@@ -8,10 +8,10 @@ class Matrix4x4 {
 public:
 
 	Matrix4x4() {
-		m_data[0][0] = m_data[0][1] = m_data[0][2] = m_data[0][3] = 0.0f;
-		m_data[1][0] = m_data[1][1] = m_data[1][2] = m_data[1][3] = 0.0f;
-		m_data[2][0] = m_data[2][1] = m_data[2][2] = m_data[2][3] = 0.0f;
-		m_data[3][0] = m_data[3][1] = m_data[3][2] = m_data[3][3] = 0.0f;
+		m_data[0][1] = m_data[0][2] = m_data[0][3] = 0.0f;
+		m_data[1][0] = m_data[1][2] = m_data[1][3] = 0.0f;
+		m_data[2][0] = m_data[2][1] = m_data[2][3] = 0.0f;
+		m_data[3][0] = m_data[3][1] = m_data[3][2] = 0.0f;
 		m_data[0][0] = m_data[1][1] = m_data[2][2] = m_data[3][3] = 1.0f;
 	}
 
@@ -196,6 +196,6 @@ public:
 
 inline Vector3 operator*(const Vector3& _v, Matrix4x4& _mat) {
 	return _mat.mult(_v);
-}
+};
 
 #endif // __MATRIX4X4_Z__
