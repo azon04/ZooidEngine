@@ -2,16 +2,17 @@
 #define __MATRIX4X4_Z__
 
 #include "Vector3.h"
+#include "Matrix3x3.h"
 
 class Matrix4x4 {
 	
 public:
 
 	Matrix4x4() {
-		m_data[0][0] = m_data[0][1] = m_data[0][2] = m_data[0][3] = 0.0f;
-		m_data[1][0] = m_data[1][1] = m_data[1][2] = m_data[1][3] = 0.0f;
-		m_data[2][0] = m_data[2][1] = m_data[2][2] = m_data[2][3] = 0.0f;
-		m_data[3][0] = m_data[3][1] = m_data[3][2] = m_data[3][3] = 0.0f;
+		m_data[0][1] = m_data[0][2] = m_data[0][3] = 0.0f;
+		m_data[1][0] = m_data[1][2] = m_data[1][3] = 0.0f;
+		m_data[2][0] = m_data[2][1] = m_data[2][3] = 0.0f;
+		m_data[3][0] = m_data[3][1] = m_data[3][2] = 0.0f;
 		m_data[0][0] = m_data[1][1] = m_data[2][2] = m_data[3][3] = 1.0f;
 	}
 
@@ -58,14 +59,27 @@ public:
 		return newMat;
 	}
 
-	float matMinor(int r, int c) {
-		// #TODO Implement Minor, wait for 3x3 matrix
-		return 0.0f;
+	float matMinor(int row, int column) {
+		float values[3][3];
+		int r_index = 0;
+		int c_index = 0;
+
+		for (int r = 0; r < 3; r++) {
+			if(r == row) continue;
+			for (int c = 0; c < 3; c++) {
+				if(c == column) continue;
+				values[r_index][c_index] = m_data[r][c];
+				c_index++;
+			}
+			r_index++;
+		}
+
+		Matrix3x3 mat((float**)values);
+		return mat.det();
 	}
 
 	float matCofactor(int r, int c) {
 		int _sign = (r + c) % 2 == 0 ? 1 : -1;
-
 		return _sign * matMinor(r, c);
 	}
 
@@ -82,10 +96,19 @@ public:
 
 	// fast inverse // use this if you're sure that the matrix is unitary scale, rotate on axis.
 	Matrix4x4 inverse() {
-		// #TODO Change this using Classical Adjoint
 		// Implement Minors, Cofactors and Determinants
+		Matrix4x4 inverseMat;
+		float d = det();
+
+		for (int r = 0; r < 4; r++) {
+			for (int c = 0; c < 4; c++) {
+				inverseMat.m_data[r][c] = matCofactor(c, r) / d;
+			}
+		}
+
+		return inverseMat;
+#if 0
 		// (RST) -1 = (T-1 S-1 R-1)
-		
 		Matrix4x4 R_inverse = *this;
 		R_inverse.setPos(Vector3());
 		R_inverse.normalizeScale();
@@ -100,6 +123,7 @@ public:
 		T_inverse.setPos(-1 * getPos());
 
 		return T_inverse * S_inverse * R_inverse;
+#endif
 	}
 
 	Matrix4x4 operator*(const Matrix4x4& _m) {
@@ -196,6 +220,6 @@ public:
 
 inline Vector3 operator*(const Vector3& _v, Matrix4x4& _mat) {
 	return _mat.mult(_v);
-}
+};
 
 #endif // __MATRIX4X4_Z__

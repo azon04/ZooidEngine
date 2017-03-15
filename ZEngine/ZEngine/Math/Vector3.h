@@ -2,6 +2,7 @@
 #define __VECTOR_Z__
 
 #include <cmath>
+#include <cassert>
 
 class Vector3 {
 
@@ -67,8 +68,10 @@ public:
 	}
 
 	// Normalize
-	float normalize() {
+	void normalize() {
 		float d = length();
+		
+		assert(d > 0.0f);
 
 		m_x /= d;
 		m_y /= d;
