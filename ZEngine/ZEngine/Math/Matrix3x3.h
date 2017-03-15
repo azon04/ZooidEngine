@@ -23,6 +23,15 @@ public:
 		m_data[0][0] = _g31; m_data[0][1] = _g32; m_data[0][2] = _g33;
 	}
 
+	// _values must be at least float[3][3]
+	Matrix3x3(float** _values) {
+		for (int r = 0; r < 3; r++) {
+			for (int c = 0; c < 3; c++) {
+				m_data[r][c] = _values[r][c];
+			}
+		}
+	}
+
 	Matrix3x3(const Vector3& _u, const Vector3& _v, const Vector3& _n) {
 		setU(_u);
 		setV(_v);
@@ -50,14 +59,42 @@ public:
 	}
 
 	float det() {
-		// #TODO Calculate Matrix3x3 Determinant
-		return 0.0f;
+		float m11 = m_data[0][0] * (m_data[1][1] * m_data[2][2] - m_data[1][2] * m_data[2][1]);
+		float m12 = m_data[0][1] * (m_data[1][0] * m_data[2][2] - m_data[1][2] * m_data[2][0]);
+		float m13 = m_data[0][2] * (m_data[1][0] * m_data[2][1] - m_data[1][1] * m_data[2][0]);
+		return m11 - m12 + m13;
+	}
+
+	float matCofactor(int row, int col) {
+		float sign_one = ((row + col) % 2 == 0) ? 1.0f : -1.0f;
+		float m[2][2];
+		int r_index = 0;
+		int c_index = 0;
+		
+		for (int r = 0; r < 3; r++) {
+			if(r == row) continue;
+			for (int c = 0; c < 3; c++) {
+				if(c == col) continue;
+				m[r_index][c_index] = m_data[r][c];
+				c_index++;
+			}
+			r_index++;
+		}
+
+		return sign_one * (m[0][0] * m[1][1] - m[0][1] * m[1][0]);
 	}
 
 	Matrix3x3 inverse() {
-		// #TODO implement Inverse for Matrix3x3
+		Matrix3x3 inverseMatrix;
+		float d = det();
 
-		return Matrix3x3();
+		for (int r = 0; r < 3; r++) {
+			for (int c = 0; c < 3; c++) {
+				inverseMatrix.m_data[r][c] = matCofactor(c, r) / d;
+			}
+		}
+
+		return inverseMatrix;
 	}
 
 	Matrix3x3 operator*(const Matrix3x3& _m) {
