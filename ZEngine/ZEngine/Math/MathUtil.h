@@ -7,4 +7,6 @@
 
 #define DegToRad(deg) (deg * PI / 180)
 
+#define  RadToDeg(rad) (rad * 180 / PI)
+
 #endif // 

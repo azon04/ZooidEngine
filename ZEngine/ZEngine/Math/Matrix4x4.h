@@ -2,6 +2,7 @@
 #define __MATRIX4X4_Z__
 
 #include "Vector3.h"
+#include "Quaternion.h"
 #include "Matrix3x3.h"
 
 class Matrix4x4 {
@@ -172,6 +173,83 @@ public:
 		}
 	}
 	
+	// Matrix - Quaternions
+	void fromQuaternion(const Quaternion& _q) {
+		float x = _q.getX();
+		float y = _q.getY();
+		float z = _q.getZ();
+		float w = _q.getW();
+
+		float xx = x*x;
+		float yy = y*y;
+		float zz = z*z;
+		float xy = x*y;
+		float xz = x*z;
+		float xw = x*w;
+		float yz = y*z;
+		float yw = y*w;
+		float zw = z*w;
+
+		m_data[0][0] = 1 - 2 * (yy + zz);
+		m_data[0][1] = 2 * (xy + zw);
+		m_data[0][2] = 2 * (xz - yw);
+		m_data[0][3] = 0.0f;
+
+		m_data[1][0] = 2 * (xy - zw);
+		m_data[1][1] = 1 - 2 * (xx + zz);
+		m_data[1][2] = 2 * (xw + yz);
+		m_data[1][3] = 0.0f;
+
+		m_data[2][0] = 2 * (xz + yw);
+		m_data[2][1] = 2 * (yz - xw);
+		m_data[2][2] = 1 - 2 * (xx + yy);
+		m_data[2][3] = 0.0f;
+
+		m_data[3][0] = m_data[3][1] = m_data[3][2] = 0.0f;
+		m_data[3][3] = 1.0f;
+	}
+
+	Quaternion toQuaternion() {
+		float Trace = m_data[0][0] + m_data[1][1] + m_data[2][2] + m_data[3][3];
+
+		Quaternion qResult;
+		
+		if (Trace >= 1.0f) {
+			float _4w = 2 * sqrt(Trace);
+			qResult.m_x = (m_data[1][2] - m_data[2][1]) / _4w;
+			qResult.m_y = (m_data[2][0] - m_data[0][2]) / _4w;
+			qResult.m_z = (m_data[0][1] - m_data[1][0]) / _4w;
+			qResult.m_w = _4w / 4.0f;
+		}
+		else {
+			float v[3];
+
+			int i = 0, j, k;
+			for (int d = 1; d < 3; d++) {
+				if (m_data[d][d] > m_data[i][i]) {
+					i = d;
+				}
+			}
+
+			j = (i + 1) % 3;
+			k = (k + 1) % 3;
+
+			v[i] = sqrt(m_data[i][i] - m_data[j][j] - m_data[k][k] + 1) * 0.5f;
+			
+			float _4vi = 4 * v[i];
+			
+			v[j] = (m_data[i][j] + m_data[j][i]) / _4vi;
+			v[k] = (m_data[i][k] + m_data[k][i]) / _4vi;
+
+			qResult.m_w = (m_data[j][k] - m_data[k][j]) / _4vi;
+			qResult.m_x = v[0];
+			qResult.m_y = v[1];
+			qResult.m_z = v[2];
+		}
+
+		return qResult;
+	}
+
 	// Getter
 	Vector3 getU() {
 		return Vector3(m_data[0][0], m_data[0][1], m_data[0][2]);

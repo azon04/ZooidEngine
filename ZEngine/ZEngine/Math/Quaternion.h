@@ -2,7 +2,6 @@
 #define __QUATERNION_Z__
 
 #include "Vector3.h"
-#include "Matrix4x4.h"
 #include "MathUtil.h"
 
 class Quaternion {
@@ -49,20 +48,49 @@ public:
 		m_w /= mag;
 	}
 
-	float getAngleInDeg();
-	float getAngleInRad();
+	float getAngleInDeg() {
+		return RadToDeg(getAngleInRad());
+	}
 
-	void updateAngleInRad(float _radAngle);
-	void updateAngleInDeg(float _degAngle);
+	float getAngleInRad() {
+		return static_cast<float>(acos(m_w));
+	}
+
+	void updateAngleInRad(float _radAngle) {
+		float arccos = acos(m_w);
+		float sinv = sin(arccos);
+		
+		float _cos = cos(_radAngle);
+		float _sin = sin(_radAngle);
+
+		m_w = _cos;
+
+		m_x *= _sin / sinv;
+		m_y *= _sin / sinv;
+		m_z *= _sin / sinv;
+	}
+
+	void updateAngleInDeg(float _degAngle) {
+		updateAngleInRad(DegToRad(_degAngle));
+	}
 
 	// Operator Overloading
-	Quaternion operator+(const Quaternion& _q2);
-	Quaternion operator-(const Quaternion& _q2);
-	Quaternion operator*(const Quaternion& _q2);
+	Quaternion operator+(const Quaternion& _q2) {
+		return Quaternion(m_x + _q2.m_x, m_y + _q2.m_y, m_z + _q2.m_z, m_w + _q2.m_w);
+	}
 
-	// Matrix - Quaternion conversions
-	Matrix4x4 toMatrix4x4();
-	void fromMatrix4x4(const Matrix4x4& mat);
+	Quaternion operator-(const Quaternion& _q2) {
+		return Quaternion(m_x - _q2.m_x, m_y - _q2.m_y, m_z - _q2.m_z, m_w - _q2.m_w);
+	}
+
+	Quaternion operator*(const Quaternion& _q2) {
+		float _w = m_w * _q2.m_w - (m_x * _q2.m_x + m_z * _q2.m_z + m_z * _q2.m_z);
+		float _x = m_w * _q2.m_x + _q2.m_w * m_x + m_y * _q2.m_z - m_z * _q2.m_y;
+		float _y = m_w * _q2.m_y + _q2.m_w * m_y - m_x * _q2.m_z + m_z * _q2.m_x;
+		float _z = m_w * _q2.m_z + _q2.m_w * m_z - m_y * _q2.m_x + m_x * _q2.m_y;
+
+		return Quaternion(_x, _y, _z, _w);
+	}
 
 	// Getter and Setter
 	float getX() const { return m_x; }
