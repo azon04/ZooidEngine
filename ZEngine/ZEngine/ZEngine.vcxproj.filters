@@ -51,6 +51,12 @@
     <ClInclude Include="Math\Matrix3x3.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="Math\Quaternion.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\MathUtil.h">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UnitTest\VectorTest.cpp">
