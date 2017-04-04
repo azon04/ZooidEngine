@@ -158,6 +158,11 @@
     <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Math\Vector2.h" />
     <ClInclude Include="Math\Vector3.h" />
+    <ClInclude Include="Renderer\BufferData.h" />
+    <ClInclude Include="Renderer\GPUBufferData.h" />
+    <ClInclude Include="Renderer\IRenderer.h" />
+    <ClInclude Include="Renderer\Shader.h" />
+    <ClInclude Include="Renderer\ShaderAction.h" />
     <ClInclude Include="UnitTest\UnitTest.h" />
     <ClInclude Include="UnitTest\VectorTest.h" />
     <ClInclude Include="Utils\ZEngineHelper.h" />
@@ -166,6 +171,8 @@
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp" />
     <ClCompile Include="Math\Vector3.cpp" />
+    <ClCompile Include="Renderer\BufferData.cpp" />
+    <ClCompile Include="Renderer\GPUBufferData.cpp" />
     <ClCompile Include="UnitTest\VectorTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
