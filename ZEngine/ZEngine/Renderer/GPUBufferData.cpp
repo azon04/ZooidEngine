@@ -21,6 +21,15 @@ namespace ZE {
 		m_BufferData = _bufferData;
 	}
 
+	void GPUBufferData::SetupLayout(BufferLayout* _layouts, int numberOfLayout)
+	{
+		this->numberOfLayout = numberOfLayout;
+		this->m_layouts.reserve(numberOfLayout);
+		for (int i = 0; i < numberOfLayout; i++) {
+			this->m_layouts[i] = _layouts[i];
+		}
+	}
+
 	void GPUBufferData::Bind()
 	{
 		// #OPENGL specific

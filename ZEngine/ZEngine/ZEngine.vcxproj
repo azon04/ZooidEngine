@@ -159,6 +159,7 @@
     <ClInclude Include="Math\Vector2.h" />
     <ClInclude Include="Math\Vector3.h" />
     <ClInclude Include="Renderer\BufferData.h" />
+    <ClInclude Include="Renderer\GPUBufferArray.h" />
     <ClInclude Include="Renderer\GPUBufferData.h" />
     <ClInclude Include="Renderer\IRenderer.h" />
     <ClInclude Include="Renderer\Shader.h" />
@@ -172,7 +173,9 @@
     <ClCompile Include="MainFunction\Main.cpp" />
     <ClCompile Include="Math\Vector3.cpp" />
     <ClCompile Include="Renderer\BufferData.cpp" />
+    <ClCompile Include="Renderer\GPUBufferArray.cpp" />
     <ClCompile Include="Renderer\GPUBufferData.cpp" />
+    <ClCompile Include="Renderer\Shader.cpp" />
     <ClCompile Include="UnitTest\VectorTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -75,6 +75,9 @@
     <ClInclude Include="Renderer\GPUBufferData.h">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer\GPUBufferArray.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UnitTest\VectorTest.cpp">
@@ -90,6 +93,12 @@
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Renderer\GPUBufferData.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\Shader.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\GPUBufferArray.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
   </ItemGroup>
