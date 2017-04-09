@@ -98,6 +98,11 @@ namespace ZE {
 		}
 	}
 
+	void Shader::SetLayout(BufferLayout* _layout)
+	{
+		m_layout = _layout;
+	}
+
 	void Shader::Bind()
 	{
 		glUseProgram(this->m_GLProgram);

@@ -2,6 +2,7 @@
 #define __Z_GPU_BUFFER_ARRAY__
 
 #include "GPUBufferArray.h"
+#include "GPUBufferData.h"
 
 #include <vector>
 
@@ -13,7 +14,7 @@ public:
 	GPUBufferArray();
 	virtual ~GPUBufferArray();
 
-	void SetupBufferArray(GPUBufferData* _vertexBuffer, GPUBufferData* _colorBuffer, GPUBufferData* _computeBuffer);
+	void SetupBufferArray(GPUBufferData* _vertexBuffer, GPUBufferData* _indexBuffer, GPUBufferData* _computeBuffer);
 	
 	void Bind();
 	void Unbind();

@@ -2,22 +2,12 @@
 #define __Z_GPU_BUFFER__
 
 #include "BufferData.h"
+#include "BufferLayout.h"
 
 #include <vector>
 
 #define MAX_LAYOUT 16
 namespace ZE {
-enum DataType {
-	FLOAT
-};
-
-struct BufferLayout {
-	int index;
-	int sizePerItem;
-	DataType dataType;
-	int stride;
-	int offset;
-};
 
 class GPUBufferData {
 
@@ -37,7 +27,7 @@ public:
 	// #OPENGL Specific
 	unsigned int m_BBO;
 	int numberOfLayout;
-	std::vector<BufferLayout> m_layouts;
+	BufferLayout* m_layout;
 
 };
 };

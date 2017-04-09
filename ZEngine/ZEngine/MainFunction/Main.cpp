@@ -1,6 +1,9 @@
 #include "../UnitTest/VectorTest.h"
 
 #include "../ZEngine.h"
+#include "../ZEGameContext.h"
+
+#include "MainFunctions.h"
 
 #define GLUE_STATIC
 #include <GL/glew.h>
@@ -56,12 +59,19 @@ int main(int argc, char** argv) {
 	// Set Callback key
 	glfwSetKeyCallback(window, key_callback);
 
+	// Init Engine
+	ZE::GameContext gameContext;
+
+	ZE::MainSetup(&gameContext);
+
 	// Main Loop
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
 		displayMe();
 		glfwSwapBuffers(window);
 	}
+
+	ZE::MainClean(&gameContext);
 
 	// Terminate and Exit
 	glfwTerminate();
