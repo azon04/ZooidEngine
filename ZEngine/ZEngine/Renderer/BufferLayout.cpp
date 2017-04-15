@@ -6,12 +6,27 @@ namespace ZE {
 
 	void BufferLayoutManager::InitLayout()
 	{
-		// #TODO init layout here
+		// Vertex with color
+		BufferLayout* vertexColorLayout = new BufferLayout();
+		vertexColorLayout->m_layouts = {
+			{ 0, 3, DataType::FLOAT, 5 * sizeof(float), 0 },
+			{ 1, 2, DataType::FLOAT, 5 * sizeof(float), 3 }
+		};
+		m_bufferLayout.push_back(vertexColorLayout);
 	}
 
 	void BufferLayoutManager::DestroyLayout()
 	{
-		// #TODO destroy layout
+		for (auto layout : m_bufferLayout) {
+			delete layout;
+		}
+
+		m_bufferLayout.clear();
+	}
+
+	ZE::BufferLayout* BufferLayoutManager::getBufferLayoutByFormat(int format)
+	{
+		return m_bufferLayout[format];
 	}
 
 	void BufferLayout::BindLayout()

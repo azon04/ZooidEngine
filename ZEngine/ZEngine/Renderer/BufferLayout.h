@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#define BUFFER_LAYOUT_V3_C2 0
+
 namespace ZE {
 
 	enum DataType {
@@ -26,11 +28,13 @@ namespace ZE {
 	};
 
 	class BufferLayoutManager {
-
+	public:
 		void InitLayout();
 		void DestroyLayout();
 
 		std::vector<BufferLayout*> m_bufferLayout;
+
+		BufferLayout* getBufferLayoutByFormat(int format);
 	};
 }
 

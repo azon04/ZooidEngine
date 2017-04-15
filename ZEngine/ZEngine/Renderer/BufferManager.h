@@ -11,18 +11,23 @@ namespace ZE {
 class BufferManager {
 	
 	static BufferManager* m_instance;
+
+	BufferManager();
+
 public:
 	
-	BufferManager* getInstance();
+	static BufferManager* getInstance();
 
-	void Init();
-	void Destroy();
+	static void Init();
+	static void Destroy();
 
 	GPUBufferData* createGPUBufferFromBuffer(BufferData* _bufferData);
 	GPUBufferArray* createBufferArray(BufferData* _vertexBuffer, BufferData* _indexBuffer, BufferData* _gpuBuffer);
 
 	std::vector<BufferData*> m_buffers;
 	std::vector<GPUBufferData*> m_GPUBuffers;
+
+	BufferLayoutManager* m_bufferLayoutManager;
 };
 }
 #endif

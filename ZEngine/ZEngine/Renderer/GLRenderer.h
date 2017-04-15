@@ -3,6 +3,12 @@
 
 #include "IRenderer.h"
 
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
+#define WIDTH 1024
+#define HEIGHT 768
+
 namespace ZE {
 class GLRenderer : public IRenderer {
 	
@@ -14,6 +20,11 @@ public:
 	virtual void BeginRender() override;
 	virtual void EndRender() override;
 	virtual void Clean() override;
+	virtual void ClearScreen() override;
+	virtual void Draw(ShaderAction* shaderAction) override;
+	virtual bool IsClose() override;
+
+	GLFWwindow* m_window;
 
 };
 }
