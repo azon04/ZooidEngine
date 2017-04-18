@@ -26,7 +26,10 @@ namespace ZE {
 
 		glBindVertexArray(m_VAO);
 		glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer->m_BBO);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer->m_BBO);
+		if (_indexBuffer) {
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer->m_BBO);
+		}
+		m_bUsingIndexBuffer = _indexBuffer != nullptr;
 
 		_vertexBuffer->m_layout->BindLayout();
 

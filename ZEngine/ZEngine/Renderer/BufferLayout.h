@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#define BUFFER_LAYOUT_V3_C2 0
+#define BUFFER_LAYOUT_V3_C3 0
 
 namespace ZE {
 
@@ -28,7 +28,12 @@ namespace ZE {
 	};
 
 	class BufferLayoutManager {
+		static BufferLayoutManager* m_instance;
 	public:
+		static void Init();
+		static BufferLayoutManager* getInstance();
+		static void Destroy();
+
 		void InitLayout();
 		void DestroyLayout();
 

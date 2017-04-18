@@ -6,6 +6,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include <vector>
+
 #define WIDTH 1024
 #define HEIGHT 768
 
@@ -25,7 +27,6 @@ public:
 	virtual bool IsClose() override;
 
 	GLFWwindow* m_window;
-
 };
 }
 #endif

@@ -19,9 +19,11 @@ namespace ZE {
 		}
 
 		m_BufferData = _bufferData;
+
+		SetupLayout(BufferLayoutManager::getInstance()->m_bufferLayout[_bufferData->m_bufferLayout]);
 	}
 
-	void GPUBufferData::SetupLayout(BufferLayout* _layouts, int numberOfLayout)
+	void GPUBufferData::SetupLayout(BufferLayout* _layouts)
 	{
 		this->m_layout = _layouts;
 	}

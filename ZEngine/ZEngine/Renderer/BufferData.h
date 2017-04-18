@@ -25,6 +25,7 @@ public:
 	void* m_data;
 	unsigned int m_size;
 	BufferType m_type;
+	int m_bufferLayout;
 };
 
 };

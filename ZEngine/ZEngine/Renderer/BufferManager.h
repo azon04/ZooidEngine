@@ -26,6 +26,7 @@ public:
 
 	std::vector<BufferData*> m_buffers;
 	std::vector<GPUBufferData*> m_GPUBuffers;
+	std::vector<GPUBufferArray*> m_GPUBufferArrays;
 
 	BufferLayoutManager* m_bufferLayoutManager;
 };

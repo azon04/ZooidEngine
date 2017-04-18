@@ -28,6 +28,9 @@
     <Filter Include="Renderer">
       <UniqueIdentifier>{382b57c6-60b2-4401-89a2-8964fbdf3e1d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{054e7844-a36c-48c7-8ad4-30f84e67ac78}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ZEngine.h">
@@ -93,6 +96,9 @@
     <ClInclude Include="Renderer\GLRenderer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer\DrawList.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UnitTest\VectorTest.cpp">
@@ -131,5 +137,19 @@
     <ClCompile Include="Renderer\GLRenderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Renderer\DrawList.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\ShaderAction.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\TestGLVertexShader.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\TestGLFragmentShader.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

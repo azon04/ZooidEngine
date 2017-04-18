@@ -58,7 +58,16 @@ namespace ZE {
 
 	void GLRenderer::Draw(ShaderAction* shaderAction)
 	{
-
+		shaderAction->m_shader->Bind();
+		shaderAction->m_bufferArray->Bind();
+		if (shaderAction->m_bufferArray->m_bUsingIndexBuffer) {
+			glDrawElements(GL_TRIANGLES, shaderAction->m_vertexSize, GL_UNSIGNED_INT, 0);
+		}
+		else {
+			glDrawArrays(GL_TRIANGLES, 0, shaderAction->m_vertexSize);
+		}
+		shaderAction->m_bufferArray->Unbind();
+		shaderAction->m_shader->Unbind();
 	}
 
 	bool GLRenderer::IsClose()

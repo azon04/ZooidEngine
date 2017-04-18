@@ -113,4 +113,47 @@ namespace ZE {
 		glUseProgram(0);
 	}
 
+	ShaderManager::ShaderManager()
+	{
+
+	}
+
+	void ShaderManager::Init()
+	{
+		m_instance = new ShaderManager;
+		m_instance->InitShaders();
+	}
+
+	ShaderManager* ShaderManager::m_instance = nullptr;
+
+	void ShaderManager::Destroy()
+	{
+		m_instance->DestroyShaders();
+		delete m_instance;
+	}
+
+	ShaderManager* ShaderManager::getInstance()
+	{
+		return m_instance;
+	}
+
+	void ShaderManager::InitShaders()
+	{
+		// Init all shaders
+		// #OPENGL Specific
+		Shader* simpleGLShader = new Shader;
+		simpleGLShader->LoadShaderFiles("Shaders/TestGLVertexShader.vs", "Shaders/TestGLFragmentShader.frag", nullptr);
+		
+		m_shaders.push_back(simpleGLShader);
+	}
+
+	void ShaderManager::DestroyShaders()
+	{
+		for (int i = 0; i < m_shaders.size(); i++) {
+			delete m_shaders[i];
+		}
+
+		m_shaders.clear();
+	}
+
 }

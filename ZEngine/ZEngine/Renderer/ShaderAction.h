@@ -2,7 +2,7 @@
 #define __Z_SHADER_ACTION__
 
 #include "Shader.h"
-#include "GPUBufferData.h"
+#include "GPUBufferArray.h"
 
 namespace ZE {
 class ShaderAction {
@@ -11,10 +11,12 @@ public:
 	ShaderAction();
 	ShaderAction(Shader* shader);
 
-private:
+	void SetShaderAndBuffer(Shader* _shader, GPUBufferArray* _bufferArray);
+
+	int m_vertexSize;
 
 	Shader* m_shader;
-	GPUBufferData* m_buffers[2];
+	GPUBufferArray* m_bufferArray;
 };
 };
 #endif // __Z_SHADER_ACTION__

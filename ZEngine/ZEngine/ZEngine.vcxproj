@@ -162,6 +162,7 @@
     <ClInclude Include="Renderer\BufferData.h" />
     <ClInclude Include="Renderer\BufferLayout.h" />
     <ClInclude Include="Renderer\BufferManager.h" />
+    <ClInclude Include="Renderer\DrawList.h" />
     <ClInclude Include="Renderer\GLRenderer.h" />
     <ClInclude Include="Renderer\GPUBufferArray.h" />
     <ClInclude Include="Renderer\GPUBufferData.h" />
@@ -181,12 +182,18 @@
     <ClCompile Include="Renderer\BufferData.cpp" />
     <ClCompile Include="Renderer\BufferLayout.cpp" />
     <ClCompile Include="Renderer\BufferManager.cpp" />
+    <ClCompile Include="Renderer\DrawList.cpp" />
     <ClCompile Include="Renderer\GLRenderer.cpp" />
     <ClCompile Include="Renderer\GPUBufferArray.cpp" />
     <ClCompile Include="Renderer\GPUBufferData.cpp" />
     <ClCompile Include="Renderer\Shader.cpp" />
+    <ClCompile Include="Renderer\ShaderAction.cpp" />
     <ClCompile Include="UnitTest\VectorTest.cpp" />
     <ClCompile Include="ZEGameContext.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\TestGLFragmentShader.frag" />
+    <None Include="Shaders\TestGLVertexShader.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

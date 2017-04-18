@@ -18,8 +18,25 @@ namespace ZE {
 	void BufferManager::Init()
 	{
 		m_instance = new BufferManager();
-		m_instance->m_bufferLayoutManager = new BufferLayoutManager();
-		m_instance->m_bufferLayoutManager->InitLayout();
+		BufferLayoutManager::Init();
+		m_instance->m_bufferLayoutManager = BufferLayoutManager::getInstance();
+
+		// Create sample vertex Color buffer
+		float* vertices_color = new float[18] {
+			// Positions		// Colors			
+			0.5, -0.5f, 0.0f,	1.0f, 0.0f, 0.0f, // Bottom Right
+			-0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // Bottom Left
+			0.0f, 0.5f, 0.0f,	0.0f, 0.0f, 1.0f	// Top
+		};
+
+		BufferData* bufferData = new BufferData(BufferType::VERTEX_BUFFER);
+		bufferData->SetData(vertices_color, 18);
+		bufferData->m_bufferLayout = BUFFER_LAYOUT_V3_C3;
+
+		getInstance()->m_buffers.push_back(bufferData);
+
+		getInstance()->createBufferArray(bufferData, nullptr, nullptr);
+
 	}
 
 	void BufferManager::Destroy()
@@ -29,6 +46,7 @@ namespace ZE {
 
 	ZE::GPUBufferData* BufferManager::createGPUBufferFromBuffer(BufferData* _bufferData)
 	{
+		if (!_bufferData) return nullptr;
 		// #OPENGL Specific
 		GPUBufferData* GPUBuffer = new GPUBufferData();
 		GPUBuffer->FromBufferData(_bufferData);
@@ -43,14 +61,12 @@ namespace ZE {
 		// #OPENGL Specific
 		GPUBufferData* vertexBufferGPU = createGPUBufferFromBuffer(_vertexBuffer);
 		GPUBufferData* indexBufferGPU = createGPUBufferFromBuffer(_indexBuffer);
-		GPUBufferData* computeGPUBuffer = NULL;
-		if (_gpuBuffer) {
-			computeGPUBuffer = createGPUBufferFromBuffer(_gpuBuffer);
-		}
-
+		GPUBufferData* computeGPUBuffer = createGPUBufferFromBuffer(_gpuBuffer);
+	
 		GPUBufferArray* bufferArray = new GPUBufferArray();
-		bufferArray->SetupBufferArray(vertexBufferGPU, indexBufferGPU, nullptr);
+		bufferArray->SetupBufferArray(vertexBufferGPU, indexBufferGPU, computeGPUBuffer);
 
+		m_GPUBufferArrays.push_back(bufferArray);
 		return bufferArray;
 	}
 

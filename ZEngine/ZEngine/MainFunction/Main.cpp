@@ -5,6 +5,8 @@
 
 #include "MainFunctions.h"
 
+#include <vector>
+
 #define GLUE_STATIC
 #include <GL/glew.h>
 
@@ -19,12 +21,20 @@ int main(int argc, char** argv) {
 	ZE::GameContext gameContext;
 	
 	ZE::MainSetup(&gameContext);
+	
+	ZE::ShaderAction& shaderAction = gameContext.getDrawList()->getNextShaderAction();
+	shaderAction.SetShaderAndBuffer(ZE::ShaderManager::getInstance()->m_shaders[0], ZE::BufferManager::getInstance()->m_GPUBufferArrays[0]);
+	shaderAction.m_vertexSize = 6;
 
 	// Main Loop
 	while (!gameContext.getRenderer()->IsClose()) {
 		gameContext.getRenderer()->BeginRender();
 
 		gameContext.getRenderer()->ClearScreen();
+
+		for (int i = 0; i < gameContext.getDrawList()->m_size; i++) {
+			gameContext.getRenderer()->Draw(&gameContext.getDrawList()->m_drawList[i]);
+		}
 
 		gameContext.getRenderer()->EndRender();
 	}

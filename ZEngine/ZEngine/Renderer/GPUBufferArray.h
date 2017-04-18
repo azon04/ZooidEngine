@@ -21,6 +21,8 @@ public:
 
 	std::vector<GPUBufferData*> m_buffers;
 	
+	bool m_bUsingIndexBuffer;
+
 	// #OPENGL Specific
 	unsigned int m_VAO;
 };

@@ -16,7 +16,7 @@ public:
 	virtual ~GPUBufferData() {}
 
 	void FromBufferData(BufferData* _bufferData);
-	void SetupLayout(BufferLayout* _layouts, int numberOfLayout);
+	void SetupLayout(BufferLayout* _layouts);
 
 	void Bind();
 	void UnBind();
