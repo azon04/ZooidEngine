@@ -30,7 +30,7 @@ namespace ZE {
 		};
 
 		BufferData* bufferData = new BufferData(BufferType::VERTEX_BUFFER);
-		bufferData->SetData(vertices_color, 18);
+		bufferData->SetData(vertices_color, 18 * sizeof(float));
 		bufferData->m_bufferLayout = BUFFER_LAYOUT_V3_C3;
 
 		getInstance()->m_buffers.push_back(bufferData);

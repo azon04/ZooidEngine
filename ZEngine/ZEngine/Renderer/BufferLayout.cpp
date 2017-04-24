@@ -28,10 +28,23 @@ namespace ZE {
 		// Vertex with color
 		BufferLayout* vertexColorLayout = new BufferLayout();
 		vertexColorLayout->m_layouts = {
+			{ 0, 3, DataType::FLOAT, 6 * sizeof(float), 0 },
+			{ 1, 3, DataType::FLOAT, 6 * sizeof(float), 3 }
+		};
+		m_bufferLayout.push_back(vertexColorLayout);
+
+		BufferLayout* vertexTexCoord = new BufferLayout();
+		vertexTexCoord->m_layouts = {
 			{ 0, 3, DataType::FLOAT, 5 * sizeof(float), 0 },
 			{ 1, 3, DataType::FLOAT, 5 * sizeof(float), 3 }
 		};
-		m_bufferLayout.push_back(vertexColorLayout);
+		m_bufferLayout.push_back(vertexTexCoord);
+
+		BufferLayout* texCoordLayout = new BufferLayout();
+		texCoordLayout->m_layouts = {
+			{ 0, 2, DataType::FLOAT, 2 * sizeof(float), 0 }
+		};
+		m_bufferLayout.push_back(texCoordLayout);
 	}
 
 	void BufferLayoutManager::DestroyLayout()
