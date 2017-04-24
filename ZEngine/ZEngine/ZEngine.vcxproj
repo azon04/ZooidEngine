@@ -152,21 +152,48 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="MainFunction\MainFunctions.h" />
     <ClInclude Include="Math\MathUtil.h" />
     <ClInclude Include="Math\Matrix3x3.h" />
     <ClInclude Include="Math\Matrix4x4.h" />
     <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Math\Vector2.h" />
     <ClInclude Include="Math\Vector3.h" />
+    <ClInclude Include="Renderer\BufferData.h" />
+    <ClInclude Include="Renderer\BufferLayout.h" />
+    <ClInclude Include="Renderer\BufferManager.h" />
+    <ClInclude Include="Renderer\DrawList.h" />
+    <ClInclude Include="Renderer\GLRenderer.h" />
+    <ClInclude Include="Renderer\GPUBufferArray.h" />
+    <ClInclude Include="Renderer\GPUBufferData.h" />
+    <ClInclude Include="Renderer\IRenderer.h" />
+    <ClInclude Include="Renderer\Shader.h" />
+    <ClInclude Include="Renderer\ShaderAction.h" />
     <ClInclude Include="UnitTest\UnitTest.h" />
     <ClInclude Include="UnitTest\VectorTest.h" />
     <ClInclude Include="Utils\ZEngineHelper.h" />
+    <ClInclude Include="ZEGameContext.h" />
     <ClInclude Include="ZEngine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp" />
+    <ClCompile Include="MainFunction\MainFunctions.cpp" />
     <ClCompile Include="Math\Vector3.cpp" />
+    <ClCompile Include="Renderer\BufferData.cpp" />
+    <ClCompile Include="Renderer\BufferLayout.cpp" />
+    <ClCompile Include="Renderer\BufferManager.cpp" />
+    <ClCompile Include="Renderer\DrawList.cpp" />
+    <ClCompile Include="Renderer\GLRenderer.cpp" />
+    <ClCompile Include="Renderer\GPUBufferArray.cpp" />
+    <ClCompile Include="Renderer\GPUBufferData.cpp" />
+    <ClCompile Include="Renderer\Shader.cpp" />
+    <ClCompile Include="Renderer\ShaderAction.cpp" />
     <ClCompile Include="UnitTest\VectorTest.cpp" />
+    <ClCompile Include="ZEGameContext.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\TestGLFragmentShader.frag" />
+    <None Include="Shaders\TestGLVertexShader.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
