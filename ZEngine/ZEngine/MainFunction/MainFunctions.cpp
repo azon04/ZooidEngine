@@ -1,5 +1,7 @@
 #include "MainFunctions.h"
 
+#include "../GameObjectModel/Component.h"
+
 namespace ZE {
 
 	void MainSetup(GameContext* _gameContext)
@@ -14,6 +16,10 @@ namespace ZE {
 		_gameContext->m_bufferManager = BufferManager::getInstance();
 		
 		_gameContext->m_drawList = new DrawList;
+
+		int ClassID = Component::GetClassID();
+		int bufferManagerClassID = BufferManager::GetClassID();
+		int classMapSize = Object::ClassMap().size();
 	}
 
 	void MainClean(GameContext* _gameContext)

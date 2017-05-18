@@ -31,6 +31,9 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{054e7844-a36c-48c7-8ad4-30f84e67ac78}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObjectModel">
+      <UniqueIdentifier>{9b82ba8a-2b55-46e6-89e3-96dee089d797}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ZEngine.h">
@@ -99,6 +102,18 @@
     <ClInclude Include="Renderer\DrawList.h">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="GameObjectModel\Object.h">
+      <Filter>GameObjectModel</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectModel\ObjDecl.h">
+      <Filter>GameObjectModel</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectModel\Component.h">
+      <Filter>GameObjectModel</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectModel\RTTI.h">
+      <Filter>GameObjectModel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UnitTest\VectorTest.cpp">
@@ -142,6 +157,12 @@
     </ClCompile>
     <ClCompile Include="Renderer\ShaderAction.cpp">
       <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectModel\Object.cpp">
+      <Filter>GameObjectModel</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectModel\Component.cpp">
+      <Filter>GameObjectModel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

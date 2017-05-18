@@ -152,6 +152,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="GameObjectModel\Component.h" />
+    <ClInclude Include="GameObjectModel\ObjDecl.h" />
+    <ClInclude Include="GameObjectModel\Object.h" />
+    <ClInclude Include="GameObjectModel\RTTI.h" />
     <ClInclude Include="MainFunction\MainFunctions.h" />
     <ClInclude Include="Math\MathUtil.h" />
     <ClInclude Include="Math\Matrix3x3.h" />
@@ -176,6 +180,8 @@
     <ClInclude Include="ZEngine.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GameObjectModel\Component.cpp" />
+    <ClCompile Include="GameObjectModel\Object.cpp" />
     <ClCompile Include="MainFunction\Main.cpp" />
     <ClCompile Include="MainFunction\MainFunctions.cpp" />
     <ClCompile Include="Math\Vector3.cpp" />

@@ -16,8 +16,21 @@ namespace ZE {
 		virtual int getClassID() = 0;
 		virtual const char* getClassName() = 0;
 
-		static std::vector<int> ClassMap;
+		static std::vector<int>& ClassMap();
+
+		static void RegisterClass() {};
+
+		template <typename D>
+		struct Register
+		{
+			explicit Register(const char* className) {
+				D::RegisterClass();
+			}
+		};
+
 	};
+
+	
 };
 
 #endif

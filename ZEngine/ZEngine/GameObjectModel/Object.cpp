@@ -3,6 +3,9 @@
 
 
 namespace ZE {
-	std::vector<int> Object::ClassMap;
+	std::vector<int>& Object::ClassMap(){
+		static std::vector<int> impl;
+		return impl;
+	};
 
 }
