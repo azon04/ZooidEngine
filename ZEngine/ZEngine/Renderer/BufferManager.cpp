@@ -4,8 +4,6 @@
 
 namespace ZE {
 
-	IMPLEMENT_CLASS_1(BufferManager, Component)
-
 	BufferManager* BufferManager::m_instance = NULL;
 
 	BufferManager::BufferManager()

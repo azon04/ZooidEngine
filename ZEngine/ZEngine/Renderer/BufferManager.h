@@ -10,9 +10,7 @@
 #include <vector>
 
 namespace ZE {
-class BufferManager : public Component {
-	
-	DEFINE_CLASS(BufferManager)
+class BufferManager {
 
 	static BufferManager* m_instance;
 

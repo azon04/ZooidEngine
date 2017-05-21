@@ -1,11 +1,15 @@
 #include "MainFunctions.h"
 
-#include "../GameObjectModel/Component.h"
+#include "../Common/GlobalRegistry.h"
 
 namespace ZE {
 
 	void MainSetup(GameContext* _gameContext)
 	{
+
+		// Register all classes
+		GlobalRegistry::Register();
+
 		_gameContext->m_renderer = new ZE::GLRenderer();
 		_gameContext->m_renderer->Setup();
 
@@ -16,10 +20,6 @@ namespace ZE {
 		_gameContext->m_bufferManager = BufferManager::getInstance();
 		
 		_gameContext->m_drawList = new DrawList;
-
-		int ClassID = Component::GetClassID();
-		int bufferManagerClassID = BufferManager::GetClassID();
-		int classMapSize = Object::ClassMap().size();
 	}
 
 	void MainClean(GameContext* _gameContext)

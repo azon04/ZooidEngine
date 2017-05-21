@@ -20,14 +20,6 @@ namespace ZE {
 
 		static void RegisterClass() {};
 
-		template <typename D>
-		struct Register
-		{
-			explicit Register(const char* className) {
-				D::RegisterClass();
-			}
-		};
-
 	};
 
 	

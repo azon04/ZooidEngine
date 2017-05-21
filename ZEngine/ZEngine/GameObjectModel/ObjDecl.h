@@ -9,8 +9,7 @@
 	virtual int getClassID() { return ClassName ## ::m_metaInfo.m_classID; }\
 	virtual const char* getClassName() { return #ClassName ; } \
 	static int GetClassID() { return m_metaInfo.m_classID; } \
-	static const char* GetClassName() { return #ClassName; } \
-	static Object::Register<ClassName> m_registration;
+	static const char* GetClassName() { return #ClassName; } 
 
 #define REGISTER_CLASS0(ClassName) \
 	void ClassName ## ::RegisterClass() { \
@@ -27,13 +26,11 @@
 
 #define IMPLEMENT_CLASS_1(ClassName, ParentName) \
 	REGISTER_CLASS1(ClassName, ParentName) \
-	ClassName  ## ::RTTI_ ## ClassName ClassName ##::m_metaInfo; \
-	Object::Register<ClassName> ClassName ## ::m_registration(#ClassName);
+	ClassName  ## ::RTTI_ ## ClassName ClassName ##::m_metaInfo;
 
 #define IMPLEMENT_CLASS_0(Class) \
 	REGISTER_CLASS0(Class) \
-	Class ## ::RTTI_ ## Class Class ##::m_metaInfo; \
-	Object::Register<Class> Class ## ::m_registration(#Class);
+	Class ## ::RTTI_ ## Class Class ##::m_metaInfo;
 
 #endif
 

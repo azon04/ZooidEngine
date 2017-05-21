@@ -34,6 +34,9 @@
     <Filter Include="GameObjectModel">
       <UniqueIdentifier>{9b82ba8a-2b55-46e6-89e3-96dee089d797}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{aa1d15b4-fef2-4e21-833f-274a13daebd9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ZEngine.h">
@@ -114,6 +117,12 @@
     <ClInclude Include="GameObjectModel\RTTI.h">
       <Filter>GameObjectModel</Filter>
     </ClInclude>
+    <ClInclude Include="Common\GlobalRegistry.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ZEngineIncl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UnitTest\VectorTest.cpp">
@@ -163,6 +172,9 @@
     </ClCompile>
     <ClCompile Include="GameObjectModel\Component.cpp">
       <Filter>GameObjectModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\GlobalRegistry.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
