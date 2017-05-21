@@ -1,9 +1,15 @@
 #include "MainFunctions.h"
 
+#include "../Common/GlobalRegistry.h"
+
 namespace ZE {
 
 	void MainSetup(GameContext* _gameContext)
 	{
+
+		// Register all classes
+		GlobalRegistry::Register();
+
 		_gameContext->m_renderer = new ZE::GLRenderer();
 		_gameContext->m_renderer->Setup();
 

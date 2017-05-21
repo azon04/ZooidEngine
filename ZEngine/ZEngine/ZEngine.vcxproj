@@ -152,6 +152,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Common\GlobalRegistry.h" />
+    <ClInclude Include="GameObjectModel\Component.h" />
+    <ClInclude Include="GameObjectModel\ObjDecl.h" />
+    <ClInclude Include="GameObjectModel\Object.h" />
+    <ClInclude Include="GameObjectModel\RTTI.h" />
     <ClInclude Include="MainFunction\MainFunctions.h" />
     <ClInclude Include="Math\MathUtil.h" />
     <ClInclude Include="Math\Matrix3x3.h" />
@@ -169,13 +174,18 @@
     <ClInclude Include="Renderer\IRenderer.h" />
     <ClInclude Include="Renderer\Shader.h" />
     <ClInclude Include="Renderer\ShaderAction.h" />
+    <ClInclude Include="Scene\Actor.h" />
     <ClInclude Include="UnitTest\UnitTest.h" />
     <ClInclude Include="UnitTest\VectorTest.h" />
     <ClInclude Include="Utils\ZEngineHelper.h" />
     <ClInclude Include="ZEGameContext.h" />
     <ClInclude Include="ZEngine.h" />
+    <ClInclude Include="ZEngineIncl.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Common\GlobalRegistry.cpp" />
+    <ClCompile Include="GameObjectModel\Component.cpp" />
+    <ClCompile Include="GameObjectModel\Object.cpp" />
     <ClCompile Include="MainFunction\Main.cpp" />
     <ClCompile Include="MainFunction\MainFunctions.cpp" />
     <ClCompile Include="Math\Vector3.cpp" />
@@ -188,6 +198,7 @@
     <ClCompile Include="Renderer\GPUBufferData.cpp" />
     <ClCompile Include="Renderer\Shader.cpp" />
     <ClCompile Include="Renderer\ShaderAction.cpp" />
+    <ClCompile Include="Scene\Actor.cpp" />
     <ClCompile Include="UnitTest\VectorTest.cpp" />
     <ClCompile Include="ZEGameContext.cpp" />
   </ItemGroup>

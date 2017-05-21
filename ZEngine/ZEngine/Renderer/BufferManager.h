@@ -5,11 +5,13 @@
 #include "GPUBufferData.h"
 #include "GPUBufferArray.h"
 #include "BufferLayout.h"
+#include "../GameObjectModel/Component.h"
+
 #include <vector>
 
 namespace ZE {
 class BufferManager {
-	
+
 	static BufferManager* m_instance;
 
 	BufferManager();
