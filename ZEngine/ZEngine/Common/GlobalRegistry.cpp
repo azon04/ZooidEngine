@@ -7,6 +7,7 @@ namespace ZE {
 	{
 		// Register all object classes
 		Component::RegisterClass();
+		Actor::RegisterClass();
 	}
 
 }

@@ -174,6 +174,7 @@
     <ClInclude Include="Renderer\IRenderer.h" />
     <ClInclude Include="Renderer\Shader.h" />
     <ClInclude Include="Renderer\ShaderAction.h" />
+    <ClInclude Include="Scene\Actor.h" />
     <ClInclude Include="UnitTest\UnitTest.h" />
     <ClInclude Include="UnitTest\VectorTest.h" />
     <ClInclude Include="Utils\ZEngineHelper.h" />
@@ -197,6 +198,7 @@
     <ClCompile Include="Renderer\GPUBufferData.cpp" />
     <ClCompile Include="Renderer\Shader.cpp" />
     <ClCompile Include="Renderer\ShaderAction.cpp" />
+    <ClCompile Include="Scene\Actor.cpp" />
     <ClCompile Include="UnitTest\VectorTest.cpp" />
     <ClCompile Include="ZEGameContext.cpp" />
   </ItemGroup>

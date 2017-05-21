@@ -37,6 +37,9 @@
     <Filter Include="Common">
       <UniqueIdentifier>{aa1d15b4-fef2-4e21-833f-274a13daebd9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{8b24e35b-31cf-4a9e-b208-c10d4023f6ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ZEngine.h">
@@ -123,6 +126,9 @@
     <ClInclude Include="ZEngineIncl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\Actor.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UnitTest\VectorTest.cpp">
@@ -175,6 +181,9 @@
     </ClCompile>
     <ClCompile Include="Common\GlobalRegistry.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Actor.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
