@@ -164,6 +164,8 @@
     <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Math\Vector2.h" />
     <ClInclude Include="Math\Vector3.h" />
+    <ClInclude Include="MemoryManagement\Handle.h" />
+    <ClInclude Include="MemoryManagement\MemoryManager.h" />
     <ClInclude Include="Renderer\BufferData.h" />
     <ClInclude Include="Renderer\BufferLayout.h" />
     <ClInclude Include="Renderer\BufferManager.h" />
@@ -189,6 +191,8 @@
     <ClCompile Include="MainFunction\Main.cpp" />
     <ClCompile Include="MainFunction\MainFunctions.cpp" />
     <ClCompile Include="Math\Vector3.cpp" />
+    <ClCompile Include="MemoryManagement\Handle.cpp" />
+    <ClCompile Include="MemoryManagement\MemoryManager.cpp" />
     <ClCompile Include="Renderer\BufferData.cpp" />
     <ClCompile Include="Renderer\BufferLayout.cpp" />
     <ClCompile Include="Renderer\BufferManager.cpp" />
