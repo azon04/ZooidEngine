@@ -138,6 +138,15 @@
     <ClInclude Include="MemoryManagement\Handle.h">
       <Filter>MemoryManagement</Filter>
     </ClInclude>
+    <ClInclude Include="MemoryManagement\IAllocator.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManagement\StackAllocator.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManagement\PoolAllocator.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UnitTest\VectorTest.cpp">
@@ -198,6 +207,15 @@
       <Filter>MemoryManagement</Filter>
     </ClCompile>
     <ClCompile Include="MemoryManagement\Handle.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManagement\IAllocator.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManagement\StackAllocator.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManagement\PoolAllocator.cpp">
       <Filter>MemoryManagement</Filter>
     </ClCompile>
   </ItemGroup>

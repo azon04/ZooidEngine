@@ -8,11 +8,11 @@ namespace ZE {
 		virtual void init(size_t totalsize) = 0;
 		virtual void destroy() = 0;
 
-		virtual void* allocate(size_t size) = 0;
+		virtual void* allocateMem(size_t size) = 0;
 		virtual void deallocate(void* _mem) = 0;
 
-		virtual void* allocateAllign(size_t size, short allign) = 0;
-		virtual void deallocateAllign(void* _mem) = 0;
+		virtual void* allocateAlign(size_t size, short allign) = 0;
+		virtual void deallocateAlign(void* _mem) = 0;
 
 		virtual void clear() = 0;
 	};
