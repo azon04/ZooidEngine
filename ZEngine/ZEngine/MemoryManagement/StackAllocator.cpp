@@ -7,33 +7,33 @@ namespace ZE {
 
 	StackAllocator::StackAllocator()
 	{
-		m_MemBlock = NULL;
-		m_currentBlock = NULL;
+		m_pMemBlock = NULL;
+		m_pCurrentBlock = NULL;
 		m_totalSize = 0;
 	}
 
 	void StackAllocator::init(size_t totalSize)
 	{
 		m_totalSize = totalSize;
-		m_MemBlock = malloc(m_totalSize);
-		m_currentBlock = m_MemBlock;
+		m_pMemBlock = malloc(m_totalSize);
+		m_pCurrentBlock = m_pMemBlock;
 	}
 
 	void StackAllocator::destroy()
 	{
 		//memset(m_MemBlock, 0, m_totalSize);
-		free(m_MemBlock);
-		m_MemBlock = NULL;
-		m_currentBlock = NULL;
+		free(m_pMemBlock);
+		m_pMemBlock = NULL;
+		m_pCurrentBlock = NULL;
 	}
 
 	void* StackAllocator::allocateMem(size_t size)
 	{
-		if ((int)m_currentBlock + size - (int)m_MemBlock > m_totalSize)
+		if ((int)m_pCurrentBlock + size - (int)m_pMemBlock > m_totalSize)
 			return NULL;
 
-		void* mem = m_currentBlock;
-		m_currentBlock = (void*)((uintptr_t)m_currentBlock + size);
+		void* mem = m_pCurrentBlock;
+		m_pCurrentBlock = (void*)((uintptr_t)m_pCurrentBlock + size);
 		return mem;
 	}
 
@@ -66,22 +66,22 @@ namespace ZE {
 
 	void StackAllocator::clear()
 	{
-		m_currentBlock = m_MemBlock;
+		m_pCurrentBlock = m_pMemBlock;
 	}
 
 	unsigned int StackAllocator::getCurrentMarker()
 	{
-		return (reinterpret_cast<uintptr_t>(m_currentBlock) - reinterpret_cast<uintptr_t>(m_MemBlock));
+		return (reinterpret_cast<uintptr_t>(m_pCurrentBlock) - reinterpret_cast<uintptr_t>(m_pMemBlock));
 	}
 
 	void StackAllocator::setCurrentMarker(unsigned int marker_location)
 	{
-		m_currentBlock =  (void*)(reinterpret_cast<uintptr_t>(m_MemBlock) + marker_location);
+		m_pCurrentBlock =  (void*)(reinterpret_cast<uintptr_t>(m_pMemBlock) + marker_location);
 	}
 
 	StackAllocator::~StackAllocator()
 	{
-		if (m_MemBlock) {
+		if (m_pMemBlock) {
 			destroy();
 		}
 	}

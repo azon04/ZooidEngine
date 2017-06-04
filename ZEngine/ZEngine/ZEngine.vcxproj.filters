@@ -147,6 +147,12 @@
     <ClInclude Include="MemoryManagement\PoolAllocator.h">
       <Filter>MemoryManagement</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\StringFunc.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Debug.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UnitTest\VectorTest.cpp">
@@ -217,6 +223,12 @@
     </ClCompile>
     <ClCompile Include="MemoryManagement\PoolAllocator.cpp">
       <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\StringFunc.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Debug.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

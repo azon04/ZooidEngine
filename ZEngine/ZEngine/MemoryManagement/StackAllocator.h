@@ -26,9 +26,9 @@ namespace ZE {
 		void setCurrentMarker(unsigned int marker_location);
 
 	private:
-		void* m_MemBlock;
+		void* m_pMemBlock;
 		size_t m_totalSize;
-		void* m_currentBlock;
+		void* m_pCurrentBlock;
 	};
 };
 #endif

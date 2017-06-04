@@ -182,6 +182,8 @@
     <ClInclude Include="Scene\Actor.h" />
     <ClInclude Include="UnitTest\UnitTest.h" />
     <ClInclude Include="UnitTest\VectorTest.h" />
+    <ClInclude Include="Utils\Debug.h" />
+    <ClInclude Include="Utils\StringFunc.h" />
     <ClInclude Include="Utils\ZEngineHelper.h" />
     <ClInclude Include="ZEGameContext.h" />
     <ClInclude Include="ZEngine.h" />
@@ -210,6 +212,8 @@
     <ClCompile Include="Renderer\ShaderAction.cpp" />
     <ClCompile Include="Scene\Actor.cpp" />
     <ClCompile Include="UnitTest\VectorTest.cpp" />
+    <ClCompile Include="Utils\Debug.cpp" />
+    <ClCompile Include="Utils\StringFunc.cpp" />
     <ClCompile Include="ZEGameContext.cpp" />
   </ItemGroup>
   <ItemGroup>

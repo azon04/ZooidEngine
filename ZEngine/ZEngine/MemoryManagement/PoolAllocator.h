@@ -24,8 +24,11 @@ namespace ZE {
 
 		virtual void clear() override;
 
+		void* getBlock(unsigned int block_index);
+		unsigned int getIndexOfBlock(void* pMem);
+
 	private:
-		void* m_MemBlock;
+		void* m_pMemBlock;
 		size_t m_totalSize;
 		size_t m_itemSize;
 		UINT16 m_poolSize;

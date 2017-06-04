@@ -8,7 +8,7 @@
 namespace ZE {
 
 	PoolAllocator::PoolAllocator(UINT32 poolSize, size_t itemSize, bool alligned) 
-		: m_poolSize(poolSize), m_itemSize(itemSize), m_MemBlock(NULL), m_aligned(alligned)
+		: m_poolSize(poolSize), m_itemSize(itemSize), m_pMemBlock(NULL), m_aligned(alligned)
 	{}
 
 	PoolAllocator::~PoolAllocator()
@@ -23,14 +23,14 @@ namespace ZE {
 		memset(m_avails, 1, sizeof(UINT8) * m_poolSize);
 
 		m_totalSize = totalSize;
-		m_MemBlock = malloc(m_totalSize);
+		m_pMemBlock = malloc(m_totalSize);
 
 	}
 
 	void PoolAllocator::destroy()
 	{
 		free(m_avails);
-		free(m_MemBlock);
+		free(m_pMemBlock);
 	}
 	
 	void* PoolAllocator::allocateItem()
@@ -45,7 +45,7 @@ namespace ZE {
 		if (idx < m_poolSize) 
 		{
 			m_avails[idx] = 0;
-			void* mem = (void*)(reinterpret_cast<uintptr_t>(m_MemBlock) + m_itemSize * idx);
+			void* mem = (void*)(reinterpret_cast<uintptr_t>(m_pMemBlock) + m_itemSize * idx);
 			return mem;
 		}
 		else {
@@ -76,6 +76,19 @@ namespace ZE {
 		for (int idx = 0; idx < m_poolSize; idx++) {
 			m_avails[idx] = 1;
 		}
+	}
+
+	void* PoolAllocator::getBlock(unsigned int block_index)
+	{
+		void* pReturn = nullptr;
+		pReturn = (void*)(reinterpret_cast<uintptr_t>(m_pMemBlock) + m_itemSize * block_index);
+		return pReturn;
+	}
+
+	unsigned int PoolAllocator::getIndexOfBlock(void* pMem)
+	{
+		uintptr_t diff = reinterpret_cast<uintptr_t>(pMem) - reinterpret_cast<uintptr_t>(m_pMemBlock);
+		return diff / m_itemSize;
 	}
 
 	void* PoolAllocator::allocateMem(size_t size)
