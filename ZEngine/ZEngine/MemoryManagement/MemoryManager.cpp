@@ -2,6 +2,17 @@
 #include "../ZEngine.h"
 #include "PoolAllocator.h"
 #include <cstdlib>
+#include "../Utils/Debug.h"
+
+static unsigned int poolConfig[NPOOL][2] =
+{
+	{32, 1024}, // 32 * 1024 =~ 32 kb
+	{64, 1024}, // 64 * 1024 =~ 64 kb 
+	{128, 1024}, // 128 * 1024 =~ 128 kb
+	{256, 1024}, // 256 * 1024 =~ 256 kb
+	{512, 1024}, // 512 * 1024 =~ 512 kb
+	{1024, 1024} // 1024 * 1024 =~ 1 MB
+};
 
 namespace ZE {
 
@@ -25,9 +36,23 @@ namespace ZE {
 		s_instance = new MemoryManager();
 
 		// Calculate total memory needed
+		size_t totalSize = 0;
+		for (unsigned int i = 0; i < NPOOL; i++)
+		{
+			totalSize += PoolAllocator::calculateSizeMem(poolConfig[i][0], poolConfig[i][1]) + ALIGNMENT;
+		}
+		ZEINFO("Total Mem Size : %d", totalSize);
 
 		// Allocate the memory needed for pool
+		s_instance->m_pAlocatorsBlock = (void*)malloc(totalSize);
 		
+		// TO DO align memory first and construct pools
+		void* pMem = s_instance->m_pAlocatorsBlock;
+		for (unsigned int i = 0; i < NPOOL; i++)
+		{
+
+			pMem = (void*) ((uintptr_t) pMem + PoolAllocator::calculateSizeMem(poolConfig[i][0], poolConfig[i][1]));
+		}
 		return s_instance;
 	}
 

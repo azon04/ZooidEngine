@@ -5,7 +5,7 @@
 
 namespace StringFunc {
 	
-	char Buffer[STRING_FUNC_BUFFER_SIZE];
+	extern char Buffer[STRING_FUNC_BUFFER_SIZE];
 
 	void WriteTo(char* to, const char* from, unsigned int size);
 

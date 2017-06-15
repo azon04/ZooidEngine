@@ -24,3 +24,5 @@ int StringFunc::Length(char* string)
 	while(string[length++] != '\0') {}
 	return length;
 }
+
+char StringFunc::Buffer[STRING_FUNC_BUFFER_SIZE];

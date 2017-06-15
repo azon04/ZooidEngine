@@ -12,29 +12,31 @@ namespace ZE {
 		PoolAllocator(UINT32 poolSize, size_t itemSize, bool alligned);
 		virtual ~PoolAllocator();
 
-		virtual void init(size_t totalSize) override;
-		virtual void destroy() override;
+		virtual void init(size_t totalSize);
+		virtual void destroy();
 
-		virtual void* allocateMem(size_t size = 0) override;
-		void* allocateItem();
-		virtual void deallocate(void* _mem) override;
+		virtual void* allocateMem(size_t size = 0);
+		virtual void* allocateItem();
+		virtual void deallocate(void* _mem);
 
-		virtual void* allocateAlign(size_t size, short allign) override;
-		virtual void deallocateAlign(void* _mem) override;
+		virtual void* allocateAlign(size_t size, short allign);
+		virtual void deallocateAlign(void* _mem);
 
-		virtual void clear() override;
+		virtual void clear();
 
 		void* getBlock(unsigned int block_index);
 		unsigned int getIndexOfBlock(void* pMem);
 
+		static PoolAllocator* constructFromMem(void* pMem, size_t itemSize, unsigned int blockCount);
+		static size_t calculateSizeMem(size_t itemSize, unsigned int blockCount);
 	private:
 		void* m_pMemBlock;
 		size_t m_totalSize;
 		size_t m_itemSize;
 		UINT16 m_poolSize;
-		UINT8* m_avails;
 		bool m_aligned; // NEED to implement
-
+		bool m_bNeedToFree;
+		unsigned int m_avails[1];
 	};
 };
 

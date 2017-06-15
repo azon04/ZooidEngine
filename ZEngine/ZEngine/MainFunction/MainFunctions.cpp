@@ -6,6 +6,8 @@ namespace ZE {
 
 	void MainSetup(GameContext* _gameContext)
 	{
+		// Construct Memory
+		MemoryManager::Construct();
 
 		// Register all classes
 		GlobalRegistry::Register();
@@ -29,6 +31,7 @@ namespace ZE {
 		BufferManager::Destroy();
 		ShaderManager::Destroy();
 		_gameContext->m_renderer->Clean();
+		MemoryManager::Deconstruct();
 	}
 
 }

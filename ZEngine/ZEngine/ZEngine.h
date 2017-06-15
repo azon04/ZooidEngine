@@ -2,6 +2,8 @@
 
 #include "Renderer/IRenderer.h"
 
+#include "MemoryManagement/MemoryManager.h"
+
 // #OPENGL Specific
 #include "Renderer/GLRenderer.h"
 

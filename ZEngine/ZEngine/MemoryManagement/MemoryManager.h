@@ -1,7 +1,7 @@
 #ifndef __ZE_MEMORY_MANAGER_H__
 #define __ZE_MEMORY_MANAGER_H__
 
-#define NPOOL 32
+#define NPOOL 6
 #define  ALIGNMENT 16
 
 namespace ZE {
