@@ -50,7 +50,12 @@ namespace ZE {
 		void* pMem = s_instance->m_pAlocatorsBlock;
 		for (unsigned int i = 0; i < NPOOL; i++)
 		{
+			size_t mask = ALIGNMENT - 1;
+			uintptr_t misaligned = ((uintptr_t)(pMem)& mask);
+			ptrdiff_t adjustment = ALIGNMENT - misaligned;
 
+			pMem = (void*)((uintptr_t)pMem + adjustment);
+			s_instance->m_pools[i] = PoolAllocator::constructFromMem(pMem, poolConfig[i][0], poolConfig[i][1]);
 			pMem = (void*) ((uintptr_t) pMem + PoolAllocator::calculateSizeMem(poolConfig[i][0], poolConfig[i][1]));
 		}
 		return s_instance;

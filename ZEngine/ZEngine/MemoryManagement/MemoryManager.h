@@ -14,7 +14,7 @@ namespace ZE {
 	
 	protected:
 		void* m_pAlocatorsBlock;
-		PoolAllocator *m_pools[NPOOL];
+		PoolAllocator* m_pools[NPOOL];
 	
 	public:
 		MemoryManager();
