@@ -120,7 +120,8 @@ namespace ZE {
 
 	void ShaderManager::Init()
 	{
-		m_instance = new ShaderManager;
+		Handle handle("SHADER MANAGER", sizeof(ShaderManager));
+		m_instance = new(handle) ShaderManager;
 		m_instance->InitShaders();
 	}
 
@@ -129,7 +130,6 @@ namespace ZE {
 	void ShaderManager::Destroy()
 	{
 		m_instance->DestroyShaders();
-		delete m_instance;
 	}
 
 	ShaderManager* ShaderManager::getInstance()
@@ -141,7 +141,8 @@ namespace ZE {
 	{
 		// Init all shaders
 		// #OPENGL Specific
-		Shader* simpleGLShader = new Shader;
+		Handle handle("Simple Shader", sizeof(Shader));
+		Shader* simpleGLShader = new(handle) Shader;
 		simpleGLShader->LoadShaderFiles("Shaders/TestGLVertexShader.vs", "Shaders/TestGLFragmentShader.frag", nullptr);
 		
 		m_shaders.push_back(simpleGLShader);
@@ -149,10 +150,6 @@ namespace ZE {
 
 	void ShaderManager::DestroyShaders()
 	{
-		for (int i = 0; i < m_shaders.size(); i++) {
-			delete m_shaders[i];
-		}
-
 		m_shaders.clear();
 	}
 

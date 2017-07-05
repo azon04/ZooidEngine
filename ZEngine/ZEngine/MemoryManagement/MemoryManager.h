@@ -1,8 +1,8 @@
 #ifndef __ZE_MEMORY_MANAGER_H__
 #define __ZE_MEMORY_MANAGER_H__
 
-#define NPOOL 6
-#define  ALIGNMENT 16
+#define NPOOL 7
+#define ALLIGNMENT 16
 
 namespace ZE {
 	class PoolAllocator;

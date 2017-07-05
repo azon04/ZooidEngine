@@ -7,9 +7,7 @@ namespace ZE {
 	class GameContext {
 	public:
 		GameContext() {}
-		virtual ~GameContext() {
-			if (m_renderer) delete m_renderer;
-		}
+		virtual ~GameContext() {}
 
 		IRenderer* m_renderer;
 		BufferManager* m_bufferManager;

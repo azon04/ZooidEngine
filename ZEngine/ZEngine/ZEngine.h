@@ -1,5 +1,7 @@
 #include "Utils/ZEngineHelper.h"
 
+#include "MemoryManagement/Handle.h"
+
 #include "Renderer/IRenderer.h"
 
 #include "MemoryManagement/MemoryManager.h"

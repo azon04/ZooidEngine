@@ -11,7 +11,8 @@ static unsigned int poolConfig[NPOOL][2] =
 	{128, 1024}, // 128 * 1024 =~ 128 kb
 	{256, 1024}, // 256 * 1024 =~ 256 kb
 	{512, 1024}, // 512 * 1024 =~ 512 kb
-	{1024, 1024} // 1024 * 1024 =~ 1 MB
+	{1024, 1024}, // 1024 * 1024 =~ 1 MB
+	{16384, 1} // Draw list need this big of memoryblock
 };
 
 namespace ZE {
@@ -20,13 +21,12 @@ namespace ZE {
 
 	MemoryManager::MemoryManager() :
 		m_pAlocatorsBlock(nullptr)
-	{
-
-	}
+	{}
 
 	MemoryManager::~MemoryManager()
 	{
-		if (m_pAlocatorsBlock) {
+		if (m_pAlocatorsBlock) 
+		{
 			free(m_pAlocatorsBlock);
 		}
 	}
@@ -39,25 +39,26 @@ namespace ZE {
 		size_t totalSize = 0;
 		for (unsigned int i = 0; i < NPOOL; i++)
 		{
-			totalSize += PoolAllocator::calculateSizeMem(poolConfig[i][0], poolConfig[i][1]) + ALIGNMENT;
+			totalSize += PoolAllocator::calculateSizeMem(poolConfig[i][0], poolConfig[i][1]) + ALLIGNMENT;
 		}
-		ZEINFO("Total Mem Size : %d", totalSize);
+		ZEINFO("Total Mem Size : %d bytes ~ %f MB", totalSize, totalSize / (1024.0f * 1024.0f));
 
 		// Allocate the memory needed for pool
-		s_instance->m_pAlocatorsBlock = (void*)malloc(totalSize);
+		s_instance->m_pAlocatorsBlock = (void*) malloc(totalSize);
 		
 		// TO DO align memory first and construct pools
 		void* pMem = s_instance->m_pAlocatorsBlock;
 		for (unsigned int i = 0; i < NPOOL; i++)
 		{
-			size_t mask = ALIGNMENT - 1;
+			size_t mask = ALLIGNMENT - 1;
 			uintptr_t misaligned = ((uintptr_t)(pMem)& mask);
-			ptrdiff_t adjustment = ALIGNMENT - misaligned;
+			ptrdiff_t adjustment = ALLIGNMENT - misaligned;
 
 			pMem = (void*)((uintptr_t)pMem + adjustment);
 			s_instance->m_pools[i] = PoolAllocator::constructFromMem(pMem, poolConfig[i][0], poolConfig[i][1]);
 			pMem = (void*) ((uintptr_t) pMem + PoolAllocator::calculateSizeMem(poolConfig[i][0], poolConfig[i][1]));
 		}
+
 		return s_instance;
 	}
 
@@ -68,18 +69,37 @@ namespace ZE {
 
 	void* MemoryManager::allocateBlock(size_t size, unsigned int &pool_index, unsigned int &block_index)
 	{
-		ZASSERT(pool_index < NPOOL, "Index Pool out of bound");
+		ZEINFO("Allocate memory for %d bytes", size);
 
 		// Check the matched size in pools
+		int index = 0;
+		while (index < NPOOL && poolConfig[index][0] < size)
+		{
+			ZEINFO("Cant fit in %d bytes", poolConfig[index][0]);
+			index++;
+		}
 
+		ZASSERT(index < NPOOL, "Can't find pool for the requested size");
+
+		while (index < NPOOL && m_pools[index]->getCountFreeBlock() == 0)
+		{
+			ZEINFO("Cant find free block in %d bytes", poolConfig[index][0]);
+			index++;
+		}
+
+		ZASSERT(index < NPOOL, "Can't find available available free block");
+		ZASSERT(m_pools[index]->getCountFreeBlock() > 0, "Need more size for pool");
+		
 		// Allocate in memory
+		pool_index = index;
+		block_index = m_pools[index]->allocateFreeBlockIndex();
 
-		return nullptr;
+		return m_pools[pool_index]->getBlock(block_index);
 	}
 
 	void MemoryManager::freeBlock(unsigned int pool_index, unsigned int block_index)
 	{
-		ZASSERT(pool_index < NPOOL, "Index Pool out of bound");
+		ZASSERT(pool_index < NPOOL, "Pool index out of bound");
 		m_pools[pool_index]->deallocate(m_pools[pool_index]->getBlock(block_index));
 	}
 

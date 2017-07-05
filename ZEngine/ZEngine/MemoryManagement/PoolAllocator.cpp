@@ -92,6 +92,11 @@ namespace ZE {
 		return pReturn;
 	}
 
+	unsigned int PoolAllocator::allocateFreeBlockIndex()
+	{
+		return m_avails[--m_freeBlock];
+	}
+
 	unsigned int PoolAllocator::getIndexOfBlock(void* pMem)
 	{
 		uintptr_t diff = reinterpret_cast<uintptr_t>(pMem) - reinterpret_cast<uintptr_t>(m_pMemBlock);
@@ -111,8 +116,10 @@ namespace ZE {
 		poolAllocator->m_poolSize = blockCount;
 		poolAllocator->m_aligned = false;
 		poolAllocator->m_bNeedToFree = false;
+		poolAllocator->m_freeBlock = blockCount;
 
-		for (unsigned int i = 0; i < blockCount; i++) {
+		for (unsigned int i = 0; i < blockCount; i++) 
+		{
 			poolAllocator->m_avails[i] = i;
 		}
 
@@ -133,4 +140,10 @@ namespace ZE {
 	{
 		return allocateItem();
 	}
+
+	void PoolAllocator::freeBlock(unsigned int block)
+	{
+		m_avails[m_freeBlock++] = block;
+	}
+
 }

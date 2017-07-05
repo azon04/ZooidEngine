@@ -24,16 +24,22 @@ namespace ZE {
 
 		virtual void clear();
 
+		// Pool allocator specific function
 		void* getBlock(unsigned int block_index);
 		unsigned int getIndexOfBlock(void* pMem);
+		unsigned int allocateFreeBlockIndex();
+		void freeBlock(unsigned int block);
+		int getCountFreeBlock() const { return m_freeBlock; }
 
 		static PoolAllocator* constructFromMem(void* pMem, size_t itemSize, unsigned int blockCount);
 		static size_t calculateSizeMem(size_t itemSize, unsigned int blockCount);
+
 	private:
 		void* m_pMemBlock;
 		size_t m_totalSize;
 		size_t m_itemSize;
 		UINT16 m_poolSize;
+		size_t m_freeBlock;
 		bool m_aligned; // NEED to implement
 		bool m_bNeedToFree;
 		unsigned int m_avails[1];
