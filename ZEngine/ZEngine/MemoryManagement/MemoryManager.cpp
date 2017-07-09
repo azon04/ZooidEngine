@@ -12,7 +12,8 @@ static unsigned int poolConfig[NPOOL][2] =
 	{256, 1024}, // 256 * 1024 =~ 256 kb
 	{512, 1024}, // 512 * 1024 =~ 512 kb
 	{1024, 1024}, // 1024 * 1024 =~ 1 MB
-	{16384, 1} // Draw list need this big of memoryblock
+	{16384, 1}, // Draw list need this big of memoryblock
+	{24584, 1} // Draw list for 64bit machine
 };
 
 namespace ZE {
