@@ -4,6 +4,8 @@
 // Outer engine includes
 #include <vector>
 
+#include "../Utils/PrimitiveTypes.h"
+
 #include "ObjDecl.h"
 #include "RTTI.h"
 
@@ -16,7 +18,7 @@ namespace ZE {
 		virtual int getClassID() = 0;
 		virtual const char* getClassName() = 0;
 
-		static std::vector<int>& ClassMap();
+		static std::vector<Int32>& ClassMap();
 
 		static void RegisterClass() {};
 

@@ -1,7 +1,7 @@
 #ifndef __VECTOR_Z__
 #define __VECTOR_Z__
 
-#include <cmath>
+#include "MathUtil.h"
 #include <cassert>
 
 class Vector3 {
@@ -46,7 +46,7 @@ public:
 	}
 
 	// Dot Product
-	float dotProduct(const Vector3& _v2) {
+	ZE::Float32 dotProduct(const Vector3& _v2) {
 		return m_x * _v2.m_x + m_y * _v2.m_y + m_z * _v2.m_z;
 	}
 
@@ -58,18 +58,18 @@ public:
 	}
 
 	// SquareLength
-	float lengthSquare() {
+	ZE::Float32 lengthSquare() {
 		return m_x * m_x + m_y * m_y + m_z * m_z;
 	}
 
 	// Length
-	float length() {
+	ZE::Float32 length() {
 		return sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
 	}
 
 	// Normalize
 	void normalize() {
-		float d = length();
+		ZE::Float32 d = length();
 		
 		assert(d > 0.0f);
 
@@ -79,16 +79,16 @@ public:
 	}
 
 	// Getter and Setter
-	float getX() const { return m_x; }
-	float getY() const { return m_y; }
-	float getZ() const { return m_z; }
+	ZE::Float32 getX() const { return m_x; }
+	ZE::Float32 getY() const { return m_y; }
+	ZE::Float32 getZ() const { return m_z; }
 
 	Vector3& setX(float _x) { m_x = _x; return *this; }
 	Vector3& setY(float _y) { m_y = _y; return *this; }
 	Vector3& setZ(float _z) { m_z = _z; return *this; }
 
 	// Data Member
-	float m_x, m_y, m_z;
+	ZE::Float32 m_x, m_y, m_z;
 };
 
 

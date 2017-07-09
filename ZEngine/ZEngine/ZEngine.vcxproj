@@ -164,6 +164,11 @@
     <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Math\Vector2.h" />
     <ClInclude Include="Math\Vector3.h" />
+    <ClInclude Include="MemoryManagement\Handle.h" />
+    <ClInclude Include="MemoryManagement\IAllocator.h" />
+    <ClInclude Include="MemoryManagement\MemoryManager.h" />
+    <ClInclude Include="MemoryManagement\PoolAllocator.h" />
+    <ClInclude Include="MemoryManagement\StackAllocator.h" />
     <ClInclude Include="Renderer\BufferData.h" />
     <ClInclude Include="Renderer\BufferLayout.h" />
     <ClInclude Include="Renderer\BufferManager.h" />
@@ -177,6 +182,9 @@
     <ClInclude Include="Scene\Actor.h" />
     <ClInclude Include="UnitTest\UnitTest.h" />
     <ClInclude Include="UnitTest\VectorTest.h" />
+    <ClInclude Include="Utils\Debug.h" />
+    <ClInclude Include="Utils\PrimitiveTypes.h" />
+    <ClInclude Include="Utils\StringFunc.h" />
     <ClInclude Include="Utils\ZEngineHelper.h" />
     <ClInclude Include="ZEGameContext.h" />
     <ClInclude Include="ZEngine.h" />
@@ -188,7 +196,11 @@
     <ClCompile Include="GameObjectModel\Object.cpp" />
     <ClCompile Include="MainFunction\Main.cpp" />
     <ClCompile Include="MainFunction\MainFunctions.cpp" />
-    <ClCompile Include="Math\Vector3.cpp" />
+    <ClCompile Include="MemoryManagement\Handle.cpp" />
+    <ClCompile Include="MemoryManagement\IAllocator.cpp" />
+    <ClCompile Include="MemoryManagement\MemoryManager.cpp" />
+    <ClCompile Include="MemoryManagement\PoolAllocator.cpp" />
+    <ClCompile Include="MemoryManagement\StackAllocator.cpp" />
     <ClCompile Include="Renderer\BufferData.cpp" />
     <ClCompile Include="Renderer\BufferLayout.cpp" />
     <ClCompile Include="Renderer\BufferManager.cpp" />
@@ -200,6 +212,8 @@
     <ClCompile Include="Renderer\ShaderAction.cpp" />
     <ClCompile Include="Scene\Actor.cpp" />
     <ClCompile Include="UnitTest\VectorTest.cpp" />
+    <ClCompile Include="Utils\Debug.cpp" />
+    <ClCompile Include="Utils\StringFunc.cpp" />
     <ClCompile Include="ZEGameContext.cpp" />
   </ItemGroup>
   <ItemGroup>

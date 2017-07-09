@@ -40,6 +40,9 @@
     <Filter Include="Scene">
       <UniqueIdentifier>{8b24e35b-31cf-4a9e-b208-c10d4023f6ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MemoryManagement">
+      <UniqueIdentifier>{90300010-1402-44f6-b775-643268d2c28e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ZEngine.h">
@@ -129,6 +132,30 @@
     <ClInclude Include="Scene\Actor.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="MemoryManagement\MemoryManager.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManagement\Handle.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManagement\IAllocator.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManagement\StackAllocator.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManagement\PoolAllocator.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\StringFunc.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Debug.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\PrimitiveTypes.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UnitTest\VectorTest.cpp">
@@ -136,9 +163,6 @@
     </ClCompile>
     <ClCompile Include="MainFunction\Main.cpp">
       <Filter>MainFunction</Filter>
-    </ClCompile>
-    <ClCompile Include="Math\Vector3.cpp">
-      <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="Renderer\BufferData.cpp">
       <Filter>Renderer</Filter>
@@ -184,6 +208,27 @@
     </ClCompile>
     <ClCompile Include="Scene\Actor.cpp">
       <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManagement\MemoryManager.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManagement\Handle.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManagement\IAllocator.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManagement\StackAllocator.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManagement\PoolAllocator.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\StringFunc.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Debug.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

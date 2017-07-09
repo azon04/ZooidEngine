@@ -24,7 +24,7 @@ public:
 	bool m_bUsingIndexBuffer;
 
 	// #OPENGL Specific
-	unsigned int m_VAO;
+	GLuint m_VAO;
 };
 }
 #endif

@@ -1,6 +1,8 @@
 #ifndef __Z_BUFFER_DATA__
 #define __Z_BUFFER_DATA__
 
+#include "../Utils/PrimitiveTypes.h"
+
 namespace ZE {
 
 enum BufferType {
@@ -23,9 +25,9 @@ public:
 	}
 
 	void* m_data;
-	unsigned int m_size;
+	ZE::UInt32 m_size;
 	BufferType m_type;
-	int m_bufferLayout;
+	ZE::Int32 m_bufferLayout;
 };
 
 };

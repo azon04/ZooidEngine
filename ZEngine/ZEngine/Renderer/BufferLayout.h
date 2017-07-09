@@ -1,6 +1,7 @@
 #ifndef __ZE_BUFFER_LAYOUT__
 #define __ZE_BUFFER_LAYOUT__
 
+#include "../Utils/PrimitiveTypes.h"
 #include <vector>
 
 #define BUFFER_LAYOUT_V3_C3 0
@@ -14,11 +15,11 @@ namespace ZE {
 	};
 
 	struct Layout {
-		int index;
-		int sizePerItem;
+		ZE::Int32 index;
+		ZE::UInt32 sizePerItem;
 		DataType dataType;
-		int stride;
-		int offset;
+		ZE::UInt32 stride;
+		ZE::Int32 offset;
 	};
 
 	class BufferLayout {

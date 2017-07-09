@@ -1,6 +1,7 @@
 #ifndef __MATRIX4X4_Z__
 #define __MATRIX4X4_Z__
 
+#include "MathUtil.h"
 #include "Vector3.h"
 #include "Quaternion.h"
 #include "Matrix3x3.h"
@@ -60,8 +61,8 @@ public:
 		return newMat;
 	}
 
-	float matMinor(int row, int column) {
-		float values[3][3];
+	ZE::Float32 matMinor(ZE::Int32 row, ZE::Int32 column) {
+		ZE::Float32 values[3][3];
 		int r_index = 0;
 		int c_index = 0;
 
@@ -79,14 +80,14 @@ public:
 		return mat.det();
 	}
 
-	float matCofactor(int r, int c) {
+	ZE::Float32 matCofactor(ZE::Int32 r, ZE::Int32 c) {
 		int _sign = (r + c) % 2 == 0 ? 1 : -1;
 		return _sign * matMinor(r, c);
 	}
 
-	float det() {
+	ZE::Float32 det() {
 		
-		float resultDet = 0.0f;
+		ZE::Float32 resultDet = 0.0f;
 		
 		for (int i = 0; i < 4; i++) {
 			resultDet += m_data[0][i] * matCofactor(0, i);
@@ -158,7 +159,7 @@ public:
 		return resultVector;
 	}
 
-	void scale(float _scale) {
+	void scale(ZE::Float32 _scale) {
 		m_data[0][0] *= _scale;
 		m_data[1][1] *= _scale;
 		m_data[2][2] *= _scale;
@@ -293,7 +294,7 @@ public:
 	}
 
 	// DATA MEMBER
-	float m_data[4][4];
+	ZE::Float32 m_data[4][4];
 };
 
 inline Vector3 operator*(const Vector3& _v, Matrix4x4& _mat) {

@@ -1,6 +1,7 @@
 #ifndef __ZE_DRAW_LIST__
 #define __ZE_DRAW_LIST__
 
+#include "../Utils/PrimitiveTypes.h"
 #include "ShaderAction.h"
 
 #define MAX_DRAW_LIST 1024
@@ -18,7 +19,7 @@ namespace ZE {
 		}
 
 		ShaderAction m_drawList[MAX_DRAW_LIST];
-		int m_size;
+		ZE::Int32 m_size;
 	};
 
 };

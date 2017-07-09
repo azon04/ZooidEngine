@@ -1,3 +1,5 @@
+#include "../ZEngine.h"
+
 #include "BufferManager.h"
 
 #include "BufferLayout.h"
@@ -17,7 +19,8 @@ namespace ZE {
 
 	void BufferManager::Init()
 	{
-		m_instance = new BufferManager();
+		Handle handle("Buffer Manager", sizeof(BufferManager));
+		m_instance = new(handle) BufferManager();
 		BufferLayoutManager::Init();
 		m_instance->m_bufferLayoutManager = BufferLayoutManager::getInstance();
 
@@ -29,7 +32,8 @@ namespace ZE {
 			0.0f, 0.5f, 0.0f,	0.0f, 0.0f, 1.0f	// Top
 		};
 
-		BufferData* bufferData = new BufferData(BufferType::VERTEX_BUFFER);
+		Handle hBufferData("Buffer Data", sizeof(BufferData));
+		BufferData* bufferData = new(hBufferData) BufferData(BufferType::VERTEX_BUFFER);
 		bufferData->SetData(vertices_color, 18 * sizeof(float));
 		bufferData->m_bufferLayout = BUFFER_LAYOUT_V3_C3;
 
@@ -41,14 +45,15 @@ namespace ZE {
 
 	void BufferManager::Destroy()
 	{
-		delete m_instance;
+
 	}
 
 	ZE::GPUBufferData* BufferManager::createGPUBufferFromBuffer(BufferData* _bufferData)
 	{
 		if (!_bufferData) return nullptr;
 		// #OPENGL Specific
-		GPUBufferData* GPUBuffer = new GPUBufferData();
+		Handle handle("GPU Buffer Data", sizeof(GPUBufferData));
+		GPUBufferData* GPUBuffer = new(handle) GPUBufferData();
 		GPUBuffer->FromBufferData(_bufferData);
 
 		m_GPUBuffers.push_back(GPUBuffer);
@@ -63,7 +68,8 @@ namespace ZE {
 		GPUBufferData* indexBufferGPU = createGPUBufferFromBuffer(_indexBuffer);
 		GPUBufferData* computeGPUBuffer = createGPUBufferFromBuffer(_gpuBuffer);
 	
-		GPUBufferArray* bufferArray = new GPUBufferArray();
+		Handle handle("GPU Buffer Array", sizeof(GPUBufferArray));
+		GPUBufferArray* bufferArray = new(handle) GPUBufferArray();
 		bufferArray->SetupBufferArray(vertexBufferGPU, indexBufferGPU, computeGPUBuffer);
 
 		m_GPUBufferArrays.push_back(bufferArray);
