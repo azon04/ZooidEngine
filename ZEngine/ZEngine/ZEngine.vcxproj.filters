@@ -153,6 +153,9 @@
     <ClInclude Include="Utils\Debug.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\PrimitiveTypes.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UnitTest\VectorTest.cpp">
@@ -160,9 +163,6 @@
     </ClCompile>
     <ClCompile Include="MainFunction\Main.cpp">
       <Filter>MainFunction</Filter>
-    </ClCompile>
-    <ClCompile Include="Math\Vector3.cpp">
-      <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="Renderer\BufferData.cpp">
       <Filter>Renderer</Filter>

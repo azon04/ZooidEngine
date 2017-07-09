@@ -1,10 +1,15 @@
 #ifndef __Z_GPU_BUFFER__
 #define __Z_GPU_BUFFER__
 
+#include "../Utils/PrimitiveTypes.h"
+
 #include "BufferData.h"
 #include "BufferLayout.h"
 
 #include <vector>
+
+// #OPENGL Specific
+#include <GL/glew.h>
 
 #define MAX_LAYOUT 16
 namespace ZE {
@@ -25,8 +30,8 @@ public:
 	BufferData* m_BufferData;
 
 	// #OPENGL Specific
-	unsigned int m_BBO;
-	int numberOfLayout;
+	GLuint m_BBO;
+	ZE::Int32 numberOfLayout;
 	BufferLayout* m_layout;
 
 };

@@ -1,4 +1,5 @@
 #include "Utils/ZEngineHelper.h"
+#include "Utils/PrimitiveTypes.h"
 
 #include "MemoryManagement/Handle.h"
 

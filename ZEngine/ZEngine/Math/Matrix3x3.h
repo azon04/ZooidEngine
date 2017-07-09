@@ -1,6 +1,7 @@
 #ifndef __MATRIX3X3_Z__
 #define __MATRIX3X3_Z__
 
+#include "MathUtil.h"
 #include "Vector3.h"
 
 class Matrix3x3 {
@@ -15,16 +16,16 @@ public:
 		m_data[0][0] = m_data[1][1] = m_data[2][2] = 1.0f;
 	}
 
-	Matrix3x3(float _g11, float _g12, float _g13,
-		float _g21, float _g22, float _g23,
-		float _g31, float _g32, float _g33) {
+	Matrix3x3(ZE::Float32 _g11, ZE::Float32 _g12, ZE::Float32 _g13,
+		ZE::Float32 _g21, ZE::Float32 _g22, ZE::Float32 _g23,
+		ZE::Float32 _g31, ZE::Float32 _g32, ZE::Float32 _g33) {
 		m_data[0][0] = _g11; m_data[0][1] = _g12; m_data[0][2] = _g13;
 		m_data[0][0] = _g21; m_data[0][1] = _g22; m_data[0][2] = _g23;
 		m_data[0][0] = _g31; m_data[0][1] = _g32; m_data[0][2] = _g33;
 	}
 
 	// _values must be at least float[3][3]
-	Matrix3x3(float** _values) {
+	Matrix3x3(ZE::Float32** _values) {
 		for (int r = 0; r < 3; r++) {
 			for (int c = 0; c < 3; c++) {
 				m_data[r][c] = _values[r][c];
@@ -58,16 +59,16 @@ public:
 		return newMat;
 	}
 
-	float det() {
-		float m11 = m_data[0][0] * (m_data[1][1] * m_data[2][2] - m_data[1][2] * m_data[2][1]);
-		float m12 = m_data[0][1] * (m_data[1][0] * m_data[2][2] - m_data[1][2] * m_data[2][0]);
-		float m13 = m_data[0][2] * (m_data[1][0] * m_data[2][1] - m_data[1][1] * m_data[2][0]);
+	ZE::Float32 det() {
+		ZE::Float32 m11 = m_data[0][0] * (m_data[1][1] * m_data[2][2] - m_data[1][2] * m_data[2][1]);
+		ZE::Float32 m12 = m_data[0][1] * (m_data[1][0] * m_data[2][2] - m_data[1][2] * m_data[2][0]);
+		ZE::Float32 m13 = m_data[0][2] * (m_data[1][0] * m_data[2][1] - m_data[1][1] * m_data[2][0]);
 		return m11 - m12 + m13;
 	}
 
-	float matCofactor(int row, int col) {
-		float sign_one = ((row + col) % 2 == 0) ? 1.0f : -1.0f;
-		float m[2][2];
+	ZE::Float32 matCofactor(ZE::Int32 row, ZE::Int32 col) {
+		ZE::Float32 sign_one = ((row + col) % 2 == 0) ? 1.0f : -1.0f;
+		ZE::Float32 m[2][2];
 		int r_index = 0;
 		int c_index = 0;
 		
@@ -86,7 +87,7 @@ public:
 
 	Matrix3x3 inverse() {
 		Matrix3x3 inverseMatrix;
-		float d = det();
+		ZE::Float32 d = det();
 
 		for (int r = 0; r < 3; r++) {
 			for (int c = 0; c < 3; c++) {
@@ -169,7 +170,7 @@ public:
 	}
 
 	// DATA MEMBER
-	float m_data[3][3];
+	ZE::Float32 m_data[3][3];
 };
 
 inline Vector3 operator*(const Vector3& _v, Matrix3x3& _mat) {

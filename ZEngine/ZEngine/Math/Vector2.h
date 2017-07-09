@@ -1,7 +1,7 @@
 #ifndef __VECTOR2_Z__
 #define __VECTOR2_Z__
 
-#include <cmath>
+#include "MathUtil.h"
 #include <cassert>
 
 class Vector2 {
@@ -12,13 +12,13 @@ public:
 		m_x(0.0f), m_y(0.0f)
 	{}
 
-	Vector2(float _x, float _y) :
-		m_x(_x), float m_y(_y) 
+	Vector2(ZE::Float32 _x, ZE::Float32 _y) :
+		m_x(_x), m_y(_y) 
 	{}
 
 	Vector2(const Vector2& _v2) {
 		m_x = _v2.m_x;
-		m_y = _v2.m_y
+		m_y = _v2.m_y;
 	}
 
 	~Vector2() {}
@@ -47,40 +47,40 @@ public:
 	}
 
 	// Dot product
-	float dotProduct(Vector2 _v2) {
+	ZE::Float32 dotProduct(Vector2 _v2) {
 		return m_x * _v2.m_x + m_y * _v2.m_y;
 	}
 
 	// SquareLength
-	float lengthSquare() {
+	ZE::Float32 lengthSquare() {
 		return m_x * m_x + m_y + m_y;
 	}
 
 
 	// Length
-	float length() {
+	ZE::Float32 length() {
 		return sqrt(m_x * m_x + m_y * m_y);
 	}
 
 	// Normalize
 	void normalize() {
-		float d = length();
+		ZE::Float32 d = length();
 
-		assert(d > 0);
+		ZASSERT(d > 0, "Length Zero");
 
 		m_x /= d;
 		m_y /= d;
 	}
 
 	// Getter and Setter
-	float getX() const { return m_x; }
-	float getY() const { return m_y; }
+	ZE::Float32 getX() const { return m_x; }
+	ZE::Float32 getY() const { return m_y; }
 
 	Vector2& setX(float _x) { m_x = _x; return *this; }
 	Vector2& setY(float _y) { m_y = _y; return *this; }
 	
-	float m_x;
-	float m_y;
+	ZE::Float32 m_x;
+	ZE::Float32 m_y;
 };
 
 // Vector2 multiplication with scalar

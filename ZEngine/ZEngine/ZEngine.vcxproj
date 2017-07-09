@@ -183,6 +183,7 @@
     <ClInclude Include="UnitTest\UnitTest.h" />
     <ClInclude Include="UnitTest\VectorTest.h" />
     <ClInclude Include="Utils\Debug.h" />
+    <ClInclude Include="Utils\PrimitiveTypes.h" />
     <ClInclude Include="Utils\StringFunc.h" />
     <ClInclude Include="Utils\ZEngineHelper.h" />
     <ClInclude Include="ZEGameContext.h" />
@@ -195,7 +196,6 @@
     <ClCompile Include="GameObjectModel\Object.cpp" />
     <ClCompile Include="MainFunction\Main.cpp" />
     <ClCompile Include="MainFunction\MainFunctions.cpp" />
-    <ClCompile Include="Math\Vector3.cpp" />
     <ClCompile Include="MemoryManagement\Handle.cpp" />
     <ClCompile Include="MemoryManagement\IAllocator.cpp" />
     <ClCompile Include="MemoryManagement\MemoryManager.cpp" />

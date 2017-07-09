@@ -5,6 +5,9 @@
 
 #include <vector>
 
+// OPENGL Specific
+#include <GL/glew.h>
+
 namespace ZE {
 
 class Shader {
@@ -19,8 +22,9 @@ public:
 	void Unbind();
 
 	BufferLayout *m_layout;
+
 	// #OPENGL Specific
-	unsigned int m_GLProgram;
+	GLuint m_GLProgram;
 };
 
 class ShaderManager {

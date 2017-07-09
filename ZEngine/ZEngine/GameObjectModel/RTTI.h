@@ -1,6 +1,8 @@
 #ifndef __ZE_RTTI_H__
 #define __ZE_RTTI_H__
 
+#include "../Utils/PrimitiveTypes.h"
+
 namespace ZE {
 	
 	struct RTTI_Properties {
@@ -9,7 +11,7 @@ namespace ZE {
 
 	struct RTTI {
 		char m_className[32];
-		int m_classID;
+		Int32 m_classID;
 		RTTI* m_parentRTTI;
 	};
 

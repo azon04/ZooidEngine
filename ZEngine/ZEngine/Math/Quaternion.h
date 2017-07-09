@@ -12,11 +12,11 @@ public:
 		: m_x(0.0f), m_y(0.0f), m_z(0.0f), m_w(1.0f)
 	{}
 
-	Quaternion(float _x, float _y, float _z, float _w)
+	Quaternion(ZE::Float32 _x, ZE::Float32 _y, ZE::Float32 _z, ZE::Float32 _w)
 		: m_x(_x), m_y(_y), m_z(_z), m_w(_w)
 	{}
 
-	Quaternion(Vector3 _v, float _degreeAngle)
+	Quaternion(Vector3 _v, ZE::Float32 _degreeAngle)
 	{
 		float _cos = cos(DegToRad(_degreeAngle) * 0.5f);
 		float _sin = sin(DegToRad(_degreeAngle) * 0.5f);
@@ -40,7 +40,7 @@ public:
 	
 	// Methods
 	void normalize() {
-		float mag = sqrt(m_x * m_x + m_y * m_y + m_z * m_z + m_w * m_w);
+		ZE::Float32 mag = sqrt(m_x * m_x + m_y * m_y + m_z * m_z + m_w * m_w);
 
 		m_x /= mag;
 		m_y /= mag;
@@ -48,15 +48,15 @@ public:
 		m_w /= mag;
 	}
 
-	float getAngleInDeg() {
+	ZE::Float32 getAngleInDeg() {
 		return RadToDeg(getAngleInRad());
 	}
 
-	float getAngleInRad() {
+	ZE::Float32 getAngleInRad() {
 		return static_cast<float>(acos(m_w));
 	}
 
-	void updateAngleInRad(float _radAngle) {
+	ZE::Float32 updateAngleInRad(ZE::Float32 _radAngle) {
 		float arccos = acos(m_w);
 		float sinv = sin(arccos);
 		
@@ -93,16 +93,16 @@ public:
 	}
 
 	// Getter and Setter
-	float getX() const { return m_x; }
-	float getY() const { return m_y; }
-	float getZ() const { return m_z; }
-	float getW() const { return m_w; }
+	ZE::Float32 getX() const { return m_x; }
+	ZE::Float32 getY() const { return m_y; }
+	ZE::Float32 getZ() const { return m_z; }
+	ZE::Float32 getW() const { return m_w; }
 
 	// DATA MEMBER
-	float m_x;
-	float m_y;
-	float m_z;
-	float m_w;
+	ZE::Float32 m_x;
+	ZE::Float32 m_y;
+	ZE::Float32 m_z;
+	ZE::Float32 m_w;
 };
 
 #endif // 
