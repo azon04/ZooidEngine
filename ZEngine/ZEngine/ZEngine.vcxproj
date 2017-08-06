@@ -172,6 +172,7 @@
     <ClInclude Include="Math\Vector3.h" />
     <ClInclude Include="MemoryManagement\Handle.h" />
     <ClInclude Include="MemoryManagement\IAllocator.h" />
+    <ClInclude Include="MemoryManagement\MemoryHelper.h" />
     <ClInclude Include="MemoryManagement\MemoryManager.h" />
     <ClInclude Include="MemoryManagement\PoolAllocator.h" />
     <ClInclude Include="MemoryManagement\StackAllocator.h" />
@@ -188,6 +189,7 @@
     <ClInclude Include="Scene\Actor.h" />
     <ClInclude Include="UnitTest\UnitTest.h" />
     <ClInclude Include="UnitTest\VectorTest.h" />
+    <ClInclude Include="Utils\Array.h" />
     <ClInclude Include="Utils\Debug.h" />
     <ClInclude Include="Utils\PrimitiveTypes.h" />
     <ClInclude Include="Utils\StringFunc.h" />
@@ -204,6 +206,7 @@
     <ClCompile Include="MainFunction\MainFunctions.cpp" />
     <ClCompile Include="MemoryManagement\Handle.cpp" />
     <ClCompile Include="MemoryManagement\IAllocator.cpp" />
+    <ClCompile Include="MemoryManagement\MemoryHelper.cpp" />
     <ClCompile Include="MemoryManagement\MemoryManager.cpp" />
     <ClCompile Include="MemoryManagement\PoolAllocator.cpp" />
     <ClCompile Include="MemoryManagement\StackAllocator.cpp" />
