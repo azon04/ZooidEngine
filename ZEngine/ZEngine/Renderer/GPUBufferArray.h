@@ -4,7 +4,7 @@
 #include "GPUBufferArray.h"
 #include "GPUBufferData.h"
 
-#include <vector>
+#include "../Utils/Array.h"
 
 namespace ZE {
 
@@ -19,7 +19,7 @@ public:
 	void Bind();
 	void Unbind();
 
-	std::vector<GPUBufferData*> m_buffers;
+	Array<GPUBufferData*, true> m_buffers;
 	
 	bool m_bUsingIndexBuffer;
 

@@ -2,7 +2,8 @@
 #define __ZE_BUFFER_LAYOUT__
 
 #include "../Utils/PrimitiveTypes.h"
-#include <vector>
+#include "../Utils/Array.h"
+
 
 #define BUFFER_LAYOUT_V3_C3 0
 #define BUFFER_LAYOUT_V3_TC2 1
@@ -24,7 +25,7 @@ namespace ZE {
 
 	class BufferLayout {
 	public:
-		std::vector<Layout> m_layouts;
+		Array<Layout> m_layouts;
 
 		void BindLayout();
 
@@ -40,7 +41,7 @@ namespace ZE {
 		void InitLayout();
 		void DestroyLayout();
 
-		std::vector<BufferLayout*> m_bufferLayout;
+		Array<BufferLayout*> m_bufferLayout;
 
 		BufferLayout* getBufferLayoutByFormat(int format);
 	};

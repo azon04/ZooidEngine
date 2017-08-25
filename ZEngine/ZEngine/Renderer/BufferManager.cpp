@@ -21,6 +21,7 @@ namespace ZE {
 	{
 		Handle handle("Buffer Manager", sizeof(BufferManager));
 		m_instance = new(handle) BufferManager();
+
 		BufferLayoutManager::Init();
 		m_instance->m_bufferLayoutManager = BufferLayoutManager::getInstance();
 

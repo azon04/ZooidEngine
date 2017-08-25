@@ -36,6 +36,7 @@ namespace ZE {
 			}
 
 			m_handle = Handle(size * sizeof(T));
+			m_handle.getObject();
 			m_capacity = size;
 			m_length = 0;
 		}
@@ -59,10 +60,10 @@ namespace ZE {
 
 		T& operator[](int index)
 		{
-			return reinterpret_cast<T>((void*)((uintptr_t)m_handle.getObject() + (uintptr_t)(index * sizeof(T))));
+			return *(T*)((void*)((uintptr_t)m_handle.getObject() + (uintptr_t)(index * sizeof(T))));
 		}
 
-		void push(T& item)
+		void push_back(T item)
 		{
 			if (m_length + 1 > m_capacity)
 			{
@@ -114,9 +115,14 @@ namespace ZE {
 			(*this)[index] = item;
 		}
 
-		int Length() const { return m_length; }
+		void clear()
+		{
+			m_length = 0;
+		}
 
-		int Capacity() const { return m_capacity; }
+		int length() const { return m_length; }
+
+		int capacity() const { return m_capacity; }
 	private:
 
 		Handle m_handle;

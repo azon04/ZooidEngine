@@ -25,33 +25,32 @@ namespace ZE {
 
 	void BufferLayoutManager::InitLayout()
 	{
+		m_bufferLayout.reset(3);
+
 		// Vertex with color
 		BufferLayout* vertexColorLayout = new BufferLayout();
-		vertexColorLayout->m_layouts = {
-			{ 0, 3, DataType::FLOAT, 6 * sizeof(float), 0 },
-			{ 1, 3, DataType::FLOAT, 6 * sizeof(float), 3 }
-		};
+		vertexColorLayout->m_layouts.reset(2);
+		vertexColorLayout->m_layouts.push_back({ 0, 3, DataType::FLOAT, 6 * sizeof(float), 0 });
+		vertexColorLayout->m_layouts.push_back({ 1, 3, DataType::FLOAT, 6 * sizeof(float), 3 });
+		
 		m_bufferLayout.push_back(vertexColorLayout);
 
 		BufferLayout* vertexTexCoord = new BufferLayout();
-		vertexTexCoord->m_layouts = {
-			{ 0, 3, DataType::FLOAT, 5 * sizeof(float), 0 },
-			{ 1, 3, DataType::FLOAT, 5 * sizeof(float), 3 }
-		};
+		vertexTexCoord->m_layouts.reset(2);
+		vertexTexCoord->m_layouts.push_back({ 0, 3, DataType::FLOAT, 5 * sizeof(float), 0 });
+		vertexTexCoord->m_layouts.push_back({ 1, 3, DataType::FLOAT, 5 * sizeof(float), 3 });
+		
 		m_bufferLayout.push_back(vertexTexCoord);
 
 		BufferLayout* texCoordLayout = new BufferLayout();
-		texCoordLayout->m_layouts = {
-			{ 0, 2, DataType::FLOAT, 2 * sizeof(float), 0 }
-		};
+		texCoordLayout->m_layouts.reset(1);
+		texCoordLayout->m_layouts.push_back({ 0, 2, DataType::FLOAT, 2 * sizeof(float), 0 });
+		
 		m_bufferLayout.push_back(texCoordLayout);
 	}
 
 	void BufferLayoutManager::DestroyLayout()
 	{
-		for (auto layout : m_bufferLayout) {
-			delete layout;
-		}
 
 		m_bufferLayout.clear();
 	}
@@ -64,7 +63,7 @@ namespace ZE {
 	void BufferLayout::BindLayout()
 	{
 		// #OPENGL Specific
-		for (int i = 0; i < m_layouts.size(); i++) {
+		for (int i = 0; i < m_layouts.length(); i++) {
 			GLenum dataType = GL_FLOAT;
 			unsigned int size_data_type = 1;
 			if (m_layouts[i].dataType == FLOAT) {
