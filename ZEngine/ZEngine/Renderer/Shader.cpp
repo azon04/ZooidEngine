@@ -140,6 +140,7 @@ namespace ZE {
 	void ShaderManager::InitShaders()
 	{
 		// Init all shaders
+		m_shaders.reset(1);
 		// #OPENGL Specific
 		Handle handle("Simple Shader", sizeof(Shader));
 		Shader* simpleGLShader = new(handle) Shader;

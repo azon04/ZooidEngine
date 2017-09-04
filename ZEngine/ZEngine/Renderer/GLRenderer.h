@@ -6,7 +6,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include <vector>
 
 #define WIDTH 1024
 #define HEIGHT 768

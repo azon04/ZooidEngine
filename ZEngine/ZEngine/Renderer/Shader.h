@@ -3,7 +3,7 @@
 
 #include "BufferLayout.h"
 
-#include <vector>
+#include "../Utils/Array.h"
 
 // OPENGL Specific
 #include <GL/glew.h>
@@ -42,7 +42,7 @@ public:
 	void InitShaders();
 	void DestroyShaders();
 
-	std::vector<Shader*> m_shaders;
+	Array<Shader*> m_shaders;
 
 };
 

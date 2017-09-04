@@ -156,6 +156,12 @@
     <ClInclude Include="Utils\PrimitiveTypes.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\Array.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManagement\MemoryHelper.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UnitTest\VectorTest.cpp">
@@ -229,6 +235,9 @@
     </ClCompile>
     <ClCompile Include="Utils\Debug.cpp">
       <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManagement\MemoryHelper.cpp">
+      <Filter>MemoryManagement</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

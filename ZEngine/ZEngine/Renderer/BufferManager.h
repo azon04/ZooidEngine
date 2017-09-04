@@ -6,8 +6,7 @@
 #include "GPUBufferArray.h"
 #include "BufferLayout.h"
 #include "../GameObjectModel/Component.h"
-
-#include <vector>
+#include "../Utils/Array.h"
 
 namespace ZE {
 class BufferManager {
@@ -26,9 +25,9 @@ public:
 	GPUBufferData* createGPUBufferFromBuffer(BufferData* _bufferData);
 	GPUBufferArray* createBufferArray(BufferData* _vertexBuffer, BufferData* _indexBuffer, BufferData* _gpuBuffer);
 
-	std::vector<BufferData*> m_buffers;
-	std::vector<GPUBufferData*> m_GPUBuffers;
-	std::vector<GPUBufferArray*> m_GPUBufferArrays;
+	Array<BufferData*, true> m_buffers;
+	Array<GPUBufferData*, true> m_GPUBuffers;
+	Array<GPUBufferArray*, true> m_GPUBufferArrays;
 
 	BufferLayoutManager* m_bufferLayoutManager;
 };

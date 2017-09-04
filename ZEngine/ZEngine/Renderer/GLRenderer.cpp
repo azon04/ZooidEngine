@@ -72,7 +72,7 @@ namespace ZE {
 
 	bool GLRenderer::IsClose()
 	{
-		return glfwWindowShouldClose(m_window);
+		return glfwWindowShouldClose(m_window) == 1;
 	}
 
 }

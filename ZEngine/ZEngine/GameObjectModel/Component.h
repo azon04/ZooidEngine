@@ -2,8 +2,8 @@
 #define __ZE_COMPONENT_H__
 
 // Outer Engine includes
-#include <vector>
 
+#include "../Utils/Array.h"
 #include "Object.h"
 
 namespace ZE {
@@ -16,8 +16,8 @@ namespace ZE {
 		Component(GameContext* gameContext) : m_gameContext(gameContext){}
 		virtual ~Component() {}
 
-		std::vector<Component*> m_components;
-		std::vector<Component*> m_parents;
+		Array<Component*, true> m_components;
+		Array<Component*, true> m_parents;
 
 	protected:
 		GameContext* m_gameContext;

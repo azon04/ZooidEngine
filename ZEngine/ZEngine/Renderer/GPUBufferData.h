@@ -6,8 +6,6 @@
 #include "BufferData.h"
 #include "BufferLayout.h"
 
-#include <vector>
-
 // #OPENGL Specific
 #include <GL/glew.h>
 

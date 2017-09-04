@@ -19,6 +19,14 @@ namespace ZE {
 		char m_handleName[32];
 
 	public:
+
+		Handle() :
+			m_size(0),
+			pCache(nullptr),
+			m_poolIndex(INVALID_UINT),
+			m_blockIndex(INVALID_UINT)
+		{}
+
 		Handle(size_t size) :
 			m_size(size),
 			pCache(nullptr),
@@ -40,7 +48,7 @@ namespace ZE {
 		bool isValid() 
 		{
 			if(pCache == NULL)
-				return m_poolIndex == INVALID_UINT || m_blockIndex == INVALID_UINT;
+				return m_poolIndex != INVALID_UINT && m_blockIndex != INVALID_UINT;
 			else 
 				return true;
 		}
