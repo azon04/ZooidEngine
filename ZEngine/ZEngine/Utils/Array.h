@@ -10,7 +10,7 @@
 
 namespace ZE {
 	
-	template<class T, bool resizable = false>
+	template<class T, bool resizable>
 	class Array
 	{
 	public:
@@ -121,6 +121,7 @@ namespace ZE {
 		}
 
 		int length() const { return m_length; }
+		int size() const { return m_length; }
 
 		int capacity() const { return m_capacity; }
 	private:

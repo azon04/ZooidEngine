@@ -2,14 +2,17 @@
 #define __ZE_OBJECT_H__
 
 // Outer engine includes
-#include <vector>
-
 #include "../Utils/PrimitiveTypes.h"
 
 #include "ObjDecl.h"
 #include "RTTI.h"
 
+
 namespace ZE {
+
+	template<class T, bool resizable = false>
+	class Array;
+
 	class Object {
 	public:
 		Object() {}
@@ -18,7 +21,7 @@ namespace ZE {
 		virtual int getClassID() = 0;
 		virtual const char* getClassName() = 0;
 
-		static std::vector<Int32>& ClassMap();
+		static Array<Int32, true>& ClassMap();
 
 		static void RegisterClass() {};
 

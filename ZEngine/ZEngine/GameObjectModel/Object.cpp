@@ -1,10 +1,11 @@
 
 #include "Object.h"
+#include "../Utils/Array.h"
 
-namespace ZE {
-	std::vector<int>& Object::ClassMap(){
-		static std::vector<Int32> impl;
-		return impl;
-	};
 
+
+ZE::Array<ZE::Int32, true>& ZE::Object::ClassMap()
+{
+	static ZE::Array<ZE::Int32, true> classMap;
+	return classMap;
 }

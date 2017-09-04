@@ -5,8 +5,6 @@
 
 #include "MainFunctions.h"
 
-#include <vector>
-
 #define GLUE_STATIC
 #include <GL/glew.h>
 
