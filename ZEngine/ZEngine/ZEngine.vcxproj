@@ -187,6 +187,9 @@
     <ClInclude Include="Renderer\Shader.h" />
     <ClInclude Include="Renderer\ShaderAction.h" />
     <ClInclude Include="Scene\Actor.h" />
+    <ClInclude Include="Scene\CameraComponent.h" />
+    <ClInclude Include="Scene\CameraManager.h" />
+    <ClInclude Include="Scene\RenderComponent.h" />
     <ClInclude Include="UnitTest\UnitTest.h" />
     <ClInclude Include="UnitTest\VectorTest.h" />
     <ClInclude Include="Utils\Array.h" />
@@ -220,6 +223,9 @@
     <ClCompile Include="Renderer\Shader.cpp" />
     <ClCompile Include="Renderer\ShaderAction.cpp" />
     <ClCompile Include="Scene\Actor.cpp" />
+    <ClCompile Include="Scene\CameraComponent.cpp" />
+    <ClCompile Include="Scene\CameraManager.cpp" />
+    <ClCompile Include="Scene\RenderComponent.cpp" />
     <ClCompile Include="UnitTest\VectorTest.cpp" />
     <ClCompile Include="Utils\Debug.cpp" />
     <ClCompile Include="Utils\StringFunc.cpp" />

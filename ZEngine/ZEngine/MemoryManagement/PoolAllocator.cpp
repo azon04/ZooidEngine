@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <cstdint>
+#include <new>
 
 namespace ZE {
 
@@ -110,7 +111,7 @@ namespace ZE {
 		// which mean no virtual method.
 
 		// Using new(pMem) it will handle vtable allocation for us
-		PoolAllocator* poolAllocator = new(pMem)PoolAllocator(blockCount, itemSize, false);
+		PoolAllocator* poolAllocator =  new(pMem) PoolAllocator(blockCount, itemSize, false);
 		poolAllocator->m_totalSize = itemSize * blockCount;
 		poolAllocator->m_itemSize = itemSize;
 		poolAllocator->m_poolSize = blockCount;

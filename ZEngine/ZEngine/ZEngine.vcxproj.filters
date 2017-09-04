@@ -162,6 +162,15 @@
     <ClInclude Include="MemoryManagement\MemoryHelper.h">
       <Filter>MemoryManagement</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\CameraComponent.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\CameraManager.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\RenderComponent.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UnitTest\VectorTest.cpp">
@@ -238,6 +247,15 @@
     </ClCompile>
     <ClCompile Include="MemoryManagement\MemoryHelper.cpp">
       <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\CameraComponent.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\CameraManager.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\RenderComponent.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
