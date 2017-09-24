@@ -87,7 +87,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;Z_RENDER_OPENGL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)\glew-2.0.0\include;$(SolutionDir)\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -232,6 +232,8 @@
     <ClCompile Include="ZEGameContext.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Shaders\DefaultGLSimple.frag" />
+    <None Include="Shaders\DefaultGLSimple.vs" />
     <None Include="Shaders\TestGLFragmentShader.frag" />
     <None Include="Shaders\TestGLVertexShader.vs" />
   </ItemGroup>

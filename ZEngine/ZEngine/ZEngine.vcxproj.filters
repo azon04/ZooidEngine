@@ -265,5 +265,11 @@
     <None Include="Shaders\TestGLFragmentShader.frag">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="Shaders\DefaultGLSimple.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\DefaultGLSimple.vs">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
