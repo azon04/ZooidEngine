@@ -26,22 +26,80 @@ namespace ZE {
 		m_instance->m_bufferLayoutManager = BufferLayoutManager::getInstance();
 
 		// Create sample vertex Color buffer
-		float* vertices_color = new float[18] {
-			// Positions		// Colors			
-			0.5, -0.5f, 0.0f,	1.0f, 0.0f, 0.0f, // Bottom Right
-			-0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // Bottom Left
-			0.0f, 0.5f, 0.0f,	0.0f, 0.0f, 1.0f	// Top
-		};
+		{
+			Handle handle("Data Triangle", sizeof(float) * 18);
+			float* vertices_color = new(handle) float[18]{
+				// Positions		// Colors			
+				0.5, -0.5f, 0.0f,	1.0f, 0.0f, 0.0f, // Bottom Right
+				-0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // Bottom Left
+				0.0f, 0.5f, 0.0f,	0.0f, 0.0f, 1.0f	// Top
+			};
 
-		Handle hBufferData("Buffer Data", sizeof(BufferData));
-		BufferData* bufferData = new(hBufferData) BufferData(BufferType::VERTEX_BUFFER);
-		bufferData->SetData(vertices_color, 18 * sizeof(float));
-		bufferData->m_bufferLayout = BUFFER_LAYOUT_V3_C3;
+			Handle hBufferData("Buffer Data", sizeof(BufferData));
+			BufferData* bufferData = new(hBufferData) BufferData(BufferType::VERTEX_BUFFER);
+			bufferData->SetData(vertices_color, 18 * sizeof(float));
+			bufferData->m_bufferLayout = BUFFER_LAYOUT_V3_C3;
 
-		getInstance()->m_buffers.push_back(bufferData);
+			getInstance()->m_buffers.push_back(bufferData);
+			getInstance()->createBufferArray(bufferData, nullptr, nullptr);
+		}
 
-		getInstance()->createBufferArray(bufferData, nullptr, nullptr);
+		{
+			Handle handle("Cube Data", sizeof(float) * 288);
+			float* cube_vertices = new(handle) float[288]
+			{
+				// positions			// colors				// texture coords
+				-0.5f, -0.5f, -0.5f,	1.0f, 0.0f, 0.0f,		0.0f, 0.0f,
+				0.5f, -0.5f, -0.5f,		1.0f, 0.0f, 0.0f,		1.0f, 0.0f,
+				0.5f, 0.5f, -0.5f,		1.0f, 0.0f, 0.0f,		1.0f, 1.0f,
+				0.5f, 0.5f, -0.5f,		1.0f, 0.0f, 0.0f,		1.0f, 1.0f,
+				-0.5f, 0.5f, -0.5f,		1.0f, 0.0f, 0.0f,		0.0f, 1.0f,
+				-0.5f, -0.5f, -0.5f,	1.0f, 0.0f, 0.0f,		0.0f, 0.0f,
 
+				-0.5f, -0.5f, 0.5f,		0.0f, 1.0f, 0.0f,		0.0f, 0.0f,
+				0.5f, -0.5f, 0.5f,		0.0f, 1.0f, 0.0f,		1.0f, 0.0f,
+				0.5f, 0.5f, 0.5f,		0.0f, 1.0f, 0.0f,		1.0f, 1.0f,
+				0.5f, 0.5f, 0.5f,		0.0f, 1.0f, 0.0f,		1.0f, 1.0f,
+				-0.5f, 0.5f, 0.5f,		0.0f, 1.0f, 0.0f,		0.0f, 1.0f,
+				-0.5f, -0.5f, 0.5f,		0.0f, 1.0f, 0.0f,		0.0f, 0.0f,
+
+				-0.5f, 0.5f, 0.5f,		0.0f, 0.0f, 1.0f,		1.0f, 0.0f,
+				-0.5f, 0.5f, -0.5f,		0.0f, 0.0f, 1.0f,		1.0f, 1.0f,
+				-0.5f, -0.5f, -0.5f,	0.0f, 0.0f, 1.0f,		0.0f, 1.0f,
+				-0.5f, -0.5f, -0.5f,	0.0f, 0.0f, 1.0f,		0.0f, 1.0f,
+				-0.5f, -0.5f, 0.5f,		0.0f, 0.0f, 1.0f,		0.0f, 0.0f,
+				-0.5f, 0.5f, 0.5f,		0.0f, 0.0f, 1.0f,		1.0f, 0.0f,
+
+				0.5f, 0.5f, 0.5f,		1.0f, 0.0f, 0.0f,		1.0f, 0.0f,
+				0.5f, 0.5f, -0.5f,		1.0f, 0.0f, 0.0f,		1.0f, 1.0f,
+				0.5f, -0.5f, -0.5f,		1.0f, 0.0f, 0.0f,		0.0f, 1.0f,
+				0.5f, -0.5f, -0.5f,		1.0f, 0.0f, 0.0f,		0.0f, 1.0f,
+				0.5f, -0.5f, 0.5f,		1.0f, 0.0f, 0.0f,		0.0f, 0.0f,
+				0.5f, 0.5f, 0.5f,		1.0f, 0.0f, 0.0f,		1.0f, 0.0f,
+
+				-0.5f, -0.5f, -0.5f,	1.0f, 0.0f, 0.0f,		0.0f, 1.0f,
+				0.5f, -0.5f, -0.5f,		1.0f, 0.0f, 0.0f,		1.0f, 1.0f,
+				0.5f, -0.5f, 0.5f,		1.0f, 0.0f, 0.0f,		1.0f, 0.0f,
+				0.5f, -0.5f, 0.5f,		1.0f, 0.0f, 0.0f,		1.0f, 0.0f,
+				-0.5f, -0.5f, 0.5f,		1.0f, 0.0f, 0.0f,		0.0f, 0.0f,
+				-0.5f, -0.5f, -0.5f,	1.0f, 0.0f, 0.0f,		0.0f, 1.0f,
+
+				-0.5f, 0.5f, -0.5f,		0.0f, 1.0f, 0.0f,		0.0f, 1.0f,
+				0.5f, 0.5f, -0.5f,		0.0f, 1.0f, 0.0f,		1.0f, 1.0f,
+				0.5f, 0.5f, 0.5f,		0.0f, 1.0f, 0.0f,		1.0f, 0.0f,
+				0.5f, 0.5f, 0.5f,		0.0f, 1.0f, 0.0f,		1.0f, 0.0f,
+				-0.5f, 0.5f, 0.5f,		0.0f, 1.0f, 0.0f,		0.0f, 0.0f,
+				-0.5f, 0.5f, -0.5f,		0.0f, 1.0f, 0.0f,		0.0f, 1.0f
+			};
+
+			Handle hBufferData("CubeBuffer Data", sizeof(BufferData));
+			BufferData* bufferData = new(hBufferData) BufferData(BufferType::VERTEX_BUFFER);
+			bufferData->SetData(cube_vertices, 288 * sizeof(float));
+			bufferData->m_bufferLayout = BUFFER_LAYOUT_V3_C3_TC2;
+
+			getInstance()->m_buffers.push_back(bufferData);
+			getInstance()->createBufferArray(bufferData, nullptr, nullptr);
+		}
 	}
 
 	void BufferManager::Destroy()

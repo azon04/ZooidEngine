@@ -25,7 +25,7 @@ namespace ZE {
 		GLenum err = glewInit();
 		if (err != GLEW_OK) {
 			glfwTerminate();
-			ZASSERT(true, glewGetErrorString(err));
+			ZASSERT(false, "GL Init Error: %s", glewGetErrorString(err));
 			return;
 		}
 
@@ -59,6 +59,26 @@ namespace ZE {
 	void GLRenderer::Draw(ShaderAction* shaderAction)
 	{
 		shaderAction->m_shader->Bind();
+		
+		for (int i = 0; i < shaderAction->m_shaderVariables.length(); i++)
+		{
+			ShaderVariable& shaderVariable = shaderAction->m_shaderVariables[i];
+			switch (shaderVariable.m_varType)
+			{
+			case SHADER_VAR_TYPE_FLOAT:
+				shaderAction->m_shader->SetFloat(shaderVariable.m_varName, shaderVariable.float_value);
+				break;
+			case SHADER_VAR_TYPE_INT:
+				//shaderAction->m_shader->set(shaderVariable.m_varName, shaderVariable.int_value);
+				break;
+			case SHADER_VAR_TYPE_VECTOR3:
+				shaderAction->m_shader->SetVec3(shaderVariable.m_varName, shaderVariable.vec3_value);
+				break;
+			case SHADER_VAR_TYPE_MATRIX:
+				shaderAction->m_shader->SetMat(shaderVariable.m_varName, shaderVariable.mat_value);
+				break;
+			}
+		}
 		shaderAction->m_bufferArray->Bind();
 		if (shaderAction->m_bufferArray->m_bUsingIndexBuffer) {
 			glDrawElements(GL_TRIANGLES, shaderAction->m_vertexSize, GL_UNSIGNED_INT, 0);
@@ -66,6 +86,7 @@ namespace ZE {
 		else {
 			glDrawArrays(GL_TRIANGLES, 0, shaderAction->m_vertexSize);
 		}
+		
 		shaderAction->m_bufferArray->Unbind();
 		shaderAction->m_shader->Unbind();
 	}

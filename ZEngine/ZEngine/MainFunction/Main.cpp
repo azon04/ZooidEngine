@@ -5,8 +5,10 @@
 
 #include "MainFunctions.h"
 
+#if Z_RENDER_OPENGL
 #define GLUE_STATIC
 #include <GL/glew.h>
+#endif
 
 // GLFW
 #include <GLFW/glfw3.h>
@@ -20,9 +22,24 @@ int main(int argc, char** argv) {
 	
 	ZE::MainSetup(&gameContext);
 	
-	ZE::ShaderAction& shaderAction = gameContext.getDrawList()->getNextShaderAction();
-	shaderAction.SetShaderAndBuffer(ZE::ShaderManager::getInstance()->m_shaders[0], ZE::BufferManager::getInstance()->m_GPUBufferArrays[0]);
-	shaderAction.m_vertexSize = 6;
+	{
+		ZE::ShaderAction& shaderAction = gameContext.getDrawList()->getNextShaderAction();
+		shaderAction.SetShaderAndBuffer(ZE::ShaderManager::getInstance()->m_shaders[0], ZE::BufferManager::getInstance()->m_GPUBufferArrays[0]);
+		shaderAction.m_vertexSize = 6;
+	}
+	
+	{
+		Matrix4x4 mat;
+		mat.scale(Vector3(0.5f, 0.5f, 0.5f));
+		mat.rotateAroundN(DegToRad(45.0f));
+
+		ZE::ShaderAction& shaderAction = gameContext.getDrawList()->getNextShaderAction();
+		ZE::Shader* shader = ZE::ShaderManager::getInstance()->m_shaders[1];
+		
+		shaderAction.SetShaderAndBuffer(shader, ZE::BufferManager::getInstance()->m_GPUBufferArrays[1]);
+		shaderAction.m_vertexSize = 288;
+		shaderAction.SetShaderMatVar("modelMat", mat);
+	}
 
 	// Main Loop
 	while (!gameContext.getRenderer()->IsClose()) {

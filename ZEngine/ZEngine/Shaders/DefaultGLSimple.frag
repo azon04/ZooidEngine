@@ -9,7 +9,7 @@
 struct Material
 {
 	sampler2D diffuseMap;
-}
+};
 
 out vec4 fColor;
 

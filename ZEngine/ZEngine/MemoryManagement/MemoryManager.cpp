@@ -12,8 +12,8 @@ static unsigned int poolConfig[NPOOL][2] =
 	{256, 1024}, // 256 * 1024 =~ 256 kb
 	{512, 1024}, // 512 * 1024 =~ 512 kb
 	{1024, 1024}, // 1024 * 1024 =~ 1 MB
-	{16384, 1}, // Draw list need this big of memoryblock
-	{24584, 1} // Draw list for 64bit machine
+	{69636, 1}, // Draw list need this big of memoryblock
+	{139272, 1} // Draw list for 64bit machine
 };
 
 namespace ZE {
@@ -88,7 +88,7 @@ namespace ZE {
 			index++;
 		}
 
-		ZASSERT(index < NPOOL, "Can't find available available free block");
+		ZASSERT(index < NPOOL, "Can't find available free block");
 		ZASSERT(m_pools[index]->getCountFreeBlock() > 0, "Need more size for pool");
 		
 		// Allocate in memory

@@ -7,9 +7,14 @@
 
 #include "MemoryManagement/MemoryManager.h"
 
-// #OPENGL Specific
+#if Z_RENDER_OPENGL
 #include "Renderer/GLRenderer.h"
+#endif
 
 #include "Renderer/BufferManager.h"
 #include "Renderer/Shader.h"
 #include "Renderer/DrawList.h"
+
+#include "Math/MathUtil.h"
+#include "Math/Matrix4x4.h"
+#include "Math/Vector3.h"

@@ -16,10 +16,10 @@ public:
 		: m_x(_x), m_y(_y), m_z(_z), m_w(_w)
 	{}
 
-	Quaternion(Vector3 _v, ZE::Float32 _degreeAngle)
+	Quaternion(const Vector3& _v, ZE::Float32 _degreeAngle)
 	{
-		float _cos = cos(DegToRad(_degreeAngle) * 0.5f);
-		float _sin = sin(DegToRad(_degreeAngle) * 0.5f);
+		float _cos = cosf(DegToRad(_degreeAngle) * 0.5f);
+		float _sin = sinf(DegToRad(_degreeAngle) * 0.5f);
 		
 		Vector3 _vSin = _v * _sin;
 		m_x = _vSin.getX();
@@ -28,6 +28,10 @@ public:
 
 		m_w = _cos;
 	}
+
+	Quaternion(const Vector3& _v)
+		: m_x(_v.m_x), m_y(_v.m_y), m_z(_v.m_z), m_w(0)
+	{}
 
 	Quaternion(const Quaternion& _q2) {
 		m_x = _q2.m_x;
@@ -56,12 +60,12 @@ public:
 		return static_cast<float>(acos(m_w));
 	}
 
-	ZE::Float32 updateAngleInRad(ZE::Float32 _radAngle) {
+	void updateAngleInRad(ZE::Float32 _radAngle) {
 		float arccos = acos(m_w);
 		float sinv = sin(arccos);
 		
-		float _cos = cos(_radAngle);
-		float _sin = sin(_radAngle);
+		float _cos = cos(_radAngle * 0.5f);
+		float _sin = sin(_radAngle * 0.5f);
 
 		m_w = _cos;
 
@@ -90,6 +94,27 @@ public:
 		float _z = m_w * _q2.m_z + _q2.m_w * m_z - m_y * _q2.m_x + m_x * _q2.m_y;
 
 		return Quaternion(_x, _y, _z, _w);
+	}
+
+	Vector3 rotateVector(const Vector3& _v, float _radAngle)
+	{
+		Quaternion p(*this), v(_v);
+		p.updateAngleInRad(_radAngle);
+		p.normalize();
+		Quaternion pConj = *p;
+		v = (p * v) * pConj;
+
+		return v.toVector3();
+	}
+
+	Vector3 toVector3()
+	{
+		return Vector3(m_x, m_y, m_z);
+	}
+	// Quaternion Conjugate
+	Quaternion operator*()
+	{
+		return Quaternion(-m_x, -m_y, -m_z, m_w);
 	}
 
 	// Getter and Setter
