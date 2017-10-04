@@ -25,7 +25,7 @@ public:
 	}
 
 	// _values must be at least float[3][3]
-	Matrix3x3(ZE::Float32** _values) {
+	Matrix3x3(ZE::Float32 _values[3][3]) {
 		for (int r = 0; r < 3; r++) {
 			for (int c = 0; c < 3; c++) {
 				m_data[r][c] = _values[r][c];

@@ -5,12 +5,26 @@
 
 namespace ZE {
 	
+	class CameraComponent;
+	
 	class CameraManager : public Component {
-		DEFINE_CLASS(CameraManager)
 
+		DEFINE_CLASS(CameraManager)
 	public:
 		CameraManager(GameContext* gameContext) : Component(gameContext) {}
 		virtual ~CameraManager() {}
+
+		static void Init(GameContext* _gameContext);
+		static CameraManager* GetInstance();
+
+		CameraComponent* getCurrentCamera() const { return m_currentCamera; }
+
+	public:
+		static CameraManager* s_instance;
+		
+		Array<Handle, true> m_cameras;
+		
+		CameraComponent* m_currentCamera;
 	};
 }
 #endif

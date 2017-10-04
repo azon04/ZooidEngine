@@ -1,17 +1,19 @@
 #ifndef __ZE_CAMERA_COMPONENT_H__
 #define __ZE_CAMERA_COMPONENT_H__
 
-#include "../GameObjectModel/Component.h"
+#include "SceneComponent.h"
 
 namespace ZE
 {
-	class CameraComponent : public Component {
+	class CameraComponent : public SceneComponent {
 		DEFINE_CLASS(CameraComponent)
 
 	public:
-		CameraComponent(GameContext* gameContext) : Component(gameContext) {}
+		CameraComponent(GameContext* gameContext) : SceneComponent(gameContext) {}
 		virtual ~CameraComponent() {}
 
+
+		void getViewMatrix(Matrix4x4& _outMat);
 	};
 }
 #endif

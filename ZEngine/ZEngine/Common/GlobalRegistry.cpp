@@ -8,6 +8,9 @@ namespace ZE {
 		// Register all object classes
 		Component::RegisterClass();
 		Actor::RegisterClass();
+		SceneComponent::RegisterClass();
+		CameraComponent::RegisterClass();
+		CameraManager::RegisterClass();
 	}
 
 }

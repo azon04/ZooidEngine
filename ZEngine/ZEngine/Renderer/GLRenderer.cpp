@@ -56,6 +56,19 @@ namespace ZE {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
+	void GLRenderer::ProcessShaderAction(ShaderAction* shaderAction)
+	{
+		switch (shaderAction->m_shaderActionType)
+		{
+		case SHADER_ACTION_DRAW:
+			Draw(shaderAction);
+			break;
+		case SHADER_ACTION_SETGLOBAL:
+			SetShaderGlobal(shaderAction);
+			break;
+		}
+	}
+
 	void GLRenderer::Draw(ShaderAction* shaderAction)
 	{
 		shaderAction->m_shader->Bind();
@@ -69,7 +82,7 @@ namespace ZE {
 				shaderAction->m_shader->SetFloat(shaderVariable.m_varName, shaderVariable.float_value);
 				break;
 			case SHADER_VAR_TYPE_INT:
-				//shaderAction->m_shader->set(shaderVariable.m_varName, shaderVariable.int_value);
+				shaderAction->m_shader->SetInt(shaderVariable.m_varName, shaderVariable.int_value);
 				break;
 			case SHADER_VAR_TYPE_VECTOR3:
 				shaderAction->m_shader->SetVec3(shaderVariable.m_varName, shaderVariable.vec3_value);
@@ -79,6 +92,14 @@ namespace ZE {
 				break;
 			}
 		}
+
+		// #TODO Make shader for Global Variable
+		if (shaderAction->m_shader->getUniformPosition("viewMat") >= 0)
+		{
+			shaderAction->m_shader->SetMat("viewMat", m_viewMatrix);
+		}
+		//
+
 		shaderAction->m_bufferArray->Bind();
 		if (shaderAction->m_bufferArray->m_bUsingIndexBuffer) {
 			glDrawElements(GL_TRIANGLES, shaderAction->m_vertexSize, GL_UNSIGNED_INT, 0);
@@ -94,6 +115,23 @@ namespace ZE {
 	bool GLRenderer::IsClose()
 	{
 		return glfwWindowShouldClose(m_window) == 1;
+	}
+
+	void GLRenderer::SetShaderGlobal(ShaderAction* shaderAction)
+	{
+		// #TODO Make shader for Global Variable
+		for (int i = 0; i < shaderAction->m_shaderVariables.length(); i++)
+		{
+			ShaderVariable& shaderVariable = shaderAction->m_shaderVariables[i];
+			switch (shaderVariable.m_varType)
+			{
+			case SHADER_VAR_TYPE_MATRIX:
+				m_viewMatrix = shaderVariable.mat_value;
+				break;
+			default:
+				break;
+			}
+		}
 	}
 
 }

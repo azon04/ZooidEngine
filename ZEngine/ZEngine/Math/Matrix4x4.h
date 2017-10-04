@@ -63,12 +63,14 @@ public:
 
 	ZE::Float32 matMinor(ZE::Int32 row, ZE::Int32 column) {
 		ZE::Float32 values[3][3];
+
 		int r_index = 0;
 		int c_index = 0;
 
-		for (int r = 0; r < 3; r++) {
+		for (int r = 0; r < 4; r++) {
 			if(r == row) continue;
-			for (int c = 0; c < 3; c++) {
+			c_index = 0;
+			for (int c = 0; c < 4; c++) {
 				if(c == column) continue;
 				values[r_index][c_index] = m_data[r][c];
 				c_index++;
@@ -76,7 +78,7 @@ public:
 			r_index++;
 		}
 
-		Matrix3x3 mat((float**)values);
+		Matrix3x3 mat(values);
 		return mat.det();
 	}
 

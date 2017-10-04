@@ -11,6 +11,9 @@
 #define SHADER_VAR_TYPE_VECTOR3 2
 #define SHADER_VAR_TYPE_MATRIX 3
 
+#define SHADER_ACTION_DRAW 0
+#define SHADER_ACTION_SETGLOBAL 1
+
 namespace ZE {
 
 struct ShaderVariable
@@ -45,9 +48,11 @@ public:
 	void SetShaderIntVar(const char* _name, Int32 _value);
 	void SetShaderVec3Var(const char* _name, const Vector3& _value);
 	void SetShaderMatVar(const char* _name, const Matrix4x4& _value);
+	void SetType(ZE::UInt16 _shaderActionType);
 
 	ZE::Int32 m_vertexSize;
-
+	ZE::UInt16 m_shaderActionType;
+	
 	Shader* m_shader;
 	GPUBufferArray* m_bufferArray;
 	Array<ShaderVariable, true> m_shaderVariables;

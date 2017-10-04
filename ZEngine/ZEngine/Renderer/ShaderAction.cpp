@@ -8,7 +8,7 @@ namespace ZE {
 
 	ShaderAction::ShaderAction()
 	{
-
+		m_shaderActionType = SHADER_ACTION_DRAW;
 	}
 
 	ShaderAction::ShaderAction(Shader* shader)
@@ -56,6 +56,11 @@ namespace ZE {
 		shaderVariable.m_varType = SHADER_VAR_TYPE_MATRIX;
 		shaderVariable.mat_value = _value;
 		m_shaderVariables.push_back(shaderVariable);
+	}
+
+	void ShaderAction::SetType(ZE::UInt16 _shaderActionType)
+	{
+		m_shaderActionType = _shaderActionType;
 	}
 
 	ShaderVariable::ShaderVariable(const ShaderVariable& _other)

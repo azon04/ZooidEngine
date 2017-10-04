@@ -15,6 +15,8 @@
 
 #include <stdio.h>
 
+#include "../Scene/CameraComponent.h"
+
 int main(int argc, char** argv) {
 
 	// Init Engine
@@ -22,6 +24,19 @@ int main(int argc, char** argv) {
 	
 	ZE::MainSetup(&gameContext);
 	
+	{
+		ZE::ShaderAction& shaderAction = gameContext.getDrawList()->getNextShaderAction();
+		shaderAction.SetType(SHADER_ACTION_SETGLOBAL);
+
+		if (gameContext.getCameraManager()->getCurrentCamera())
+		{
+			Matrix4x4 mat;
+			gameContext.getCameraManager()->m_currentCamera->m_worldTransform.setPos(Vector3(0.5f, 0.5f, -0.5f));
+			gameContext.getCameraManager()->m_currentCamera->getViewMatrix(mat);
+			shaderAction.SetShaderMatVar("viewMat", mat);
+		}
+	}
+
 	{
 		ZE::ShaderAction& shaderAction = gameContext.getDrawList()->getNextShaderAction();
 		shaderAction.SetShaderAndBuffer(ZE::ShaderManager::getInstance()->m_shaders[0], ZE::BufferManager::getInstance()->m_GPUBufferArrays[0]);
@@ -48,7 +63,7 @@ int main(int argc, char** argv) {
 		gameContext.getRenderer()->ClearScreen();
 
 		for (int i = 0; i < gameContext.getDrawList()->m_size; i++) {
-			gameContext.getRenderer()->Draw(&gameContext.getDrawList()->m_drawList[i]);
+			gameContext.getRenderer()->ProcessShaderAction(&gameContext.getDrawList()->m_drawList[i]);
 		}
 
 		gameContext.getRenderer()->EndRender();

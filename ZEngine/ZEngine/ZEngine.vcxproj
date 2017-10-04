@@ -190,6 +190,7 @@
     <ClInclude Include="Scene\CameraComponent.h" />
     <ClInclude Include="Scene\CameraManager.h" />
     <ClInclude Include="Scene\RenderComponent.h" />
+    <ClInclude Include="Scene\SceneComponent.h" />
     <ClInclude Include="UnitTest\UnitTest.h" />
     <ClInclude Include="UnitTest\VectorTest.h" />
     <ClInclude Include="Utils\Array.h" />
@@ -226,6 +227,7 @@
     <ClCompile Include="Scene\CameraComponent.cpp" />
     <ClCompile Include="Scene\CameraManager.cpp" />
     <ClCompile Include="Scene\RenderComponent.cpp" />
+    <ClCompile Include="Scene\SceneComponent.cpp" />
     <ClCompile Include="UnitTest\VectorTest.cpp" />
     <ClCompile Include="Utils\Debug.cpp" />
     <ClCompile Include="Utils\StringFunc.cpp" />

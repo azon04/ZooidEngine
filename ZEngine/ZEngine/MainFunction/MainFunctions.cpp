@@ -28,6 +28,9 @@ namespace ZE {
 			Handle handle("DrawList", sizeof(DrawList));
 			_gameContext->m_drawList = new(handle) DrawList;
 		}
+
+		CameraManager::Init(_gameContext);
+		_gameContext->m_cameraManager = CameraManager::GetInstance();
 	}
 
 	void MainClean(GameContext* _gameContext)

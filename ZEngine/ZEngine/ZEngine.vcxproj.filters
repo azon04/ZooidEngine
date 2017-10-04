@@ -171,6 +171,9 @@
     <ClInclude Include="Scene\RenderComponent.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\SceneComponent.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UnitTest\VectorTest.cpp">
@@ -255,6 +258,9 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Scene\RenderComponent.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneComponent.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
