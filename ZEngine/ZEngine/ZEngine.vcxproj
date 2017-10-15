@@ -164,6 +164,7 @@
     <ClInclude Include="GameObjectModel\Object.h" />
     <ClInclude Include="GameObjectModel\RTTI.h" />
     <ClInclude Include="MainFunction\MainFunctions.h" />
+    <ClInclude Include="Math\MathOps.h" />
     <ClInclude Include="Math\MathUtil.h" />
     <ClInclude Include="Math\Matrix3x3.h" />
     <ClInclude Include="Math\Matrix4x4.h" />
@@ -208,6 +209,7 @@
     <ClCompile Include="GameObjectModel\Object.cpp" />
     <ClCompile Include="MainFunction\Main.cpp" />
     <ClCompile Include="MainFunction\MainFunctions.cpp" />
+    <ClCompile Include="Math\MathOps.cpp" />
     <ClCompile Include="MemoryManagement\Handle.cpp" />
     <ClCompile Include="MemoryManagement\IAllocator.cpp" />
     <ClCompile Include="MemoryManagement\MemoryHelper.cpp" />

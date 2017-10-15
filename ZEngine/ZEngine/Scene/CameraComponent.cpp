@@ -2,11 +2,18 @@
 
 #include "../Math/Vector3.h"
 
-#define USING_INVERSE 1
+#define USING_INVERSE 0
 
 namespace ZE {
 
 	IMPLEMENT_CLASS_1(CameraComponent, SceneComponent);
+
+	CameraComponent::CameraComponent(GameContext* gameContext)
+		: SceneComponent(gameContext)
+	{
+		m_far = 1000.0f;
+		m_near = 0.1f;
+	}
 
 	void CameraComponent::getViewMatrix(Matrix4x4& _outMat)
 	{

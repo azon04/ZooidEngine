@@ -9,11 +9,14 @@ namespace ZE
 		DEFINE_CLASS(CameraComponent)
 
 	public:
-		CameraComponent(GameContext* gameContext) : SceneComponent(gameContext) {}
+		CameraComponent(GameContext* gameContext);
 		virtual ~CameraComponent() {}
 
-
 		void getViewMatrix(Matrix4x4& _outMat);
+
+		ZE::Float32 m_near;
+		ZE::Float32 m_far;
+		ZE::Float32 m_degFieldOfView;
 	};
 }
 #endif

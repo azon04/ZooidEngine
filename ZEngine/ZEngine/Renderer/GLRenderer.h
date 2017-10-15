@@ -8,8 +8,8 @@
 
 #include "../Math/Matrix4x4.h"
 
-#define WIDTH 1024
-#define HEIGHT 768
+#define WIDTH 1280
+#define HEIGHT 720
 
 namespace ZE {
 class GLRenderer : public IRenderer {
@@ -27,12 +27,16 @@ public:
 	virtual void Draw(ShaderAction* shaderAction) override;
 	virtual bool IsClose() override;
 
+	virtual float GetHeight() const { return HEIGHT; }
+	virtual float GetWidth() const { return WIDTH; }
+
 	void SetShaderGlobal(ShaderAction* shaderAction);
 
 	GLFWwindow* m_window;
 
 	// #TODO Make shader for global instead saving the viewMatrix here
 	Matrix4x4 m_viewMatrix;
+	Matrix4x4 m_projMatrix;
 };
 }
 #endif

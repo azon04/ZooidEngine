@@ -18,5 +18,6 @@
 #include "Math/MathUtil.h"
 #include "Math/Matrix4x4.h"
 #include "Math/Vector3.h"
+#include "Math/MathOps.h"
 
 #include "Scene/CameraManager.h"

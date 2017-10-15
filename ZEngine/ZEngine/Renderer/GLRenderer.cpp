@@ -2,6 +2,8 @@
 
 #include "../ZEngine.h"
 
+#include <cstring>
+
 namespace ZE {
 
 	void GLRenderer::Setup()
@@ -32,6 +34,9 @@ namespace ZE {
 		// Viewport setup
 		int width, height;
 		glfwGetFramebufferSize(m_window, &width, &height);
+
+		// Enable Depth test
+		glEnable(GL_DEPTH_TEST);
 	}
 
 	void GLRenderer::BeginRender()
@@ -98,6 +103,11 @@ namespace ZE {
 		{
 			shaderAction->m_shader->SetMat("viewMat", m_viewMatrix);
 		}
+		
+		if (shaderAction->m_shader->getUniformPosition("projectionMat") >= 0)
+		{
+			shaderAction->m_shader->SetMat("projectionMat", m_projMatrix);
+		}
 		//
 
 		shaderAction->m_bufferArray->Bind();
@@ -126,7 +136,14 @@ namespace ZE {
 			switch (shaderVariable.m_varType)
 			{
 			case SHADER_VAR_TYPE_MATRIX:
-				m_viewMatrix = shaderVariable.mat_value;
+				if (std::strcmp(shaderVariable.m_varName, "viewMat") == 0)
+				{
+					m_viewMatrix = shaderVariable.mat_value;
+				}
+				else if (std::strcmp(shaderVariable.m_varName, "projectionMat") == 0)
+				{
+					m_projMatrix = shaderVariable.mat_value;
+				}
 				break;
 			default:
 				break;
