@@ -18,7 +18,11 @@ public:
 	virtual void Clean() = 0;
 	virtual void ClearScreen() = 0;
 	virtual void Draw(ShaderAction* shaderAction) = 0;
+	virtual void ProcessShaderAction(ShaderAction* shaderAction) = 0;
 	virtual bool IsClose() { return false; };
+
+	virtual float GetHeight() const = 0;
+	virtual float GetWidth() const = 0;
 };
 
 }

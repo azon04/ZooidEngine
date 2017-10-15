@@ -87,7 +87,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;Z_RENDER_OPENGL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)\glew-2.0.0\include;$(SolutionDir)\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -164,6 +164,7 @@
     <ClInclude Include="GameObjectModel\Object.h" />
     <ClInclude Include="GameObjectModel\RTTI.h" />
     <ClInclude Include="MainFunction\MainFunctions.h" />
+    <ClInclude Include="Math\MathOps.h" />
     <ClInclude Include="Math\MathUtil.h" />
     <ClInclude Include="Math\Matrix3x3.h" />
     <ClInclude Include="Math\Matrix4x4.h" />
@@ -187,6 +188,10 @@
     <ClInclude Include="Renderer\Shader.h" />
     <ClInclude Include="Renderer\ShaderAction.h" />
     <ClInclude Include="Scene\Actor.h" />
+    <ClInclude Include="Scene\CameraComponent.h" />
+    <ClInclude Include="Scene\CameraManager.h" />
+    <ClInclude Include="Scene\RenderComponent.h" />
+    <ClInclude Include="Scene\SceneComponent.h" />
     <ClInclude Include="UnitTest\UnitTest.h" />
     <ClInclude Include="UnitTest\VectorTest.h" />
     <ClInclude Include="Utils\Array.h" />
@@ -204,6 +209,7 @@
     <ClCompile Include="GameObjectModel\Object.cpp" />
     <ClCompile Include="MainFunction\Main.cpp" />
     <ClCompile Include="MainFunction\MainFunctions.cpp" />
+    <ClCompile Include="Math\MathOps.cpp" />
     <ClCompile Include="MemoryManagement\Handle.cpp" />
     <ClCompile Include="MemoryManagement\IAllocator.cpp" />
     <ClCompile Include="MemoryManagement\MemoryHelper.cpp" />
@@ -220,12 +226,18 @@
     <ClCompile Include="Renderer\Shader.cpp" />
     <ClCompile Include="Renderer\ShaderAction.cpp" />
     <ClCompile Include="Scene\Actor.cpp" />
+    <ClCompile Include="Scene\CameraComponent.cpp" />
+    <ClCompile Include="Scene\CameraManager.cpp" />
+    <ClCompile Include="Scene\RenderComponent.cpp" />
+    <ClCompile Include="Scene\SceneComponent.cpp" />
     <ClCompile Include="UnitTest\VectorTest.cpp" />
     <ClCompile Include="Utils\Debug.cpp" />
     <ClCompile Include="Utils\StringFunc.cpp" />
     <ClCompile Include="ZEGameContext.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Shaders\DefaultGLSimple.frag" />
+    <None Include="Shaders\DefaultGLSimple.vs" />
     <None Include="Shaders\TestGLFragmentShader.frag" />
     <None Include="Shaders\TestGLVertexShader.vs" />
   </ItemGroup>

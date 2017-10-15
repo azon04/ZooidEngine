@@ -63,12 +63,14 @@ public:
 
 	ZE::Float32 matMinor(ZE::Int32 row, ZE::Int32 column) {
 		ZE::Float32 values[3][3];
+
 		int r_index = 0;
 		int c_index = 0;
 
-		for (int r = 0; r < 3; r++) {
+		for (int r = 0; r < 4; r++) {
 			if(r == row) continue;
-			for (int c = 0; c < 3; c++) {
+			c_index = 0;
+			for (int c = 0; c < 4; c++) {
 				if(c == column) continue;
 				values[r_index][c_index] = m_data[r][c];
 				c_index++;
@@ -76,7 +78,7 @@ public:
 			r_index++;
 		}
 
-		Matrix3x3 mat((float**)values);
+		Matrix3x3 mat(values);
 		return mat.det();
 	}
 
@@ -160,9 +162,16 @@ public:
 	}
 
 	void scale(ZE::Float32 _scale) {
-		m_data[0][0] *= _scale;
-		m_data[1][1] *= _scale;
-		m_data[2][2] *= _scale;
+		setU(getU() * _scale);
+		setV(getV() * _scale);
+		setN(getN() * _scale);
+	}
+
+	void scale(Vector3 _vScale)
+	{
+		setU(getU() * _vScale);
+		setV(getV() * _vScale);
+		setN(getN() * _vScale);
 	}
 
 	void normalizeScale() {
@@ -249,6 +258,57 @@ public:
 		}
 
 		return qResult;
+	}
+
+	// Translate Functions
+	void translate(Vector3 _offset)
+	{
+		setPos(getPos() + _offset);
+	}
+
+	void moveForward(float _distance)
+	{
+		setPos(getPos() + getN() * _distance);
+	}
+
+	void moveUp(float _distance)
+	{
+		setPos(getPos() + getV() * _distance);
+	}
+
+	void moveSide(float _distance)
+	{
+		setPos(getPos() + getU() * _distance);
+	}
+
+	// Rotate Functions
+	void rotateAroundU(float _radAngle)
+	{
+		Quaternion axis(getU());
+		setV(axis.rotateVector(getV(), _radAngle));
+		setN(axis.rotateVector(getN(), _radAngle));
+	}
+
+	void rotateAroundV(float _radAngle)
+	{
+		Quaternion axis(getV());
+		setU(axis.rotateVector(getU(), _radAngle));
+		setN(axis.rotateVector(getN(), _radAngle));
+	}
+
+	void rotateAroundN(float _radAngle)
+	{
+		Quaternion axis(getN());
+		setU(axis.rotateVector(getU(), _radAngle));
+		setV(axis.rotateVector(getV(), _radAngle));
+	}
+
+	void rotateAroundAxis(float _radAngle, Vector3 _v)
+	{
+		Quaternion axis(_v);
+		setU(axis.rotateVector(getU(), _radAngle));
+		setV(axis.rotateVector(getV(), _radAngle));
+		setN(axis.rotateVector(getN(), _radAngle));
 	}
 
 	// Getter

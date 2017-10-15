@@ -65,7 +65,7 @@ namespace ZE {
 			glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
 			if (!success) {
 				glGetShaderInfoLog(vertex, 512, NULL, infoLog);
-				ZASSERT(true, infoLog);
+				ZASSERT(false, "Shader Compile Error: File: %s, %s", _vertexShaderFile, infoLog);
 			}
 
 			// Fragment shader compilation
@@ -77,7 +77,7 @@ namespace ZE {
 			glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
 			if (!success) {
 				glGetShaderInfoLog(fragment, 512, NULL, infoLog);
-				ZASSERT(fragment, infoLog);
+				ZASSERT(false, "Shader Compile Error: File: %s, %s", _colorShaderFile, infoLog);
 			}
 
 
@@ -90,7 +90,7 @@ namespace ZE {
 			glGetProgramiv(m_GLProgram, GL_LINK_STATUS, &success);
 			if (!success) {
 				glGetProgramInfoLog(m_GLProgram, 512, NULL, infoLog);
-				ZASSERT(true, infoLog);
+				ZASSERT(false, "Shader Linking Error: %s", infoLog);
 			}
 
 			glDeleteShader(vertex);
@@ -112,6 +112,42 @@ namespace ZE {
 	{
 		glUseProgram(0);
 	}
+
+	void Shader::SetVec3(const char* _constName, Vector3 _value)
+	{
+#if Z_RENDER_OPENGL
+		glUniform3f(getUniformPosition(_constName), _value.getX(), _value.getY(), _value.getZ());
+#endif
+	}
+
+	void Shader::SetFloat(const char* _constName, float _value)
+	{
+#if Z_RENDER_OPENGL
+		glUniform1f(getUniformPosition(_constName), _value);
+#endif
+	}
+
+	void Shader::SetMat(const char* _constName, Matrix4x4 _value)
+	{
+#if Z_RENDER_OPENGL
+		glUniformMatrix4fv(getUniformPosition(_constName), 1, GL_FALSE, &_value.m_data[0][0]);
+#endif
+	}
+
+	void Shader::SetInt(const char* _constName, int _value)
+	{
+#if Z_RENDER_OPENGL
+		glUniform1i(getUniformPosition(_constName), _value);
+#endif
+	}
+
+#if Z_RENDER_OPENGL
+	GLint Shader::getUniformPosition(const char* _varName)
+	{
+		GLint pos = glGetUniformLocation(m_GLProgram, _varName);
+		return pos;
+	}
+#endif
 
 	ShaderManager::ShaderManager()
 	{
@@ -139,14 +175,28 @@ namespace ZE {
 
 	void ShaderManager::InitShaders()
 	{
-		// Init all shaders
-		m_shaders.reset(1);
-		// #OPENGL Specific
-		Handle handle("Simple Shader", sizeof(Shader));
-		Shader* simpleGLShader = new(handle) Shader;
-		simpleGLShader->LoadShaderFiles("Shaders/TestGLVertexShader.vs", "Shaders/TestGLFragmentShader.frag", nullptr);
-		
-		m_shaders.push_back(simpleGLShader);
+		/*** 
+		* Initialize all shaders
+		***/
+
+#if Z_RENDER_OPENGL
+		m_shaders.reset(2);
+		{
+			Handle handle("Simple Shader", sizeof(Shader));
+			Shader* simpleGLShader = new(handle) Shader;
+			simpleGLShader->LoadShaderFiles("Shaders/TestGLVertexShader.vs", "Shaders/TestGLFragmentShader.frag", nullptr);
+
+			m_shaders.push_back(simpleGLShader);
+		}
+		{
+			Handle handle("Default GL Shader", sizeof(Shader));
+			Shader* defaultGLShader = new(handle) Shader;
+			defaultGLShader->LoadShaderFiles("Shaders/DefaultGLSimple.vs", "Shaders/DefaultGLSimple.frag", nullptr);
+
+			m_shaders.push_back(defaultGLShader);
+		}
+#endif
+
 	}
 
 	void ShaderManager::DestroyShaders()
