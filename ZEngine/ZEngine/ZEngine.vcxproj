@@ -205,6 +205,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common\GlobalRegistry.cpp" />
+    <ClCompile Include="External\Hash\lookup3.c" />
     <ClCompile Include="GameObjectModel\Component.cpp" />
     <ClCompile Include="GameObjectModel\Object.cpp" />
     <ClCompile Include="MainFunction\Main.cpp" />

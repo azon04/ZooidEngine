@@ -43,6 +43,12 @@
     <Filter Include="MemoryManagement">
       <UniqueIdentifier>{90300010-1402-44f6-b775-643268d2c28e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="External">
+      <UniqueIdentifier>{95f1ffe2-19de-49c5-93a8-3e2faacd394a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\Hash">
+      <UniqueIdentifier>{dc94f07c-b14f-4c1b-95d7-a2d7e30497ea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ZEngine.h">
@@ -268,6 +274,9 @@
     </ClCompile>
     <ClCompile Include="Math\MathOps.cpp">
       <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="External\Hash\lookup3.c">
+      <Filter>External\Hash</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
