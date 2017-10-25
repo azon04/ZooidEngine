@@ -16,12 +16,7 @@ namespace ZE {
 	public:
 
 		Array() : m_capacity(0), m_length(0)
-		{
-			if (resizable)
-			{
-				reset(1);
-			}
-		}
+		{}
 
 		Array(int initialSize) : m_capacity(0), m_length(0)
 		{
@@ -68,7 +63,14 @@ namespace ZE {
 			if (m_length + 1 > m_capacity)
 			{
 				ZASSERT(resizable, "TRY TO RESIZE AN ARRAY BUT IT'S NOT RESIZABLE");
-				resize(m_capacity * 2);
+				if (resizable && m_capacity == 0)
+				{
+					reset(1);
+				}
+				else
+				{
+					resize(m_capacity * 2);
+				}
 			}
 
 			m_length++;

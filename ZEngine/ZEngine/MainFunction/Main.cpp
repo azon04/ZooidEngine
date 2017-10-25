@@ -16,7 +16,7 @@
 #include <stdio.h>
 
 #include "../Scene/CameraComponent.h"
-#include "../Utils/StringFunc.h"
+#include "../Utils/String.h"
 
 int main(int argc, char** argv) {
 
@@ -68,12 +68,6 @@ int main(int argc, char** argv) {
 		shaderAction.m_vertexSize = 288;
 		shaderAction.SetShaderMatVar("modelMat", modelMat);
 	}
-
-	ZE::UInt32 result1 = StringFunc::Hash("aku", 3);
-	ZE::UInt32 result2 = StringFunc::Hash("aqu", 3);
-
-	ZEINFO("Result1 : %u", result1 % 2);
-	ZEINFO("Result2 : %u", result2 % 2);
 
 	// Main Loop
 	while (!gameContext.getRenderer()->IsClose()) {

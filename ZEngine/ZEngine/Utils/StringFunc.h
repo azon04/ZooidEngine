@@ -11,7 +11,7 @@ namespace StringFunc {
 
 	void WriteTo(char* to, const char* from, unsigned int size);
 
-	int Length(char* string);
+	int Length(const char* string);
 
 	ZE::UInt32 Hash(const char* string, size_t size);
 

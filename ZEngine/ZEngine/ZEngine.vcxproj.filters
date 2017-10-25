@@ -183,6 +183,12 @@
     <ClInclude Include="Math\MathOps.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\HashMap.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\String.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UnitTest\VectorTest.cpp">
