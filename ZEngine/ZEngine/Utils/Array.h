@@ -31,7 +31,8 @@ namespace ZE {
 			}
 
 			m_handle = Handle(size * sizeof(T));
-			m_handle.getObject();
+			MemoryHelper::Zero(m_handle.getObject(), m_handle.getCapacity());
+
 			m_capacity = size;
 			m_length = 0;
 		}
@@ -46,14 +47,21 @@ namespace ZE {
 			Handle newHandle(size * sizeof(T));
 			if (sizeToCopy > 0)
 			{
+				MemoryHelper::Zero(newHandle.getObject(), newHandle.getCapacity());
 				MemoryHelper::Copy(m_handle.getObject(), newHandle.getObject(), sizeToCopy * sizeof(T));
 			}
 
 			m_handle.release();
 			m_handle = newHandle;
+			m_capacity = size;
 		}
 
 		T& operator[](int index)
+		{
+			return get(index);
+		}
+
+		T& get(int index)
 		{
 			return *(T*)((void*)((uintptr_t)m_handle.getObject() + (uintptr_t)(index * sizeof(T))));
 		}
@@ -126,8 +134,8 @@ namespace ZE {
 		int size() const { return m_length; }
 
 		int capacity() const { return m_capacity; }
-	private:
 
+	protected:
 		Handle m_handle;
 		int m_length;
 		int m_capacity;

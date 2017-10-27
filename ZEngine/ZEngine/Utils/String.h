@@ -55,6 +55,8 @@ namespace ZE
 			char* cText = m_handle.getObject<char>();
 
 			StringFunc::WriteTo(cText, text, size);
+
+			return *this;
 		}
 
 		char* c_str() { return m_handle.getObject<char>(); }
