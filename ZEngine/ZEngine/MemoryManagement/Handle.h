@@ -6,6 +6,7 @@
 #include "../Utils/StringFunc.h"
 
 #define INVALID_UINT 0xFFFFFFFF
+#define HANDLE_NO_NAME 1
 
 namespace ZE {
 
@@ -16,7 +17,10 @@ namespace ZE {
 		unsigned int m_poolIndex;
 		unsigned int m_blockIndex;
 		size_t m_size;
+
+#if !HANDLE_NO_NAME
 		char m_handleName[32];
+#endif
 
 	public:
 
@@ -40,7 +44,9 @@ namespace ZE {
 			m_poolIndex(INVALID_UINT),
 			m_blockIndex(INVALID_UINT)
 		{
+#if !HANDLE_NO_NAME
 			StringFunc::WriteTo(m_handleName, handleName, 32);
+#endif
 		}
 
 		~Handle() {}
@@ -75,6 +81,8 @@ namespace ZE {
 		}
 
 		void release();
+
+		size_t getCapacity() const { return m_size; };
 	};
 
 };

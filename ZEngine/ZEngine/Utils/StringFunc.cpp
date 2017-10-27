@@ -2,7 +2,10 @@
 #include <cstdlib>
 #include <cstring>
 
-#define  USING_MEM_FUNCTION 1
+#include "../External/Hash/lookup3.c"
+
+#define USING_MEM_FUNCTION 1
+#define USING_ENDIANNES 1
 
 void StringFunc::WriteTo(char* to, const char* from, unsigned int size)
 {
@@ -18,11 +21,36 @@ void StringFunc::WriteTo(char* to, const char* from, unsigned int size)
 #endif
 }
 
-int StringFunc::Length(char* string)
+int StringFunc::Length(const char* string)
 {
 	int length = 0;
 	while(string[length++] != '\0') {}
 	return length;
+}
+
+ZE::UInt32 StringFunc::Hash(const char* string, size_t size)
+{
+	ZE::UInt32 result;
+
+	uint32_t initval = 13; // Prime is good
+#if USING_ENDIANNES
+	if (HASH_LITTLE_ENDIAN)
+	{
+		result = (ZE::UInt32) (hashlittle(string, size, initval));
+	}
+	else if (HASH_BIG_ENDIAN)
+	{
+		result = (ZE::UInt32) (hashbig(string, size, initval));
+	}
+	else
+	{
+		result = (ZE::UInt32) (hashword((const uint32_t *)string, size / 4, initval));
+	}
+#else
+	result = (ZE::UInt32) (hashword((const uint32_t *)string, size / 4, initval));
+#endif
+
+	return result;
 }
 
 char StringFunc::Buffer[STRING_FUNC_BUFFER_SIZE];

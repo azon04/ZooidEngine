@@ -1,9 +1,9 @@
-#include "../UnitTest/VectorTest.h"
-
-#include "../ZEngine.h"
-#include "../ZEGameContext.h"
+#include "ZEngine.h"
+#include "ZEGameContext.h"
 
 #include "MainFunctions.h"
+
+#include "UnitTest/UnitTest.h"
 
 #if Z_RENDER_OPENGL
 #define GLUE_STATIC
@@ -15,7 +15,7 @@
 
 #include <stdio.h>
 
-#include "../Scene/CameraComponent.h"
+#include "Scene/CameraComponent.h"
 
 int main(int argc, char** argv) {
 
@@ -24,6 +24,8 @@ int main(int argc, char** argv) {
 	
 	ZE::MainSetup(&gameContext);
 	
+	UnitTest::RunMainTest();
+
 	Matrix4x4 viewMat;
 	Matrix4x4 projectionMat;
 	Matrix4x4 modelMat;
@@ -67,6 +69,7 @@ int main(int argc, char** argv) {
 		shaderAction.m_vertexSize = 288;
 		shaderAction.SetShaderMatVar("modelMat", modelMat);
 	}
+
 
 	// Main Loop
 	while (!gameContext.getRenderer()->IsClose()) {

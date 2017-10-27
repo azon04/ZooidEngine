@@ -66,6 +66,7 @@ namespace ZE {
 	void MemoryManager::Deconstruct()
 	{
 		delete s_instance;
+		s_instance = nullptr;
 	}
 
 	void* MemoryManager::allocateBlock(size_t size, unsigned int &pool_index, unsigned int &block_index)

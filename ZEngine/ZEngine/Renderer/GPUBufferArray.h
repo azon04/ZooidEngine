@@ -23,8 +23,9 @@ public:
 	
 	bool m_bUsingIndexBuffer;
 
-	// #OPENGL Specific
+#if Z_RENDER_OPENGL
 	GLuint m_VAO;
+#endif
 };
 }
 #endif

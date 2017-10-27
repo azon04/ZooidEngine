@@ -6,6 +6,7 @@ class UnitTest {
 public:
 	virtual void RunTest() = 0;
 
+	static void RunMainTest();
 };
 
 #endif

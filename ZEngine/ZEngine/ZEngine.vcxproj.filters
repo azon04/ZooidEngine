@@ -19,9 +19,6 @@
     <Filter Include="Utils">
       <UniqueIdentifier>{54fab83d-7f65-4756-8a79-1f543a2f1b03}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UnitTest">
-      <UniqueIdentifier>{fccf1c7c-f638-4fef-b542-dbf7647a1623}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MainFunction">
       <UniqueIdentifier>{6e3080ba-5deb-486d-b0d8-8e0d0209078e}</UniqueIdentifier>
     </Filter>
@@ -43,6 +40,15 @@
     <Filter Include="MemoryManagement">
       <UniqueIdentifier>{90300010-1402-44f6-b775-643268d2c28e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="External">
+      <UniqueIdentifier>{95f1ffe2-19de-49c5-93a8-3e2faacd394a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\Hash">
+      <UniqueIdentifier>{dc94f07c-b14f-4c1b-95d7-a2d7e30497ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UnitTest">
+      <UniqueIdentifier>{21b6936d-e885-46a9-9714-887a77ffb71c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ZEngine.h">
@@ -50,12 +56,6 @@
     </ClInclude>
     <ClInclude Include="Utils\ZEngineHelper.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="UnitTest\UnitTest.h">
-      <Filter>UnitTest</Filter>
-    </ClInclude>
-    <ClInclude Include="UnitTest\VectorTest.h">
-      <Filter>UnitTest</Filter>
     </ClInclude>
     <ClInclude Include="Math\Vector3.h">
       <Filter>Math</Filter>
@@ -177,11 +177,26 @@
     <ClInclude Include="Math\MathOps.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\HashMap.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\String.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitTest\UnitTest.h">
+      <Filter>UnitTest</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitTest\VectorTest.h">
+      <Filter>UnitTest</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitTest\ArrayTest.h">
+      <Filter>UnitTest</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitTest\HashMapTest.h">
+      <Filter>UnitTest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="UnitTest\VectorTest.cpp">
-      <Filter>UnitTest</Filter>
-    </ClCompile>
     <ClCompile Include="MainFunction\Main.cpp">
       <Filter>MainFunction</Filter>
     </ClCompile>
@@ -268,6 +283,21 @@
     </ClCompile>
     <ClCompile Include="Math\MathOps.cpp">
       <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="External\Hash\lookup3.c">
+      <Filter>External\Hash</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTest\VectorTest.cpp">
+      <Filter>UnitTest</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTest\ArrayTest.cpp">
+      <Filter>UnitTest</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTest\HashMapTest.cpp">
+      <Filter>UnitTest</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTest\UnitTest.cpp">
+      <Filter>UnitTest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

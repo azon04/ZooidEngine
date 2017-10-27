@@ -11,18 +11,19 @@ namespace ZE {
 
 	private:
 		static MemoryManager* s_instance;
+
+		MemoryManager();
+		virtual ~MemoryManager();
 	
 	protected:
 		void* m_pAlocatorsBlock;
 		PoolAllocator* m_pools[NPOOL];
 	
 	public:
-		MemoryManager();
-		virtual ~MemoryManager();
-
 		static MemoryManager* Construct();
 		static void Deconstruct();
 		static MemoryManager* getInstance() { return s_instance; }
+		static bool isConstructed() { return s_instance != nullptr; }
 		
 		void* allocateBlock(size_t size, unsigned int &pool_index, unsigned int &block_index);
 		void freeBlock(unsigned int pool_index, unsigned int block_index);

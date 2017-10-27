@@ -16,16 +16,19 @@ namespace ZE {
 	public:
 
 		Array() : m_capacity(0), m_length(0)
-		{
-			if (resizable)
-			{
-				reset(1);
-			}
-		}
+		{}
 
 		Array(int initialSize) : m_capacity(0), m_length(0)
 		{
-			reset(initialSize * sizeof(T));
+			reset(initialSize);
+		}
+
+		virtual ~Array()
+		{
+			if (m_handle.isValid())
+			{
+				m_handle.release();
+			}
 		}
 
 		void reset(int size)
@@ -36,7 +39,8 @@ namespace ZE {
 			}
 
 			m_handle = Handle(size * sizeof(T));
-			m_handle.getObject();
+			MemoryHelper::Zero(m_handle.getObject(), m_handle.getCapacity());
+
 			m_capacity = size;
 			m_length = 0;
 		}
@@ -51,14 +55,21 @@ namespace ZE {
 			Handle newHandle(size * sizeof(T));
 			if (sizeToCopy > 0)
 			{
+				MemoryHelper::Zero(newHandle.getObject(), newHandle.getCapacity());
 				MemoryHelper::Copy(m_handle.getObject(), newHandle.getObject(), sizeToCopy * sizeof(T));
 			}
 
 			m_handle.release();
 			m_handle = newHandle;
+			m_capacity = size;
 		}
 
 		T& operator[](int index)
+		{
+			return get(index);
+		}
+
+		T& get(int index)
 		{
 			return *(T*)((void*)((uintptr_t)m_handle.getObject() + (uintptr_t)(index * sizeof(T))));
 		}
@@ -68,7 +79,14 @@ namespace ZE {
 			if (m_length + 1 > m_capacity)
 			{
 				ZASSERT(resizable, "TRY TO RESIZE AN ARRAY BUT IT'S NOT RESIZABLE");
-				resize(m_capacity * 2);
+				if (resizable && m_capacity == 0)
+				{
+					reset(1);
+				}
+				else
+				{
+					resize(m_capacity * 2);
+				}
 			}
 
 			m_length++;
@@ -88,7 +106,7 @@ namespace ZE {
 			if (index < m_length-1)
 			{
 				// Shift Memory
-				uintptr_t memDest = (uintptr_t)m_handle + (uintptr_t)(index * sizeof(T));
+				uintptr_t memDest = (uintptr_t)(m_handle.getObject()) + (uintptr_t)(index * sizeof(T));
 				uintptr_t memSrc = memDest + (uintptr_t) sizeof(T);
 
 				MemoryHelper::Move((void*)memSrc, (void*)memDest, sizeof(T) * (m_length - index - 1));
@@ -105,7 +123,7 @@ namespace ZE {
 			else if (index < m_length)
 			{
 				// unshift the memory
-				uintptr_t memSrc = (uintptr_t)m_handle + (uintptr_t)(index * sizeof(T));
+				uintptr_t memSrc = (uintptr_t)(m_handle.getObject()) + (uintptr_t)(index * sizeof(T));
 				uintptr_t memDest = memDest + (uintptr_t) sizeof(T);
 
 				MemoryHelper::Move((void*)memSrc, (void*)memDest, sizeof(T) * (m_length - index));
@@ -124,8 +142,8 @@ namespace ZE {
 		int size() const { return m_length; }
 
 		int capacity() const { return m_capacity; }
-	private:
 
+	protected:
 		Handle m_handle;
 		int m_length;
 		int m_capacity;
