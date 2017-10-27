@@ -1,9 +1,9 @@
-#include "../UnitTest/VectorTest.h"
-
-#include "../ZEngine.h"
-#include "../ZEGameContext.h"
+#include "ZEngine.h"
+#include "ZEGameContext.h"
 
 #include "MainFunctions.h"
+
+#include "UnitTest/UnitTest.h"
 
 #if Z_RENDER_OPENGL
 #define GLUE_STATIC
@@ -15,9 +15,7 @@
 
 #include <stdio.h>
 
-#include "../Scene/CameraComponent.h"
-#include "../Utils/String.h"
-#include "../Utils/HashMap.h"
+#include "Scene/CameraComponent.h"
 
 int main(int argc, char** argv) {
 
@@ -26,6 +24,8 @@ int main(int argc, char** argv) {
 	
 	ZE::MainSetup(&gameContext);
 	
+	UnitTest::RunMainTest();
+
 	Matrix4x4 viewMat;
 	Matrix4x4 projectionMat;
 	Matrix4x4 modelMat;
@@ -70,26 +70,6 @@ int main(int argc, char** argv) {
 		shaderAction.SetShaderMatVar("modelMat", modelMat);
 	}
 
-	ZE::HashMap<ZE::String, int> testMap;
-	testMap.put("Hai", 3);
-	testMap.put("Hau", 4);
-	testMap.put("Hau", 5);
-	testMap.put("Hal", 12);
-	testMap.put("Hai", 1);
-	testMap.put("Biji1", 3);
-	testMap.put("Biji2", 7);
-	testMap.put("Biji3", 9);
-	testMap.put("Biji1", 1234);
-	testMap.put("Biji3", 567);
-	testMap.put("Biji4", 4321);
-	
-	ZEINFO("Hai value : %d", testMap["Hai"]);
-	ZEINFO("Hau value : %d", testMap["Hau"]);
-	ZEINFO("Hal value : %d", testMap["Hal"]);
-	ZEINFO("Biji1 value : %d", testMap["Biji1"]);
-	ZEINFO("Biji2 value : %d", testMap["Biji2"]);
-	ZEINFO("Biji3 value : %d", testMap["Biji3"]);
-	ZEINFO("Biji4 value : %d", testMap["Biji4"]);
 
 	// Main Loop
 	while (!gameContext.getRenderer()->IsClose()) {

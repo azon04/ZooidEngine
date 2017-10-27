@@ -6,8 +6,9 @@
 #include "BufferData.h"
 #include "BufferLayout.h"
 
-// #OPENGL Specific
+#if Z_RENDER_OPENGL
 #include <GL/glew.h>
+#endif
 
 #define MAX_LAYOUT 16
 namespace ZE {
@@ -15,7 +16,13 @@ namespace ZE {
 class GPUBufferData {
 
 public:
-	GPUBufferData() : m_BBO(0) {}
+	GPUBufferData() 
+	{
+#if Z_RENDER_OPENGL
+		m_BBO = 0;
+#endif
+	}
+
 	virtual ~GPUBufferData() {}
 
 	void FromBufferData(BufferData* _bufferData);
@@ -27,8 +34,10 @@ public:
 	BufferType m_bufferType;
 	BufferData* m_BufferData;
 
-	// #OPENGL Specific
+#if Z_RENDER_OPENGL
 	GLuint m_BBO;
+#endif
+
 	ZE::Int32 numberOfLayout;
 	BufferLayout* m_layout;
 

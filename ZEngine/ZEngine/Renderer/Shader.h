@@ -20,7 +20,12 @@ namespace ZE {
 
 class Shader {
 public:
-	Shader() : m_GLProgram(0) {}
+	Shader()
+	{
+#if Z_RENDER_OPENGL
+		m_GLProgram = 0;
+#endif
+	}
 	virtual ~Shader();
 	
 	void LoadShaderFiles(const char* _vertexShaderFile, const char* _colorShaderFile, const char* _computeShaderFile);

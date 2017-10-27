@@ -88,7 +88,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;Z_RENDER_OPENGL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\glew-2.0.0\include;$(SolutionDir)\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\glew-2.0.0\include;$(SolutionDir)\glfw\include;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -192,6 +192,8 @@
     <ClInclude Include="Scene\CameraManager.h" />
     <ClInclude Include="Scene\RenderComponent.h" />
     <ClInclude Include="Scene\SceneComponent.h" />
+    <ClInclude Include="UnitTest\ArrayTest.h" />
+    <ClInclude Include="UnitTest\HashMapTest.h" />
     <ClInclude Include="UnitTest\UnitTest.h" />
     <ClInclude Include="UnitTest\VectorTest.h" />
     <ClInclude Include="Utils\Array.h" />
@@ -233,6 +235,9 @@
     <ClCompile Include="Scene\CameraManager.cpp" />
     <ClCompile Include="Scene\RenderComponent.cpp" />
     <ClCompile Include="Scene\SceneComponent.cpp" />
+    <ClCompile Include="UnitTest\ArrayTest.cpp" />
+    <ClCompile Include="UnitTest\HashMapTest.cpp" />
+    <ClCompile Include="UnitTest\UnitTest.cpp" />
     <ClCompile Include="UnitTest\VectorTest.cpp" />
     <ClCompile Include="Utils\Debug.cpp" />
     <ClCompile Include="Utils\StringFunc.cpp" />

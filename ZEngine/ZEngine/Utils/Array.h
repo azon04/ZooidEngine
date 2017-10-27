@@ -20,7 +20,15 @@ namespace ZE {
 
 		Array(int initialSize) : m_capacity(0), m_length(0)
 		{
-			reset(initialSize * sizeof(T));
+			reset(initialSize);
+		}
+
+		virtual ~Array()
+		{
+			if (m_handle.isValid())
+			{
+				m_handle.release();
+			}
 		}
 
 		void reset(int size)
@@ -98,7 +106,7 @@ namespace ZE {
 			if (index < m_length-1)
 			{
 				// Shift Memory
-				uintptr_t memDest = (uintptr_t)m_handle + (uintptr_t)(index * sizeof(T));
+				uintptr_t memDest = (uintptr_t)(m_handle.getObject()) + (uintptr_t)(index * sizeof(T));
 				uintptr_t memSrc = memDest + (uintptr_t) sizeof(T);
 
 				MemoryHelper::Move((void*)memSrc, (void*)memDest, sizeof(T) * (m_length - index - 1));
@@ -115,7 +123,7 @@ namespace ZE {
 			else if (index < m_length)
 			{
 				// unshift the memory
-				uintptr_t memSrc = (uintptr_t)m_handle + (uintptr_t)(index * sizeof(T));
+				uintptr_t memSrc = (uintptr_t)(m_handle.getObject()) + (uintptr_t)(index * sizeof(T));
 				uintptr_t memDest = memDest + (uintptr_t) sizeof(T);
 
 				MemoryHelper::Move((void*)memSrc, (void*)memDest, sizeof(T) * (m_length - index));

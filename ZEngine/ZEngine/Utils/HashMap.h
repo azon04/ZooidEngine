@@ -14,7 +14,7 @@ namespace ZE {
 	template<class K, class V>
 	struct HashKeyValue
 	{
-		bool m_occupied = false;
+		ZE::Int8 m_occupied = 0;
 		K m_key;
 		uint32_t m_hashKey;
 		V m_value;
@@ -73,15 +73,15 @@ namespace ZE {
 #if HASH_MAP_PROBING == HASH_MAP_QUADRATIC_PROBING
 			int q_offset = 1;
 #endif
-			while (get(index).m_occupied)
+			while (get(index).m_occupied == 1)
 			{
 				// Try to reposition the current index for better performance
 				HashKeyValue<String, V>& hashKeyValue = get(index);
-				hashKeyValue.m_occupied = false;
+				hashKeyValue.m_occupied = 0;
 				m_length--;
 				put_internal(hashKeyValue.m_key, hashKeyValue.m_value);
 
-				if (!get(index).m_occupied) { break; }
+				if (get(index).m_occupied != 1) { break; }
 
 #if HASH_MAP_PROBING == HASH_MAP_LINEAR_PROBING
 				index = (index + 1) % m_capacity;
@@ -92,7 +92,7 @@ namespace ZE {
 			}
 
 			HashKeyValue<K, V>& hashKeyValue = get(index);
-			hashKeyValue.m_occupied = true;
+			hashKeyValue.m_occupied = 1;
 			m_length++;
 			hashKeyValue.m_hashKey = hashValue;
 			hashKeyValue.m_key = key;
@@ -145,7 +145,7 @@ namespace ZE {
 
 				int offset = 1;
 				
-				while (get(index).m_occupied && get(index).m_hashKey != hashValue && index < currentCapacity)
+				while (get(index).m_occupied != 0 && get(index).m_hashKey != hashValue && index < currentCapacity)
 				{
 #if HASH_MAP_PROBING == HASH_MAP_LINEAR_PROBING
 					index = (index + 1) % m_capacity;
@@ -153,6 +153,13 @@ namespace ZE {
 					index = (initial_index + (offset * offset)) % currentCapacity;
 #endif
 					offset++;
+				}
+
+				if (get(index).m_occupied == -1)
+				{
+					// is deleted
+					index = -1;
+					return false;
 				}
 
 				if (get(index).m_hashKey == hashValue)
@@ -177,6 +184,15 @@ namespace ZE {
 		{
 			int index = 0;
 			return hasKey_internal(key, index);
+		}
+
+		void erase(K& key)
+		{
+			int index = 0;
+			if (hasKey_internal(key, index))
+			{
+				get(index).m_occupied = -1;
+			}
 		}
 	};
 
@@ -209,11 +225,11 @@ namespace ZE {
 #if HASH_MAP_PROBING == HASH_MAP_QUADRATIC_PROBING
 			int q_offset = 1;
 #endif
-			while (get(index).m_occupied)
+			while (get(index).m_occupied == 1)
 			{
 				// Try to reposition the current index for better performance
 				HashKeyValue<String, V>& hashKeyValue = get(index);
-				hashKeyValue.m_occupied = false;
+				hashKeyValue.m_occupied = 0;
 				m_length--;
 				put_internal(hashKeyValue.m_key.c_str(), hashKeyValue.m_value);
 				
@@ -228,7 +244,7 @@ namespace ZE {
 			}
 
 			HashKeyValue<String, V>& hashKeyValue = get(index);
-			hashKeyValue.m_occupied = true;
+			hashKeyValue.m_occupied = 1;
 			m_length++;
 			hashKeyValue.m_hashKey = hashValue;
 			hashKeyValue.m_key = key;
@@ -270,7 +286,7 @@ namespace ZE {
 
 				int offset = 1;
 
-				while (get(index).m_occupied && get(index).m_hashKey != hashValue && offset < currentCapacity)
+				while (get(index).m_occupied != 0 && get(index).m_hashKey != hashValue && offset < currentCapacity)
 				{
 #if HASH_MAP_PROBING == HASH_MAP_LINEAR_PROBING
 					index = (index + 1) % currentCapacity;
@@ -278,6 +294,13 @@ namespace ZE {
 					index = (initial_index + (offset * offset)) % currentCapacity;
 #endif
 					offset++;
+				}
+
+				if (get(index).m_occupied == -1)
+				{
+					// is deleted
+					index = -1;
+					return false;
 				}
 
 				if (get(index).m_hashKey == hashValue)
@@ -303,6 +326,15 @@ namespace ZE {
 		{
 			int index = 0;
 			return hasKey_internal(key, index);
+		}
+
+		void erase(const char* key)
+		{
+			int index = 0;
+			if (hasKey_internal(key, index))
+			{
+				get(index).m_occupied = -1;
+			}
 		}
 	};
 

@@ -1,7 +1,7 @@
 #include "VectorTest.h"
-#include "../ZEngine.h"
+#include "ZEngine.h"
 
-#include "../Math/Vector3.h"
+#include "Math/Vector3.h"
 
 void VectorUnitTest::RunTest()
 {
@@ -15,7 +15,7 @@ void VectorUnitTest::RunTest()
 	// Vector addition
 	tmp = v4 + v1;
 	ZASSERT(tmp.getX() == 2.0f && tmp.getY() == 1.0f && tmp.getZ() == 1.0f, "Vector Addition Failed");
-
+	
 	// Vector subtraction
 	tmp = v4 - v1;
 	ZASSERT(tmp.getX() == 0.0f && tmp.getY() == 1.0f && tmp.getZ() == 1.0f, "Vector Subtraction Failed");
