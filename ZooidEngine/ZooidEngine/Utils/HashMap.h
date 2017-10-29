@@ -23,7 +23,8 @@ namespace ZE {
 	template<class K>
 	class HashFunc
 	{
-		ZE::UInt32 operator()(K& Object)
+	public:
+		ZE::UInt32 operator()(const K& Object)
 		{
 			return 0;
 		}
@@ -32,6 +33,7 @@ namespace ZE {
 	template<>
 	class HashFunc<String>
 	{
+	public:
 		ZE::UInt32 operator()(String& object)
 		{
 			return StringFunc::Hash(object.c_str(), StringFunc::Length(object.c_str()));
@@ -41,7 +43,8 @@ namespace ZE {
 	template<>
 	class HashFunc<ZE::Int32>
 	{
-		ZE::UInt32 operator()(ZE::Int32& object)
+	public:
+		ZE::UInt32 operator()(const ZE::Int32& object)
 		{
 			return object;
 		}
@@ -63,7 +66,8 @@ namespace ZE {
 	public:
 		bool put_internal(const K& key, const V& value)
 		{
-			ZE::UInt32 hashValue = Func(key);
+			Func func;
+			ZE::UInt32 hashValue = func(key);
 			int initial_index = hashValue % m_capacity;
 			int index = initial_index;
 
@@ -76,7 +80,7 @@ namespace ZE {
 			while (get(index).m_occupied == 1)
 			{
 				// Try to reposition the current index for better performance
-				HashKeyValue<String, V>& hashKeyValue = get(index);
+				HashKeyValue<K, V>& hashKeyValue = get(index);
 				hashKeyValue.m_occupied = 0;
 				m_length--;
 				put_internal(hashKeyValue.m_key, hashKeyValue.m_value);
@@ -123,29 +127,35 @@ namespace ZE {
 			return put_internal(key, value);
 		}
 
-		V& operator[](K& key)
+		V& operator[](const K& key)
 		{
 			int index = 0;
-			if (hasKey_internal(k, index))
+			if (hasKey_internal(key, index))
 			{
 				return get(index).m_value;
 			}
 
-			return HashKeyValue<K,V>().m_value;
+			// if nothing, then put
+			V temp;
+			put(key, temp);
+			hasKey_internal(key, index);
+
+			return get(index).m_value;
 		}
 
-		bool hasKey_internal(K& key, int& index)
+		bool hasKey_internal(const K& key, int& index)
 		{
 			int currentCapacity = m_capacity;
-			ZE::UInt32 hashValue = Func(key);
-			while (currentCapacity >= 0)
+			Func func;
+			ZE::UInt32 hashValue = func(key);
+			while (currentCapacity > 0)
 			{
 				int initial_index = hashValue % currentCapacity;
 				index = initial_index;
 
 				int offset = 1;
 				
-				while (get(index).m_occupied != 0 && get(index).m_hashKey != hashValue && index < currentCapacity)
+				while (get(index).m_occupied != 0 && get(index).m_hashKey != hashValue && offset < currentCapacity)
 				{
 #if HASH_MAP_PROBING == HASH_MAP_LINEAR_PROBING
 					index = (index + 1) % m_capacity;
@@ -180,13 +190,13 @@ namespace ZE {
 			return false;
 		}
 
-		bool hasKey(K& key)
+		bool hasKey(const K& key)
 		{
 			int index = 0;
 			return hasKey_internal(key, index);
 		}
 
-		void erase(K& key)
+		void erase(const K& key)
 		{
 			int index = 0;
 			if (hasKey_internal(key, index))
@@ -210,7 +220,12 @@ namespace ZE {
 				return get(index).m_value;
 			}
 
-			return HashKeyValue<String,V>().m_value;
+			// if nothing put
+			V temp;
+			put(key, temp);
+			hasKey_internal(key, index);
+
+			return get(index).m_value;
 		}
 
 		bool put_internal(const char* key, const V& value)

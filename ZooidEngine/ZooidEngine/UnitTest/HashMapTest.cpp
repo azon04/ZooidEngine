@@ -29,5 +29,18 @@ void HashMapTest::RunTest()
 
 	testMap.erase("Hai");
 	ZASSERT(!testMap.hasKey("Hai"), "Erase HashMap Failed");
+
+	ZE::HashMap<ZE::Int32, ZE::Int32> intTestMap;
+	intTestMap.put(3, 3);
+	ZASSERT(intTestMap[3] == 3, "Put HashMap Failed");
+
+	intTestMap.put(4, 4);
+	ZASSERT(intTestMap[4] == 4, "Put HashMap Failed");
+
+	intTestMap.put(4, 5);
+	ZASSERT(intTestMap[4] == 5, "Put HashMap Failed");
+
+	intTestMap.erase(3);
+	ZASSERT(!intTestMap.hasKey(3), "Erase HashMap Failed");
 }
 
