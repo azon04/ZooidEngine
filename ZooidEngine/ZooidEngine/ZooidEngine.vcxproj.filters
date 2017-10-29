@@ -195,6 +195,9 @@
     <ClInclude Include="UnitTest\HashMapTest.h">
       <Filter>UnitTest</Filter>
     </ClInclude>
+    <ClInclude Include="External\Hash\lookup3.h">
+      <Filter>External\Hash</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">

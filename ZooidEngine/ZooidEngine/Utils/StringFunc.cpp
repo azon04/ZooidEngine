@@ -2,7 +2,10 @@
 #include <cstdlib>
 #include <cstring>
 
-#include "../External/Hash/lookup3.c"
+extern "C"
+{
+	#include "../External/Hash/lookup3.h"
+}
 
 #define USING_MEM_FUNCTION 1
 #define USING_ENDIANNES 1

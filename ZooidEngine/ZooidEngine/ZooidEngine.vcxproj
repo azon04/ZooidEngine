@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0DFAB8DF-272C-4B1F-B4B1-1182CB68801D}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>ZEngine</RootNamespace>
+    <RootNamespace>ZooidEngine</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -159,6 +159,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Common\GlobalRegistry.h" />
+    <ClInclude Include="External\Hash\lookup3.h" />
     <ClInclude Include="GameObjectModel\Component.h" />
     <ClInclude Include="GameObjectModel\ObjDecl.h" />
     <ClInclude Include="GameObjectModel\Object.h" />
