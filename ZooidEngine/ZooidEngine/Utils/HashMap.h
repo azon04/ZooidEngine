@@ -7,7 +7,7 @@
 #define HASH_MAP_LINEAR_PROBING 1
 #define HASH_MAP_QUADRATIC_PROBING 2
 
-#define  HASH_MAP_PROBING HASH_MAP_QUADRATIC_PROBING
+#define HASH_MAP_PROBING HASH_MAP_QUADRATIC_PROBING
 
 namespace ZE {
 
@@ -204,6 +204,20 @@ namespace ZE {
 				get(index).m_occupied = -1;
 			}
 		}
+
+		Array<K, true> getKeys()
+		{
+			Array<K, true> keys;
+			for (int i = 0; i < m_capacity; i++)
+			{
+				if (get(i).m_occupied == 1)
+				{
+					keys.push_back(get(i).m_key);
+				}
+			}
+
+			return keys;
+		}
 	};
 
 	template<class V>
@@ -350,6 +364,20 @@ namespace ZE {
 			{
 				get(index).m_occupied = -1;
 			}
+		}
+
+		Array<String, true> getKeys()
+		{
+			Array<K, true> keys;
+			for (int i = 0; i < m_capacity; i++)
+			{
+				if (get(i).m_occupied == 1)
+				{
+					keys.push_back(get(i).m_key);
+				}
+			}
+
+			return keys;
 		}
 	};
 

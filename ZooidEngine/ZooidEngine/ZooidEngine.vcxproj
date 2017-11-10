@@ -159,8 +159,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Common\GlobalRegistry.h" />
+    <ClInclude Include="Events\Events.h" />
     <ClInclude Include="External\Hash\lookup3.h" />
     <ClInclude Include="GameObjectModel\Component.h" />
+    <ClInclude Include="GameObjectModel\FunctionDelegates.h" />
     <ClInclude Include="GameObjectModel\ObjDecl.h" />
     <ClInclude Include="GameObjectModel\Object.h" />
     <ClInclude Include="GameObjectModel\RTTI.h" />
@@ -210,8 +212,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common\GlobalRegistry.cpp" />
+    <ClCompile Include="Events\Events.cpp" />
     <ClCompile Include="External\Hash\lookup3.c" />
     <ClCompile Include="GameObjectModel\Component.cpp" />
+    <ClCompile Include="GameObjectModel\FunctionDelegates.cpp" />
     <ClCompile Include="GameObjectModel\Object.cpp" />
     <ClCompile Include="MainFunction\Main.cpp" />
     <ClCompile Include="MainFunction\MainFunctions.cpp" />

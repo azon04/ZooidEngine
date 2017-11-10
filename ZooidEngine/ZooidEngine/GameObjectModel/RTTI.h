@@ -11,7 +11,7 @@ namespace ZE {
 
 	struct RTTI {
 		char m_className[32];
-		Int32 m_classID;
+		Int32 m_classID = -1;
 		RTTI* m_parentRTTI;
 	};
 

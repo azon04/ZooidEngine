@@ -49,6 +49,9 @@
     <Filter Include="UnitTest">
       <UniqueIdentifier>{21b6936d-e885-46a9-9714-887a77ffb71c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Events">
+      <UniqueIdentifier>{01658448-4e51-45e3-9544-b7ca04a31a7c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ZEngine.h">
@@ -198,6 +201,12 @@
     <ClInclude Include="External\Hash\lookup3.h">
       <Filter>External\Hash</Filter>
     </ClInclude>
+    <ClInclude Include="Events\Events.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectModel\FunctionDelegates.h">
+      <Filter>GameObjectModel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -301,6 +310,12 @@
     </ClCompile>
     <ClCompile Include="UnitTest\UnitTest.cpp">
       <Filter>UnitTest</Filter>
+    </ClCompile>
+    <ClCompile Include="Events\Events.cpp">
+      <Filter>Events</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectModel\FunctionDelegates.cpp">
+      <Filter>GameObjectModel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

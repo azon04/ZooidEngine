@@ -23,6 +23,21 @@ namespace ZE {
 			reset(initialSize);
 		}
 
+		Array(const Array& otherArray)
+		{
+			m_capacity = otherArray.capacity();
+			m_length = otherArray.length();
+
+			m_handle = Handle(m_capacity * sizeof(T));
+			
+			if (m_capacity > 0)
+			{
+				void* otherObject = Handle(otherArray.m_handle).getObject();
+				MemoryHelper::Copy(otherObject, m_handle.getObject(), m_handle.getCapacity());
+			}
+			
+		}
+
 		virtual ~Array()
 		{
 			if (m_handle.isValid())
@@ -131,6 +146,32 @@ namespace ZE {
 			}
 
 			(*this)[index] = item;
+		}
+
+		bool contains(const T& item)
+		{
+			for (int i = 0; i < m_length; i++)
+			{
+				if (get(i) == item)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		int firstIndexOf(const T& item)
+		{
+			for (int i = 0; i < m_length; i++)
+			{
+				if (get(i) == item)
+				{
+					return i;
+				}
+			}
+
+			return -1;
 		}
 
 		void clear()
