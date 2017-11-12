@@ -21,3 +21,6 @@
 #include "Math/MathOps.h"
 
 #include "Scene/CameraManager.h"
+#include "Scene/SceneComponent.h"
+
+#include "Events/EventDispatcher.h"

@@ -10,7 +10,7 @@ namespace ZE
 	class EventDelegate
 	{
 	public:
-		typedef void(Object::*HandleEventFunc)(Event* evt);
+		typedef void(Object::*HandleEventFunc)(Event*);
 
 		EventDelegate(Object* Obj, HandleEventFunc eventFunc)
 			: m_object(Obj), m_eventFunc(eventFunc)

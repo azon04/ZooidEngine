@@ -207,6 +207,9 @@
     <ClInclude Include="GameObjectModel\FunctionDelegates.h">
       <Filter>GameObjectModel</Filter>
     </ClInclude>
+    <ClInclude Include="Events\EventDispatcher.h">
+      <Filter>Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -316,6 +319,9 @@
     </ClCompile>
     <ClCompile Include="GameObjectModel\FunctionDelegates.cpp">
       <Filter>GameObjectModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Events\EventDispatcher.cpp">
+      <Filter>Events</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

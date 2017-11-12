@@ -25,7 +25,10 @@ namespace ZE {
 		void handleEvent(Event* event);
 		void addChild(Component* child);
 
+		virtual void setupComponent() {}
+
 	protected:
+
 
 		void addEventDelegate(Int32 eventId, EventDelegate::HandleEventFunc eventFunc);
 		void removeEventDelegate(Int32 eventId, EventDelegate::HandleEventFunc eventFunc);

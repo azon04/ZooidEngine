@@ -159,6 +159,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Common\GlobalRegistry.h" />
+    <ClInclude Include="Events\EventDispatcher.h" />
     <ClInclude Include="Events\Events.h" />
     <ClInclude Include="External\Hash\lookup3.h" />
     <ClInclude Include="GameObjectModel\Component.h" />
@@ -212,6 +213,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common\GlobalRegistry.cpp" />
+    <ClCompile Include="Events\EventDispatcher.cpp" />
     <ClCompile Include="Events\Events.cpp" />
     <ClCompile Include="External\Hash\lookup3.c" />
     <ClCompile Include="GameObjectModel\Component.cpp" />

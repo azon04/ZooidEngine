@@ -16,6 +16,8 @@
 #include <stdio.h>
 
 #include "Scene/CameraComponent.h"
+#include "MemoryManagement/Handle.h"
+#include "Events/Events.h"
 
 int main(int argc, char** argv) {
 
@@ -73,6 +75,14 @@ int main(int argc, char** argv) {
 
 	// Main Loop
 	while (!gameContext.getRenderer()->IsClose()) {
+
+		// Handle Event_Update
+		{
+			ZE::Handle handleUpdate("EventUpdate", sizeof(ZE::Event_UPDATE));
+			ZE::Event_UPDATE* eventUpdate = new(handleUpdate) ZE::Event_UPDATE();
+			gameContext.getEventDispatcher()->handleEvent(eventUpdate);
+			handleUpdate.release();
+		}
 		gameContext.getRenderer()->BeginRender();
 
 		gameContext.getRenderer()->ClearScreen();
