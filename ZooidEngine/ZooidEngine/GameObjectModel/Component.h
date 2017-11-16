@@ -10,6 +10,9 @@
 #include "MemoryManagement/Handle.h"
 #include "GameObjectModel/FunctionDelegates.h"
 
+#define addEventDelegate(EventClass, Func) _addEventDelegate(EventClass::GetClassID(), (EventDelegate::HandleEventFunc) Func);
+#define removeEventDelegate(EventClass, Func) _removeEventDelegate(EventClass::GetClassID(), (EventDelegate::HandleEventFunc) Func);
+
 namespace ZE {
 	class GameContext;
 	class Event;
@@ -27,11 +30,8 @@ namespace ZE {
 
 		virtual void setupComponent() {}
 
-	protected:
-
-
-		void addEventDelegate(Int32 eventId, EventDelegate::HandleEventFunc eventFunc);
-		void removeEventDelegate(Int32 eventId, EventDelegate::HandleEventFunc eventFunc);
+		void _addEventDelegate(Int32 eventId, EventDelegate::HandleEventFunc eventFunc);
+		void _removeEventDelegate(Int32 eventId, EventDelegate::HandleEventFunc eventFunc);
 
 	private:
 		void registerEventToParent(Int32 classId);

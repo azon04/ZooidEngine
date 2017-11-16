@@ -108,7 +108,7 @@ namespace ZE {
 		}
 	}
 
-	void Component::addEventDelegate(Int32 eventId, EventDelegate::HandleEventFunc eventFunc)
+	void Component::_addEventDelegate(Int32 eventId, EventDelegate::HandleEventFunc eventFunc)
 	{
 		if (!m_delegateMap.hasKey(eventId))
 		{
@@ -124,7 +124,7 @@ namespace ZE {
 
 	}
 
-	void Component::removeEventDelegate(Int32 eventId, EventDelegate::HandleEventFunc eventFunc)
+	void Component::_removeEventDelegate(Int32 eventId, EventDelegate::HandleEventFunc eventFunc)
 	{
 		if (!m_delegateMap.hasKey(eventId))
 		{

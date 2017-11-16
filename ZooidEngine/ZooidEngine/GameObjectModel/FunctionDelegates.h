@@ -18,7 +18,10 @@ namespace ZE
 
 		void call(Event* event)
 		{
-			(m_object->*m_eventFunc)(event);
+			if (m_object && m_eventFunc)
+			{
+				(m_object->*m_eventFunc)(event);
+			}
 		}
 
 		bool operator==(const EventDelegate& other)
@@ -27,8 +30,30 @@ namespace ZE
 				&& m_eventFunc == other.m_eventFunc;
 		}
 
-		HandleEventFunc m_eventFunc;
-		Object* m_object;
+		HandleEventFunc m_eventFunc = NULL;
+		Object* m_object = NULL;
+	};
+
+	class NativeEventDelegate
+	{
+	public:
+		typedef void(*HandleEventFunc)(Event*);
+
+		NativeEventDelegate(HandleEventFunc eventFunc)
+			: m_eventFunc(eventFunc)
+		{
+
+		}
+
+		void call(Event* event)
+		{
+			if (m_eventFunc)
+			{
+				m_eventFunc(event);
+			}
+		}
+
+		HandleEventFunc m_eventFunc = NULL;
 	};
 };
 #endif

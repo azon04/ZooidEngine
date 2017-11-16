@@ -15,12 +15,14 @@ namespace ZE {
 	{
 		Component::setupComponent();
 
-		addEventDelegate(Event_UPDATE::GetClassID(), (EventDelegate::HandleEventFunc) &SceneComponent::handleUpdateEvent);
+		addEventDelegate(Event_UPDATE, &SceneComponent::handleUpdateEvent);
 	}
 
 	void SceneComponent::handleUpdateEvent(Event* event)
 	{
 		ZEINFO("UPDATE FUNCTION CALLED");
+
+		removeEventDelegate(Event_UPDATE, &SceneComponent::handleUpdateEvent);
 	}
 
 }
