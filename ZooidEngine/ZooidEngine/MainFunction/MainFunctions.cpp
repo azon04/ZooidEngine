@@ -31,6 +31,20 @@ namespace ZE {
 
 		CameraManager::Init(_gameContext);
 		_gameContext->m_cameraManager = CameraManager::GetInstance();
+
+		// Create Main Event Dispatcher
+		{
+			Handle handle("EventDispatcher", sizeof(EventDispatcher));
+			_gameContext->m_mainEventDispatcher = new(handle) EventDispatcher(_gameContext);
+		}
+
+		// Create Root Component and add is as child of Event Dispatcher
+		{
+			Handle handle("RootComponent", sizeof(SceneComponent));
+			_gameContext->m_rootComponent = new (handle) SceneComponent(_gameContext);
+			_gameContext->getEventDispatcher()->addChild(_gameContext->m_rootComponent);
+			_gameContext->m_rootComponent->setupComponent();
+		}
 	}
 
 	void MainClean(GameContext* _gameContext)

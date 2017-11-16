@@ -11,6 +11,11 @@ namespace ZE {
 		SceneComponent::RegisterClass();
 		CameraComponent::RegisterClass();
 		CameraManager::RegisterClass();
+		EventDispatcher::RegisterClass();
+
+		// Register event classes
+		Event::RegisterClass();
+		Event_UPDATE::RegisterClass();
 	}
 
 }

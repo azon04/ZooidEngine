@@ -102,7 +102,7 @@ namespace ZE {
 	void MemoryManager::freeBlock(unsigned int pool_index, unsigned int block_index)
 	{
 		ZASSERT(pool_index < NPOOL, "Pool index out of bound");
-		m_pools[pool_index]->deallocate(m_pools[pool_index]->getBlock(block_index));
+		m_pools[pool_index]->freeBlock(block_index);
 	}
 
 	void* MemoryManager::getBlock(unsigned int pool_index, unsigned int block_index)

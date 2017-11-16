@@ -43,12 +43,7 @@ namespace ZE {
 	
 	void* PoolAllocator::allocateItem()
 	{
-		int idx = 0;
-		for (; idx < m_poolSize; idx++) 
-		{
-			if (m_avails[idx] == 1)
-				break;
-		}
+		unsigned int idx = allocateFreeBlockIndex();
 
 		if (idx < m_poolSize) 
 		{
@@ -64,8 +59,8 @@ namespace ZE {
 	void PoolAllocator::deallocate(void* _mem)
 	{
 		// Mark as avail
-		int idx = (reinterpret_cast<uintptr_t>(_mem) - reinterpret_cast<uintptr_t>(_mem)) / m_itemSize;
-		m_avails[idx] = 1;
+		int idx = (reinterpret_cast<uintptr_t>(_mem) - reinterpret_cast<uintptr_t>(m_pMemBlock)) / m_itemSize;
+		m_avails[m_freeBlock++] = idx;
 	}
 
 	void* PoolAllocator::allocateAlign(size_t size, short allign)
@@ -82,7 +77,7 @@ namespace ZE {
 	void PoolAllocator::clear()
 	{
 		for (int idx = 0; idx < m_poolSize; idx++) {
-			m_avails[idx] = 1;
+			m_avails[idx] = idx;
 		}
 	}
 

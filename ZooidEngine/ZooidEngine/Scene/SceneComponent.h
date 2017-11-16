@@ -6,6 +6,7 @@
 
 namespace ZE
 {
+	class Event;
 	class SceneComponent : public Component {
 
 		DEFINE_CLASS(SceneComponent)
@@ -15,9 +16,16 @@ namespace ZE
 		virtual ~SceneComponent() {}
 
 		virtual void calculateTransform(const Matrix4x4& parentMat);
+		virtual void setupComponent() override;
 
 		Matrix4x4 m_transform;
 		Matrix4x4 m_worldTransform;
+
+	protected:
+
+
+		void handleUpdateEvent(Event* event);
+
 	};
 }
 
