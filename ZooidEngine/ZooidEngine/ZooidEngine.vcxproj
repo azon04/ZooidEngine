@@ -162,6 +162,8 @@
     <ClInclude Include="Events\EventDispatcher.h" />
     <ClInclude Include="Events\Events.h" />
     <ClInclude Include="External\Hash\lookup3.h" />
+    <ClInclude Include="FileSystem\FileReader.h" />
+    <ClInclude Include="FileSystem\FileWriter.h" />
     <ClInclude Include="GameObjectModel\Component.h" />
     <ClInclude Include="GameObjectModel\FunctionDelegates.h" />
     <ClInclude Include="GameObjectModel\ObjDecl.h" />
@@ -197,6 +199,7 @@
     <ClInclude Include="Scene\RenderComponent.h" />
     <ClInclude Include="Scene\SceneComponent.h" />
     <ClInclude Include="UnitTest\ArrayTest.h" />
+    <ClInclude Include="UnitTest\FileTest.h" />
     <ClInclude Include="UnitTest\HashMapTest.h" />
     <ClInclude Include="UnitTest\UnitTest.h" />
     <ClInclude Include="UnitTest\VectorTest.h" />
@@ -216,6 +219,8 @@
     <ClCompile Include="Events\EventDispatcher.cpp" />
     <ClCompile Include="Events\Events.cpp" />
     <ClCompile Include="External\Hash\lookup3.c" />
+    <ClCompile Include="FileSystem\FileReader.cpp" />
+    <ClCompile Include="FileSystem\FileWriter.cpp" />
     <ClCompile Include="GameObjectModel\Component.cpp" />
     <ClCompile Include="GameObjectModel\FunctionDelegates.cpp" />
     <ClCompile Include="GameObjectModel\Object.cpp" />
@@ -243,6 +248,7 @@
     <ClCompile Include="Scene\RenderComponent.cpp" />
     <ClCompile Include="Scene\SceneComponent.cpp" />
     <ClCompile Include="UnitTest\ArrayTest.cpp" />
+    <ClCompile Include="UnitTest\FileTest.cpp" />
     <ClCompile Include="UnitTest\HashMapTest.cpp" />
     <ClCompile Include="UnitTest\UnitTest.cpp" />
     <ClCompile Include="UnitTest\VectorTest.cpp" />

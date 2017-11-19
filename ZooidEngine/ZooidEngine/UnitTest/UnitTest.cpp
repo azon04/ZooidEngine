@@ -5,6 +5,7 @@
 #include "VectorTest.h"
 #include "ArrayTest.h"
 #include "HashMapTest.h"
+#include "FileTest.h"
 
 void UnitTest::RunMainTest()
 {
@@ -19,5 +20,9 @@ void UnitTest::RunMainTest()
 	HashMapTest hashMapTest;
 	hashMapTest.RunTest();
 	ZEINFO("HashMap Test Completed");
+
+	FileTest fileTest;
+	fileTest.RunTest();
+	ZEINFO("File Test Completed");
 
 }
