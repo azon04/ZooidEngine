@@ -193,6 +193,7 @@
     <ClInclude Include="Renderer\IRenderer.h" />
     <ClInclude Include="Renderer\Shader.h" />
     <ClInclude Include="Renderer\ShaderAction.h" />
+    <ClInclude Include="ResourceManagers\ResourceManager.h" />
     <ClInclude Include="Scene\Actor.h" />
     <ClInclude Include="Scene\CameraComponent.h" />
     <ClInclude Include="Scene\CameraManager.h" />
@@ -242,6 +243,7 @@
     <ClCompile Include="Renderer\GPUBufferData.cpp" />
     <ClCompile Include="Renderer\Shader.cpp" />
     <ClCompile Include="Renderer\ShaderAction.cpp" />
+    <ClCompile Include="ResourceManagers\ResourceManager.cpp" />
     <ClCompile Include="Scene\Actor.cpp" />
     <ClCompile Include="Scene\CameraComponent.cpp" />
     <ClCompile Include="Scene\CameraManager.cpp" />

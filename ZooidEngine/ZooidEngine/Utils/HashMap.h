@@ -368,7 +368,7 @@ namespace ZE {
 
 		Array<String, true> getKeys()
 		{
-			Array<K, true> keys;
+			Array<String, true> keys;
 			for (int i = 0; i < m_capacity; i++)
 			{
 				if (get(i).m_occupied == 1)

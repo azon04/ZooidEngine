@@ -55,6 +55,9 @@
     <Filter Include="FileSystem">
       <UniqueIdentifier>{19c1f909-dc2c-43d1-8910-3ff532053c42}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ResourceManagers">
+      <UniqueIdentifier>{738e2b83-4b64-4057-993f-0d1e6cb0d5ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ZEngine.h">
@@ -222,6 +225,9 @@
     <ClInclude Include="UnitTest\FileTest.h">
       <Filter>UnitTest</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceManagers\ResourceManager.h">
+      <Filter>ResourceManagers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -343,6 +349,9 @@
     </ClCompile>
     <ClCompile Include="UnitTest\FileTest.cpp">
       <Filter>UnitTest</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManagers\ResourceManager.cpp">
+      <Filter>ResourceManagers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
