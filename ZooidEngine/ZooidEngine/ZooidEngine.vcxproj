@@ -162,6 +162,8 @@
     <ClInclude Include="Events\EventDispatcher.h" />
     <ClInclude Include="Events\Events.h" />
     <ClInclude Include="External\Hash\lookup3.h" />
+    <ClInclude Include="FileSystem\FileReader.h" />
+    <ClInclude Include="FileSystem\FileWriter.h" />
     <ClInclude Include="GameObjectModel\Component.h" />
     <ClInclude Include="GameObjectModel\FunctionDelegates.h" />
     <ClInclude Include="GameObjectModel\ObjDecl.h" />
@@ -191,12 +193,14 @@
     <ClInclude Include="Renderer\IRenderer.h" />
     <ClInclude Include="Renderer\Shader.h" />
     <ClInclude Include="Renderer\ShaderAction.h" />
+    <ClInclude Include="ResourceManagers\ResourceManager.h" />
     <ClInclude Include="Scene\Actor.h" />
     <ClInclude Include="Scene\CameraComponent.h" />
     <ClInclude Include="Scene\CameraManager.h" />
     <ClInclude Include="Scene\RenderComponent.h" />
     <ClInclude Include="Scene\SceneComponent.h" />
     <ClInclude Include="UnitTest\ArrayTest.h" />
+    <ClInclude Include="UnitTest\FileTest.h" />
     <ClInclude Include="UnitTest\HashMapTest.h" />
     <ClInclude Include="UnitTest\UnitTest.h" />
     <ClInclude Include="UnitTest\VectorTest.h" />
@@ -216,6 +220,8 @@
     <ClCompile Include="Events\EventDispatcher.cpp" />
     <ClCompile Include="Events\Events.cpp" />
     <ClCompile Include="External\Hash\lookup3.c" />
+    <ClCompile Include="FileSystem\FileReader.cpp" />
+    <ClCompile Include="FileSystem\FileWriter.cpp" />
     <ClCompile Include="GameObjectModel\Component.cpp" />
     <ClCompile Include="GameObjectModel\FunctionDelegates.cpp" />
     <ClCompile Include="GameObjectModel\Object.cpp" />
@@ -237,12 +243,14 @@
     <ClCompile Include="Renderer\GPUBufferData.cpp" />
     <ClCompile Include="Renderer\Shader.cpp" />
     <ClCompile Include="Renderer\ShaderAction.cpp" />
+    <ClCompile Include="ResourceManagers\ResourceManager.cpp" />
     <ClCompile Include="Scene\Actor.cpp" />
     <ClCompile Include="Scene\CameraComponent.cpp" />
     <ClCompile Include="Scene\CameraManager.cpp" />
     <ClCompile Include="Scene\RenderComponent.cpp" />
     <ClCompile Include="Scene\SceneComponent.cpp" />
     <ClCompile Include="UnitTest\ArrayTest.cpp" />
+    <ClCompile Include="UnitTest\FileTest.cpp" />
     <ClCompile Include="UnitTest\HashMapTest.cpp" />
     <ClCompile Include="UnitTest\UnitTest.cpp" />
     <ClCompile Include="UnitTest\VectorTest.cpp" />

@@ -52,6 +52,12 @@
     <Filter Include="Events">
       <UniqueIdentifier>{01658448-4e51-45e3-9544-b7ca04a31a7c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FileSystem">
+      <UniqueIdentifier>{19c1f909-dc2c-43d1-8910-3ff532053c42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ResourceManagers">
+      <UniqueIdentifier>{738e2b83-4b64-4057-993f-0d1e6cb0d5ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ZEngine.h">
@@ -210,6 +216,18 @@
     <ClInclude Include="Events\EventDispatcher.h">
       <Filter>Events</Filter>
     </ClInclude>
+    <ClInclude Include="FileSystem\FileReader.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\FileWriter.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitTest\FileTest.h">
+      <Filter>UnitTest</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManagers\ResourceManager.h">
+      <Filter>ResourceManagers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -322,6 +340,18 @@
     </ClCompile>
     <ClCompile Include="Events\EventDispatcher.cpp">
       <Filter>Events</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\FileReader.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\FileWriter.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTest\FileTest.cpp">
+      <Filter>UnitTest</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManagers\ResourceManager.cpp">
+      <Filter>ResourceManagers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
