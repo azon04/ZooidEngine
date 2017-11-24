@@ -37,5 +37,8 @@ namespace ZE {
 
 	// 8 bytes unsigned int
 	typedef std::uint64_t UInt64;
+
+	// unsigned char
+	typedef unsigned char UChar;
 }
 #endif // !__ZE_PRIMITIVE_TYPES__

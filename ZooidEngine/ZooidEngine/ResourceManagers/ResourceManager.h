@@ -42,11 +42,25 @@ namespace ZE
 		// Unload all resource that reference count is zero ( means that nothing that used the assets )
 		void unloadUnusedResource();
 
+		// Unload all resource; No exceptions
+		void unloadResources();
+
 		// cycle that deal with load and unload
 		void doLoadUnload();
 
 		// This must override in the child class to provide memory handle to actual resource pointer
 		virtual Handle loadResource(const char* resourceFilePath) = 0;
+
+		// Pre unload the resource. Do everything to clear the assets
+		virtual void preUnloadResource(Resource* _resource) = 0;
+
+		template<class T>
+		T* getResource(const char* filePath)
+		{
+			return getResourceHandle(filePath).getObject<T>();
+		}
+
+		Handle getResourceHandle(const char* filePath);
 
 	protected:
 		HashMap<String, Resource> m_resourceMap;

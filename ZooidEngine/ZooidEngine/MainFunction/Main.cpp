@@ -15,6 +15,7 @@
 
 #include <stdio.h>
 
+#include "Renderer/GPUTexture.h"
 #include "Scene/CameraComponent.h"
 #include "MemoryManagement/Handle.h"
 #include "Events/Events.h"
@@ -70,6 +71,8 @@ int main(int argc, char** argv) {
 		shaderAction.SetShaderAndBuffer(shader, ZE::BufferManager::getInstance()->m_GPUBufferArrays[1]);
 		shaderAction.m_vertexSize = 288;
 		shaderAction.SetShaderMatVar("modelMat", modelMat);
+		ZE::GPUTexture* pGPUTexture = gameContext.getTextureManager()->getResource<ZE::GPUTexture>("../Resources/Textures/container2.png");
+		shaderAction.SetShaderTextureVar("material.diffuseMap", pGPUTexture, 0);
 	}
 
 
@@ -93,6 +96,8 @@ int main(int argc, char** argv) {
 
 		gameContext.getRenderer()->EndRender();
 	}
+
+	gameContext.getDrawList()->Reset();
 
 	ZE::MainClean(&gameContext);
 

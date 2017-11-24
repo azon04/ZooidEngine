@@ -58,6 +58,12 @@
     <Filter Include="ResourceManagers">
       <UniqueIdentifier>{738e2b83-4b64-4057-993f-0d1e6cb0d5ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="External\Image">
+      <UniqueIdentifier>{6915c03a-7ea6-4a4d-99b0-2e8c1f668278}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{b02f4a52-b1a2-4e4b-b5d7-987b6cf0c72c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ZEngine.h">
@@ -228,6 +234,18 @@
     <ClInclude Include="ResourceManagers\ResourceManager.h">
       <Filter>ResourceManagers</Filter>
     </ClInclude>
+    <ClInclude Include="External\Image\stb_image.h">
+      <Filter>External\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\Texture.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\GPUTexture.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManagers\TextureManager.h">
+      <Filter>ResourceManagers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -353,6 +371,18 @@
     <ClCompile Include="ResourceManagers\ResourceManager.cpp">
       <Filter>ResourceManagers</Filter>
     </ClCompile>
+    <ClCompile Include="External\Image\stb_image.cpp">
+      <Filter>External\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="Resources\Texture.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\GPUTexture.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManagers\TextureManager.cpp">
+      <Filter>ResourceManagers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\TestGLVertexShader.vs">
@@ -365,6 +395,9 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="Shaders\DefaultGLSimple.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\DefaultGLSimpleColor.frag">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

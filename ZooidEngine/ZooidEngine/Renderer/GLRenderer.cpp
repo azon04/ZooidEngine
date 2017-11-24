@@ -95,6 +95,11 @@ namespace ZE {
 			case SHADER_VAR_TYPE_MATRIX:
 				shaderAction->m_shader->SetMat(shaderVariable.m_varName, shaderVariable.mat_value);
 				break;
+			case SHADER_VAR_TYPE_TEXTURE:
+				shaderAction->m_shader->SetTexture(shaderVariable.m_varName, shaderVariable.texture_value.texture_data, shaderVariable.texture_value.texture_index);
+				glActiveTexture(GL_TEXTURE0 + shaderVariable.texture_value.texture_index);
+				shaderVariable.texture_value.texture_data->Bind();
+				break;
 			}
 		}
 
@@ -118,6 +123,17 @@ namespace ZE {
 			glDrawArrays(GL_TRIANGLES, 0, shaderAction->m_vertexSize);
 		}
 		
+		// Unbind textures, buffer array and shader
+		for (int i = 0; i < shaderAction->m_shaderVariables.length(); i++)
+		{
+			ShaderVariable& shaderVariable = shaderAction->m_shaderVariables[i];
+			switch (shaderVariable.m_varType)
+			{
+			case SHADER_VAR_TYPE_TEXTURE:
+				shaderVariable.texture_value.texture_data->Unbind();
+				break;
+			}
+		}
 		shaderAction->m_bufferArray->Unbind();
 		shaderAction->m_shader->Unbind();
 	}

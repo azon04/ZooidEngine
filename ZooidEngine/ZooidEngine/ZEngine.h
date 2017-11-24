@@ -24,3 +24,5 @@
 #include "Scene/SceneComponent.h"
 
 #include "Events/EventDispatcher.h"
+
+#include "ResourceManagers/TextureManager.h"
