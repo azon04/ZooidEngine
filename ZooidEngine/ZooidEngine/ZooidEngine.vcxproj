@@ -162,6 +162,7 @@
     <ClInclude Include="Events\EventDispatcher.h" />
     <ClInclude Include="Events\Events.h" />
     <ClInclude Include="External\Hash\lookup3.h" />
+    <ClInclude Include="External\Image\stb_image.h" />
     <ClInclude Include="FileSystem\FileReader.h" />
     <ClInclude Include="FileSystem\FileWriter.h" />
     <ClInclude Include="GameObjectModel\Component.h" />
@@ -190,10 +191,14 @@
     <ClInclude Include="Renderer\GLRenderer.h" />
     <ClInclude Include="Renderer\GPUBufferArray.h" />
     <ClInclude Include="Renderer\GPUBufferData.h" />
+    <ClInclude Include="Renderer\GPUTexture.h" />
     <ClInclude Include="Renderer\IRenderer.h" />
     <ClInclude Include="Renderer\Shader.h" />
     <ClInclude Include="Renderer\ShaderAction.h" />
     <ClInclude Include="ResourceManagers\ResourceManager.h" />
+    <ClInclude Include="ResourceManagers\ShaderManager.h" />
+    <ClInclude Include="ResourceManagers\TextureManager.h" />
+    <ClInclude Include="Resources\Texture.h" />
     <ClInclude Include="Scene\Actor.h" />
     <ClInclude Include="Scene\CameraComponent.h" />
     <ClInclude Include="Scene\CameraManager.h" />
@@ -220,6 +225,7 @@
     <ClCompile Include="Events\EventDispatcher.cpp" />
     <ClCompile Include="Events\Events.cpp" />
     <ClCompile Include="External\Hash\lookup3.c" />
+    <ClCompile Include="External\Image\stb_image.cpp" />
     <ClCompile Include="FileSystem\FileReader.cpp" />
     <ClCompile Include="FileSystem\FileWriter.cpp" />
     <ClCompile Include="GameObjectModel\Component.cpp" />
@@ -241,9 +247,13 @@
     <ClCompile Include="Renderer\GLRenderer.cpp" />
     <ClCompile Include="Renderer\GPUBufferArray.cpp" />
     <ClCompile Include="Renderer\GPUBufferData.cpp" />
+    <ClCompile Include="Renderer\GPUTexture.cpp" />
     <ClCompile Include="Renderer\Shader.cpp" />
     <ClCompile Include="Renderer\ShaderAction.cpp" />
     <ClCompile Include="ResourceManagers\ResourceManager.cpp" />
+    <ClCompile Include="ResourceManagers\ShaderManager.cpp" />
+    <ClCompile Include="ResourceManagers\TextureManager.cpp" />
+    <ClCompile Include="Resources\Texture.cpp" />
     <ClCompile Include="Scene\Actor.cpp" />
     <ClCompile Include="Scene\CameraComponent.cpp" />
     <ClCompile Include="Scene\CameraManager.cpp" />
@@ -261,6 +271,7 @@
   <ItemGroup>
     <None Include="Shaders\DefaultGLSimple.frag" />
     <None Include="Shaders\DefaultGLSimple.vs" />
+    <None Include="Shaders\DefaultGLSimpleColor.frag" />
     <None Include="Shaders\TestGLFragmentShader.frag" />
     <None Include="Shaders\TestGLVertexShader.vs" />
   </ItemGroup>

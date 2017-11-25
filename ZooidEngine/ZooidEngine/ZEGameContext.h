@@ -16,6 +16,7 @@ namespace ZE {
 		CameraManager* m_cameraManager;
 		EventDispatcher* m_mainEventDispatcher;
 		SceneComponent* m_rootComponent;
+		TextureManager* m_textureManager;
 
 		IRenderer* getRenderer() const { return m_renderer; }
 		BufferManager* getBufferManager() const { return m_bufferManager; }
@@ -24,6 +25,7 @@ namespace ZE {
 		CameraManager* getCameraManager() const { return m_cameraManager; }
 		SceneComponent* getRootComponent() const { return m_rootComponent; }
 		EventDispatcher* getEventDispatcher() const { return m_mainEventDispatcher; }
+		TextureManager* getTextureManager() const { return m_textureManager; }
 	};
 }
 #endif // __ZE_GAME_CONTEXT__

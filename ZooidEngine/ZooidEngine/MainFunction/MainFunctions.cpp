@@ -24,6 +24,9 @@ namespace ZE {
 		BufferManager::Init();
 		_gameContext->m_bufferManager = BufferManager::getInstance();
 		
+		TextureManager::Init();
+		_gameContext->m_textureManager = TextureManager::getInstance();
+
 		{
 			Handle handle("DrawList", sizeof(DrawList));
 			_gameContext->m_drawList = new(handle) DrawList;
@@ -49,9 +52,10 @@ namespace ZE {
 
 	void MainClean(GameContext* _gameContext)
 	{
-
 		BufferManager::Destroy();
 		ShaderManager::Destroy();
+		TextureManager::Destroy();
+
 		_gameContext->m_renderer->Clean();
 
 		MemoryManager::Deconstruct();

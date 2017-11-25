@@ -11,12 +11,21 @@ namespace ZE {
 		m_shaderActionType = SHADER_ACTION_DRAW;
 	}
 
-	ShaderAction::ShaderAction(Shader* shader)
+	ShaderAction::ShaderAction(ShaderChain* shader)
 	{
 		m_shader = shader;
 	}
 
-	void ShaderAction::SetShaderAndBuffer(Shader* _shader, GPUBufferArray* _bufferArray)
+	void ShaderAction::Reset()
+	{
+		m_shader = nullptr;
+		m_shaderVariables.clear();
+		m_bufferArray = nullptr;
+		m_shaderActionType = SHADER_ACTION_DRAW;
+		m_vertexSize = 0;
+	}
+
+	void ShaderAction::SetShaderAndBuffer(ShaderChain* _shader, GPUBufferArray* _bufferArray)
 	{
 		m_shader = _shader;
 		m_bufferArray = _bufferArray;
@@ -55,6 +64,20 @@ namespace ZE {
 		StringFunc::WriteTo(shaderVariable.m_varName, _name, 32);
 		shaderVariable.m_varType = SHADER_VAR_TYPE_MATRIX;
 		shaderVariable.mat_value = _value;
+		m_shaderVariables.push_back(shaderVariable);
+	}
+
+	void ShaderAction::SetData(const char* _name, void* _data)
+	{
+
+	}
+
+	void ShaderAction::SetShaderTextureVar(const char* _name, GPUTexture* _texture, Int32 _texture_index)
+	{
+		ShaderVariable shaderVariable;
+		StringFunc::WriteTo(shaderVariable.m_varName, _name, 32);
+		shaderVariable.m_varType = SHADER_VAR_TYPE_TEXTURE;
+		shaderVariable.texture_value = { _texture, _texture_index };
 		m_shaderVariables.push_back(shaderVariable);
 	}
 

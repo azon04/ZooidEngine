@@ -5,11 +5,14 @@
 
 #include "Shader.h"
 #include "GPUBufferArray.h"
+#include "GPUTexture.h"
 
 #define SHADER_VAR_TYPE_FLOAT 0
 #define SHADER_VAR_TYPE_INT 1
 #define SHADER_VAR_TYPE_VECTOR3 2
 #define SHADER_VAR_TYPE_MATRIX 3
+#define SHADER_VAR_TYPE_TEXTURE 4
+#define SHADER_VAR_TYPE_DATA 5
 
 #define SHADER_ACTION_DRAW 0
 #define SHADER_ACTION_SETGLOBAL 1
@@ -27,6 +30,13 @@ struct ShaderVariable
 		Vector3 vec3_value;
 		float float_value;
 		Int32 int_value;
+		void* data_value;
+
+		struct tTexture 
+		{
+			GPUTexture* texture_data;
+			Int32 texture_index;
+		} texture_value;
 	};
 
 	ShaderVariable() : mat_value(Matrix4x4())
@@ -41,19 +51,22 @@ class ShaderAction {
 public:
 
 	ShaderAction();
-	ShaderAction(Shader* shader);
+	ShaderAction(ShaderChain* shader);
 
-	void SetShaderAndBuffer(Shader* _shader, GPUBufferArray* _bufferArray);
+	void Reset();
+	void SetShaderAndBuffer(ShaderChain* _shader, GPUBufferArray* _bufferArray);
 	void SetShaderFloatVar(const char* _name, float _value);
 	void SetShaderIntVar(const char* _name, Int32 _value);
 	void SetShaderVec3Var(const char* _name, const Vector3& _value);
 	void SetShaderMatVar(const char* _name, const Matrix4x4& _value);
+	void SetData(const char* _name, void* _data);
+	void SetShaderTextureVar(const char* _name, GPUTexture* _texture, Int32 _texture_index);
 	void SetType(ZE::UInt16 _shaderActionType);
 
 	ZE::Int32 m_vertexSize;
 	ZE::UInt16 m_shaderActionType;
 	
-	Shader* m_shader;
+	ShaderChain* m_shader;
 	GPUBufferArray* m_bufferArray;
 	Array<ShaderVariable, true> m_shaderVariables;
 };

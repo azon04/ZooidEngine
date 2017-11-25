@@ -5,7 +5,9 @@ namespace ZE {
 	void Handle::release()
 	{
 		if (isValid() && MemoryManager::getInstance())
+		{
 			MemoryManager::getInstance()->freeBlock(m_poolIndex, m_blockIndex);
+		}
 		m_poolIndex = INVALID_UINT;
 		m_blockIndex = INVALID_UINT;
 		pCache = nullptr;

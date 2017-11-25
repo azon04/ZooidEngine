@@ -6,19 +6,12 @@
 
 #version 330
 
-struct Material
-{
-	sampler2D diffuseMap;
-};
-
 out vec4 fColor;
 
 in vec4 vsColor;
 in vec2 vsTexCoord;
 
-uniform Material material;
-
 void main()
 {
-	fColor = texture(material.diffuseMap, vsTexCoord) * vsColor;
+	fColor = vsColor;
 }

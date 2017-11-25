@@ -14,6 +14,8 @@ namespace ZE {
 			m_size = 0;
 		}
 
+		void Reset();
+
 		ShaderAction& getNextShaderAction() {
 			return m_drawList[m_size++];
 		}
