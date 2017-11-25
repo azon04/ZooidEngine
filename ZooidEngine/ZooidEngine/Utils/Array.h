@@ -7,6 +7,7 @@
 #include "../MemoryManagement/MemoryHelper.h"
 
 #include <cstdlib>
+#include <new>
 
 namespace ZE {
 	
@@ -55,9 +56,16 @@ namespace ZE {
 
 			m_handle = Handle(size * sizeof(T));
 			MemoryHelper::Zero(m_handle.getObject(), m_handle.getCapacity());
-
+			
 			m_capacity = size;
 			m_length = 0;
+
+			T* item = reinterpret_cast<T*> (&get(0));
+			for (int i = 0; i < m_capacity; i++)
+			{
+				T* newItem = item + i;
+				::new(newItem) T;
+			} 
 		}
 
 		// doubling the size
@@ -65,7 +73,7 @@ namespace ZE {
 		{
 			if (!resizable) return;
 			
-			int sizeToCopy = size > m_capacity ? m_length : size;
+			int sizeToCopy = size > m_capacity ? m_capacity : size;
 
 			Handle newHandle(size * sizeof(T));
 			if (sizeToCopy > 0)
@@ -76,6 +84,14 @@ namespace ZE {
 
 			m_handle.release();
 			m_handle = newHandle;
+
+			T* item = reinterpret_cast<T*> (&get(0));
+			for (int i = m_capacity; i < size; i++)
+			{
+				T* newItem = item + i;
+				::new(newItem) T;
+			}
+
 			m_capacity = size;
 		}
 
@@ -89,7 +105,12 @@ namespace ZE {
 			return *(T*)((void*)((uintptr_t)m_handle.getObject() + (uintptr_t)(index * sizeof(T))));
 		}
 
-		void push_back(T item)
+		T* getPtr(int index)
+		{
+			(T*)((void*)((uintptr_t)m_handle.getObject() + (uintptr_t)(index * sizeof(T))));
+		}
+
+		void push_back(const T& item)
 		{
 			if (m_length + 1 > m_capacity)
 			{

@@ -246,6 +246,9 @@
     <ClInclude Include="ResourceManagers\TextureManager.h">
       <Filter>ResourceManagers</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceManagers\ShaderManager.h">
+      <Filter>ResourceManagers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -381,6 +384,9 @@
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManagers\TextureManager.cpp">
+      <Filter>ResourceManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManagers\ShaderManager.cpp">
       <Filter>ResourceManagers</Filter>
     </ClCompile>
   </ItemGroup>

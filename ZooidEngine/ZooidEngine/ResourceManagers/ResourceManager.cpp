@@ -32,8 +32,7 @@ namespace ZE
 
 	void ResourceManager::loadAllResource()
 	{
-		Array<String, true> keys;
-		keys = m_resourceMap.getKeys();
+		Array<String, true>& keys = m_resourceMap.getKeys();
 
 		for (int k_index = 0; k_index < keys.length(); k_index++)
 		{
@@ -47,8 +46,7 @@ namespace ZE
 
 	void ResourceManager::unloadUnusedResource()
 	{
-		Array<String, true> keys;
-		keys = m_resourceMap.getKeys();
+		Array<String, true> keys = m_resourceMap.getKeys();
 
 		for (int k_index = 0; k_index < keys.length(); k_index++)
 		{

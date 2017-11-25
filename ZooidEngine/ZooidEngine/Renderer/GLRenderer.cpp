@@ -14,7 +14,7 @@ namespace ZE {
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-		m_window = glfwCreateWindow(WIDTH, HEIGHT, "ZEngine - Windows", nullptr, nullptr);
+		m_window = glfwCreateWindow(WIDTH, HEIGHT, "ZooidEngine - Windows", nullptr, nullptr);
 		if (!m_window) {
 			glfwTerminate();
 			ZASSERT(true, "Failed to create GLFW window");
@@ -115,12 +115,29 @@ namespace ZE {
 		}
 		//
 
-		shaderAction->m_bufferArray->Bind();
-		if (shaderAction->m_bufferArray->m_bUsingIndexBuffer) {
-			glDrawElements(GL_TRIANGLES, shaderAction->m_vertexSize, GL_UNSIGNED_INT, 0);
+		GLenum drawTopology = GL_TRIANGLES;
+
+		switch (shaderAction->m_shader->m_topology)
+		{
+		case TOPOLOGY_LINE:
+			drawTopology = GL_LINES;
+			break;
+		case TOPOLOGY_TRIANGLE:
+			drawTopology = GL_TRIANGLES;
+			break;
+		case TOPOLOGY_POINT:
+			drawTopology = GL_POINTS;
+			break;
 		}
-		else {
-			glDrawArrays(GL_TRIANGLES, 0, shaderAction->m_vertexSize);
+
+		shaderAction->m_bufferArray->Bind();
+		if (shaderAction->m_bufferArray->m_bUsingIndexBuffer) 
+		{
+			glDrawElements(drawTopology, shaderAction->m_vertexSize, GL_UNSIGNED_INT, 0);
+		}
+		else 
+		{
+			glDrawArrays(drawTopology, 0, shaderAction->m_vertexSize);
 		}
 		
 		// Unbind textures, buffer array and shader

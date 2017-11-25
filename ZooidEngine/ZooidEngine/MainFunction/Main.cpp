@@ -39,7 +39,9 @@ int main(int argc, char** argv) {
 
 		if (gameContext.getCameraManager()->getCurrentCamera())
 		{
-			gameContext.getCameraManager()->m_currentCamera->m_worldTransform.setPos(Vector3(0.0f, 0.0f, 5.0f));
+			gameContext.getCameraManager()->m_currentCamera->m_worldTransform.setPos(Vector3(1.0f, 1.0f, 5.0f));
+			gameContext.getCameraManager()->m_currentCamera->m_worldTransform.rotateAroundV(DegToRad(15));
+			gameContext.getCameraManager()->m_currentCamera->m_worldTransform.rotateAroundU(DegToRad(-10));
 			gameContext.getCameraManager()->m_currentCamera->getViewMatrix(viewMat);
 			shaderAction.SetShaderMatVar("viewMat", viewMat);
 		}
@@ -61,18 +63,27 @@ int main(int argc, char** argv) {
 	}
 
 	{
-		//modelMat.translate(Vector3(5.0f, 2.5f, -25.0f));
-		modelMat.rotateAroundU(DegToRad(45.0f));
-		modelMat.rotateAroundV(DegToRad(45.0f));
+		modelMat.translate(Vector3(-1.f, 0.0f, 0.0f));
+		//modelMat.rotateAroundU(DegToRad(45.0f));
+		//modelMat.rotateAroundV(DegToRad(45.0f));
 
 		ZE::ShaderAction& shaderAction = gameContext.getDrawList()->getNextShaderAction();
-		ZE::Shader* shader = ZE::ShaderManager::getInstance()->m_shaders[1];
+		ZE::ShaderChain* shader = ZE::ShaderManager::getInstance()->getShaderChain(1);
 		
 		shaderAction.SetShaderAndBuffer(shader, ZE::BufferManager::getInstance()->m_GPUBufferArrays[1]);
 		shaderAction.m_vertexSize = 288;
 		shaderAction.SetShaderMatVar("modelMat", modelMat);
 		ZE::GPUTexture* pGPUTexture = gameContext.getTextureManager()->getResource<ZE::GPUTexture>("../Resources/Textures/container2.png");
 		shaderAction.SetShaderTextureVar("material.diffuseMap", pGPUTexture, 0);
+	}
+
+	{
+		ZE::ShaderAction& shaderAction = gameContext.getDrawList()->getNextShaderAction();
+		ZE::ShaderChain* shader = ZE::ShaderManager::getInstance()->getShaderChain(2);
+
+		shaderAction.SetShaderAndBuffer(shader, ZE::BufferManager::getInstance()->m_GPUBufferArrays[2]);
+		shaderAction.m_vertexSize = 36;
+		shaderAction.SetShaderMatVar("modelMat", Matrix4x4());
 	}
 
 

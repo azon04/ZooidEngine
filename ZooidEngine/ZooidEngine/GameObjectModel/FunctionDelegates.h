@@ -12,6 +12,10 @@ namespace ZE
 	public:
 		typedef void(Object::*HandleEventFunc)(Event*);
 
+		EventDelegate()
+			: m_object(nullptr), m_eventFunc(nullptr)
+		{}
+
 		EventDelegate(Object* Obj, HandleEventFunc eventFunc)
 			: m_object(Obj), m_eventFunc(eventFunc)
 		{}

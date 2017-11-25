@@ -12,7 +12,6 @@
 #endif
 
 #include "Renderer/BufferManager.h"
-#include "Renderer/Shader.h"
 #include "Renderer/DrawList.h"
 
 #include "Math/MathUtil.h"
@@ -26,3 +25,4 @@
 #include "Events/EventDispatcher.h"
 
 #include "ResourceManagers/TextureManager.h"
+#include "ResourceManagers/ShaderManager.h"

@@ -196,6 +196,7 @@
     <ClInclude Include="Renderer\Shader.h" />
     <ClInclude Include="Renderer\ShaderAction.h" />
     <ClInclude Include="ResourceManagers\ResourceManager.h" />
+    <ClInclude Include="ResourceManagers\ShaderManager.h" />
     <ClInclude Include="ResourceManagers\TextureManager.h" />
     <ClInclude Include="Resources\Texture.h" />
     <ClInclude Include="Scene\Actor.h" />
@@ -250,6 +251,7 @@
     <ClCompile Include="Renderer\Shader.cpp" />
     <ClCompile Include="Renderer\ShaderAction.cpp" />
     <ClCompile Include="ResourceManagers\ResourceManager.cpp" />
+    <ClCompile Include="ResourceManagers\ShaderManager.cpp" />
     <ClCompile Include="ResourceManagers\TextureManager.cpp" />
     <ClCompile Include="Resources\Texture.cpp" />
     <ClCompile Include="Scene\Actor.cpp" />

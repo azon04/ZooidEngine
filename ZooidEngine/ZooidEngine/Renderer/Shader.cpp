@@ -1,9 +1,11 @@
 #include "Shader.h"
 
 #include "../ZEngine.h"
+#include "FileSystem/FileReader.h"
 
-// #OPENGL Specific
+#if Z_RENDER_OPENGL
 #include <GL/glew.h>
+#endif
 
 #include <string>
 #include <fstream>
@@ -11,12 +13,52 @@
 
 namespace ZE {
 
-	Shader::~Shader()
+	ShaderChain::~ShaderChain()
 	{
 		glDeleteProgram(m_GLProgram);
 	}
 
-	void Shader::LoadShaderFiles(const char* _vertexShaderFile, const char* _colorShaderFile, const char* _computeShaderFile)
+	void ShaderChain::MakeChain(Shader* vsShader, Shader* psShader, Shader* gsShader, Shader* csShader)
+	{
+		// Shader Program
+		m_GLProgram = glCreateProgram();
+		
+		if (vsShader)
+		{
+			ZASSERT(vsShader->m_shaderType == Z_SHADER_VERTEX, "This isn't Vertex Shader");
+			glAttachShader(m_GLProgram, vsShader->m_GLShader);
+		}
+
+		if (psShader)
+		{
+			ZASSERT(psShader->m_shaderType == Z_SHADER_PIXEL, "This isn't Pixel Shader");
+			glAttachShader(m_GLProgram, psShader->m_GLShader);
+		}
+
+		if (gsShader)
+		{
+			ZASSERT(gsShader->m_shaderType == Z_SHADER_GEOMETRY, "This isn't Geometry Shader");
+			glAttachShader(m_GLProgram, gsShader->m_GLShader);
+		}
+
+		if (csShader)
+		{
+			ZASSERT(csShader->m_shaderType == Z_SHADER_COMPUTE, "This isn't Compute Shader");
+			glAttachShader(m_GLProgram, csShader->m_GLShader);
+		}
+
+		glLinkProgram(m_GLProgram);
+		// Print linking error if any
+		int success;
+		char infoLog[512];
+		glGetProgramiv(m_GLProgram, GL_LINK_STATUS, &success);
+		if (!success) {
+			glGetProgramInfoLog(m_GLProgram, 512, NULL, infoLog);
+			ZASSERT(false, "Shader Linking Error: %s", infoLog);
+		}
+	}
+
+	void ShaderChain::LoadShaderFiles(const char* _vertexShaderFile, const char* _colorShaderFile, const char* _computeShaderFile)
 	{
 		// #OPENGL Specific
 		if (_vertexShaderFile != NULL && _colorShaderFile != NULL) {
@@ -98,50 +140,60 @@ namespace ZE {
 		}
 	}
 
-	void Shader::SetLayout(BufferLayout* _layout)
+	void ShaderChain::Release()
+	{
+#if Z_RENDER_OPENGL
+		if (m_GLProgram)
+		{
+			glDeleteProgram(m_GLProgram);
+		}
+#endif
+	}
+
+	void ShaderChain::SetLayout(BufferLayout* _layout)
 	{
 		m_layout = _layout;
 	}
 
-	void Shader::Bind()
+	void ShaderChain::Bind()
 	{
 		glUseProgram(this->m_GLProgram);
 	}
 
-	void Shader::Unbind()
+	void ShaderChain::Unbind()
 	{
 		glUseProgram(0);
 	}
 
-	void Shader::SetVec3(const char* _constName, Vector3 _value)
+	void ShaderChain::SetVec3(const char* _constName, Vector3 _value)
 	{
 #if Z_RENDER_OPENGL
 		glUniform3f(getUniformPosition(_constName), _value.getX(), _value.getY(), _value.getZ());
 #endif
 	}
 
-	void Shader::SetFloat(const char* _constName, float _value)
+	void ShaderChain::SetFloat(const char* _constName, float _value)
 	{
 #if Z_RENDER_OPENGL
 		glUniform1f(getUniformPosition(_constName), _value);
 #endif
 	}
 
-	void Shader::SetMat(const char* _constName, Matrix4x4 _value)
+	void ShaderChain::SetMat(const char* _constName, Matrix4x4 _value)
 	{
 #if Z_RENDER_OPENGL
 		glUniformMatrix4fv(getUniformPosition(_constName), 1, GL_FALSE, &_value.m_data[0][0]);
 #endif
 	}
 
-	void Shader::SetInt(const char* _constName, int _value)
+	void ShaderChain::SetInt(const char* _constName, int _value)
 	{
 #if Z_RENDER_OPENGL
 		glUniform1i(getUniformPosition(_constName), _value);
 #endif
 	}
 
-	void Shader::SetTexture(const char* _constName, GPUTexture* _texture, Int32 _textureIndex)
+	void ShaderChain::SetTexture(const char* _constName, GPUTexture* _texture, Int32 _textureIndex)
 	{
 #if Z_RENDER_OPENGL
 		GLint pos = getUniformPosition(_constName);
@@ -150,66 +202,65 @@ namespace ZE {
 	}
 
 #if Z_RENDER_OPENGL
-	GLint Shader::getUniformPosition(const char* _varName)
+	GLint ShaderChain::getUniformPosition(const char* _varName)
 	{
 		GLint pos = glGetUniformLocation(m_GLProgram, _varName);
 		return pos;
 	}
 #endif
 
-	ShaderManager::ShaderManager()
+	void Shader::loadShader(const char* _shaderFilePath, UInt8 _shaderType)
 	{
+		FileReader file(_shaderFilePath);
+		Handle bufferHandle(sizeof(char) * (file.size() + 1));
+		Int32 resultSize = file.readToBuffer(bufferHandle.getObject(), file.size());
+		char* shaderText = bufferHandle.getObject<char>();
+		shaderText[resultSize] = '\0';
 
-	}
-
-	void ShaderManager::Init()
-	{
-		Handle handle("SHADER MANAGER", sizeof(ShaderManager));
-		m_instance = new(handle) ShaderManager;
-		m_instance->InitShaders();
-	}
-
-	ShaderManager* ShaderManager::m_instance = nullptr;
-
-	void ShaderManager::Destroy()
-	{
-		m_instance->DestroyShaders();
-	}
-
-	ShaderManager* ShaderManager::getInstance()
-	{
-		return m_instance;
-	}
-
-	void ShaderManager::InitShaders()
-	{
-		/*** 
-		* Initialize all shaders
-		***/
-
+		m_shaderType = _shaderType;
 #if Z_RENDER_OPENGL
-		m_shaders.reset(2);
+		GLenum glShaderType = GL_VERTEX_SHADER;
+		switch (m_shaderType)
 		{
-			Handle handle("Simple Shader", sizeof(Shader));
-			Shader* simpleGLShader = new(handle) Shader;
-			simpleGLShader->LoadShaderFiles("Shaders/TestGLVertexShader.vs", "Shaders/TestGLFragmentShader.frag", nullptr);
-
-			m_shaders.push_back(simpleGLShader);
+		case Z_SHADER_VERTEX:
+			glShaderType = GL_VERTEX_SHADER;
+			break;
+		case Z_SHADER_PIXEL:
+			glShaderType = GL_FRAGMENT_SHADER;
+			break;
+		case Z_SHADER_GEOMETRY:
+			glShaderType = GL_GEOMETRY_SHADER;
+			break;
+		case Z_SHADER_COMPUTE:
+			glShaderType = GL_COMPUTE_SHADER;
+			break;
 		}
-		{
-			Handle handle("Default GL Shader", sizeof(Shader));
-			Shader* defaultGLShader = new(handle) Shader;
-			defaultGLShader->LoadShaderFiles("Shaders/DefaultGLSimple.vs", "Shaders/DefaultGLSimple.frag", nullptr);
 
-			m_shaders.push_back(defaultGLShader);
+		m_GLShader = glCreateShader(glShaderType);
+		glShaderSource(m_GLShader, 1, &shaderText, NULL);
+		glCompileShader(m_GLShader);
+
+		int success;
+		char infoLog[512];
+		glGetShaderiv(m_GLShader, GL_COMPILE_STATUS, &success);
+		if (!success) {
+			glGetShaderInfoLog(m_GLShader, 512, NULL, infoLog);
+			ZASSERT(false, "Shader Compile Error: File: %s, %s", _shaderFilePath, infoLog);
 		}
 #endif
 
+		bufferHandle.release();
+
 	}
 
-	void ShaderManager::DestroyShaders()
+	void Shader::release()
 	{
-		m_shaders.clear();
+#if Z_RENDER_OPENGL
+		if (m_GLShader > 0)
+		{
+			glDeleteShader(m_GLShader);
+		}
+#endif
 	}
 
 }

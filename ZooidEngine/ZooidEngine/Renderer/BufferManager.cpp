@@ -19,8 +19,8 @@ namespace ZE {
 
 	void BufferManager::Init()
 	{
-		Handle handle("Buffer Manager", sizeof(BufferManager));
-		m_instance = new(handle) BufferManager();
+		Handle hBufferManager("Buffer Manager", sizeof(BufferManager));
+		m_instance = new(hBufferManager) BufferManager();
 
 		BufferLayoutManager::Init();
 		m_instance->m_bufferLayoutManager = BufferLayoutManager::getInstance();
@@ -28,6 +28,7 @@ namespace ZE {
 		// Create sample vertex Color buffer
 		{
 			Handle handle("Data Triangle", sizeof(float) * 18);
+			handle.getObject();
 			float* vertices_color = new(handle) float[18]{
 				// Positions		// Colors			
 				0.5, -0.5f, 0.0f,	1.0f, 0.0f, 0.0f, // Bottom Right
@@ -44,6 +45,7 @@ namespace ZE {
 			getInstance()->createBufferArray(bufferData, nullptr, nullptr);
 		}
 
+		// Create Cube
 		{
 			Handle handle("Cube Data", sizeof(float) * 288);
 			float* cube_vertices = new(handle) float[288]
@@ -96,6 +98,31 @@ namespace ZE {
 			BufferData* bufferData = new(hBufferData) BufferData(BufferType::VERTEX_BUFFER);
 			bufferData->SetData(cube_vertices, 288 * sizeof(float));
 			bufferData->m_bufferLayout = BUFFER_LAYOUT_V3_C3_TC2;
+
+			getInstance()->m_buffers.push_back(bufferData);
+			getInstance()->createBufferArray(bufferData, nullptr, nullptr);
+		}
+
+		// Create Basis vertices
+		{
+			Handle handle("Basis Data", sizeof(float) * 36);
+			float* basis_data = new(handle) float[36]
+			{
+				// positions		// color
+				0.0f, 0.0f, 0.0f,	0.0f, 0.0f, 1.0f,
+				0.0f, 1.0f, 0.0f,	0.0f, 0.0f, 1.0f,
+
+				0.0f, 0.0f, 0.0f,	1.0f, 0.0f, 0.0f,
+				1.0f, 0.0f, 0.0f,	1.0f, 0.0f, 0.0f,
+
+				0.0f, 0.0f, 0.0f,	0.0f, 1.0f, 0.0f,
+				0.0f, 0.0f, 1.0f,	0.0f, 1.0f, 0.0f
+			};
+
+			Handle hBufferData("BasisBufferData", sizeof(BufferData));
+			BufferData* bufferData = new(hBufferData) BufferData(BufferType::VERTEX_BUFFER);
+			bufferData->SetData(basis_data, 36 * sizeof(float));
+			bufferData->m_bufferLayout = BUFFER_LAYOUT_V3_C3;
 
 			getInstance()->m_buffers.push_back(bufferData);
 			getInstance()->createBufferArray(bufferData, nullptr, nullptr);

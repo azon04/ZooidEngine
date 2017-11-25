@@ -51,10 +51,10 @@ class ShaderAction {
 public:
 
 	ShaderAction();
-	ShaderAction(Shader* shader);
+	ShaderAction(ShaderChain* shader);
 
 	void Reset();
-	void SetShaderAndBuffer(Shader* _shader, GPUBufferArray* _bufferArray);
+	void SetShaderAndBuffer(ShaderChain* _shader, GPUBufferArray* _bufferArray);
 	void SetShaderFloatVar(const char* _name, float _value);
 	void SetShaderIntVar(const char* _name, Int32 _value);
 	void SetShaderVec3Var(const char* _name, const Vector3& _value);
@@ -66,7 +66,7 @@ public:
 	ZE::Int32 m_vertexSize;
 	ZE::UInt16 m_shaderActionType;
 	
-	Shader* m_shader;
+	ShaderChain* m_shader;
 	GPUBufferArray* m_bufferArray;
 	Array<ShaderVariable, true> m_shaderVariables;
 };
