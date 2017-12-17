@@ -26,3 +26,5 @@
 
 #include "ResourceManagers/TextureManager.h"
 #include "ResourceManagers/ShaderManager.h"
+
+#include "Input/InputManager.h"

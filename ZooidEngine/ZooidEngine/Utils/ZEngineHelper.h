@@ -1,7 +1,9 @@
 #ifndef __ZENGINE_HELPER_H__ 
 #define __ZENGINE_HELPER_H__
 
+#include "Macros.h"
 #include "Debug.h"
+
 #define ZEINFO(textFormat, ...) \
 	ZE::Debug::PrintDebugString("ZE_INFO: " ## textFormat ## "\r\n", __VA_ARGS__);
 

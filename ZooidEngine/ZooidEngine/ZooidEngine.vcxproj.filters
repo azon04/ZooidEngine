@@ -64,6 +64,9 @@
     <Filter Include="Resources">
       <UniqueIdentifier>{b02f4a52-b1a2-4e4b-b5d7-987b6cf0c72c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{01f13d93-2810-47dc-a2f4-f23f17d914a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ZEngine.h">
@@ -249,6 +252,21 @@
     <ClInclude Include="ResourceManagers\ShaderManager.h">
       <Filter>ResourceManagers</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\Macros.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\InputManager.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\KeyboardMouseInput.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\InputEvents.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\DebugCamera.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -388,6 +406,18 @@
     </ClCompile>
     <ClCompile Include="ResourceManagers\ShaderManager.cpp">
       <Filter>ResourceManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\KeyboardMouseInput.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\InputManager.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Events\InputEvents.cpp">
+      <Filter>Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\DebugCamera.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

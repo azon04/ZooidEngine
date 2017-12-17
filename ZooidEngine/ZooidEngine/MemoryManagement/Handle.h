@@ -1,9 +1,11 @@
 #ifndef __ZE_HANDLE_H__
 #define __ZE_HANDLE_H__
 
-#include "../GameObjectModel/Object.h"
+#include "Utils/ZEngineHelper.h"
+
 #include "MemoryManager.h"
-#include "../Utils/StringFunc.h"
+#include "GameObjectModel/Object.h"
+#include "Utils/StringFunc.h"
 
 #define INVALID_UINT 0xFFFFFFFF
 #define HANDLE_NO_NAME 1
@@ -51,7 +53,7 @@ namespace ZE {
 
 		~Handle() {}
 
-		bool isValid() 
+		FORCEINLINE bool isValid() 
 		{
 			if(pCache == NULL)
 				return m_poolIndex != INVALID_UINT && m_blockIndex != INVALID_UINT;
@@ -60,7 +62,7 @@ namespace ZE {
 		}
 		
 		template<typename T>
-		T* getObject() {
+		FORCEINLINE T* getObject() {
 			if (pCache == NULL && (m_poolIndex == INVALID_UINT || m_blockIndex == INVALID_UINT)) {
 				pCache = MemoryManager::getInstance()->allocateBlock(m_size, m_poolIndex, m_blockIndex);
 			}
@@ -70,7 +72,7 @@ namespace ZE {
 			return (T*)pCache;
 		}
 
-		void* getObject() {
+		FORCEINLINE void* getObject() {
 			if (pCache == NULL && (m_poolIndex == INVALID_UINT || m_blockIndex == INVALID_UINT)) {
 				pCache = MemoryManager::getInstance()->allocateBlock(m_size, m_poolIndex, m_blockIndex);
 			}
@@ -82,7 +84,7 @@ namespace ZE {
 
 		void release();
 
-		size_t getCapacity() const { return m_size; };
+		FORCEINLINE size_t getCapacity() const { return m_size; };
 	};
 
 };

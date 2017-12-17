@@ -3,7 +3,7 @@
 namespace ZE
 {
 
-	ZE::UShort ShaderManager::getShaderTypeByName(const char* resourceFilePath)
+	UInt8 ShaderManager::getShaderTypeByName(const char* resourceFilePath)
 	{
 		Int32 length = StringFunc::Length(resourceFilePath);
 

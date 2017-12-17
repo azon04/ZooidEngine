@@ -1,6 +1,6 @@
 #ifndef __ZE_ACTOR_H__
 
-#include "../GameObjectModel/Component.h"
+#include "GameObjectModel/Component.h"
 
 namespace ZE {
 	/*

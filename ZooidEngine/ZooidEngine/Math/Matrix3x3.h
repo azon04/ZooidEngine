@@ -59,7 +59,7 @@ public:
 		return newMat;
 	}
 
-	ZE::Float32 det() {
+	FORCEINLINE ZE::Float32 det() {
 		ZE::Float32 m11 = m_data[0][0] * (m_data[1][1] * m_data[2][2] - m_data[1][2] * m_data[2][1]);
 		ZE::Float32 m12 = m_data[0][1] * (m_data[1][0] * m_data[2][2] - m_data[1][2] * m_data[2][0]);
 		ZE::Float32 m13 = m_data[0][2] * (m_data[1][0] * m_data[2][1] - m_data[1][1] * m_data[2][0]);
@@ -113,7 +113,7 @@ public:
 		return resultMat;
 	}
 
-	Vector3 mult(const Vector3& _v) {
+	FORCEINLINE Vector3 mult(const Vector3& _v) {
 		Vector3 resultVector;
 		resultVector.m_x = _v.getX() * m_data[0][0] + _v.getY() * m_data[0][1] + _v.getZ() * m_data[0][2];
 		resultVector.m_y = _v.getX() * m_data[1][0] + _v.getY() * m_data[1][1] + _v.getZ() * m_data[1][2];
@@ -122,7 +122,7 @@ public:
 		return resultVector;
 	}
 
-	void scale(float _scale) {
+	FORCEINLINE void scale(float _scale) {
 		m_data[0][0] *= _scale;
 		m_data[1][1] *= _scale;
 		m_data[2][2] *= _scale;
@@ -138,32 +138,32 @@ public:
 	}
 
 	// Getter
-	Vector3 getU() {
+	FORCEINLINE Vector3 getU() {
 		return Vector3(m_data[0][0], m_data[0][1], m_data[0][2]);
 	}
 
-	Vector3 getV() {
+	FORCEINLINE Vector3 getV() {
 		return Vector3(m_data[1][0], m_data[1][1], m_data[1][2]);
 	}
 
-	Vector3 getN() {
+	FORCEINLINE Vector3 getN() {
 		return Vector3(m_data[2][0], m_data[2][1], m_data[2][2]);
 	}
 
 	// Setter
-	void setU(const Vector3& _u) {
+	FORCEINLINE void setU(const Vector3& _u) {
 		m_data[0][0] = _u.getX();
 		m_data[0][1] = _u.getY();
 		m_data[0][2] = _u.getZ();
 	}
 
-	void setV(const Vector3& _v) {
+	FORCEINLINE void setV(const Vector3& _v) {
 		m_data[1][0] = _v.getX();
 		m_data[1][1] = _v.getY();
 		m_data[1][2] = _v.getZ();
 	}
 
-	void setN(const Vector3& _n) {
+	FORCEINLINE void setN(const Vector3& _n) {
 		m_data[2][0] = _n.getX();
 		m_data[2][1] = _n.getY();
 		m_data[2][2] = _n.getZ();
@@ -173,7 +173,7 @@ public:
 	ZE::Float32 m_data[3][3];
 };
 
-inline Vector3 operator*(const Vector3& _v, Matrix3x3& _mat) {
+FORCEINLINE Vector3 operator*(const Vector3& _v, Matrix3x3& _mat) {
 	return _mat.mult(_v);
 };
 

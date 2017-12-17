@@ -1,5 +1,7 @@
 #include "CameraManager.h"
-#include "CameraComponent.h"
+#include "DebugCamera.h"
+
+#include "ZEGameContext.h"
 
 namespace ZE
 {
@@ -13,11 +15,17 @@ namespace ZE
 		s_instance = new(handle) CameraManager(_gameContext);
 
 		// TODO init some default debug camera
-		Handle cameraHandle("DEBUG CAMERA", sizeof(CameraComponent));
-		CameraComponent* debugCamera = new(cameraHandle) CameraComponent(_gameContext);
+		Handle cameraHandle("DEBUG CAMERA", sizeof(DebugCamera));
+		DebugCamera* debugCamera = new(cameraHandle) DebugCamera(_gameContext);
+		debugCamera->m_worldTransform.setPos(Vector3(1.0f, 1.0f, 5.0f));
+		debugCamera->m_worldTransform.rotateAroundV(DegToRad(15));
+		debugCamera->m_worldTransform.rotateAroundU(DegToRad(-10));
+		debugCamera->setupComponent();
 		s_instance->m_currentCamera = debugCamera;
 
 		s_instance->m_cameras.push_back(cameraHandle);
+
+		_gameContext->getRootComponent()->addChild(debugCamera);
 	}
 
 	ZE::CameraManager* CameraManager::GetInstance()

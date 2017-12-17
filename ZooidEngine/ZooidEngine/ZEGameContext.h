@@ -17,15 +17,17 @@ namespace ZE {
 		EventDispatcher* m_mainEventDispatcher;
 		SceneComponent* m_rootComponent;
 		TextureManager* m_textureManager;
+		InputManager* m_inputManager;
 
-		IRenderer* getRenderer() const { return m_renderer; }
-		BufferManager* getBufferManager() const { return m_bufferManager; }
-		ShaderManager* getShaderManager() const { return m_shaderManager; }
-		DrawList* getDrawList() const { return m_drawList; }
-		CameraManager* getCameraManager() const { return m_cameraManager; }
-		SceneComponent* getRootComponent() const { return m_rootComponent; }
-		EventDispatcher* getEventDispatcher() const { return m_mainEventDispatcher; }
-		TextureManager* getTextureManager() const { return m_textureManager; }
+		FORCEINLINE IRenderer* getRenderer() const { return m_renderer; }
+		FORCEINLINE BufferManager* getBufferManager() const { return m_bufferManager; }
+		FORCEINLINE ShaderManager* getShaderManager() const { return m_shaderManager; }
+		FORCEINLINE DrawList* getDrawList() const { return m_drawList; }
+		FORCEINLINE CameraManager* getCameraManager() const { return m_cameraManager; }
+		FORCEINLINE SceneComponent* getRootComponent() const { return m_rootComponent; }
+		FORCEINLINE EventDispatcher* getEventDispatcher() const { return m_mainEventDispatcher; }
+		FORCEINLINE TextureManager* getTextureManager() const { return m_textureManager; }
+		FORCEINLINE InputManager* getInputManager() const { return m_inputManager; };
 	};
 }
 #endif // __ZE_GAME_CONTEXT__

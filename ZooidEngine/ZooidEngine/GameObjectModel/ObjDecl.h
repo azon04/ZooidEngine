@@ -5,20 +5,21 @@
 	public: \
 	struct RTTI_ ## ClassName : public RTTI {}; \
 	static RTTI_ ## ClassName m_metaInfo; \
-	static void RegisterClass(); \
+	static void RegClass(); \
 	virtual int getClassID() { return ClassName ## ::m_metaInfo.m_classID; }\
 	virtual const char* getClassName() { return #ClassName ; } \
 	static int GetClassID() { return m_metaInfo.m_classID; } \
-	static const char* GetClassName() { return #ClassName; } 
+	static const char* GetClassName() { return #ClassName; } \
+	static const RTTI* GetRTTI() { return &m_metaInfo; }
 
 #define REGISTER_CLASS0(ClassName) \
-	void ClassName ## ::RegisterClass() { \
+	void ClassName ## ::RegClass() { \
 		m_metaInfo.m_classID = Object::ClassMap().size(); \
 		Object::ClassMap().push_back(m_metaInfo.m_classID); \
 	}
 
 #define REGISTER_CLASS1(ClassName, ParentName) \
-	void ClassName ## ::RegisterClass() {\
+	void ClassName ## ::RegClass() {\
 		m_metaInfo.m_classID = Object::ClassMap().size(); \
 		Object::ClassMap().push_back(m_metaInfo.m_classID); \
 		m_metaInfo.m_parentRTTI = (RTTI*) & ## ClassName ## ::m_metaInfo; \

@@ -20,9 +20,6 @@ namespace ZE {
 
 	void SceneComponent::handleUpdateEvent(Event* event)
 	{
-		ZEINFO("UPDATE FUNCTION CALLED");
-
-		removeEventDelegate(Event_UPDATE, &SceneComponent::handleUpdateEvent);
 	}
 
 }

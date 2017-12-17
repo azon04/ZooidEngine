@@ -40,5 +40,8 @@ namespace ZE {
 
 	// unsigned char
 	typedef unsigned char UChar;
+
+	// byte
+	typedef unsigned char Byte;
 }
 #endif // !__ZE_PRIMITIVE_TYPES__
