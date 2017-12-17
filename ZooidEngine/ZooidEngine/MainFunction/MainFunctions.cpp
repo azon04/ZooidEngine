@@ -48,6 +48,13 @@ namespace ZE {
 			_gameContext->getEventDispatcher()->addChild(_gameContext->m_rootComponent);
 			_gameContext->m_rootComponent->setupComponent();
 		}
+
+		// Create Input Manager
+		{
+			Handle handle("InputManager", sizeof(InputManager));
+			_gameContext->m_inputManager = new (handle) InputManager(_gameContext);
+			_gameContext->m_inputManager->setupComponent();
+		}
 	}
 
 	void MainClean(GameContext* _gameContext)

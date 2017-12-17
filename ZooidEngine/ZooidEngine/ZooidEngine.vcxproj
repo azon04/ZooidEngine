@@ -161,6 +161,7 @@
     <ClInclude Include="Common\GlobalRegistry.h" />
     <ClInclude Include="Events\EventDispatcher.h" />
     <ClInclude Include="Events\Events.h" />
+    <ClInclude Include="Events\InputEvents.h" />
     <ClInclude Include="External\Hash\lookup3.h" />
     <ClInclude Include="External\Image\stb_image.h" />
     <ClInclude Include="FileSystem\FileReader.h" />
@@ -170,6 +171,8 @@
     <ClInclude Include="GameObjectModel\ObjDecl.h" />
     <ClInclude Include="GameObjectModel\Object.h" />
     <ClInclude Include="GameObjectModel\RTTI.h" />
+    <ClInclude Include="Input\InputManager.h" />
+    <ClInclude Include="Input\KeyboardMouseInput.h" />
     <ClInclude Include="MainFunction\MainFunctions.h" />
     <ClInclude Include="Math\MathOps.h" />
     <ClInclude Include="Math\MathUtil.h" />
@@ -212,6 +215,7 @@
     <ClInclude Include="Utils\Array.h" />
     <ClInclude Include="Utils\Debug.h" />
     <ClInclude Include="Utils\HashMap.h" />
+    <ClInclude Include="Utils\Macros.h" />
     <ClInclude Include="Utils\PrimitiveTypes.h" />
     <ClInclude Include="Utils\String.h" />
     <ClInclude Include="Utils\StringFunc.h" />
@@ -224,6 +228,7 @@
     <ClCompile Include="Common\GlobalRegistry.cpp" />
     <ClCompile Include="Events\EventDispatcher.cpp" />
     <ClCompile Include="Events\Events.cpp" />
+    <ClCompile Include="Events\InputEvents.cpp" />
     <ClCompile Include="External\Hash\lookup3.c" />
     <ClCompile Include="External\Image\stb_image.cpp" />
     <ClCompile Include="FileSystem\FileReader.cpp" />
@@ -231,6 +236,8 @@
     <ClCompile Include="GameObjectModel\Component.cpp" />
     <ClCompile Include="GameObjectModel\FunctionDelegates.cpp" />
     <ClCompile Include="GameObjectModel\Object.cpp" />
+    <ClCompile Include="Input\InputManager.cpp" />
+    <ClCompile Include="Input\KeyboardMouseInput.cpp" />
     <ClCompile Include="MainFunction\Main.cpp" />
     <ClCompile Include="MainFunction\MainFunctions.cpp" />
     <ClCompile Include="Math\MathOps.cpp" />

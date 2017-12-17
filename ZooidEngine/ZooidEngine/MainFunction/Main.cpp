@@ -95,6 +95,7 @@ int main(int argc, char** argv) {
 			ZE::Handle handleUpdate("EventUpdate", sizeof(ZE::Event_UPDATE));
 			ZE::Event_UPDATE* eventUpdate = new(handleUpdate) ZE::Event_UPDATE();
 			gameContext.getEventDispatcher()->handleEvent(eventUpdate);
+			gameContext.getInputManager()->handleEvent(eventUpdate);
 			handleUpdate.release();
 		}
 		gameContext.getRenderer()->BeginRender();

@@ -95,17 +95,17 @@ namespace ZE {
 			m_capacity = size;
 		}
 
-		T& operator[](int index)
+		FORCEINLINE T& operator[](int index)
 		{
 			return get(index);
 		}
 
-		T& get(int index)
+		FORCEINLINE T& get(int index)
 		{
 			return *(T*)((void*)((uintptr_t)m_handle.getObject() + (uintptr_t)(index * sizeof(T))));
 		}
 
-		T* getPtr(int index)
+		FORCEINLINE T* getPtr(int index)
 		{
 			(T*)((void*)((uintptr_t)m_handle.getObject() + (uintptr_t)(index * sizeof(T))));
 		}
@@ -130,7 +130,7 @@ namespace ZE {
 			(*this)[m_length - 1] = item;
 		}
 
-		T& pop()
+		FORCEINLINE T& pop()
 		{
 			ZASSERT(m_length > 0, "TRY TO POP AN ARRAY, BUT LENGTH IS 0");
 			m_length--;
@@ -169,7 +169,7 @@ namespace ZE {
 			(*this)[index] = item;
 		}
 
-		bool contains(const T& item)
+		FORCEINLINE bool contains(const T& item)
 		{
 			for (int i = 0; i < m_length; i++)
 			{
@@ -182,7 +182,7 @@ namespace ZE {
 			return false;
 		}
 
-		int firstIndexOf(const T& item)
+		FORCEINLINE int firstIndexOf(const T& item)
 		{
 			for (int i = 0; i < m_length; i++)
 			{
@@ -195,15 +195,15 @@ namespace ZE {
 			return -1;
 		}
 
-		void clear()
+		FORCEINLINE void clear()
 		{
 			m_length = 0;
 		}
 
-		int length() const { return m_length; }
-		int size() const { return m_length; }
+		FORCEINLINE int length() const { return m_length; }
+		FORCEINLINE int size() const { return m_length; }
 
-		int capacity() const { return m_capacity; }
+		FORCEINLINE int capacity() const { return m_capacity; }
 
 	protected:
 		Handle m_handle;
