@@ -2,6 +2,8 @@
 
 #include "../ZEngineIncl.h"
 
+#include "Scene/DebugCamera.h"
+
 namespace ZE {
 	void GlobalRegistry::Register()
 	{
@@ -10,6 +12,7 @@ namespace ZE {
 		Actor::RegClass();
 		SceneComponent::RegClass();
 		CameraComponent::RegClass();
+		DebugCamera::RegClass();
 		CameraManager::RegClass();
 		EventDispatcher::RegClass();
 		InputManager::RegClass();

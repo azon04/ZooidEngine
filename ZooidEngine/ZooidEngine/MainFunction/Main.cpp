@@ -98,6 +98,18 @@ int main(int argc, char** argv) {
 			gameContext.getInputManager()->handleEvent(eventUpdate);
 			handleUpdate.release();
 		}
+
+		for (int i = 0; i < gameContext.getEventDispatcher()->getEvents(ZE::EVENT_INPUT).length(); i++)
+		{
+			ZE::Handle handle = gameContext.getEventDispatcher()->getEvents(ZE::EVENT_INPUT)[i];
+			if (handle.isValid())
+			{
+				gameContext.getEventDispatcher()->handleEvent(handle.getObject<ZE::Event>());
+			}
+			handle.release();
+		}
+		gameContext.getEventDispatcher()->clearEvents(ZE::EVENT_INPUT);
+
 		gameContext.getRenderer()->BeginRender();
 
 		gameContext.getRenderer()->ClearScreen();

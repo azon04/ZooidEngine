@@ -32,9 +32,6 @@ namespace ZE {
 			_gameContext->m_drawList = new(handle) DrawList;
 		}
 
-		CameraManager::Init(_gameContext);
-		_gameContext->m_cameraManager = CameraManager::GetInstance();
-
 		// Create Main Event Dispatcher
 		{
 			Handle handle("EventDispatcher", sizeof(EventDispatcher));
@@ -55,6 +52,9 @@ namespace ZE {
 			_gameContext->m_inputManager = new (handle) InputManager(_gameContext);
 			_gameContext->m_inputManager->setupComponent();
 		}
+
+		CameraManager::Init(_gameContext);
+		_gameContext->m_cameraManager = CameraManager::GetInstance();
 	}
 
 	void MainClean(GameContext* _gameContext)

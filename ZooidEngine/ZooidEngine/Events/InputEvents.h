@@ -18,7 +18,7 @@ namespace ZE
 		Short m_keyId;
 	};
 
-	class Event_KEY_UP : Event_INPUT
+	class Event_KEY_UP : public Event_INPUT
 	{
 		DEFINE_CLASS(Event_KEY_UP)
 
@@ -27,7 +27,7 @@ namespace ZE
 		virtual ~Event_KEY_UP() {}
 	};
 
-	class Event_KEY_DOWN : Event_INPUT
+	class Event_KEY_DOWN : public Event_INPUT
 	{
 		DEFINE_CLASS(Event_KEY_DOWN)
 

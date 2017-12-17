@@ -264,6 +264,9 @@
     <ClInclude Include="Events\InputEvents.h">
       <Filter>Events</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\DebugCamera.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -412,6 +415,9 @@
     </ClCompile>
     <ClCompile Include="Events\InputEvents.cpp">
       <Filter>Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\DebugCamera.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

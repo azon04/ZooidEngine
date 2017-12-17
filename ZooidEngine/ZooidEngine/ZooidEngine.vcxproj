@@ -205,6 +205,7 @@
     <ClInclude Include="Scene\Actor.h" />
     <ClInclude Include="Scene\CameraComponent.h" />
     <ClInclude Include="Scene\CameraManager.h" />
+    <ClInclude Include="Scene\DebugCamera.h" />
     <ClInclude Include="Scene\RenderComponent.h" />
     <ClInclude Include="Scene\SceneComponent.h" />
     <ClInclude Include="UnitTest\ArrayTest.h" />
@@ -264,6 +265,7 @@
     <ClCompile Include="Scene\Actor.cpp" />
     <ClCompile Include="Scene\CameraComponent.cpp" />
     <ClCompile Include="Scene\CameraManager.cpp" />
+    <ClCompile Include="Scene\DebugCamera.cpp" />
     <ClCompile Include="Scene\RenderComponent.cpp" />
     <ClCompile Include="Scene\SceneComponent.cpp" />
     <ClCompile Include="UnitTest\ArrayTest.cpp" />

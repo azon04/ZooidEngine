@@ -23,8 +23,7 @@ namespace ZE
 
 	protected:
 
-
-		void handleUpdateEvent(Event* event);
+		virtual void handleUpdateEvent(Event* event);
 
 	};
 }
