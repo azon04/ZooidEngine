@@ -30,4 +30,9 @@ namespace ZE
 		}
 	}
 
+	bool InputManager::IsKeyDown(Short m_keyId)
+	{
+		return getKeyboardMouseInput()->IsKeyDown(m_keyId);
+	}
+
 }

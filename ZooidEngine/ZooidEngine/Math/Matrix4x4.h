@@ -51,7 +51,7 @@ public:
 
 	~Matrix4x4() {}
 
-	Matrix4x4 transpose() {
+	FORCEINLINE Matrix4x4 transpose() {
 		Matrix4x4 newMat;
 		for (int r = 0; r < 4; r++) {
 			for (int c = 0; c < 4; c++) {
@@ -87,7 +87,7 @@ public:
 		return _sign * matMinor(r, c);
 	}
 
-	ZE::Float32 det() {
+	FORCEINLINE ZE::Float32 det() {
 		
 		ZE::Float32 resultDet = 0.0f;
 		
@@ -151,7 +151,7 @@ public:
 		return v / w;
 	}
 
-	Vector3 mult(const Vector3 _v, float& _w) {
+	FORCEINLINE Vector3 mult(const Vector3 _v, float& _w) {
 		Vector3 resultVector;
 		resultVector.m_x = _v.getX() * m_data[0][0] + _v.getY() * m_data[1][0] + _v.getZ() * m_data[2][0] + _w * m_data[3][0];
 		resultVector.m_y = _v.getX() * m_data[0][1] + _v.getY() * m_data[1][1] + _v.getZ() * m_data[2][1] + _w * m_data[3][1];
@@ -312,42 +312,42 @@ public:
 	}
 
 	// Getter
-	Vector3 getU() {
+	FORCEINLINE Vector3 getU() {
 		return Vector3(m_data[0][0], m_data[0][1], m_data[0][2]);
 	}
 
-	Vector3 getV() {
+	FORCEINLINE Vector3 getV() {
 		return Vector3(m_data[1][0], m_data[1][1], m_data[1][2]);
 	}
 
-	Vector3 getN() {
+	FORCEINLINE Vector3 getN() {
 		return Vector3(m_data[2][0], m_data[2][1], m_data[2][2]);
 	}
 
-	Vector3 getPos() {
+	FORCEINLINE Vector3 getPos() {
 		return Vector3(m_data[3][0], m_data[3][1], m_data[3][2]);
 	}
 
 	// Setter
-	void setU(const Vector3& _u) {
+	FORCEINLINE void setU(const Vector3& _u) {
 		m_data[0][0] = _u.getX();
 		m_data[0][1] = _u.getY();
 		m_data[0][2] = _u.getZ();
 	}
 
-	void setV(const Vector3& _v) {
+	FORCEINLINE void setV(const Vector3& _v) {
 		m_data[1][0] = _v.getX();
 		m_data[1][1] = _v.getY();
 		m_data[1][2] = _v.getZ();
 	}
 
-	void setN(const Vector3& _n) {
+	FORCEINLINE void setN(const Vector3& _n) {
 		m_data[2][0] = _n.getX();
 		m_data[2][1] = _n.getY();
 		m_data[2][2] = _n.getZ();
 	}
 
-	void setPos(const Vector3& _pos) {
+	FORCEINLINE void setPos(const Vector3& _pos) {
 		m_data[3][0] = _pos.getX();
 		m_data[3][1] = _pos.getY();
 		m_data[3][2] = _pos.getZ();
@@ -357,7 +357,7 @@ public:
 	ZE::Float32 m_data[4][4];
 };
 
-inline Vector3 operator*(const Vector3& _v, Matrix4x4& _mat) {
+FORCEINLINE Vector3 operator*(const Vector3& _v, Matrix4x4& _mat) {
 	return _mat.mult(_v);
 };
 

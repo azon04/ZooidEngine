@@ -21,7 +21,7 @@ namespace ZE
 		ShaderChain* getShaderChain(int id);
 	protected:
 
-		UShort getShaderTypeByName(const char* resourceFilePath);
+		UInt8 getShaderTypeByName(const char* resourceFilePath);
 
 		static ShaderManager* s_instance;
 

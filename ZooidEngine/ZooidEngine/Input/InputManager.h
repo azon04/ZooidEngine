@@ -26,6 +26,8 @@ namespace ZE
 		KeyboardMouseInput* getKeyboardMouseInput();
 
 		virtual void setupComponent();
+
+		bool IsKeyDown(Short m_keyId);
 	};
 }
 #endif

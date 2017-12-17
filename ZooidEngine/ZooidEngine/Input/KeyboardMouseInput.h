@@ -20,6 +20,11 @@ namespace ZE
 
 		void handleUpdate(Event* event);
 
+		FORCEINLINE bool IsKeyDown(Short keyId) const
+		{
+			return ( m_keyStates[keyId] & 0x80 ) > 0;
+		}
+
 	protected:
 
 		Byte m_keyStates[256];
