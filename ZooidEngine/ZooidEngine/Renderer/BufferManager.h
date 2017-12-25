@@ -5,8 +5,8 @@
 #include "GPUBufferData.h"
 #include "GPUBufferArray.h"
 #include "BufferLayout.h"
-#include "../GameObjectModel/Component.h"
-#include "../Utils/Array.h"
+#include "GameObjectModel/Component.h"
+#include "Utils/Array.h"
 
 namespace ZE {
 class BufferManager {
@@ -19,10 +19,10 @@ public:
 	
 	static BufferManager* getInstance();
 
-	static void Init();
+	static void Init(GameContext* _gameContext);
 	static void Destroy();
 
-	GPUBufferData* createGPUBufferFromBuffer(BufferData* _bufferData);
+	GPUBufferData* createGPUBufferFromBuffer(BufferData* _bufferData, bool _bStatic = true, bool _manualManage = false);
 	GPUBufferArray* createBufferArray(BufferData* _vertexBuffer, BufferData* _indexBuffer, BufferData* _gpuBuffer);
 
 	Array<BufferData*, true> m_buffers;

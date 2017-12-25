@@ -27,6 +27,7 @@
 namespace ZE {
 
 class GPUTexture;
+class GPUBufferData;
 
 enum RenderTopologyEnum : UInt8
 {
@@ -78,6 +79,8 @@ public:
 	void SetMat(const char* _constName, Matrix4x4 _value);
 	void SetInt(const char* _constName, int _value);
 	void SetTexture(const char* _constName, GPUTexture* _texture, Int32 _textureIndex);
+
+	void BindConstantBuffer(const char* _blockName, GPUBufferData* _constantBuffer);
 		
 	BufferLayout *m_layout;
 	RenderTopologyEnum m_topology;

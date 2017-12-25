@@ -61,6 +61,24 @@ namespace ZE {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
+	void GLRenderer::ProcessDrawList(DrawList* drawList)
+	{
+		if (drawList->m_mainConstantBuffer)
+		{
+			drawList->m_mainConstantBuffer->Bind();
+		}
+
+		for (int i = 0; i < drawList->m_size; ++i)
+		{
+			ProcessShaderAction(&drawList->m_drawList[i]);
+		}
+
+		if (drawList->m_mainConstantBuffer)
+		{
+			drawList->m_mainConstantBuffer->UnBind();
+		}
+	}
+
 	void GLRenderer::ProcessShaderAction(ShaderAction* shaderAction)
 	{
 		switch (shaderAction->m_shaderActionType)
@@ -100,6 +118,8 @@ namespace ZE {
 				glActiveTexture(GL_TEXTURE0 + shaderVariable.texture_value.texture_index);
 				shaderVariable.texture_value.texture_data->Bind();
 				break;
+			case SHADER_VAR_TYPE_BLOCK_BUFFER:
+				shaderAction->m_shader->BindConstantBuffer(shaderVariable.m_varName, shaderVariable.constant_buffer);
 			}
 		}
 

@@ -12,8 +12,11 @@ out vec4 vsColor;
 out vec2 vsTexCoord;
 
 uniform mat4 modelMat;
-uniform mat4 viewMat;
-uniform mat4 projectionMat;
+layout (std140) uniform shader_data
+{
+	mat4 viewMat;
+	mat4 projectionMat;
+};
 
 void main()
 {

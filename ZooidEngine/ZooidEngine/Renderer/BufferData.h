@@ -6,6 +6,7 @@
 namespace ZE {
 
 enum BufferType {
+	UNIFORM_BUFFER,
 	VERTEX_BUFFER,
 	INDEX_BUFFER,
 	COMPUTE_BUFFER

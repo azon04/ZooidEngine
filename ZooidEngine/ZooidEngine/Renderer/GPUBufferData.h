@@ -21,6 +21,13 @@ public:
 #if Z_RENDER_OPENGL
 		m_BBO = 0;
 #endif
+		m_isStatic = true;
+	}
+
+	GPUBufferData(bool _isStaticBuffer)
+		: GPUBufferData()
+	{
+		m_isStatic = _isStaticBuffer;
 	}
 
 	virtual ~GPUBufferData() {}
@@ -38,7 +45,9 @@ public:
 	GLuint m_BBO;
 #endif
 
-	ZE::Int32 numberOfLayout;
+	bool m_isStatic;
+
+	ZE::Int32 m_bindingIndex;
 	BufferLayout* m_layout;
 
 };

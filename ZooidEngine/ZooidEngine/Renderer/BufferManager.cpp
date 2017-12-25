@@ -1,7 +1,6 @@
 #include "../ZEngine.h"
 
 #include "BufferManager.h"
-
 #include "BufferLayout.h"
 
 namespace ZE {
@@ -17,7 +16,7 @@ namespace ZE {
 		return m_instance;
 	}
 
-	void BufferManager::Init()
+	void BufferManager::Init(GameContext* _gameContext)
 	{
 		Handle hBufferManager("Buffer Manager", sizeof(BufferManager));
 		m_instance = new(hBufferManager) BufferManager();
@@ -134,16 +133,19 @@ namespace ZE {
 
 	}
 
-	ZE::GPUBufferData* BufferManager::createGPUBufferFromBuffer(BufferData* _bufferData)
+	ZE::GPUBufferData* BufferManager::createGPUBufferFromBuffer(BufferData* _bufferData, bool _bStatic, bool _manualManage)
 	{
 		if (!_bufferData) return nullptr;
 		// #OPENGL Specific
 		Handle handle("GPU Buffer Data", sizeof(GPUBufferData));
-		GPUBufferData* GPUBuffer = new(handle) GPUBufferData();
+		GPUBufferData* GPUBuffer = new(handle) GPUBufferData(_bStatic);
 		GPUBuffer->FromBufferData(_bufferData);
 
-		m_GPUBuffers.push_back(GPUBuffer);
-		
+		if (!_manualManage)
+		{
+			m_GPUBuffers.push_back(GPUBuffer);
+		}
+
 		return GPUBuffer;
 	}
 

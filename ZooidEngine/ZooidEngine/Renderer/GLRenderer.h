@@ -7,11 +7,16 @@
 #include <GLFW/glfw3.h>
 
 #include "../Math/Matrix4x4.h"
+#include "ShaderData.h"
 
 #define WIDTH 1280
 #define HEIGHT 720
 
 namespace ZE {
+
+class BufferData;
+class GPUBufferData;
+
 class GLRenderer : public IRenderer {
 	
 public:
@@ -23,6 +28,7 @@ public:
 	virtual void EndRender() override;
 	virtual void Clean() override;
 	virtual void ClearScreen() override;
+	virtual void ProcessDrawList(DrawList* drawList) override;
 	virtual void ProcessShaderAction(ShaderAction* shaderAction) override;
 	virtual void Draw(ShaderAction* shaderAction) override;
 	virtual bool IsClose() override;

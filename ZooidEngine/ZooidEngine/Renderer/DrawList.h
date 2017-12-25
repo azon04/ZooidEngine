@@ -3,6 +3,7 @@
 
 #include "../Utils/PrimitiveTypes.h"
 #include "ShaderAction.h"
+#include "ShaderData.h"
 
 #define MAX_DRAW_LIST 1024
 
@@ -15,6 +16,7 @@ namespace ZE {
 		}
 
 		void Reset();
+		void Setup();
 
 		ShaderAction& getNextShaderAction() {
 			return m_drawList[m_size++];
@@ -22,6 +24,10 @@ namespace ZE {
 
 		ShaderAction m_drawList[MAX_DRAW_LIST];
 		ZE::Int32 m_size;
+
+		ShaderData m_shaderData;
+		BufferData* m_constantBufferData;
+		GPUBufferData* m_mainConstantBuffer;
 	};
 
 };
