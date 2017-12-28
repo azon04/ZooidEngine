@@ -36,13 +36,7 @@ public:
 	virtual float GetHeight() const { return HEIGHT; }
 	virtual float GetWidth() const { return WIDTH; }
 
-	void SetShaderGlobal(ShaderAction* shaderAction);
-
 	GLFWwindow* m_window;
-
-	// #TODO Make shader for global instead saving the viewMatrix here
-	Matrix4x4 m_viewMatrix;
-	Matrix4x4 m_projMatrix;
 };
 }
 #endif

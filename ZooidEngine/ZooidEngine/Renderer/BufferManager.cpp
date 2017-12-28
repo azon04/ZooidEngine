@@ -22,7 +22,6 @@ namespace ZE {
 		m_instance = new(hBufferManager) BufferManager();
 
 		BufferLayoutManager::Init();
-		m_instance->m_bufferLayoutManager = BufferLayoutManager::getInstance();
 
 		// Create sample vertex Color buffer
 		{
@@ -40,8 +39,10 @@ namespace ZE {
 			bufferData->SetData(vertices_color, 18 * sizeof(float));
 			bufferData->m_bufferLayout = BUFFER_LAYOUT_V3_C3;
 
-			getInstance()->m_buffers.push_back(bufferData);
 			getInstance()->createBufferArray(bufferData, nullptr, nullptr);
+
+			// #TODO do we really need BufferData to be saved?
+			hBufferData.release();
 		}
 
 		// Create Cube
@@ -98,8 +99,10 @@ namespace ZE {
 			bufferData->SetData(cube_vertices, 288 * sizeof(float));
 			bufferData->m_bufferLayout = BUFFER_LAYOUT_V3_C3_TC2;
 
-			getInstance()->m_buffers.push_back(bufferData);
 			getInstance()->createBufferArray(bufferData, nullptr, nullptr);
+
+			// #TODO do we really need BufferData to be saved?
+			hBufferData.release();
 		}
 
 		// Create Basis vertices
@@ -123,8 +126,10 @@ namespace ZE {
 			bufferData->SetData(basis_data, 36 * sizeof(float));
 			bufferData->m_bufferLayout = BUFFER_LAYOUT_V3_C3;
 
-			getInstance()->m_buffers.push_back(bufferData);
 			getInstance()->createBufferArray(bufferData, nullptr, nullptr);
+
+			// #TODO do we really need BufferData to be saved?
+			hBufferData.release();
 		}
 	}
 
@@ -136,7 +141,6 @@ namespace ZE {
 	ZE::GPUBufferData* BufferManager::createGPUBufferFromBuffer(BufferData* _bufferData, bool _bStatic, bool _manualManage)
 	{
 		if (!_bufferData) return nullptr;
-		// #OPENGL Specific
 		Handle handle("GPU Buffer Data", sizeof(GPUBufferData));
 		GPUBufferData* GPUBuffer = new(handle) GPUBufferData(_bStatic);
 		GPUBuffer->FromBufferData(_bufferData);
@@ -149,9 +153,28 @@ namespace ZE {
 		return GPUBuffer;
 	}
 
+	ZE::GPUBufferData* BufferManager::createConstantBufferFromBuffer(BufferData* _bufferData)
+	{
+		GPUBufferData* bufferData = createGPUBufferFromBuffer(_bufferData, false, true);
+		bufferData->m_bindingIndex = m_constantGPUBuffer.length();
+		m_constantGPUBuffer.push_back(bufferData);
+		return bufferData;
+	}
+
+	ZE::GPUBufferData* BufferManager::createConstantBuffer(void* data, size_t size)
+	{
+		Handle hBufferData("BasisBufferData", sizeof(BufferData));
+		BufferData* bufferData = new(hBufferData) BufferData(BufferType::UNIFORM_BUFFER);
+		bufferData->SetData(data, size);
+
+		// Buffer Data need to be saved since the data will be changed eventually
+		m_buffers.push_back(bufferData);
+
+		return createConstantBufferFromBuffer(bufferData);
+	}
+
 	ZE::GPUBufferArray* BufferManager::createBufferArray(BufferData* _vertexBuffer, BufferData* _indexBuffer, BufferData* _gpuBuffer)
 	{
-		// #OPENGL Specific
 		GPUBufferData* vertexBufferGPU = createGPUBufferFromBuffer(_vertexBuffer);
 		GPUBufferData* indexBufferGPU = createGPUBufferFromBuffer(_indexBuffer);
 		GPUBufferData* computeGPUBuffer = createGPUBufferFromBuffer(_gpuBuffer);

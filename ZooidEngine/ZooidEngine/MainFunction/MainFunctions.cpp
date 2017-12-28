@@ -66,6 +66,7 @@ namespace ZE {
 
 	void MainClean(GameContext* _gameContext)
 	{
+		CameraManager::Destroy();
 		BufferManager::Destroy();
 		ShaderManager::Destroy();
 		TextureManager::Destroy();
@@ -91,6 +92,7 @@ namespace ZE {
 			ZE::GPUTexture* pGPUTexture = _gameContext->getTextureManager()->getResource<ZE::GPUTexture>("../Resources/Textures/container2.png");
 			shaderAction.SetShaderTextureVar("material.diffuseMap", pGPUTexture, 0);
 			shaderAction.SetConstantsBlockBuffer("shader_data", _gameContext->getDrawList()->m_mainConstantBuffer);
+			shaderAction.SetConstantsBlockBuffer("light_data", _gameContext->getDrawList()->m_lightConstantBuffer);
 		}
 
 		{
@@ -101,6 +103,7 @@ namespace ZE {
 			shaderAction.m_vertexSize = 36;
 			shaderAction.SetShaderMatVar("modelMat", Matrix4x4());
 			shaderAction.SetConstantsBlockBuffer("shader_data", _gameContext->getDrawList()->m_mainConstantBuffer);
+			shaderAction.SetConstantsBlockBuffer("light_data", _gameContext->getDrawList()->m_lightConstantBuffer);
 		}
 
 		// Handle Event_Update

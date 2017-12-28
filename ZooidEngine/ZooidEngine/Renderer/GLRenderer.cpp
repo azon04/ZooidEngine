@@ -68,6 +68,11 @@ namespace ZE {
 			drawList->m_mainConstantBuffer->Bind();
 		}
 
+		if (drawList->m_lightConstantBuffer)
+		{
+			drawList->m_lightConstantBuffer->Bind();
+		}
+
 		for (int i = 0; i < drawList->m_size; ++i)
 		{
 			ProcessShaderAction(&drawList->m_drawList[i]);
@@ -77,6 +82,11 @@ namespace ZE {
 		{
 			drawList->m_mainConstantBuffer->UnBind();
 		}
+
+		if (drawList->m_lightConstantBuffer)
+		{
+			drawList->m_lightConstantBuffer->UnBind();
+		}
 	}
 
 	void GLRenderer::ProcessShaderAction(ShaderAction* shaderAction)
@@ -85,9 +95,6 @@ namespace ZE {
 		{
 		case SHADER_ACTION_DRAW:
 			Draw(shaderAction);
-			break;
-		case SHADER_ACTION_SETGLOBAL:
-			SetShaderGlobal(shaderAction);
 			break;
 		}
 	}
@@ -122,18 +129,6 @@ namespace ZE {
 				shaderAction->m_shader->BindConstantBuffer(shaderVariable.m_varName, shaderVariable.constant_buffer);
 			}
 		}
-
-		// #TODO Make shader for Global Variable
-		if (shaderAction->m_shader->getUniformPosition("viewMat") >= 0)
-		{
-			shaderAction->m_shader->SetMat("viewMat", m_viewMatrix);
-		}
-		
-		if (shaderAction->m_shader->getUniformPosition("projectionMat") >= 0)
-		{
-			shaderAction->m_shader->SetMat("projectionMat", m_projMatrix);
-		}
-		//
 
 		GLenum drawTopology = GL_TRIANGLES;
 
@@ -178,30 +173,6 @@ namespace ZE {
 	bool GLRenderer::IsClose()
 	{
 		return glfwWindowShouldClose(m_window) == 1;
-	}
-
-	void GLRenderer::SetShaderGlobal(ShaderAction* shaderAction)
-	{
-		// #TODO Make shader for Global Variable
-		for (int i = 0; i < shaderAction->m_shaderVariables.length(); i++)
-		{
-			ShaderVariable& shaderVariable = shaderAction->m_shaderVariables[i];
-			switch (shaderVariable.m_varType)
-			{
-			case SHADER_VAR_TYPE_MATRIX:
-				if (std::strcmp(shaderVariable.m_varName, "viewMat") == 0)
-				{
-					m_viewMatrix = shaderVariable.mat_value;
-				}
-				else if (std::strcmp(shaderVariable.m_varName, "projectionMat") == 0)
-				{
-					m_projMatrix = shaderVariable.mat_value;
-				}
-				break;
-			default:
-				break;
-			}
-		}
 	}
 
 }

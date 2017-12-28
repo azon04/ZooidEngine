@@ -28,6 +28,11 @@ namespace ZE
 		_gameContext->getRootComponent()->addChild(debugCamera);
 	}
 
+	void CameraManager::Destroy()
+	{
+
+	}
+
 	ZE::CameraManager* CameraManager::GetInstance()
 	{
 		return s_instance;

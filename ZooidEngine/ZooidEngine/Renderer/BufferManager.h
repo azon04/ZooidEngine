@@ -23,13 +23,14 @@ public:
 	static void Destroy();
 
 	GPUBufferData* createGPUBufferFromBuffer(BufferData* _bufferData, bool _bStatic = true, bool _manualManage = false);
+	GPUBufferData* createConstantBufferFromBuffer(BufferData* _bufferData);
+	GPUBufferData* createConstantBuffer(void* data, size_t size);
 	GPUBufferArray* createBufferArray(BufferData* _vertexBuffer, BufferData* _indexBuffer, BufferData* _gpuBuffer);
 
 	Array<BufferData*, true> m_buffers;
 	Array<GPUBufferData*, true> m_GPUBuffers;
 	Array<GPUBufferArray*, true> m_GPUBufferArrays;
-
-	BufferLayoutManager* m_bufferLayoutManager;
+	Array<GPUBufferData*, true> m_constantGPUBuffer;
 };
 }
 #endif
