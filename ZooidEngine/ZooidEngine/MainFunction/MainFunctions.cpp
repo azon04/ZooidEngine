@@ -3,6 +3,7 @@
 #include "../Common/GlobalRegistry.h"
 
 #include "Scene/CameraComponent.h"
+#include "Scene/Light/LightComponent.h"
 #include "Renderer/GPUTexture.h"
 #include "MemoryManagement/Handle.h"
 #include "Events/Events.h"
@@ -61,6 +62,15 @@ namespace ZE {
 
 		CameraManager::Init(_gameContext);
 		_gameContext->m_cameraManager = CameraManager::GetInstance();
+		
+		// Put Sample Directional Light
+		{
+			Handle hDirLight("Directional Light", sizeof(LightComponent));
+			LightComponent* pDirLight = new(hDirLight) LightComponent(_gameContext, DIRECTIONAL_LIGHT);
+			pDirLight->setupComponent();
+
+			_gameContext->getRootComponent()->addChild(pDirLight);
+		}
 
 	}
 
@@ -84,13 +94,14 @@ namespace ZE {
 			modelMat.translate(Vector3(-1.f, 0.0f, 0.0f));
 
 			ZE::ShaderAction& shaderAction = _gameContext->getDrawList()->getNextShaderAction();
-			ZE::ShaderChain* shader = ZE::ShaderManager::getInstance()->getShaderChain(1);
+			ZE::ShaderChain* shader = ZE::ShaderManager::getInstance()->getShaderChain(Z_SHADER_CHAIN_3D_DEFAULT_LIT);
 
 			shaderAction.SetShaderAndBuffer(shader, ZE::BufferManager::getInstance()->m_GPUBufferArrays[1]);
 			shaderAction.m_vertexSize = 288;
 			shaderAction.SetShaderMatVar("modelMat", modelMat);
 			ZE::GPUTexture* pGPUTexture = _gameContext->getTextureManager()->getResource<ZE::GPUTexture>("../Resources/Textures/container2.png");
 			shaderAction.SetShaderTextureVar("material.diffuseMap", pGPUTexture, 0);
+			shaderAction.SetShaderFloatVar("material.shininess", 32.0f);
 			shaderAction.SetConstantsBlockBuffer("shader_data", _gameContext->getDrawList()->m_mainConstantBuffer);
 			shaderAction.SetConstantsBlockBuffer("light_data", _gameContext->getDrawList()->m_lightConstantBuffer);
 		}
@@ -146,7 +157,18 @@ namespace ZE {
 				//ZE::MathOps::CreateOrthoProj(projectionMat, 1.0f * renderer->GetWidth() / renderer->GetHeight(), 1.0f, currentCamera->m_near, currentCamera->m_far);
 
 				_gameContext->getDrawList()->m_shaderData.setProjectionMat(projectionMat);
+
+				_gameContext->getDrawList()->m_lightData.setViewPos(currentCamera->m_worldTransform.getPos());
 			}
+		}
+
+		// Handle Event_GATHER_LIGHT
+		_gameContext->getDrawList()->m_lightData.numLight = 0;
+		{
+			ZE::Handle handleGatherLight("EventGatherLight", sizeof(ZE::Event_GATHER_LIGHT));
+			ZE::Event_GATHER_LIGHT* eventGatherLight = new(handleGatherLight) Event_GATHER_LIGHT();
+			_gameContext->getEventDispatcher()->handleEvent(eventGatherLight);
+			handleGatherLight.release();
 		}
 
 		_gameContext->getRenderer()->ProcessDrawList(_gameContext->getDrawList());

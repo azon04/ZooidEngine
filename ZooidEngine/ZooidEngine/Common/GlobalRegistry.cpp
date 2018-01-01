@@ -3,6 +3,7 @@
 #include "../ZEngineIncl.h"
 
 #include "Scene/DebugCamera.h"
+#include "Scene/Light/LightComponent.h"
 
 namespace ZE {
 	void GlobalRegistry::Register()
@@ -17,6 +18,7 @@ namespace ZE {
 		EventDispatcher::RegClass();
 		InputManager::RegClass();
 		KeyboardMouseInput::RegClass();
+		LightComponent::RegClass();
 
 		// Register event classes
 		Event::RegClass();
@@ -24,6 +26,7 @@ namespace ZE {
 		Event_INPUT::RegClass();
 			Event_KEY_UP::RegClass();
 			Event_KEY_DOWN::RegClass();
+		Event_GATHER_LIGHT::RegClass();
 
 	}
 

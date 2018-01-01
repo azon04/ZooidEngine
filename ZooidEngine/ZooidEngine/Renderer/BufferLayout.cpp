@@ -25,7 +25,7 @@ namespace ZE {
 
 	void BufferLayoutManager::InitLayout()
 	{
-		m_bufferLayout.reset(3);
+		m_bufferLayout.reset(4);
 
 		// Vertex : { Position, Color }
 		BufferLayout* vertexColorLayout = new BufferLayout();
@@ -43,6 +43,7 @@ namespace ZE {
 		
 		m_bufferLayout.push_back(vertexTexCoord);
 
+		// Vertex : { Postion, Color, TexCoord }
 		BufferLayout* texCoordLayout = new BufferLayout();
 		texCoordLayout->m_layouts.reset(3);
 		texCoordLayout->m_layouts.push_back({ 0, 3, DataType::FLOAT, 8 * sizeof(float), 0 });
@@ -50,6 +51,15 @@ namespace ZE {
 		texCoordLayout->m_layouts.push_back({ 2, 2, DataType::FLOAT, 8 * sizeof(float), 6 });
 		
 		m_bufferLayout.push_back(texCoordLayout);
+
+		// Vertex : { Postion, Normal, TexCoord }
+		BufferLayout* normalTexCoordLayout = new BufferLayout();
+		normalTexCoordLayout->m_layouts.reset(3);
+		normalTexCoordLayout->m_layouts.push_back({ 0, 3, DataType::FLOAT, 8 * sizeof(float), 0 });
+		normalTexCoordLayout->m_layouts.push_back({ 1, 3, DataType::FLOAT, 8 * sizeof(float), 3 });
+		normalTexCoordLayout->m_layouts.push_back({ 2, 2, DataType::FLOAT, 8 * sizeof(float), 6 });
+
+		m_bufferLayout.push_back(normalTexCoordLayout);
 	}
 
 	void BufferLayoutManager::DestroyLayout()
