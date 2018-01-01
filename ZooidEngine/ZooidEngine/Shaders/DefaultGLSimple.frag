@@ -1,6 +1,6 @@
 /***
 * Default 3D Fragment Shader for OPENGL rendering
-* With Single diffuse texture
+* With Basic Light (Unlit)
 * by: Ahmad Fauzan
 ***/
 

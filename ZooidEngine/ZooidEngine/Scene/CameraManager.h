@@ -15,6 +15,8 @@ namespace ZE {
 		virtual ~CameraManager() {}
 
 		static void Init(GameContext* _gameContext);
+		static void Destroy();
+
 		static CameraManager* GetInstance();
 
 		CameraComponent* getCurrentCamera() const { return m_currentCamera; }

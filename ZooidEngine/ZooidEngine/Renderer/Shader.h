@@ -18,6 +18,7 @@
 #define Z_SHADER_CHAIN_SIMPLE 0
 #define Z_SHADER_CHAIN_3D_DEFAULT 1
 #define Z_SHADER_CHAIN_3D_DEFAULT_COLOR 2
+#define Z_SHADER_CHAIN_3D_DEFAULT_LIT 3
 
 #define Z_SHADER_VERTEX 0
 #define Z_SHADER_PIXEL 1
@@ -27,6 +28,7 @@
 namespace ZE {
 
 class GPUTexture;
+class GPUBufferData;
 
 enum RenderTopologyEnum : UInt8
 {
@@ -78,6 +80,8 @@ public:
 	void SetMat(const char* _constName, Matrix4x4 _value);
 	void SetInt(const char* _constName, int _value);
 	void SetTexture(const char* _constName, GPUTexture* _texture, Int32 _textureIndex);
+
+	void BindConstantBuffer(const char* _blockName, GPUBufferData* _constantBuffer);
 		
 	BufferLayout *m_layout;
 	RenderTopologyEnum m_topology;

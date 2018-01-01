@@ -1,0 +1,36 @@
+
+layout (std140) uniform shader_data
+{
+	mat4 viewMat;
+	mat4 projectionMat;
+};
+
+#define MAX_NUM_LIGHTS 8
+
+struct Light {
+	int type; // 0 = directional Light, 1 = Point Light, 2 = Spot Light
+
+	// For FlashLight
+	float cutOff;
+	float outerCutOff;
+
+	vec3 position;
+	vec3 direction; // For directional light and Flashlight
+	
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+
+	// Use for attenuation
+	float constant;
+	float linear;
+	float quadratic;
+};
+
+layout (std140) uniform light_data
+{
+	int numLight;
+	vec3 viewPos;
+
+	Light lights[MAX_NUM_LIGHTS];
+};

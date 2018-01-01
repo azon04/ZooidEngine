@@ -89,7 +89,15 @@ public:
 	FORCEINLINE Vector3& setZ(float _z) { m_z = _z; return *this; }
 
 	// Data Member
-	ZE::Float32 m_x, m_y, m_z;
+	union 
+	{
+		struct {
+			ZE::Float32 m_x, m_y, m_z;
+		};
+
+		ZE::Float32 m_data[3];
+	};
+	
 };
 
 

@@ -86,6 +86,15 @@ namespace ZE {
 		m_shaderActionType = _shaderActionType;
 	}
 
+	void ShaderAction::SetConstantsBlockBuffer(const char* _name, GPUBufferData* _constantBlockBuffer)
+	{
+		ShaderVariable shaderVariable;
+		StringFunc::WriteTo(shaderVariable.m_varName, _name, 32);
+		shaderVariable.m_varType = SHADER_VAR_TYPE_BLOCK_BUFFER;
+		shaderVariable.constant_buffer = _constantBlockBuffer;
+		m_shaderVariables.push_back(shaderVariable);
+	}
+
 	ShaderVariable::ShaderVariable(const ShaderVariable& _other)
 	{
 		StringFunc::WriteTo(m_varName, _other.m_varName, 32);

@@ -12,7 +12,8 @@
 #define SHADER_VAR_TYPE_VECTOR3 2
 #define SHADER_VAR_TYPE_MATRIX 3
 #define SHADER_VAR_TYPE_TEXTURE 4
-#define SHADER_VAR_TYPE_DATA 5
+#define SHADER_VAR_TYPE_BLOCK_BUFFER 5
+#define SHADER_VAR_TYPE_DATA 6
 
 #define SHADER_ACTION_DRAW 0
 #define SHADER_ACTION_SETGLOBAL 1
@@ -37,6 +38,8 @@ struct ShaderVariable
 			GPUTexture* texture_data;
 			Int32 texture_index;
 		} texture_value;
+
+		GPUBufferData* constant_buffer;
 	};
 
 	ShaderVariable() : mat_value(Matrix4x4())
@@ -62,6 +65,7 @@ public:
 	void SetData(const char* _name, void* _data);
 	void SetShaderTextureVar(const char* _name, GPUTexture* _texture, Int32 _texture_index);
 	void SetType(ZE::UInt16 _shaderActionType);
+	void SetConstantsBlockBuffer(const char* _name, GPUBufferData* _constantBlockBuffer);
 
 	ZE::Int32 m_vertexSize;
 	ZE::UInt16 m_shaderActionType;

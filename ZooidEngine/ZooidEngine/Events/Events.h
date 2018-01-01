@@ -27,6 +27,15 @@ namespace ZE {
 
 		Float32 m_deltaTime;
 	};
+
+	class Event_GATHER_LIGHT : public Event
+	{
+		DEFINE_CLASS(Event_GATHER_LIGHT);
+
+	public: 
+		Event_GATHER_LIGHT() {}
+		virtual ~Event_GATHER_LIGHT() {}
+	};
 };
 
 #endif 

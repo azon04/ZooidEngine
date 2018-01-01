@@ -30,6 +30,8 @@ namespace ZE
 		s_instance->registerResourceToLoad("Shaders/TestGLFragmentShader.frag");
 		s_instance->registerResourceToLoad("Shaders/DefaultGLSimple.frag");
 		s_instance->registerResourceToLoad("Shaders/DefaultGLSimpleColor.frag");
+		s_instance->registerResourceToLoad("Shaders/DefaultGLSimpleLit.vs");
+		s_instance->registerResourceToLoad("Shaders/DefaultGLSimpleLit.frag");
 
 		s_instance->loadAllResource();
 
@@ -52,6 +54,13 @@ namespace ZE
 			ShaderChain* shaderChain = new(hShaderChain) ShaderChain();
 			shaderChain->MakeChain(s_instance->getResource<Shader>("Shaders/DefaultGLSimple.vs"), s_instance->getResource<Shader>("Shaders/DefaultGLSimpleColor.frag"), nullptr, nullptr);
 			shaderChain->m_topology = TOPOLOGY_LINE;
+			s_instance->m_shaderChain.push_back(shaderChain);
+		}
+
+		{
+			Handle hShaderChain(sizeof(ShaderChain));
+			ShaderChain* shaderChain = new(hShaderChain) ShaderChain();
+			shaderChain->MakeChain(s_instance->getResource<Shader>("Shaders/DefaultGLSimpleLit.vs"), s_instance->getResource<Shader>("Shaders/DefaultGLSimpleLit.frag"), nullptr, nullptr);
 			s_instance->m_shaderChain.push_back(shaderChain);
 		}
 	}

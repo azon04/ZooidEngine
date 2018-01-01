@@ -198,6 +198,7 @@
     <ClInclude Include="Renderer\IRenderer.h" />
     <ClInclude Include="Renderer\Shader.h" />
     <ClInclude Include="Renderer\ShaderAction.h" />
+    <ClInclude Include="Renderer\ShaderData.h" />
     <ClInclude Include="ResourceManagers\ResourceManager.h" />
     <ClInclude Include="ResourceManagers\ShaderManager.h" />
     <ClInclude Include="ResourceManagers\TextureManager.h" />
@@ -206,6 +207,7 @@
     <ClInclude Include="Scene\CameraComponent.h" />
     <ClInclude Include="Scene\CameraManager.h" />
     <ClInclude Include="Scene\DebugCamera.h" />
+    <ClInclude Include="Scene\Light\LightComponent.h" />
     <ClInclude Include="Scene\RenderComponent.h" />
     <ClInclude Include="Scene\SceneComponent.h" />
     <ClInclude Include="UnitTest\ArrayTest.h" />
@@ -258,6 +260,7 @@
     <ClCompile Include="Renderer\GPUTexture.cpp" />
     <ClCompile Include="Renderer\Shader.cpp" />
     <ClCompile Include="Renderer\ShaderAction.cpp" />
+    <ClCompile Include="Renderer\ShaderData.cpp" />
     <ClCompile Include="ResourceManagers\ResourceManager.cpp" />
     <ClCompile Include="ResourceManagers\ShaderManager.cpp" />
     <ClCompile Include="ResourceManagers\TextureManager.cpp" />
@@ -266,6 +269,7 @@
     <ClCompile Include="Scene\CameraComponent.cpp" />
     <ClCompile Include="Scene\CameraManager.cpp" />
     <ClCompile Include="Scene\DebugCamera.cpp" />
+    <ClCompile Include="Scene\Light\LightComponent.cpp" />
     <ClCompile Include="Scene\RenderComponent.cpp" />
     <ClCompile Include="Scene\SceneComponent.cpp" />
     <ClCompile Include="UnitTest\ArrayTest.cpp" />
@@ -281,6 +285,9 @@
     <None Include="Shaders\DefaultGLSimple.frag" />
     <None Include="Shaders\DefaultGLSimple.vs" />
     <None Include="Shaders\DefaultGLSimpleColor.frag" />
+    <None Include="Shaders\DefaultGLSimpleLit.frag" />
+    <None Include="Shaders\DefaultGLSimpleLit.vs" />
+    <None Include="Shaders\ShaderData.ubs" />
     <None Include="Shaders\TestGLFragmentShader.frag" />
     <None Include="Shaders\TestGLVertexShader.vs" />
   </ItemGroup>

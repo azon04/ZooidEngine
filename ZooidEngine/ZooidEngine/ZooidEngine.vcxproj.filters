@@ -267,6 +267,12 @@
     <ClInclude Include="Scene\DebugCamera.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer\ShaderData.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Light\LightComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -419,6 +425,12 @@
     <ClCompile Include="Scene\DebugCamera.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Renderer\ShaderData.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Light\LightComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\TestGLVertexShader.vs">
@@ -436,5 +448,10 @@
     <None Include="Shaders\DefaultGLSimpleColor.frag">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="Shaders\ShaderData.ubs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\DefaultGLSimpleLit.frag" />
+    <None Include="Shaders\DefaultGLSimpleLit.vs" />
   </ItemGroup>
 </Project>

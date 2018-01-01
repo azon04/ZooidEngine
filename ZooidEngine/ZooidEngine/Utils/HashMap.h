@@ -5,9 +5,11 @@
 #include "String.h"
 
 #define HASH_MAP_LINEAR_PROBING 1
-#define HASH_MAP_QUADRATIC_PROBING 2
 
-#define HASH_MAP_PROBING HASH_MAP_QUADRATIC_PROBING
+// #TODO Quadratic probing need more advance resizing, since it wont guarantee find the empty spot if size > size / 2, esp if size is not prime
+#define HASH_MAP_QUADRATIC_PROBING 2 
+
+#define HASH_MAP_PROBING HASH_MAP_LINEAR_PROBING
 
 namespace ZE {
 
@@ -158,7 +160,7 @@ namespace ZE {
 				while (get(index).m_occupied != 0 && get(index).m_hashKey != hashValue && offset < currentCapacity)
 				{
 #if HASH_MAP_PROBING == HASH_MAP_LINEAR_PROBING
-					index = (index + 1) % m_capacity;
+					index = (index + 1) % currentCapacity;
 #elif HASH_MAP_PROBING == HASH_MAP_QUADRATIC_PROBING
 					index = (initial_index + (offset * offset)) % currentCapacity;
 #endif

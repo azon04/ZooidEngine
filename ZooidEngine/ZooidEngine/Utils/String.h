@@ -76,7 +76,15 @@ namespace ZE
 		String& operator=(const char* text)
 		{
 			size_t size = StringFunc::Length(text);
-			m_handle = Handle(size);
+
+			if (m_handle.getCapacity() < size)
+			{
+				if (m_handle.isValid())
+				{
+					m_handle.release();
+				}
+				m_handle = Handle(size);
+			}
 
 			char* cText = m_handle.getObject<char>();
 
