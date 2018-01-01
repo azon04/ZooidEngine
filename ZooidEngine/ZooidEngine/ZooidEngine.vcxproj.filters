@@ -1,0 +1,457 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{778a8f6f-aa91-4517-a041-679f6d8caff5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{54fab83d-7f65-4756-8a79-1f543a2f1b03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainFunction">
+      <UniqueIdentifier>{6e3080ba-5deb-486d-b0d8-8e0d0209078e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{382b57c6-60b2-4401-89a2-8964fbdf3e1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{054e7844-a36c-48c7-8ad4-30f84e67ac78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjectModel">
+      <UniqueIdentifier>{9b82ba8a-2b55-46e6-89e3-96dee089d797}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{aa1d15b4-fef2-4e21-833f-274a13daebd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{8b24e35b-31cf-4a9e-b208-c10d4023f6ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MemoryManagement">
+      <UniqueIdentifier>{90300010-1402-44f6-b775-643268d2c28e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External">
+      <UniqueIdentifier>{95f1ffe2-19de-49c5-93a8-3e2faacd394a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\Hash">
+      <UniqueIdentifier>{dc94f07c-b14f-4c1b-95d7-a2d7e30497ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UnitTest">
+      <UniqueIdentifier>{21b6936d-e885-46a9-9714-887a77ffb71c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Events">
+      <UniqueIdentifier>{01658448-4e51-45e3-9544-b7ca04a31a7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FileSystem">
+      <UniqueIdentifier>{19c1f909-dc2c-43d1-8910-3ff532053c42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ResourceManagers">
+      <UniqueIdentifier>{738e2b83-4b64-4057-993f-0d1e6cb0d5ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\Image">
+      <UniqueIdentifier>{6915c03a-7ea6-4a4d-99b0-2e8c1f668278}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{b02f4a52-b1a2-4e4b-b5d7-987b6cf0c72c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{01f13d93-2810-47dc-a2f4-f23f17d914a5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ZEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\ZEngineHelper.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Vector3.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Matrix4x4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Vector2.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Matrix3x3.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Quaternion.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\MathUtil.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\IRenderer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Shader.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\BufferData.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\ShaderAction.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\GPUBufferData.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\GPUBufferArray.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\BufferLayout.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\BufferManager.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFunction\MainFunctions.h">
+      <Filter>MainFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="ZEGameContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\GLRenderer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\DrawList.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectModel\Object.h">
+      <Filter>GameObjectModel</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectModel\ObjDecl.h">
+      <Filter>GameObjectModel</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectModel\Component.h">
+      <Filter>GameObjectModel</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectModel\RTTI.h">
+      <Filter>GameObjectModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\GlobalRegistry.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ZEngineIncl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Actor.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManagement\MemoryManager.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManagement\Handle.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManagement\IAllocator.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManagement\StackAllocator.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManagement\PoolAllocator.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\StringFunc.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Debug.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\PrimitiveTypes.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Array.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManagement\MemoryHelper.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\CameraComponent.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\CameraManager.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\RenderComponent.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneComponent.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\MathOps.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\HashMap.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\String.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitTest\UnitTest.h">
+      <Filter>UnitTest</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitTest\VectorTest.h">
+      <Filter>UnitTest</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitTest\ArrayTest.h">
+      <Filter>UnitTest</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitTest\HashMapTest.h">
+      <Filter>UnitTest</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Hash\lookup3.h">
+      <Filter>External\Hash</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\Events.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectModel\FunctionDelegates.h">
+      <Filter>GameObjectModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\EventDispatcher.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\FileReader.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\FileWriter.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitTest\FileTest.h">
+      <Filter>UnitTest</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManagers\ResourceManager.h">
+      <Filter>ResourceManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Image\stb_image.h">
+      <Filter>External\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\Texture.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\GPUTexture.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManagers\TextureManager.h">
+      <Filter>ResourceManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManagers\ShaderManager.h">
+      <Filter>ResourceManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Macros.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\InputManager.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\KeyboardMouseInput.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\InputEvents.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\DebugCamera.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\ShaderData.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Light\LightComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MainFunction\Main.cpp">
+      <Filter>MainFunction</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\BufferData.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\GPUBufferData.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\Shader.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\GPUBufferArray.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\BufferLayout.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\BufferManager.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFunction\MainFunctions.cpp">
+      <Filter>MainFunction</Filter>
+    </ClCompile>
+    <ClCompile Include="ZEGameContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\GLRenderer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\DrawList.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\ShaderAction.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectModel\Object.cpp">
+      <Filter>GameObjectModel</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectModel\Component.cpp">
+      <Filter>GameObjectModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\GlobalRegistry.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Actor.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManagement\MemoryManager.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManagement\Handle.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManagement\IAllocator.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManagement\StackAllocator.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManagement\PoolAllocator.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\StringFunc.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Debug.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManagement\MemoryHelper.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\CameraComponent.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\CameraManager.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\RenderComponent.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneComponent.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\MathOps.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="External\Hash\lookup3.c">
+      <Filter>External\Hash</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTest\VectorTest.cpp">
+      <Filter>UnitTest</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTest\ArrayTest.cpp">
+      <Filter>UnitTest</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTest\HashMapTest.cpp">
+      <Filter>UnitTest</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTest\UnitTest.cpp">
+      <Filter>UnitTest</Filter>
+    </ClCompile>
+    <ClCompile Include="Events\Events.cpp">
+      <Filter>Events</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectModel\FunctionDelegates.cpp">
+      <Filter>GameObjectModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Events\EventDispatcher.cpp">
+      <Filter>Events</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\FileReader.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\FileWriter.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTest\FileTest.cpp">
+      <Filter>UnitTest</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManagers\ResourceManager.cpp">
+      <Filter>ResourceManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="External\Image\stb_image.cpp">
+      <Filter>External\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="Resources\Texture.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\GPUTexture.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManagers\TextureManager.cpp">
+      <Filter>ResourceManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManagers\ShaderManager.cpp">
+      <Filter>ResourceManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\KeyboardMouseInput.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\InputManager.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Events\InputEvents.cpp">
+      <Filter>Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\DebugCamera.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\ShaderData.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Light\LightComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\TestGLVertexShader.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\TestGLFragmentShader.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\DefaultGLSimple.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\DefaultGLSimple.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\DefaultGLSimpleColor.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\ShaderData.ubs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\DefaultGLSimpleLit.frag" />
+    <None Include="Shaders\DefaultGLSimpleLit.vs" />
+  </ItemGroup>
+</Project>
