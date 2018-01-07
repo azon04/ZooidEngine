@@ -7,14 +7,14 @@ namespace ZE
 {
 	class TextureManager : public ResourceManager
 	{
-
+		DEFINE_CLASS(TextureManager)
 	public:
 		
 		static void Init();
 		static TextureManager* getInstance();
 		static void Destroy();
 
-		virtual Handle loadResource(const char* resourceFilePath);
+		virtual Handle loadResource_Internal(const char* resourceFilePath);
 		virtual void preUnloadResource(Resource* _resource);
 
 	protected:

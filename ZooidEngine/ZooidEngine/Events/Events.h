@@ -2,6 +2,7 @@
 #define __ZE_EVENTS__
 
 #include "GameObjectModel/Object.h"
+#include "Memory/Handle.h"
 
 namespace ZE {
 	
@@ -35,6 +36,17 @@ namespace ZE {
 	public: 
 		Event_GATHER_LIGHT() {}
 		virtual ~Event_GATHER_LIGHT() {}
+	};
+
+	class Event_RESOURCE_LOADED : public Event
+	{
+		DEFINE_CLASS(Event_RESOURCE_LOADED)
+
+	public:
+		Event_RESOURCE_LOADED() {}
+		virtual ~Event_RESOURCE_LOADED() {}
+
+		Handle m_resourceHandle;
 	};
 };
 

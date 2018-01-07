@@ -2,6 +2,7 @@
 
 namespace ZE
 {
+	IMPLEMENT_CLASS_1(ShaderManager, ResourceManager)
 
 	UInt8 ShaderManager::getShaderTypeByName(const char* resourceFilePath)
 	{
@@ -25,13 +26,13 @@ namespace ZE
 		Handle handle("SHADER MANAGER", sizeof(ShaderManager));
 		s_instance = new(handle) ShaderManager;
 
-		s_instance->registerResourceToLoad("Shaders/DefaultGLSimple.vs");
-		s_instance->registerResourceToLoad("Shaders/TestGLVertexShader.vs");
-		s_instance->registerResourceToLoad("Shaders/TestGLFragmentShader.frag");
-		s_instance->registerResourceToLoad("Shaders/DefaultGLSimple.frag");
-		s_instance->registerResourceToLoad("Shaders/DefaultGLSimpleColor.frag");
-		s_instance->registerResourceToLoad("Shaders/DefaultGLSimpleLit.vs");
-		s_instance->registerResourceToLoad("Shaders/DefaultGLSimpleLit.frag");
+		s_instance->loadResourceAsync("Shaders/DefaultGLSimple.vs");
+		s_instance->loadResourceAsync("Shaders/TestGLVertexShader.vs");
+		s_instance->loadResourceAsync("Shaders/TestGLFragmentShader.frag");
+		s_instance->loadResourceAsync("Shaders/DefaultGLSimple.frag");
+		s_instance->loadResourceAsync("Shaders/DefaultGLSimpleColor.frag");
+		s_instance->loadResourceAsync("Shaders/DefaultGLSimpleLit.vs");
+		s_instance->loadResourceAsync("Shaders/DefaultGLSimpleLit.frag");
 
 		s_instance->loadAllResource();
 
@@ -78,7 +79,7 @@ namespace ZE
 		}
 	}
 
-	ZE::Handle ShaderManager::loadResource(const char* resourceFilePath)
+	ZE::Handle ShaderManager::loadResource_Internal(const char* resourceFilePath)
 	{
 		Handle hShader(sizeof(Shader));
 		Shader* pShader = new(hShader) Shader();

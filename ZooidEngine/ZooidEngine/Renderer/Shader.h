@@ -8,7 +8,7 @@
 #include "../Math/Vector3.h"
 #include "../Math/Matrix4x4.h"
 #include "Utils/PrimitiveTypes.h"
-#include "MemoryManagement/Handle.h"
+#include "Memory/Handle.h"
 
 // Outer engine includes
 #if Z_RENDER_OPENGL

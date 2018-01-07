@@ -1,8 +1,6 @@
 #ifndef __Z_RENDERER__
 #define __Z_RENDERER__
 
-
-
 namespace ZE {
 
 struct ShaderData;

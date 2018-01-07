@@ -150,21 +150,6 @@
     <ClInclude Include="Scene\Actor.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryManagement\MemoryManager.h">
-      <Filter>MemoryManagement</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryManagement\Handle.h">
-      <Filter>MemoryManagement</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryManagement\IAllocator.h">
-      <Filter>MemoryManagement</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryManagement\StackAllocator.h">
-      <Filter>MemoryManagement</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryManagement\PoolAllocator.h">
-      <Filter>MemoryManagement</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\StringFunc.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -176,9 +161,6 @@
     </ClInclude>
     <ClInclude Include="Utils\Array.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryManagement\MemoryHelper.h">
-      <Filter>MemoryManagement</Filter>
     </ClInclude>
     <ClInclude Include="Scene\CameraComponent.h">
       <Filter>Scene</Filter>
@@ -273,6 +255,33 @@
     <ClInclude Include="Scene\Light\LightComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceManagers\MeshManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\Handle.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\IAllocator.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\MemoryHelper.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\MemoryManager.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\PoolAllocator.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\StackAllocator.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -323,29 +332,11 @@
     <ClCompile Include="Scene\Actor.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="MemoryManagement\MemoryManager.cpp">
-      <Filter>MemoryManagement</Filter>
-    </ClCompile>
-    <ClCompile Include="MemoryManagement\Handle.cpp">
-      <Filter>MemoryManagement</Filter>
-    </ClCompile>
-    <ClCompile Include="MemoryManagement\IAllocator.cpp">
-      <Filter>MemoryManagement</Filter>
-    </ClCompile>
-    <ClCompile Include="MemoryManagement\StackAllocator.cpp">
-      <Filter>MemoryManagement</Filter>
-    </ClCompile>
-    <ClCompile Include="MemoryManagement\PoolAllocator.cpp">
-      <Filter>MemoryManagement</Filter>
-    </ClCompile>
     <ClCompile Include="Utils\StringFunc.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Utils\Debug.cpp">
       <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="MemoryManagement\MemoryHelper.cpp">
-      <Filter>MemoryManagement</Filter>
     </ClCompile>
     <ClCompile Include="Scene\CameraComponent.cpp">
       <Filter>Scene</Filter>
@@ -430,6 +421,33 @@
     </ClCompile>
     <ClCompile Include="Scene\Light\LightComponent.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManagers\MeshManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Resources\Material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Resources\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\Handle.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\IAllocator.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\MemoryHelper.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\MemoryManager.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\PoolAllocator.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\StackAllocator.cpp">
+      <Filter>MemoryManagement</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

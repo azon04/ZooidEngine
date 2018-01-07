@@ -1,6 +1,6 @@
 #include "ShaderData.h"
 
-#include "MemoryManagement/MemoryHelper.h"
+#include "Memory/MemoryHelper.h"
 
 namespace ZE
 {

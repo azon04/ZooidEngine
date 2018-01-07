@@ -5,7 +5,7 @@
 #include "Scene/CameraComponent.h"
 #include "Scene/Light/LightComponent.h"
 #include "Renderer/GPUTexture.h"
-#include "MemoryManagement/Handle.h"
+#include "Memory/Handle.h"
 #include "Events/Events.h"
 
 namespace ZE {

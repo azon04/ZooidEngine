@@ -1,7 +1,7 @@
 #ifndef __ZE_STRING__
 #define __ZE_STRING__
 
-#include "../MemoryManagement/Handle.h"
+#include "Memory/Handle.h"
 
 #include "StringFunc.h"
 

@@ -1,4 +1,5 @@
 #ifndef __ZE_ACTOR_H__
+#define __ZE_ACTOR_H__
 
 #include "GameObjectModel/Component.h"
 

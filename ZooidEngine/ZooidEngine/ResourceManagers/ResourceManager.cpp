@@ -1,24 +1,67 @@
 #include "ResourceManager.h"
 
 #include "ZEngine.h"
+#include "Events/Events.h"
 
 namespace ZE
 {
-	void ResourceManager::registerResourceToLoad(const char* resourceFilePath)
+
+	IMPLEMENT_CLASS_0(ResourceManager)
+
+	Handle ResourceManager::loadResource(const char* resourceFilePath)
 	{
 		if (m_resourceMap.hasKey(resourceFilePath))
 		{
-			m_resourceMap[resourceFilePath].m_refCount++;
+			Resource& resource = m_resourceMap[resourceFilePath];
+			resource.m_refCount++;
+			if (!resource.IsLoaded())
+			{
+				resource.m_hActual = loadResource_Internal(resourceFilePath);
+			}
+			return resource.m_hActual;
 		}
 		else
 		{
 			Resource resource;
 			resource.m_refCount = 1;
 			m_resourceMap.put(resourceFilePath, resource);
+			resource.m_hActual = loadResource_Internal(resourceFilePath);
+			return resource.m_hActual;
 		}
 	}
 
-	void ResourceManager::registerResourceToUnLoad(const char* resourceFilePath)
+	void ResourceManager::loadResourceAsync(const char* resourceFilePath, EventDelegate callback)
+	{
+		if (m_resourceMap.hasKey(resourceFilePath))
+		{
+			m_resourceMap[resourceFilePath].m_refCount++;
+			if (callback.isValid())
+			{
+				m_resourceMap[resourceFilePath].m_loadedDelegates.push_back(callback);
+
+				if (m_resourceMap[resourceFilePath].IsLoaded())
+				{
+					Handle eventHandle("Event Loaded", sizeof(Event_RESOURCE_LOADED));
+					Event_RESOURCE_LOADED* pEvent = new(eventHandle) Event_RESOURCE_LOADED();
+					pEvent->m_resourceHandle = m_resourceMap[resourceFilePath].m_hActual;
+					callback.call(pEvent);
+					eventHandle.release();
+				}
+			}
+		}
+		else
+		{
+			Resource resource;
+			resource.m_refCount = 1;
+			if (callback.isValid())
+			{
+				resource.m_loadedDelegates.push_back(callback);
+			}
+			m_resourceMap.put(resourceFilePath, resource);
+		}
+	}
+
+	void ResourceManager::unloadResource(const char* resourceFilePath)
 	{
 		if (m_resourceMap.hasKey(resourceFilePath))
 		{
@@ -39,7 +82,17 @@ namespace ZE
 			Resource& resource = m_resourceMap[keys[k_index].c_str()];
 			if (resource.m_refCount > 0 && !resource.IsLoaded())
 			{
-				resource.m_hActual = loadResource(keys[k_index].c_str());
+				resource.m_hActual = loadResource_Internal(keys[k_index].c_str());
+
+				Handle eventHandle("Event Loaded", sizeof(Event_RESOURCE_LOADED));
+				Event_RESOURCE_LOADED* pEvent = new(eventHandle) Event_RESOURCE_LOADED();
+				pEvent->m_resourceHandle = resource.m_hActual;
+				int callBackSize = resource.m_loadedDelegates.length();
+				for (int i = 0; i < callBackSize; ++i)
+				{
+					resource.m_loadedDelegates[i].call(pEvent);
+				}
+				eventHandle.release();
 			}
 		}
 	}

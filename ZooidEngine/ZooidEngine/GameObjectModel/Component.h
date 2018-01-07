@@ -7,7 +7,7 @@
 #include "Utils/HashMap.h"
 #include "Object.h"
 
-#include "MemoryManagement/Handle.h"
+#include "Memory/Handle.h"
 #include "GameObjectModel/FunctionDelegates.h"
 
 #define addEventDelegate(EventClass, Func) _addEventDelegate(EventClass::GetClassID(), (EventDelegate::HandleEventFunc) Func);

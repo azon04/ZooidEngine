@@ -1,11 +1,11 @@
 #include "Utils/ZEngineHelper.h"
 #include "Utils/PrimitiveTypes.h"
 
-#include "MemoryManagement/Handle.h"
+#include "Memory/Handle.h"
 
 #include "Renderer/IRenderer.h"
 
-#include "MemoryManagement/MemoryManager.h"
+#include "Memory/MemoryManager.h"
 
 #if Z_RENDER_OPENGL
 #include "Renderer/GLRenderer.h"

@@ -3,8 +3,8 @@
 
 #include "ZEngineHelper.h"
 
-#include "../MemoryManagement/Handle.h"
-#include "../MemoryManagement/MemoryHelper.h"
+#include "Memory/Handle.h"
+#include "Memory/MemoryHelper.h"
 
 #include <cstdlib>
 #include <new>

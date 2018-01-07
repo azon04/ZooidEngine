@@ -3,7 +3,8 @@
 
 #include "Utils/PrimitiveTypes.h"
 #include "Utils/HashMap.h"
-#include "MemoryManagement/Handle.h"
+#include "Memory/Handle.h"
+#include "GameObjectModel/FunctionDelegates.h"
 
 namespace ZE
 {
@@ -20,21 +21,27 @@ namespace ZE
 
 		Handle m_hActual;
 		UInt32 m_refCount;
+		Array<EventDelegate, true> m_loadedDelegates;
 	};
 
-	class ResourceManager
+	class ResourceManager : public Object
 	{
+		DEFINE_CLASS(ResourceManager)
+
 	public:
 		
 		ResourceManager() {}
 		ResourceManager(UInt32 maxResource) : m_maxResource(maxResource)
 		{}
 
+		// Load Resource Sync
+		Handle loadResource(const char* resourceFilePath);
+
 		// Register resource to load ( not actually load the res, only register it )
-		void registerResourceToLoad(const char* resourceFilePath);
+		void loadResourceAsync(const char* resourceFilePath, EventDelegate callback = EventDelegate());
 
 		// Register resource to unload ( not actually unload the res, only register it )
-		void registerResourceToUnLoad(const char* resourceFilePath);
+		void unloadResource(const char* resourceFilePath);
 
 		// Load all resource that reference count more than zero (means that the resource still in used)
 		void loadAllResource();
@@ -48,9 +55,6 @@ namespace ZE
 		// cycle that deal with load and unload
 		void doLoadUnload();
 
-		// This must override in the child class to provide memory handle to actual resource pointer
-		virtual Handle loadResource(const char* resourceFilePath) = 0;
-
 		// Pre unload the resource. Do everything to clear the assets
 		virtual void preUnloadResource(Resource* _resource) = 0;
 
@@ -61,6 +65,11 @@ namespace ZE
 		}
 
 		Handle getResourceHandle(const char* filePath);
+		
+	protected:
+		// This must override in the child class to provide memory handle to actual resource pointer
+		virtual Handle loadResource_Internal(const char* resourceFilePath) = 0;
+
 
 	protected:
 		HashMap<String, Resource> m_resourceMap;
