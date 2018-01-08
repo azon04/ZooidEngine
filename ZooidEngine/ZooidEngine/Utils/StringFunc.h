@@ -14,6 +14,8 @@ namespace StringFunc {
 	// Length of char* string, including null terminated char
 	int Length(const char* string);
 
+	int Compare(const char* string1, const char* string2);
+
 	ZE::UInt32 Hash(const char* string, size_t size);
 
 };

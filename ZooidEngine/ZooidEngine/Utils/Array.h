@@ -16,25 +16,22 @@ namespace ZE {
 	{
 	public:
 
-		Array() : m_capacity(0), m_length(0)
+		Array() : m_capacity(0), m_length(0), m_handle(Handle())
 		{}
 
-		Array(int initialSize) : m_capacity(0), m_length(0)
+		Array(int initialSize) : m_capacity(0), m_length(0), m_handle(Handle())
 		{
 			reset(initialSize);
 		}
 
 		Array(const Array& otherArray)
 		{
-			m_capacity = otherArray.capacity();
+			reset(otherArray.capacity());
 			m_length = otherArray.length();
-
-			m_handle = Handle(m_capacity * sizeof(T));
 			
-			if (m_capacity > 0)
+			for (int i = 0; i < m_length; ++i)
 			{
-				void* otherObject = Handle(otherArray.m_handle).getObject();
-				MemoryHelper::Copy(otherObject, m_handle.getObject(), m_handle.getCapacity());
+				(*this)[i] = otherArray.getConst(i);
 			}
 			
 		}
@@ -43,6 +40,13 @@ namespace ZE {
 		{
 			if (m_handle.isValid())
 			{
+				T* item = reinterpret_cast<T*> (&get(0));
+				for (int i = 0; i < m_capacity; i++)
+				{
+					T* newItem = item + i;
+					newItem->~T();
+				}
+
 				m_handle.release();
 			}
 		}
@@ -51,6 +55,13 @@ namespace ZE {
 		{
 			if (m_handle.isValid())
 			{
+				T* item = reinterpret_cast<T*> (&get(0));
+				for (int i = 0; i < m_capacity; i++)
+				{
+					T* newItem = item + i;
+					newItem->~T();
+				}
+
 				m_handle.release();
 			}
 
@@ -78,15 +89,14 @@ namespace ZE {
 			Handle newHandle(size * sizeof(T));
 			if (sizeToCopy > 0)
 			{
-				MemoryHelper::Zero(newHandle.getObject(), newHandle.getCapacity());
 				MemoryHelper::Copy(m_handle.getObject(), newHandle.getObject(), sizeToCopy * sizeof(T));
 			}
 
 			m_handle.release();
 			m_handle = newHandle;
 
-			T* item = reinterpret_cast<T*> (&get(0));
-			for (int i = m_capacity; i < size; i++)
+			T* item = reinterpret_cast<T*> (&get(sizeToCopy));
+			for (int i = 0; i < size-sizeToCopy; ++i)
 			{
 				T* newItem = item + i;
 				::new(newItem) T;
@@ -103,6 +113,11 @@ namespace ZE {
 		FORCEINLINE T& get(int index)
 		{
 			return *(T*)((void*)((uintptr_t)m_handle.getObject() + (uintptr_t)(index * sizeof(T))));
+		}
+
+		FORCEINLINE T& getConst(int index) const
+		{
+			return *(T*)((void*)((uintptr_t)m_handle.getObjectConst() + (uintptr_t)(index * sizeof(T))));
 		}
 
 		FORCEINLINE T* getPtr(int index)

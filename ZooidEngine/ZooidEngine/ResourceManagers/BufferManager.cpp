@@ -1,9 +1,13 @@
 #include "../ZEngine.h"
 
 #include "BufferManager.h"
-#include "BufferLayout.h"
+#include "Renderer/BufferLayout.h"
+
+#include "FileSystem/FileReader.h"
 
 namespace ZE {
+
+	IMPLEMENT_CLASS_1(BufferManager, ResourceManager)
 
 	BufferManager* BufferManager::m_instance = NULL;
 
@@ -131,11 +135,15 @@ namespace ZE {
 			// #TODO do we really need BufferData to be saved?
 			hBufferData.release();
 		}
+
+		getInstance()->loadResource("../Resources/VertexBuffers/Cube.vbuff");
 	}
 
 	void BufferManager::Destroy()
 	{
+		getInstance()->unloadResource("../Resources/VertexBuffers/Cube.vbuff");
 
+		getInstance()->unloadResources();
 	}
 
 	ZE::GPUBufferData* BufferManager::createGPUBufferFromBuffer(BufferData* _bufferData, bool _bStatic, bool _manualManage)
@@ -173,7 +181,7 @@ namespace ZE {
 		return createConstantBufferFromBuffer(bufferData);
 	}
 
-	ZE::GPUBufferArray* BufferManager::createBufferArray(BufferData* _vertexBuffer, BufferData* _indexBuffer, BufferData* _gpuBuffer)
+	Handle BufferManager::createBufferArray(BufferData* _vertexBuffer, BufferData* _indexBuffer, BufferData* _gpuBuffer)
 	{
 		GPUBufferData* vertexBufferGPU = createGPUBufferFromBuffer(_vertexBuffer);
 		GPUBufferData* indexBufferGPU = createGPUBufferFromBuffer(_indexBuffer);
@@ -184,7 +192,109 @@ namespace ZE {
 		bufferArray->SetupBufferArray(vertexBufferGPU, indexBufferGPU, computeGPUBuffer);
 
 		m_GPUBufferArrays.push_back(bufferArray);
-		return bufferArray;
+		return handle;
+	}
+
+	ZE::Handle BufferManager::loadResource_Internal(const char* resourceFilePath)
+	{
+		FileReader fileReader(resourceFilePath);
+
+		if (!fileReader.isValid())
+		{
+			ZEINFO("BufferManager: File %s not find", resourceFilePath);
+			return Handle();
+		}
+
+		char buffer[256];
+
+		// READ VERTEX BUFFER
+		fileReader.readNextString(buffer);
+		int bufferLayoutType = getBufferLayoutByString(buffer);
+		if (bufferLayoutType == -1)
+		{
+			ZEINFO("BufferManager: Can't find buffer layout type for %s", buffer);
+			return Handle();
+		}
+
+		int dataPerVertex = 6;
+		switch (bufferLayoutType)
+		{
+		case BUFFER_LAYOUT_V3_C3:
+			dataPerVertex = 6;
+			break;
+		case BUFFER_LAYOUT_V3_N3_TC2:
+			dataPerVertex = 8;
+			break;
+		default:
+			break;
+		}
+
+		int numVertex = fileReader.readNextInt();
+		int totalSize = dataPerVertex * numVertex;
+		
+		Handle dataHandle("Data", sizeof(Float32) * totalSize);
+		Float32* pData = new(dataHandle) Float32[totalSize];
+
+		for (int i = 0; i < totalSize; ++i)
+		{
+			pData[i] = fileReader.readNextFloat();
+		}
+
+		Handle hVertexBufferData("Buffer Data", sizeof(BufferData));
+		BufferData* pVertexBuffer = new(hVertexBufferData) BufferData(VERTEX_BUFFER);
+		pVertexBuffer->SetData(pData, sizeof(Float32) * totalSize);
+
+		// READ OPTIONAL INDEX BUFFER
+		Handle hIndexBufferData("Buffer Data", sizeof(BufferData));
+		BufferData* pIndexBuffer = nullptr;
+		Handle indexDataHandle;
+
+		fileReader.readNextString(buffer);
+		if (StringFunc::Compare(buffer, "INDICE_BUFFER_NONE") != 0)
+		{
+			int numIndex = fileReader.readNextInt();
+			indexDataHandle = Handle("Data", sizeof(Int32) * numIndex);
+			Int32* indexData = new(indexDataHandle) Int32[numIndex];
+
+			for (int i = 0; i < numIndex; ++i)
+			{
+				indexData[i] = fileReader.readNextInt();
+			}
+
+			pIndexBuffer = new(hIndexBufferData) BufferData(INDEX_BUFFER);
+			pIndexBuffer->SetData(indexData, sizeof(Int32) * numIndex);
+		}
+
+		fileReader.close();
+
+		Handle hResult = createBufferArray(pVertexBuffer, pIndexBuffer, nullptr);
+
+		if (hVertexBufferData.isValid())
+		{
+			hVertexBufferData.release();
+			dataHandle.release();
+		}
+
+		if (hIndexBufferData.isValid())
+		{
+			hIndexBufferData.release();
+			indexDataHandle.release();
+		}
+
+		return hResult;
+
+	}
+
+	void BufferManager::preUnloadResource(Resource* _resource)
+	{
+
+	}
+
+	int BufferManager::getBufferLayoutByString(const char* stringType)
+	{
+		COMPARE_RETURN(stringType, BUFFER_LAYOUT_V3_C3);
+		COMPARE_RETURN(stringType, BUFFER_LAYOUT_V3_N3_TC2);
+		return -1;
 	}
 
 }

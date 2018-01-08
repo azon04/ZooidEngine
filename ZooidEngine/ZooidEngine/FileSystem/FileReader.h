@@ -23,6 +23,15 @@ namespace ZE
 
 		size_t readToBuffer(void* buffer, size_t bufferSize);
 		
+		// Reading for text string
+		void readNextString(void* buffer);
+
+		// Reading for int
+		int readNextInt();
+
+		// Reading for float
+		float readNextFloat();
+
 		long size();
 		long getCurrentPosition();
 

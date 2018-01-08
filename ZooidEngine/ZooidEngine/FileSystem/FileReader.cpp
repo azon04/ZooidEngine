@@ -39,6 +39,25 @@ namespace ZE
 		return fread_s(buffer, bufferSize, 1, bufferSize , m_fileHandle);
 	}
 
+	void FileReader::readNextString(void* buffer)
+	{
+		fscanf(m_fileHandle, "%s", buffer);
+	}
+
+	int FileReader::readNextInt()
+	{
+		int result;
+		fscanf(m_fileHandle, "%d", &result);
+		return result;
+	}
+
+	float FileReader::readNextFloat()
+	{
+		float result;
+		fscanf(m_fileHandle, "%f", &result);
+		return result;
+	}
+
 	long FileReader::size()
 	{
 		long lastPos = ftell(m_fileHandle);

@@ -31,6 +31,17 @@ int StringFunc::Length(const char* string)
 	return length;
 }
 
+int StringFunc::Compare(const char* string1, const char* string2)
+{
+	int length = 0;
+	while (string1[length] != '\0' && string2[length] != '\0' && string1[length] == string2[length])
+	{
+		++length;
+	}
+
+	return string1[length] == string2[length] ? 0 : (string1[length] < string2[length] ? -1 : 1);
+}
+
 ZE::UInt32 StringFunc::Hash(const char* string, size_t size)
 {
 	ZE::UInt32 result;

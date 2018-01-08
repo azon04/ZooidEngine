@@ -189,7 +189,7 @@
     <ClInclude Include="Memory\StackAllocator.h" />
     <ClInclude Include="Renderer\BufferData.h" />
     <ClInclude Include="Renderer\BufferLayout.h" />
-    <ClInclude Include="Renderer\BufferManager.h" />
+    <ClInclude Include="ResourceManagers\BufferManager.h" />
     <ClInclude Include="Renderer\DrawList.h" />
     <ClInclude Include="Renderer\GLRenderer.h" />
     <ClInclude Include="Renderer\GPUBufferArray.h" />
@@ -255,7 +255,7 @@
     <ClCompile Include="Memory\StackAllocator.cpp" />
     <ClCompile Include="Renderer\BufferData.cpp" />
     <ClCompile Include="Renderer\BufferLayout.cpp" />
-    <ClCompile Include="Renderer\BufferManager.cpp" />
+    <ClCompile Include="ResourceManagers\BufferManager.cpp" />
     <ClCompile Include="Renderer\DrawList.cpp" />
     <ClCompile Include="Renderer\GLRenderer.cpp" />
     <ClCompile Include="Renderer\GPUBufferArray.cpp" />

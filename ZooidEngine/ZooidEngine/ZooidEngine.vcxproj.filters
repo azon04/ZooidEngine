@@ -114,9 +114,6 @@
     <ClInclude Include="Renderer\BufferLayout.h">
       <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\BufferManager.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="MainFunction\MainFunctions.h">
       <Filter>MainFunction</Filter>
     </ClInclude>
@@ -282,6 +279,9 @@
     <ClInclude Include="Memory\StackAllocator.h">
       <Filter>MemoryManagement</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceManagers\BufferManager.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -300,9 +300,6 @@
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Renderer\BufferLayout.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer\BufferManager.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="MainFunction\MainFunctions.cpp">
@@ -448,6 +445,9 @@
     </ClCompile>
     <ClCompile Include="Memory\StackAllocator.cpp">
       <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManagers\BufferManager.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

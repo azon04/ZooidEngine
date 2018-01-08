@@ -11,7 +11,7 @@
 #include "Renderer/GLRenderer.h"
 #endif
 
-#include "Renderer/BufferManager.h"
+#include "ResourceManagers/BufferManager.h"
 #include "Renderer/DrawList.h"
 
 #include "Math/MathUtil.h"

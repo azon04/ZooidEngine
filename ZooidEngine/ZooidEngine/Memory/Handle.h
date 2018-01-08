@@ -82,6 +82,10 @@ namespace ZE {
 			return pCache;
 		}
 
+		FORCEINLINE void* getObjectConst() const {
+			return pCache;
+		}
+
 		void release();
 
 		FORCEINLINE size_t getCapacity() const { return m_size; };

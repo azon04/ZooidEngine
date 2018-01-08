@@ -1,15 +1,23 @@
 #ifndef __ZE_BUFFER_MANAGER__
 #define __ZE_BUFFER_MANAGER__
 
-#include "BufferData.h"
-#include "GPUBufferData.h"
-#include "GPUBufferArray.h"
-#include "BufferLayout.h"
-#include "GameObjectModel/Component.h"
+#include "ResourceManager.h"
+
+#include "Renderer/BufferData.h"
+#include "Renderer/GPUBufferData.h"
+#include "Renderer/GPUBufferArray.h"
+#include "Renderer/BufferLayout.h"
 #include "Utils/Array.h"
 
 namespace ZE {
-class BufferManager {
+
+class GameContext;
+
+class BufferManager : public ResourceManager
+{
+	DEFINE_CLASS(BufferManager)
+
+private:
 
 	static BufferManager* m_instance;
 
@@ -25,12 +33,19 @@ public:
 	GPUBufferData* createGPUBufferFromBuffer(BufferData* _bufferData, bool _bStatic = true, bool _manualManage = false);
 	GPUBufferData* createConstantBufferFromBuffer(BufferData* _bufferData);
 	GPUBufferData* createConstantBuffer(void* data, size_t size);
-	GPUBufferArray* createBufferArray(BufferData* _vertexBuffer, BufferData* _indexBuffer, BufferData* _gpuBuffer);
+	Handle createBufferArray(BufferData* _vertexBuffer, BufferData* _indexBuffer, BufferData* _gpuBuffer);
+
+	virtual Handle loadResource_Internal(const char* resourceFilePath) override;
+	virtual void preUnloadResource(Resource* _resource) override;
+
 
 	Array<BufferData*, true> m_buffers;
 	Array<GPUBufferData*, true> m_GPUBuffers;
 	Array<GPUBufferArray*, true> m_GPUBufferArrays;
 	Array<GPUBufferData*, true> m_constantGPUBuffer;
+	
+private:
+	int getBufferLayoutByString(const char* stringType);
 };
 }
 #endif
