@@ -4,6 +4,11 @@
 
 namespace ZE {
 
+	GPUBufferData::~GPUBufferData()
+	{
+		release();
+	}
+
 	void GPUBufferData::FromBufferData(BufferData* _bufferData)
 	{
 		m_bufferType = _bufferData->m_type;
@@ -85,6 +90,16 @@ namespace ZE {
 		else if (m_bufferType == UNIFORM_BUFFER)
 		{
 			glBindBuffer(GL_UNIFORM_BUFFER, 0);
+		}
+	}
+
+	void GPUBufferData::release()
+	{
+		// #OPENGL Specific
+		if (m_BBO)
+		{
+			glDeleteBuffers(1, &m_BBO);
+			m_BBO = 0;
 		}
 	}
 

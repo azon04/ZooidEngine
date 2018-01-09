@@ -4,6 +4,7 @@
 #include "Renderer/BufferLayout.h"
 
 #include "FileSystem/FileReader.h"
+#include "FileSystem/DirectoryHelper.h"
 
 namespace ZE {
 
@@ -107,6 +108,7 @@ namespace ZE {
 
 			// #TODO do we really need BufferData to be saved?
 			hBufferData.release();
+			handle.release();
 		}
 
 		// Create Basis vertices
@@ -136,13 +138,11 @@ namespace ZE {
 			hBufferData.release();
 		}
 
-		getInstance()->loadResource("../Resources/VertexBuffers/Cube.vbuff");
+		getInstance()->loadResource(GetPackageAssetPath("Basic", "VertexBuffer", "Cube.vbuff").c_str());
 	}
 
 	void BufferManager::Destroy()
 	{
-		getInstance()->unloadResource("../Resources/VertexBuffers/Cube.vbuff");
-
 		getInstance()->unloadResources();
 	}
 
@@ -243,6 +243,7 @@ namespace ZE {
 		Handle hVertexBufferData("Buffer Data", sizeof(BufferData));
 		BufferData* pVertexBuffer = new(hVertexBufferData) BufferData(VERTEX_BUFFER);
 		pVertexBuffer->SetData(pData, sizeof(Float32) * totalSize);
+		pVertexBuffer->m_bufferLayout = bufferLayoutType;
 
 		// READ OPTIONAL INDEX BUFFER
 		Handle hIndexBufferData("Buffer Data", sizeof(BufferData));
@@ -287,7 +288,18 @@ namespace ZE {
 
 	void BufferManager::preUnloadResource(Resource* _resource)
 	{
-
+		GPUBufferArray* gpuBufferArray = _resource->m_hActual.getObject<GPUBufferArray>();
+		m_GPUBufferArrays.removeAt(m_GPUBufferArrays.firstIndexOf(gpuBufferArray));
+		
+		if (gpuBufferArray)
+		{
+			gpuBufferArray->release();
+			for (int i = 0; i < gpuBufferArray->m_buffers.length(); ++i)
+			{
+				gpuBufferArray->m_buffers[i]->release();
+				m_GPUBuffers.removeAt(m_GPUBuffers.firstIndexOf(gpuBufferArray->m_buffers[i]));
+			}
+		}
 	}
 
 	int BufferManager::getBufferLayoutByString(const char* stringType)

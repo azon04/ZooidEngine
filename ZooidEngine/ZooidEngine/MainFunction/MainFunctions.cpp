@@ -7,6 +7,7 @@
 #include "Renderer/GPUTexture.h"
 #include "Memory/Handle.h"
 #include "Events/Events.h"
+#include "FileSystem/DirectoryHelper.h"
 
 namespace ZE {
 
@@ -96,10 +97,10 @@ namespace ZE {
 			ZE::ShaderAction& shaderAction = _gameContext->getDrawList()->getNextShaderAction();
 			ZE::ShaderChain* shader = ZE::ShaderManager::getInstance()->getShaderChain(Z_SHADER_CHAIN_3D_DEFAULT_LIT);
 
-			shaderAction.SetShaderAndBuffer(shader, ZE::BufferManager::getInstance()->m_GPUBufferArrays[1]);
-			shaderAction.m_vertexSize = 288;
+			shaderAction.SetShaderAndBuffer(shader, ZE::BufferManager::getInstance()->getResource<GPUBufferArray>(GetPackageAssetPath("Basic", "VertexBuffer", "Cube.vbuff").c_str()));
+			shaderAction.m_vertexSize = 36;
 			shaderAction.SetShaderMatVar("modelMat", modelMat);
-			ZE::GPUTexture* pGPUTexture = _gameContext->getTextureManager()->getResource<ZE::GPUTexture>("../Resources/Textures/container2.png");
+			ZE::GPUTexture* pGPUTexture = _gameContext->getTextureManager()->getResource<ZE::GPUTexture>(GetPackageAssetPath("Basic", "Texture", "container2.png").c_str());
 			shaderAction.SetShaderTextureVar("material.diffuseMap", pGPUTexture, 0);
 			shaderAction.SetShaderFloatVar("material.shininess", 32.0f);
 			shaderAction.SetConstantsBlockBuffer("shader_data", _gameContext->getDrawList()->m_mainConstantBuffer);

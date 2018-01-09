@@ -164,6 +164,7 @@
     <ClInclude Include="Events\InputEvents.h" />
     <ClInclude Include="External\Hash\lookup3.h" />
     <ClInclude Include="External\Image\stb_image.h" />
+    <ClInclude Include="FileSystem\DirectoryHelper.h" />
     <ClInclude Include="FileSystem\FileReader.h" />
     <ClInclude Include="FileSystem\FileWriter.h" />
     <ClInclude Include="GameObjectModel\Component.h" />
@@ -237,6 +238,7 @@
     <ClCompile Include="Events\InputEvents.cpp" />
     <ClCompile Include="External\Hash\lookup3.c" />
     <ClCompile Include="External\Image\stb_image.cpp" />
+    <ClCompile Include="FileSystem\DirectoryHelper.cpp" />
     <ClCompile Include="FileSystem\FileReader.cpp" />
     <ClCompile Include="FileSystem\FileWriter.cpp" />
     <ClCompile Include="GameObjectModel\Component.cpp" />

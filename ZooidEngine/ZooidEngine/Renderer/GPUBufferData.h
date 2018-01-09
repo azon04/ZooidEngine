@@ -30,13 +30,14 @@ public:
 		m_isStatic = _isStaticBuffer;
 	}
 
-	virtual ~GPUBufferData() {}
+	virtual ~GPUBufferData();
 
 	void FromBufferData(BufferData* _bufferData);
 	void SetupLayout(BufferLayout* _layouts);
 
 	void Bind();
 	void UnBind();
+	void release();
 
 	BufferType m_bufferType;
 	BufferData* m_BufferData;

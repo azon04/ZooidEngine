@@ -18,6 +18,7 @@ public:
 	
 	void Bind();
 	void Unbind();
+	void release();
 
 	Array<GPUBufferData*, true> m_buffers;
 	

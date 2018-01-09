@@ -24,8 +24,8 @@ namespace ZE
 		{
 			Resource resource;
 			resource.m_refCount = 1;
-			m_resourceMap.put(resourceFilePath, resource);
 			resource.m_hActual = loadResource_Internal(resourceFilePath);
+			m_resourceMap.put(resourceFilePath, resource);
 			return resource.m_hActual;
 		}
 	}

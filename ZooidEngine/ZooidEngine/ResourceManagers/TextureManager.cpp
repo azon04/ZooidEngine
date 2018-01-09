@@ -4,6 +4,7 @@
 
 #include "Resources/Texture.h"
 #include "Renderer/GPUTexture.h"
+#include "FileSystem/DirectoryHelper.h"
 
 namespace ZE
 {
@@ -19,7 +20,7 @@ namespace ZE
 			s_instance = new (textureManagerHandle) TextureManager();
 		}
 
-		s_instance->loadResourceAsync("../Resources/Textures/container2.png");
+		s_instance->loadResourceAsync(GetPackageAssetPath("Basic", "Texture", "container2.png").c_str());
 
 		s_instance->doLoadUnload();
 	}
@@ -31,7 +32,7 @@ namespace ZE
 
 	void TextureManager::Destroy()
 	{
-		s_instance->unloadResource("../Resources/Textures/container2.png");
+		s_instance->unloadResource(GetPackageAssetPath("Basic", "Texture", "container2.png").c_str());
 
 		s_instance->unloadResources();
 	}

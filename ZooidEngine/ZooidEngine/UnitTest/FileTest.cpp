@@ -7,7 +7,7 @@
 void FileTest::RunTest()
 {
 	char buffer[128];
-	ZE::FileReader file("../Resources/TestFile.txt");
+	ZE::FileReader file("Resources/TestFile.txt");
 	
 	ZASSERT(file.size() == 42, "Check file size Failed!");
 	
@@ -19,7 +19,7 @@ void FileTest::RunTest()
 
 	file.close();
 
-	ZE::FileWriter fileWriter("../Resources/WriteTestFile.txt");
+	ZE::FileWriter fileWriter("Resources/WriteTestFile.txt");
 	fileWriter.writeFromBuffer(buffer, resultSize);
 
 	fileWriter.close();
