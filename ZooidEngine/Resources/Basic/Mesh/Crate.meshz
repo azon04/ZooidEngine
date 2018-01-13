@@ -1,2 +1,2 @@
-vbuff Cube.vbuff
-mat Crate.matz
+vbuff Basic/VertexBuffer/Cube.vbuff
+mat Basic/Material/Crate.matz

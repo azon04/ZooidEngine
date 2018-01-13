@@ -11,8 +11,15 @@ namespace ZE
 
 	public:
 
+		static void Init();
+		static void Destroy();
+		static MeshManager* getInstance();
+
 		virtual Handle loadResource_Internal(const char* resourceFilePath) override;
 		virtual void preUnloadResource(Resource* _resource) override;
+
+	private:
+		static MeshManager* s_instance;
 	};
 }
 #endif

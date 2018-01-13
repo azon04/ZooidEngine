@@ -42,6 +42,11 @@ int StringFunc::Compare(const char* string1, const char* string2)
 	return string1[length] == string2[length] ? 0 : (string1[length] < string2[length] ? -1 : 1);
 }
 
+void StringFunc::Concat(const char* string1, const char* string2, char* res)
+{
+	sprintf(res, "%s%s", string1, string2);
+}
+
 ZE::UInt32 StringFunc::Hash(const char* string, size_t size)
 {
 	ZE::UInt32 result;

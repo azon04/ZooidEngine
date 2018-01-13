@@ -8,6 +8,7 @@ namespace ZE
 	class GPUBufferArray;
 	class GPUBufferData;
 	class GameContext;
+	class Material;
 
 	class Mesh : public Object
 	{
@@ -20,6 +21,7 @@ namespace ZE
 		GPUBufferData* m_vertexBuffer;;
 		GPUBufferData* m_indexBuffer;
 		GPUBufferArray* m_bufferArray;
+		Material* m_material;
 	};
 }
 #endif

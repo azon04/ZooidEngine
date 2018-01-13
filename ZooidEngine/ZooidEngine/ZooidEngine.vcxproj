@@ -89,6 +89,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;Z_RENDER_OPENGL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)\glew-2.0.0\include;$(SolutionDir)\glfw\include;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -200,6 +201,7 @@
     <ClInclude Include="Renderer\Shader.h" />
     <ClInclude Include="Renderer\ShaderAction.h" />
     <ClInclude Include="Renderer\ShaderData.h" />
+    <ClInclude Include="ResourceManagers\MaterialManager.h" />
     <ClInclude Include="ResourceManagers\MeshManager.h" />
     <ClInclude Include="ResourceManagers\ResourceManager.h" />
     <ClInclude Include="ResourceManagers\ShaderManager.h" />
@@ -266,6 +268,7 @@
     <ClCompile Include="Renderer\Shader.cpp" />
     <ClCompile Include="Renderer\ShaderAction.cpp" />
     <ClCompile Include="Renderer\ShaderData.cpp" />
+    <ClCompile Include="ResourceManagers\MaterialManager.cpp" />
     <ClCompile Include="ResourceManagers\MeshManager.cpp" />
     <ClCompile Include="ResourceManagers\ResourceManager.cpp" />
     <ClCompile Include="ResourceManagers\ShaderManager.cpp" />

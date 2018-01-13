@@ -32,6 +32,8 @@ namespace ZE
 		// Reading for float
 		float readNextFloat();
 
+		bool eof();
+
 		long size();
 		long getCurrentPosition();
 

@@ -14,7 +14,7 @@ namespace ZE
 
 	public:
 
-		Material(GameContext* gameContext) {}
+		Material() {}
 		GPUTexture* m_texture;
 		Float32 m_shininess;
 

@@ -9,6 +9,9 @@
 #include "Events/Events.h"
 #include "FileSystem/DirectoryHelper.h"
 
+#include "ResourceManagers/MeshManager.h"
+#include "ResourceManagers/MaterialManager.h"
+
 namespace ZE {
 
 	void MainSetup(GameContext* _gameContext)
@@ -33,6 +36,12 @@ namespace ZE {
 		
 		TextureManager::Init();
 		_gameContext->m_textureManager = TextureManager::getInstance();
+
+		MaterialManager::Init();
+		_gameContext->m_materialManager = MaterialManager::getInstance();
+
+		MeshManager::Init();
+		_gameContext->m_meshManager = MeshManager::getInstance();
 
 		{
 			Handle handle("DrawList", sizeof(DrawList));

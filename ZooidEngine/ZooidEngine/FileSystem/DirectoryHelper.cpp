@@ -18,4 +18,11 @@ namespace ZE
 		return path;
 	}
 
+	ZE::String GetResourcePath(const char* resourcePath)
+	{
+		String path(1024);
+		sprintf(path.c_str(), "%s/%s", PACKAGE_ROOT_PATH, resourcePath);
+		return path;
+	}
+
 }

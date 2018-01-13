@@ -58,13 +58,18 @@ namespace ZE
 		return result;
 	}
 
+	bool FileReader::eof()
+	{
+		return feof(m_fileHandle) > 0;
+	}
+
 	long FileReader::size()
 	{
 		long lastPos = ftell(m_fileHandle);
 		fseek(m_fileHandle, 0L, SEEK_END);
 		long size = ftell(m_fileHandle);
 		fseek(m_fileHandle, lastPos, SEEK_SET);
-
+		
 		return size;
 	}
 

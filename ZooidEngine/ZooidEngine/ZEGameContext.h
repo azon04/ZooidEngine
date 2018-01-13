@@ -4,6 +4,10 @@
 #include "ZEngine.h"
 
 namespace ZE {
+	
+	class MaterialManager;
+	class MeshManager;
+
 	class GameContext {
 	public:
 		GameContext() {}
@@ -19,6 +23,9 @@ namespace ZE {
 		TextureManager* m_textureManager;
 		InputManager* m_inputManager;
 
+		MaterialManager* m_materialManager;
+		MeshManager* m_meshManager;
+
 		FORCEINLINE IRenderer* getRenderer() const { return m_renderer; }
 		FORCEINLINE BufferManager* getBufferManager() const { return m_bufferManager; }
 		FORCEINLINE ShaderManager* getShaderManager() const { return m_shaderManager; }
@@ -28,6 +35,8 @@ namespace ZE {
 		FORCEINLINE EventDispatcher* getEventDispatcher() const { return m_mainEventDispatcher; }
 		FORCEINLINE TextureManager* getTextureManager() const { return m_textureManager; }
 		FORCEINLINE InputManager* getInputManager() const { return m_inputManager; };
+		FORCEINLINE MaterialManager* getMaterialManager() const { return m_materialManager; }
+		FORCEINLINE MeshManager* getMeshManager() const { return m_meshManager; }
 	};
 }
 #endif // __ZE_GAME_CONTEXT__

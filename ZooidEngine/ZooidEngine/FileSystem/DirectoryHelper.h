@@ -10,6 +10,8 @@ namespace ZE
 	String GetPackageAssetPath(const char* packageName, const char* assetType, const char* assetName);
 
 	String GetEngineAssetPath(const char* assetType, const char* assetName);
+
+	String GetResourcePath(const char* resourcePath);
 }
 
 #endif
