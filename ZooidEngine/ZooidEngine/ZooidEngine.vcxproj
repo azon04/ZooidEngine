@@ -228,6 +228,7 @@
     <ClInclude Include="Utils\PrimitiveTypes.h" />
     <ClInclude Include="Utils\String.h" />
     <ClInclude Include="Utils\StringFunc.h" />
+    <ClInclude Include="Utils\Timer.h" />
     <ClInclude Include="Utils\ZEngineHelper.h" />
     <ClInclude Include="ZEGameContext.h" />
     <ClInclude Include="ZEngine.h" />

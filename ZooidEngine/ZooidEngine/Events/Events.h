@@ -26,7 +26,7 @@ namespace ZE {
 		Event_UPDATE() {}
 		virtual ~Event_UPDATE() {}
 
-		Float32 m_deltaTime;
+		double m_deltaTime;
 	};
 
 	class Event_GATHER_LIGHT : public Event
