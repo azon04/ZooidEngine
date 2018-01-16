@@ -33,6 +33,7 @@ namespace ZE {
 		}
 
 		m_BufferData = _bufferData;
+		m_dataCount = _bufferData->m_count;
 
 		if (m_bufferType != UNIFORM_BUFFER)
 		{

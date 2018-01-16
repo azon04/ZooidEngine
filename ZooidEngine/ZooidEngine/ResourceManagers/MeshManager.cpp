@@ -20,7 +20,7 @@ namespace ZE
 		Handle hMeshManager("Mesh Manager", sizeof(MeshManager));
 		s_instance = new(hMeshManager) MeshManager();
 
-		s_instance->loadResource(GetPackageAssetPath("Basic", "Mesh", "Crate.meshz").c_str());
+		//s_instance->loadResource(GetPackageAssetPath("Basic", "Mesh", "Crate.meshz").c_str());
 	}
 
 	void MeshManager::Destroy()

@@ -23,8 +23,11 @@ namespace ZE {
 
 		glBindVertexArray(m_VAO);
 		glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer->m_BBO);
+		m_dataCount = _vertexBuffer->m_dataCount;
+
 		if (_indexBuffer) {
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer->m_BBO);
+			m_dataCount = _vertexBuffer->m_dataCount;
 		}
 		m_bUsingIndexBuffer = _indexBuffer != nullptr;
 

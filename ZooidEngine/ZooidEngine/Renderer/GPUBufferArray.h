@@ -23,6 +23,7 @@ public:
 	Array<GPUBufferData*, true> m_buffers;
 	
 	bool m_bUsingIndexBuffer;
+	UInt32 m_dataCount;
 
 #if Z_RENDER_OPENGL
 	GLuint m_VAO;

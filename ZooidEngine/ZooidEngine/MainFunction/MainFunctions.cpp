@@ -3,6 +3,7 @@
 #include "../Common/GlobalRegistry.h"
 
 #include "Scene/CameraComponent.h"
+#include "Scene/RenderComponent.h"
 #include "Scene/Light/LightComponent.h"
 #include "Renderer/GPUTexture.h"
 #include "Memory/Handle.h"
@@ -82,6 +83,44 @@ namespace ZE {
 			_gameContext->getRootComponent()->addChild(pDirLight);
 		}
 
+		// Put sample boxes
+		{
+			Handle hRenderComp("Sample Crate", sizeof(RenderComponent));
+			RenderComponent* pRenderComp = new(hRenderComp) RenderComponent(_gameContext);
+
+			pRenderComp->setupComponent();
+			pRenderComp->fromFile(GetPackageAssetPath("Basic", "Mesh", "Crate.meshz").c_str());
+			pRenderComp->m_worldTransform.setPos(Vector3(1.5f, 0.0f, 0.0f));
+			pRenderComp->m_worldTransform.rotateAroundN(DegToRad(45));
+
+			_gameContext->getRootComponent()->addChild(pRenderComp);
+		}
+
+		{
+			Handle hRenderComp("Sample Crate", sizeof(RenderComponent));
+			RenderComponent* pRenderComp = new(hRenderComp) RenderComponent(_gameContext);
+
+			pRenderComp->setupComponent();
+			pRenderComp->fromFile(GetPackageAssetPath("Basic", "Mesh", "Crate.meshz").c_str());
+			pRenderComp->m_worldTransform.setPos(Vector3(-1.5f, 0.0f, 0.0f));
+			pRenderComp->m_worldTransform.rotateAroundU(DegToRad(45));
+
+			_gameContext->getRootComponent()->addChild(pRenderComp);
+		}
+
+		{
+			Handle hRenderComp("Sample Crate", sizeof(RenderComponent));
+			RenderComponent* pRenderComp = new(hRenderComp) RenderComponent(_gameContext);
+
+			pRenderComp->setupComponent();
+			pRenderComp->fromFile(GetPackageAssetPath("Basic", "Mesh", "Crate.meshz").c_str());
+			pRenderComp->m_worldTransform.setPos(Vector3(0.0f, 0.0f, 0.0f));
+			pRenderComp->m_worldTransform.rotateAroundV(DegToRad(45));
+
+			_gameContext->getRootComponent()->addChild(pRenderComp);
+		}
+
+
 	}
 
 	void MainClean(GameContext* _gameContext)
@@ -98,33 +137,23 @@ namespace ZE {
 
 	void MainThreadJob(GameContext* _gameContext)
 	{
-		Matrix4x4 modelMat;
 
-		{
-			modelMat.translate(Vector3(-1.f, 0.0f, 0.0f));
-
-			ZE::ShaderAction& shaderAction = _gameContext->getDrawList()->getNextShaderAction();
-			ZE::ShaderChain* shader = ZE::ShaderManager::getInstance()->getShaderChain(Z_SHADER_CHAIN_3D_DEFAULT_LIT);
-
-			shaderAction.SetShaderAndBuffer(shader, ZE::BufferManager::getInstance()->getResource<GPUBufferArray>(GetPackageAssetPath("Basic", "VertexBuffer", "Cube.vbuff").c_str()));
-			shaderAction.m_vertexSize = 36;
-			shaderAction.SetShaderMatVar("modelMat", modelMat);
-			ZE::GPUTexture* pGPUTexture = _gameContext->getTextureManager()->getResource<ZE::GPUTexture>(GetPackageAssetPath("Basic", "Texture", "container2.png").c_str());
-			shaderAction.SetShaderTextureVar("material.diffuseMap", pGPUTexture, 0);
-			shaderAction.SetShaderFloatVar("material.shininess", 32.0f);
-			shaderAction.SetConstantsBlockBuffer("shader_data", _gameContext->getDrawList()->m_mainConstantBuffer);
-			shaderAction.SetConstantsBlockBuffer("light_data", _gameContext->getDrawList()->m_lightConstantBuffer);
-		}
-
+		// Draw Base Lines
 		{
 			ZE::ShaderAction& shaderAction = _gameContext->getDrawList()->getNextShaderAction();
 			ZE::ShaderChain* shader = ZE::ShaderManager::getInstance()->getShaderChain(2);
 
 			shaderAction.SetShaderAndBuffer(shader, ZE::BufferManager::getInstance()->m_GPUBufferArrays[2]);
-			shaderAction.m_vertexSize = 36;
 			shaderAction.SetShaderMatVar("modelMat", Matrix4x4());
 			shaderAction.SetConstantsBlockBuffer("shader_data", _gameContext->getDrawList()->m_mainConstantBuffer);
-			shaderAction.SetConstantsBlockBuffer("light_data", _gameContext->getDrawList()->m_lightConstantBuffer);
+		}
+
+		// Handle Event_GATHER_RENDER
+		{
+			Handle handleGatherRender("EventGatherRender", sizeof(Event_GATHER_RENDER));
+			Event_GATHER_RENDER* pEvent = new(handleGatherRender) Event_GATHER_RENDER();
+			_gameContext->getEventDispatcher()->handleEvent(pEvent);
+			handleGatherRender.release();
 		}
 
 		// Handle Event_Update

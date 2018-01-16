@@ -48,6 +48,7 @@ public:
 
 	bool m_isStatic;
 
+	ZE::Int32 m_dataCount;
 	ZE::Int32 m_bindingIndex;
 	BufferLayout* m_layout;
 

@@ -20,12 +20,14 @@ public:
 
 	virtual ~BufferData() {}
 
-	void SetData(void* Data, unsigned int size) {
+	void SetData(void* Data, unsigned int sizePerItem, unsigned int count = 1) {
 		m_data = Data;
-		m_size = size;
+		m_size = sizePerItem * count;
+		m_count = count;
 	}
 
 	void* m_data;
+	ZE::UInt32 m_count;
 	ZE::UInt32 m_size;
 	BufferType m_type;
 	ZE::Int32 m_bufferLayout;

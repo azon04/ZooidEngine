@@ -38,6 +38,15 @@ namespace ZE {
 		virtual ~Event_GATHER_LIGHT() {}
 	};
 
+	class Event_GATHER_RENDER : public Event
+	{
+		DEFINE_CLASS(Event_GATHER_RENDER);
+
+	public:
+		Event_GATHER_RENDER() {}
+		virtual ~Event_GATHER_RENDER() {}
+	};
+
 	class Event_RESOURCE_LOADED : public Event
 	{
 		DEFINE_CLASS(Event_RESOURCE_LOADED)

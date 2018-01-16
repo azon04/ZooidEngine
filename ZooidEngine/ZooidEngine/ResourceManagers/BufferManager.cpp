@@ -41,7 +41,7 @@ namespace ZE {
 
 			Handle hBufferData("Buffer Data", sizeof(BufferData));
 			BufferData* bufferData = new(hBufferData) BufferData(BufferType::VERTEX_BUFFER);
-			bufferData->SetData(vertices_color, 18 * sizeof(float));
+			bufferData->SetData(vertices_color, 6 * sizeof(float), 3);
 			bufferData->m_bufferLayout = BUFFER_LAYOUT_V3_C3;
 
 			getInstance()->createBufferArray(bufferData, nullptr, nullptr);
@@ -101,7 +101,7 @@ namespace ZE {
 
 			Handle hBufferData("CubeBuffer Data", sizeof(BufferData));
 			BufferData* bufferData = new(hBufferData) BufferData(BufferType::VERTEX_BUFFER);
-			bufferData->SetData(cube_vertices, 288 * sizeof(float));
+			bufferData->SetData(cube_vertices, 8 * sizeof(float), 36);
 			bufferData->m_bufferLayout = BUFFER_LAYOUT_V3_N3_TC2;
 
 			getInstance()->createBufferArray(bufferData, nullptr, nullptr);
@@ -129,7 +129,7 @@ namespace ZE {
 
 			Handle hBufferData("BasisBufferData", sizeof(BufferData));
 			BufferData* bufferData = new(hBufferData) BufferData(BufferType::VERTEX_BUFFER);
-			bufferData->SetData(basis_data, 36 * sizeof(float));
+			bufferData->SetData(basis_data, 6 * sizeof(float), 6);
 			bufferData->m_bufferLayout = BUFFER_LAYOUT_V3_C3;
 
 			getInstance()->createBufferArray(bufferData, nullptr, nullptr);
@@ -242,7 +242,7 @@ namespace ZE {
 
 		Handle hVertexBufferData("Buffer Data", sizeof(BufferData));
 		BufferData* pVertexBuffer = new(hVertexBufferData) BufferData(VERTEX_BUFFER);
-		pVertexBuffer->SetData(pData, sizeof(Float32) * totalSize);
+		pVertexBuffer->SetData(pData, sizeof(Float32) * dataPerVertex, numVertex);
 		pVertexBuffer->m_bufferLayout = bufferLayoutType;
 
 		// READ OPTIONAL INDEX BUFFER
@@ -263,7 +263,7 @@ namespace ZE {
 			}
 
 			pIndexBuffer = new(hIndexBufferData) BufferData(INDEX_BUFFER);
-			pIndexBuffer->SetData(indexData, sizeof(Int32) * numIndex);
+			pIndexBuffer->SetData(indexData, sizeof(Int32), numIndex);
 		}
 
 		fileReader.close();
