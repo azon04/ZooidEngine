@@ -29,6 +29,7 @@ namespace ZE {
 	{
 		m_shader = _shader;
 		m_bufferArray = _bufferArray;
+		m_vertexSize = _bufferArray->m_dataCount;
 	}
 
 	void ShaderAction::SetShaderFloatVar(const char* _name, float _value)

@@ -30,13 +30,14 @@ public:
 		m_isStatic = _isStaticBuffer;
 	}
 
-	virtual ~GPUBufferData() {}
+	virtual ~GPUBufferData();
 
 	void FromBufferData(BufferData* _bufferData);
 	void SetupLayout(BufferLayout* _layouts);
 
 	void Bind();
 	void UnBind();
+	void release();
 
 	BufferType m_bufferType;
 	BufferData* m_BufferData;
@@ -47,6 +48,7 @@ public:
 
 	bool m_isStatic;
 
+	ZE::Int32 m_dataCount;
 	ZE::Int32 m_bindingIndex;
 	BufferLayout* m_layout;
 

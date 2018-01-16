@@ -89,6 +89,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;Z_RENDER_OPENGL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)\glew-2.0.0\include;$(SolutionDir)\glfw\include;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -164,6 +165,7 @@
     <ClInclude Include="Events\InputEvents.h" />
     <ClInclude Include="External\Hash\lookup3.h" />
     <ClInclude Include="External\Image\stb_image.h" />
+    <ClInclude Include="FileSystem\DirectoryHelper.h" />
     <ClInclude Include="FileSystem\FileReader.h" />
     <ClInclude Include="FileSystem\FileWriter.h" />
     <ClInclude Include="GameObjectModel\Component.h" />
@@ -181,15 +183,15 @@
     <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Math\Vector2.h" />
     <ClInclude Include="Math\Vector3.h" />
-    <ClInclude Include="MemoryManagement\Handle.h" />
-    <ClInclude Include="MemoryManagement\IAllocator.h" />
-    <ClInclude Include="MemoryManagement\MemoryHelper.h" />
-    <ClInclude Include="MemoryManagement\MemoryManager.h" />
-    <ClInclude Include="MemoryManagement\PoolAllocator.h" />
-    <ClInclude Include="MemoryManagement\StackAllocator.h" />
+    <ClInclude Include="Memory\Handle.h" />
+    <ClInclude Include="Memory\IAllocator.h" />
+    <ClInclude Include="Memory\MemoryHelper.h" />
+    <ClInclude Include="Memory\MemoryManager.h" />
+    <ClInclude Include="Memory\PoolAllocator.h" />
+    <ClInclude Include="Memory\StackAllocator.h" />
     <ClInclude Include="Renderer\BufferData.h" />
     <ClInclude Include="Renderer\BufferLayout.h" />
-    <ClInclude Include="Renderer\BufferManager.h" />
+    <ClInclude Include="ResourceManagers\BufferManager.h" />
     <ClInclude Include="Renderer\DrawList.h" />
     <ClInclude Include="Renderer\GLRenderer.h" />
     <ClInclude Include="Renderer\GPUBufferArray.h" />
@@ -199,9 +201,13 @@
     <ClInclude Include="Renderer\Shader.h" />
     <ClInclude Include="Renderer\ShaderAction.h" />
     <ClInclude Include="Renderer\ShaderData.h" />
+    <ClInclude Include="ResourceManagers\MaterialManager.h" />
+    <ClInclude Include="ResourceManagers\MeshManager.h" />
     <ClInclude Include="ResourceManagers\ResourceManager.h" />
     <ClInclude Include="ResourceManagers\ShaderManager.h" />
     <ClInclude Include="ResourceManagers\TextureManager.h" />
+    <ClInclude Include="Resources\Material.h" />
+    <ClInclude Include="Resources\Mesh.h" />
     <ClInclude Include="Resources\Texture.h" />
     <ClInclude Include="Scene\Actor.h" />
     <ClInclude Include="Scene\CameraComponent.h" />
@@ -234,6 +240,7 @@
     <ClCompile Include="Events\InputEvents.cpp" />
     <ClCompile Include="External\Hash\lookup3.c" />
     <ClCompile Include="External\Image\stb_image.cpp" />
+    <ClCompile Include="FileSystem\DirectoryHelper.cpp" />
     <ClCompile Include="FileSystem\FileReader.cpp" />
     <ClCompile Include="FileSystem\FileWriter.cpp" />
     <ClCompile Include="GameObjectModel\Component.cpp" />
@@ -244,15 +251,15 @@
     <ClCompile Include="MainFunction\Main.cpp" />
     <ClCompile Include="MainFunction\MainFunctions.cpp" />
     <ClCompile Include="Math\MathOps.cpp" />
-    <ClCompile Include="MemoryManagement\Handle.cpp" />
-    <ClCompile Include="MemoryManagement\IAllocator.cpp" />
-    <ClCompile Include="MemoryManagement\MemoryHelper.cpp" />
-    <ClCompile Include="MemoryManagement\MemoryManager.cpp" />
-    <ClCompile Include="MemoryManagement\PoolAllocator.cpp" />
-    <ClCompile Include="MemoryManagement\StackAllocator.cpp" />
+    <ClCompile Include="Memory\Handle.cpp" />
+    <ClCompile Include="Memory\IAllocator.cpp" />
+    <ClCompile Include="Memory\MemoryHelper.cpp" />
+    <ClCompile Include="Memory\MemoryManager.cpp" />
+    <ClCompile Include="Memory\PoolAllocator.cpp" />
+    <ClCompile Include="Memory\StackAllocator.cpp" />
     <ClCompile Include="Renderer\BufferData.cpp" />
     <ClCompile Include="Renderer\BufferLayout.cpp" />
-    <ClCompile Include="Renderer\BufferManager.cpp" />
+    <ClCompile Include="ResourceManagers\BufferManager.cpp" />
     <ClCompile Include="Renderer\DrawList.cpp" />
     <ClCompile Include="Renderer\GLRenderer.cpp" />
     <ClCompile Include="Renderer\GPUBufferArray.cpp" />
@@ -261,9 +268,13 @@
     <ClCompile Include="Renderer\Shader.cpp" />
     <ClCompile Include="Renderer\ShaderAction.cpp" />
     <ClCompile Include="Renderer\ShaderData.cpp" />
+    <ClCompile Include="ResourceManagers\MaterialManager.cpp" />
+    <ClCompile Include="ResourceManagers\MeshManager.cpp" />
     <ClCompile Include="ResourceManagers\ResourceManager.cpp" />
     <ClCompile Include="ResourceManagers\ShaderManager.cpp" />
     <ClCompile Include="ResourceManagers\TextureManager.cpp" />
+    <ClCompile Include="Resources\Material.cpp" />
+    <ClCompile Include="Resources\Mesh.cpp" />
     <ClCompile Include="Resources\Texture.cpp" />
     <ClCompile Include="Scene\Actor.cpp" />
     <ClCompile Include="Scene\CameraComponent.cpp" />

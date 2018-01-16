@@ -2,13 +2,14 @@
 #define __ZE_TEXTURE_H__
 
 #include "Utils/PrimitiveTypes.h"
-#include "MemoryManagement/Handle.h"
+#include "Memory/Handle.h"
 
 namespace ZE
 {
-	class Texture
+	class Texture : public Object
 	{
-	
+		DEFINE_CLASS(Texture)
+
 	public:
 		Texture() {}
 

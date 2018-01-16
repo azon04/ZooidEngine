@@ -3,7 +3,7 @@
 #include "ZEGameContext.h"
 #include "Events/InputEvents.h"
 #include "Events/EventDispatcher.h"
-#include "MemoryManagement/MemoryHelper.h"
+#include "Memory/MemoryHelper.h"
 
 #include <Windows.h>
 

@@ -2,6 +2,7 @@
 
 namespace ZE
 {
+	IMPLEMENT_CLASS_1(ShaderManager, ResourceManager)
 
 	UInt8 ShaderManager::getShaderTypeByName(const char* resourceFilePath)
 	{
@@ -25,34 +26,34 @@ namespace ZE
 		Handle handle("SHADER MANAGER", sizeof(ShaderManager));
 		s_instance = new(handle) ShaderManager;
 
-		s_instance->registerResourceToLoad("Shaders/DefaultGLSimple.vs");
-		s_instance->registerResourceToLoad("Shaders/TestGLVertexShader.vs");
-		s_instance->registerResourceToLoad("Shaders/TestGLFragmentShader.frag");
-		s_instance->registerResourceToLoad("Shaders/DefaultGLSimple.frag");
-		s_instance->registerResourceToLoad("Shaders/DefaultGLSimpleColor.frag");
-		s_instance->registerResourceToLoad("Shaders/DefaultGLSimpleLit.vs");
-		s_instance->registerResourceToLoad("Shaders/DefaultGLSimpleLit.frag");
+		s_instance->loadResourceAsync("ZooidEngine/Shaders/DefaultGLSimple.vs");
+		s_instance->loadResourceAsync("ZooidEngine/Shaders/TestGLVertexShader.vs");
+		s_instance->loadResourceAsync("ZooidEngine/Shaders/TestGLFragmentShader.frag");
+		s_instance->loadResourceAsync("ZooidEngine/Shaders/DefaultGLSimple.frag");
+		s_instance->loadResourceAsync("ZooidEngine/Shaders/DefaultGLSimpleColor.frag");
+		s_instance->loadResourceAsync("ZooidEngine/Shaders/DefaultGLSimpleLit.vs");
+		s_instance->loadResourceAsync("ZooidEngine/Shaders/DefaultGLSimpleLit.frag");
 
 		s_instance->loadAllResource();
 
 		{
 			Handle hShaderChain(sizeof(ShaderChain));
 			ShaderChain* shaderChain = new(hShaderChain) ShaderChain();
-			shaderChain->MakeChain(s_instance->getResource<Shader>("Shaders/TestGLVertexShader.vs"), s_instance->getResource<Shader>("Shaders/TestGLFragmentShader.frag"), nullptr, nullptr);
+			shaderChain->MakeChain(s_instance->getResource<Shader>("ZooidEngine/Shaders/TestGLVertexShader.vs"), s_instance->getResource<Shader>("ZooidEngine/Shaders/TestGLFragmentShader.frag"), nullptr, nullptr);
 			s_instance->m_shaderChain.push_back(shaderChain);
 		}
 
 		{
 			Handle hShaderChain(sizeof(ShaderChain));
 			ShaderChain* shaderChain = new(hShaderChain) ShaderChain();
-			shaderChain->MakeChain(s_instance->getResource<Shader>("Shaders/DefaultGLSimple.vs"), s_instance->getResource<Shader>("Shaders/DefaultGLSimple.frag"), nullptr, nullptr);
+			shaderChain->MakeChain(s_instance->getResource<Shader>("ZooidEngine/Shaders/DefaultGLSimple.vs"), s_instance->getResource<Shader>("ZooidEngine/Shaders/DefaultGLSimple.frag"), nullptr, nullptr);
 			s_instance->m_shaderChain.push_back(shaderChain);
 		}
 
 		{
 			Handle hShaderChain(sizeof(ShaderChain));
 			ShaderChain* shaderChain = new(hShaderChain) ShaderChain();
-			shaderChain->MakeChain(s_instance->getResource<Shader>("Shaders/DefaultGLSimple.vs"), s_instance->getResource<Shader>("Shaders/DefaultGLSimpleColor.frag"), nullptr, nullptr);
+			shaderChain->MakeChain(s_instance->getResource<Shader>("ZooidEngine/Shaders/DefaultGLSimple.vs"), s_instance->getResource<Shader>("ZooidEngine/Shaders/DefaultGLSimpleColor.frag"), nullptr, nullptr);
 			shaderChain->m_topology = TOPOLOGY_LINE;
 			s_instance->m_shaderChain.push_back(shaderChain);
 		}
@@ -60,7 +61,7 @@ namespace ZE
 		{
 			Handle hShaderChain(sizeof(ShaderChain));
 			ShaderChain* shaderChain = new(hShaderChain) ShaderChain();
-			shaderChain->MakeChain(s_instance->getResource<Shader>("Shaders/DefaultGLSimpleLit.vs"), s_instance->getResource<Shader>("Shaders/DefaultGLSimpleLit.frag"), nullptr, nullptr);
+			shaderChain->MakeChain(s_instance->getResource<Shader>("ZooidEngine/Shaders/DefaultGLSimpleLit.vs"), s_instance->getResource<Shader>("ZooidEngine/Shaders/DefaultGLSimpleLit.frag"), nullptr, nullptr);
 			s_instance->m_shaderChain.push_back(shaderChain);
 		}
 	}
@@ -78,7 +79,7 @@ namespace ZE
 		}
 	}
 
-	ZE::Handle ShaderManager::loadResource(const char* resourceFilePath)
+	ZE::Handle ShaderManager::loadResource_Internal(const char* resourceFilePath)
 	{
 		Handle hShader(sizeof(Shader));
 		Shader* pShader = new(hShader) Shader();

@@ -12,10 +12,7 @@ namespace ZE {
 
 	GPUBufferArray::~GPUBufferArray()
 	{
-		// #OPENGL Specific
-		if (m_VAO > 0) {
-			glDeleteVertexArrays(1, &m_VAO);
-		}
+		release();
 	}
 
 	void GPUBufferArray::SetupBufferArray(GPUBufferData* _vertexBuffer, GPUBufferData* _indexBuffer, GPUBufferData* _computeBuffer)
@@ -26,8 +23,11 @@ namespace ZE {
 
 		glBindVertexArray(m_VAO);
 		glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer->m_BBO);
+		m_dataCount = _vertexBuffer->m_dataCount;
+
 		if (_indexBuffer) {
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer->m_BBO);
+			m_dataCount = _vertexBuffer->m_dataCount;
 		}
 		m_bUsingIndexBuffer = _indexBuffer != nullptr;
 
@@ -46,6 +46,16 @@ namespace ZE {
 	{
 		// #OPENGL specific
 		glBindVertexArray(0);
+	}
+
+	void GPUBufferArray::release()
+	{
+		// #OPENGL Specific
+		if (m_VAO > 0)
+		{
+			glDeleteVertexArrays(1, &m_VAO);
+			m_VAO = 0;
+		}
 	}
 
 }

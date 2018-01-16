@@ -4,10 +4,10 @@
 
 #include "External/Image/stb_image.h"
 
-#include "MemoryManagement/Handle.h"
-
 namespace ZE
 {
+	IMPLEMENT_CLASS_0(Texture)
+
 	Handle Texture::loadTexture(const char* filePath)
 	{
 		Handle textureHandle(sizeof(Texture));

@@ -1,9 +1,14 @@
 #include "../ZEngine.h"
 
 #include "BufferManager.h"
-#include "BufferLayout.h"
+#include "Renderer/BufferLayout.h"
+
+#include "FileSystem/FileReader.h"
+#include "FileSystem/DirectoryHelper.h"
 
 namespace ZE {
+
+	IMPLEMENT_CLASS_1(BufferManager, ResourceManager)
 
 	BufferManager* BufferManager::m_instance = NULL;
 
@@ -36,7 +41,7 @@ namespace ZE {
 
 			Handle hBufferData("Buffer Data", sizeof(BufferData));
 			BufferData* bufferData = new(hBufferData) BufferData(BufferType::VERTEX_BUFFER);
-			bufferData->SetData(vertices_color, 18 * sizeof(float));
+			bufferData->SetData(vertices_color, 6 * sizeof(float), 3);
 			bufferData->m_bufferLayout = BUFFER_LAYOUT_V3_C3;
 
 			getInstance()->createBufferArray(bufferData, nullptr, nullptr);
@@ -96,13 +101,14 @@ namespace ZE {
 
 			Handle hBufferData("CubeBuffer Data", sizeof(BufferData));
 			BufferData* bufferData = new(hBufferData) BufferData(BufferType::VERTEX_BUFFER);
-			bufferData->SetData(cube_vertices, 288 * sizeof(float));
+			bufferData->SetData(cube_vertices, 8 * sizeof(float), 36);
 			bufferData->m_bufferLayout = BUFFER_LAYOUT_V3_N3_TC2;
 
 			getInstance()->createBufferArray(bufferData, nullptr, nullptr);
 
 			// #TODO do we really need BufferData to be saved?
 			hBufferData.release();
+			handle.release();
 		}
 
 		// Create Basis vertices
@@ -123,7 +129,7 @@ namespace ZE {
 
 			Handle hBufferData("BasisBufferData", sizeof(BufferData));
 			BufferData* bufferData = new(hBufferData) BufferData(BufferType::VERTEX_BUFFER);
-			bufferData->SetData(basis_data, 36 * sizeof(float));
+			bufferData->SetData(basis_data, 6 * sizeof(float), 6);
 			bufferData->m_bufferLayout = BUFFER_LAYOUT_V3_C3;
 
 			getInstance()->createBufferArray(bufferData, nullptr, nullptr);
@@ -131,11 +137,13 @@ namespace ZE {
 			// #TODO do we really need BufferData to be saved?
 			hBufferData.release();
 		}
+
+		getInstance()->loadResource(GetPackageAssetPath("Basic", "VertexBuffer", "Cube.vbuff").c_str());
 	}
 
 	void BufferManager::Destroy()
 	{
-
+		getInstance()->unloadResources();
 	}
 
 	ZE::GPUBufferData* BufferManager::createGPUBufferFromBuffer(BufferData* _bufferData, bool _bStatic, bool _manualManage)
@@ -173,7 +181,7 @@ namespace ZE {
 		return createConstantBufferFromBuffer(bufferData);
 	}
 
-	ZE::GPUBufferArray* BufferManager::createBufferArray(BufferData* _vertexBuffer, BufferData* _indexBuffer, BufferData* _gpuBuffer)
+	Handle BufferManager::createBufferArray(BufferData* _vertexBuffer, BufferData* _indexBuffer, BufferData* _gpuBuffer)
 	{
 		GPUBufferData* vertexBufferGPU = createGPUBufferFromBuffer(_vertexBuffer);
 		GPUBufferData* indexBufferGPU = createGPUBufferFromBuffer(_indexBuffer);
@@ -184,7 +192,121 @@ namespace ZE {
 		bufferArray->SetupBufferArray(vertexBufferGPU, indexBufferGPU, computeGPUBuffer);
 
 		m_GPUBufferArrays.push_back(bufferArray);
-		return bufferArray;
+		return handle;
+	}
+
+	ZE::Handle BufferManager::loadResource_Internal(const char* resourceFilePath)
+	{
+		FileReader fileReader(resourceFilePath);
+
+		if (!fileReader.isValid())
+		{
+			ZEINFO("BufferManager: File %s not find", resourceFilePath);
+			return Handle();
+		}
+
+		char buffer[256];
+
+		// READ VERTEX BUFFER
+		fileReader.readNextString(buffer);
+		int bufferLayoutType = getBufferLayoutByString(buffer);
+		if (bufferLayoutType == -1)
+		{
+			ZEINFO("BufferManager: Can't find buffer layout type for %s", buffer);
+			return Handle();
+		}
+
+		int dataPerVertex = 6;
+		switch (bufferLayoutType)
+		{
+		case BUFFER_LAYOUT_V3_C3:
+			dataPerVertex = 6;
+			break;
+		case BUFFER_LAYOUT_V3_N3_TC2:
+			dataPerVertex = 8;
+			break;
+		default:
+			break;
+		}
+
+		int numVertex = fileReader.readNextInt();
+		int totalSize = dataPerVertex * numVertex;
+		
+		Handle dataHandle("Data", sizeof(Float32) * totalSize);
+		Float32* pData = new(dataHandle) Float32[totalSize];
+
+		for (int i = 0; i < totalSize; ++i)
+		{
+			pData[i] = fileReader.readNextFloat();
+		}
+
+		Handle hVertexBufferData("Buffer Data", sizeof(BufferData));
+		BufferData* pVertexBuffer = new(hVertexBufferData) BufferData(VERTEX_BUFFER);
+		pVertexBuffer->SetData(pData, sizeof(Float32) * dataPerVertex, numVertex);
+		pVertexBuffer->m_bufferLayout = bufferLayoutType;
+
+		// READ OPTIONAL INDEX BUFFER
+		Handle hIndexBufferData("Buffer Data", sizeof(BufferData));
+		BufferData* pIndexBuffer = nullptr;
+		Handle indexDataHandle;
+
+		fileReader.readNextString(buffer);
+		if (StringFunc::Compare(buffer, "INDICE_BUFFER_NONE") != 0)
+		{
+			int numIndex = fileReader.readNextInt();
+			indexDataHandle = Handle("Data", sizeof(Int32) * numIndex);
+			Int32* indexData = new(indexDataHandle) Int32[numIndex];
+
+			for (int i = 0; i < numIndex; ++i)
+			{
+				indexData[i] = fileReader.readNextInt();
+			}
+
+			pIndexBuffer = new(hIndexBufferData) BufferData(INDEX_BUFFER);
+			pIndexBuffer->SetData(indexData, sizeof(Int32), numIndex);
+		}
+
+		fileReader.close();
+
+		Handle hResult = createBufferArray(pVertexBuffer, pIndexBuffer, nullptr);
+
+		if (hVertexBufferData.isValid())
+		{
+			hVertexBufferData.release();
+			dataHandle.release();
+		}
+
+		if (hIndexBufferData.isValid())
+		{
+			hIndexBufferData.release();
+			indexDataHandle.release();
+		}
+
+		return hResult;
+
+	}
+
+	void BufferManager::preUnloadResource(Resource* _resource)
+	{
+		GPUBufferArray* gpuBufferArray = _resource->m_hActual.getObject<GPUBufferArray>();
+		m_GPUBufferArrays.removeAt(m_GPUBufferArrays.firstIndexOf(gpuBufferArray));
+		
+		if (gpuBufferArray)
+		{
+			gpuBufferArray->release();
+			for (int i = 0; i < gpuBufferArray->m_buffers.length(); ++i)
+			{
+				gpuBufferArray->m_buffers[i]->release();
+				m_GPUBuffers.removeAt(m_GPUBuffers.firstIndexOf(gpuBufferArray->m_buffers[i]));
+			}
+		}
+	}
+
+	int BufferManager::getBufferLayoutByString(const char* stringType)
+	{
+		COMPARE_RETURN(stringType, BUFFER_LAYOUT_V3_C3);
+		COMPARE_RETURN(stringType, BUFFER_LAYOUT_V3_N3_TC2);
+		return -1;
 	}
 
 }

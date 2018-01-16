@@ -8,6 +8,8 @@ namespace ZE
 {
 	class ShaderManager : public ResourceManager
 	{
+		DEFINE_CLASS(ShaderManager)
+
 	public:
 		ShaderManager() {}
 
@@ -15,7 +17,7 @@ namespace ZE
 		static void Destroy();
 		static ShaderManager* getInstance() { return s_instance; }
 		
-		virtual Handle loadResource(const char* resourceFilePath);
+		virtual Handle loadResource_Internal(const char* resourceFilePath);
 		virtual void preUnloadResource(Resource* _resource);
 
 		ShaderChain* getShaderChain(int id);
