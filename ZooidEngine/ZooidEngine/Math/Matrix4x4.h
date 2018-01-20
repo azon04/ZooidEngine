@@ -5,6 +5,7 @@
 #include "Vector3.h"
 #include "Quaternion.h"
 #include "Matrix3x3.h"
+#include "SSEHelper.h"
 
 class Matrix4x4 {
 	
@@ -133,6 +134,9 @@ public:
 	Matrix4x4 operator*(const Matrix4x4& _m) {
 		Matrix4x4 resultMat;
 
+#if USING_SSE
+		mul2Matrices(m_sseData, _m.m_sseData, resultMat.m_sseData);
+#else
 		for (int r = 0; r < 4; r++) {
 			for (int c = 0; c < 4; c++) {
 				resultMat.m_data[r][c] = 0;
@@ -141,23 +145,56 @@ public:
 				}
 			}
 		}
-
+#endif
 		return resultMat;
 	}
 
-	Vector3 mult(const Vector3 _v) {
+	FORCEINLINE Vector3 mult(const Vector3& _v) {
+#if USING_SSE
+		Vector3 resultVector;
+		__declspec(align(16)) float res[4];
+		__m128 v;
+
+		// Store in reverse because XMM using little endian (Intel is little endian)
+		v = _mm_set_ps(1.0f, _v.m_z, _v.m_y, _v.m_x);
+
+		v = mulVectorMatrixDivideByW(v, m_sseData);
+
+		_mm_store_ps(&res[0], v);
+		resultVector.m_x = res[0];
+		resultVector.m_y = res[1];
+		resultVector.m_z = res[2];
+
+		return resultVector;
+#else
 		float w = 1.0f;
 		Vector3 v = mult(_v, w);
 		return v / w;
+#endif
 	}
 
-	FORCEINLINE Vector3 mult(const Vector3 _v, float& _w) {
+	FORCEINLINE Vector3 mult(const Vector3& _v, float& _w) {
 		Vector3 resultVector;
+#if USING_SSE
+		__declspec(align(16)) float res[4];
+		__m128 v;
+
+		// Store in reverse because XMM using little endian (Intel is little endian)
+		v = _mm_set_ps(_w, _v.m_z, _v.m_y, _v.m_x);
+
+		v = mulVectorMatrix(v, m_sseData);
+
+		_mm_store_ps(&res[0], v);
+		resultVector.m_x = res[0];
+		resultVector.m_y = res[1];
+		resultVector.m_z = res[2];
+		_w = res[3];
+#else
 		resultVector.m_x = _v.getX() * m_data[0][0] + _v.getY() * m_data[1][0] + _v.getZ() * m_data[2][0] + _w * m_data[3][0];
 		resultVector.m_y = _v.getX() * m_data[0][1] + _v.getY() * m_data[1][1] + _v.getZ() * m_data[2][1] + _w * m_data[3][1];
 		resultVector.m_z = _v.getX() * m_data[0][2] + _v.getY() * m_data[1][2] + _v.getZ() * m_data[2][2] + _w * m_data[3][2];
 		_w = _v.getX() * m_data[0][3] + _v.getY() * m_data[1][3] + _v.getZ() * m_data[2][3] + _w * m_data[3][3];
-
+#endif
 		return resultVector;
 	}
 
@@ -354,7 +391,13 @@ public:
 	}
 
 	// DATA MEMBER
-	ZE::Float32 m_data[4][4];
+	union 
+	{
+#if USING_SSE
+		__m128 m_sseData[4];
+#endif
+		ZE::Float32 m_data[4][4];
+	};
 };
 
 FORCEINLINE Vector3 operator*(const Vector3& _v, Matrix4x4& _mat) {

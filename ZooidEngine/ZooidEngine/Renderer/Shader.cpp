@@ -179,7 +179,7 @@ namespace ZE {
 #endif
 	}
 
-	void ShaderChain::SetMat(const char* _constName, Matrix4x4 _value)
+	void ShaderChain::SetMat(const char* _constName, const Matrix4x4& _value)
 	{
 #if Z_RENDER_OPENGL
 		glUniformMatrix4fv(getUniformPosition(_constName), 1, GL_FALSE, &_value.m_data[0][0]);

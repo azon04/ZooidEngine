@@ -28,6 +28,8 @@ namespace ZE {
 		}
 
 		m_totalSize = totalSize;
+
+		// #TODO need to align
 		m_pMemBlock = malloc(m_totalSize);
 
 	}
@@ -120,7 +122,8 @@ namespace ZE {
 		}
 
 		poolAllocator->m_pMemBlock = (void*)((uintptr_t)poolAllocator->m_avails + (uintptr_t)(blockCount * sizeof(unsigned int)));
-		
+		// #TODO need to align
+
 		return poolAllocator;
 	}
 
@@ -128,6 +131,10 @@ namespace ZE {
 	{
 		size_t size = sizeof(PoolAllocator);
 		size += sizeof(unsigned int) * blockCount;
+		// Need Align
+
+		// #TODO need to align
+
 		size += itemSize * blockCount;
 		return size;
 	}

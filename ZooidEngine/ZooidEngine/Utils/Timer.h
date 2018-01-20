@@ -4,7 +4,7 @@
 #include "Utils/PrimitiveTypes.h"
 #include "Utils/Macros.h"
 
-#if __cplusplus <= 199711L && 0
+#if __cplusplus <= 199711L
 	#include <chrono>
 	
 	typedef std::chrono::high_resolution_clock::time_point Time;
@@ -17,7 +17,6 @@
 	typedef timespec Time;
 	typedef double DeltaTime;
 
-	#define TIMER_USING_HIGH_PRESICION 0
 #endif
 
 namespace ZE
@@ -27,9 +26,7 @@ namespace ZE
 	public:
 		Timer() 
 		{
-#if CPP11_CHRONO
-			t = std::chrono::high_resolution_clock::now();
-#endif
+			t = Now();
 		}
 
 		virtual ~Timer() {}
