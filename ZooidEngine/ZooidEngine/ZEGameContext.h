@@ -3,6 +3,8 @@
 
 #include "ZEngine.h"
 
+#include "Utils/Timer.h"
+
 namespace ZE {
 	
 	class MaterialManager;
@@ -25,6 +27,8 @@ namespace ZE {
 
 		MaterialManager* m_materialManager;
 		MeshManager* m_meshManager;
+		
+		Timer m_mainTimer;
 
 		FORCEINLINE IRenderer* getRenderer() const { return m_renderer; }
 		FORCEINLINE BufferManager* getBufferManager() const { return m_bufferManager; }
@@ -37,6 +41,7 @@ namespace ZE {
 		FORCEINLINE InputManager* getInputManager() const { return m_inputManager; };
 		FORCEINLINE MaterialManager* getMaterialManager() const { return m_materialManager; }
 		FORCEINLINE MeshManager* getMeshManager() const { return m_meshManager; }
+
 	};
 }
 #endif // __ZE_GAME_CONTEXT__

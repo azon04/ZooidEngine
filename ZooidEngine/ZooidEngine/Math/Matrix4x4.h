@@ -3,8 +3,10 @@
 
 #include "MathUtil.h"
 #include "Vector3.h"
+#include "Vector4.h"
 #include "Quaternion.h"
 #include "Matrix3x3.h"
+#include "SSEHelper.h"
 
 class Matrix4x4 {
 	
@@ -132,32 +134,13 @@ public:
 
 	Matrix4x4 operator*(const Matrix4x4& _m) {
 		Matrix4x4 resultMat;
-
-		for (int r = 0; r < 4; r++) {
-			for (int c = 0; c < 4; c++) {
-				resultMat.m_data[r][c] = 0;
-				for (int i = 0; i < 4; i++) {
-					resultMat.m_data[r][c] += m_data[r][i] * _m.m_data[i][c];
-				}
-			}
-		}
-
+		FastMul(*this, _m, resultMat);
 		return resultMat;
 	}
 
-	Vector3 mult(const Vector3 _v) {
-		float w = 1.0f;
-		Vector3 v = mult(_v, w);
-		return v / w;
-	}
-
-	FORCEINLINE Vector3 mult(const Vector3 _v, float& _w) {
+	FORCEINLINE Vector3 mult(const Vector3& _v) {
 		Vector3 resultVector;
-		resultVector.m_x = _v.getX() * m_data[0][0] + _v.getY() * m_data[1][0] + _v.getZ() * m_data[2][0] + _w * m_data[3][0];
-		resultVector.m_y = _v.getX() * m_data[0][1] + _v.getY() * m_data[1][1] + _v.getZ() * m_data[2][1] + _w * m_data[3][1];
-		resultVector.m_z = _v.getX() * m_data[0][2] + _v.getY() * m_data[1][2] + _v.getZ() * m_data[2][2] + _w * m_data[3][2];
-		_w = _v.getX() * m_data[0][3] + _v.getY() * m_data[1][3] + _v.getZ() * m_data[2][3] + _w * m_data[3][3];
-
+		Matrix4x4::FastVecMul(_v, *this, resultVector);
 		return resultVector;
 	}
 
@@ -311,6 +294,77 @@ public:
 		setN(axis.rotateVector(getN(), _radAngle));
 	}
 
+	static FORCEINLINE void Mul(const Matrix4x4& m1, const Matrix4x4& m2, Matrix4x4& res)
+	{
+		for (int r = 0; r < 4; r++) {
+			for (int c = 0; c < 4; c++) {
+				res.m_data[r][c] = 0;
+				for (int i = 0; i < 4; i++) {
+					res.m_data[r][c] += m1.m_data[r][i] * m2.m_data[i][c];
+				}
+			}
+		}
+	}
+
+	static FORCEINLINE void FastMul(const Matrix4x4& m1, const Matrix4x4& m2, Matrix4x4& res)
+	{
+#if USING_SSE
+		mul2Matrices(m1.m_sseData, m2.m_sseData, res.m_sseData);
+#else // Fallback if SSE not supported
+		Mul(m1, m2, res);
+#endif
+	}
+
+	static FORCEINLINE void VecMul(const Vector3& v, const Matrix4x4& m, Vector3& resultVector)
+	{
+		float _w = 1.0f;
+		resultVector.m_x = v.getX() * m.m_data[0][0] + v.getY() * m.m_data[1][0] + v.getZ() * m.m_data[2][0] + _w * m.m_data[3][0];
+		resultVector.m_y = v.getX() * m.m_data[0][1] + v.getY() * m.m_data[1][1] + v.getZ() * m.m_data[2][1] + _w * m.m_data[3][1];
+		resultVector.m_z = v.getX() * m.m_data[0][2] + v.getY() * m.m_data[1][2] + v.getZ() * m.m_data[2][2] + _w * m.m_data[3][2];
+		_w = v.getX() * m.m_data[0][3] + v.getY() * m.m_data[1][3] + v.getZ() * m.m_data[2][3] + _w * m.m_data[3][3];
+		resultVector.m_x /= _w;
+		resultVector.m_y /= _w;
+		resultVector.m_z /= _w;
+	}
+
+	static FORCEINLINE void FastVecMul(const Vector3& _v, const Matrix4x4& m, Vector3& resultVector)
+	{
+#if USING_SSE
+		__declspec(align(16)) float res[4];
+		__m128 v;
+		float _w = 1.0f;
+
+		// Store in reverse because XMM using little endian (Intel is little endian)
+		v = _mm_set_ps(_w, _v.m_z, _v.m_y, _v.m_x);
+
+		v = mulVectorMatrix(v, m.m_sseData);
+
+		_mm_store_ps(&res[0], v);
+		resultVector.m_x = res[0] / res[3];
+		resultVector.m_y = res[1] / res[3];
+		resultVector.m_z = res[2] / res[3];
+		_w = res[3];
+#else // Fallback if SSE not supported
+		VecMul(_v, m, resultVector);
+#endif
+	}
+
+	static FORCEINLINE void Vec4Mul(const Vector4& v, const Matrix4x4& m, Vector4& resultVector)
+	{
+		resultVector.m_x = v.m_x * m.m_data[0][0] + v.m_y * m.m_data[1][0] + v.m_z * m.m_data[2][0] + v.m_w * m.m_data[3][0];
+		resultVector.m_y = v.m_x * m.m_data[0][1] + v.m_y * m.m_data[1][1] + v.m_z * m.m_data[2][1] + v.m_w * m.m_data[3][1];
+		resultVector.m_z = v.m_x * m.m_data[0][2] + v.m_y * m.m_data[1][2] + v.m_z * m.m_data[2][2] + v.m_w * m.m_data[3][2];
+		resultVector.m_w = v.m_x * m.m_data[0][3] + v.m_y * m.m_data[1][3] + v.m_z * m.m_data[2][3] + v.m_w * m.m_data[3][3];
+	}
+
+	static FORCEINLINE void FastVec4Mul(const Vector4& v, const Matrix4x4& m, Vector4& resultVector)
+	{
+#if USING_SSE
+		resultVector.m_sseData = mulVectorMatrix(v.m_sseData, m.m_sseData);
+#else // Fall back
+		Vec4Mul(v, m, resultVector);
+#endif
+	}
 	// Getter
 	FORCEINLINE Vector3 getU() {
 		return Vector3(m_data[0][0], m_data[0][1], m_data[0][2]);
@@ -354,7 +408,13 @@ public:
 	}
 
 	// DATA MEMBER
-	ZE::Float32 m_data[4][4];
+	union 
+	{
+#if USING_SSE
+		__m128 m_sseData[4];
+#endif
+		ZE::Float32 m_data[4][4];
+	};
 };
 
 FORCEINLINE Vector3 operator*(const Vector3& _v, Matrix4x4& _mat) {

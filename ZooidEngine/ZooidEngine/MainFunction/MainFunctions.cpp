@@ -137,6 +137,9 @@ namespace ZE {
 
 	void MainThreadJob(GameContext* _gameContext)
 	{
+		double deltaTime = _gameContext->m_mainTimer.ResetAndGetDeltaMS();
+
+		ZEINFO("Delta Time : %.2f ms", deltaTime);
 
 		// Draw Base Lines
 		{
@@ -160,6 +163,7 @@ namespace ZE {
 		{
 			ZE::Handle handleUpdate("EventUpdate", sizeof(ZE::Event_UPDATE));
 			ZE::Event_UPDATE* eventUpdate = new(handleUpdate) ZE::Event_UPDATE();
+			eventUpdate->m_deltaTime = deltaTime;
 			_gameContext->getEventDispatcher()->handleEvent(eventUpdate);
 			_gameContext->getInputManager()->handleEvent(eventUpdate);
 			handleUpdate.release();

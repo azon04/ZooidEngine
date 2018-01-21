@@ -77,7 +77,7 @@ public:
 
 	void SetVec3(const char* _constName, Vector3 _value);
 	void SetFloat(const char* _constName, float _value);
-	void SetMat(const char* _constName, Matrix4x4 _value);
+	void SetMat(const char* _constName, const Matrix4x4& _value);
 	void SetInt(const char* _constName, int _value);
 	void SetTexture(const char* _constName, GPUTexture* _texture, Int32 _textureIndex);
 

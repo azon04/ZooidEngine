@@ -90,6 +90,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;Z_RENDER_OPENGL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)\glew-2.0.0\include;$(SolutionDir)\glfw\include;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessToFile>false</PreprocessToFile>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -181,8 +182,10 @@
     <ClInclude Include="Math\Matrix3x3.h" />
     <ClInclude Include="Math\Matrix4x4.h" />
     <ClInclude Include="Math\Quaternion.h" />
+    <ClInclude Include="Math\SSEHelper.h" />
     <ClInclude Include="Math\Vector2.h" />
     <ClInclude Include="Math\Vector3.h" />
+    <ClInclude Include="Math\Vector4.h" />
     <ClInclude Include="Memory\Handle.h" />
     <ClInclude Include="Memory\IAllocator.h" />
     <ClInclude Include="Memory\MemoryHelper.h" />
@@ -228,6 +231,7 @@
     <ClInclude Include="Utils\PrimitiveTypes.h" />
     <ClInclude Include="Utils\String.h" />
     <ClInclude Include="Utils\StringFunc.h" />
+    <ClInclude Include="Utils\Timer.h" />
     <ClInclude Include="Utils\ZEngineHelper.h" />
     <ClInclude Include="ZEGameContext.h" />
     <ClInclude Include="ZEngine.h" />
