@@ -185,6 +185,7 @@
     <ClInclude Include="Math\SSEHelper.h" />
     <ClInclude Include="Math\Vector2.h" />
     <ClInclude Include="Math\Vector3.h" />
+    <ClInclude Include="Math\Vector4.h" />
     <ClInclude Include="Memory\Handle.h" />
     <ClInclude Include="Memory\IAllocator.h" />
     <ClInclude Include="Memory\MemoryHelper.h" />

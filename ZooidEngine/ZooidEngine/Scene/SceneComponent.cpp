@@ -8,7 +8,7 @@ namespace ZE {
 
 	void SceneComponent::calculateTransform(const Matrix4x4& parentMat)
 	{
-		m_worldTransform = m_transform * parentMat;
+		Matrix4x4::FastMul(parentMat, m_transform, m_worldTransform);
 	}
 
 	void SceneComponent::setupComponent()
