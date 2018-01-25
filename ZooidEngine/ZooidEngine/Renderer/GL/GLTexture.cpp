@@ -1,15 +1,15 @@
-#include "GPUTexture.h"
+#include "GLTexture.h"
 
 namespace ZE
-{
-	void GPUTexture::FromTexture(Texture* texture)
-	{
-		m_textureRes = texture;
-		
-#if Z_RENDER_OPENGL
-		glGenTextures(1, &m_textureBuff);
+{ 
 
-		glBindTexture(GL_TEXTURE_2D, m_textureBuff);
+	void GLTexture::FromTexture(Texture* texture)
+	{
+		IGPUTexture::FromTexture(texture);
+
+		glGenTextures(1, &m_textureBuffer);
+
+		glBindTexture(GL_TEXTURE_2D, m_textureBuffer);
 
 		// #TODO make these parameterize
 		// Wrap functions
@@ -26,36 +26,28 @@ namespace ZE
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 		// #TODO Should we release the memory of the image when the image already loading to GPU?
-#endif
-
 	}
 
-	void GPUTexture::release()
+	void GLTexture::release()
 	{
-#if Z_RENDER_OPENGL
-		if (m_textureBuff != 0)
+		if (m_textureBuffer != 0)
 		{
-			glDeleteTextures(1, &m_textureBuff);
-			m_textureBuff = 0;
+			glDeleteTextures(1, &m_textureBuffer);
+			m_textureBuffer = 0;
 		}
-#endif
 	}
 
-	void GPUTexture::Bind()
+	void GLTexture::Bind()
 	{
-#if Z_RENDER_OPENGL
-		if (m_textureBuff != 0)
+		if (m_textureBuffer != 0)
 		{
-			glBindTexture(GL_TEXTURE_2D, m_textureBuff);
+			glBindTexture(GL_TEXTURE_2D, m_textureBuffer);
 		}
-#endif
 	}
 
-	void GPUTexture::Unbind()
+	void GLTexture::Unbind()
 	{
-#if Z_RENDER_OPENGL
 		glBindTexture(GL_TEXTURE_2D, 0);
-#endif
 	}
 
 }

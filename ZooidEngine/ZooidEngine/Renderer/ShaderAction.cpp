@@ -73,7 +73,7 @@ namespace ZE {
 
 	}
 
-	void ShaderAction::SetShaderTextureVar(const char* _name, GPUTexture* _texture, Int32 _texture_index)
+	void ShaderAction::SetShaderTextureVar(const char* _name, IGPUTexture* _texture, Int32 _texture_index)
 	{
 		ShaderVariable shaderVariable;
 		StringFunc::WriteTo(shaderVariable.m_varName, _name, 32);

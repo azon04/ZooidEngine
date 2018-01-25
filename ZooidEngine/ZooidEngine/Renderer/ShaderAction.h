@@ -5,7 +5,7 @@
 
 #include "Shader.h"
 #include "IGPUBufferArray.h"
-#include "GPUTexture.h"
+#include "IGPUTexture.h"
 
 #define SHADER_VAR_TYPE_FLOAT 0
 #define SHADER_VAR_TYPE_INT 1
@@ -35,7 +35,7 @@ struct ShaderVariable
 
 		struct tTexture 
 		{
-			GPUTexture* texture_data;
+			IGPUTexture* texture_data;
 			Int32 texture_index;
 		} texture_value;
 
@@ -63,7 +63,7 @@ public:
 	void SetShaderVec3Var(const char* _name, const Vector3& _value);
 	void SetShaderMatVar(const char* _name, const Matrix4x4& _value);
 	void SetData(const char* _name, void* _data);
-	void SetShaderTextureVar(const char* _name, GPUTexture* _texture, Int32 _texture_index);
+	void SetShaderTextureVar(const char* _name, IGPUTexture* _texture, Int32 _texture_index);
 	void SetType(ZE::UInt16 _shaderActionType);
 	void SetConstantsBlockBuffer(const char* _name, IGPUBufferData* _constantBlockBuffer);
 

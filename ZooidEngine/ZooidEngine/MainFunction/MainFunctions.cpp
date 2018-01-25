@@ -5,7 +5,7 @@
 #include "Scene/CameraComponent.h"
 #include "Scene/RenderComponent.h"
 #include "Scene/Light/LightComponent.h"
-#include "Renderer/GPUTexture.h"
+#include "Renderer/IGPUTexture.h"
 #include "Memory/Handle.h"
 #include "Events/Events.h"
 #include "FileSystem/DirectoryHelper.h"
@@ -44,7 +44,7 @@ namespace ZE {
 		BufferManager::Init(_gameContext);
 		_gameContext->m_bufferManager = BufferManager::getInstance();
 		
-		TextureManager::Init();
+		TextureManager::Init(_gameContext);
 		_gameContext->m_textureManager = TextureManager::getInstance();
 
 		MaterialManager::Init();

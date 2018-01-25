@@ -193,7 +193,7 @@ namespace ZE {
 #endif
 	}
 
-	void ShaderChain::SetTexture(const char* _constName, GPUTexture* _texture, Int32 _textureIndex)
+	void ShaderChain::SetTexture(const char* _constName, IGPUTexture* _texture, Int32 _textureIndex)
 	{
 #if Z_RENDER_OPENGL
 		GLint pos = getUniformPosition(_constName);

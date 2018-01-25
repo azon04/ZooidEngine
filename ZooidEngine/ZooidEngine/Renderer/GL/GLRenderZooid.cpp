@@ -3,6 +3,7 @@
 #include "GLRenderer.h"
 #include "GLBufferData.h"
 #include "GLBufferArray.h"
+#include "GLTexture.h"
 
 #include "Memory/Handle.h"
 
@@ -21,6 +22,13 @@ namespace ZE
 		Handle hRenderBufferArray("Render Buffer Array", sizeof(GLBufferArray));
 		GLBufferArray* pBufferArray = new(hRenderBufferArray) GLBufferArray();
 		return hRenderBufferArray;
+	}
+
+	ZE::Handle GLRenderZooid::CreateRenderTexture()
+	{
+		Handle hTexture("Render Texture", sizeof(GLTexture));
+		GLTexture* pTexture = new(hTexture) GLTexture();
+		return hTexture;
 	}
 
 	void GLRenderZooid::Init()

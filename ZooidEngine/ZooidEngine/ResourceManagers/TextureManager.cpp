@@ -3,8 +3,11 @@
 #include "Memory/Handle.h"
 
 #include "Resources/Texture.h"
-#include "Renderer/GPUTexture.h"
+#include "Renderer/IGPUTexture.h"
 #include "FileSystem/DirectoryHelper.h"
+
+#include "ZEGameContext.h"
+#include "Renderer/RenderZooid.h"
 
 namespace ZE
 {
@@ -12,12 +15,13 @@ namespace ZE
 
 	TextureManager* TextureManager::s_instance = nullptr;
 
-	void TextureManager::Init()
+	void TextureManager::Init(GameContext* _gameContext)
 	{
 		if (!s_instance)
 		{
 			Handle textureManagerHandle("TEXTURE_MANAGER", sizeof(TextureManager));
 			s_instance = new (textureManagerHandle) TextureManager();
+			s_instance->m_gameContext = _gameContext;
 		}
 
 		s_instance->loadResourceAsync(GetPackageAssetPath("Basic", "Texture", "container2.png").c_str());
@@ -39,11 +43,12 @@ namespace ZE
 
 	ZE::Handle TextureManager::loadResource_Internal(const char* resourceFilePath)
 	{
-		Handle hGPUTexture(sizeof(GPUTexture));
+		Handle hGPUTexture(sizeof(IGPUTexture));
 		Handle hCPUTexture = Texture::loadTexture(resourceFilePath);
 		if (hCPUTexture.isValid())
 		{
-			GPUTexture* pGPUTexture = new (hGPUTexture) GPUTexture();
+			hGPUTexture = m_gameContext->getRenderZooid()->CreateRenderTexture();
+			IGPUTexture* pGPUTexture = hGPUTexture.getObject<IGPUTexture>();
 			pGPUTexture->FromTexture(hCPUTexture.getObject<Texture>());
 		}
 
@@ -57,7 +62,7 @@ namespace ZE
 
 	void TextureManager::preUnloadResource(Resource* _resource)
 	{
-		GPUTexture* pGPUTexture = _resource->m_hActual.getObject<GPUTexture>();
+		IGPUTexture* pGPUTexture = _resource->m_hActual.getObject<IGPUTexture>();
 		pGPUTexture->release();
 	}
 

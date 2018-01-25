@@ -9,7 +9,7 @@
 
 namespace ZE
 {
-	class GPUTexture;
+	class IGPUTexture;
 	class GameContext;
 
 	enum class TextureType : UInt8
@@ -20,7 +20,7 @@ namespace ZE
 
 	struct MaterialTexture
 	{
-		GPUTexture* texture;
+		IGPUTexture* texture;
 		TextureType type;
 	};
 

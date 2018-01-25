@@ -3,7 +3,7 @@
 #include "TextureManager.h"
 
 #include "Resources/Material.h"
-#include "Renderer/GPUTexture.h"
+#include "Renderer/IGPUTexture.h"
 
 #include "FileSystem/FileReader.h"
 #include "FileSystem/DirectoryHelper.h"
@@ -59,7 +59,7 @@ namespace ZE
 				if (hTexture.isValid())
 				{
 					MaterialTexture texture;
-					texture.texture = hTexture.getObject<GPUTexture>();
+					texture.texture = hTexture.getObject<IGPUTexture>();
 					texture.type = TextureType::DIFFUSE;
 					pMaterial->m_textures.push_back(texture);
 				}
@@ -71,7 +71,7 @@ namespace ZE
 				if (hTexture.isValid())
 				{
 					MaterialTexture texture;
-					texture.texture = hTexture.getObject<GPUTexture>();
+					texture.texture = hTexture.getObject<IGPUTexture>();
 					texture.type = TextureType::SPECULAR;
 					pMaterial->m_textures.push_back(texture);
 				}
