@@ -31,14 +31,7 @@ namespace ZE {
 			shaderAction.SetShaderAndBuffer(shader, m_mesh->m_bufferArray);
 			shaderAction.SetShaderMatVar("modelMat", m_worldTransform);
 			
-			if (m_mesh->m_material)
-			{
-				if (m_mesh->m_material->m_texture)
-				{
-					shaderAction.SetShaderTextureVar("material.diffuseMap", m_mesh->m_material->m_texture, 0);
-				}
-				shaderAction.SetShaderFloatVar("material.shininess", m_mesh->m_material->m_shininess);
-			}
+			m_mesh->m_material ? m_mesh->m_material->Bind(shaderAction) : nullptr;
 
 			shaderAction.SetConstantsBlockBuffer("shader_data", m_gameContext->getDrawList()->m_mainConstantBuffer);
 			shaderAction.SetConstantsBlockBuffer("light_data", m_gameContext->getDrawList()->m_lightConstantBuffer);

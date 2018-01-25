@@ -9,6 +9,7 @@
 struct Material
 {
 	sampler2D diffuseMap;
+	sampler2D specularMap;
 
 	float shininess;
 };
@@ -97,7 +98,7 @@ vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir)
 	// combine results
 	vec3 ambient = light.ambient * vec3(texture(material.diffuseMap, vsTexCoord));
 	vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuseMap, vsTexCoord));
-	vec3 specular = light.specular * spec;
+	vec3 specular = light.specular * spec * vec3(texture(material.specularMap, vsTexCoord));
 	
 	return (ambient + diffuse + specular);
 }
@@ -116,7 +117,7 @@ vec3 CalcPointLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir)
 	// combine results
 	vec3 ambient = light.ambient * vec3(texture(material.diffuseMap, vsTexCoord));
 	vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuseMap, vsTexCoord));
-	vec3 specular = light.specular * spec;
+	vec3 specular = light.specular * spec * vec3(texture(material.specularMap, vsTexCoord));
 	ambient *= attenuation;
 	diffuse *= attenuation;
 	specular *= attenuation;
@@ -142,7 +143,7 @@ vec3 CalcSpotLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir)
 	// combine results
 	vec3 ambient = light.ambient * vec3(texture(material.diffuseMap, vsTexCoord));
 	vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuseMap, vsTexCoord));
-	vec3 specular = light.specular * spec;
+	vec3 specular = light.specular * spec * vec3(texture(material.specularMap, vsTexCoord));
 	ambient *= attenuation;
 	diffuse *= attenuation * intensity;
 	specular *= attenuation * intensity;

@@ -8,11 +8,11 @@ namespace ZE
 	{
 		Int32 length = StringFunc::Length(resourceFilePath);
 
-		if (resourceFilePath[length - 3] == 'v' && resourceFilePath[length - 2] == 's')
+		if (resourceFilePath[length - 2] == 'v' && resourceFilePath[length - 1] == 's')
 		{
 			return Z_SHADER_VERTEX;
 		}
-		else if (resourceFilePath[length - 5] == 'f' && resourceFilePath[length - 4] == 'r' && resourceFilePath[length - 3] == 'a' && resourceFilePath[length - 2] == 'g')
+		else if (resourceFilePath[length - 4] == 'f' && resourceFilePath[length - 3] == 'r' && resourceFilePath[length - 2] == 'a' && resourceFilePath[length - 1] == 'g')
 		{
 			return Z_SHADER_PIXEL;
 		}

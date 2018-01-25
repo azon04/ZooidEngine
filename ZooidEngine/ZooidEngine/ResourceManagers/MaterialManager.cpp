@@ -52,13 +52,28 @@ namespace ZE
 		{
 			reader.readNextString(tokenBuffer);
 
-			if (StringFunc::Compare(tokenBuffer, "tex") == 0)
+			if (StringFunc::Compare(tokenBuffer, "diffuse") == 0)
 			{
 				reader.readNextString(tokenBuffer);
 				Handle hTexture = TextureManager::getInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
 				if (hTexture.isValid())
 				{
-					pMaterial->m_texture = hTexture.getObject<GPUTexture>();
+					MaterialTexture texture;
+					texture.texture = hTexture.getObject<GPUTexture>();
+					texture.type = TextureType::DIFFUSE;
+					pMaterial->m_textures.push_back(texture);
+				}
+			}
+			else if (StringFunc::Compare(tokenBuffer, "specular") == 0)
+			{
+				reader.readNextString(tokenBuffer);
+				Handle hTexture = TextureManager::getInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
+				if (hTexture.isValid())
+				{
+					MaterialTexture texture;
+					texture.texture = hTexture.getObject<GPUTexture>();
+					texture.type = TextureType::SPECULAR;
+					pMaterial->m_textures.push_back(texture);
 				}
 			}
 			else if (StringFunc::Compare(tokenBuffer, "shininess") == 0)
