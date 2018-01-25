@@ -38,7 +38,7 @@ namespace ZE {
 			_gameContext->m_renderer = _gameContext->m_renderZooid->GetRenderer();
 		}
 
-		ShaderManager::Init();
+		ShaderManager::Init(_gameContext);
 		_gameContext->m_shaderManager = ShaderManager::getInstance();
 
 		BufferManager::Init(_gameContext);
@@ -152,7 +152,7 @@ namespace ZE {
 		// Draw Base Lines
 		{
 			ZE::ShaderAction& shaderAction = _gameContext->getDrawList()->getNextShaderAction();
-			ZE::ShaderChain* shader = ZE::ShaderManager::getInstance()->getShaderChain(2);
+			ZE::IShaderChain* shader = ZE::ShaderManager::getInstance()->getShaderChain(2);
 
 			shaderAction.SetShaderAndBuffer(shader, ZE::BufferManager::getInstance()->m_GPUBufferArrays[2]);
 			shaderAction.SetShaderMatVar("modelMat", Matrix4x4());

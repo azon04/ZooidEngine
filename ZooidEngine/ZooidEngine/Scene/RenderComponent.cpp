@@ -5,7 +5,7 @@
 #include "Events/Events.h"
 #include "Renderer/DrawList.h"
 #include "Renderer/ShaderAction.h"
-#include "Renderer/Shader.h"
+#include "Renderer/IShader.h"
 #include "ResourceManagers/ShaderManager.h"
 
 #include "Resources/Mesh.h"
@@ -26,7 +26,7 @@ namespace ZE {
 		if (m_mesh)
 		{
 			ShaderAction& shaderAction = m_gameContext->getDrawList()->getNextShaderAction();
-			ShaderChain* shader = ShaderManager::getInstance()->getShaderChain(Z_SHADER_CHAIN_3D_DEFAULT_LIT);
+			IShaderChain* shader = ShaderManager::getInstance()->getShaderChain(Z_SHADER_CHAIN_3D_DEFAULT_LIT);
 
 			shaderAction.SetShaderAndBuffer(shader, m_mesh->m_bufferArray);
 			shaderAction.SetShaderMatVar("modelMat", m_worldTransform);

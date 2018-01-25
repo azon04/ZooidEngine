@@ -11,7 +11,7 @@ namespace ZE {
 		m_shaderActionType = SHADER_ACTION_DRAW;
 	}
 
-	ShaderAction::ShaderAction(ShaderChain* shader)
+	ShaderAction::ShaderAction(IShaderChain* shader)
 	{
 		m_shader = shader;
 	}
@@ -25,7 +25,7 @@ namespace ZE {
 		m_vertexSize = 0;
 	}
 
-	void ShaderAction::SetShaderAndBuffer(ShaderChain* _shader, IGPUBufferArray* _bufferArray)
+	void ShaderAction::SetShaderAndBuffer(IShaderChain* _shader, IGPUBufferArray* _bufferArray)
 	{
 		m_shader = _shader;
 		m_bufferArray = _bufferArray;

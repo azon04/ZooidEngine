@@ -3,7 +3,7 @@
 
 #include "../Utils/PrimitiveTypes.h"
 
-#include "Shader.h"
+#include "IShader.h"
 #include "IGPUBufferArray.h"
 #include "IGPUTexture.h"
 
@@ -18,7 +18,8 @@
 #define SHADER_ACTION_DRAW 0
 #define SHADER_ACTION_SETGLOBAL 1
 
-namespace ZE {
+namespace ZE 
+{
 
 struct ShaderVariable
 {
@@ -54,10 +55,10 @@ class ShaderAction {
 public:
 
 	ShaderAction();
-	ShaderAction(ShaderChain* shader);
+	ShaderAction(IShaderChain* shader);
 
 	void Reset();
-	void SetShaderAndBuffer(ShaderChain* _shader, IGPUBufferArray* _bufferArray);
+	void SetShaderAndBuffer(IShaderChain* _shader, IGPUBufferArray* _bufferArray);
 	void SetShaderFloatVar(const char* _name, float _value);
 	void SetShaderIntVar(const char* _name, Int32 _value);
 	void SetShaderVec3Var(const char* _name, const Vector3& _value);
@@ -70,7 +71,7 @@ public:
 	ZE::Int32 m_vertexSize;
 	ZE::UInt16 m_shaderActionType;
 	
-	ShaderChain* m_shader;
+	IShaderChain* m_shader;
 	IGPUBufferArray* m_bufferArray;
 	Array<ShaderVariable, true> m_shaderVariables;
 };

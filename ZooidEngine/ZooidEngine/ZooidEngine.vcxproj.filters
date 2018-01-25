@@ -102,9 +102,6 @@
     <ClInclude Include="Renderer\IRenderer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\Shader.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer\BufferData.h">
       <Filter>Renderer</Filter>
     </ClInclude>
@@ -321,15 +318,18 @@
     <ClInclude Include="Renderer\GL\GLTexture.h">
       <Filter>Renderer\GL</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer\IShader.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="GLShader.h">
+      <Filter>Renderer\GL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
       <Filter>MainFunction</Filter>
     </ClCompile>
     <ClCompile Include="Renderer\BufferData.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer\Shader.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Renderer\BufferLayout.cpp">
@@ -510,6 +510,12 @@
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Renderer\GL\GLTexture.cpp">
+      <Filter>Renderer\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\IShader.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="GLShader.cpp">
       <Filter>Renderer\GL</Filter>
     </ClCompile>
   </ItemGroup>
