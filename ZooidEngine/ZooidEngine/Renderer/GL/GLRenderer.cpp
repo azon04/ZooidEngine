@@ -1,6 +1,6 @@
 #include "GLRenderer.h"
 
-#include "../ZEngine.h"
+#include "ZEngine.h"
 
 #include <cstring>
 

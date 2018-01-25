@@ -201,7 +201,7 @@ namespace ZE {
 #endif
 	}
 
-	void ShaderChain::BindConstantBuffer(const char* _blockName, GPUBufferData* _constantBuffer)
+	void ShaderChain::BindConstantBuffer(const char* _blockName, IGPUBufferData* _constantBuffer)
 	{
 #if Z_RENDER_OPENGL
 		GLint block_index = glGetUniformBlockIndex(m_GLProgram, _blockName);

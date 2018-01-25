@@ -1,6 +1,6 @@
 #include "MainFunctions.h"
 
-#include "../Common/GlobalRegistry.h"
+#include "Common/GlobalRegistry.h"
 
 #include "Scene/CameraComponent.h"
 #include "Scene/RenderComponent.h"
@@ -13,6 +13,10 @@
 #include "ResourceManagers/MeshManager.h"
 #include "ResourceManagers/MaterialManager.h"
 
+#if Z_RENDER_OPENGL
+#include "Renderer/GL/GLRenderZooid.h"
+#endif
+
 namespace ZE {
 
 	void MainSetup(GameContext* _gameContext)
@@ -23,10 +27,15 @@ namespace ZE {
 		// Register all classes
 		GlobalRegistry::Register();
 
+		// Creating rendering Zooid
+
 		{
-			Handle handle("RENDERER", sizeof(ZE::GLRenderer));
-			_gameContext->m_renderer = new(handle) ZE::GLRenderer();
-			_gameContext->m_renderer->Setup();
+#if Z_RENDER_OPENGL
+			Handle renderZooidHandle("Render Zooid", sizeof(GLRenderZooid));
+			_gameContext->m_renderZooid = new(renderZooidHandle) GLRenderZooid(_gameContext);
+#endif
+			_gameContext->m_renderZooid->Init();
+			_gameContext->m_renderer = _gameContext->m_renderZooid->GetRenderer();
 		}
 
 		ShaderManager::Init();
@@ -120,7 +129,6 @@ namespace ZE {
 			_gameContext->getRootComponent()->addChild(pRenderComp);
 		}
 
-
 	}
 
 	void MainClean(GameContext* _gameContext)
@@ -130,7 +138,7 @@ namespace ZE {
 		ShaderManager::Destroy();
 		TextureManager::Destroy();
 
-		_gameContext->m_renderer->Clean();
+		_gameContext->m_renderZooid->Destroy();
 
 		MemoryManager::Deconstruct();
 	}

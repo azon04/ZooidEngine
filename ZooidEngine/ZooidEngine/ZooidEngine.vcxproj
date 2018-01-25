@@ -194,11 +194,15 @@
     <ClInclude Include="Memory\StackAllocator.h" />
     <ClInclude Include="Renderer\BufferData.h" />
     <ClInclude Include="Renderer\BufferLayout.h" />
+    <ClInclude Include="Renderer\GL\GLBufferArray.h" />
+    <ClInclude Include="Renderer\GL\GLBufferData.h" />
+    <ClInclude Include="Renderer\GL\GLRenderer.h" />
+    <ClInclude Include="Renderer\GL\GLRenderZooid.h" />
+    <ClInclude Include="Renderer\RenderZooid.h" />
     <ClInclude Include="ResourceManagers\BufferManager.h" />
     <ClInclude Include="Renderer\DrawList.h" />
-    <ClInclude Include="Renderer\GLRenderer.h" />
-    <ClInclude Include="Renderer\GPUBufferArray.h" />
-    <ClInclude Include="Renderer\GPUBufferData.h" />
+    <ClInclude Include="Renderer\IGPUBufferArray.h" />
+    <ClInclude Include="Renderer\IGPUBufferData.h" />
     <ClInclude Include="Renderer\GPUTexture.h" />
     <ClInclude Include="Renderer\IRenderer.h" />
     <ClInclude Include="Renderer\Shader.h" />
@@ -236,6 +240,7 @@
     <ClInclude Include="ZEGameContext.h" />
     <ClInclude Include="ZEngine.h" />
     <ClInclude Include="ZEngineIncl.h" />
+    <ClInclude Include="Zooid\BaseZooid.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common\GlobalRegistry.cpp" />
@@ -263,11 +268,15 @@
     <ClCompile Include="Memory\StackAllocator.cpp" />
     <ClCompile Include="Renderer\BufferData.cpp" />
     <ClCompile Include="Renderer\BufferLayout.cpp" />
+    <ClCompile Include="Renderer\GL\GLBufferArray.cpp" />
+    <ClCompile Include="Renderer\GL\GLBufferData.cpp" />
+    <ClCompile Include="Renderer\GL\GLRenderer.cpp" />
+    <ClCompile Include="Renderer\GL\GLRenderZooid.cpp" />
+    <ClCompile Include="Renderer\RenderZooid.cpp" />
     <ClCompile Include="ResourceManagers\BufferManager.cpp" />
     <ClCompile Include="Renderer\DrawList.cpp" />
-    <ClCompile Include="Renderer\GLRenderer.cpp" />
-    <ClCompile Include="Renderer\GPUBufferArray.cpp" />
-    <ClCompile Include="Renderer\GPUBufferData.cpp" />
+    <ClCompile Include="Renderer\IGPUBufferArray.cpp" />
+    <ClCompile Include="Renderer\IGPUBufferData.cpp" />
     <ClCompile Include="Renderer\GPUTexture.cpp" />
     <ClCompile Include="Renderer\Shader.cpp" />
     <ClCompile Include="Renderer\ShaderAction.cpp" />
@@ -295,6 +304,7 @@
     <ClCompile Include="Utils\Debug.cpp" />
     <ClCompile Include="Utils\StringFunc.cpp" />
     <ClCompile Include="ZEGameContext.cpp" />
+    <ClCompile Include="Zooid\BaseZooid.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\DefaultGLSimple.frag" />

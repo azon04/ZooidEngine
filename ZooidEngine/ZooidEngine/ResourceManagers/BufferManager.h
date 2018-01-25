@@ -4,8 +4,8 @@
 #include "ResourceManager.h"
 
 #include "Renderer/BufferData.h"
-#include "Renderer/GPUBufferData.h"
-#include "Renderer/GPUBufferArray.h"
+#include "Renderer/IGPUBufferData.h"
+#include "Renderer/IGPUBufferArray.h"
 #include "Renderer/BufferLayout.h"
 #include "Utils/Array.h"
 
@@ -21,7 +21,7 @@ private:
 
 	static BufferManager* m_instance;
 
-	BufferManager();
+	BufferManager(GameContext* _gameContext);
 
 public:
 	
@@ -30,9 +30,9 @@ public:
 	static void Init(GameContext* _gameContext);
 	static void Destroy();
 
-	GPUBufferData* createGPUBufferFromBuffer(BufferData* _bufferData, bool _bStatic = true, bool _manualManage = false);
-	GPUBufferData* createConstantBufferFromBuffer(BufferData* _bufferData);
-	GPUBufferData* createConstantBuffer(void* data, size_t size);
+	IGPUBufferData* createGPUBufferFromBuffer(BufferData* _bufferData, bool _bStatic = true, bool _manualManage = false);
+	IGPUBufferData* createConstantBufferFromBuffer(BufferData* _bufferData);
+	IGPUBufferData* createConstantBuffer(void* data, size_t size);
 	Handle createBufferArray(BufferData* _vertexBuffer, BufferData* _indexBuffer, BufferData* _gpuBuffer);
 
 	virtual Handle loadResource_Internal(const char* resourceFilePath) override;
@@ -40,10 +40,12 @@ public:
 
 
 	Array<BufferData*, true> m_buffers;
-	Array<GPUBufferData*, true> m_GPUBuffers;
-	Array<GPUBufferArray*, true> m_GPUBufferArrays;
-	Array<GPUBufferData*, true> m_constantGPUBuffer;
+	Array<IGPUBufferData*, true> m_GPUBuffers;
+	Array<IGPUBufferArray*, true> m_GPUBufferArrays;
+	Array<IGPUBufferData*, true> m_constantGPUBuffer;
 	
+	GameContext* m_gameContext;
+
 private:
 	int getBufferLayoutByString(const char* stringType);
 };

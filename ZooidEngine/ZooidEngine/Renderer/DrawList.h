@@ -26,10 +26,10 @@ namespace ZE {
 		ZE::Int32 m_size;
 
 		ShaderData m_shaderData;
-		GPUBufferData* m_mainConstantBuffer;
+		IGPUBufferData* m_mainConstantBuffer;
 
 		LightData m_lightData;
-		GPUBufferData* m_lightConstantBuffer;
+		IGPUBufferData* m_lightConstantBuffer;
 	};
 
 };

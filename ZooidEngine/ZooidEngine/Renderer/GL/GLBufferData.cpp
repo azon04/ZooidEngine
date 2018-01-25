@@ -1,18 +1,12 @@
-#include "GPUBufferData.h"
+#include "GLBufferData.h"
 
-#include <GL/glew.h>
+namespace ZE
+{
 
-namespace ZE {
-
-	GPUBufferData::~GPUBufferData()
+	void GLBufferData::FromBufferData(BufferData* _bufferData)
 	{
-		release();
-	}
+		IGPUBufferData::FromBufferData(_bufferData);
 
-	void GPUBufferData::FromBufferData(BufferData* _bufferData)
-	{
-		m_bufferType = _bufferData->m_type;
-		// #OPENGL SPECIFIC
 		GLenum usage = m_isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW;
 		glGenBuffers(1, &m_BBO);
 		if (m_bufferType == VERTEX_BUFFER) {
@@ -32,23 +26,10 @@ namespace ZE {
 			glBindBuffer(GL_UNIFORM_BUFFER, 0);
 		}
 
-		m_BufferData = _bufferData;
-		m_dataCount = _bufferData->m_count;
-
-		if (m_bufferType != UNIFORM_BUFFER)
-		{
-			SetupLayout(BufferLayoutManager::getInstance()->m_bufferLayout[_bufferData->m_bufferLayout]);
-		}
 	}
 
-	void GPUBufferData::SetupLayout(BufferLayout* _layouts)
+	void GLBufferData::Bind()
 	{
-		this->m_layout = _layouts;
-	}
-
-	void GPUBufferData::Bind()
-	{
-		// #OPENGL specific
 		if (m_bufferType == VERTEX_BUFFER) {
 			glBindBuffer(GL_ARRAY_BUFFER, m_BBO);
 			if (!m_isStatic)
@@ -79,9 +60,8 @@ namespace ZE {
 		}
 	}
 
-	void GPUBufferData::UnBind()
+	void GLBufferData::UnBind()
 	{
-		// #OPENGL specific
 		if (m_bufferType == VERTEX_BUFFER) {
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
@@ -94,9 +74,8 @@ namespace ZE {
 		}
 	}
 
-	void GPUBufferData::release()
+	void GLBufferData::release()
 	{
-		// #OPENGL Specific
 		if (m_BBO)
 		{
 			glDeleteBuffers(1, &m_BBO);
