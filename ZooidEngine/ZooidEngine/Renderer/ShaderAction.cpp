@@ -11,7 +11,7 @@ namespace ZE {
 		m_shaderActionType = SHADER_ACTION_DRAW;
 	}
 
-	ShaderAction::ShaderAction(ShaderChain* shader)
+	ShaderAction::ShaderAction(IShaderChain* shader)
 	{
 		m_shader = shader;
 	}
@@ -25,7 +25,7 @@ namespace ZE {
 		m_vertexSize = 0;
 	}
 
-	void ShaderAction::SetShaderAndBuffer(ShaderChain* _shader, GPUBufferArray* _bufferArray)
+	void ShaderAction::SetShaderAndBuffer(IShaderChain* _shader, IGPUBufferArray* _bufferArray)
 	{
 		m_shader = _shader;
 		m_bufferArray = _bufferArray;
@@ -73,7 +73,7 @@ namespace ZE {
 
 	}
 
-	void ShaderAction::SetShaderTextureVar(const char* _name, GPUTexture* _texture, Int32 _texture_index)
+	void ShaderAction::SetShaderTextureVar(const char* _name, IGPUTexture* _texture, Int32 _texture_index)
 	{
 		ShaderVariable shaderVariable;
 		StringFunc::WriteTo(shaderVariable.m_varName, _name, 32);
@@ -87,7 +87,7 @@ namespace ZE {
 		m_shaderActionType = _shaderActionType;
 	}
 
-	void ShaderAction::SetConstantsBlockBuffer(const char* _name, GPUBufferData* _constantBlockBuffer)
+	void ShaderAction::SetConstantsBlockBuffer(const char* _name, IGPUBufferData* _constantBlockBuffer)
 	{
 		ShaderVariable shaderVariable;
 		StringFunc::WriteTo(shaderVariable.m_varName, _name, 32);

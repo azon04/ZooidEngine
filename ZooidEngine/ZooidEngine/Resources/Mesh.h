@@ -5,8 +5,8 @@
 
 namespace ZE
 {
-	class GPUBufferArray;
-	class GPUBufferData;
+	class IGPUBufferArray;
+	class IGPUBufferData;
 	class GameContext;
 	class Material;
 
@@ -18,9 +18,9 @@ namespace ZE
 
 		Mesh() {}
 
-		GPUBufferData* m_vertexBuffer;;
-		GPUBufferData* m_indexBuffer;
-		GPUBufferArray* m_bufferArray;
+		IGPUBufferData* m_vertexBuffer;;
+		IGPUBufferData* m_indexBuffer;
+		IGPUBufferArray* m_bufferArray;
 		Material* m_material;
 	};
 }

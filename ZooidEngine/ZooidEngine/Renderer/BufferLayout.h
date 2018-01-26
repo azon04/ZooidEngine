@@ -27,9 +27,6 @@ namespace ZE {
 	class BufferLayout {
 	public:
 		Array<Layout> m_layouts;
-
-		void BindLayout();
-
 	};
 
 	class BufferLayoutManager {

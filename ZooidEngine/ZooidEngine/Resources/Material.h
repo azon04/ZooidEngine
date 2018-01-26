@@ -3,10 +3,26 @@
 
 #include "ZEngineIncl.h"
 
+#include "Utils/Array.h"
+#include "Utils/PrimitiveTypes.h"
+#include "Renderer/ShaderAction.h"
+
 namespace ZE
 {
-	class GPUTexture;
+	class IGPUTexture;
 	class GameContext;
+
+	enum class TextureType : UInt8
+	{
+		DIFFUSE = 1,
+		SPECULAR = 2
+	};
+
+	struct MaterialTexture
+	{
+		IGPUTexture* texture;
+		TextureType type;
+	};
 
 	class Material : public Object
 	{
@@ -15,9 +31,10 @@ namespace ZE
 	public:
 
 		Material() {}
-		GPUTexture* m_texture;
+		Array<MaterialTexture, true> m_textures;
 		Float32 m_shininess;
 
+		void Bind(ShaderAction& shaderAction);
 	};
 }
 #endif

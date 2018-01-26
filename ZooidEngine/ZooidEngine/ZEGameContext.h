@@ -9,12 +9,14 @@ namespace ZE {
 	
 	class MaterialManager;
 	class MeshManager;
+	class RenderZooid;
 
 	class GameContext {
 	public:
 		GameContext() {}
 		virtual ~GameContext() {}
 
+		RenderZooid* m_renderZooid;
 		IRenderer* m_renderer;
 		BufferManager* m_bufferManager;
 		ShaderManager* m_shaderManager;
@@ -30,6 +32,7 @@ namespace ZE {
 		
 		Timer m_mainTimer;
 
+		FORCEINLINE RenderZooid* getRenderZooid() const { return m_renderZooid; }
 		FORCEINLINE IRenderer* getRenderer() const { return m_renderer; }
 		FORCEINLINE BufferManager* getBufferManager() const { return m_bufferManager; }
 		FORCEINLINE ShaderManager* getShaderManager() const { return m_shaderManager; }

@@ -1,17 +1,21 @@
 #include "MainFunctions.h"
 
-#include "../Common/GlobalRegistry.h"
+#include "Common/GlobalRegistry.h"
 
 #include "Scene/CameraComponent.h"
 #include "Scene/RenderComponent.h"
 #include "Scene/Light/LightComponent.h"
-#include "Renderer/GPUTexture.h"
+#include "Renderer/IGPUTexture.h"
 #include "Memory/Handle.h"
 #include "Events/Events.h"
 #include "FileSystem/DirectoryHelper.h"
 
 #include "ResourceManagers/MeshManager.h"
 #include "ResourceManagers/MaterialManager.h"
+
+#if Z_RENDER_OPENGL
+#include "Renderer/GL/GLRenderZooid.h"
+#endif
 
 namespace ZE {
 
@@ -23,19 +27,24 @@ namespace ZE {
 		// Register all classes
 		GlobalRegistry::Register();
 
+		// Creating rendering Zooid
+
 		{
-			Handle handle("RENDERER", sizeof(ZE::GLRenderer));
-			_gameContext->m_renderer = new(handle) ZE::GLRenderer();
-			_gameContext->m_renderer->Setup();
+#if Z_RENDER_OPENGL
+			Handle renderZooidHandle("Render Zooid", sizeof(GLRenderZooid));
+			_gameContext->m_renderZooid = new(renderZooidHandle) GLRenderZooid(_gameContext);
+#endif
+			_gameContext->m_renderZooid->Init();
+			_gameContext->m_renderer = _gameContext->m_renderZooid->GetRenderer();
 		}
 
-		ShaderManager::Init();
+		ShaderManager::Init(_gameContext);
 		_gameContext->m_shaderManager = ShaderManager::getInstance();
 
 		BufferManager::Init(_gameContext);
 		_gameContext->m_bufferManager = BufferManager::getInstance();
 		
-		TextureManager::Init();
+		TextureManager::Init(_gameContext);
 		_gameContext->m_textureManager = TextureManager::getInstance();
 
 		MaterialManager::Init();
@@ -120,7 +129,6 @@ namespace ZE {
 			_gameContext->getRootComponent()->addChild(pRenderComp);
 		}
 
-
 	}
 
 	void MainClean(GameContext* _gameContext)
@@ -130,7 +138,7 @@ namespace ZE {
 		ShaderManager::Destroy();
 		TextureManager::Destroy();
 
-		_gameContext->m_renderer->Clean();
+		_gameContext->m_renderZooid->Destroy();
 
 		MemoryManager::Deconstruct();
 	}
@@ -144,7 +152,7 @@ namespace ZE {
 		// Draw Base Lines
 		{
 			ZE::ShaderAction& shaderAction = _gameContext->getDrawList()->getNextShaderAction();
-			ZE::ShaderChain* shader = ZE::ShaderManager::getInstance()->getShaderChain(2);
+			ZE::IShaderChain* shader = ZE::ShaderManager::getInstance()->getShaderChain(2);
 
 			shaderAction.SetShaderAndBuffer(shader, ZE::BufferManager::getInstance()->m_GPUBufferArrays[2]);
 			shaderAction.SetShaderMatVar("modelMat", Matrix4x4());

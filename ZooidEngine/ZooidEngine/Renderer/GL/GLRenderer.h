@@ -1,13 +1,13 @@
 #ifndef __ZE_GL_RENDERER__
 #define __ZE_GL_RENDERER__
 
-#include "IRenderer.h"
+#include "Renderer/IRenderer.h"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "../Math/Matrix4x4.h"
-#include "ShaderData.h"
+#include "Math/Matrix4x4.h"
+#include "Renderer/ShaderData.h"
 
 #define WIDTH 1280
 #define HEIGHT 720
@@ -15,7 +15,7 @@
 namespace ZE {
 
 class BufferData;
-class GPUBufferData;
+class IGPUBufferData;
 
 class GLRenderer : public IRenderer {
 	

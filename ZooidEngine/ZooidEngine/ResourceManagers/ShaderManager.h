@@ -2,10 +2,12 @@
 #define __ZE_SHADER_MANAGER_H__
 
 #include "ResourceManager.h"
-#include "Renderer/Shader.h"
+#include "Renderer/IShader.h"
 
 namespace ZE
 {
+	class GameContext;
+
 	class ShaderManager : public ResourceManager
 	{
 		DEFINE_CLASS(ShaderManager)
@@ -13,21 +15,23 @@ namespace ZE
 	public:
 		ShaderManager() {}
 
-		static void Init();
+		static void Init(GameContext* _gameContext);
 		static void Destroy();
 		static ShaderManager* getInstance() { return s_instance; }
 		
 		virtual Handle loadResource_Internal(const char* resourceFilePath);
 		virtual void preUnloadResource(Resource* _resource);
 
-		ShaderChain* getShaderChain(int id);
+		IShaderChain* getShaderChain(int id);
+
+		GameContext* m_gameContext;
 	protected:
 
 		UInt8 getShaderTypeByName(const char* resourceFilePath);
 
 		static ShaderManager* s_instance;
 
-		Array<ShaderChain*, true> m_shaderChain;
+		Array<IShaderChain*, true> m_shaderChain;
 
 	};
 };

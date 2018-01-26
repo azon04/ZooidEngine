@@ -6,45 +6,34 @@
 #include "BufferData.h"
 #include "BufferLayout.h"
 
-#if Z_RENDER_OPENGL
-#include <GL/glew.h>
-#endif
-
 #define MAX_LAYOUT 16
 namespace ZE {
 
-class GPUBufferData {
+class IGPUBufferData {
 
 public:
-	GPUBufferData() 
+	IGPUBufferData() 
 	{
-#if Z_RENDER_OPENGL
-		m_BBO = 0;
-#endif
 		m_isStatic = true;
 	}
 
-	GPUBufferData(bool _isStaticBuffer)
-		: GPUBufferData()
+	IGPUBufferData(bool _isStaticBuffer)
+		: IGPUBufferData()
 	{
 		m_isStatic = _isStaticBuffer;
 	}
 
-	virtual ~GPUBufferData();
+	virtual ~IGPUBufferData();
 
-	void FromBufferData(BufferData* _bufferData);
+	virtual void FromBufferData(BufferData* _bufferData);
 	void SetupLayout(BufferLayout* _layouts);
 
-	void Bind();
-	void UnBind();
-	void release();
+	virtual void Bind() = 0;
+	virtual void UnBind() = 0;
+	virtual void release() {};
 
 	BufferType m_bufferType;
 	BufferData* m_BufferData;
-
-#if Z_RENDER_OPENGL
-	GLuint m_BBO;
-#endif
 
 	bool m_isStatic;
 

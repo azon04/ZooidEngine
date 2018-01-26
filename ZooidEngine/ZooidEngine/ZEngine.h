@@ -7,10 +7,6 @@
 
 #include "Memory/MemoryManager.h"
 
-#if Z_RENDER_OPENGL
-#include "Renderer/GLRenderer.h"
-#endif
-
 #include "ResourceManagers/BufferManager.h"
 #include "Renderer/DrawList.h"
 

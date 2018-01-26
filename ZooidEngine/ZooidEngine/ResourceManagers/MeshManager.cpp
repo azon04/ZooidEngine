@@ -60,7 +60,7 @@ namespace ZE
 				Handle hVertexBuffer = BufferManager::getInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
 				if (hVertexBuffer.isValid())
 				{
-					pMesh->m_bufferArray = hVertexBuffer.getObject<GPUBufferArray>();
+					pMesh->m_bufferArray = hVertexBuffer.getObject<IGPUBufferArray>();
 				}
 			}
 			else if (StringFunc::Compare(tokenBuffer, "mat") == 0)

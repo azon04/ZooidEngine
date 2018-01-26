@@ -1,2 +1,3 @@
-tex Basic/Texture/container2.png
+diffuse Basic/Texture/container2.png
+specular Basic/Texture/container2_specular.png
 shininess 32.0

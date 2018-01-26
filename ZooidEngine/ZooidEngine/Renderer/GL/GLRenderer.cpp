@@ -1,6 +1,6 @@
 #include "GLRenderer.h"
 
-#include "../ZEngine.h"
+#include "ZEngine.h"
 
 #include <cstring>
 
@@ -162,6 +162,7 @@ namespace ZE {
 			switch (shaderVariable.m_varType)
 			{
 			case SHADER_VAR_TYPE_TEXTURE:
+				glActiveTexture(GL_TEXTURE0 + shaderVariable.texture_value.texture_index);
 				shaderVariable.texture_value.texture_data->Unbind();
 				break;
 			}

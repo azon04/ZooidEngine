@@ -3,9 +3,9 @@
 
 #include "../Utils/PrimitiveTypes.h"
 
-#include "Shader.h"
-#include "GPUBufferArray.h"
-#include "GPUTexture.h"
+#include "IShader.h"
+#include "IGPUBufferArray.h"
+#include "IGPUTexture.h"
 
 #define SHADER_VAR_TYPE_FLOAT 0
 #define SHADER_VAR_TYPE_INT 1
@@ -18,7 +18,8 @@
 #define SHADER_ACTION_DRAW 0
 #define SHADER_ACTION_SETGLOBAL 1
 
-namespace ZE {
+namespace ZE 
+{
 
 struct ShaderVariable
 {
@@ -35,11 +36,11 @@ struct ShaderVariable
 
 		struct tTexture 
 		{
-			GPUTexture* texture_data;
+			IGPUTexture* texture_data;
 			Int32 texture_index;
 		} texture_value;
 
-		GPUBufferData* constant_buffer;
+		IGPUBufferData* constant_buffer;
 	};
 
 	ShaderVariable() : mat_value(Matrix4x4())
@@ -54,24 +55,24 @@ class ShaderAction {
 public:
 
 	ShaderAction();
-	ShaderAction(ShaderChain* shader);
+	ShaderAction(IShaderChain* shader);
 
 	void Reset();
-	void SetShaderAndBuffer(ShaderChain* _shader, GPUBufferArray* _bufferArray);
+	void SetShaderAndBuffer(IShaderChain* _shader, IGPUBufferArray* _bufferArray);
 	void SetShaderFloatVar(const char* _name, float _value);
 	void SetShaderIntVar(const char* _name, Int32 _value);
 	void SetShaderVec3Var(const char* _name, const Vector3& _value);
 	void SetShaderMatVar(const char* _name, const Matrix4x4& _value);
 	void SetData(const char* _name, void* _data);
-	void SetShaderTextureVar(const char* _name, GPUTexture* _texture, Int32 _texture_index);
+	void SetShaderTextureVar(const char* _name, IGPUTexture* _texture, Int32 _texture_index);
 	void SetType(ZE::UInt16 _shaderActionType);
-	void SetConstantsBlockBuffer(const char* _name, GPUBufferData* _constantBlockBuffer);
+	void SetConstantsBlockBuffer(const char* _name, IGPUBufferData* _constantBlockBuffer);
 
 	ZE::Int32 m_vertexSize;
 	ZE::UInt16 m_shaderActionType;
 	
-	ShaderChain* m_shader;
-	GPUBufferArray* m_bufferArray;
+	IShaderChain* m_shader;
+	IGPUBufferArray* m_bufferArray;
 	Array<ShaderVariable, true> m_shaderVariables;
 };
 };

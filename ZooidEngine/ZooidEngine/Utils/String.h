@@ -21,6 +21,7 @@ namespace ZE
 		String(int reservedSize)
 		{
 			m_handle = Handle(reservedSize);
+			m_handle.getObject<char>()[0] = '\0';
 		}
 
 		String(const String& other)
@@ -107,7 +108,7 @@ namespace ZE
 
 		String& operator+=(const char* text)
 		{
-			size_t size = StringFunc::Length(text);
+			size_t size = StringFunc::Length(text) + 1;
 			size_t currentLength = length();
 
 			Handle newHandle;

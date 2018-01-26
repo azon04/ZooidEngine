@@ -1,5 +1,8 @@
 #include "../ZEngine.h"
 
+#include "ZEGameContext.h"
+#include "Renderer/RenderZooid.h"
+
 #include "BufferManager.h"
 #include "Renderer/BufferLayout.h"
 
@@ -12,7 +15,7 @@ namespace ZE {
 
 	BufferManager* BufferManager::m_instance = NULL;
 
-	BufferManager::BufferManager()
+	BufferManager::BufferManager(GameContext* _gameContext) : m_gameContext(_gameContext)
 	{
 	}
 
@@ -24,7 +27,7 @@ namespace ZE {
 	void BufferManager::Init(GameContext* _gameContext)
 	{
 		Handle hBufferManager("Buffer Manager", sizeof(BufferManager));
-		m_instance = new(hBufferManager) BufferManager();
+		m_instance = new(hBufferManager) BufferManager(_gameContext);
 
 		BufferLayoutManager::Init();
 
@@ -146,11 +149,12 @@ namespace ZE {
 		getInstance()->unloadResources();
 	}
 
-	ZE::GPUBufferData* BufferManager::createGPUBufferFromBuffer(BufferData* _bufferData, bool _bStatic, bool _manualManage)
+	ZE::IGPUBufferData* BufferManager::createGPUBufferFromBuffer(BufferData* _bufferData, bool _bStatic, bool _manualManage)
 	{
 		if (!_bufferData) return nullptr;
-		Handle handle("GPU Buffer Data", sizeof(GPUBufferData));
-		GPUBufferData* GPUBuffer = new(handle) GPUBufferData(_bStatic);
+		Handle handle = m_gameContext->getRenderZooid()->CreateRenderBufferData();
+		IGPUBufferData* GPUBuffer = handle.getObject<IGPUBufferData>();
+		GPUBuffer->m_isStatic = _bStatic;
 		GPUBuffer->FromBufferData(_bufferData);
 
 		if (!_manualManage)
@@ -161,15 +165,15 @@ namespace ZE {
 		return GPUBuffer;
 	}
 
-	ZE::GPUBufferData* BufferManager::createConstantBufferFromBuffer(BufferData* _bufferData)
+	ZE::IGPUBufferData* BufferManager::createConstantBufferFromBuffer(BufferData* _bufferData)
 	{
-		GPUBufferData* bufferData = createGPUBufferFromBuffer(_bufferData, false, true);
+		IGPUBufferData* bufferData = createGPUBufferFromBuffer(_bufferData, false, true);
 		bufferData->m_bindingIndex = m_constantGPUBuffer.length();
 		m_constantGPUBuffer.push_back(bufferData);
 		return bufferData;
 	}
 
-	ZE::GPUBufferData* BufferManager::createConstantBuffer(void* data, size_t size)
+	ZE::IGPUBufferData* BufferManager::createConstantBuffer(void* data, size_t size)
 	{
 		Handle hBufferData("BasisBufferData", sizeof(BufferData));
 		BufferData* bufferData = new(hBufferData) BufferData(BufferType::UNIFORM_BUFFER);
@@ -183,12 +187,12 @@ namespace ZE {
 
 	Handle BufferManager::createBufferArray(BufferData* _vertexBuffer, BufferData* _indexBuffer, BufferData* _gpuBuffer)
 	{
-		GPUBufferData* vertexBufferGPU = createGPUBufferFromBuffer(_vertexBuffer);
-		GPUBufferData* indexBufferGPU = createGPUBufferFromBuffer(_indexBuffer);
-		GPUBufferData* computeGPUBuffer = createGPUBufferFromBuffer(_gpuBuffer);
+		IGPUBufferData* vertexBufferGPU = createGPUBufferFromBuffer(_vertexBuffer);
+		IGPUBufferData* indexBufferGPU = createGPUBufferFromBuffer(_indexBuffer);
+		IGPUBufferData* computeGPUBuffer = createGPUBufferFromBuffer(_gpuBuffer);
 	
-		Handle handle("GPU Buffer Array", sizeof(GPUBufferArray));
-		GPUBufferArray* bufferArray = new(handle) GPUBufferArray();
+		Handle handle = m_gameContext->getRenderZooid()->CreateRenderBufferArray();
+		IGPUBufferArray* bufferArray = handle.getObject<IGPUBufferArray>();
 		bufferArray->SetupBufferArray(vertexBufferGPU, indexBufferGPU, computeGPUBuffer);
 
 		m_GPUBufferArrays.push_back(bufferArray);
@@ -288,7 +292,7 @@ namespace ZE {
 
 	void BufferManager::preUnloadResource(Resource* _resource)
 	{
-		GPUBufferArray* gpuBufferArray = _resource->m_hActual.getObject<GPUBufferArray>();
+		IGPUBufferArray* gpuBufferArray = _resource->m_hActual.getObject<IGPUBufferArray>();
 		m_GPUBufferArrays.removeAt(m_GPUBufferArrays.firstIndexOf(gpuBufferArray));
 		
 		if (gpuBufferArray)
