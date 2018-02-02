@@ -6,8 +6,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "Math/Matrix4x4.h"
-#include "Renderer/ShaderData.h"
+#include "Platform/Thread.h"
 
 #define WIDTH 1280
 #define HEIGHT 720
@@ -33,10 +32,17 @@ public:
 	virtual void Draw(ShaderAction* shaderAction) override;
 	virtual bool IsClose() override;
 
+	virtual void PollEvent() override;
+
+	virtual void AcquireRenderThreadOwnership() override;
+	virtual void ReleaseRenderThreadOwnership() override;
+
 	virtual float GetHeight() const { return HEIGHT; }
 	virtual float GetWidth() const { return WIDTH; }
 
 	GLFWwindow* m_window;
+	GLFWwindow* m_renderWindow;
+	Mutex m_renderLock;
 };
 }
 #endif

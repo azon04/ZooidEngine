@@ -17,10 +17,20 @@
 #include "Renderer/GL/GLRenderZooid.h"
 #endif
 
+#include "Platform/Thread.h"
+
 namespace ZE {
+
+
+	ConditionVariable g_drawThreadVariable;
+	Mutex g_drawMutex;
+	bool g_drawReady = false;
 
 	void MainSetup(GameContext* _gameContext)
 	{
+
+		ZASSERT(ZE::MAIN_THREAD_ID == ZE::getThreadId(), "Not in Main Thread");
+
 		// Construct Memory
 		MemoryManager::Construct();
 
@@ -129,10 +139,22 @@ namespace ZE {
 			_gameContext->getRootComponent()->addChild(pRenderComp);
 		}
 
+#if ZE_RENDER_MULTITHREAD
+		g_drawReady = false;
+		_gameContext->m_drawThread = new Thread(MainDrawJob, _gameContext);
+#endif
+
 	}
 
 	void MainClean(GameContext* _gameContext)
 	{
+#if ZE_RENDER_MULTITHREAD
+		if (_gameContext->m_drawThread)
+		{
+			_gameContext->m_drawThread->join();
+		}
+#endif
+
 		CameraManager::Destroy();
 		BufferManager::Destroy();
 		ShaderManager::Destroy();
@@ -148,24 +170,6 @@ namespace ZE {
 		double deltaTime = _gameContext->m_mainTimer.ResetAndGetDeltaMS();
 
 		ZEINFO("Delta Time : %.2f ms", deltaTime);
-
-		// Draw Base Lines
-		{
-			ZE::ShaderAction& shaderAction = _gameContext->getDrawList()->getNextShaderAction();
-			ZE::IShaderChain* shader = ZE::ShaderManager::getInstance()->getShaderChain(2);
-
-			shaderAction.SetShaderAndBuffer(shader, ZE::BufferManager::getInstance()->m_GPUBufferArrays[2]);
-			shaderAction.SetShaderMatVar("modelMat", Matrix4x4());
-			shaderAction.SetConstantsBlockBuffer("shader_data", _gameContext->getDrawList()->m_mainConstantBuffer);
-		}
-
-		// Handle Event_GATHER_RENDER
-		{
-			Handle handleGatherRender("EventGatherRender", sizeof(Event_GATHER_RENDER));
-			Event_GATHER_RENDER* pEvent = new(handleGatherRender) Event_GATHER_RENDER();
-			_gameContext->getEventDispatcher()->handleEvent(pEvent);
-			handleGatherRender.release();
-		}
 
 		// Handle Event_Update
 		{
@@ -187,6 +191,73 @@ namespace ZE {
 			handle.release();
 		}
 		_gameContext->getEventDispatcher()->clearEvents(ZE::EVENT_INPUT);
+
+#if ZE_RENDER_MULTITHREAD
+		while (g_drawReady) {}
+#endif
+
+		// Draw Base Lines
+		{
+			ZE::ShaderAction& shaderAction = _gameContext->getDrawList()->getNextShaderAction();
+			ZE::IShaderChain* shader = ZE::ShaderManager::getInstance()->getShaderChain(2);
+
+			shaderAction.SetShaderAndBuffer(shader, ZE::BufferManager::getInstance()->m_GPUBufferArrays[2]);
+			shaderAction.SetShaderMatVar("modelMat", Matrix4x4());
+			shaderAction.SetConstantsBlockBuffer("shader_data", _gameContext->getDrawList()->m_mainConstantBuffer);
+		}
+
+		// Handle Event_GATHER_RENDER
+		{
+			Handle handleGatherRender("EventGatherRender", sizeof(Event_GATHER_RENDER));
+			Event_GATHER_RENDER* pEvent = new(handleGatherRender) Event_GATHER_RENDER();
+			_gameContext->getEventDispatcher()->handleEvent(pEvent);
+			handleGatherRender.release();
+		}
+
+		// Handle Event_GATHER_LIGHT
+		_gameContext->getDrawList()->m_lightData.numLight = 0;
+		{
+			ZE::Handle handleGatherLight("EventGatherLight", sizeof(ZE::Event_GATHER_LIGHT));
+			ZE::Event_GATHER_LIGHT* eventGatherLight = new(handleGatherLight) Event_GATHER_LIGHT();
+			_gameContext->getEventDispatcher()->handleEvent(eventGatherLight);
+			handleGatherLight.release();
+		}
+
+#if ZE_RENDER_MULTITHREAD
+		UniqueLock lck(g_drawMutex);
+		g_drawReady = true;
+		g_drawThreadVariable.notify_all();
+
+		// Oddly needed. This will let the main thread know that the window is still active
+		_gameContext->getRenderer()->PollEvent();
+#else
+		_gameContext->getRenderer()->PollEvent();
+		DrawJob(_gameContext);
+#endif
+	}
+
+	void MainDrawJob(GameContext* _gameContext)
+	{
+		UniqueLock lck(g_drawMutex);
+
+		while (!g_drawReady)
+		{
+			g_drawThreadVariable.wait(lck);
+		}
+
+		while (!_gameContext->getRenderer()->IsClose())
+		{
+			ZEINFO("Start Draw");
+			DrawJob(_gameContext);
+			ZEINFO("End Draw");
+			g_drawReady = false;
+			while (!g_drawReady) g_drawThreadVariable.wait(lck);
+		}
+	}
+
+	void DrawJob(GameContext* _gameContext)
+	{
+		_gameContext->getRenderer()->AcquireRenderThreadOwnership();
 
 		_gameContext->getRenderer()->BeginRender();
 
@@ -213,20 +284,13 @@ namespace ZE {
 			}
 		}
 
-		// Handle Event_GATHER_LIGHT
-		_gameContext->getDrawList()->m_lightData.numLight = 0;
-		{
-			ZE::Handle handleGatherLight("EventGatherLight", sizeof(ZE::Event_GATHER_LIGHT));
-			ZE::Event_GATHER_LIGHT* eventGatherLight = new(handleGatherLight) Event_GATHER_LIGHT();
-			_gameContext->getEventDispatcher()->handleEvent(eventGatherLight);
-			handleGatherLight.release();
-		}
-
 		_gameContext->getRenderer()->ProcessDrawList(_gameContext->getDrawList());
 
 		_gameContext->getRenderer()->EndRender();
 
 		_gameContext->getDrawList()->Reset();
+
+		_gameContext->getRenderer()->ReleaseRenderThreadOwnership();
 	}
 
 }

@@ -20,6 +20,12 @@ public:
 	virtual void ProcessDrawList(DrawList* drawList) = 0;
 	virtual void Draw(ShaderAction* shaderAction) = 0;
 	virtual void ProcessShaderAction(ShaderAction* shaderAction) = 0;
+
+	virtual void PollEvent() = 0;
+
+	virtual void AcquireRenderThreadOwnership() = 0;
+	virtual void ReleaseRenderThreadOwnership() = 0;
+	
 	virtual bool IsClose() { return false; };
 
 	virtual float GetHeight() const = 0;

@@ -73,6 +73,9 @@
     <Filter Include="Renderer\GL">
       <UniqueIdentifier>{173dcb27-a0b6-490d-b87c-0c8d1722a9fa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{839ece0a-08ae-48b5-b322-86d68db0ac7f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ZEngine.h">
@@ -324,6 +327,9 @@
     <ClInclude Include="GLShader.h">
       <Filter>Renderer\GL</Filter>
     </ClInclude>
+    <ClInclude Include="Platform\Thread.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -517,6 +523,9 @@
     </ClCompile>
     <ClCompile Include="GLShader.cpp">
       <Filter>Renderer\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\Thread.cpp">
+      <Filter>Platform</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

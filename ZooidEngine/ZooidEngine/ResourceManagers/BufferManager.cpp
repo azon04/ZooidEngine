@@ -31,6 +31,8 @@ namespace ZE {
 
 		BufferLayoutManager::Init();
 
+		_gameContext->getRenderer()->AcquireRenderThreadOwnership();
+
 		// Create sample vertex Color buffer
 		{
 			Handle handle("Data Triangle", sizeof(float) * 18);
@@ -141,6 +143,8 @@ namespace ZE {
 			hBufferData.release();
 		}
 
+		_gameContext->getRenderer()->ReleaseRenderThreadOwnership();
+
 		getInstance()->loadResource(GetPackageAssetPath("Basic", "VertexBuffer", "Cube.vbuff").c_str());
 	}
 
@@ -182,7 +186,13 @@ namespace ZE {
 		// Buffer Data need to be saved since the data will be changed eventually
 		m_buffers.push_back(bufferData);
 
-		return createConstantBufferFromBuffer(bufferData);
+		m_gameContext->getRenderer()->AcquireRenderThreadOwnership();
+
+		IGPUBufferData* res = createConstantBufferFromBuffer(bufferData);
+
+		m_gameContext->getRenderer()->ReleaseRenderThreadOwnership();
+
+		return res;
 	}
 
 	Handle BufferManager::createBufferArray(BufferData* _vertexBuffer, BufferData* _indexBuffer, BufferData* _gpuBuffer)
@@ -194,6 +204,7 @@ namespace ZE {
 		Handle handle = m_gameContext->getRenderZooid()->CreateRenderBufferArray();
 		IGPUBufferArray* bufferArray = handle.getObject<IGPUBufferArray>();
 		bufferArray->SetupBufferArray(vertexBufferGPU, indexBufferGPU, computeGPUBuffer);
+
 
 		m_GPUBufferArrays.push_back(bufferArray);
 		return handle;
@@ -271,8 +282,12 @@ namespace ZE {
 		}
 
 		fileReader.close();
+		
+		m_gameContext->getRenderer()->AcquireRenderThreadOwnership();
 
 		Handle hResult = createBufferArray(pVertexBuffer, pIndexBuffer, nullptr);
+
+		m_gameContext->getRenderer()->ReleaseRenderThreadOwnership();
 
 		if (hVertexBufferData.isValid())
 		{
