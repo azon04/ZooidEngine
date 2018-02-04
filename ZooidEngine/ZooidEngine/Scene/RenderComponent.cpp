@@ -35,6 +35,22 @@ namespace ZE {
 
 			shaderAction.SetConstantsBlockBuffer("shader_data", m_gameContext->getDrawList()->m_mainConstantBuffer);
 			shaderAction.SetConstantsBlockBuffer("light_data", m_gameContext->getDrawList()->m_lightConstantBuffer);
+			
+			if (m_bHighlight)
+			{
+				EnableAndSetStencilFunc(shaderAction, ALWAYS, 1, 0xFF, 0xFF);
+
+				ShaderAction& highlightAction = m_gameContext->getDrawList()->getNextShaderAction();
+
+				highlightAction.SetShaderAndBuffer(ShaderManager::getInstance()->getShaderChain(Z_SHADER_CHAIN_3D_HIGHLIGHT), m_mesh->m_bufferArray);
+				Matrix4x4 m_scaledTransform = m_worldTransform;
+				m_scaledTransform.scale(Vector3(1.05f, 1.05f, 1.05f));
+
+				highlightAction.SetShaderMatVar("modelMat", m_scaledTransform);
+				highlightAction.SetShaderVec3Var("highlightColor", Vector3(1.0f, 0.5, 0.3f));
+
+				EnableAndSetStencilFunc(highlightAction, NOTEQUAL, 1, 0xFF, 0x00);
+			}
 		}
 	}
 

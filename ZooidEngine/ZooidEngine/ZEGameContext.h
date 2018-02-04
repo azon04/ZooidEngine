@@ -3,6 +3,8 @@
 
 #include "ZEngine.h"
 
+#include "Platform/Thread.h"
+
 #include "Utils/Timer.h"
 
 namespace ZE {
@@ -30,6 +32,8 @@ namespace ZE {
 		MaterialManager* m_materialManager;
 		MeshManager* m_meshManager;
 		
+		Thread* m_drawThread;
+
 		Timer m_mainTimer;
 
 		FORCEINLINE RenderZooid* getRenderZooid() const { return m_renderZooid; }

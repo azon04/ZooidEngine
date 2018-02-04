@@ -9,10 +9,11 @@ namespace ZE {
 	class Event;
 
 	class RenderComponent : public SceneComponent {
+		
 		DEFINE_CLASS(RenderComponent)
 
 	public:
-		RenderComponent(GameContext* gameContext) : SceneComponent(gameContext), m_mesh(nullptr) {}
+		RenderComponent(GameContext* gameContext) : SceneComponent(gameContext), m_mesh(nullptr), m_bHighlight(false) {}
 		virtual ~RenderComponent() {}
 
 		virtual void setupComponent() override;
@@ -21,6 +22,7 @@ namespace ZE {
 		void fromFile(const char* filePath);
 
 		Mesh* m_mesh;
+		bool m_bHighlight;
 	};
 }
 #endif

@@ -1,8 +1,9 @@
 #ifndef __Z_SHADER_ACTION__
 #define __Z_SHADER_ACTION__
 
-#include "../Utils/PrimitiveTypes.h"
+#include "Utils/PrimitiveTypes.h"
 
+#include "IRenderer.h"
 #include "IShader.h"
 #include "IGPUBufferArray.h"
 #include "IGPUTexture.h"
@@ -51,6 +52,38 @@ struct ShaderVariable
 	~ShaderVariable() {}
 };
 
+union ShaderFeatureVar
+{
+	UInt32 uint_value;
+	Int32 int_value;
+	void* paddress;
+};
+
+struct ShaderFeature
+{
+	ShaderFeature() {}
+
+	ShaderFeature(const ShaderFeature& other)
+	{
+		m_rendererFeature = other.m_rendererFeature;
+		m_bFeatureEnabled = other.m_bFeatureEnabled;
+		m_shaderFeatureVar = other.m_shaderFeatureVar;
+	}
+
+	ShaderFeature& operator=(const ShaderFeature& other)
+	{
+		m_rendererFeature = other.m_rendererFeature;
+		m_bFeatureEnabled = other.m_bFeatureEnabled;
+		m_shaderFeatureVar = other.m_shaderFeatureVar;
+		return *this;
+	}
+
+	UInt32 m_rendererFeature;
+	bool m_bFeatureEnabled;
+
+	Array<ShaderFeatureVar, true> m_shaderFeatureVar;
+};
+
 class ShaderAction {
 public:
 
@@ -67,6 +100,8 @@ public:
 	void SetShaderTextureVar(const char* _name, IGPUTexture* _texture, Int32 _texture_index);
 	void SetType(ZE::UInt16 _shaderActionType);
 	void SetConstantsBlockBuffer(const char* _name, IGPUBufferData* _constantBlockBuffer);
+	
+	void AddShaderFeature(UInt32 _feature, bool _enabled);
 
 	ZE::Int32 m_vertexSize;
 	ZE::UInt16 m_shaderActionType;
@@ -74,6 +109,11 @@ public:
 	IShaderChain* m_shader;
 	IGPUBufferArray* m_bufferArray;
 	Array<ShaderVariable, true> m_shaderVariables;
+	Array<ShaderFeature, true> m_shaderFeatures;
 };
+
+// Shader Action Helper; Representative Name of function
+void EnableAndSetDepthFunction(ShaderAction& shaderAction, RendererCompareFunc func);
+void EnableAndSetStencilFunc(ShaderAction& shaderAction, RendererCompareFunc func, Int32 ref, UInt32 refMask, UInt32 stencilWriteMask);
 };
 #endif // __Z_SHADER_ACTION__

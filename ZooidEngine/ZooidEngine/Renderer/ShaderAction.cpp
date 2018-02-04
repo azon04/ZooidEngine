@@ -20,6 +20,7 @@ namespace ZE {
 	{
 		m_shader = nullptr;
 		m_shaderVariables.clear();
+		m_shaderFeatures.clear();
 		m_bufferArray = nullptr;
 		m_shaderActionType = SHADER_ACTION_DRAW;
 		m_vertexSize = 0;
@@ -96,11 +97,61 @@ namespace ZE {
 		m_shaderVariables.push_back(shaderVariable);
 	}
 
+	void ShaderAction::AddShaderFeature(UInt32 _feature, bool _enabled)
+	{
+		ShaderFeature shaderFeature;
+		shaderFeature.m_rendererFeature = _feature;
+		shaderFeature.m_bFeatureEnabled = _enabled;
+		m_shaderFeatures.push_back(shaderFeature);
+	}
+
 	ShaderVariable::ShaderVariable(const ShaderVariable& _other)
 	{
 		StringFunc::WriteTo(m_varName, _other.m_varName, 32);
 		m_varType = _other.m_varType;
 		memcpy(&mat_value, &_other.mat_value, sizeof(mat_value));
+	}
+
+	void EnableAndSetDepthFunction(ShaderAction& shaderAction, RendererCompareFunc func)
+	{
+		shaderAction.m_shaderFeatures.push_back(ShaderFeature());
+		ShaderFeature& shaderFeature = shaderAction.m_shaderFeatures[shaderAction.m_shaderFeatures.length() - 1];
+		shaderFeature.m_rendererFeature = DEPTH_TEST;
+		shaderFeature.m_bFeatureEnabled = true;
+		
+		ShaderFeatureVar shaderFunc;
+		shaderFunc.uint_value = func;
+		
+		shaderFeature.m_shaderFeatureVar.push_back(shaderFunc);
+	}
+
+	void EnableAndSetStencilFunc(ShaderAction& shaderAction, RendererCompareFunc func, Int32 ref, UInt32 refMask, UInt32 stencilWriteMask)
+	{
+		shaderAction.m_shaderFeatures.push_back(ShaderFeature());
+		ShaderFeature& shaderFeature = shaderAction.m_shaderFeatures[shaderAction.m_shaderFeatures.length() - 1];
+		shaderFeature.m_rendererFeature = STENCIL_TEST;
+		shaderFeature.m_bFeatureEnabled = true;
+
+		ShaderFeatureVar shaderFunc;
+		shaderFunc.uint_value = func;
+
+		shaderFeature.m_shaderFeatureVar.push_back(shaderFunc);
+
+		ShaderFeatureVar refVar;
+		refVar.int_value = ref;
+
+		shaderFeature.m_shaderFeatureVar.push_back(refVar);
+
+		ShaderFeatureVar refMaskVar;
+		refMaskVar.uint_value = refMask;
+
+		shaderFeature.m_shaderFeatureVar.push_back(refMaskVar);
+		
+		ShaderFeatureVar stencilMaskVar;
+		stencilMaskVar.uint_value = stencilWriteMask;
+
+		shaderFeature.m_shaderFeatureVar.push_back(stencilMaskVar);
+
 	}
 
 }

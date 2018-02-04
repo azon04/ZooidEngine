@@ -71,6 +71,8 @@ namespace ZE {
 
 	void* MemoryManager::allocateBlock(size_t size, unsigned int &pool_index, unsigned int &block_index)
 	{
+		m_memoryLock.lock();
+
 		ZEINFO("Allocate memory for %d bytes", size);
 
 		// Check the matched size in pools
@@ -96,13 +98,16 @@ namespace ZE {
 		pool_index = index;
 		block_index = m_pools[index]->allocateFreeBlockIndex();
 
+		m_memoryLock.unlock();
 		return m_pools[pool_index]->getBlock(block_index);
 	}
 
 	void MemoryManager::freeBlock(unsigned int pool_index, unsigned int block_index)
 	{
+		m_memoryLock.lock();
 		ZASSERT(pool_index < NPOOL, "Pool index out of bound");
 		m_pools[pool_index]->freeBlock(block_index);
+		m_memoryLock.unlock();
 	}
 
 	void* MemoryManager::getBlock(unsigned int pool_index, unsigned int block_index)

@@ -193,6 +193,7 @@
     <ClInclude Include="Memory\MemoryManager.h" />
     <ClInclude Include="Memory\PoolAllocator.h" />
     <ClInclude Include="Memory\StackAllocator.h" />
+    <ClInclude Include="Platform\Thread.h" />
     <ClInclude Include="Renderer\BufferData.h" />
     <ClInclude Include="Renderer\BufferLayout.h" />
     <ClInclude Include="Renderer\GL\GLBufferArray.h" />
@@ -269,6 +270,7 @@
     <ClCompile Include="Memory\MemoryManager.cpp" />
     <ClCompile Include="Memory\PoolAllocator.cpp" />
     <ClCompile Include="Memory\StackAllocator.cpp" />
+    <ClCompile Include="Platform\Thread.cpp" />
     <ClCompile Include="Renderer\BufferData.cpp" />
     <ClCompile Include="Renderer\BufferLayout.cpp" />
     <ClCompile Include="Renderer\GL\GLBufferArray.cpp" />
@@ -316,6 +318,8 @@
     <None Include="Shaders\DefaultGLSimpleColor.frag" />
     <None Include="Shaders\DefaultGLSimpleLit.frag" />
     <None Include="Shaders\DefaultGLSimpleLit.vs" />
+    <None Include="Shaders\DefaultHighlightSimple.frag" />
+    <None Include="Shaders\DefaultHighlightSimple.vs" />
     <None Include="Shaders\ShaderData.ubs" />
     <None Include="Shaders\TestGLFragmentShader.frag" />
     <None Include="Shaders\TestGLVertexShader.vs" />

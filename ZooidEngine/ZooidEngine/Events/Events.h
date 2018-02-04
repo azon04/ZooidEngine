@@ -26,6 +26,7 @@ namespace ZE {
 		Event_UPDATE() {}
 		virtual ~Event_UPDATE() {}
 
+		// Delta Time in milliseconds
 		double m_deltaTime;
 	};
 

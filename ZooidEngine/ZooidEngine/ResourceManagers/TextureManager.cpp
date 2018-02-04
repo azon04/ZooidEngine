@@ -47,9 +47,13 @@ namespace ZE
 		Handle hCPUTexture = Texture::loadTexture(resourceFilePath);
 		if (hCPUTexture.isValid())
 		{
+			m_gameContext->getRenderer()->AcquireRenderThreadOwnership();
+
 			hGPUTexture = m_gameContext->getRenderZooid()->CreateRenderTexture();
 			IGPUTexture* pGPUTexture = hGPUTexture.getObject<IGPUTexture>();
 			pGPUTexture->FromTexture(hCPUTexture.getObject<Texture>());
+
+			m_gameContext->getRenderer()->ReleaseRenderThreadOwnership();
 		}
 
 		// Clean the CPU texture

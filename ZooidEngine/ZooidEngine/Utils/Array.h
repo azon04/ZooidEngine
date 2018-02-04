@@ -26,6 +26,11 @@ namespace ZE {
 
 		Array(const Array& otherArray)
 		{
+			if (this == &otherArray)
+			{
+				return;
+			}
+
 			reset(otherArray.capacity());
 			m_length = otherArray.length();
 			
@@ -77,6 +82,23 @@ namespace ZE {
 				T* newItem = item + i;
 				::new(newItem) T;
 			} 
+		}
+
+		Array<T, resizable>& operator=(const Array& otherArray)
+		{
+			if(this == &otherArray) 
+			{
+				return *this;
+			}
+			reset(otherArray.capacity());
+			m_length = otherArray.length();
+
+			for (int i = 0; i < m_length; ++i)
+			{
+				(*this)[i] = otherArray.getConst(i);
+			}
+
+			return *this;
 		}
 
 		// doubling the size

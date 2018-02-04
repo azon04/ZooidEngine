@@ -37,8 +37,13 @@ namespace ZE
 		s_instance->loadResourceAsync("ZooidEngine/Shaders/DefaultGLSimpleColor.frag");
 		s_instance->loadResourceAsync("ZooidEngine/Shaders/DefaultGLSimpleLit.vs");
 		s_instance->loadResourceAsync("ZooidEngine/Shaders/DefaultGLSimpleLit.frag");
+		s_instance->loadResourceAsync("ZooidEngine/Shaders/DefaultHighlightSimple.vs");
+		s_instance->loadResourceAsync("ZooidEngine/Shaders/DefaultHighlightSimple.frag");
 
 		s_instance->loadAllResource();
+
+
+		_gameContext->getRenderer()->AcquireRenderThreadOwnership();
 
 		{
 			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
@@ -68,6 +73,16 @@ namespace ZE
 			shaderChain->MakeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLit.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLit.frag"), nullptr, nullptr);
 			s_instance->m_shaderChain.push_back(shaderChain);
 		}
+
+		{
+			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
+			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
+			shaderChain->MakeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultHighlightSimple.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultHighlightSimple.frag"), nullptr, nullptr);
+			s_instance->m_shaderChain.push_back(shaderChain);
+		}
+
+
+		_gameContext->getRenderer()->ReleaseRenderThreadOwnership();
 	}
 
 	void ShaderManager::Destroy()
@@ -85,9 +100,17 @@ namespace ZE
 
 	ZE::Handle ShaderManager::loadResource_Internal(const char* resourceFilePath)
 	{
+
+		m_gameContext->getRenderer()->AcquireRenderThreadOwnership();
+
 		Handle hShader = m_gameContext->getRenderZooid()->CreateShader();
 		IShader* pShader = hShader.getObject<IShader>();
+		
+
 		pShader->loadShader(resourceFilePath, getShaderTypeByName(resourceFilePath));
+		
+		m_gameContext->getRenderer()->ReleaseRenderThreadOwnership();
+		
 		return hShader;
 	}
 

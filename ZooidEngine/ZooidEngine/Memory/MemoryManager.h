@@ -4,6 +4,8 @@
 #define NPOOL 8
 #define ALLIGNMENT 16
 
+#include "Platform/Thread.h"
+
 namespace ZE {
 	class PoolAllocator;
 
@@ -28,6 +30,8 @@ namespace ZE {
 		void* allocateBlock(size_t size, unsigned int &pool_index, unsigned int &block_index);
 		void freeBlock(unsigned int pool_index, unsigned int block_index);
 		void* getBlock(unsigned int pool_index, unsigned int block_index);
+
+		Mutex m_memoryLock;
 	};
 }
 #endif
