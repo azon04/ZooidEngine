@@ -106,6 +106,7 @@ namespace ZE {
 		{
 			Handle hRenderComp("Sample Crate", sizeof(RenderComponent));
 			RenderComponent* pRenderComp = new(hRenderComp) RenderComponent(_gameContext);
+			pRenderComp->m_bHighlight = true;
 
 			pRenderComp->setupComponent();
 			pRenderComp->fromFile(GetPackageAssetPath("Basic", "Mesh", "Crate.meshz").c_str());

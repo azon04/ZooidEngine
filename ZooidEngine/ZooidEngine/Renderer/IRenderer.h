@@ -1,11 +1,31 @@
 #ifndef __Z_RENDERER__
 #define __Z_RENDERER__
 
+#include "Utils/PrimitiveTypes.h"
+
 namespace ZE {
 
 struct ShaderData;
 class ShaderAction;
 class DrawList;
+
+enum RendererFeature : UInt32
+{
+	DEPTH_TEST = 0,
+	STENCIL_TEST = 1
+};
+
+enum RendererCompareFunc : UInt32
+{
+	NEVER,
+	LESS,
+	LEQUAL,
+	GREATER,
+	GEQUAL,
+	EQUAL,
+	NOTEQUAL,
+	ALWAYS
+};
 
 class IRenderer {
 public:
@@ -25,6 +45,12 @@ public:
 
 	virtual void AcquireRenderThreadOwnership() = 0;
 	virtual void ReleaseRenderThreadOwnership() = 0;
+
+	virtual void EnableFeature(UInt32 feature) = 0;
+	virtual void DisableFeature(UInt32 feature) = 0;
+	virtual void ResetFeature(UInt32 feature) = 0;
+
+	virtual bool IsFeatureEnabled(UInt32 feature) { return false; };
 	
 	virtual bool IsClose() { return false; };
 

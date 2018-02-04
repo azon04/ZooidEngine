@@ -547,7 +547,17 @@
     <None Include="Shaders\ShaderData.ubs">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Shaders\DefaultGLSimpleLit.frag" />
-    <None Include="Shaders\DefaultGLSimpleLit.vs" />
+    <None Include="Shaders\DefaultHighlightSimple.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\DefaultHighlightSimple.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\DefaultGLSimpleLit.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\DefaultGLSimpleLit.vs">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

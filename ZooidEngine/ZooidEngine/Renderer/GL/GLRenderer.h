@@ -2,11 +2,13 @@
 #define __ZE_GL_RENDERER__
 
 #include "Renderer/IRenderer.h"
+#include "Renderer/ShaderAction.h"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include "Platform/Thread.h"
+#include "Utils/HashMap.h"
 
 #define WIDTH 1280
 #define HEIGHT 720
@@ -19,7 +21,7 @@ class IGPUBufferData;
 class GLRenderer : public IRenderer {
 	
 public:
-	GLRenderer() {}
+	GLRenderer();
 	virtual ~GLRenderer() {}
 
 	virtual void Setup() override;
@@ -37,12 +39,21 @@ public:
 	virtual void AcquireRenderThreadOwnership() override;
 	virtual void ReleaseRenderThreadOwnership() override;
 
+	virtual void EnableFeature(UInt32 feature) override;
+	virtual void DisableFeature(UInt32 feature) override;
+	virtual bool IsFeatureEnabled(UInt32 feature) override;
+	virtual void ResetFeature(UInt32 feature) override;
+
 	virtual float GetHeight() const { return HEIGHT; }
 	virtual float GetWidth() const { return WIDTH; }
+
+	void ProcessShaderFeature(ShaderFeature& shaderFeature);
 
 	GLFWwindow* m_window;
 	GLFWwindow* m_renderWindow;
 	Mutex m_renderLock;
+	HashMap<UInt32, GLenum> HashFeatureToRealGLVar;
+	HashMap<UInt32, GLenum> HashCompareFuncToRealGLVar;
 };
 }
 #endif

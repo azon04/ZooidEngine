@@ -318,6 +318,8 @@
     <None Include="Shaders\DefaultGLSimpleColor.frag" />
     <None Include="Shaders\DefaultGLSimpleLit.frag" />
     <None Include="Shaders\DefaultGLSimpleLit.vs" />
+    <None Include="Shaders\DefaultHighlightSimple.frag" />
+    <None Include="Shaders\DefaultHighlightSimple.vs" />
     <None Include="Shaders\ShaderData.ubs" />
     <None Include="Shaders\TestGLFragmentShader.frag" />
     <None Include="Shaders\TestGLVertexShader.vs" />

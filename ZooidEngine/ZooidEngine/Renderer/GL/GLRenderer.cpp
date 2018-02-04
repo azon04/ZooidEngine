@@ -6,6 +6,21 @@
 
 namespace ZE {
 
+	GLRenderer::GLRenderer()
+	{
+		HashFeatureToRealGLVar.put(RendererFeature::DEPTH_TEST, GL_DEPTH_TEST);
+		HashFeatureToRealGLVar.put(RendererFeature::STENCIL_TEST, GL_STENCIL_TEST);
+
+		HashCompareFuncToRealGLVar.put(RendererCompareFunc::ALWAYS, GL_ALWAYS);
+		HashCompareFuncToRealGLVar.put(RendererCompareFunc::NEVER, GL_NEVER);
+		HashCompareFuncToRealGLVar.put(RendererCompareFunc::LESS, GL_LESS);
+		HashCompareFuncToRealGLVar.put(RendererCompareFunc::EQUAL, GL_EQUAL);
+		HashCompareFuncToRealGLVar.put(RendererCompareFunc::LEQUAL, GL_LEQUAL);
+		HashCompareFuncToRealGLVar.put(RendererCompareFunc::GREATER, GL_GREATER);
+		HashCompareFuncToRealGLVar.put(RendererCompareFunc::NOTEQUAL, GL_NOTEQUAL);
+		HashCompareFuncToRealGLVar.put(RendererCompareFunc::GEQUAL, GL_GEQUAL);
+	}
+
 	void GLRenderer::Setup()
 	{
 		glfwInit();
@@ -36,8 +51,11 @@ namespace ZE {
 		glfwGetFramebufferSize(m_window, &width, &height);
 
 		// Enable Depth test
-		glEnable(GL_DEPTH_TEST);
+		EnableFeature(RendererFeature::DEPTH_TEST);
 
+		// Enable Stencil Buffer
+		EnableFeature(RendererFeature::STENCIL_TEST);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 	}
 
 	void GLRenderer::BeginRender()
@@ -58,7 +76,9 @@ namespace ZE {
 	void GLRenderer::ClearScreen()
 	{
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glStencilMask(0xFF); // Before clearning Stencil buffer
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		glStencilMask(0x00); // Disable writing to stencil buffer
 	}
 
 	void GLRenderer::ProcessDrawList(DrawList* drawList)
@@ -103,6 +123,18 @@ namespace ZE {
 	{
 		shaderAction->m_shader->Bind();
 		
+		for (int i = 0; i < shaderAction->m_shaderFeatures.length(); i++)
+		{
+			ShaderFeature& shaderFeature = shaderAction->m_shaderFeatures[i];
+			
+			bool bDefaultEnable = IsFeatureEnabled(shaderFeature.m_rendererFeature);
+			
+			ProcessShaderFeature(shaderFeature);
+
+			// Save the default value for reverting the renderer feature
+			shaderFeature.m_bFeatureEnabled = bDefaultEnable;
+		}
+
 		for (int i = 0; i < shaderAction->m_shaderVariables.length(); i++)
 		{
 			ShaderVariable& shaderVariable = shaderAction->m_shaderVariables[i];
@@ -167,6 +199,22 @@ namespace ZE {
 				break;
 			}
 		}
+
+		// Revert Render Feature
+		for (int i = 0; i < shaderAction->m_shaderFeatures.length(); i++)
+		{
+			ShaderFeature& shaderFeature = shaderAction->m_shaderFeatures[i];
+			if (shaderFeature.m_bFeatureEnabled)
+			{
+				EnableFeature(shaderFeature.m_rendererFeature);
+				ResetFeature(shaderFeature.m_rendererFeature);
+			}
+			else
+			{
+				DisableFeature(shaderFeature.m_rendererFeature);
+			}
+		}
+
 		shaderAction->m_bufferArray->Unbind();
 		shaderAction->m_shader->Unbind();
 	}
@@ -192,6 +240,65 @@ namespace ZE {
 		glfwMakeContextCurrent(nullptr);
 		m_renderLock.unlock();
 
+	}
+
+	void GLRenderer::EnableFeature(UInt32 feature)
+	{
+		glEnable(HashFeatureToRealGLVar[feature]);
+	}
+
+	void GLRenderer::DisableFeature(UInt32 feature)
+	{
+		glDisable(HashFeatureToRealGLVar[feature]);
+	}
+
+	bool GLRenderer::IsFeatureEnabled(UInt32 feature)
+	{
+		return glIsEnabled(HashFeatureToRealGLVar[feature]) == GL_TRUE;
+	}
+
+	void GLRenderer::ResetFeature(UInt32 feature)
+	{
+		if (feature == RendererFeature::DEPTH_TEST)
+		{
+			glDepthFunc(GL_LESS);
+		}
+		else if (feature == RendererFeature::STENCIL_TEST)
+		{
+			glStencilFunc(GL_ALWAYS, 1, 0xFF);
+			glStencilMask(0x00);
+		}
+	}
+
+	void GLRenderer::ProcessShaderFeature(ShaderFeature& shaderFeature)
+	{
+		if (shaderFeature.m_bFeatureEnabled)
+		{
+			EnableFeature(shaderFeature.m_rendererFeature);
+
+			if (shaderFeature.m_rendererFeature == RendererFeature::DEPTH_TEST)
+			{
+
+				if (shaderFeature.m_shaderFeatureVar.length() > 0)
+				{
+					glDepthFunc(HashCompareFuncToRealGLVar[shaderFeature.m_shaderFeatureVar[0].uint_value]);
+				}
+			}
+			else if (shaderFeature.m_rendererFeature == RendererFeature::STENCIL_TEST)
+			{
+				if (shaderFeature.m_shaderFeatureVar.length() > 0)
+				{
+					glStencilFunc(HashCompareFuncToRealGLVar[shaderFeature.m_shaderFeatureVar[0].uint_value], 
+						shaderFeature.m_shaderFeatureVar[1].int_value, 
+						shaderFeature.m_shaderFeatureVar[2].uint_value);
+					glStencilMask(shaderFeature.m_shaderFeatureVar[3].uint_value);
+				}
+			}
+		}
+		else
+		{
+			DisableFeature(shaderFeature.m_rendererFeature);
+		}
 	}
 
 }
