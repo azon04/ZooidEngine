@@ -29,6 +29,9 @@ namespace ZE
 			shaderAction.SetShaderTextureVar(varName.c_str(), matTexture.texture, i);
 		}
 		shaderAction.SetShaderFloatVar("material.shininess", m_shininess);
+		shaderAction.SetShaderVec3Var("material.Ka", m_Ka);
+		shaderAction.SetShaderVec3Var("material.Kd", m_Kd);
+		shaderAction.SetShaderVec3Var("material.Ks", m_Ks);
 	}
 
 }

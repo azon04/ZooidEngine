@@ -6,6 +6,7 @@
 #include "Utils/Array.h"
 #include "Utils/PrimitiveTypes.h"
 #include "Renderer/ShaderAction.h"
+#include "Math/Vector3.h"
 
 namespace ZE
 {
@@ -30,9 +31,18 @@ namespace ZE
 
 	public:
 
-		Material() {}
+		Material() 
+			: m_Ka(0.0f, 0.0f, 0.0f),
+			m_Kd(1.0f, 1.0f, 1.0f),
+			m_Ks(1.0f, 1.0f, 1.0f)
+		{
+		}
+
 		Array<MaterialTexture, true> m_textures;
 		Float32 m_shininess;
+		Vector3 m_Ka;
+		Vector3 m_Kd;
+		Vector3 m_Ks;
 
 		void Bind(ShaderAction& shaderAction);
 	};

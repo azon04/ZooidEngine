@@ -12,6 +12,10 @@ struct Material
 	sampler2D specularMap;
 
 	float shininess;
+
+	vec3 Ka;
+	vec3 Kd;
+	vec3 Ks;
 };
 
 #define MAX_NUM_LIGHTS 8
