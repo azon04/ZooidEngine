@@ -33,6 +33,7 @@ int StringFunc::Length(const char* string)
 
 int StringFunc::Compare(const char* string1, const char* string2)
 {
+#if 0
 	int length = 0;
 	while (string1[length] != '\0' && string2[length] != '\0' && string1[length] == string2[length])
 	{
@@ -40,6 +41,9 @@ int StringFunc::Compare(const char* string1, const char* string2)
 	}
 
 	return string1[length] == string2[length] ? 0 : (string1[length] < string2[length] ? -1 : 1);
+#else
+	return strcmp(string1, string2);
+#endif
 }
 
 void StringFunc::Concat(const char* string1, const char* string2, char* res)
