@@ -21,7 +21,8 @@ namespace ZETools
 		NONE,
 		DIFFUSE_TEXTURE,
 		SPECULAR_TEXTURE,
-		NORMAL_TEXTURE
+		NORMAL_TEXTURE,
+		BUMP_TEXTURE
 	};
 
 	struct Texture
@@ -30,12 +31,21 @@ namespace ZETools
 		TextureType type;
 	};
 
+	struct Material
+	{
+		float Ka[3];
+		float Kd[3];
+		float Ks[3];
+		float shininess;
+		std::vector<Texture> textures;
+	};
+
 	struct Mesh
 	{
 		std::string name;
 		std::vector<Vertex> vertices;
 		std::vector<unsigned int> indices;
-		std::vector<Texture> textures;
+		Material material;
 	};
 
 	class ModelParser
@@ -48,11 +58,13 @@ namespace ZETools
 
 		void processNode(aiNode* node, const aiScene* scene);
 		void processMesh(aiMesh* mesh, const aiScene* scene);
-		std::vector<Texture> processMaterial(aiMaterial* mat, aiTextureType type);
+		std::vector<Texture> processTextures(aiMaterial* mat, aiTextureType type);
 
 		TextureType getTextureType(aiTextureType type);
+		std::string getFullPath(std::string outputDir, std::string path);
+
 	protected:
-		std::string m_directory;
+		std::string m_assetDir;
 		std::vector<Mesh> m_meshes;
 		std::string m_fileName;
 	};

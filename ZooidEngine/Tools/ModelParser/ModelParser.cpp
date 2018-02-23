@@ -20,44 +20,47 @@ namespace ZETools
 			return false;
 		}
 
-		m_directory = filePath.substr(0, filePath.find_last_of('/'));
-		m_fileName = filePath.substr(filePath.find_last_of('/'));
+		m_assetDir = filePath.substr(0, filePath.find_last_of(Dir::separator()));
+		m_fileName = filePath.substr(filePath.find_last_of(Dir::separator()));
 
 		processNode(scene->mRootNode, scene);
+
+		return true;
 	}
 
 	void ModelParser::save(std::string outputDir, std::string packageName)
 	{
-		// #TODO create folder structure if not present
-		std::string packagePath;
-		if (outputDir.length() > 0)
-		{
-			packagePath += outputDir + Dir::separator();
-		}
-		packagePath += packageName;
+		// Create folder structure if not present
+		std::string packagePath = packageName;
 
 		std::string vertexBufferPath = Dir::CombinePath( packagePath, "VertexBuffer");
 		std::string texturePath = Dir::CombinePath(packagePath, "Texture");
 		std::string materialPath = Dir::CombinePath(packagePath, "Material");
-		
-		Dir::CreateDirectory(vertexBufferPath);
-		Dir::CreateDirectory(texturePath);
-		Dir::CreateDirectory(materialPath);
+		std::string meshPath = Dir::CombinePath(packagePath, "Mesh");
 
-		for (int i = 0; i < m_meshes.size(); i++)
+		Dir::CreateDirectory(getFullPath(outputDir, vertexBufferPath));
+		Dir::CreateDirectory(getFullPath(outputDir, texturePath));
+		Dir::CreateDirectory(getFullPath(outputDir, materialPath));
+		Dir::CreateDirectory(getFullPath(outputDir, meshPath));
+
+		for (unsigned int i = 0; i < m_meshes.size(); i++)
 		{
 			Mesh& mesh = m_meshes[i];
 
-			// #TODO export vbuff and indices buffer to file
 			std::string meshFileName = mesh.name.length() > 0 ? mesh.name : m_fileName + "_" + std::to_string(i);
+			std::string vertexFilePath = Dir::CombinePath(vertexBufferPath, meshFileName + ".vbuff");
+			std::string matFilePath = Dir::CombinePath(materialPath, meshFileName + ".matz");
+			std::string meshFilePath = Dir::CombinePath(meshPath, meshFileName + ".meshz");
+
+			// Export vbuff and indices buffer to file
 			{
 				std::ofstream stream;
-				stream.open(Dir::CombinePath(vertexBufferPath, meshFileName + ".vbuff").c_str(), std::ofstream::out);
+				stream.open(getFullPath(outputDir, vertexFilePath), std::ofstream::out);
 				if (stream.is_open())
 				{
 					stream << "BUFFER_LAYOUT_V3_N3_TC2\n";
 					stream << mesh.vertices.size() << "\n";
-					for (int vi = 0; vi < mesh.vertices.size(); vi++)
+					for (unsigned int vi = 0; vi < mesh.vertices.size(); vi++)
 					{
 						stream << mesh.vertices[vi].Position[0] << " " << mesh.vertices[vi].Position[2] << " " << mesh.vertices[vi].Position[3] << "\t";
 						stream << mesh.vertices[vi].Normal[0] << " " << mesh.vertices[vi].Normal[1] << " " << mesh.vertices[vi].Normal[3] << "\t";
@@ -74,76 +77,108 @@ namespace ZETools
 						stream << "INDICE_BUFFER_NONE" << std::endl;
 					}
 
-					for (int j = 0; j < mesh.indices.size(); j++)
+					for (unsigned int j = 0; j < mesh.indices.size(); j++)
 					{
 						stream << mesh.indices[j] << std::endl;
 					}
 
 					stream.close();
 				}
-
-				// #TODO export material
-				// #TODO copying texture files if necessary
+				else
 				{
-					std::ofstream stream;
-					stream.open(Dir::CombinePath(materialPath, meshFileName + ".matz"));
-					if (stream.is_open())
-					{
-						for (int j = 0; j < mesh.textures.size(); j++)
-						{
-							Texture& texture = mesh.textures[j];
-							switch (texture.type)
-							{
-							case DIFFUSE_TEXTURE:
-								stream << "diffuse ";
-								break;
-							case NORMAL_TEXTURE:
-								stream << "normals ";
-								break;
-							case SPECULAR_TEXTURE:
-								stream << "specular ";
-								break;
-							default:
-								break;
-							}
-							
-							stream << Dir::CombinePath(texturePath, texture.path) << std::endl;
-
-							// Copy Files
-							std::ifstream source(Dir::CombinePath(m_directory, texture.path), std::ofstream::binary);
-							if (source.is_open())
-							{
-								std::ofstream dest(Dir::CombinePath(texturePath, texture.path), std::ofstream::binary);
-
-								dest << source.rdbuf();
-
-								source.close();
-								dest.close();
-							}
-						}
-
-						stream.close();
-					}
+					std::cout << "ERROR: Can't create \"" << getFullPath(outputDir, vertexFilePath) << "\"" << std::endl;
 				}
-				
-				// #TODO create meshz file
-
 			}
 
+			// Export material
+			// Copying texture files if necessary
+			{
+				std::ofstream stream;
+				stream.open(getFullPath(outputDir, matFilePath));
+				if (stream.is_open())
+				{
+					Material& mat = m_meshes[i].material;
+					stream << "Ka " << mat.Ka[0] << " " << mat.Ka[1] << " " << mat.Ka[2] << std::endl;
+					stream << "Kd " << mat.Kd[0] << " " << mat.Kd[1] << " " << mat.Kd[2] << std::endl;
+					stream << "Ks " << mat.Ks[0] << " " << mat.Ks[1] << " " << mat.Ks[2] << std::endl;
+					stream << "shininess " << mat.shininess << std::endl;
 
+					for (unsigned int j = 0; j < mat.textures.size(); j++)
+					{
+						Texture& texture = mat.textures[j];
+						switch (texture.type)
+						{
+						case DIFFUSE_TEXTURE:
+							stream << "diffuse ";
+							break;
+						case NORMAL_TEXTURE:
+							stream << "normals ";
+							break;
+						case SPECULAR_TEXTURE:
+							stream << "specular ";
+							break;
+						case BUMP_TEXTURE:
+							stream << "bump ";
+						default:
+							stream << "map ";
+							break;
+						}
+							
+						stream << Dir::CombinePath(texturePath, texture.path) << std::endl;
 
+						// Copy Files
+						std::ifstream source(Dir::CombinePath(m_assetDir, texture.path), std::ofstream::binary);
+						if (source.is_open())
+						{
+							std::ofstream dest(getFullPath(outputDir, Dir::CombinePath(texturePath, texture.path)), std::ofstream::binary);
+
+							dest << source.rdbuf();
+
+							source.close();
+							dest.close();
+						}
+						else
+						{
+							std::cout << "WARNING: Can't copy texture \"" << Dir::CombinePath(m_assetDir, texture.path) << "\". The texture might set something else in the game." << std::endl;
+						}
+					}
+
+					stream.close();
+				}
+				else
+				{
+					std::cout << "ERROR: Can't create \"" << getFullPath(outputDir, matFilePath) << "\"" << std::endl;
+				}
+			}
+				
+			// #TODO create meshz file
+			{
+				std::ofstream stream(getFullPath(outputDir, meshFilePath));
+				if (stream.is_open())
+				{
+					stream << "vbuff " << vertexFilePath << std::endl;
+					stream << "mat " << matFilePath << std::endl;
+
+					stream.close();
+				}
+				else
+				{
+					std::cout << "ERROR: Can't create \"" << getFullPath(outputDir, meshFilePath) << "\"" << std::endl;
+				}
+			}
+			
 		}
 	}
 
 	void ModelParser::processNode(aiNode* node, const aiScene* scene)
 	{
-		for (int i = 0; i < node->mNumMeshes; i++)
+		for (unsigned int i = 0; i < node->mNumMeshes; i++)
 		{
 			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 			processMesh(mesh, scene);
 		}
 
-		for (int i = 0; i < node->mNumChildren; i++)
+		for (unsigned int i = 0; i < node->mNumChildren; i++)
 		{
 			processNode(node->mChildren[i], scene);
 		}
@@ -155,7 +190,7 @@ namespace ZETools
 
 		outMesh.name = mesh->mName.C_Str();
 
-		for (int i = 0; i < mesh->mNumVertices; i++)
+		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 		{
 			Vertex pos = 
 				{ mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z,
@@ -174,10 +209,10 @@ namespace ZETools
 		}
 
 		// Indices
-		for (int i = 0; i < mesh->mNumFaces; i++)
+		for (unsigned int i = 0; i < mesh->mNumFaces; i++)
 		{
 			aiFace& face = mesh->mFaces[i];
-			for (int j = 0; j < face.mNumIndices; j++)
+			for (unsigned int j = 0; j < face.mNumIndices; j++)
 			{
 				outMesh.indices.push_back(face.mIndices[j]);
 			}
@@ -186,22 +221,49 @@ namespace ZETools
 		// Material
 		if (mesh->mMaterialIndex >= 0)
 		{
+			Material outMat;
 			aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+
+			aiColor3D MatKa;
+			aiColor3D MatKd;
+			aiColor3D MatKs;
+			ai_real shininess;
+			material->Get(AI_MATKEY_COLOR_AMBIENT, MatKa);
+			material->Get(AI_MATKEY_COLOR_DIFFUSE, MatKd);
+			material->Get(AI_MATKEY_COLOR_SPECULAR, MatKs);
+
+			material->Get(AI_MATKEY_SHININESS, shininess);
+
+			outMat.Ka[0] = MatKa.r;
+			outMat.Ka[1] = MatKa.g;
+			outMat.Ka[2] = MatKa.b;
+
+			outMat.Kd[0] = MatKd.r;
+			outMat.Kd[1] = MatKd.g;
+			outMat.Kd[2] = MatKd.b;
+
+			outMat.Ks[0] = MatKs.r;
+			outMat.Ks[1] = MatKs.g;
+			outMat.Ks[2] = MatKs.b;
+
+			outMat.shininess = shininess;
+
 			for (aiTextureType type = aiTextureType_NONE; type < aiTextureType_UNKNOWN; )
 			{
-				std::vector<Texture> res = processMaterial(material, type);
-				outMesh.textures.insert(outMesh.textures.end(), res.begin(), res.end());
+				std::vector<Texture> res = processTextures(material, type);
+				outMat.textures.insert(outMat.textures.end(), res.begin(), res.end());
 				type = (aiTextureType)(static_cast<unsigned int>(type) + 1);
 			}
+			outMesh.material = outMat;
 		}
 
 		m_meshes.push_back(outMesh);
 	}
 
-	std::vector<ZETools::Texture> ModelParser::processMaterial(aiMaterial* mat, aiTextureType type)
+	std::vector<ZETools::Texture> ModelParser::processTextures(aiMaterial* mat, aiTextureType type)
 	{
 		std::vector<Texture> res;
-		for (int i = 0; i < mat->GetTextureCount(type); i++)
+		for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
 		{
 			aiString str;
 			mat->GetTexture(type, i, &str);
@@ -230,7 +292,7 @@ namespace ZETools
 		case aiTextureType_EMISSIVE:
 			break;
 		case aiTextureType_HEIGHT:
-			return NORMAL_TEXTURE; // TODO will support later
+			return BUMP_TEXTURE;
 			break;
 		case aiTextureType_NORMALS:
 			return NORMAL_TEXTURE;
@@ -254,6 +316,16 @@ namespace ZETools
 		}
 
 		return NONE;
+	}
+
+	std::string ModelParser::getFullPath(std::string outputDir, std::string path)
+	{
+		if (outputDir.length() > 0)
+		{
+			return Dir::CombinePath(outputDir, path);
+		}
+
+		return path;
 	}
 
 }

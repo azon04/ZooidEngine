@@ -10,14 +10,14 @@
 
 bool ZETools::Dir::CreateDirectory(std::string path)
 {
-	if (access(path.c_str(), 0) == 0)
+	if (_access(path.c_str(), 0) == 0)
 	{
 		return true;
 	}
 
 	if (path.find_last_of("\\") == std::string::npos && path.find_last_of("/") == std::string::npos)
 	{
-		return mkdir(path.c_str()) == 0;
+		return _mkdir(path.c_str()) == 0;
 	}
 	else
 	{
@@ -29,7 +29,7 @@ bool ZETools::Dir::CreateDirectory(std::string path)
 
 		bool res = CreateDirectory(path.substr(0, lastDelim));
 
-		return res && mkdir(path.c_str()) == 0;
+		return res && _mkdir(path.c_str()) == 0;
 	}
 
 	return false;
