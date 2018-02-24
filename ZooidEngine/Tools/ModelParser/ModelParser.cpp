@@ -62,8 +62,8 @@ namespace ZETools
 					stream << mesh.vertices.size() << "\n";
 					for (unsigned int vi = 0; vi < mesh.vertices.size(); vi++)
 					{
-						stream << mesh.vertices[vi].Position[0] << " " << mesh.vertices[vi].Position[2] << " " << mesh.vertices[vi].Position[3] << "\t";
-						stream << mesh.vertices[vi].Normal[0] << " " << mesh.vertices[vi].Normal[1] << " " << mesh.vertices[vi].Normal[3] << "\t";
+						stream << mesh.vertices[vi].Position[0] << " " << mesh.vertices[vi].Position[1] << " " << mesh.vertices[vi].Position[2] << "\t";
+						stream << mesh.vertices[vi].Normal[0] << " " << mesh.vertices[vi].Normal[1] << " " << mesh.vertices[vi].Normal[2] << "\t";
 						stream << mesh.vertices[vi].TexCoords[0] << " " << mesh.vertices[vi].TexCoords[1] << "\n";
 					}
 
@@ -192,11 +192,15 @@ namespace ZETools
 
 		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 		{
-			Vertex pos = 
-				{ mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z,
-					mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z,
-					0.0f, 0.0f
-				};
+			Vertex pos;
+			pos.Position[0] = mesh->mVertices[i].x;
+			pos.Position[1] = mesh->mVertices[i].y;
+			pos.Position[2] = mesh->mVertices[i].z;
+			pos.Normal[0] = mesh->mNormals[i].x;
+			pos.Normal[1] = mesh->mNormals[i].y;
+			pos.Normal[2] = mesh->mNormals[i].z;
+			pos.TexCoords[0] = 0.0f;
+			pos.TexCoords[1] = 0.0f;
 
 			if (mesh->mTextureCoords[0])
 			{

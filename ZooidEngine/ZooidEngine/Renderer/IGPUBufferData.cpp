@@ -15,7 +15,7 @@ namespace ZE {
 		m_BufferData = _bufferData;
 		m_dataCount = _bufferData->m_count;
 
-		if (m_bufferType != UNIFORM_BUFFER)
+		if (m_bufferType == VERTEX_BUFFER)
 		{
 			SetupLayout(BufferLayoutManager::getInstance()->m_bufferLayout[_bufferData->m_bufferLayout]);
 		}

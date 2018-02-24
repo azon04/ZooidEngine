@@ -103,10 +103,10 @@ namespace ZE {
 		}
 
 		// Put sample boxes
-		{
+		/*{
 			Handle hRenderComp("Sample Crate", sizeof(RenderComponent));
 			RenderComponent* pRenderComp = new(hRenderComp) RenderComponent(_gameContext);
-			pRenderComp->m_bHighlight = true;
+			
 
 			pRenderComp->setupComponent();
 			pRenderComp->fromFile(GetPackageAssetPath("Basic", "Mesh", "Crate.meshz").c_str());
@@ -114,21 +114,23 @@ namespace ZE {
 			pRenderComp->m_worldTransform.rotateAroundN(DegToRad(45));
 
 			_gameContext->getRootComponent()->addChild(pRenderComp);
-		}
+		}*/
 
 		{
 			Handle hRenderComp("Sample Crate", sizeof(RenderComponent));
 			RenderComponent* pRenderComp = new(hRenderComp) RenderComponent(_gameContext);
+			pRenderComp->m_bHighlight = true;
 
 			pRenderComp->setupComponent();
-			pRenderComp->fromFile(GetPackageAssetPath("Basic", "Mesh", "Crate.meshz").c_str());
-			pRenderComp->m_worldTransform.setPos(Vector3(-1.5f, 0.0f, 0.0f));
-			pRenderComp->m_worldTransform.rotateAroundU(DegToRad(45));
+			pRenderComp->fromFile(GetPackageAssetPath("Nanosuit", "Mesh", "Arms.meshz").c_str());
+			//pRenderComp->m_worldTransform.setPos(Vector3(-1.5f, 0.0f, 0.0f));
+			//pRenderComp->m_worldTransform.rotateAroundU(DegToRad(45));
+			pRenderComp->m_worldTransform.scale(Vector3(0.25, 0.25, 0.25));
 
 			_gameContext->getRootComponent()->addChild(pRenderComp);
 		}
 
-		{
+		/*{
 			Handle hRenderComp("Sample Crate", sizeof(RenderComponent));
 			RenderComponent* pRenderComp = new(hRenderComp) RenderComponent(_gameContext);
 
@@ -138,7 +140,7 @@ namespace ZE {
 			pRenderComp->m_worldTransform.rotateAroundV(DegToRad(45));
 
 			_gameContext->getRootComponent()->addChild(pRenderComp);
-		}
+		}*/
 
 #if ZE_RENDER_MULTITHREAD
 		g_drawReady = false;
