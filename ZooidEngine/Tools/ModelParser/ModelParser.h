@@ -13,7 +13,7 @@ namespace ZETools
 	{
 		float Position[3];
 		float Normal[3];
-		float TexCoords[3];
+		float TexCoords[2];
 	};
 
 	enum TextureType

@@ -80,6 +80,24 @@ namespace ZE
 			{
 				pMaterial->m_shininess = reader.readNextFloat();
 			}
+			else if (StringFunc::Compare(tokenBuffer, "Ka") == 0)
+			{
+				pMaterial->m_Ka.setX(reader.readNextFloat());
+				pMaterial->m_Ka.setY(reader.readNextFloat());
+				pMaterial->m_Ka.setZ(reader.readNextFloat());
+			}
+			else if (StringFunc::Compare(tokenBuffer, "Kd") == 0)
+			{
+				pMaterial->m_Kd.setX(reader.readNextFloat());
+				pMaterial->m_Kd.setY(reader.readNextFloat());
+				pMaterial->m_Kd.setZ(reader.readNextFloat());
+			}
+			else if (StringFunc::Compare(tokenBuffer, "Ks") == 0)
+			{
+				pMaterial->m_Ks.setX(reader.readNextFloat());
+				pMaterial->m_Ks.setY(reader.readNextFloat());
+				pMaterial->m_Ks.setZ(reader.readNextFloat());
+			}
 		}
 
 		reader.close();

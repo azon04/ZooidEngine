@@ -1,7 +1,7 @@
 #ifndef __ZE_MEMORY_MANAGER_H__
 #define __ZE_MEMORY_MANAGER_H__
 
-#define NPOOL 8
+#define NPOOL 10
 #define ALLIGNMENT 16
 
 #include "Platform/Thread.h"

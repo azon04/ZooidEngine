@@ -270,7 +270,7 @@ namespace ZE {
 		{
 			int numIndex = fileReader.readNextInt();
 			indexDataHandle = Handle("Data", sizeof(Int32) * numIndex);
-			Int32* indexData = new(indexDataHandle) Int32[numIndex];
+			UInt32* indexData = new(indexDataHandle) UInt32[numIndex];
 
 			for (int i = 0; i < numIndex; ++i)
 			{
@@ -278,7 +278,7 @@ namespace ZE {
 			}
 
 			pIndexBuffer = new(hIndexBufferData) BufferData(INDEX_BUFFER);
-			pIndexBuffer->SetData(indexData, sizeof(Int32), numIndex);
+			pIndexBuffer->SetData(indexData, sizeof(UInt32), numIndex);
 		}
 
 		fileReader.close();
