@@ -47,6 +47,15 @@ public:
 	virtual float GetHeight() const { return HEIGHT; }
 	virtual float GetWidth() const { return WIDTH; }
 
+#if defined(_WIN32) || defined(_WIN64)
+	virtual HWND getWinWindow() override
+	{
+		return m_winWindow;
+	}
+
+	HWND m_winWindow;
+#endif
+
 	void ProcessShaderFeature(ShaderFeature& shaderFeature);
 
 	GLFWwindow* m_window;

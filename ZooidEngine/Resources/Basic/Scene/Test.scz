@@ -1,0 +1,19 @@
+SceneName TestMap
+CompName Crate_1
+Class StaticMesh
+Mesh Basic/Mesh/Crate.meshz
+S 1.0 1.0 1.0
+R 45.0 0.0 0.0
+T 0.0 0.0 0.0
+CompName Crate_2
+Class StaticMesh
+Mesh Basic/Mesh/Crate.meshz
+S 1.0 1.0 1.0
+R 0.0 45.0 0.0
+T 1.0 0.0 0.0
+CompName Crate_2
+Class StaticMesh
+Mesh Basic?mesh/Crate.meshz
+S 1.0 1.0 1.0
+R 0.0 0.0 45.0
+T -1.0 0.0 0.0
