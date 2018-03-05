@@ -19,6 +19,7 @@ namespace ZE
 
 		void handleKeyDownEvent(Event* _event);
 		void handleKeyUpEvent(Event* _event);
+		void handleMouseDragEvent(Event* _event);
 
 	protected:
 		Vector3 m_velocity;

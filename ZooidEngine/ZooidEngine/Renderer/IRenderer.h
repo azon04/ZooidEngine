@@ -3,6 +3,10 @@
 
 #include "Utils/PrimitiveTypes.h"
 
+#if defined(_WIN32) || defined(_WIN64)
+#include <Windows.h>
+#endif
+
 namespace ZE {
 
 struct ShaderData;
@@ -56,6 +60,11 @@ public:
 
 	virtual float GetHeight() const = 0;
 	virtual float GetWidth() const = 0;
+
+#if defined(_WIN32) || defined(_WIN64)
+	virtual HWND getWinWindow() = 0;
+#endif
+
 };
 
 }

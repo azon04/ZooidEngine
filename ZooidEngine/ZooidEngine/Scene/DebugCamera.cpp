@@ -15,6 +15,7 @@ namespace ZE
 		CameraComponent::setupComponent();
 		addEventDelegate(Event_KEY_UP, &DebugCamera::handleKeyUpEvent);
 		addEventDelegate(Event_KEY_DOWN, &DebugCamera::handleKeyDownEvent);
+		addEventDelegate(Event_MOUSE_DRAG, &DebugCamera::handleMouseDragEvent);
 	}
 
 	void DebugCamera::handleUpdateEvent(Event* _event)
@@ -114,6 +115,18 @@ namespace ZE
 		}
 	}
 
+	void DebugCamera::handleMouseDragEvent(Event* _event)
+	{
+		Event_MOUSE_DRAG* pMouseDragEvent = (Event_MOUSE_DRAG*)_event;
 
+		if (pMouseDragEvent->m_keyId == VK_RBUTTON)
+		{
+			float deltaPitch = pMouseDragEvent->m_deltaY * 0.001;
+			float deltaYaw = pMouseDragEvent->m_deltaX * 0.001;
+
+			m_worldTransform.rotateAroundV(deltaYaw);
+			m_worldTransform.rotateAroundU(deltaPitch);
+		}
+	}
 
 }

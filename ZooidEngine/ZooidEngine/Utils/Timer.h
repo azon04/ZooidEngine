@@ -9,6 +9,7 @@
 	
 	typedef std::chrono::high_resolution_clock::time_point Time;
 	typedef std::chrono::duration<double, std::milli> DeltaTime;
+	typedef std::chrono::duration<double> DeltaSeconds;
 
 	#define CPP11_CHRONO 1
 #else 
@@ -16,6 +17,7 @@
 	
 	typedef timespec Time;
 	typedef double DeltaTime;
+	typedef double DeltaSeconds;
 
 #endif
 
@@ -44,17 +46,36 @@ namespace ZE
 		
 		FORCEINLINE double GetDeltaMS() 
 		{ 
+			Time now = Now();
+
 #if CPP11_CHRONO
+			delta = now - t;
 			return delta.count();
 #else
+			delta = Delta(now, t);
 			return delta; 
+#endif
+		}
+
+		FORCEINLINE double GetDeltaSeconds()
+		{
+			Time now = Now();
+#if CPP11_CHRONO
+			DeltaSeconds deltaSeconds = now - t;
+			return deltaSeconds.count();
+#else
+			return CalcDeltaSeconds(now, t);
 #endif
 		}
 
 		FORCEINLINE double ResetAndGetDeltaMS() 
 		{ 
 			Reset();
-			return GetDeltaMS(); 
+#if CPP11_CHRONO
+			return delta.count();
+#else
+			return delta;
+#endif 
 		}
 
 		// Inner timer representation
@@ -75,6 +96,11 @@ namespace ZE
 		static FORCEINLINE DeltaTime Delta(const Time& time1, const Time& time2)
 		{
 			return (time1.tv_sec - time2.tv_sec) * 1000.0 + (time1.tv_nsec - time2.tv_nsec) / 1000000.0;
+		}
+
+		static FORCEINLINE DeltaSeconds CalcDeltaSeconds(const Time& time1, const Time& time2)
+		{
+			return (time1.tv_sec - time2.tv_sec) + (time1.tv_nsec - time2.tv_nsec) / 1000.0;
 		}
 #endif
 

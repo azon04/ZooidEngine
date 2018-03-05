@@ -20,6 +20,12 @@ namespace ZE
 
 		void handleUpdate(Event* event);
 
+		FORCEINLINE void getMousePosition(int& mouseX, int& mouseY)
+		{
+			mouseX = m_mouseX;
+			mouseY = m_mouseY;
+		}
+
 		FORCEINLINE bool IsKeyDown(Short keyId) const
 		{
 			return ( m_keyStates[keyId] & 0x80 ) > 0;
@@ -29,6 +35,16 @@ namespace ZE
 
 		Byte m_keyStates[256];
 		Byte m_prevState[256];
+
+		int m_mouseX;
+		int m_mouseY;
+
+		// For dragging
+		int m_startDragX;
+		int m_startDragY;
+		float m_currentDragTime;
+		bool m_isCurrentDragged;
+		Byte m_currentDragKey;
 	};
 };
 
