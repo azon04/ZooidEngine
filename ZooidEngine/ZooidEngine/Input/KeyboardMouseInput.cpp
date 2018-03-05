@@ -48,12 +48,13 @@ namespace ZE {
 						pEvent->m_keyId = i;
 						m_gameContext->getEventDispatcher()->addEvent(handle, EVENT_INPUT);	
 
-						if (i == VK_LBUTTON && !m_isCurrentDragged)
+						if ((i == VK_LBUTTON || i == VK_RBUTTON) && (!m_isCurrentDragged || m_currentDragKey != i))
 						{
 							m_currentDragTime = 0.0f;
 							m_isCurrentDragged = true;
 							m_startDragX = m_mouseX;
 							m_startDragY = m_mouseY;
+							m_currentDragKey = i;
 						}
 					}
 					else
@@ -63,7 +64,7 @@ namespace ZE {
 						pEvent->m_keyId = i;
 						m_gameContext->getEventDispatcher()->addEvent(handle, EVENT_INPUT);
 
-						if (i == VK_LBUTTON && m_isCurrentDragged)
+						if ((i == VK_LBUTTON || i == VK_RBUTTON ) && m_isCurrentDragged && m_currentDragKey == i)
 						{
 							m_isCurrentDragged = false;
 						}
@@ -77,12 +78,12 @@ namespace ZE {
 		{
 			m_currentDragTime += pEventUpdate->m_deltaTime;
 
-			const float deltaTime = 500.0f;
+			const float deltaTime = 10.0f;
 			if (m_currentDragTime > deltaTime)
 			{
 				Handle handle("MouseDragInput", sizeof(Event_MOUSE_DRAG));
 				Event_MOUSE_DRAG* pEvent = new(handle) Event_MOUSE_DRAG;
-				pEvent->m_keyId = VK_LBUTTON;
+				pEvent->m_keyId = m_currentDragKey;
 				pEvent->m_deltaX = m_mouseX - m_startDragX;
 				pEvent->m_deltaY = m_mouseY - m_startDragY;
 

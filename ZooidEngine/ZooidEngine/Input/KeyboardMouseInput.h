@@ -44,6 +44,7 @@ namespace ZE
 		int m_startDragY;
 		float m_currentDragTime;
 		bool m_isCurrentDragged;
+		Byte m_currentDragKey;
 	};
 };
 
