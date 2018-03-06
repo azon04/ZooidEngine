@@ -134,7 +134,7 @@ namespace ZE {
 			RenderComponent* pRenderComp = new(hRenderComp) RenderComponent(_gameContext);
 
 			pRenderComp->setupComponent();
-			pRenderComp->fromFile(GetPackageAssetPath("Basic", "Mesh", "Crate.meshz").c_str());
+			pRenderComp->fromFile(GetPackageAssetPath("Basic", "Mesh", "Window.meshz").c_str());
 			pRenderComp->m_worldTransform.setPos(Vector3(0.0f, 0.0f, 0.0f));
 			pRenderComp->m_worldTransform.rotateAroundV(DegToRad(45));
 

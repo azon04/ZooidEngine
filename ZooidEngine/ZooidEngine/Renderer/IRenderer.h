@@ -16,7 +16,8 @@ class DrawList;
 enum RendererFeature : UInt32
 {
 	DEPTH_TEST = 0,
-	STENCIL_TEST = 1
+	STENCIL_TEST = 1,
+	BLEND = 2
 };
 
 enum RendererCompareFunc : UInt32

@@ -318,6 +318,7 @@
     <None Include="Shaders\DefaultGLSimpleColor.frag" />
     <None Include="Shaders\DefaultGLSimpleLit.frag" />
     <None Include="Shaders\DefaultGLSimpleLit.vs" />
+    <None Include="Shaders\DefaultGLSimpleLit_Blend.frag" />
     <None Include="Shaders\DefaultHighlightSimple.frag" />
     <None Include="Shaders\DefaultHighlightSimple.vs" />
     <None Include="Shaders\ShaderData.ubs" />

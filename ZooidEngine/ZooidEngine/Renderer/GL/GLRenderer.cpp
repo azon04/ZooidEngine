@@ -16,6 +16,7 @@ namespace ZE {
 	{
 		HashFeatureToRealGLVar.put(RendererFeature::DEPTH_TEST, GL_DEPTH_TEST);
 		HashFeatureToRealGLVar.put(RendererFeature::STENCIL_TEST, GL_STENCIL_TEST);
+		HashFeatureToRealGLVar.put(RendererFeature::BLEND, GL_BLEND);
 
 		HashCompareFuncToRealGLVar.put(RendererCompareFunc::ALWAYS, GL_ALWAYS);
 		HashCompareFuncToRealGLVar.put(RendererCompareFunc::NEVER, GL_NEVER);
@@ -107,6 +108,11 @@ namespace ZE {
 		for (int i = 0; i < drawList->m_size; ++i)
 		{
 			ProcessShaderAction(&drawList->m_drawList[i]);
+		}
+
+		for (int i = 0; i < drawList->m_secondPassSize; ++i)
+		{
+			ProcessShaderAction(&drawList->m_secondPassDrawList[i]);
 		}
 
 		if (drawList->m_mainConstantBuffer)
@@ -304,6 +310,10 @@ namespace ZE {
 						shaderFeature.m_shaderFeatureVar[2].uint_value);
 					glStencilMask(shaderFeature.m_shaderFeatureVar[3].uint_value);
 				}
+			}
+			else if(shaderFeature.m_rendererFeature == RendererFeature::BLEND)
+			{
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			}
 		}
 		else

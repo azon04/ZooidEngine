@@ -154,4 +154,12 @@ namespace ZE {
 
 	}
 
+	void EnableAndSetBlendFunc(ShaderAction& shaderAction)
+	{
+		shaderAction.m_shaderFeatures.push_back(ShaderFeature());
+		ShaderFeature& shaderFeature = shaderAction.m_shaderFeatures[shaderAction.m_shaderFeatures.length() - 1];
+		shaderFeature.m_rendererFeature = BLEND;
+		shaderFeature.m_bFeatureEnabled = true;
+	}
+
 }
