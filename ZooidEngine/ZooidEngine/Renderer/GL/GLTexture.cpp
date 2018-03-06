@@ -24,6 +24,7 @@ namespace ZE
 			imageFormat = GL_RGB;
 			break;
 		}
+
 		glGenTextures(1, &m_textureBuffer);
 
 		glBindTexture(GL_TEXTURE_2D, m_textureBuffer);

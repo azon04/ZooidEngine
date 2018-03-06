@@ -115,6 +115,6 @@ public:
 // Shader Action Helper; Representative Name of function
 void EnableAndSetDepthFunction(ShaderAction& shaderAction, RendererCompareFunc func);
 void EnableAndSetStencilFunc(ShaderAction& shaderAction, RendererCompareFunc func, Int32 ref, UInt32 refMask, UInt32 stencilWriteMask);
-void EnableAndSetBlendFunc(ShaderAction& shaderAction);
+void EnableAndSetBlendFunc(ShaderAction& shaderAction, RendererBlendFactor sourceBlenFactor, RendererBlendFactor dstBlendFactor);
 };
 #endif // __Z_SHADER_ACTION__

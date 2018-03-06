@@ -154,12 +154,24 @@ namespace ZE {
 
 	}
 
-	void EnableAndSetBlendFunc(ShaderAction& shaderAction)
+	void EnableAndSetBlendFunc(ShaderAction& shaderAction, RendererBlendFactor sourceBlendFactor, RendererBlendFactor dstBlendFactor)
 	{
 		shaderAction.m_shaderFeatures.push_back(ShaderFeature());
 		ShaderFeature& shaderFeature = shaderAction.m_shaderFeatures[shaderAction.m_shaderFeatures.length() - 1];
 		shaderFeature.m_rendererFeature = BLEND;
 		shaderFeature.m_bFeatureEnabled = true;
+
+		ShaderFeatureVar sourceBlendFactorVar;
+		sourceBlendFactorVar.uint_value = sourceBlendFactor;
+
+		shaderFeature.m_shaderFeatureVar.push_back(sourceBlendFactorVar);
+
+		ShaderFeatureVar destBlendFactorVar;
+		destBlendFactorVar.uint_value = dstBlendFactor;
+
+		shaderFeature.m_shaderFeatureVar.push_back(destBlendFactorVar);
+
+
 	}
 
 }

@@ -31,7 +31,7 @@ namespace ZE {
 			{
 				shaderAction = &m_gameContext->getDrawList()->getNextSecondPassShaderAction();
 				shader = ShaderManager::getInstance()->getShaderChain(Z_SHADER_CHAIN_3D_DEFAULT_LIT_BLEND);
-				EnableAndSetBlendFunc(*shaderAction);
+				EnableAndSetBlendFunc(*shaderAction, SRC_ALPHA, ONE_MINUS_SRC_ALPHA);
 			}
 			else
 			{

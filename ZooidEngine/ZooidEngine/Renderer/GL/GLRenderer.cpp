@@ -26,6 +26,21 @@ namespace ZE {
 		HashCompareFuncToRealGLVar.put(RendererCompareFunc::GREATER, GL_GREATER);
 		HashCompareFuncToRealGLVar.put(RendererCompareFunc::NOTEQUAL, GL_NOTEQUAL);
 		HashCompareFuncToRealGLVar.put(RendererCompareFunc::GEQUAL, GL_GEQUAL);
+
+		HashBlendFactorToRealGLVar.put(RendererBlendFactor::ZERO, GL_ZERO);
+		HashBlendFactorToRealGLVar.put(RendererBlendFactor::ONE, GL_ONE);
+		HashBlendFactorToRealGLVar.put(RendererBlendFactor::SRC_COLOR, GL_SRC_COLOR);
+		HashBlendFactorToRealGLVar.put(RendererBlendFactor::ONE_MINUS_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR);
+		HashBlendFactorToRealGLVar.put(RendererBlendFactor::DST_COLOR, GL_DST_COLOR);
+		HashBlendFactorToRealGLVar.put(RendererBlendFactor::ONE_MINUS_DST_COLOR, GL_ONE_MINUS_DST_COLOR);
+		HashBlendFactorToRealGLVar.put(RendererBlendFactor::SRC_ALPHA, GL_SRC_ALPHA);
+		HashBlendFactorToRealGLVar.put(RendererBlendFactor::ONE_MINUS_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		HashBlendFactorToRealGLVar.put(RendererBlendFactor::DST_ALPHA, GL_DST_ALPHA);
+		HashBlendFactorToRealGLVar.put(RendererBlendFactor::ONE_MINUS_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA);
+		HashBlendFactorToRealGLVar.put(RendererBlendFactor::CONSTANT_COLOR, GL_CONSTANT_COLOR);
+		HashBlendFactorToRealGLVar.put(RendererBlendFactor::ONE_MINUS_CONSTANT_COLOR, GL_ONE_MINUS_CONSTANT_COLOR);
+		HashBlendFactorToRealGLVar.put(RendererBlendFactor::CONSTANT_ALPHA, GL_CONSTANT_ALPHA);
+		HashBlendFactorToRealGLVar.put(RendererBlendFactor::ONE_MINUS_CONSTANT_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);
 	}
 
 	void GLRenderer::Setup()
@@ -313,7 +328,9 @@ namespace ZE {
 			}
 			else if(shaderFeature.m_rendererFeature == RendererFeature::BLEND)
 			{
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				GLenum sourceFactor = HashBlendFactorToRealGLVar[shaderFeature.m_shaderFeatureVar[0].uint_value];
+				GLenum destFactor = HashBlendFactorToRealGLVar[shaderFeature.m_shaderFeatureVar[1].uint_value];
+				glBlendFunc(sourceFactor, destFactor);
 			}
 		}
 		else

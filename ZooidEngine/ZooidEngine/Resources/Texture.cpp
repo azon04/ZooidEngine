@@ -12,7 +12,7 @@ namespace ZE
 	{
 		Handle textureHandle(sizeof(Texture));
 		int width, height, channel;
-		UChar* image = stbi_load(filePath, &width, &height, &channel, 0); // #TODO handle image with alpha
+		UChar* image = stbi_load(filePath, &width, &height, &channel, 0);
 
 		if (image)
 		{

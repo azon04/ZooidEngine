@@ -63,6 +63,7 @@ public:
 	Mutex m_renderLock;
 	HashMap<UInt32, GLenum> HashFeatureToRealGLVar;
 	HashMap<UInt32, GLenum> HashCompareFuncToRealGLVar;
+	HashMap<UInt32, GLenum> HashBlendFactorToRealGLVar;
 };
 }
 #endif
