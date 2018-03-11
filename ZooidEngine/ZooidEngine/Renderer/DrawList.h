@@ -1,7 +1,8 @@
 #ifndef __ZE_DRAW_LIST__
 #define __ZE_DRAW_LIST__
 
-#include "../Utils/PrimitiveTypes.h"
+#include "Utils/PrimitiveTypes.h"
+#include "Math/Vector3.h"
 #include "ShaderAction.h"
 #include "ShaderData.h"
 
@@ -40,6 +41,9 @@ namespace ZE {
 
 		LightData m_lightData;
 		IGPUBufferData* m_lightConstantBuffer;
+
+		Vector3 m_cameraPosition;
+		Vector3 m_cameraDirection;
 	};
 
 };

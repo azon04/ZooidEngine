@@ -97,6 +97,18 @@ namespace ZE {
 		m_shaderVariables.push_back(shaderVariable);
 	}
 
+	void ShaderAction::GetShaderMatVar(const char* _name, Matrix4x4& _value)
+	{
+		for (int i = 0; i < m_shaderVariables.length(); i++)
+		{
+			if (StringFunc::Compare(m_shaderVariables[i].m_varName, _name) == 0)
+			{
+				_value = m_shaderVariables[i].mat_value;
+				return;
+			}
+		}
+	}
+
 	void ShaderAction::AddShaderFeature(UInt32 _feature, bool _enabled)
 	{
 		ShaderFeature shaderFeature;

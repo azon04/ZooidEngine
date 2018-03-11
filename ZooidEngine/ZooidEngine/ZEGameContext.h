@@ -36,6 +36,7 @@ namespace ZE {
 
 		Timer m_mainTimer;
 		Timer m_globalTimer;
+		Timer m_renderThreadTimer;
 
 		FORCEINLINE RenderZooid* getRenderZooid() const { return m_renderZooid; }
 		FORCEINLINE IRenderer* getRenderer() const { return m_renderer; }

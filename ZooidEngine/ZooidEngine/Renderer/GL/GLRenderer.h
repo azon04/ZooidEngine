@@ -57,6 +57,7 @@ public:
 #endif
 
 	void ProcessShaderFeature(ShaderFeature& shaderFeature);
+	void SortBlendShaderActions(const Vector3& cameraPosition, const Vector3& cameraDirection,  ShaderAction* inArray, UInt32* outIndexArray, UInt32 count);
 
 	GLFWwindow* m_window;
 	GLFWwindow* m_renderWindow;

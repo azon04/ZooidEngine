@@ -2,7 +2,7 @@
 
 #include "../Math/Vector3.h"
 
-#define USING_INVERSE 0
+#define USING_INVERSE 1
 
 namespace ZE {
 

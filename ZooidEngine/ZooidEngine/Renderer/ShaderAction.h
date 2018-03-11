@@ -101,6 +101,8 @@ public:
 	void SetType(ZE::UInt16 _shaderActionType);
 	void SetConstantsBlockBuffer(const char* _name, IGPUBufferData* _constantBlockBuffer);
 	
+	void GetShaderMatVar(const char* _name, Matrix4x4& _value);
+
 	void AddShaderFeature(UInt32 _feature, bool _enabled);
 
 	ZE::Int32 m_vertexSize;

@@ -125,9 +125,11 @@ namespace ZE {
 			ProcessShaderAction(&drawList->m_drawList[i]);
 		}
 
+		UInt32 blendSortIndices[MAX_SECONDPASS_DRAW_LIST];
+		SortBlendShaderActions(drawList->m_cameraPosition, drawList->m_cameraDirection, drawList->m_secondPassDrawList, blendSortIndices, drawList->m_secondPassSize);
 		for (int i = 0; i < drawList->m_secondPassSize; ++i)
 		{
-			ProcessShaderAction(&drawList->m_secondPassDrawList[i]);
+			ProcessShaderAction(&drawList->m_secondPassDrawList[blendSortIndices[i]]);
 		}
 
 		if (drawList->m_mainConstantBuffer)
@@ -337,6 +339,53 @@ namespace ZE {
 		{
 			DisableFeature(shaderFeature.m_rendererFeature);
 		}
+	}
+
+	UInt32 quickSortBlendPartition(Float32* squareDist, UInt32* arr, Int32 lo, Int32 hi)
+	{
+		Float32 pivot = squareDist[arr[hi]];
+		UInt32 i = lo - 1;
+		for (UInt32 j = lo; j < hi; j++)
+		{
+			if (squareDist[arr[j]] > pivot)
+			{
+				i++;
+				UInt32 temp = arr[j];
+				arr[j] = arr[i];
+				arr[i] = temp;
+			}
+		}
+
+		i++;
+		UInt32 temp = arr[hi];
+		arr[hi] = arr[i];
+		arr[i] = temp;
+
+		return i;
+	}
+
+	void quickSortBlend(Float32* squareDist, UInt32* arr, Int32 lo, Int32 hi)
+	{
+		if (lo < hi)
+		{
+			UInt32 p = quickSortBlendPartition(squareDist, arr, lo, hi);
+			quickSortBlend(squareDist, arr, lo, p - 1);
+			quickSortBlend(squareDist, arr, p + 1, hi);
+		}
+	}
+
+	void GLRenderer::SortBlendShaderActions(const Vector3& cameraPosition, const Vector3& cameraDirection, ShaderAction* inArray, UInt32* outIndexArray, UInt32 count)
+	{
+		Float32 squareDists[MAX_SECONDPASS_DRAW_LIST];
+		for (UInt32 i = 0; i < count; i++)
+		{
+			Matrix4x4 worldTransform;
+			inArray[i].GetShaderMatVar("modelMat", worldTransform);
+			squareDists[i] = (worldTransform.getPos() - cameraPosition).lengthSquare();
+			outIndexArray[i] = i;
+		}
+
+		quickSortBlend(squareDists, outIndexArray, 0, count - 1);
 	}
 
 }
