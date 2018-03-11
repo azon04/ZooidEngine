@@ -1,4 +1,5 @@
 #include "GLTexture.h"
+#include "Resources/Texture.h"
 
 namespace ZE
 { 
@@ -6,6 +7,23 @@ namespace ZE
 	void GLTexture::FromTexture(Texture* texture)
 	{
 		IGPUTexture::FromTexture(texture);
+
+		GLenum imageFormat;
+		switch (texture->getChannel())
+		{
+		case 1:
+			imageFormat = GL_RED;
+			break;
+		case 3:
+			imageFormat = GL_RGB;
+			break;
+		case 4:
+			imageFormat = GL_RGBA;
+			break;
+		default:
+			imageFormat = GL_RGB;
+			break;
+		}
 
 		glGenTextures(1, &m_textureBuffer);
 
@@ -20,7 +38,7 @@ namespace ZE
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		// #TODO handle multisampling if needed
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_textureRes->getWidth(), m_textureRes->getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, m_textureRes->getImage());
+		glTexImage2D(GL_TEXTURE_2D, 0, imageFormat, m_textureRes->getWidth(), m_textureRes->getHeight(), 0, imageFormat, GL_UNSIGNED_BYTE, m_textureRes->getImage());
 
 		glGenerateMipmap(GL_TEXTURE_2D);
 

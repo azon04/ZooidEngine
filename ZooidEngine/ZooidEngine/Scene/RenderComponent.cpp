@@ -25,20 +25,32 @@ namespace ZE {
 	{
 		if (m_mesh)
 		{
-			ShaderAction& shaderAction = m_gameContext->getDrawList()->getNextShaderAction();
-			IShaderChain* shader = ShaderManager::getInstance()->getShaderChain(Z_SHADER_CHAIN_3D_DEFAULT_LIT);
+			ShaderAction* shaderAction;
+			IShaderChain* shader;
+			if (m_mesh->m_material && m_mesh->m_material->m_isBlend)
+			{
+				shaderAction = &m_gameContext->getDrawList()->getNextSecondPassShaderAction();
+				shader = ShaderManager::getInstance()->getShaderChain(Z_SHADER_CHAIN_3D_DEFAULT_LIT_BLEND);
+				EnableAndSetBlendFunc(*shaderAction, SRC_ALPHA, ONE_MINUS_SRC_ALPHA);
+			}
+			else
+			{
+				shaderAction = &m_gameContext->getDrawList()->getNextShaderAction();
+				shader = ShaderManager::getInstance()->getShaderChain(Z_SHADER_CHAIN_3D_DEFAULT_LIT);
+			}
 
-			shaderAction.SetShaderAndBuffer(shader, m_mesh->m_bufferArray);
-			shaderAction.SetShaderMatVar("modelMat", m_worldTransform);
+
+			shaderAction->SetShaderAndBuffer(shader, m_mesh->m_bufferArray);
+			shaderAction->SetShaderMatVar("modelMat", m_worldTransform);
 			
-			m_mesh->m_material ? m_mesh->m_material->Bind(shaderAction) : nullptr;
+			m_mesh->m_material ? m_mesh->m_material->Bind(*shaderAction) : nullptr;
 
-			shaderAction.SetConstantsBlockBuffer("shader_data", m_gameContext->getDrawList()->m_mainConstantBuffer);
-			shaderAction.SetConstantsBlockBuffer("light_data", m_gameContext->getDrawList()->m_lightConstantBuffer);
+			shaderAction->SetConstantsBlockBuffer("shader_data", m_gameContext->getDrawList()->m_mainConstantBuffer);
+			shaderAction->SetConstantsBlockBuffer("light_data", m_gameContext->getDrawList()->m_lightConstantBuffer);
 			
 			if (m_bHighlight)
 			{
-				EnableAndSetStencilFunc(shaderAction, ALWAYS, 1, 0xFF, 0xFF);
+				EnableAndSetStencilFunc(*shaderAction, ALWAYS, 1, 0xFF, 0xFF);
 
 				ShaderAction& highlightAction = m_gameContext->getDrawList()->getNextShaderAction();
 

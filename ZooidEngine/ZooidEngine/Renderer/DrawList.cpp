@@ -11,7 +11,13 @@ namespace ZE {
 			m_drawList[i].Reset();
 		}
 
+		for (int i = 0; i < m_secondPassSize; i++)
+		{
+			m_secondPassDrawList[i].Reset();
+		}
+
 		m_size = 0;
+		m_secondPassSize = 0;
 	}
 
 	void DrawList::Setup()

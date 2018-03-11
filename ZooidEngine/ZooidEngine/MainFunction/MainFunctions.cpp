@@ -28,19 +28,24 @@ namespace ZE {
 
 	void MainSetup(GameContext* _gameContext)
 	{
+		ZEINFO("Zooid Engine Main Setup");
+		ZEINFO("=======================");
 
 		ZASSERT(ZE::MAIN_THREAD_ID == ZE::getThreadId(), "Not in Main Thread");
 
 		// Construct Memory
+		ZEINFO("Initializing Memory Manager...");
 		MemoryManager::Construct();
 
 		// Register all classes
+		ZEINFO("Registering Classes...");
 		GlobalRegistry::Register();
 
 		// Creating rendering Zooid
 
 		{
 #if Z_RENDER_OPENGL
+			ZEINFO("Initializing GL Rendering...");
 			Handle renderZooidHandle("Render Zooid", sizeof(GLRenderZooid));
 			_gameContext->m_renderZooid = new(renderZooidHandle) GLRenderZooid(_gameContext);
 #endif
@@ -48,22 +53,28 @@ namespace ZE {
 			_gameContext->m_renderer = _gameContext->m_renderZooid->GetRenderer();
 		}
 
+		ZEINFO("Initializing Shaders...");
 		ShaderManager::Init(_gameContext);
 		_gameContext->m_shaderManager = ShaderManager::getInstance();
 
+		ZEINFO("Initializing Buffer Manager...");
 		BufferManager::Init(_gameContext);
 		_gameContext->m_bufferManager = BufferManager::getInstance();
 		
+		ZEINFO("Initializing Texture Manager...");
 		TextureManager::Init(_gameContext);
 		_gameContext->m_textureManager = TextureManager::getInstance();
 
+		ZEINFO("Initializing Material Manager...");
 		MaterialManager::Init();
 		_gameContext->m_materialManager = MaterialManager::getInstance();
 
+		ZEINFO("Initializing Mesh Manager...");
 		MeshManager::Init();
 		_gameContext->m_meshManager = MeshManager::getInstance();
 
 		{
+			ZEINFO("Initializing DrawList...");
 			Handle handle("DrawList", sizeof(DrawList));
 			_gameContext->m_drawList = new(handle) DrawList;
 			_gameContext->m_drawList->Setup();
@@ -71,12 +82,14 @@ namespace ZE {
 
 		// Create Main Event Dispatcher
 		{
+			ZEINFO("Initializing Event Dispatcher...");
 			Handle handle("EventDispatcher", sizeof(EventDispatcher));
 			_gameContext->m_mainEventDispatcher = new(handle) EventDispatcher(_gameContext);
 		}
 
 		// Create Root Component and add is as child of Event Dispatcher
 		{
+			ZEINFO("Initializing Root Component...");
 			Handle handle("RootComponent", sizeof(SceneComponent));
 			_gameContext->m_rootComponent = new (handle) SceneComponent(_gameContext);
 			_gameContext->getEventDispatcher()->addChild(_gameContext->m_rootComponent);
@@ -85,11 +98,13 @@ namespace ZE {
 
 		// Create Input Manager
 		{
+			ZEINFO("Initializing Input Manager...");
 			Handle handle("InputManager", sizeof(InputManager));
 			_gameContext->m_inputManager = new (handle) InputManager(_gameContext);
 			_gameContext->m_inputManager->setupComponent();
 		}
 
+		ZEINFO("Initializing Camera Manager...");
 		CameraManager::Init(_gameContext);
 		_gameContext->m_cameraManager = CameraManager::GetInstance();
 		
@@ -97,6 +112,7 @@ namespace ZE {
 		{
 			Handle hDirLight("Directional Light", sizeof(LightComponent));
 			LightComponent* pDirLight = new(hDirLight) LightComponent(_gameContext, DIRECTIONAL_LIGHT);
+			pDirLight->m_worldTransform.rotateAroundU(DegToRad(45.0));
 			pDirLight->setupComponent();
 
 			_gameContext->getRootComponent()->addChild(pDirLight);
@@ -130,16 +146,54 @@ namespace ZE {
 		}
 
 		{
-			Handle hRenderComp("Sample Crate", sizeof(RenderComponent));
+			Handle hRenderComp("Window", sizeof(RenderComponent));
 			RenderComponent* pRenderComp = new(hRenderComp) RenderComponent(_gameContext);
 
 			pRenderComp->setupComponent();
-			pRenderComp->fromFile(GetPackageAssetPath("Basic", "Mesh", "Crate.meshz").c_str());
-			pRenderComp->m_worldTransform.setPos(Vector3(0.0f, 0.0f, 0.0f));
-			pRenderComp->m_worldTransform.rotateAroundV(DegToRad(45));
+			pRenderComp->fromFile(GetPackageAssetPath("Basic", "Mesh", "Window.meshz").c_str());
+			pRenderComp->m_worldTransform.setPos(Vector3(0.0f, 0.5f, 0.0f));
+			pRenderComp->m_worldTransform.rotateAroundU(DegToRad(-90));
 
 			_gameContext->getRootComponent()->addChild(pRenderComp);
 		}
+
+		{
+			Handle hRenderComp("Window", sizeof(RenderComponent));
+			RenderComponent* pRenderComp = new(hRenderComp) RenderComponent(_gameContext);
+
+			pRenderComp->setupComponent();
+			pRenderComp->fromFile(GetPackageAssetPath("Basic", "Mesh", "Window.meshz").c_str());
+			pRenderComp->m_worldTransform.setPos(Vector3(0.0f, 0.5f, -1.0f));
+			pRenderComp->m_worldTransform.rotateAroundU(DegToRad(90));
+
+			_gameContext->getRootComponent()->addChild(pRenderComp);
+		}
+
+		{
+			Handle hRenderComp("Window", sizeof(RenderComponent));
+			RenderComponent* pRenderComp = new(hRenderComp) RenderComponent(_gameContext);
+
+			pRenderComp->setupComponent();
+			pRenderComp->fromFile(GetPackageAssetPath("Basic", "Mesh", "Window.meshz").c_str());
+			pRenderComp->m_worldTransform.setPos(Vector3(0.0f, 0.5f, 1.0f));
+			pRenderComp->m_worldTransform.rotateAroundU(DegToRad(90));
+
+			_gameContext->getRootComponent()->addChild(pRenderComp);
+		}
+
+		{
+			Handle hRenderComp("Floor", sizeof(RenderComponent));
+			RenderComponent* pRenderComp = new(hRenderComp) RenderComponent(_gameContext);
+
+			pRenderComp->setupComponent();
+			pRenderComp->fromFile(GetPackageAssetPath("Basic", "Mesh", "Floor.meshz").c_str());
+			pRenderComp->m_worldTransform.setPos(Vector3(0.0f, 0.0f, 0.0f));
+			pRenderComp->m_worldTransform.scale(Vector3(10.0f, 10.0f, 10.0f));
+
+			_gameContext->getRootComponent()->addChild(pRenderComp);
+		}
+
+		_gameContext->m_mainTimer.Reset();
 
 #if ZE_RENDER_MULTITHREAD
 		g_drawReady = false;
@@ -242,6 +296,8 @@ namespace ZE {
 	{
 		UniqueLock lck(g_drawMutex);
 
+		_gameContext->m_renderThreadTimer.Reset();
+
 		while (!g_drawReady)
 		{
 			g_drawThreadVariable.wait(lck);
@@ -249,9 +305,12 @@ namespace ZE {
 
 		while (!_gameContext->getRenderer()->IsClose())
 		{
-			ZEINFO("Start Draw");
+			double deltaTime = _gameContext->m_renderThreadTimer.ResetAndGetDeltaMS();
+
+			ZEINFO("Render Delta Time : %.2f ms", deltaTime);
+
 			DrawJob(_gameContext);
-			ZEINFO("End Draw");
+
 			g_drawReady = false;
 			while (!g_drawReady) g_drawThreadVariable.wait(lck);
 		}
@@ -273,13 +332,14 @@ namespace ZE {
 			if (currentCamera)
 			{
 				currentCamera->getViewMatrix(viewMat);
+
 				_gameContext->getDrawList()->m_shaderData.setViewMat(viewMat);
+				_gameContext->getDrawList()->m_cameraPosition = currentCamera->m_worldTransform.getPos();
+				_gameContext->getDrawList()->m_cameraDirection = currentCamera->m_worldTransform.getN();
 
 				ZE::IRenderer* renderer = _gameContext->getRenderer();
-				//ZE::MathOps::CreatePerspectiveProj(projectionMat, renderer->GetWidth(), renderer->GetHeight(), currentCamera->m_near, currentCamera->m_far);
 				ZE::MathOps::CreatePerspectiveProjEx(projectionMat, renderer->GetWidth() / renderer->GetHeight(), 45.0f, currentCamera->m_near, currentCamera->m_far);
-				//ZE::MathOps::CreateOrthoProj(projectionMat, 1.0f * renderer->GetWidth() / renderer->GetHeight(), 1.0f, currentCamera->m_near, currentCamera->m_far);
-
+				
 				_gameContext->getDrawList()->m_shaderData.setProjectionMat(projectionMat);
 
 				_gameContext->getDrawList()->m_lightData.setViewPos(currentCamera->m_worldTransform.getPos());

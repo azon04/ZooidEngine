@@ -167,7 +167,7 @@ namespace ZE {
 
 				int offset = 1;
 				
-				while (get(index).m_occupied != 0 && get(index).m_hashKey != hashValue && offset < currentCapacity)
+				while ((get(index).m_occupied == 0 || get(index).m_hashKey != hashValue) && offset < currentCapacity)
 				{
 #if HASH_MAP_PROBING == HASH_MAP_LINEAR_PROBING
 					index = (index + 1) % currentCapacity;
@@ -327,7 +327,7 @@ namespace ZE {
 
 				int offset = 1;
 
-				while (get(index).m_occupied != 0 && get(index).m_hashKey != hashValue && offset < currentCapacity)
+				while ((get(index).m_occupied == 0 || get(index).m_hashKey != hashValue) && offset < currentCapacity)
 				{
 #if HASH_MAP_PROBING == HASH_MAP_LINEAR_PROBING
 					index = (index + 1) % currentCapacity;

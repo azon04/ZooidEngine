@@ -34,15 +34,17 @@ namespace ZE
 		Material() 
 			: m_Ka(1.0f, 1.0f, 1.0f),
 			m_Kd(1.0f, 1.0f, 1.0f),
-			m_Ks(1.0f, 1.0f, 1.0f)
+			m_Ks(1.0f, 1.0f, 1.0f),
+			m_isBlend(false)
 		{
 		}
 
-		Array<MaterialTexture, true> m_textures;
-		Float32 m_shininess;
 		Vector3 m_Ka;
 		Vector3 m_Kd;
 		Vector3 m_Ks;
+		Array<MaterialTexture, true> m_textures;
+		Float32 m_shininess;
+		bool m_isBlend;
 
 		void Bind(ShaderAction& shaderAction);
 	};

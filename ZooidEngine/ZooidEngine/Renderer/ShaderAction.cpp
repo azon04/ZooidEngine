@@ -97,6 +97,18 @@ namespace ZE {
 		m_shaderVariables.push_back(shaderVariable);
 	}
 
+	void ShaderAction::GetShaderMatVar(const char* _name, Matrix4x4& _value)
+	{
+		for (int i = 0; i < m_shaderVariables.length(); i++)
+		{
+			if (StringFunc::Compare(m_shaderVariables[i].m_varName, _name) == 0)
+			{
+				_value = m_shaderVariables[i].mat_value;
+				return;
+			}
+		}
+	}
+
 	void ShaderAction::AddShaderFeature(UInt32 _feature, bool _enabled)
 	{
 		ShaderFeature shaderFeature;
@@ -151,6 +163,26 @@ namespace ZE {
 		stencilMaskVar.uint_value = stencilWriteMask;
 
 		shaderFeature.m_shaderFeatureVar.push_back(stencilMaskVar);
+
+	}
+
+	void EnableAndSetBlendFunc(ShaderAction& shaderAction, RendererBlendFactor sourceBlendFactor, RendererBlendFactor dstBlendFactor)
+	{
+		shaderAction.m_shaderFeatures.push_back(ShaderFeature());
+		ShaderFeature& shaderFeature = shaderAction.m_shaderFeatures[shaderAction.m_shaderFeatures.length() - 1];
+		shaderFeature.m_rendererFeature = BLEND;
+		shaderFeature.m_bFeatureEnabled = true;
+
+		ShaderFeatureVar sourceBlendFactorVar;
+		sourceBlendFactorVar.uint_value = sourceBlendFactor;
+
+		shaderFeature.m_shaderFeatureVar.push_back(sourceBlendFactorVar);
+
+		ShaderFeatureVar destBlendFactorVar;
+		destBlendFactorVar.uint_value = dstBlendFactor;
+
+		shaderFeature.m_shaderFeatureVar.push_back(destBlendFactorVar);
+
 
 	}
 

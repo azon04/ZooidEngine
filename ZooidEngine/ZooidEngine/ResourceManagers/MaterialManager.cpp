@@ -98,6 +98,10 @@ namespace ZE
 				pMaterial->m_Ks.setY(reader.readNextFloat());
 				pMaterial->m_Ks.setZ(reader.readNextFloat());
 			}
+			else if (StringFunc::Compare(tokenBuffer, "blend") == 0)
+			{
+				pMaterial->m_isBlend = true;
+			}
 		}
 
 		reader.close();

@@ -88,7 +88,9 @@ void main()
 		}
 	}
 
-	fColor = vec4(result, 1.0f);
+	float alpha = texture(material.diffuseMap, vsTexCoord).a;
+
+	fColor = vec4(result, alpha);
 }
 
 vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir)
@@ -98,7 +100,7 @@ vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir)
 	float diff = max( dot(normal, lightDir), 0.0);
 	// specular shading
 	vec3 reflectDir = reflect(-lightDir, normal);
-	float spec = material.shininess > 0.0 ? pow( max( dot( viewDir, reflectDir ), 0.0), material.shininess ) : 0;
+	float spec = pow( max( dot( viewDir, reflectDir ), 0.0), material.shininess );
 	// combine results
 	vec3 ambient = light.ambient * material.Ka * vec3(texture(material.diffuseMap, vsTexCoord));
 	vec3 diffuse = light.diffuse * diff * material.Kd * vec3(texture(material.diffuseMap, vsTexCoord));
