@@ -10,7 +10,8 @@
 	virtual const char* getClassName() { return #ClassName ; } \
 	static int GetClassID() { return m_metaInfo.m_classID; } \
 	static const char* GetClassName() { return #ClassName; } \
-	static const RTTI* GetRTTI() { return &m_metaInfo; }
+	static const RTTI* GetRTTI() { return &m_metaInfo; } \
+	virtual bool IsA(Int32 ClassID) const { return m_metaInfo.IsA(ClassID); }
 
 #define REGISTER_CLASS0(ClassName) \
 	void ClassName ## ::RegClass() { \

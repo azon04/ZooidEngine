@@ -124,8 +124,8 @@ namespace ZE
 			float deltaPitch = pMouseDragEvent->m_deltaY * 0.001;
 			float deltaYaw = pMouseDragEvent->m_deltaX * 0.001;
 
-			m_worldTransform.rotateAroundV(deltaYaw);
-			m_worldTransform.rotateAroundU(deltaPitch);
+			m_worldTransform.rotateAroundV(-deltaYaw);
+			m_worldTransform.rotateAroundU(-deltaPitch);
 		}
 	}
 

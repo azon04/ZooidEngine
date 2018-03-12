@@ -1,19 +1,46 @@
 SceneName TestMap
-CompName Crate_1
-Class StaticMesh
+FileVersion 1.0
+ComponentCount 7
+LightComponent DirLight
+BEGIN
+LightType 0
+R 150.0 0.0 0.0
+END
+RenderComponent Floor
+BEGIN
+Mesh Basic/Mesh/Floor.meshz
+S 10.0 10.0 10.0
+END
+RenderComponent Crate_1
+BEGIN
 Mesh Basic/Mesh/Crate.meshz
 S 1.0 1.0 1.0
 R 45.0 0.0 0.0
-T 0.0 0.0 0.0
-CompName Crate_2
-Class StaticMesh
+T 0.0 0.5 -2.0
+END
+RenderComponent Crate_2
+BEGIN
 Mesh Basic/Mesh/Crate.meshz
 S 1.0 1.0 1.0
 R 0.0 45.0 0.0
-T 1.0 0.0 0.0
-CompName Crate_2
-Class StaticMesh
-Mesh Basic?mesh/Crate.meshz
+T 2.0 0.5 0.0
+END
+RenderComponent Crate_3
+BEGIN
+Mesh Basic/mesh/Crate.meshz
 S 1.0 1.0 1.0
 R 0.0 0.0 45.0
-T -1.0 0.0 0.0
+T -2.0 0.5 0.0
+END
+RenderComponent Window_1
+BEGIN
+Mesh Basic/mesh/Window.meshz
+R 90.0 0.0 0.0
+T 0.0 0.5 0.0
+END
+RenderComponent Window_2
+BEGIN
+Mesh Basic/mesh/Window.meshz
+R 90.0 0.0 0.0
+T 0.0 0.5 1.0
+END

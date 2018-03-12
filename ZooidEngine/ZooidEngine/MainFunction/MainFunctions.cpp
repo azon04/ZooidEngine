@@ -9,6 +9,7 @@
 #include "Memory/Handle.h"
 #include "Events/Events.h"
 #include "FileSystem/DirectoryHelper.h"
+#include "Scene/SceneManager.h"
 
 #include "ResourceManagers/MeshManager.h"
 #include "ResourceManagers/MaterialManager.h"
@@ -96,6 +97,13 @@ namespace ZE {
 			_gameContext->m_rootComponent->setupComponent();
 		}
 
+		// Create SceneManager
+		{
+			SceneManager::Init(_gameContext);
+			_gameContext->m_sceneManager = SceneManager::GetInstance();
+
+		}
+
 		// Create Input Manager
 		{
 			ZEINFO("Initializing Input Manager...");
@@ -108,90 +116,7 @@ namespace ZE {
 		CameraManager::Init(_gameContext);
 		_gameContext->m_cameraManager = CameraManager::GetInstance();
 		
-		// Put Sample Directional Light
-		{
-			Handle hDirLight("Directional Light", sizeof(LightComponent));
-			LightComponent* pDirLight = new(hDirLight) LightComponent(_gameContext, DIRECTIONAL_LIGHT);
-			pDirLight->m_worldTransform.rotateAroundU(DegToRad(45.0));
-			pDirLight->setupComponent();
-
-			_gameContext->getRootComponent()->addChild(pDirLight);
-		}
-
-		// Put sample boxes
-		{
-			Handle hRenderComp("Sample Crate", sizeof(RenderComponent));
-			RenderComponent* pRenderComp = new(hRenderComp) RenderComponent(_gameContext);
-			
-
-			pRenderComp->setupComponent();
-			pRenderComp->fromFile(GetPackageAssetPath("Basic", "Mesh", "Crate.meshz").c_str());
-			pRenderComp->m_worldTransform.setPos(Vector3(1.5f, 0.0f, 0.0f));
-			pRenderComp->m_worldTransform.rotateAroundN(DegToRad(45));
-
-			_gameContext->getRootComponent()->addChild(pRenderComp);
-		}
-
-		{
-			Handle hRenderComp("Sample Crate", sizeof(RenderComponent));
-			RenderComponent* pRenderComp = new(hRenderComp) RenderComponent(_gameContext);
-			pRenderComp->m_bHighlight = true;
-
-			pRenderComp->setupComponent();
-			pRenderComp->fromFile(GetPackageAssetPath("Basic", "Mesh", "Crate.meshz").c_str());
-			pRenderComp->m_worldTransform.setPos(Vector3(-1.5f, 0.0f, 0.0f));
-			pRenderComp->m_worldTransform.rotateAroundU(DegToRad(45));
-
-			_gameContext->getRootComponent()->addChild(pRenderComp);
-		}
-
-		{
-			Handle hRenderComp("Window", sizeof(RenderComponent));
-			RenderComponent* pRenderComp = new(hRenderComp) RenderComponent(_gameContext);
-
-			pRenderComp->setupComponent();
-			pRenderComp->fromFile(GetPackageAssetPath("Basic", "Mesh", "Window.meshz").c_str());
-			pRenderComp->m_worldTransform.setPos(Vector3(0.0f, 0.5f, 0.0f));
-			pRenderComp->m_worldTransform.rotateAroundU(DegToRad(-90));
-
-			_gameContext->getRootComponent()->addChild(pRenderComp);
-		}
-
-		{
-			Handle hRenderComp("Window", sizeof(RenderComponent));
-			RenderComponent* pRenderComp = new(hRenderComp) RenderComponent(_gameContext);
-
-			pRenderComp->setupComponent();
-			pRenderComp->fromFile(GetPackageAssetPath("Basic", "Mesh", "Window.meshz").c_str());
-			pRenderComp->m_worldTransform.setPos(Vector3(0.0f, 0.5f, -1.0f));
-			pRenderComp->m_worldTransform.rotateAroundU(DegToRad(90));
-
-			_gameContext->getRootComponent()->addChild(pRenderComp);
-		}
-
-		{
-			Handle hRenderComp("Window", sizeof(RenderComponent));
-			RenderComponent* pRenderComp = new(hRenderComp) RenderComponent(_gameContext);
-
-			pRenderComp->setupComponent();
-			pRenderComp->fromFile(GetPackageAssetPath("Basic", "Mesh", "Window.meshz").c_str());
-			pRenderComp->m_worldTransform.setPos(Vector3(0.0f, 0.5f, 1.0f));
-			pRenderComp->m_worldTransform.rotateAroundU(DegToRad(90));
-
-			_gameContext->getRootComponent()->addChild(pRenderComp);
-		}
-
-		{
-			Handle hRenderComp("Floor", sizeof(RenderComponent));
-			RenderComponent* pRenderComp = new(hRenderComp) RenderComponent(_gameContext);
-
-			pRenderComp->setupComponent();
-			pRenderComp->fromFile(GetPackageAssetPath("Basic", "Mesh", "Floor.meshz").c_str());
-			pRenderComp->m_worldTransform.setPos(Vector3(0.0f, 0.0f, 0.0f));
-			pRenderComp->m_worldTransform.scale(Vector3(10.0f, 10.0f, 10.0f));
-
-			_gameContext->getRootComponent()->addChild(pRenderComp);
-		}
+		SceneManager::GetInstance()->LoadSceneFile(GetResourcePath("Basic/Scene/Test.scz").c_str());
 
 		_gameContext->m_mainTimer.Reset();
 

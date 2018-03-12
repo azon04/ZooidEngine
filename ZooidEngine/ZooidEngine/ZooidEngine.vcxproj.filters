@@ -76,6 +76,9 @@
     <Filter Include="Platform">
       <UniqueIdentifier>{839ece0a-08ae-48b5-b322-86d68db0ac7f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene\Light">
+      <UniqueIdentifier>{ef5e86bb-6ec8-466c-bfa0-8c366a20ada6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ZEngine.h">
@@ -330,6 +333,12 @@
     <ClInclude Include="Platform\Thread.h">
       <Filter>Platform</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\SceneManager.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectModel\CompDecl.h">
+      <Filter>GameObjectModel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -526,6 +535,9 @@
     </ClCompile>
     <ClCompile Include="Platform\Thread.cpp">
       <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneManager.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

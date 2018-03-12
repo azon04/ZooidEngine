@@ -12,6 +12,7 @@ namespace ZE {
 	class MaterialManager;
 	class MeshManager;
 	class RenderZooid;
+	class SceneManager;
 
 	class GameContext {
 	public:
@@ -31,6 +32,8 @@ namespace ZE {
 
 		MaterialManager* m_materialManager;
 		MeshManager* m_meshManager;
+
+		SceneManager* m_sceneManager;
 		
 		Thread* m_drawThread;
 
@@ -50,6 +53,7 @@ namespace ZE {
 		FORCEINLINE InputManager* getInputManager() const { return m_inputManager; };
 		FORCEINLINE MaterialManager* getMaterialManager() const { return m_materialManager; }
 		FORCEINLINE MeshManager* getMeshManager() const { return m_meshManager; }
+		FORCEINLINE SceneManager* getSceneManager() const { return m_sceneManager; }
 
 	};
 }

@@ -169,6 +169,7 @@
     <ClInclude Include="FileSystem\DirectoryHelper.h" />
     <ClInclude Include="FileSystem\FileReader.h" />
     <ClInclude Include="FileSystem\FileWriter.h" />
+    <ClInclude Include="GameObjectModel\CompDecl.h" />
     <ClInclude Include="GameObjectModel\Component.h" />
     <ClInclude Include="GameObjectModel\FunctionDelegates.h" />
     <ClInclude Include="GameObjectModel\ObjDecl.h" />
@@ -226,6 +227,7 @@
     <ClInclude Include="Scene\Light\LightComponent.h" />
     <ClInclude Include="Scene\RenderComponent.h" />
     <ClInclude Include="Scene\SceneComponent.h" />
+    <ClInclude Include="Scene\SceneManager.h" />
     <ClInclude Include="UnitTest\ArrayTest.h" />
     <ClInclude Include="UnitTest\FileTest.h" />
     <ClInclude Include="UnitTest\HashMapTest.h" />
@@ -302,6 +304,7 @@
     <ClCompile Include="Scene\Light\LightComponent.cpp" />
     <ClCompile Include="Scene\RenderComponent.cpp" />
     <ClCompile Include="Scene\SceneComponent.cpp" />
+    <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="UnitTest\ArrayTest.cpp" />
     <ClCompile Include="UnitTest\FileTest.cpp" />
     <ClCompile Include="UnitTest\HashMapTest.cpp" />
