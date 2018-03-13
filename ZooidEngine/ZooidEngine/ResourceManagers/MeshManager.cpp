@@ -74,6 +74,10 @@ namespace ZE
 				}
 
 			}
+			else if (StringFunc::Compare(tokenBuffer, "double_side") == 0)
+			{
+				pMesh->m_doubleSided = true;
+			}
 		}
 
 		reader.close();

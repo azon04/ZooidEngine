@@ -39,6 +39,10 @@ namespace ZE {
 				shader = ShaderManager::getInstance()->getShaderChain(Z_SHADER_CHAIN_3D_DEFAULT_LIT);
 			}
 
+			if (m_mesh->m_doubleSided)
+			{
+				shaderAction->AddShaderFeature(FACE_CULING, false);
+			}
 
 			shaderAction->SetShaderAndBuffer(shader, m_mesh->m_bufferArray);
 			shaderAction->SetShaderMatVar("modelMat", m_worldTransform);

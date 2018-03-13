@@ -16,12 +16,16 @@ namespace ZE
 
 	public:
 
-		Mesh() {}
+		Mesh() :
+			m_doubleSided(false)
+		{}
 
 		IGPUBufferData* m_vertexBuffer;;
 		IGPUBufferData* m_indexBuffer;
 		IGPUBufferArray* m_bufferArray;
 		Material* m_material;
+
+		bool m_doubleSided;
 	};
 }
 #endif

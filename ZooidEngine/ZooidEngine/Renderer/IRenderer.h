@@ -17,7 +17,8 @@ enum RendererFeature : UInt32
 {
 	DEPTH_TEST = 0,
 	STENCIL_TEST = 1,
-	BLEND = 2
+	BLEND = 2,
+	FACE_CULING = 3
 };
 
 enum RendererCompareFunc : UInt32
@@ -48,6 +49,19 @@ enum RendererBlendFactor : UInt32
 	ONE_MINUS_CONSTANT_COLOR,
 	CONSTANT_ALPHA,
 	ONE_MINUS_CONSTANT_ALPHA
+};
+
+enum CullFace : UInt8
+{
+	FRONT,
+	BACK,
+	FRONT_AND_BACK
+};
+
+enum FaceFrontOrder : UInt8
+{
+	CCW,
+	CW
 };
 
 class IRenderer {

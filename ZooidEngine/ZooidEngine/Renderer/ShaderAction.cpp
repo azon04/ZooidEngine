@@ -186,4 +186,22 @@ namespace ZE {
 
 	}
 
+	void EnableAndSetFaceCull(ShaderAction& shaderAction, FaceFrontOrder faceOrder, CullFace cullFace)
+	{
+		shaderAction.m_shaderFeatures.push_back(ShaderFeature());
+		ShaderFeature& shaderFeature = shaderAction.m_shaderFeatures[shaderAction.m_shaderFeatures.length() - 1];
+		shaderFeature.m_rendererFeature = FACE_CULING;
+		shaderFeature.m_bFeatureEnabled = true;
+
+		ShaderFeatureVar faceOrderVar;
+		faceOrderVar.uint_value = faceOrder;
+
+		shaderFeature.m_shaderFeatureVar.push_back(faceOrderVar);
+
+		ShaderFeatureVar cullFaceVar;
+		cullFaceVar.uint_value = cullFace;
+
+		shaderFeature.m_shaderFeatureVar.push_back(cullFaceVar);
+	}
+
 }

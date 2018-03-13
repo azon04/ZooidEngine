@@ -17,6 +17,7 @@ namespace ZE {
 		HashFeatureToRealGLVar.put(RendererFeature::DEPTH_TEST, GL_DEPTH_TEST);
 		HashFeatureToRealGLVar.put(RendererFeature::STENCIL_TEST, GL_STENCIL_TEST);
 		HashFeatureToRealGLVar.put(RendererFeature::BLEND, GL_BLEND);
+		HashFeatureToRealGLVar.put(RendererFeature::FACE_CULING, GL_CULL_FACE);
 
 		HashCompareFuncToRealGLVar.put(RendererCompareFunc::ALWAYS, GL_ALWAYS);
 		HashCompareFuncToRealGLVar.put(RendererCompareFunc::NEVER, GL_NEVER);
@@ -41,6 +42,13 @@ namespace ZE {
 		HashBlendFactorToRealGLVar.put(RendererBlendFactor::ONE_MINUS_CONSTANT_COLOR, GL_ONE_MINUS_CONSTANT_COLOR);
 		HashBlendFactorToRealGLVar.put(RendererBlendFactor::CONSTANT_ALPHA, GL_CONSTANT_ALPHA);
 		HashBlendFactorToRealGLVar.put(RendererBlendFactor::ONE_MINUS_CONSTANT_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);
+		
+		HashCullFace[CullFace::FRONT] = GL_FRONT;
+		HashCullFace[CullFace::BACK] = GL_BACK;
+		HashCullFace[CullFace::FRONT_AND_BACK] = GL_FRONT_AND_BACK;
+
+		HashFaceFrontOrder[FaceFrontOrder::CCW] = GL_CCW;
+		HashFaceFrontOrder[FaceFrontOrder::CW] = GL_CW;
 	}
 
 	void GLRenderer::Setup()
@@ -83,6 +91,10 @@ namespace ZE {
 		// Enable Stencil Buffer
 		EnableFeature(RendererFeature::STENCIL_TEST);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+		// Enable Face Culling
+		EnableFeature(FACE_CULING);
+		glFrontFace(GL_CCW);
 	}
 
 	void GLRenderer::BeginRender()
@@ -302,6 +314,11 @@ namespace ZE {
 			glStencilFunc(GL_ALWAYS, 1, 0xFF);
 			glStencilMask(0x00);
 		}
+		else if (feature == RendererFeature::FACE_CULING)
+		{
+			glFrontFace(GL_CCW);
+			glCullFace(GL_BACK);
+		}
 	}
 
 	void GLRenderer::ProcessShaderFeature(ShaderFeature& shaderFeature)
@@ -333,6 +350,11 @@ namespace ZE {
 				GLenum sourceFactor = HashBlendFactorToRealGLVar[shaderFeature.m_shaderFeatureVar[0].uint_value];
 				GLenum destFactor = HashBlendFactorToRealGLVar[shaderFeature.m_shaderFeatureVar[1].uint_value];
 				glBlendFunc(sourceFactor, destFactor);
+			}
+			else if (shaderFeature.m_rendererFeature == RendererFeature::FACE_CULING)
+			{
+				glFrontFace(HashFaceFrontOrder[shaderFeature.m_shaderFeatureVar[0].uint_value]);
+				glCullFace(HashCullFace[shaderFeature.m_shaderFeatureVar[1].uint_value]);
 			}
 		}
 		else

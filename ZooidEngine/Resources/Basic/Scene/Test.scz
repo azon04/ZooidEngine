@@ -15,21 +15,21 @@ RenderComponent Crate_1
 BEGIN
 Mesh Basic/Mesh/Crate.meshz
 S 1.0 1.0 1.0
-R 45.0 0.0 0.0
+R 0.0 0.0 0.0
 T 0.0 0.5 -2.0
 END
 RenderComponent Crate_2
 BEGIN
 Mesh Basic/Mesh/Crate.meshz
 S 1.0 1.0 1.0
-R 0.0 45.0 0.0
-T 2.0 0.5 0.0
+R 0.0 0.0 0.0
+T 2.0 1.5 0.0
 END
 RenderComponent Crate_3
 BEGIN
 Mesh Basic/mesh/Crate.meshz
 S 1.0 1.0 1.0
-R 0.0 0.0 45.0
+R 0.0 0.0 0.0
 T -2.0 0.5 0.0
 END
 RenderComponent Window_1
