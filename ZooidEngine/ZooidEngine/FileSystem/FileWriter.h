@@ -20,13 +20,14 @@ namespace ZE
 		bool isValid();
 
 		void writeFromBuffer(void* buffer, size_t bufferSize);
+		void writeFormatText(const char* formatText, ...);
 
-		String getPath() { return m_path; }
+		char* getPath() { return &m_path[0]; }
 		FILE* getInternalFileHandle() { return m_fileHandle; }
 
 	protected:
 		FILE* m_fileHandle;
-		String m_path;
+		char m_path[256];
 	};
 };
 #endif

@@ -178,6 +178,8 @@
     <ClInclude Include="GLShader.h" />
     <ClInclude Include="Input\InputManager.h" />
     <ClInclude Include="Input\KeyboardMouseInput.h" />
+    <ClInclude Include="Logging\Log.h" />
+    <ClInclude Include="Logging\LogManager.h" />
     <ClInclude Include="MainFunction\MainFunctions.h" />
     <ClInclude Include="Math\MathOps.h" />
     <ClInclude Include="Math\MathUtil.h" />
@@ -263,6 +265,7 @@
     <ClCompile Include="GLShader.cpp" />
     <ClCompile Include="Input\InputManager.cpp" />
     <ClCompile Include="Input\KeyboardMouseInput.cpp" />
+    <ClCompile Include="Logging\LogManager.cpp" />
     <ClCompile Include="MainFunction\Main.cpp" />
     <ClCompile Include="MainFunction\MainFunctions.cpp" />
     <ClCompile Include="Math\MathOps.cpp" />

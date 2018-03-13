@@ -2,17 +2,18 @@
 
 #include "Common/GlobalRegistry.h"
 
-#include "Scene/CameraComponent.h"
-#include "Scene/RenderComponent.h"
-#include "Scene/Light/LightComponent.h"
 #include "Renderer/IGPUTexture.h"
 #include "Memory/Handle.h"
 #include "Events/Events.h"
 #include "FileSystem/DirectoryHelper.h"
 #include "Scene/SceneManager.h"
+#include "Scene/CameraManager.h"
+#include "Scene/CameraComponent.h"
 
 #include "ResourceManagers/MeshManager.h"
 #include "ResourceManagers/MaterialManager.h"
+
+#include "Logging/Log.h"
 
 #if Z_RENDER_OPENGL
 #include "Renderer/GL/GLRenderZooid.h"
@@ -21,7 +22,6 @@
 #include "Platform/Thread.h"
 
 namespace ZE {
-
 
 	ConditionVariable g_drawThreadVariable;
 	Mutex g_drawMutex;
@@ -150,7 +150,7 @@ namespace ZE {
 	{
 		double deltaTime = _gameContext->m_mainTimer.ResetAndGetDeltaMS();
 
-		ZEINFO("Delta Time : %.2f ms", deltaTime);
+		ZELOG(LOG_GAME, Log, "Delta Time : %.2f ms", deltaTime);
 
 		// Handle Event_Update
 		{
@@ -232,7 +232,7 @@ namespace ZE {
 		{
 			double deltaTime = _gameContext->m_renderThreadTimer.ResetAndGetDeltaMS();
 
-			ZEINFO("Render Delta Time : %.2f ms", deltaTime);
+			ZELOG(LOG_RENDERING, Log, "Render Delta Time : %.2f ms", deltaTime);
 
 			DrawJob(_gameContext);
 

@@ -79,6 +79,9 @@
     <Filter Include="Scene\Light">
       <UniqueIdentifier>{ef5e86bb-6ec8-466c-bfa0-8c366a20ada6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Logging">
+      <UniqueIdentifier>{8347452e-90d5-4a92-818a-81ae23ee7163}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ZEngine.h">
@@ -339,6 +342,12 @@
     <ClInclude Include="GameObjectModel\CompDecl.h">
       <Filter>GameObjectModel</Filter>
     </ClInclude>
+    <ClInclude Include="Logging\LogManager.h">
+      <Filter>Logging</Filter>
+    </ClInclude>
+    <ClInclude Include="Logging\Log.h">
+      <Filter>Logging</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -538,6 +547,9 @@
     </ClCompile>
     <ClCompile Include="Scene\SceneManager.cpp">
       <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Logging\LogManager.cpp">
+      <Filter>Logging</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

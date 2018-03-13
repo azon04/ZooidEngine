@@ -4,6 +4,8 @@
 #include <cstdlib>
 #include "../Utils/Debug.h"
 
+#include "Logging/Log.h"
+
 static unsigned int poolConfig[NPOOL][2] =
 {
 	{32, 1024}, // 32 * 1024 =~ 32 kb
@@ -44,8 +46,9 @@ namespace ZE {
 		{
 			totalSize += PoolAllocator::calculateSizeMem(poolConfig[i][0], poolConfig[i][1]) + ALLIGNMENT;
 		}
-		ZEINFO("Total Mem Size : %d bytes ~ %f MB", totalSize, totalSize / (1024.0f * 1024.0f));
 
+		ZELOG(LOG_MEMORY, Log, "Total Mem Size : %d bytes ~ %f MB", totalSize, totalSize / (1024.0f * 1024.0f));
+		
 		// Allocate the memory needed for pool
 		s_instance->m_pAlocatorsBlock = (void*) malloc(totalSize);
 		
@@ -62,6 +65,7 @@ namespace ZE {
 			pMem = (void*) ((uintptr_t) pMem + PoolAllocator::calculateSizeMem(poolConfig[i][0], poolConfig[i][1]));
 		}
 
+		
 		return s_instance;
 	}
 
@@ -75,13 +79,13 @@ namespace ZE {
 	{
 		m_memoryLock.lock();
 
-		ZEINFO("Allocate memory for %d bytes", size);
+		ZELOG(LOG_MEMORY, Log, "Allocate memory for %d bytes", size);
 
 		// Check the matched size in pools
 		int index = 0;
 		while (index < NPOOL && poolConfig[index][0] < size)
 		{
-			ZEINFO("Cant fit in %d bytes", poolConfig[index][0]);
+			ZELOG(LOG_MEMORY, Log, "Cant fit in %d bytes", poolConfig[index][0]);
 			index++;
 		}
 
@@ -89,7 +93,7 @@ namespace ZE {
 
 		while (index < NPOOL && m_pools[index]->getCountFreeBlock() == 0)
 		{
-			ZEINFO("Cant find free block in %d bytes", poolConfig[index][0]);
+			ZELOG(LOG_MEMORY, Log, "Cant find free block in %d bytes", poolConfig[index][0]);
 			index++;
 		}
 
