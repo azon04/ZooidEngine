@@ -1,10 +1,7 @@
 #ifndef __ZE_GAME_CONTEXT__
 #define __ZE_GAME_CONTEXT__
 
-#include "ZEngine.h"
-
 #include "Platform/Thread.h"
-
 #include "Utils/Timer.h"
 
 namespace ZE {
@@ -13,6 +10,15 @@ namespace ZE {
 	class MeshManager;
 	class RenderZooid;
 	class SceneManager;
+	class SceneComponent;
+	class BufferManager;
+	class ShaderManager;
+	class DrawList;
+	class EventDispatcher;
+	class TextureManager;
+	class InputManager;
+	class IRenderer;
+	class CameraManager;
 
 	class GameContext {
 	public:

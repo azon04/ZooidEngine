@@ -2,6 +2,7 @@
 #define __ZE_POOL_ALLOCATOR__
 
 #include "IAllocator.h"
+
 #include <intsafe.h>
 
 namespace ZE {

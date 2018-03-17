@@ -4,6 +4,7 @@
 #include "Events/InputEvents.h"
 #include "Events/EventDispatcher.h"
 #include "Memory/MemoryHelper.h"
+#include "Renderer/IRenderer.h"
 
 #if defined(_WIN32) || defined(_WIN64) 
 #include <Windows.h>

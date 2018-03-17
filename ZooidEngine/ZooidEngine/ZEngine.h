@@ -22,5 +22,7 @@
 
 #include "ResourceManagers/TextureManager.h"
 #include "ResourceManagers/ShaderManager.h"
+#include "ResourceManagers/MeshManager.h"
+#include "ResourceManagers/MaterialManager.h"
 
 #include "Input/InputManager.h"

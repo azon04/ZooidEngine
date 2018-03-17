@@ -2,6 +2,8 @@
 
 #include "Common/GlobalRegistry.h"
 
+#include "ZEngine.h"
+
 #include "Renderer/IGPUTexture.h"
 #include "Memory/Handle.h"
 #include "Events/Events.h"
@@ -9,9 +11,6 @@
 #include "Scene/SceneManager.h"
 #include "Scene/CameraManager.h"
 #include "Scene/CameraComponent.h"
-
-#include "ResourceManagers/MeshManager.h"
-#include "ResourceManagers/MaterialManager.h"
 
 #include "Logging/Log.h"
 

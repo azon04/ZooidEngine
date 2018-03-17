@@ -1,5 +1,6 @@
-#include "../ZEngine.h"
 #include "PoolAllocator.h"
+
+#include "Utils/ZEngineHelper.h"
 
 #include <cstdlib>
 #include <cstring>

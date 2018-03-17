@@ -1,6 +1,6 @@
 #include "ShaderAction.h"
 
-#include "../Utils/StringFunc.h"
+#include "Utils/StringFunc.h"
 
 #include <cstring>
 
@@ -182,8 +182,6 @@ namespace ZE {
 		destBlendFactorVar.uint_value = dstBlendFactor;
 
 		shaderFeature.m_shaderFeatureVar.push_back(destBlendFactorVar);
-
-
 	}
 
 	void EnableAndSetFaceCull(ShaderAction& shaderAction, FaceFrontOrder faceOrder, CullFace cullFace)

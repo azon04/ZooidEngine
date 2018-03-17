@@ -1,11 +1,6 @@
 #include "IShader.h"
 
-#include "../ZEngine.h"
 #include "FileSystem/FileReader.h"
-
-#if Z_RENDER_OPENGL
-#include <GL/glew.h>
-#endif
 
 #include <string>
 #include <fstream>

@@ -1,4 +1,5 @@
 #include "Material.h"
+#include "Utils/String.h"
 
 #include <stdio.h>
 

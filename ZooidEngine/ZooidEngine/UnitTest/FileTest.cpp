@@ -1,5 +1,6 @@
 #include "FileTest.h"
-#include "ZEngine.h"
+
+#include "Utils/ZEngineHelper.h"
 
 #include "FileSystem/FileWriter.h"
 #include "FileSystem/FileReader.h"

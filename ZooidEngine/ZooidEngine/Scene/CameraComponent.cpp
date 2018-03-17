@@ -1,6 +1,6 @@
 #include "CameraComponent.h"
 
-#include "../Math/Vector3.h"
+#include "Math/Vector3.h"
 
 #define USING_INVERSE 1
 

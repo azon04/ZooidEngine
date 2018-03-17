@@ -1,7 +1,7 @@
 #ifndef __Z_GPU_BUFFER__
 #define __Z_GPU_BUFFER__
 
-#include "../Utils/PrimitiveTypes.h"
+#include "Utils/PrimitiveTypes.h"
 
 #include "BufferData.h"
 #include "BufferLayout.h"

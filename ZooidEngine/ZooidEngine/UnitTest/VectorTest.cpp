@@ -1,5 +1,6 @@
 #include "VectorTest.h"
-#include "ZEngine.h"
+
+#include "Utils/ZEngineHelper.h"
 
 #include "Math/Vector3.h"
 #include "Math/Vector4.h"

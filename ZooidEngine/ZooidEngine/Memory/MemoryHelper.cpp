@@ -1,4 +1,5 @@
 #include "MemoryHelper.h"
+
 #include <cstring>
 
 void ZE::MemoryHelper::Copy(void* source, void* dest, size_t size)

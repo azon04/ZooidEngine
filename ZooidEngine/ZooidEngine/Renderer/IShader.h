@@ -4,9 +4,9 @@
 #include "BufferLayout.h"
 
 // Inner engine includes
-#include "../Utils/Array.h"
-#include "../Math/Vector3.h"
-#include "../Math/Matrix4x4.h"
+#include "Utils/Array.h"
+#include "Math/Vector3.h"
+#include "Math/Matrix4x4.h"
 #include "Utils/PrimitiveTypes.h"
 #include "Memory/Handle.h"
 

@@ -11,7 +11,7 @@
 
 namespace ZE {
 	
-	template<class T, bool resizable>
+	template<class T, bool resizable = false>
 	class Array
 	{
 	public:

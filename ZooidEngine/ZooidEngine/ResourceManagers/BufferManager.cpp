@@ -1,5 +1,3 @@
-#include "../ZEngine.h"
-
 #include "ZEGameContext.h"
 #include "Renderer/RenderZooid.h"
 
@@ -8,6 +6,8 @@
 
 #include "FileSystem/FileReader.h"
 #include "FileSystem/DirectoryHelper.h"
+
+#include "Renderer/IRenderer.h"
 
 namespace ZE {
 

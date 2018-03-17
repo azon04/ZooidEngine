@@ -1,7 +1,7 @@
 #ifndef __ZE_RTTI_H__
 #define __ZE_RTTI_H__
 
-#include "../Utils/PrimitiveTypes.h"
+#include "Utils/PrimitiveTypes.h"
 
 namespace ZE {
 	

@@ -1,13 +1,10 @@
 #ifndef __ZE_COMPONENT_H__
 #define __ZE_COMPONENT_H__
 
-// Outer Engine includes
-
 #include "Utils/Array.h"
 #include "Utils/HashMap.h"
 #include "Object.h"
 
-#include "Memory/Handle.h"
 #include "GameObjectModel/FunctionDelegates.h"
 
 #define addEventDelegate(EventClass, Func) _addEventDelegate(EventClass::GetClassID(), (EventDelegate::HandleEventFunc) Func);

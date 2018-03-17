@@ -1,8 +1,6 @@
 
 #include "Object.h"
-#include "../Utils/Array.h"
-
-
+#include "Utils/Array.h"
 
 ZE::Array<ZE::Int32, true>& ZE::Object::ClassMap()
 {

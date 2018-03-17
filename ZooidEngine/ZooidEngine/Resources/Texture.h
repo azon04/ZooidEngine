@@ -3,6 +3,7 @@
 
 #include "Utils/PrimitiveTypes.h"
 #include "Memory/Handle.h"
+#include "GameObjectModel/Object.h"
 
 namespace ZE
 {

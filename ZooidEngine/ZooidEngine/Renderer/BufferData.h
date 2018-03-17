@@ -1,7 +1,7 @@
 #ifndef __Z_BUFFER_DATA__
 #define __Z_BUFFER_DATA__
 
-#include "../Utils/PrimitiveTypes.h"
+#include "Utils/PrimitiveTypes.h"
 
 namespace ZE {
 

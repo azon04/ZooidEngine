@@ -1,10 +1,11 @@
 #include "StringFunc.h"
+
 #include <cstdlib>
 #include <cstring>
 
 extern "C"
 {
-	#include "../External/Hash/lookup3.h"
+	#include "External/Hash/lookup3.h"
 }
 
 #define USING_MEM_FUNCTION 1

@@ -1,12 +1,11 @@
 #ifndef __ZE_FUNC_DELEGATES__
 #define __ZE_FUNC_DELEGATES__
 
-#include "Object.h"
-
 #include "Utils/ZEngineHelper.h"
 
 namespace ZE
 {
+	class Object;
 	class Event;
 
 	class EventDelegate

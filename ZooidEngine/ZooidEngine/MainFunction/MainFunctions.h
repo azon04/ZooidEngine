@@ -1,7 +1,7 @@
 #ifndef __ZE_MAIN_FUNCTIONS__ 
 #define __ZE_MAIN_FUNCTIONS__
 
-#include "../ZEGameContext.h"
+#include "ZEGameContext.h"
 
 #ifndef ZE_RENDER_MULTITHREAD
 #define ZE_RENDER_MULTITHREAD 1

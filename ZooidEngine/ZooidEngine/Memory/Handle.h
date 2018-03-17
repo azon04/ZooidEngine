@@ -4,11 +4,13 @@
 #include "Utils/ZEngineHelper.h"
 
 #include "MemoryManager.h"
-#include "GameObjectModel/Object.h"
-#include "Utils/StringFunc.h"
 
 #define INVALID_UINT 0xFFFFFFFF
 #define HANDLE_NO_NAME 1
+
+#if !HANDLE_NO_NAME
+#include "Utils/StringFunc.h"
+#endif
 
 namespace ZE {
 

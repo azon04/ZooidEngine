@@ -3,6 +3,8 @@
 #include "ZEGameContext.h"
 #include "Events/Events.h"
 #include "Renderer/ShaderData.h"
+#include "Renderer/IRenderer.h"
+#include "Renderer/DrawList.h"
 
 namespace ZE
 {

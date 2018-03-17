@@ -1,11 +1,17 @@
 #include "SceneManager.h"
+#include "ZEGameContext.h"
+
 #include "FileSystem/FileReader.h"
 #include "FileSystem/DirectoryHelper.h"
-#include "ZEGameContext.h"
+
 #include "Scene/Light/LightComponent.h"
 #include "Scene/RenderComponent.h"
+
 #include "Utils/StringFunc.h"
+
 #include "Memory/Handle.h"
+
+#include "SceneComponent.h"
 
 namespace ZE
 {

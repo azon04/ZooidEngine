@@ -1,8 +1,8 @@
 #ifndef __ZE_SCENE_COMPONENT_H__
 #define __ZE_SCENE_COMPONENT_H__
 
-#include "../GameObjectModel/Component.h"
-#include "../Math/Matrix4x4.h"
+#include "GameObjectModel/Component.h"
+#include "Math/Matrix4x4.h"
 
 namespace ZE
 {

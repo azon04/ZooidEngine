@@ -2,7 +2,6 @@
 #define __ZE_LIGHT_COMP_H__
 
 #include "Scene/SceneComponent.h"
-
 #include "Math/Vector3.h"
 
 namespace ZE

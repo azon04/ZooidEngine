@@ -1,5 +1,6 @@
 #include "ArrayTest.h"
-#include "ZEngine.h"
+
+#include "Utils/ZEngineHelper.h"
 
 #include "Utils/Array.h"
 

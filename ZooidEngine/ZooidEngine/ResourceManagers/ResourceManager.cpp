@@ -1,6 +1,5 @@
 #include "ResourceManager.h"
 
-#include "ZEngine.h"
 #include "Events/Events.h"
 
 namespace ZE

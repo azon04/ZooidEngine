@@ -8,6 +8,7 @@
 
 #include "ZEGameContext.h"
 #include "Renderer/RenderZooid.h"
+#include "Renderer/IRenderer.h"
 
 namespace ZE
 {

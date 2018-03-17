@@ -1,8 +1,6 @@
 #ifndef __ZE_MATERIAL_H__
 #define __ZE_MATERIAL_H__
 
-#include "ZEngineIncl.h"
-
 #include "Utils/Array.h"
 #include "Utils/PrimitiveTypes.h"
 #include "Renderer/ShaderAction.h"

@@ -1,8 +1,7 @@
 #include "Texture.h"
 
-#include "ZEngine.h"
-
 #include "External/Image/stb_image.h"
+#include "Utils/Array.h"
 
 namespace ZE
 {

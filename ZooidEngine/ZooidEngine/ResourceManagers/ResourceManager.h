@@ -5,6 +5,7 @@
 #include "Utils/HashMap.h"
 #include "Memory/Handle.h"
 #include "GameObjectModel/FunctionDelegates.h"
+#include "GameObjectModel/Object.h"
 
 namespace ZE
 {

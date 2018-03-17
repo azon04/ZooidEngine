@@ -1,7 +1,7 @@
 #ifndef __ZE_MESH_H__
 #define __ZE_MESH_H__
 
-#include "ZEngineIncl.h"
+#include "GameObjectModel/Object.h"
 
 namespace ZE
 {

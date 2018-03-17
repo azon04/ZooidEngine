@@ -1,6 +1,6 @@
 #include "FileWriter.h"
 
-#include "ZEngine.h"
+#include <stdarg.h>
 
 namespace ZE {
 	

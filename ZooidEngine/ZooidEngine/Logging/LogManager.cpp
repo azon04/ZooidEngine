@@ -1,7 +1,7 @@
 #include "LogManager.h"
 #include "Utils/Debug.h"
 
-#include <windows.h>
+#include <stdarg.h>
 
 #define LOG_TYPED(logGroupName, logType, text) \
 	ZE::Debug::PrintDebugString("ZooidEngine: [%s] %s: %s \r\n", logGroupName, #logType, text );
