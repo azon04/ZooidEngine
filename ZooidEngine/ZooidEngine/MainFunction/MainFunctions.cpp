@@ -115,8 +115,6 @@ namespace ZE {
 		CameraManager::Init(_gameContext);
 		_gameContext->m_cameraManager = CameraManager::GetInstance();
 		
-		SceneManager::GetInstance()->LoadSceneFile(GetResourcePath("Basic/Scene/Test.scz").c_str());
-
 		_gameContext->m_mainTimer.Reset();
 
 #if ZE_RENDER_MULTITHREAD
@@ -262,8 +260,14 @@ namespace ZE {
 				_gameContext->getDrawList()->m_cameraDirection = currentCamera->m_worldTransform.getN();
 
 				ZE::IRenderer* renderer = _gameContext->getRenderer();
-				ZE::MathOps::CreatePerspectiveProjEx(projectionMat, renderer->GetWidth() / renderer->GetHeight(), 45.0f, currentCamera->m_near, currentCamera->m_far);
-				
+				if (currentCamera->m_bUsingOrthoProjection)
+				{
+					MathOps::CreateOrthoProj(projectionMat, currentCamera->m_orthoWidth / 2.0f, (renderer->GetHeight() / renderer->GetWidth()) * currentCamera->m_orthoWidth * 0.5f, currentCamera->m_near, currentCamera->m_far);
+				}
+				else
+				{
+					ZE::MathOps::CreatePerspectiveProjEx(projectionMat, renderer->GetWidth() / renderer->GetHeight(), 45.0f, currentCamera->m_near, currentCamera->m_far);
+				}
 				_gameContext->getDrawList()->m_shaderData.setProjectionMat(projectionMat);
 
 				_gameContext->getDrawList()->m_lightData.setViewPos(currentCamera->m_worldTransform.getPos());

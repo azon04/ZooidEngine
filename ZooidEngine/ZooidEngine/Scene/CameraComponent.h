@@ -17,6 +17,10 @@ namespace ZE
 		ZE::Float32 m_near;
 		ZE::Float32 m_far;
 		ZE::Float32 m_degFieldOfView;
+
+		// For Orthographic Projection
+		ZE::Float32 m_orthoWidth;
+		bool m_bUsingOrthoProjection;
 	};
 }
 #endif
