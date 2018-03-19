@@ -119,6 +119,7 @@ namespace ZETools
 							break;
 						case BUMP_TEXTURE:
 							stream << "bump ";
+							break;
 						default:
 							stream << "map ";
 							break;
@@ -189,6 +190,7 @@ namespace ZETools
 		Mesh outMesh;
 
 		outMesh.name = mesh->mName.C_Str();
+		bool hasNormal = mesh->mNormals != NULL;
 
 		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 		{
@@ -196,9 +198,12 @@ namespace ZETools
 			pos.Position[0] = mesh->mVertices[i].x;
 			pos.Position[1] = mesh->mVertices[i].y;
 			pos.Position[2] = mesh->mVertices[i].z;
-			pos.Normal[0] = mesh->mNormals[i].x;
-			pos.Normal[1] = mesh->mNormals[i].y;
-			pos.Normal[2] = mesh->mNormals[i].z;
+			if (hasNormal)
+			{
+				pos.Normal[0] = mesh->mNormals[i].x;
+				pos.Normal[1] = mesh->mNormals[i].y;
+				pos.Normal[2] = mesh->mNormals[i].z;
+			}
 			pos.TexCoords[0] = 0.0f;
 			pos.TexCoords[1] = 0.0f;
 

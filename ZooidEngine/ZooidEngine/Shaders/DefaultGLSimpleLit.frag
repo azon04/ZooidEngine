@@ -11,6 +11,9 @@ struct Material
 	sampler2D diffuseMap;
 	sampler2D specularMap;
 
+	float diffuseMapBound;
+	float specularMapBound;
+
 	float shininess;
 
 	vec3 Ka;

@@ -21,9 +21,13 @@
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp" />
     <ClCompile Include="MainFunction\MainFunctions.cpp" />
+    <ClCompile Include="Scene\PlayerTopCamera.cpp" />
+    <ClCompile Include="Scene\SpaceShip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainFunction\MainFunctions.h" />
+    <ClInclude Include="Scene\PlayerTopCamera.h" />
+    <ClInclude Include="Scene\SpaceShip.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C135D1DC-F334-4497-97A6-AC77E83759BE}</ProjectGuid>
@@ -95,7 +99,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)ZooidEngine\;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;$(SolutionDir)ZooidEngine\;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

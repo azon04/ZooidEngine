@@ -7,8 +7,8 @@
 
 #include "GameObjectModel/FunctionDelegates.h"
 
-#define addEventDelegate(EventClass, Func) _addEventDelegate(EventClass::GetClassID(), (EventDelegate::HandleEventFunc) Func);
-#define removeEventDelegate(EventClass, Func) _removeEventDelegate(EventClass::GetClassID(), (EventDelegate::HandleEventFunc) Func);
+#define addEventDelegate(EventClass, Func) _addEventDelegate(EventClass::GetClassID(), (ZE::EventDelegate::HandleEventFunc) Func);
+#define removeEventDelegate(EventClass, Func) _removeEventDelegate(EventClass::GetClassID(), (ZE::EventDelegate::HandleEventFunc) Func);
 
 namespace ZE {
 	class GameContext;

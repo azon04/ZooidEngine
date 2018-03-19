@@ -1,0 +1,7 @@
+Ka 0 0 0
+Kd 0 0 0
+Ks 0 0 0
+shininess 0
+diffuse SpaceShooter\Texture\HULL.jpg
+specular SpaceShooter\Texture\HULL-S.jpg
+bump SpaceShooter\Texture\HULL-N.jpg -bm 1
