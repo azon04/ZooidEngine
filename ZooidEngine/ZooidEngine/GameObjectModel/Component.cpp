@@ -58,8 +58,8 @@ namespace ZE {
 		{
 			if (m_parents[i]->unregisterChildFromEvent(classId, this))
 			{
-				// check if event map is zero (means there is no child for this event) and check if current object has no delegate map for this function
-				if (m_parents[i]->m_eventMap[classId].length() == 0 || !m_parents[i]->m_delegateMap.hasKey(classId))
+				//  check if event map is zero (means there is no child for this event) and check if current object has no delegate map for this function
+				if (m_parents[i]->m_eventMap[classId].length() == 0 /*&& !m_parents[i]->m_delegateMap.hasKey(classId)*/)
 				{
 					// removing the event map
 					m_parents[i]->m_eventMap.erase(classId);
@@ -105,6 +105,39 @@ namespace ZE {
 		{
 			registerChildToEvent(eventIds[i], child);
 			registerEventToParent(eventIds[i]);
+		}
+	}
+
+	void Component::removeChild(Component* child)
+	{
+		int childIndex = this->m_components.firstIndexOf(child);
+		if (childIndex == -1)
+		{
+			ZEINFO("Child Not Found");
+			return;
+		}
+
+		// to do set events handling to parent
+		Array<Int32, true> eventIds = child->m_delegateMap.getKeys();
+		for (int i = 0; i < eventIds.length(); i++)
+		{
+			child->unregisterEventFromParent(eventIds[i]);
+		}
+
+		m_components.removeAt(childIndex);
+		
+		int parentIndex = child->m_parents.firstIndexOf(this);
+		if (parentIndex >= 0)
+		{
+			child->m_parents.removeAt(parentIndex);
+		}
+	}
+
+	void Component::removeFromParents()
+	{
+		for (int i = m_parents.length() - 1; i >= 0; i--)
+		{
+			m_parents[i]->removeChild(this);
 		}
 	}
 

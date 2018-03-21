@@ -30,6 +30,7 @@ namespace ZE {
 		void* allocateBlock(size_t size, unsigned int &pool_index, unsigned int &block_index);
 		void freeBlock(unsigned int pool_index, unsigned int block_index);
 		void* getBlock(unsigned int pool_index, unsigned int block_index);
+		void freeBlockAtAddress(void* adds);
 
 		Mutex m_memoryLock;
 	};

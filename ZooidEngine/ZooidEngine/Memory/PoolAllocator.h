@@ -30,6 +30,7 @@ namespace ZE {
 		unsigned int getIndexOfBlock(void* pMem);
 		unsigned int allocateFreeBlockIndex();
 		void freeBlock(unsigned int block);
+		bool freeBlockAtAddress(void* adds);
 		int getCountFreeBlock() const { return m_freeBlock; }
 
 		static PoolAllocator* constructFromMem(void* pMem, size_t itemSize, unsigned int blockCount);

@@ -13,7 +13,7 @@ namespace ZE {
 	class Object {
 	public:
 		Object() {}
-		virtual ~Object() {}
+		virtual ~Object();
 
 		virtual int getClassID() = 0;
 		virtual const char* getClassName() = 0;

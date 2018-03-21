@@ -122,4 +122,13 @@ namespace ZE {
 		return pReturnMem;
 	}
 
+	void MemoryManager::freeBlockAtAddress(void* adds)
+	{
+		for (int i = 0; i < NPOOL; ++i)
+		{
+			if (m_pools[i]->freeBlockAtAddress(adds))
+				return;
+		}
+	}
+
 }

@@ -1,7 +1,10 @@
 #include "SpaceShip.h"
+#include "LaserBeam.h"
 
-#include "Events/InputEvents.h"
-#include "FileSystem/DirectoryHelper.h"
+#include "ZooidEngine/Events/InputEvents.h"
+#include "ZooidEngine/FileSystem/DirectoryHelper.h"
+#include "ZooidEngine/Memory/Handle.h"
+#include "ZooidEngine/ZEGameContext.h"
 
 #include <windows.h>
 
@@ -48,7 +51,10 @@ namespace SpaceShooter
 		}
 		else if (multiplier == -1.0f && pInput->m_keyId == VK_SPACE)
 		{
-
+			ZE::Handle h("LaserBeam", sizeof(LaserBeam));
+			LaserBeam* pLaserBeam = new(h) LaserBeam(m_gameContext, m_worldTransform.getU() * 100.0f, m_worldTransform.getPos() + m_worldTransform.getU() * 10.0f);
+			pLaserBeam->setupComponent();
+			m_gameContext->getRootComponent()->addChild(pLaserBeam);
 		}
 	}
 

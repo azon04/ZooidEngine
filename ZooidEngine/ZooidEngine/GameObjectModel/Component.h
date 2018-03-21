@@ -24,6 +24,8 @@ namespace ZE {
 
 		void handleEvent(Event* event);
 		void addChild(Component* child);
+		void removeChild(Component* child);
+		void removeFromParents();
 
 		virtual void setupComponent() {}
 

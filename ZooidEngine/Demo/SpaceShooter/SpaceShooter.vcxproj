@@ -21,11 +21,13 @@
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp" />
     <ClCompile Include="MainFunction\MainFunctions.cpp" />
+    <ClCompile Include="Scene\LaserBeam.cpp" />
     <ClCompile Include="Scene\PlayerTopCamera.cpp" />
     <ClCompile Include="Scene\SpaceShip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainFunction\MainFunctions.h" />
+    <ClInclude Include="Scene\LaserBeam.h" />
     <ClInclude Include="Scene\PlayerTopCamera.h" />
     <ClInclude Include="Scene\SpaceShip.h" />
   </ItemGroup>

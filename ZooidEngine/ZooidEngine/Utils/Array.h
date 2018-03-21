@@ -176,7 +176,7 @@ namespace ZE {
 
 		void removeAt(int index)
 		{
-			if (index < m_length-1)
+			if (index < m_length)
 			{
 				// Shift Memory
 				uintptr_t memDest = (uintptr_t)(m_handle.getObject()) + (uintptr_t)(index * sizeof(T));
