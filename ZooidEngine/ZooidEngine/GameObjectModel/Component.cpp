@@ -59,7 +59,7 @@ namespace ZE {
 			if (m_parents[i]->unregisterChildFromEvent(classId, this))
 			{
 				//  check if event map is zero (means there is no child for this event) and check if current object has no delegate map for this function
-				if (m_parents[i]->m_eventMap[classId].length() == 0 /*&& !m_parents[i]->m_delegateMap.hasKey(classId)*/)
+				if (m_parents[i]->m_eventMap[classId].length() == 0 && !m_parents[i]->m_delegateMap.hasKey(classId))
 				{
 					// removing the event map
 					m_parents[i]->m_eventMap.erase(classId);

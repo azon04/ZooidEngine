@@ -8,6 +8,7 @@
 
 #include "Scene/SpaceShip.h"
 #include "Scene/PlayerTopCamera.h"
+#include "Scene/MeteorManager.h"
 
 using namespace ZE;
 
@@ -23,6 +24,13 @@ void SpaceShooter::MainSetup(ZE::GameContext* _gameContext)
 	}
 
 	{
+		ZE::Handle h("MeteorManager", sizeof(MeteorManager));
+		MeteorManager* pMeteorManager = new(h) MeteorManager(_gameContext);
+		pMeteorManager->setupComponent();
+		_gameContext->getRootComponent()->addChild(pMeteorManager);
+	}
+
+	{
 		ZE::Handle h("PlayerCamera", sizeof(PlayerTopCamera));
 		PlayerTopCamera* cam = new(h) PlayerTopCamera(_gameContext);
 		cam->setupComponent();
@@ -30,7 +38,6 @@ void SpaceShooter::MainSetup(ZE::GameContext* _gameContext)
 		_gameContext->getRootComponent()->addChild(cam);
 		_gameContext->getCameraManager()->m_cameras.push_back(h);
 		_gameContext->getCameraManager()->m_currentCamera = cam;
-
 	}
 }
 

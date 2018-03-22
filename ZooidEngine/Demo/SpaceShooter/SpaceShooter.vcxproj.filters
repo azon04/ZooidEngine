@@ -36,6 +36,12 @@
     <ClCompile Include="Scene\LaserBeam.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Scene\Meteor.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\MeteorManager.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainFunction\MainFunctions.h">
@@ -48,6 +54,12 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="Scene\LaserBeam.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Meteor.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\MeteorManager.h">
       <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
