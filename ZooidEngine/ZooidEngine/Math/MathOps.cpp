@@ -45,7 +45,7 @@ namespace ZE
 		_result.m_data[1][1] = 1.0f / _top;
 		_result.m_data[0][1] = _result.m_data[2][1] = _result.m_data[3][1] = 0.0f;
 
-		_result.m_data[2][2] = -2 / (_far - _near);
+		_result.m_data[2][2] = - 2 / (_far - _near);
 		_result.m_data[3][2] = - (_far + _near) / (_far - _near);
 		_result.m_data[0][2] = _result.m_data[2][1] = 0.0f;
 

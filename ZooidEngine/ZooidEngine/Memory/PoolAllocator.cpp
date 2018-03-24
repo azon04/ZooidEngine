@@ -15,8 +15,7 @@ namespace ZE {
 	{}
 
 	PoolAllocator::~PoolAllocator()
-	{
-	}
+	{}
 
 	void PoolAllocator::init(size_t totalSize)
 	{
@@ -148,6 +147,18 @@ namespace ZE {
 	void PoolAllocator::freeBlock(unsigned int block)
 	{
 		m_avails[m_freeBlock++] = block;
+	}
+
+	bool PoolAllocator::freeBlockAtAddress(void* adds)
+	{
+		unsigned int indexOfAdds = getIndexOfBlock(adds);
+		if ( m_pMemBlock > adds || indexOfAdds > m_poolSize)
+		{
+			return false;
+		}
+		
+		freeBlock(indexOfAdds);
+		return true;
 	}
 
 }

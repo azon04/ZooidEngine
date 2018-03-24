@@ -16,7 +16,7 @@ static unsigned int poolConfig[NPOOL][2] =
 	{2048, 1024}, // 2048 * 1024 =~ 2 MB
 	{139272, 1}, // Draw list need this big of memoryblock
 	{278544, 1}, // Draw list for 64bit machine
-	{524288, 2} // 524288 * 2 =~ 1 MB; Block for loading big assets data
+	{767360, 2} // 767360 * 2 =~ 1.5 MB; Block for loading big assets data
 };
 
 namespace ZE {
@@ -120,6 +120,15 @@ namespace ZE {
 		ZASSERT(pool_index < NPOOL, "Index Pool out of bound");
 		void* pReturnMem = m_pools[pool_index]->getBlock(block_index);
 		return pReturnMem;
+	}
+
+	void MemoryManager::freeBlockAtAddress(void* adds)
+	{
+		for (int i = 0; i < NPOOL; ++i)
+		{
+			if (m_pools[i]->freeBlockAtAddress(adds))
+				return;
+		}
 	}
 
 }

@@ -6,6 +6,7 @@
 
 #include "Scene/Light/LightComponent.h"
 #include "Scene/RenderComponent.h"
+#include "Scene/CameraComponent.h"
 
 #include "Utils/StringFunc.h"
 
@@ -36,6 +37,12 @@ namespace ZE
 		{
 			Handle h("Render Component", sizeof(RenderComponent));
 			new (h) RenderComponent(m_gameContext);
+			return h;
+		}
+		else if (StringFunc::Compare(componentTypeName, CameraComponent::GetClassName()) == 0)
+		{
+			Handle h("Component", sizeof(CameraComponent));
+			new(h) CameraComponent(m_gameContext);
 			return h;
 		}
 		else

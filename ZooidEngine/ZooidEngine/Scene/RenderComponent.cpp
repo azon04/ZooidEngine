@@ -18,6 +18,7 @@ namespace ZE {
 
 	void RenderComponent::setupComponent()
 	{
+		SceneComponent::setupComponent();
 		addEventDelegate(Event_GATHER_RENDER, &RenderComponent::handleGatherRender);
 	}
 

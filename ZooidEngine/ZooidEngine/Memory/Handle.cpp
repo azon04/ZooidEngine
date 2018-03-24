@@ -1,5 +1,6 @@
 #include "Handle.h"
 
+
 namespace ZE {
 
 	void Handle::release()
@@ -27,10 +28,24 @@ void* operator new[](size_t size, ZE::Handle& handle)
 
 void operator delete(void* mem, ZE::Handle& handle)
 {
-	handle.release();
+	if (handle.isValid())
+	{
+		handle.release();
+	}
+	else
+	{
+		ZE::MemoryManager::getInstance()->freeBlockAtAddress(mem);
+	}
 }
 
 void operator delete[](void* mem, ZE::Handle& handle)
 {
-	handle.release();
+	if (handle.isValid())
+	{
+		handle.release();
+	}
+	else
+	{
+		ZE::MemoryManager::getInstance()->freeBlockAtAddress(mem);
+	}
 }
