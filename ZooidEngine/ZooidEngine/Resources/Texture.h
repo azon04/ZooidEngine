@@ -2,22 +2,24 @@
 #define __ZE_TEXTURE_H__
 
 #include "Utils/PrimitiveTypes.h"
-#include "MemoryManagement/Handle.h"
+#include "Memory/Handle.h"
+#include "GameObjectModel/Object.h"
 
 namespace ZE
 {
-	class Texture
+	class Texture : public Object
 	{
-	
+		DEFINE_CLASS(Texture)
+
 	public:
 		Texture() {}
 
 		static Handle loadTexture(const char* filePath);
 
-		UChar* getImage() const { return m_image; }
-		UInt32 getWidth() const { return m_width; }
-		UInt32 getHeight() const { return m_height; }
-
+		FORCEINLINE UChar* getImage() const { return m_image; }
+		FORCEINLINE UInt32 getWidth() const { return m_width; }
+		FORCEINLINE UInt32 getHeight() const { return m_height; }
+		FORCEINLINE UInt32 getChannel() const { return m_channel; }
 		void release();
 
 	protected:

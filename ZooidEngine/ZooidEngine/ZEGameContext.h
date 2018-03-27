@@ -1,14 +1,31 @@
 #ifndef __ZE_GAME_CONTEXT__
 #define __ZE_GAME_CONTEXT__
 
-#include "ZEngine.h"
+#include "Platform/Thread.h"
+#include "Utils/Timer.h"
 
 namespace ZE {
+	
+	class MaterialManager;
+	class MeshManager;
+	class RenderZooid;
+	class SceneManager;
+	class SceneComponent;
+	class BufferManager;
+	class ShaderManager;
+	class DrawList;
+	class EventDispatcher;
+	class TextureManager;
+	class InputManager;
+	class IRenderer;
+	class CameraManager;
+
 	class GameContext {
 	public:
 		GameContext() {}
 		virtual ~GameContext() {}
 
+		RenderZooid* m_renderZooid;
 		IRenderer* m_renderer;
 		BufferManager* m_bufferManager;
 		ShaderManager* m_shaderManager;
@@ -19,6 +36,18 @@ namespace ZE {
 		TextureManager* m_textureManager;
 		InputManager* m_inputManager;
 
+		MaterialManager* m_materialManager;
+		MeshManager* m_meshManager;
+
+		SceneManager* m_sceneManager;
+		
+		Thread* m_drawThread;
+
+		Timer m_mainTimer;
+		Timer m_globalTimer;
+		Timer m_renderThreadTimer;
+
+		FORCEINLINE RenderZooid* getRenderZooid() const { return m_renderZooid; }
 		FORCEINLINE IRenderer* getRenderer() const { return m_renderer; }
 		FORCEINLINE BufferManager* getBufferManager() const { return m_bufferManager; }
 		FORCEINLINE ShaderManager* getShaderManager() const { return m_shaderManager; }
@@ -28,6 +57,10 @@ namespace ZE {
 		FORCEINLINE EventDispatcher* getEventDispatcher() const { return m_mainEventDispatcher; }
 		FORCEINLINE TextureManager* getTextureManager() const { return m_textureManager; }
 		FORCEINLINE InputManager* getInputManager() const { return m_inputManager; };
+		FORCEINLINE MaterialManager* getMaterialManager() const { return m_materialManager; }
+		FORCEINLINE MeshManager* getMeshManager() const { return m_meshManager; }
+		FORCEINLINE SceneManager* getSceneManager() const { return m_sceneManager; }
+
 	};
 }
 #endif // __ZE_GAME_CONTEXT__

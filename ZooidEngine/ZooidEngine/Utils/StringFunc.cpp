@@ -1,10 +1,11 @@
 #include "StringFunc.h"
+
 #include <cstdlib>
 #include <cstring>
 
 extern "C"
 {
-	#include "../External/Hash/lookup3.h"
+	#include "External/Hash/lookup3.h"
 }
 
 #define USING_MEM_FUNCTION 1
@@ -28,7 +29,27 @@ int StringFunc::Length(const char* string)
 {
 	int length = 0;
 	while(string[length++] != '\0') {}
-	return length;
+	return length-1;
+}
+
+int StringFunc::Compare(const char* string1, const char* string2)
+{
+#if 0
+	int length = 0;
+	while (string1[length] != '\0' && string2[length] != '\0' && string1[length] == string2[length])
+	{
+		++length;
+	}
+
+	return string1[length] == string2[length] ? 0 : (string1[length] < string2[length] ? -1 : 1);
+#else
+	return strcmp(string1, string2);
+#endif
+}
+
+void StringFunc::Concat(const char* string1, const char* string2, char* res)
+{
+	sprintf(res, "%s%s", string1, string2);
 }
 
 ZE::UInt32 StringFunc::Hash(const char* string, size_t size)

@@ -35,6 +35,18 @@ namespace ZE
 		Event_KEY_DOWN() {}
 		virtual ~Event_KEY_DOWN() {}
 	};
+
+	class Event_MOUSE_DRAG : public Event_INPUT
+	{
+		DEFINE_CLASS(Event_MOUSE_DRAG)
+	
+	public:
+		Event_MOUSE_DRAG() {}
+		virtual ~Event_MOUSE_DRAG() {}
+
+		int m_deltaX;
+		int m_deltaY;
+	};
 }
 
 #endif

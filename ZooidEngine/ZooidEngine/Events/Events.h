@@ -2,6 +2,7 @@
 #define __ZE_EVENTS__
 
 #include "GameObjectModel/Object.h"
+#include "Memory/Handle.h"
 
 namespace ZE {
 	
@@ -25,7 +26,8 @@ namespace ZE {
 		Event_UPDATE() {}
 		virtual ~Event_UPDATE() {}
 
-		Float32 m_deltaTime;
+		// Delta Time in milliseconds
+		double m_deltaTime;
 	};
 
 	class Event_GATHER_LIGHT : public Event
@@ -35,6 +37,26 @@ namespace ZE {
 	public: 
 		Event_GATHER_LIGHT() {}
 		virtual ~Event_GATHER_LIGHT() {}
+	};
+
+	class Event_GATHER_RENDER : public Event
+	{
+		DEFINE_CLASS(Event_GATHER_RENDER);
+
+	public:
+		Event_GATHER_RENDER() {}
+		virtual ~Event_GATHER_RENDER() {}
+	};
+
+	class Event_RESOURCE_LOADED : public Event
+	{
+		DEFINE_CLASS(Event_RESOURCE_LOADED)
+
+	public:
+		Event_RESOURCE_LOADED() {}
+		virtual ~Event_RESOURCE_LOADED() {}
+
+		Handle m_resourceHandle;
 	};
 };
 

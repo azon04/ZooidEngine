@@ -28,7 +28,7 @@ namespace ZE {
 	public:
 		ZE::UInt32 operator()(const K& Object)
 		{
-			return 0;
+			return reinterpret_cast<ZE::UInt32> Object;
 		}
 	};
 
@@ -47,6 +47,16 @@ namespace ZE {
 	{
 	public:
 		ZE::UInt32 operator()(const ZE::Int32& object)
+		{
+			return object;
+		}
+	};
+
+	template<>
+	class HashFunc<ZE::UInt32>
+	{
+	public:
+		ZE::UInt32 operator()(const ZE::UInt32& object)
 		{
 			return object;
 		}
@@ -157,7 +167,7 @@ namespace ZE {
 
 				int offset = 1;
 				
-				while (get(index).m_occupied != 0 && get(index).m_hashKey != hashValue && offset < currentCapacity)
+				while ((get(index).m_occupied == 0 || get(index).m_hashKey != hashValue) && offset < currentCapacity)
 				{
 #if HASH_MAP_PROBING == HASH_MAP_LINEAR_PROBING
 					index = (index + 1) % currentCapacity;
@@ -317,7 +327,7 @@ namespace ZE {
 
 				int offset = 1;
 
-				while (get(index).m_occupied != 0 && get(index).m_hashKey != hashValue && offset < currentCapacity)
+				while ((get(index).m_occupied == 0 || get(index).m_hashKey != hashValue) && offset < currentCapacity)
 				{
 #if HASH_MAP_PROBING == HASH_MAP_LINEAR_PROBING
 					index = (index + 1) % currentCapacity;

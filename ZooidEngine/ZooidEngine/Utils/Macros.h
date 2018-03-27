@@ -22,4 +22,8 @@
 	#define INLINE inline
 #endif
 
+#define COMPARE_RETURN(InText, OutVar) \
+	if( StringFunc::Compare(InText, #OutVar) == 0) \
+	{ return OutVar; }
+
 #endif

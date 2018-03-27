@@ -1,6 +1,6 @@
 #include "ShaderAction.h"
 
-#include "../Utils/StringFunc.h"
+#include "Utils/StringFunc.h"
 
 #include <cstring>
 
@@ -11,7 +11,7 @@ namespace ZE {
 		m_shaderActionType = SHADER_ACTION_DRAW;
 	}
 
-	ShaderAction::ShaderAction(ShaderChain* shader)
+	ShaderAction::ShaderAction(IShaderChain* shader)
 	{
 		m_shader = shader;
 	}
@@ -20,15 +20,17 @@ namespace ZE {
 	{
 		m_shader = nullptr;
 		m_shaderVariables.clear();
+		m_shaderFeatures.clear();
 		m_bufferArray = nullptr;
 		m_shaderActionType = SHADER_ACTION_DRAW;
 		m_vertexSize = 0;
 	}
 
-	void ShaderAction::SetShaderAndBuffer(ShaderChain* _shader, GPUBufferArray* _bufferArray)
+	void ShaderAction::SetShaderAndBuffer(IShaderChain* _shader, IGPUBufferArray* _bufferArray)
 	{
 		m_shader = _shader;
 		m_bufferArray = _bufferArray;
+		m_vertexSize = _bufferArray->m_dataCount;
 	}
 
 	void ShaderAction::SetShaderFloatVar(const char* _name, float _value)
@@ -72,7 +74,7 @@ namespace ZE {
 
 	}
 
-	void ShaderAction::SetShaderTextureVar(const char* _name, GPUTexture* _texture, Int32 _texture_index)
+	void ShaderAction::SetShaderTextureVar(const char* _name, IGPUTexture* _texture, Int32 _texture_index)
 	{
 		ShaderVariable shaderVariable;
 		StringFunc::WriteTo(shaderVariable.m_varName, _name, 32);
@@ -86,7 +88,7 @@ namespace ZE {
 		m_shaderActionType = _shaderActionType;
 	}
 
-	void ShaderAction::SetConstantsBlockBuffer(const char* _name, GPUBufferData* _constantBlockBuffer)
+	void ShaderAction::SetConstantsBlockBuffer(const char* _name, IGPUBufferData* _constantBlockBuffer)
 	{
 		ShaderVariable shaderVariable;
 		StringFunc::WriteTo(shaderVariable.m_varName, _name, 32);
@@ -95,11 +97,109 @@ namespace ZE {
 		m_shaderVariables.push_back(shaderVariable);
 	}
 
+	void ShaderAction::GetShaderMatVar(const char* _name, Matrix4x4& _value)
+	{
+		for (int i = 0; i < m_shaderVariables.length(); i++)
+		{
+			if (StringFunc::Compare(m_shaderVariables[i].m_varName, _name) == 0)
+			{
+				_value = m_shaderVariables[i].mat_value;
+				return;
+			}
+		}
+	}
+
+	void ShaderAction::AddShaderFeature(UInt32 _feature, bool _enabled)
+	{
+		ShaderFeature shaderFeature;
+		shaderFeature.m_rendererFeature = _feature;
+		shaderFeature.m_bFeatureEnabled = _enabled;
+		m_shaderFeatures.push_back(shaderFeature);
+	}
+
 	ShaderVariable::ShaderVariable(const ShaderVariable& _other)
 	{
 		StringFunc::WriteTo(m_varName, _other.m_varName, 32);
 		m_varType = _other.m_varType;
 		memcpy(&mat_value, &_other.mat_value, sizeof(mat_value));
+	}
+
+	void EnableAndSetDepthFunction(ShaderAction& shaderAction, RendererCompareFunc func)
+	{
+		shaderAction.m_shaderFeatures.push_back(ShaderFeature());
+		ShaderFeature& shaderFeature = shaderAction.m_shaderFeatures[shaderAction.m_shaderFeatures.length() - 1];
+		shaderFeature.m_rendererFeature = DEPTH_TEST;
+		shaderFeature.m_bFeatureEnabled = true;
+		
+		ShaderFeatureVar shaderFunc;
+		shaderFunc.uint_value = func;
+		
+		shaderFeature.m_shaderFeatureVar.push_back(shaderFunc);
+	}
+
+	void EnableAndSetStencilFunc(ShaderAction& shaderAction, RendererCompareFunc func, Int32 ref, UInt32 refMask, UInt32 stencilWriteMask)
+	{
+		shaderAction.m_shaderFeatures.push_back(ShaderFeature());
+		ShaderFeature& shaderFeature = shaderAction.m_shaderFeatures[shaderAction.m_shaderFeatures.length() - 1];
+		shaderFeature.m_rendererFeature = STENCIL_TEST;
+		shaderFeature.m_bFeatureEnabled = true;
+
+		ShaderFeatureVar shaderFunc;
+		shaderFunc.uint_value = func;
+
+		shaderFeature.m_shaderFeatureVar.push_back(shaderFunc);
+
+		ShaderFeatureVar refVar;
+		refVar.int_value = ref;
+
+		shaderFeature.m_shaderFeatureVar.push_back(refVar);
+
+		ShaderFeatureVar refMaskVar;
+		refMaskVar.uint_value = refMask;
+
+		shaderFeature.m_shaderFeatureVar.push_back(refMaskVar);
+		
+		ShaderFeatureVar stencilMaskVar;
+		stencilMaskVar.uint_value = stencilWriteMask;
+
+		shaderFeature.m_shaderFeatureVar.push_back(stencilMaskVar);
+
+	}
+
+	void EnableAndSetBlendFunc(ShaderAction& shaderAction, RendererBlendFactor sourceBlendFactor, RendererBlendFactor dstBlendFactor)
+	{
+		shaderAction.m_shaderFeatures.push_back(ShaderFeature());
+		ShaderFeature& shaderFeature = shaderAction.m_shaderFeatures[shaderAction.m_shaderFeatures.length() - 1];
+		shaderFeature.m_rendererFeature = BLEND;
+		shaderFeature.m_bFeatureEnabled = true;
+
+		ShaderFeatureVar sourceBlendFactorVar;
+		sourceBlendFactorVar.uint_value = sourceBlendFactor;
+
+		shaderFeature.m_shaderFeatureVar.push_back(sourceBlendFactorVar);
+
+		ShaderFeatureVar destBlendFactorVar;
+		destBlendFactorVar.uint_value = dstBlendFactor;
+
+		shaderFeature.m_shaderFeatureVar.push_back(destBlendFactorVar);
+	}
+
+	void EnableAndSetFaceCull(ShaderAction& shaderAction, FaceFrontOrder faceOrder, CullFace cullFace)
+	{
+		shaderAction.m_shaderFeatures.push_back(ShaderFeature());
+		ShaderFeature& shaderFeature = shaderAction.m_shaderFeatures[shaderAction.m_shaderFeatures.length() - 1];
+		shaderFeature.m_rendererFeature = FACE_CULING;
+		shaderFeature.m_bFeatureEnabled = true;
+
+		ShaderFeatureVar faceOrderVar;
+		faceOrderVar.uint_value = faceOrder;
+
+		shaderFeature.m_shaderFeatureVar.push_back(faceOrderVar);
+
+		ShaderFeatureVar cullFaceVar;
+		cullFaceVar.uint_value = cullFace;
+
+		shaderFeature.m_shaderFeatureVar.push_back(cullFaceVar);
 	}
 
 }

@@ -1,0 +1,3 @@
+vbuff Basic/VertexBuffer/Plane.vbuff
+mat Basic/Material/Window.matz
+double_side

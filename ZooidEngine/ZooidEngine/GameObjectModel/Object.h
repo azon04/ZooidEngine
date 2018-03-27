@@ -1,22 +1,19 @@
 #ifndef __ZE_OBJECT_H__
 #define __ZE_OBJECT_H__
 
-// Outer engine includes
-#include "../Utils/PrimitiveTypes.h"
-
+#include "Utils/PrimitiveTypes.h"
 #include "ObjDecl.h"
 #include "RTTI.h"
 
-
 namespace ZE {
 
-	template<class T, bool resizable = false>
+	template<class T, bool resizable>
 	class Array;
 
 	class Object {
 	public:
 		Object() {}
-		virtual ~Object() {}
+		virtual ~Object();
 
 		virtual int getClassID() = 0;
 		virtual const char* getClassName() = 0;

@@ -1,7 +1,9 @@
 #include "VectorTest.h"
-#include "ZEngine.h"
+
+#include "Utils/ZEngineHelper.h"
 
 #include "Math/Vector3.h"
+#include "Math/Vector4.h"
 
 void VectorUnitTest::RunTest()
 {
@@ -47,5 +49,22 @@ void VectorUnitTest::RunTest()
 	// Vector Length
 	f_tmp = v3.length();
 	ZASSERT(f_tmp == 1.0f, "Vector Dot Product Failed");
+
+	// Test Vector4
+	Vector4 v4_1(1.0f, 2.0f, 3.0f, 4.0f);
+	Vector4 v4_2(v4_1);
+	Vector4 res;
+
+	// Copy constructor
+	ZASSERT((v4_2.m_x == v4_1.m_x) && (v4_2.m_y == v4_1.m_y) && (v4_2.m_z == v4_1.m_z) && (v4_2.m_w == v4_1.m_w), "Copy constructor Vector4 Failed");
+
+	Vector4::FastAdd(v4_1, v4_2, res);
+	ZASSERT(res.m_w == 8.0f, "Vector4::Add function Failed");
+
+	Vector4::FastMul(v4_1, v4_2, res);
+	ZASSERT(res.m_w == 16.0f, "Vector4::Mul function Failed");
+
+	float dot = Vector4::FastDot(v4_1, v4_2);
+	ZASSERT(dot == 30.0f, "Vector4::Dot function Failed");
 
 }

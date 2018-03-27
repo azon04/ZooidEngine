@@ -1,0 +1,7 @@
+Ka 0 0 0
+Kd 0.64 0.64 0.64
+Ks 0.5 0.5 0.5
+shininess 96.0784
+diffuse Nanosuit\Texture\leg_dif.png
+specular Nanosuit\Texture\leg_showroom_spec.png
+bump map Nanosuit\Texture\leg_showroom_ddn.png

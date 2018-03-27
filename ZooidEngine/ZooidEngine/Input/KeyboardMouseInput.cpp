@@ -3,9 +3,13 @@
 #include "ZEGameContext.h"
 #include "Events/InputEvents.h"
 #include "Events/EventDispatcher.h"
-#include "MemoryManagement/MemoryHelper.h"
+#include "Memory/MemoryHelper.h"
+#include "Renderer/IRenderer.h"
 
+#if defined(_WIN32) || defined(_WIN64) 
 #include <Windows.h>
+#else
+#endif
 
 namespace ZE {
 
@@ -16,11 +20,22 @@ namespace ZE {
 		addEventDelegate(Event_UPDATE, &KeyboardMouseInput::handleUpdate);
 		GetKeyboardState(m_keyStates);
 		GetKeyboardState(m_prevState);
-	}
 
+		m_isCurrentDragged = false;
+	}
 
 	void KeyboardMouseInput::handleUpdate(Event* event)
 	{
+		Event_UPDATE* pEventUpdate = (Event_UPDATE*)event;
+
+		POINT p;
+		if (GetCursorPos(&p))
+		{
+			ScreenToClient(m_gameContext->getRenderer()->getWinWindow(), &p);
+			m_mouseX = p.x;
+			m_mouseY = p.y;
+		}
+		
 		if (GetKeyboardState(m_keyStates))
 		{
 			for (Short i = 0; i < 256; i++)
@@ -32,7 +47,16 @@ namespace ZE {
 						Handle handle("InputEvent", sizeof(Event_KEY_DOWN));
 						Event_KEY_DOWN* pEvent = new(handle) Event_KEY_DOWN;
 						pEvent->m_keyId = i;
-						m_gameContext->getEventDispatcher()->addEvent(handle, EVENT_INPUT);
+						m_gameContext->getEventDispatcher()->addEvent(handle, EVENT_INPUT);	
+
+						if ((i == VK_LBUTTON || i == VK_RBUTTON) && (!m_isCurrentDragged || m_currentDragKey != i))
+						{
+							m_currentDragTime = 0.0f;
+							m_isCurrentDragged = true;
+							m_startDragX = m_mouseX;
+							m_startDragY = m_mouseY;
+							m_currentDragKey = i;
+						}
 					}
 					else
 					{
@@ -40,9 +64,35 @@ namespace ZE {
 						Event_KEY_UP* pEvent = new(handle) Event_KEY_UP;
 						pEvent->m_keyId = i;
 						m_gameContext->getEventDispatcher()->addEvent(handle, EVENT_INPUT);
+
+						if ((i == VK_LBUTTON || i == VK_RBUTTON ) && m_isCurrentDragged && m_currentDragKey == i)
+						{
+							m_isCurrentDragged = false;
+						}
 					}
 					m_prevState[i] = m_keyStates[i];
 				}
+			}
+		}
+
+		if (m_isCurrentDragged)
+		{
+			m_currentDragTime += pEventUpdate->m_deltaTime;
+
+			const float deltaTime = 10.0f;
+			if (m_currentDragTime > deltaTime)
+			{
+				Handle handle("MouseDragInput", sizeof(Event_MOUSE_DRAG));
+				Event_MOUSE_DRAG* pEvent = new(handle) Event_MOUSE_DRAG;
+				pEvent->m_keyId = m_currentDragKey;
+				pEvent->m_deltaX = m_mouseX - m_startDragX;
+				pEvent->m_deltaY = m_mouseY - m_startDragY;
+
+				m_gameContext->getEventDispatcher()->addEvent(handle, EVENT_INPUT);
+
+				m_startDragX = m_mouseX;
+				m_startDragY = m_mouseY;
+				m_currentDragTime -= deltaTime;
 			}
 		}
 

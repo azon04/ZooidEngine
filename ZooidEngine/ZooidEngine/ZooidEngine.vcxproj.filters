@@ -67,6 +67,21 @@
     <Filter Include="Input">
       <UniqueIdentifier>{01f13d93-2810-47dc-a2f4-f23f17d914a5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Zooid">
+      <UniqueIdentifier>{0492cd76-3861-48af-a90a-1c97686a0fb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\GL">
+      <UniqueIdentifier>{173dcb27-a0b6-490d-b87c-0c8d1722a9fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{839ece0a-08ae-48b5-b322-86d68db0ac7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Light">
+      <UniqueIdentifier>{ef5e86bb-6ec8-466c-bfa0-8c366a20ada6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Logging">
+      <UniqueIdentifier>{8347452e-90d5-4a92-818a-81ae23ee7163}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ZEngine.h">
@@ -96,25 +111,13 @@
     <ClInclude Include="Renderer\IRenderer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\Shader.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer\BufferData.h">
       <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Renderer\ShaderAction.h">
       <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\GPUBufferData.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer\GPUBufferArray.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer\BufferLayout.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer\BufferManager.h">
       <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="MainFunction\MainFunctions.h">
@@ -122,9 +125,6 @@
     </ClInclude>
     <ClInclude Include="ZEGameContext.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer\GLRenderer.h">
-      <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Renderer\DrawList.h">
       <Filter>Renderer</Filter>
@@ -150,21 +150,6 @@
     <ClInclude Include="Scene\Actor.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryManagement\MemoryManager.h">
-      <Filter>MemoryManagement</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryManagement\Handle.h">
-      <Filter>MemoryManagement</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryManagement\IAllocator.h">
-      <Filter>MemoryManagement</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryManagement\StackAllocator.h">
-      <Filter>MemoryManagement</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryManagement\PoolAllocator.h">
-      <Filter>MemoryManagement</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\StringFunc.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -176,9 +161,6 @@
     </ClInclude>
     <ClInclude Include="Utils\Array.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryManagement\MemoryHelper.h">
-      <Filter>MemoryManagement</Filter>
     </ClInclude>
     <ClInclude Include="Scene\CameraComponent.h">
       <Filter>Scene</Filter>
@@ -243,9 +225,6 @@
     <ClInclude Include="Resources\Texture.h">
       <Filter>Resources</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\GPUTexture.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="ResourceManagers\TextureManager.h">
       <Filter>ResourceManagers</Filter>
     </ClInclude>
@@ -270,8 +249,104 @@
     <ClInclude Include="Renderer\ShaderData.h">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Memory\Handle.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\IAllocator.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\MemoryHelper.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\MemoryManager.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\PoolAllocator.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\StackAllocator.h">
+      <Filter>MemoryManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManagers\BufferManager.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Zooid\BaseZooid.h">
+      <Filter>Zooid</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\GL\GLRenderer.h">
+      <Filter>Renderer\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\IGPUBufferData.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\GL\GLBufferData.h">
+      <Filter>Renderer\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\RenderZooid.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\GL\GLRenderZooid.h">
+      <Filter>Renderer\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\IGPUBufferArray.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\GL\GLBufferArray.h">
+      <Filter>Renderer\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\IGPUTexture.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\GL\GLTexture.h">
+      <Filter>Renderer\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\IShader.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="GLShader.h">
+      <Filter>Renderer\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Thread.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneManager.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectModel\CompDecl.h">
+      <Filter>GameObjectModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Logging\LogManager.h">
+      <Filter>Logging</Filter>
+    </ClInclude>
+    <ClInclude Include="Logging\Log.h">
+      <Filter>Logging</Filter>
+    </ClInclude>
     <ClInclude Include="Scene\Light\LightComponent.h">
-      <Filter>Header Files</Filter>
+      <Filter>Scene\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem\DirectoryHelper.h">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\Material.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManagers\MaterialManager.h">
+      <Filter>ResourceManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\Mesh.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManagers\MeshManager.h">
+      <Filter>ResourceManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\SSEHelper.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Timer.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Vector4.h">
+      <Filter>Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -281,19 +356,7 @@
     <ClCompile Include="Renderer\BufferData.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer\GPUBufferData.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer\Shader.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer\GPUBufferArray.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="Renderer\BufferLayout.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer\BufferManager.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="MainFunction\MainFunctions.cpp">
@@ -301,9 +364,6 @@
     </ClCompile>
     <ClCompile Include="ZEGameContext.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer\GLRenderer.cpp">
-      <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Renderer\DrawList.cpp">
       <Filter>Renderer</Filter>
@@ -323,29 +383,11 @@
     <ClCompile Include="Scene\Actor.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="MemoryManagement\MemoryManager.cpp">
-      <Filter>MemoryManagement</Filter>
-    </ClCompile>
-    <ClCompile Include="MemoryManagement\Handle.cpp">
-      <Filter>MemoryManagement</Filter>
-    </ClCompile>
-    <ClCompile Include="MemoryManagement\IAllocator.cpp">
-      <Filter>MemoryManagement</Filter>
-    </ClCompile>
-    <ClCompile Include="MemoryManagement\StackAllocator.cpp">
-      <Filter>MemoryManagement</Filter>
-    </ClCompile>
-    <ClCompile Include="MemoryManagement\PoolAllocator.cpp">
-      <Filter>MemoryManagement</Filter>
-    </ClCompile>
     <ClCompile Include="Utils\StringFunc.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Utils\Debug.cpp">
       <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="MemoryManagement\MemoryHelper.cpp">
-      <Filter>MemoryManagement</Filter>
     </ClCompile>
     <ClCompile Include="Scene\CameraComponent.cpp">
       <Filter>Scene</Filter>
@@ -404,9 +446,6 @@
     <ClCompile Include="Resources\Texture.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer\GPUTexture.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceManagers\TextureManager.cpp">
       <Filter>ResourceManagers</Filter>
     </ClCompile>
@@ -428,8 +467,89 @@
     <ClCompile Include="Renderer\ShaderData.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Memory\Handle.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\IAllocator.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\MemoryHelper.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\MemoryManager.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\PoolAllocator.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\StackAllocator.cpp">
+      <Filter>MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManagers\BufferManager.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Zooid\BaseZooid.cpp">
+      <Filter>Zooid</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\GL\GLRenderer.cpp">
+      <Filter>Renderer\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\IGPUBufferData.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\GL\GLBufferData.cpp">
+      <Filter>Renderer\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\RenderZooid.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\GL\GLRenderZooid.cpp">
+      <Filter>Renderer\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\IGPUBufferArray.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\GL\GLBufferArray.cpp">
+      <Filter>Renderer\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\IGPUTexture.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\GL\GLTexture.cpp">
+      <Filter>Renderer\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\IShader.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="GLShader.cpp">
+      <Filter>Renderer\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\Thread.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneManager.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Logging\LogManager.cpp">
+      <Filter>Logging</Filter>
+    </ClCompile>
     <ClCompile Include="Scene\Light\LightComponent.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Scene\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem\DirectoryHelper.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Resources\Material.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Resources\Mesh.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManagers\MaterialManager.cpp">
+      <Filter>ResourceManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManagers\MeshManager.cpp">
+      <Filter>ResourceManagers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -451,7 +571,20 @@
     <None Include="Shaders\ShaderData.ubs">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Shaders\DefaultGLSimpleLit.frag" />
-    <None Include="Shaders\DefaultGLSimpleLit.vs" />
+    <None Include="Shaders\DefaultHighlightSimple.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\DefaultHighlightSimple.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\DefaultGLSimpleLit.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\DefaultGLSimpleLit.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\DefaultGLSimpleLit_Blend.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

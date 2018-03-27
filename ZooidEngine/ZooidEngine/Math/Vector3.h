@@ -3,7 +3,6 @@
 
 #include "MathUtil.h"
 #include "Utils/Macros.h"
-#include <cassert>
 
 class Vector3 {
 

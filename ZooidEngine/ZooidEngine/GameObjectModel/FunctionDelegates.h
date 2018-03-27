@@ -1,10 +1,11 @@
 #ifndef __ZE_FUNC_DELEGATES__
 #define __ZE_FUNC_DELEGATES__
 
-#include "Object.h"
+#include "Utils/ZEngineHelper.h"
 
 namespace ZE
 {
+	class Object;
 	class Event;
 
 	class EventDelegate
@@ -34,6 +35,10 @@ namespace ZE
 				&& m_eventFunc == other.m_eventFunc;
 		}
 
+		FORCEINLINE bool isValid() {
+			return m_object && m_eventFunc;
+		}
+		
 		HandleEventFunc m_eventFunc = NULL;
 		Object* m_object = NULL;
 	};
@@ -59,5 +64,6 @@ namespace ZE
 
 		HandleEventFunc m_eventFunc = NULL;
 	};
+
 };
 #endif

@@ -1,11 +1,12 @@
 #ifndef __Z_SHADER_ACTION__
 #define __Z_SHADER_ACTION__
 
-#include "../Utils/PrimitiveTypes.h"
+#include "Utils/PrimitiveTypes.h"
 
-#include "Shader.h"
-#include "GPUBufferArray.h"
-#include "GPUTexture.h"
+#include "IRenderer.h"
+#include "IShader.h"
+#include "IGPUBufferArray.h"
+#include "IGPUTexture.h"
 
 #define SHADER_VAR_TYPE_FLOAT 0
 #define SHADER_VAR_TYPE_INT 1
@@ -18,7 +19,8 @@
 #define SHADER_ACTION_DRAW 0
 #define SHADER_ACTION_SETGLOBAL 1
 
-namespace ZE {
+namespace ZE 
+{
 
 struct ShaderVariable
 {
@@ -35,11 +37,11 @@ struct ShaderVariable
 
 		struct tTexture 
 		{
-			GPUTexture* texture_data;
+			IGPUTexture* texture_data;
 			Int32 texture_index;
 		} texture_value;
 
-		GPUBufferData* constant_buffer;
+		IGPUBufferData* constant_buffer;
 	};
 
 	ShaderVariable() : mat_value(Matrix4x4())
@@ -50,29 +52,73 @@ struct ShaderVariable
 	~ShaderVariable() {}
 };
 
+union ShaderFeatureVar
+{
+	UInt32 uint_value;
+	Int32 int_value;
+	void* paddress;
+};
+
+struct ShaderFeature
+{
+	ShaderFeature() {}
+
+	ShaderFeature(const ShaderFeature& other)
+	{
+		m_rendererFeature = other.m_rendererFeature;
+		m_bFeatureEnabled = other.m_bFeatureEnabled;
+		m_shaderFeatureVar = other.m_shaderFeatureVar;
+	}
+
+	ShaderFeature& operator=(const ShaderFeature& other)
+	{
+		m_rendererFeature = other.m_rendererFeature;
+		m_bFeatureEnabled = other.m_bFeatureEnabled;
+		m_shaderFeatureVar = other.m_shaderFeatureVar;
+		return *this;
+	}
+
+	UInt32 m_rendererFeature;
+	bool m_bFeatureEnabled;
+
+	Array<ShaderFeatureVar, true> m_shaderFeatureVar;
+};
+
 class ShaderAction {
 public:
 
 	ShaderAction();
-	ShaderAction(ShaderChain* shader);
+	ShaderAction(IShaderChain* shader);
 
 	void Reset();
-	void SetShaderAndBuffer(ShaderChain* _shader, GPUBufferArray* _bufferArray);
+	void SetShaderAndBuffer(IShaderChain* _shader, IGPUBufferArray* _bufferArray);
 	void SetShaderFloatVar(const char* _name, float _value);
 	void SetShaderIntVar(const char* _name, Int32 _value);
 	void SetShaderVec3Var(const char* _name, const Vector3& _value);
 	void SetShaderMatVar(const char* _name, const Matrix4x4& _value);
 	void SetData(const char* _name, void* _data);
-	void SetShaderTextureVar(const char* _name, GPUTexture* _texture, Int32 _texture_index);
+	void SetShaderTextureVar(const char* _name, IGPUTexture* _texture, Int32 _texture_index);
 	void SetType(ZE::UInt16 _shaderActionType);
-	void SetConstantsBlockBuffer(const char* _name, GPUBufferData* _constantBlockBuffer);
+	void SetConstantsBlockBuffer(const char* _name, IGPUBufferData* _constantBlockBuffer);
+	
+	void GetShaderMatVar(const char* _name, Matrix4x4& _value);
+
+	void AddShaderFeature(UInt32 _feature, bool _enabled);
 
 	ZE::Int32 m_vertexSize;
 	ZE::UInt16 m_shaderActionType;
 	
-	ShaderChain* m_shader;
-	GPUBufferArray* m_bufferArray;
+	IShaderChain* m_shader;
+	IGPUBufferArray* m_bufferArray;
 	Array<ShaderVariable, true> m_shaderVariables;
+	Array<ShaderFeature, true> m_shaderFeatures;
 };
+
+// Shader Action Helper; Representative Name of function
+void EnableAndSetDepthFunction(ShaderAction& shaderAction, RendererCompareFunc func);
+void EnableAndSetStencilFunc(ShaderAction& shaderAction, RendererCompareFunc func, Int32 ref, UInt32 refMask, UInt32 stencilWriteMask);
+void EnableAndSetBlendFunc(ShaderAction& shaderAction, RendererBlendFactor sourceBlenFactor, RendererBlendFactor dstBlendFactor);
+void EnableAndSetFaceCull(ShaderAction& shaderAction, FaceFrontOrder faceOrder, CullFace cullFace);
+
 };
 #endif // __Z_SHADER_ACTION__

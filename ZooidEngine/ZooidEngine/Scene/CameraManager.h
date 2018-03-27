@@ -1,7 +1,7 @@
 #ifndef __ZE_CAMERA_MANAGER_H_
 #define __ZE_CAMERA_MANAGER_H_
 
-#include "../GameObjectModel/Component.h"
+#include "GameObjectModel/Component.h"
 
 namespace ZE {
 	

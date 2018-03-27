@@ -1,23 +1,31 @@
 #include "TextureManager.h"
 
-#include "MemoryManagement/Handle.h"
+#include "Memory/Handle.h"
 
 #include "Resources/Texture.h"
-#include "Renderer/GPUTexture.h"
+#include "Renderer/IGPUTexture.h"
+#include "FileSystem/DirectoryHelper.h"
+
+#include "ZEGameContext.h"
+#include "Renderer/RenderZooid.h"
+#include "Renderer/IRenderer.h"
 
 namespace ZE
 {
+	IMPLEMENT_CLASS_1(TextureManager, ResourceManager)
+
 	TextureManager* TextureManager::s_instance = nullptr;
 
-	void TextureManager::Init()
+	void TextureManager::Init(GameContext* _gameContext)
 	{
 		if (!s_instance)
 		{
 			Handle textureManagerHandle("TEXTURE_MANAGER", sizeof(TextureManager));
 			s_instance = new (textureManagerHandle) TextureManager();
+			s_instance->m_gameContext = _gameContext;
 		}
 
-		s_instance->registerResourceToLoad("../Resources/Textures/container2.png");
+		s_instance->loadResourceAsync(GetPackageAssetPath("Basic", "Texture", "container2.png").c_str());
 
 		s_instance->doLoadUnload();
 	}
@@ -29,19 +37,24 @@ namespace ZE
 
 	void TextureManager::Destroy()
 	{
-		s_instance->registerResourceToUnLoad("../Resources/Textures/container2.png");
+		s_instance->unloadResource(GetPackageAssetPath("Basic", "Texture", "container2.png").c_str());
 
 		s_instance->unloadResources();
 	}
 
-	ZE::Handle TextureManager::loadResource(const char* resourceFilePath)
+	ZE::Handle TextureManager::loadResource_Internal(const char* resourceFilePath)
 	{
-		Handle hGPUTexture(sizeof(GPUTexture));
+		Handle hGPUTexture(sizeof(IGPUTexture));
 		Handle hCPUTexture = Texture::loadTexture(resourceFilePath);
 		if (hCPUTexture.isValid())
 		{
-			GPUTexture* pGPUTexture = new (hGPUTexture) GPUTexture();
+			m_gameContext->getRenderer()->AcquireRenderThreadOwnership();
+
+			hGPUTexture = m_gameContext->getRenderZooid()->CreateRenderTexture();
+			IGPUTexture* pGPUTexture = hGPUTexture.getObject<IGPUTexture>();
 			pGPUTexture->FromTexture(hCPUTexture.getObject<Texture>());
+
+			m_gameContext->getRenderer()->ReleaseRenderThreadOwnership();
 		}
 
 		// Clean the CPU texture
@@ -54,7 +67,7 @@ namespace ZE
 
 	void TextureManager::preUnloadResource(Resource* _resource)
 	{
-		GPUTexture* pGPUTexture = _resource->m_hActual.getObject<GPUTexture>();
+		IGPUTexture* pGPUTexture = _resource->m_hActual.getObject<IGPUTexture>();
 		pGPUTexture->release();
 	}
 

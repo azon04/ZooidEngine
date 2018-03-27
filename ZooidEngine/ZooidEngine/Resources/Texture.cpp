@@ -1,18 +1,17 @@
 #include "Texture.h"
 
-#include "ZEngine.h"
-
 #include "External/Image/stb_image.h"
-
-#include "MemoryManagement/Handle.h"
+#include "Utils/Array.h"
 
 namespace ZE
 {
+	IMPLEMENT_CLASS_0(Texture)
+
 	Handle Texture::loadTexture(const char* filePath)
 	{
 		Handle textureHandle(sizeof(Texture));
 		int width, height, channel;
-		UChar* image = stbi_load(filePath, &width, &height, &channel, STBI_rgb); // #TODO handle image with alpha
+		UChar* image = stbi_load(filePath, &width, &height, &channel, 0);
 
 		if (image)
 		{
@@ -22,7 +21,6 @@ namespace ZE
 			texture->m_height = height;
 			texture->m_width = width;
 			texture->m_channel = channel;
-
 		}
 		else
 		{

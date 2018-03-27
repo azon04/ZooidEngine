@@ -1,5 +1,6 @@
 #include "HashMapTest.h"
-#include "ZEngine.h"
+
+#include "Utils/ZEngineHelper.h"
 
 #include "Utils/HashMap.h"
 

@@ -1,8 +1,8 @@
 #ifndef __ZE_BUFFER_LAYOUT__
 #define __ZE_BUFFER_LAYOUT__
 
-#include "../Utils/PrimitiveTypes.h"
-#include "../Utils/Array.h"
+#include "Utils/PrimitiveTypes.h"
+#include "Utils/Array.h"
 
 
 #define BUFFER_LAYOUT_V3_C3 0
@@ -27,9 +27,6 @@ namespace ZE {
 	class BufferLayout {
 	public:
 		Array<Layout> m_layouts;
-
-		void BindLayout();
-
 	};
 
 	class BufferLayoutManager {
