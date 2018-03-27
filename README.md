@@ -1,5 +1,5 @@
 # Zooid Engine
-Version: 0.1.0 (2017)
+Version: 0.1.1
 
 A C++ game engine that implemented and used for practice and experiment. Currently developed using VS 2015.
 
@@ -38,6 +38,10 @@ These are some features that I made for this version of the engine.
   * SceneComponent - which has position/transform in the game world.
   * RenderComponent - has Mesh to be drawn by renderer and also has transform.
 * **Basic Module** - make module system so it's easy to implement module in the engine.
+* **Multithreading** - game and rendering thread is in different thread now
+* **ModelParser Tool** - import external 3D model format to internal model/mesh format.
+* **Basic Log Manager** - support grouping log, enabling or disabling certain group, and put log into file (currently too intrusive)
+* **Simple Game Demo: Space Shooter** - basic input and simple spawn and destroying a component in runtime
 * **Misc**
   * High resolution timer with C++11 or basic timer if not using C++11.
 
@@ -48,6 +52,7 @@ This list consists all libraries and code that help me implementing the engine.
 * **GLFW** - http://www.glfw.org/
 * **stb_image** - https://github.com/nothings/stb to load image png, jpg, etc for texture.
 * **lookup3.c, by Bob Jenkins** - http://burtleburtle.net/bob/c/lookup3.c used in HashMap that using String as a key.
+* **assimp** - https://github.com/assimp/assimp to export from outer mesh format to internal mesh format
 
 ## References
 * Gregory, Jason. *Game Engine Architecture. Second Edition*. CRC Press, 2014
