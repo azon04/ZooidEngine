@@ -36,6 +36,11 @@ namespace ZE {
 		static PoolAllocator* constructFromMem(void* pMem, size_t itemSize, unsigned int blockCount);
 		static size_t calculateSizeMem(size_t itemSize, unsigned int blockCount);
 
+		size_t getItemSize() const
+		{
+			return m_itemSize;
+		}
+
 	private:
 		void* m_pMemBlock;
 		size_t m_totalSize;
