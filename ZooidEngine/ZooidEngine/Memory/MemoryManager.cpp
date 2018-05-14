@@ -108,7 +108,7 @@ namespace ZE {
 
 		if (index >= NPOOL) // Looking inside the additional pools
 		{
-			while (index < m_countAddPool + NPOOL && size > m_additionalPools[index - NPOOL]->getItemSize() && m_additionalPools[index - NPOOL]->getCountFreeBlock() == 0)
+			while (index < m_countAddPool + NPOOL && size > m_additionalPools[index - NPOOL]->getItemSize() && !m_additionalPools[index - NPOOL]->isEmpty() && m_additionalPools[index - NPOOL]->getCountFreeBlock() == 0)
 			{
 				index++;
 			}
@@ -122,6 +122,18 @@ namespace ZE {
 				m_countAddPool++;
 
 				ZELOG(LOG_MEMORY, Log, "Created Additional Memory Pool for %d bytes with %d blocks", size, poolCount);
+			}
+			else if (m_additionalPools[index - NPOOL]->isEmpty() && size > m_additionalPools[index - NPOOL]->getItemSize()) // For empty additional block
+			{
+				int poolCount = (MAX_MEM_ADD_POOL / size) < MAX_COUNT_ADD_POOL ? (MAX_MEM_ADD_POOL / size) : MAX_MEM_ADD_POOL;
+				size_t totalSize = PoolAllocator::calculateSizeMem(size, poolCount);
+				// Free Empty additional block
+				free(m_pAdditionalBlocks[index - NPOOL]);
+				m_pAdditionalBlocks[index - NPOOL] = (void*)malloc(totalSize);
+
+				m_additionalPools[index - NPOOL] = PoolAllocator::constructFromMem(m_pAdditionalBlocks[m_countAddPool], size, poolCount);
+
+				ZELOG(LOG_MEMORY, Log, "Created Additional Memory Pool for %d bytes with %d blocks replacing block on index %d", size, poolCount, index);
 			}
 		}
 
