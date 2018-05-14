@@ -32,9 +32,15 @@ namespace ZE {
 		void freeBlock(unsigned int block);
 		bool freeBlockAtAddress(void* adds);
 		int getCountFreeBlock() const { return m_freeBlock; }
+		bool isEmpty() const { return m_freeBlock == m_poolSize; }
 
 		static PoolAllocator* constructFromMem(void* pMem, size_t itemSize, unsigned int blockCount);
 		static size_t calculateSizeMem(size_t itemSize, unsigned int blockCount);
+
+		size_t getItemSize() const
+		{
+			return m_itemSize;
+		}
 
 	private:
 		void* m_pMemBlock;

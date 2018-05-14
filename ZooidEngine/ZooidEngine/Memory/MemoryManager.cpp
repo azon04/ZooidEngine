@@ -5,6 +5,11 @@
 
 #include <cstdlib>
 
+#define MAX_COUNT_ADD_POOL 1024
+
+// Max Memory in additional pool is gonna be 2MB
+#define MAX_MEM_ADD_POOL (2 * 1024 * 1024)
+
 static unsigned int poolConfig[NPOOL][2] =
 {
 	{32, 1024}, // 32 * 1024 =~ 32 kb
@@ -24,7 +29,7 @@ namespace ZE {
 	MemoryManager* MemoryManager::s_instance = nullptr;
 
 	MemoryManager::MemoryManager() :
-		m_pAlocatorsBlock(nullptr)
+		m_pAlocatorsBlock(nullptr), m_countAddPool(0)
 	{}
 
 	MemoryManager::~MemoryManager()
@@ -32,6 +37,11 @@ namespace ZE {
 		if (m_pAlocatorsBlock) 
 		{
 			free(m_pAlocatorsBlock);
+		}
+
+		for (int i = 0; i < m_countAddPool; i++)
+		{
+			free(m_pAdditionalBlocks[i]);
 		}
 	}
 
@@ -51,7 +61,7 @@ namespace ZE {
 		// Allocate the memory needed for pool
 		s_instance->m_pAlocatorsBlock = (void*) malloc(totalSize);
 		
-		// TO DO align memory first and construct pools
+		// #TODO align memory first and construct pools
 		void* pMem = s_instance->m_pAlocatorsBlock;
 		for (unsigned int i = 0; i < NPOOL; i++)
 		{
@@ -96,7 +106,38 @@ namespace ZE {
 			index++;
 		}
 
-		ZASSERT(index < NPOOL, "Can't find available free block");
+		if (index >= NPOOL) // Looking inside the additional pools
+		{
+			while (index < m_countAddPool + NPOOL && size > m_additionalPools[index - NPOOL]->getItemSize() && !m_additionalPools[index - NPOOL]->isEmpty() && m_additionalPools[index - NPOOL]->getCountFreeBlock() == 0)
+			{
+				index++;
+			}
+
+			if (index >= (NPOOL + m_countAddPool) && m_countAddPool < ADDITIONAL_MAX_POOL)
+			{
+				int poolCount = (MAX_MEM_ADD_POOL / size) < MAX_COUNT_ADD_POOL ? (MAX_MEM_ADD_POOL / size) : MAX_MEM_ADD_POOL;
+				size_t totalSize = PoolAllocator::calculateSizeMem(size, poolCount);
+				m_pAdditionalBlocks[m_countAddPool] = (void*)malloc(totalSize);
+				m_additionalPools[m_countAddPool] = PoolAllocator::constructFromMem(m_pAdditionalBlocks[m_countAddPool], size, poolCount);
+				m_countAddPool++;
+
+				ZELOG(LOG_MEMORY, Log, "Created Additional Memory Pool for %d bytes with %d blocks", size, poolCount);
+			}
+			else if (m_additionalPools[index - NPOOL]->isEmpty() && size > m_additionalPools[index - NPOOL]->getItemSize()) // For empty additional block
+			{
+				int poolCount = (MAX_MEM_ADD_POOL / size) < MAX_COUNT_ADD_POOL ? (MAX_MEM_ADD_POOL / size) : MAX_MEM_ADD_POOL;
+				size_t totalSize = PoolAllocator::calculateSizeMem(size, poolCount);
+				// Free Empty additional block
+				free(m_pAdditionalBlocks[index - NPOOL]);
+				m_pAdditionalBlocks[index - NPOOL] = (void*)malloc(totalSize);
+
+				m_additionalPools[index - NPOOL] = PoolAllocator::constructFromMem(m_pAdditionalBlocks[m_countAddPool], size, poolCount);
+
+				ZELOG(LOG_MEMORY, Log, "Created Additional Memory Pool for %d bytes with %d blocks replacing block on index %d", size, poolCount, index);
+			}
+		}
+
+		ZASSERT(index < (NPOOL + m_countAddPool), "Can't find available free block");
 		ZASSERT(m_pools[index]->getCountFreeBlock() > 0, "Need more size for pool");
 		
 		// Allocate in memory
@@ -110,14 +151,14 @@ namespace ZE {
 	void MemoryManager::freeBlock(unsigned int pool_index, unsigned int block_index)
 	{
 		m_memoryLock.lock();
-		ZASSERT(pool_index < NPOOL, "Pool index out of bound");
+		ZASSERT(pool_index < NPOOL + m_countAddPool, "Pool index out of bound");
 		m_pools[pool_index]->freeBlock(block_index);
 		m_memoryLock.unlock();
 	}
 
 	void* MemoryManager::getBlock(unsigned int pool_index, unsigned int block_index)
 	{
-		ZASSERT(pool_index < NPOOL, "Index Pool out of bound");
+		ZASSERT(pool_index < NPOOL + m_countAddPool, "Index Pool out of bound");
 		void* pReturnMem = m_pools[pool_index]->getBlock(block_index);
 		return pReturnMem;
 	}

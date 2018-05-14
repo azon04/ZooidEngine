@@ -2,6 +2,7 @@
 #define __ZE_MEMORY_MANAGER_H__
 
 #define NPOOL 10
+#define ADDITIONAL_MAX_POOL 10
 #define ALLIGNMENT 16
 
 #include "Platform/Thread.h"
@@ -19,8 +20,14 @@ namespace ZE {
 	
 	protected:
 		void* m_pAlocatorsBlock;
+
+		// Put additional pool next to main pool so you can access additional pool using m_pools
 		PoolAllocator* m_pools[NPOOL];
-	
+		PoolAllocator* m_additionalPools[ADDITIONAL_MAX_POOL];
+		int m_countAddPool;
+
+		void* m_pAdditionalBlocks[ADDITIONAL_MAX_POOL];
+		
 	public:
 		static MemoryManager* Construct();
 		static void Deconstruct();
