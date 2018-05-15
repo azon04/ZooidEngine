@@ -22,6 +22,8 @@
 #include "Physics/PhysX/PhysXZooid.h"
 #endif
 
+#include "Physics/Physics.h"
+
 #include "Platform/Thread.h"
 
 namespace ZE {
@@ -186,6 +188,12 @@ namespace ZE {
 			handle.release();
 		}
 		_gameContext->getEventDispatcher()->clearEvents(ZE::EVENT_INPUT);
+
+		// Update Physics
+		if (_gameContext->getPhysics())
+		{
+			_gameContext->getPhysics()->Update();
+		}
 
 #if ZE_RENDER_MULTITHREAD
 		while (g_drawReady) {}

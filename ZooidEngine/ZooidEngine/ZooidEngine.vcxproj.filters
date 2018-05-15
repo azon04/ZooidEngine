@@ -366,6 +366,12 @@
     <ClInclude Include="Physics\PhysX\PhysXZooid.h">
       <Filter>Physics\PhysX</Filter>
     </ClInclude>
+    <ClInclude Include="Physics\PhysicsBody.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\PhysX\PhysXBody.h">
+      <Filter>Physics\PhysX</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -573,6 +579,12 @@
       <Filter>Physics\PhysX</Filter>
     </ClCompile>
     <ClCompile Include="Physics\PhysX\PhysXZooid.cpp">
+      <Filter>Physics\PhysX</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\PhysicsBody.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\PhysX\PhysXBody.cpp">
       <Filter>Physics\PhysX</Filter>
     </ClCompile>
   </ItemGroup>

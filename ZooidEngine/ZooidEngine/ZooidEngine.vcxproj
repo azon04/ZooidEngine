@@ -199,8 +199,10 @@
     <ClInclude Include="Memory\PoolAllocator.h" />
     <ClInclude Include="Memory\StackAllocator.h" />
     <ClInclude Include="Physics\Physics.h" />
+    <ClInclude Include="Physics\PhysicsBody.h" />
     <ClInclude Include="Physics\PhysicsZooid.h" />
     <ClInclude Include="Physics\PhysX\PhysX.h" />
+    <ClInclude Include="Physics\PhysX\PhysXBody.h" />
     <ClInclude Include="Physics\PhysX\PhysXZooid.h" />
     <ClInclude Include="Platform\Thread.h" />
     <ClInclude Include="Renderer\BufferData.h" />
@@ -281,7 +283,9 @@
     <ClCompile Include="Memory\MemoryManager.cpp" />
     <ClCompile Include="Memory\PoolAllocator.cpp" />
     <ClCompile Include="Memory\StackAllocator.cpp" />
+    <ClCompile Include="Physics\PhysicsBody.cpp" />
     <ClCompile Include="Physics\PhysX\PhysX.cpp" />
+    <ClCompile Include="Physics\PhysX\PhysXBody.cpp" />
     <ClCompile Include="Physics\PhysX\PhysXZooid.cpp" />
     <ClCompile Include="Platform\Thread.cpp" />
     <ClCompile Include="Renderer\BufferData.cpp" />
