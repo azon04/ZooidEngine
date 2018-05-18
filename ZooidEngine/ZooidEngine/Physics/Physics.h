@@ -17,57 +17,38 @@ namespace ZE
 		PLANE,
 		CONVEX_MESHES,
 		TRIANGLE_MESHES,
-		HEIGHT_FIELDS,
-		COMPOUND_SHAPE
+		HEIGHT_FIELDS
 	};
 
 	struct PhysicsBodyDesc
 	{
+		PhysicsBodyDesc() {}
+		~PhysicsBodyDesc() {}
+
+		PhysicsShape ShapeType;
+
 		Matrix4x4 Transform;
-		bool bStatic;
-		bool bGhost;
 		Float32 Mass;
+
+		union
+		{
+			Vector3 HalfExtent;
+			struct
+			{
+				Float32 Radius;
+				Float32 HalfHeight;
+			};
+
+			void* MeshData;
+		};
 	};
 
-	struct BoxBodyDesc : public PhysicsBodyDesc
+	class PhysicsBodySetup
 	{
-		Vector3 HalfExtent;
-	};
+	public:
+		PhysicsBodySetup() {}
 
-	struct CapsuleBodyDesc : public PhysicsBodyDesc
-	{
-		Float32 Radius;
-		Float32 HalfHeight;
-	};
-
-	struct ConvexMeshBodyDesc : public PhysicsBodyDesc
-	{
-		void* MeshData;
-	};
-
-	struct HeightFieldBodyDesc : public PhysicsBodyDesc
-	{
-		void* HeightFieldData;
-	};
-
-	struct PlaneBodyDesc : public PhysicsBodyDesc
-	{
-
-	};
-
-	struct SphereBodyDesc : public PhysicsBodyDesc
-	{
-		Float32 Radius;
-	};
-
-	struct TriangleMeshBodyDesc : public PhysicsBodyDesc
-	{
-		void* TriangleMeshData;
-	};
-
-	struct CompoundBodyDesc : public PhysicsBodyDesc
-	{
-		Array<PhysicsBodyDesc*> m_bodyList;
+		Array<PhysicsBodyDesc, true> m_bodies;
 	};
 
 
@@ -80,13 +61,13 @@ namespace ZE
 
 		virtual void Setup() = 0;
 		virtual void PreUpdate() = 0;
-		virtual void Update() = 0;
+		virtual void Update(float _deltaMS) = 0;
 		virtual void PostUpdate() = 0;
 		virtual void DrawDebug() = 0;
 		virtual void Destroy() = 0;
 
-		virtual Handle CreateDynamicRigidBody(PhysicsShape _shape, PhysicsBodyDesc* _data) = 0;
-		virtual Handle CreateStaticRigidBody(PhysicsShape _shape, PhysicsBodyDesc* _data) = 0;
+		virtual Handle CreateDynamicRigidBody(Matrix4x4& _transform, PhysicsBodySetup* _setup) = 0;
+		virtual Handle CreateStaticRigidBody(Matrix4x4& _transform, PhysicsBodySetup* _setup) = 0;
 
 		virtual void DestroyPhysicsObject(Handle handle) = 0;
 	};

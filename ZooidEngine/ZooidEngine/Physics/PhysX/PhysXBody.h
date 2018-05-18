@@ -10,18 +10,18 @@ namespace physx
 
 namespace ZE
 {
+
 	class PhysXBody : public IPhysicsBody
 	{
 
 	public:
-		PhysXBody(physx::PxRigidActor* _rigidActor)
-			: m_physXRigidActor(_rigidActor)
-		{}
+		PhysXBody(physx::PxRigidActor* _rigidActor);
 
-		physx::PxRigidActor* GetRigidActor() { return m_physXRigidActor; }
+		physx::PxRigidActor* getRigidActor() const { return m_physXRigidActor; }
 
 	private:
 		physx::PxRigidActor* m_physXRigidActor;
+
 	};
 }
 

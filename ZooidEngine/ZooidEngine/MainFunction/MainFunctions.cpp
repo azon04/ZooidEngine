@@ -192,7 +192,9 @@ namespace ZE {
 		// Update Physics
 		if (_gameContext->getPhysics())
 		{
-			_gameContext->getPhysics()->Update();
+			_gameContext->getPhysics()->PreUpdate();
+			_gameContext->getPhysics()->Update(deltaTime);
+			_gameContext->getPhysics()->PostUpdate();
 		}
 
 #if ZE_RENDER_MULTITHREAD

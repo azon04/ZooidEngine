@@ -8,6 +8,10 @@
 #include "Renderer/IShader.h"
 #include "ResourceManagers/ShaderManager.h"
 
+#include "Physics/Physics.h"
+#include "Physics/PhysicsBody.h"
+#include "Physics/PhysicsEvents.h"
+
 #include "Resources/Mesh.h"
 #include "Resources/Material.h"
 
@@ -19,6 +23,8 @@ namespace ZE {
 	void RenderComponent::setupComponent()
 	{
 		SceneComponent::setupComponent();
+		setupPhysics();
+
 		addEventDelegate(Event_GATHER_RENDER, &RenderComponent::handleGatherRender);
 	}
 
@@ -77,6 +83,46 @@ namespace ZE {
 		if (hMesh.isValid())
 		{
 			m_mesh = hMesh.getObject<Mesh>();
+		}
+	}
+
+	void RenderComponent::setStatic(bool _bStatic)
+	{
+		m_bStatic = _bStatic;
+	}
+
+	void RenderComponent::setPhysicsEnabled(bool _bEnabled)
+	{
+		m_physicsEnabled = _bEnabled;
+	}
+
+	void RenderComponent::handlePhysicsUpdateTransform(Event* pEvent)
+	{
+		Event_Physics_UPDATE_TRANSFORM* pRealEvent = static_cast<Event_Physics_UPDATE_TRANSFORM*>(pEvent);
+		Matrix4x4 interMatrix = pRealEvent->m_worldTransform;
+		interMatrix.scale(m_worldTransform.extractScale());
+		m_worldTransform = interMatrix;
+	}
+
+	void RenderComponent::setupPhysics()
+	{
+		if (m_mesh->m_hPhysicsBodySetup.isValid())
+		{
+			PhysicsBodySetup* pPhysicsBodySetup = m_mesh->m_hPhysicsBodySetup.getObject<PhysicsBodySetup>();
+			if (m_bStatic)
+			{
+				hPhysicsBody = m_gameContext->getPhysics()->CreateStaticRigidBody(m_worldTransform, pPhysicsBodySetup);
+			}
+			else
+			{
+				hPhysicsBody = m_gameContext->getPhysics()->CreateDynamicRigidBody(m_worldTransform, pPhysicsBodySetup);
+				addEventDelegate(Event_Physics_UPDATE_TRANSFORM, &RenderComponent::handlePhysicsUpdateTransform);
+			}
+
+			if (hPhysicsBody.isValid())
+			{
+				hPhysicsBody.getObject<IPhysicsBody>()->setGameObject(this);
+			}
 		}
 	}
 

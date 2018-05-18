@@ -372,6 +372,9 @@
     <ClInclude Include="Physics\PhysX\PhysXBody.h">
       <Filter>Physics\PhysX</Filter>
     </ClInclude>
+    <ClInclude Include="Physics\PhysicsEvents.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -586,6 +589,9 @@
     </ClCompile>
     <ClCompile Include="Physics\PhysX\PhysXBody.cpp">
       <Filter>Physics\PhysX</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\PhysicsEvents.cpp">
+      <Filter>Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

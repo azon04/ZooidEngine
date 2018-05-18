@@ -23,19 +23,19 @@ namespace ZE
 		
 		virtual void Setup() override;
 		virtual void PreUpdate() override;
-		virtual void Update() override;
+		virtual void Update(float _deltaMS) override;
 		virtual void PostUpdate() override;
 		virtual void DrawDebug() override;
 		virtual void Destroy() override;
 
-		virtual Handle CreateDynamicRigidBody(PhysicsShape _shape, PhysicsBodyDesc* _data) override;
-		virtual Handle CreateStaticRigidBody(PhysicsShape _shape, PhysicsBodyDesc* _data) override;
+		virtual Handle CreateDynamicRigidBody(Matrix4x4& _transform, PhysicsBodySetup* _setup) override;
+		virtual Handle CreateStaticRigidBody(Matrix4x4& _transform, PhysicsBodySetup* _setup) override;
 
 		virtual void DestroyPhysicsObject(Handle handle) override;
 
 	private:
 
-		physx::PxShape* CreateShape(PhysicsShape _shape, PhysicsBodyDesc* _data);
+		physx::PxShape* CreateShape(PhysicsBodyDesc* _data, Vector3 scale);
 
 		physx::PxFoundation* m_physxFoundation;
 		physx::PxPhysics* m_physxPhysics;

@@ -152,9 +152,18 @@ public:
 
 	void scale(Vector3 _vScale)
 	{
-		setU(getU() * _vScale);
-		setV(getV() * _vScale);
-		setN(getN() * _vScale);
+		setU(getU() * _vScale.getX());
+		setV(getV() * _vScale.getY());
+		setN(getN() * _vScale.getZ());
+	}
+
+	Vector3 extractScale()
+	{
+		Vector3 scaleVector;
+		scaleVector.setX(getU().length());
+		scaleVector.setY(getV().length());
+		scaleVector.setZ(getN().length());
+		return scaleVector;
 	}
 
 	void normalizeScale() {

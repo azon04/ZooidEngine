@@ -1,5 +1,8 @@
 #include "PhysX.h"
 #include "PhysXBody.h"
+#include "Memory/MemoryHelper.h"
+#include "GameObjectModel/Component.h"
+#include "Physics/PhysicsEvents.h"
 
 #include "PxPhysicsAPI.h"
 
@@ -50,15 +53,58 @@ namespace ZE
 
 	}
 
-	void PhysXEngine::Update()
+	void PhysXEngine::Update(float _deltaMS)
 	{
-		m_physxScene->simulate(1.0f / 60.0f);
+		// Pick the smallest one, to make sure the simulation is stable
+		float elapsedTime = _deltaMS / 1000.0f > 1.0f / 60.0f ? 1.0f / 60.0f : _deltaMS / 1000.0f;
+		m_physxScene->simulate(elapsedTime);
 		m_physxScene->fetchResults(true);
+	}
+
+	Matrix4x4 ConvertToMatrix4x4(physx::PxTransform& _transform)
+	{
+		physx::PxMat44 mat(_transform);
+		Matrix4x4 resultMat;
+
+		resultMat.setU(Vector3(mat.column0.x, mat.column0.y, mat.column0.z));
+		resultMat.setV(Vector3(mat.column1.x, mat.column1.y, mat.column1.z));
+		resultMat.setN(Vector3(mat.column2.x, mat.column2.y, mat.column2.z));
+		resultMat.setPos(Vector3(mat.column3.x, mat.column3.y, mat.column3.z));
+
+		return resultMat;
 	}
 
 	void PhysXEngine::PostUpdate()
 	{
+		physx::PxActorTypeFlags types = physx::PxActorTypeFlag::eRIGID_DYNAMIC;
+		physx::PxU32 nbActors = m_physxScene->getNbActors(types);
+		if (nbActors)
+		{
+			Array<physx::PxRigidActor*> actors(nbActors);
+			m_physxScene->getActors(types, reinterpret_cast<physx::PxActor**>(&actors[0]), nbActors);
+			
+			Event_Physics_POSTUPDATE eventPostUpdate;
+			Event_Physics_UPDATE_TRANSFORM eventUpdateTransform;
 
+			for (int i = 0; i < nbActors; i++)
+			{
+				physx::PxRigidActor* actor = actors[i];
+				if (!actor->userData)
+				{
+					continue;
+				}
+				
+				IPhysicsBody* pPhysicsBody = static_cast<IPhysicsBody*>(actor->userData);
+				Component* pComponent = (Component*)(pPhysicsBody->getGameObject());
+				if (pComponent)
+				{
+					eventUpdateTransform.m_worldTransform = ConvertToMatrix4x4(actor->getGlobalPose());
+					pComponent->handleEvent(&eventPostUpdate);
+					pComponent->handleEvent(&eventUpdateTransform);
+				}
+
+			}
+		}
 	}
 
 	void PhysXEngine::DrawDebug()
@@ -79,20 +125,25 @@ namespace ZE
 		m_physxFoundation->release();
 	}
 
-	ZE::Handle PhysXEngine::CreateDynamicRigidBody(PhysicsShape _shape, PhysicsBodyDesc* _data)
+	physx::PxTransform ConvertToPxTransform(Matrix4x4& _transform)
 	{
-		Matrix4x4 transposeMat = _data->Transform.transpose();
-		physx::PxMat44 pxMat44(transposeMat.m_data[0][0]);
-		physx::PxTransform pxTransform(pxMat44);
+		Matrix4x4 transposeMat = _transform;
+		transposeMat.normalizeScale();
+		float* matrixData;
+		matrixData = &transposeMat.m_data[0][0];
+		physx::PxMat44 pxMat44(matrixData);
+		return physx::PxTransform(pxMat44);
+	}
+
+	ZE::Handle PhysXEngine::CreateDynamicRigidBody(Matrix4x4& _transform, PhysicsBodySetup* _setup)
+	{
+		physx::PxTransform pxTransform= ConvertToPxTransform(_transform);
 		physx::PxRigidDynamic* body = m_physxPhysics->createRigidDynamic(pxTransform);
-		if (_shape != COMPOUND_SHAPE)
+		for (int i = 0; i < _setup->m_bodies.length(); i++)
 		{
-			physx::PxShape* shape = CreateShape(_shape, _data);
+			PhysicsBodyDesc& bodyDesc = _setup->m_bodies[i];
+			physx::PxShape* shape = CreateShape(&bodyDesc, _transform.extractScale());
 			if (shape) { body->attachShape(*shape); }
-		}
-		else
-		{
-			// #TODO attach all compound list
 		}
 
 		m_physxScene->addActor(*body);
@@ -103,20 +154,15 @@ namespace ZE
 		return hPhysicsBody;
 	}
 
-	ZE::Handle PhysXEngine::CreateStaticRigidBody(PhysicsShape _shape, PhysicsBodyDesc* _data)
+	ZE::Handle PhysXEngine::CreateStaticRigidBody(Matrix4x4& _transform, PhysicsBodySetup* _setup)
 	{
-		Matrix4x4 transposeMat = _data->Transform.transpose();
-		physx::PxMat44 pxMat44(transposeMat.m_data[0][0]);
-		physx::PxTransform pxTransform(pxMat44);
+		physx::PxTransform pxTransform = ConvertToPxTransform(_transform);
 		physx::PxRigidStatic* body = m_physxPhysics->createRigidStatic(pxTransform);
-		if (_shape != COMPOUND_SHAPE)
+		for (int i = 0; i < _setup->m_bodies.length(); i++)
 		{
-			physx::PxShape* shape = CreateShape(_shape, _data);
+			PhysicsBodyDesc& bodyDesc = _setup->m_bodies[i];
+			physx::PxShape* shape = CreateShape(&bodyDesc, _transform.extractScale());
 			if (shape) { body->attachShape(*shape); }
-		}
-		else
-		{
-			// #TODO attach all compound list
 		}
 
 		m_physxScene->addActor(*body);
@@ -132,44 +178,40 @@ namespace ZE
 		PhysXBody* pPhysicsBody = handle.getObject<PhysXBody>();
 		if (pPhysicsBody)
 		{
-			physx::PxRigidActor* actor = pPhysicsBody->GetRigidActor();
+			physx::PxRigidActor* actor = pPhysicsBody->getRigidActor();
 			m_physxScene->removeActor(*actor);
 			actor->release();
 		}
 	}
 
-	physx::PxShape* PhysXEngine::CreateShape(PhysicsShape _shape, PhysicsBodyDesc* _data)
+	physx::PxShape* PhysXEngine::CreateShape(PhysicsBodyDesc* _data, Vector3 scale)
 	{
 		physx::PxShape* pxShape = nullptr;
-		switch (_shape)
+		switch (_data->ShapeType)
 		{
 		case ZE::BOX:
 		{
-			BoxBodyDesc* boxDesc = static_cast<BoxBodyDesc*>(_data);
 			pxShape = m_physxPhysics->createShape(
-				physx::PxBoxGeometry(boxDesc->HalfExtent.getX(), boxDesc->HalfExtent.getY(), boxDesc->HalfExtent.getZ()),
+				physx::PxBoxGeometry(_data->HalfExtent.getX() * scale.getX(), _data->HalfExtent.getY() * scale.getY(), _data->HalfExtent.getZ() * scale.getZ()),
 				*m_defaultPhysicsMaterial);
 			break;
 		}
 		case ZE::SPHERE:
 		{
-			SphereBodyDesc* sphereDesc = static_cast<SphereBodyDesc*>(_data);
 			pxShape = m_physxPhysics->createShape(
-				physx::PxSphereGeometry(sphereDesc->Radius),
+				physx::PxSphereGeometry(_data->Radius * scale.getX()),
 				*m_defaultPhysicsMaterial);
 			break;
 		}
 		case ZE::CAPSULE:
 		{
-			CapsuleBodyDesc* capsuleDesc = static_cast<CapsuleBodyDesc*>(_data);
 			pxShape = m_physxPhysics->createShape(
-				physx::PxCapsuleGeometry(capsuleDesc->Radius, capsuleDesc->HalfHeight),
+				physx::PxCapsuleGeometry(_data->Radius * scale.getX(), _data->HalfHeight * scale.getY()),
 				*m_defaultPhysicsMaterial);
 			break;
 		}
 		case ZE::PLANE:
 		{
-			PlaneBodyDesc* planeDesc = static_cast<PlaneBodyDesc*>(_data);
 			pxShape = m_physxPhysics->createShape(
 				physx::PxPlaneGeometry(),
 				*m_defaultPhysicsMaterial);
@@ -177,7 +219,6 @@ namespace ZE
 		}
 		case ZE::CONVEX_MESHES:
 		{
-			ConvexMeshBodyDesc* convexMeshDesc = static_cast<ConvexMeshBodyDesc*>(_data);
 			// #TODO Generate PxConvexMesh based on convexMeshDesc->MeshData
 			pxShape = m_physxPhysics->createShape(
 				physx::PxConvexMeshGeometry(),
@@ -186,7 +227,6 @@ namespace ZE
 		}
 		case ZE::TRIANGLE_MESHES:
 		{
-			TriangleMeshBodyDesc* triangleMeshDesc = static_cast<TriangleMeshBodyDesc*> (_data);
 			// #TODO Generate PxTriangleMesh based on triangleMeshDesc->TriangleMeshData
 			pxShape = m_physxPhysics->createShape(
 				physx::PxTriangleMeshGeometry(),
@@ -195,25 +235,16 @@ namespace ZE
 		}
 		case ZE::HEIGHT_FIELDS:
 		{
-			HeightFieldBodyDesc* heightFieldDesc = static_cast<HeightFieldBodyDesc*>(_data);
 			// #TODO Generate PxHeightField based on heightFieldDesc->HeightFieldData
 			pxShape = m_physxPhysics->createShape(
 				physx::PxHeightFieldGeometry(),
 				*m_defaultPhysicsMaterial);
 			break;
 		}
-		case ZE::COMPOUND_SHAPE:
-			// #TODO
-			break;
 		default:
 			break;
 		}
 
-		if (pxShape && _data->bGhost)
-		{
-			pxShape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
-			pxShape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, true);
-		}
 		return pxShape;
 	}
 

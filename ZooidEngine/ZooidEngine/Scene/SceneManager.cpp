@@ -156,6 +156,14 @@ namespace ZE
 					LoadSceneComponentToComp(fileReader, pComp);
 				}
 			}
+			else if (StringFunc::Compare(buff, "Physics") == 0)
+			{
+				fileReader->readNextString(buff);
+				if (RenderComponent* pRendComp = (RenderComponent*)pComp)
+				{
+					pRendComp->m_bStatic = StringFunc::Compare(buff, "true");
+				}
+			}
 			fileReader->readNextString(buff);
 		}
 

@@ -2,6 +2,7 @@
 #define __ZE_MESH_H__
 
 #include "GameObjectModel/Object.h"
+#include "Memory/Handle.h"
 
 namespace ZE
 {
@@ -24,6 +25,7 @@ namespace ZE
 		IGPUBufferData* m_indexBuffer;
 		IGPUBufferArray* m_bufferArray;
 		Material* m_material;
+		Handle m_hPhysicsBodySetup;
 
 		bool m_doubleSided;
 	};
