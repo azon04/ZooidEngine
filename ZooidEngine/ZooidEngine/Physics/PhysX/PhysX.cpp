@@ -13,6 +13,47 @@ namespace ZE
 	physx::PxDefaultAllocator mainDefaultAllocator;
 	physx::PxDefaultErrorCallback mainDefaultErrorCallback;
 
+	physx::PxFilterFlags DefaultGameFilterShader(
+		physx::PxFilterObjectAttributes attributes0, physx::PxFilterData filterData0,
+		physx::PxFilterObjectAttributes attributes1, physx::PxFilterData filterData1,
+		physx::PxPairFlags& pairFlags, const void* contstantBlock, physx::PxU32 constantBlockSize)
+	{
+		// word0 - Owner Collision Group
+		// word1 - Collision Group Mask
+		// word2 - Collision Group mask for generating touch event
+
+		// let triggers through
+		if (physx::PxFilterObjectIsTrigger(attributes0) || physx::PxFilterObjectIsTrigger(attributes1))
+		{
+			if ((filterData0.word0 & filterData1.word1) && (filterData1.word0 & filterData0.word1))
+			{
+				pairFlags = physx::PxPairFlag::eTRIGGER_DEFAULT;
+				return physx::PxFilterFlag::eDEFAULT;
+			}
+			else
+			{
+				return physx::PxFilterFlag::eKILL;
+			}
+		}
+
+		if ((filterData0.word0 & filterData1.word1) && (filterData1.word0 & filterData0.word1))
+		{
+			// generate contacts for all that were not filtered above
+			pairFlags = physx::PxPairFlag::eCONTACT_DEFAULT;
+
+			// trigger the contact callback for pair (A,B) where
+			// the filtermask of A contains the ID of B and vice versa
+			if ((filterData0.word0 & filterData1.word2) && (filterData1.word0 & filterData0.word2))
+				pairFlags |= physx::PxPairFlag::eNOTIFY_TOUCH_FOUND;
+
+			return physx::PxFilterFlag::eDEFAULT;
+		}
+		else
+		{
+			return physx::PxFilterFlag::eKILL;
+		}
+	}
+
 	void PhysXEngine::Setup()
 	{
 		
@@ -34,8 +75,11 @@ namespace ZE
 		sceneDesc.gravity = physx::PxVec3(0.0f, -9.81f, 0.0f);
 		m_physxCPUDispatcher = physx::PxDefaultCpuDispatcherCreate(2);
 		sceneDesc.cpuDispatcher = m_physxCPUDispatcher;
-		sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
+		sceneDesc.filterShader = ZE::DefaultGameFilterShader;
 		m_physxScene = m_physxPhysics->createScene(sceneDesc);
+
+		m_physxScene->setFlag(physx::PxSceneFlag::eENABLE_ACTIVE_ACTORS, true);
+		m_physxScene->setFlag(physx::PxSceneFlag::eEXCLUDE_KINEMATICS_FROM_ACTIVE_ACTORS, true);
 
 		physx::PxPvdSceneClient* pvdClient = m_physxScene->getScenePvdClient();
 		if (pvdClient)
@@ -76,19 +120,17 @@ namespace ZE
 
 	void PhysXEngine::PostUpdate()
 	{
-		physx::PxActorTypeFlags types = physx::PxActorTypeFlag::eRIGID_DYNAMIC;
-		physx::PxU32 nbActors = m_physxScene->getNbActors(types);
+		physx::PxU32 nbActors;
+		physx::PxActor** actors = m_physxScene->getActiveActors(nbActors);
+
 		if (nbActors)
-		{
-			Array<physx::PxRigidActor*> actors(nbActors);
-			m_physxScene->getActors(types, reinterpret_cast<physx::PxActor**>(&actors[0]), nbActors);
-			
+		{	
 			Event_Physics_POSTUPDATE eventPostUpdate;
 			Event_Physics_UPDATE_TRANSFORM eventUpdateTransform;
 
 			for (int i = 0; i < nbActors; i++)
 			{
-				physx::PxRigidActor* actor = actors[i];
+				physx::PxRigidActor* actor = (physx::PxRigidActor*) actors[i];
 				if (!actor->userData)
 				{
 					continue;
@@ -193,28 +235,28 @@ namespace ZE
 		{
 			pxShape = m_physxPhysics->createShape(
 				physx::PxBoxGeometry(_data->HalfExtent.getX() * scale.getX(), _data->HalfExtent.getY() * scale.getY(), _data->HalfExtent.getZ() * scale.getZ()),
-				*m_defaultPhysicsMaterial);
+				*m_defaultPhysicsMaterial, true);
 			break;
 		}
 		case ZE::SPHERE:
 		{
 			pxShape = m_physxPhysics->createShape(
 				physx::PxSphereGeometry(_data->Radius * scale.getX()),
-				*m_defaultPhysicsMaterial);
+				*m_defaultPhysicsMaterial, true);
 			break;
 		}
 		case ZE::CAPSULE:
 		{
 			pxShape = m_physxPhysics->createShape(
 				physx::PxCapsuleGeometry(_data->Radius * scale.getX(), _data->HalfHeight * scale.getY()),
-				*m_defaultPhysicsMaterial);
+				*m_defaultPhysicsMaterial, true);
 			break;
 		}
 		case ZE::PLANE:
 		{
 			pxShape = m_physxPhysics->createShape(
 				physx::PxPlaneGeometry(),
-				*m_defaultPhysicsMaterial);
+				*m_defaultPhysicsMaterial, true);
 			break;
 		}
 		case ZE::CONVEX_MESHES:
@@ -222,7 +264,7 @@ namespace ZE
 			// #TODO Generate PxConvexMesh based on convexMeshDesc->MeshData
 			pxShape = m_physxPhysics->createShape(
 				physx::PxConvexMeshGeometry(),
-				*m_defaultPhysicsMaterial);
+				*m_defaultPhysicsMaterial, true);
 			break;
 		}
 		case ZE::TRIANGLE_MESHES:
@@ -230,7 +272,7 @@ namespace ZE
 			// #TODO Generate PxTriangleMesh based on triangleMeshDesc->TriangleMeshData
 			pxShape = m_physxPhysics->createShape(
 				physx::PxTriangleMeshGeometry(),
-				*m_defaultPhysicsMaterial);
+				*m_defaultPhysicsMaterial, true);
 			break;
 		}
 		case ZE::HEIGHT_FIELDS:
@@ -238,7 +280,7 @@ namespace ZE
 			// #TODO Generate PxHeightField based on heightFieldDesc->HeightFieldData
 			pxShape = m_physxPhysics->createShape(
 				physx::PxHeightFieldGeometry(),
-				*m_defaultPhysicsMaterial);
+				*m_defaultPhysicsMaterial, true);
 			break;
 		}
 		default:

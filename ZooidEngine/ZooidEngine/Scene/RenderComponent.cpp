@@ -121,7 +121,11 @@ namespace ZE {
 
 			if (hPhysicsBody.isValid())
 			{
-				hPhysicsBody.getObject<IPhysicsBody>()->setGameObject(this);
+				IPhysicsBody* pPhysicsBody = hPhysicsBody.getObject<IPhysicsBody>();
+				pPhysicsBody->setGameObject(this);
+				pPhysicsBody->setCollisionGroup(m_bStatic ? COLLISION_STATIC : COLLISION_DYNAMIC);
+				pPhysicsBody->enableCollisionGroups(COLLISION_STATIC | COLLISION_DYNAMIC);
+				pPhysicsBody->setupCollision();
 			}
 		}
 	}

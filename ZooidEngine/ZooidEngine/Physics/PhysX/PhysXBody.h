@@ -3,10 +3,7 @@
 
 #include "Physics/PhysicsBody.h"
 
-namespace physx
-{
-	class PxRigidActor;
-}
+#include "PxPhysicsAPI.h"
 
 namespace ZE
 {
@@ -19,9 +16,11 @@ namespace ZE
 
 		physx::PxRigidActor* getRigidActor() const { return m_physXRigidActor; }
 
+		virtual void setupCollision() override;
+
 	private:
 		physx::PxRigidActor* m_physXRigidActor;
-
+		physx::PxFilterData m_filterData;
 	};
 }
 
