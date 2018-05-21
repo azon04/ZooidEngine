@@ -32,6 +32,17 @@ namespace ZE
 		{
 			physx::PxShape* shape = shapes[i];
 			shape->setSimulationFilterData(m_filterData);
+
+			if (m_bTriggerOnly)
+			{
+				shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
+				shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, true);
+			}
+			else
+			{
+				shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, true);
+				shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, false);
+			}
 		}
 	}
 

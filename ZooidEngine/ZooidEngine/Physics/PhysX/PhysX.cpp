@@ -76,10 +76,9 @@ namespace ZE
 		m_physxCPUDispatcher = physx::PxDefaultCpuDispatcherCreate(2);
 		sceneDesc.cpuDispatcher = m_physxCPUDispatcher;
 		sceneDesc.filterShader = ZE::DefaultGameFilterShader;
+		sceneDesc.flags = physx::PxSceneFlag::eENABLE_ACTIVE_ACTORS | physx::PxSceneFlag::eEXCLUDE_KINEMATICS_FROM_ACTIVE_ACTORS;
+		sceneDesc.simulationEventCallback = this;
 		m_physxScene = m_physxPhysics->createScene(sceneDesc);
-
-		m_physxScene->setFlag(physx::PxSceneFlag::eENABLE_ACTIVE_ACTORS, true);
-		m_physxScene->setFlag(physx::PxSceneFlag::eEXCLUDE_KINEMATICS_FROM_ACTIVE_ACTORS, true);
 
 		physx::PxPvdSceneClient* pvdClient = m_physxScene->getScenePvdClient();
 		if (pvdClient)
@@ -226,9 +225,105 @@ namespace ZE
 		}
 	}
 
+	void PhysXEngine::onConstraintBreak(physx::PxConstraintInfo* constraints, physx::PxU32 count)
+	{
+
+	}
+
+	void PhysXEngine::onWake(physx::PxActor** actors, physx::PxU32 count)
+	{
+
+	}
+
+	void PhysXEngine::onSleep(physx::PxActor** actors, physx::PxU32 count)
+	{
+
+	}
+
+	void PhysXEngine::onContact(const physx::PxContactPairHeader& pairHeader, const physx::PxContactPair* pairs, physx::PxU32 nbPairs)
+	{
+		IPhysicsBody* physicBody1 = reinterpret_cast<IPhysicsBody*>(pairHeader.actors[0]->userData);
+		IPhysicsBody* physicBody2 = reinterpret_cast<IPhysicsBody*>(pairHeader.actors[1]->userData);
+		Component* component = static_cast<Component*>(physicBody1->getGameObject());
+		Component* otherComponent = static_cast<Component*>(physicBody2->getGameObject());
+		for (int i = 0; i < nbPairs; i++)
+		{
+			const physx::PxContactPair& contactPair = pairs[i];
+
+			if (contactPair.events & physx::PxPairFlag::eNOTIFY_TOUCH_FOUND)
+			{
+				Event_Physics_ONCOLLIDE collideEvent;
+				collideEvent.m_component = component;
+				collideEvent.m_otherComponent = otherComponent;
+
+				Array<physx::PxContactPairPoint> contactPairPoints(contactPair.contactCount);
+				UInt32 resultCount = contactPair.extractContacts(&contactPairPoints[0], contactPair.contactCount);
+				for (int j = 0; j < resultCount; j++)
+				{
+					physx::PxContactPairPoint& contactPairPoint = contactPairPoints[j];
+					ContactPhysicsData contactPhysicsData;
+					contactPhysicsData.m_component = component;
+					contactPhysicsData.m_otherComponent = otherComponent;
+
+					contactPhysicsData.m_contactPos = Vector3(contactPairPoint.position.x, contactPairPoint.position.y, contactPairPoint.position.z);
+					contactPhysicsData.m_contactNormal = Vector3(contactPairPoint.normal.x, contactPairPoint.normal.y, contactPairPoint.normal.z);
+					contactPhysicsData.m_contactImpulse = Vector3(contactPairPoint.impulse.x, contactPairPoint.impulse.y, contactPairPoint.impulse.z);
+
+					collideEvent.m_contacts.push_back(contactPhysicsData);
+				}
+
+				if (component) { component->handleEvent(&collideEvent); }
+				if (otherComponent) { otherComponent->handleEvent(&collideEvent); }
+			}
+		}
+	}
+
+	void PhysXEngine::onTrigger(physx::PxTriggerPair* pairs, physx::PxU32 count)
+	{
+		for (int i = 0; i < count; i++)
+		{
+			// ignore pairs when shapes have been deleted
+			if (pairs[i].flags & (physx::PxTriggerPairFlag::eREMOVED_SHAPE_TRIGGER | physx::PxTriggerPairFlag::eREMOVED_SHAPE_OTHER))
+				continue;
+
+			physx::PxTriggerPair& triggerPair = pairs[i];
+			if (triggerPair.status == physx::PxPairFlag::eNOTIFY_TOUCH_FOUND)
+			{
+				Event_Physics_ON_BEGIN_TRIGGER beginTrigger;
+				IPhysicsBody* triggerPhysicsBody = (IPhysicsBody*)(triggerPair.triggerActor->userData);
+				IPhysicsBody* otherPhysicsBody = (IPhysicsBody*)(triggerPair.otherActor->userData);
+
+				beginTrigger.m_triggerComponent = static_cast<Component*>(triggerPhysicsBody->getGameObject());
+				beginTrigger.m_otherComponent = static_cast<Component*>(otherPhysicsBody->getGameObject());
+
+				if (beginTrigger.m_triggerComponent) { beginTrigger.m_triggerComponent->handleEvent(&beginTrigger); }
+				if (beginTrigger.m_otherComponent) { beginTrigger.m_otherComponent->handleEvent(&beginTrigger); }
+			}
+			else if (triggerPair.status == physx::PxPairFlag::eNOTIFY_TOUCH_LOST)
+			{
+				Event_Physics_ON_END_TRIGGER endTrigger;
+				IPhysicsBody* triggerPhysicsBody = (IPhysicsBody*)(triggerPair.triggerActor->userData);
+				IPhysicsBody* otherPhysicsBody = (IPhysicsBody*)(triggerPair.otherActor->userData);
+
+				endTrigger.m_triggerComponent = static_cast<Component*>(triggerPhysicsBody->getGameObject());
+				endTrigger.m_otherComponent = static_cast<Component*>(otherPhysicsBody->getGameObject());
+
+				if (endTrigger.m_triggerComponent) { endTrigger.m_triggerComponent->handleEvent(&endTrigger); }
+				if (endTrigger.m_otherComponent) { endTrigger.m_otherComponent->handleEvent(&endTrigger); }
+			}
+		}
+	}
+
+	void PhysXEngine::onAdvance(const physx::PxRigidBody*const* bodyBuffer, const physx::PxTransform* poseBuffer, const physx::PxU32 count)
+	{
+
+	}
+
 	physx::PxShape* PhysXEngine::CreateShape(PhysicsBodyDesc* _data, Vector3 scale)
 	{
 		physx::PxShape* pxShape = nullptr;
+		physx::PxTransform localTransform(physx::PxVec3(0.0f,0.0f, 0.0f));
+
 		switch (_data->ShapeType)
 		{
 		case ZE::BOX:
@@ -250,6 +345,8 @@ namespace ZE
 			pxShape = m_physxPhysics->createShape(
 				physx::PxCapsuleGeometry(_data->Radius * scale.getX(), _data->HalfHeight * scale.getY()),
 				*m_defaultPhysicsMaterial, true);
+			localTransform.q = physx::PxQuat(physx::PxHalfPi, physx::PxVec3(0.0f, 0.0f, 1.0f));
+			pxShape->setLocalPose(localTransform);
 			break;
 		}
 		case ZE::PLANE:

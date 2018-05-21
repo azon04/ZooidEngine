@@ -58,6 +58,9 @@ namespace ZE {
 		Event_Physics_UPDATE::RegClass();
 		Event_Physics_POSTUPDATE::RegClass();
 		Event_Physics_UPDATE_TRANSFORM::RegClass();
+		Event_Physics_ON_TRIGGER::RegClass();
+		Event_Physics_ON_BEGIN_TRIGGER::RegClass();
+		Event_Physics_ON_END_TRIGGER::RegClass();
 	}
 
 }

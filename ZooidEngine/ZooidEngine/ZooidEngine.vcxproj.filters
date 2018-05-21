@@ -88,6 +88,9 @@
     <Filter Include="Physics\PhysX">
       <UniqueIdentifier>{f2262f0b-4dd9-44a4-a9aa-6b0cb989f565}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene\Collision">
+      <UniqueIdentifier>{f9774f21-4f7b-405d-9b14-4ba6c9b045ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ZEngine.h">
@@ -375,6 +378,18 @@
     <ClInclude Include="Physics\PhysicsEvents.h">
       <Filter>Physics</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\Collision\CollisionComponent.h">
+      <Filter>Scene\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Collision\BoxComponent.h">
+      <Filter>Scene\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Collision\SphereComponent.h">
+      <Filter>Scene\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Collision\CapsuleComponent.h">
+      <Filter>Scene\Collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -592,6 +607,18 @@
     </ClCompile>
     <ClCompile Include="Physics\PhysicsEvents.cpp">
       <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Collision\CollisionComponent.cpp">
+      <Filter>Scene\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Collision\BoxComponent.cpp">
+      <Filter>Scene\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Collision\SphereComponent.cpp">
+      <Filter>Scene\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Collision\CapsuleComponent.cpp">
+      <Filter>Scene\Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -243,6 +243,10 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClInclude Include="Scene\Actor.h" />
     <ClInclude Include="Scene\CameraComponent.h" />
     <ClInclude Include="Scene\CameraManager.h" />
+    <ClInclude Include="Scene\Collision\BoxComponent.h" />
+    <ClInclude Include="Scene\Collision\CapsuleComponent.h" />
+    <ClInclude Include="Scene\Collision\CollisionComponent.h" />
+    <ClInclude Include="Scene\Collision\SphereComponent.h" />
     <ClInclude Include="Scene\DebugCamera.h" />
     <ClInclude Include="Scene\Light\LightComponent.h" />
     <ClInclude Include="Scene\RenderComponent.h" />
@@ -326,6 +330,10 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClCompile Include="Scene\Actor.cpp" />
     <ClCompile Include="Scene\CameraComponent.cpp" />
     <ClCompile Include="Scene\CameraManager.cpp" />
+    <ClCompile Include="Scene\Collision\BoxComponent.cpp" />
+    <ClCompile Include="Scene\Collision\CapsuleComponent.cpp" />
+    <ClCompile Include="Scene\Collision\CollisionComponent.cpp" />
+    <ClCompile Include="Scene\Collision\SphereComponent.cpp" />
     <ClCompile Include="Scene\DebugCamera.cpp" />
     <ClCompile Include="Scene\Light\LightComponent.cpp" />
     <ClCompile Include="Scene\RenderComponent.cpp" />

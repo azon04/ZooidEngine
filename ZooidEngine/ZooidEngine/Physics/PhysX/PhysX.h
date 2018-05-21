@@ -2,6 +2,7 @@
 #define __PHYSX_H__
 
 #include "Physics/Physics.h"
+#include "PxSimulationEventCallback.h"
 
 namespace physx
 {
@@ -16,7 +17,7 @@ namespace physx
 
 namespace ZE
 {
-	class PhysXEngine : public IPhysics
+	class PhysXEngine : public IPhysics, public physx::PxSimulationEventCallback
 	{
 
 	public:
@@ -32,6 +33,15 @@ namespace ZE
 		virtual Handle CreateStaticRigidBody(Matrix4x4& _transform, PhysicsBodySetup* _setup) override;
 
 		virtual void DestroyPhysicsObject(Handle handle) override;
+
+
+		// Implement from PxSimulationEventCallback
+		virtual void onConstraintBreak(physx::PxConstraintInfo* constraints, physx::PxU32 count);
+		virtual void onWake(physx::PxActor** actors, physx::PxU32 count);
+		virtual void onSleep(physx::PxActor** actors, physx::PxU32 count);
+		virtual void onContact(const physx::PxContactPairHeader& pairHeader, const physx::PxContactPair* pairs, physx::PxU32 nbPairs);
+		virtual void onTrigger(physx::PxTriggerPair* pairs, physx::PxU32 count);
+		virtual void onAdvance(const physx::PxRigidBody*const* bodyBuffer, const physx::PxTransform* poseBuffer, const physx::PxU32 count);
 
 	private:
 

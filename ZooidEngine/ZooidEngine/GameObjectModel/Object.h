@@ -4,6 +4,7 @@
 #include "Utils/PrimitiveTypes.h"
 #include "ObjDecl.h"
 #include "RTTI.h"
+#include "Utils/String.h"
 
 namespace ZE {
 
@@ -21,6 +22,13 @@ namespace ZE {
 		static Array<Int32, true>& ClassMap();
 
 		static void RegisterClass() {};
+
+		void setObjectName(String name) { m_name = name; }
+		String getObjectName() const { return m_name; }
+
+	protected:
+
+		String m_name;
 
 	};
 

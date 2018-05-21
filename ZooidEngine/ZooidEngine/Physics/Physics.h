@@ -9,6 +9,8 @@
 
 namespace ZE
 {
+	class Component;
+
 	enum PhysicsShape : UInt16
 	{
 		BOX,
@@ -18,6 +20,18 @@ namespace ZE
 		CONVEX_MESHES,
 		TRIANGLE_MESHES,
 		HEIGHT_FIELDS
+	};
+
+	struct ContactPhysicsData
+	{
+		ContactPhysicsData() {}
+		~ContactPhysicsData() {}
+
+		Component* m_component;
+		Component* m_otherComponent;
+		Vector3 m_contactPos;
+		Vector3 m_contactNormal;
+		Vector3 m_contactImpulse;
 	};
 
 	struct PhysicsBodyDesc

@@ -10,7 +10,8 @@ namespace ZE
 		LOG_ENGINE = 0,
 		LOG_GAME = 1,
 		LOG_RENDERING = 2,
-		LOG_MEMORY = 3
+		LOG_MEMORY = 3,
+		LOG_PHYSICS = 4
 	};
 
 	enum LogType : UInt8
