@@ -8,10 +8,50 @@
 
 #define PVD_HOST "127.0.0.1"
 
+using namespace physx;
+
 namespace ZE
 {
-	physx::PxDefaultAllocator mainDefaultAllocator;
-	physx::PxDefaultErrorCallback mainDefaultErrorCallback;
+
+	class DefaultQueryFilterCallback : public PxQueryFilterCallback
+	{
+	public:
+		DefaultQueryFilterCallback(Array<Component*, true>& ignoredComponent)
+			: m_ignoredComponent(ignoredComponent)
+		{}
+
+		virtual PxQueryHitType::Enum preFilter(const PxFilterData& filterData, const PxShape* shape, const PxRigidActor* actor, PxHitFlags& queryFlags)
+		{
+			// Check trigger
+			if (shape->getFlags() & PxShapeFlag::eTRIGGER_SHAPE)
+			{
+				return PxQueryHitType::eNONE;
+			}
+			else
+			{
+				for (int i = 0; i < m_ignoredComponent.size(); i++)
+				{
+					if (actor->userData == m_ignoredComponent[i])
+					{
+						return PxQueryHitType::eNONE;
+					}
+				}
+			}
+
+			return PxQueryHitType::eBLOCK;
+		}
+
+		virtual PxQueryHitType::Enum postFilter(const PxFilterData& filterData, const PxQueryHit& hit)
+		{
+			return PxQueryHitType::eBLOCK;
+		}
+
+	protected:
+		Array<Component*, true> m_ignoredComponent;
+	};
+
+	PxDefaultAllocator mainDefaultAllocator;
+	PxDefaultErrorCallback mainDefaultErrorCallback;
 
 	physx::PxFilterFlags DefaultGameFilterShader(
 		physx::PxFilterObjectAttributes attributes0, physx::PxFilterData filterData0,
@@ -223,6 +263,177 @@ namespace ZE
 			m_physxScene->removeActor(*actor);
 			actor->release();
 		}
+	}
+
+	bool PhysXEngine::DoLineRaycast(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, PhysicsHit& hit, Array<Component*, true>& ignoredComponents)
+	{
+		PxRaycastBuffer pxHit;
+		PxVec3 pxStartPos(startPos.getX(), startPos.getY(), startPos.getZ());
+		PxVec3 pxUnitDir(dir.getX(), dir.getY(), dir.getZ());
+
+		PxQueryFilterData queryFilterData;
+		queryFilterData.data.word0 = _groups;
+
+		queryFilterData.flags |= PxQueryFlag::ePREFILTER;
+		DefaultQueryFilterCallback filterCallback(ignoredComponents);
+
+		bool blocked = m_physxScene->raycast(pxStartPos, pxUnitDir, distance, pxHit, PxHitFlag::eDEFAULT, queryFilterData, &filterCallback);
+
+		hit.isBlocked = blocked;
+		if (blocked)
+		{
+			hit.blockPosition = Vector3(&pxHit.block.position[0]);
+			hit.blockNormal = Vector3(&pxHit.block.normal[0]);
+			if (pxHit.block.actor)
+			{
+				IPhysicsBody* physicsBody = reinterpret_cast<IPhysicsBody*>(pxHit.block.actor->userData);
+				if (physicsBody->getGameObject())
+				{
+					hit.blockComponent = static_cast<Component*>(physicsBody->getGameObject());
+				}
+			}
+		}
+
+		return blocked;
+	}
+
+	bool PhysXEngine::DoLineRaycastMulti(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, PhysicsHit& hit, Array<Component*, true>& ignoredComponents)
+	{
+		return false;
+	}
+
+	bool PhysXEngine::DoLineRaycastAny(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, Array<Component*, true>& ignoreComponents)
+	{
+		return false;
+	}
+
+	bool PhysXEngine::DoBoxCast(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, const Quaternion& quat, const Vector3& halfExtent, PhysicsHit& hit, Array<Component*, true>& ignoredComponents)
+	{
+		PxSweepBuffer pxHit;
+		PxBoxGeometry boxGeom(halfExtent.getX(), halfExtent.getY(), halfExtent.getZ());
+		PxTransform initialPose(PxVec3(startPos.getX(), startPos.getY(), startPos.getZ()), PxQuat(quat.getX(), quat.getY(), quat.getZ(), quat.getW()));
+		PxVec3 pxDir(dir.getX(), dir.getY(), dir.getZ());
+
+		PxQueryFilterData queryFilterData;
+		queryFilterData.data.word0 = _groups;
+
+		queryFilterData.flags |= PxQueryFlag::ePREFILTER;
+		DefaultQueryFilterCallback filterCallback(ignoredComponents);
+
+		bool blocked = m_physxScene->sweep(boxGeom, initialPose, pxDir, distance, pxHit, PxHitFlag::eDEFAULT, queryFilterData, &filterCallback);
+
+		hit.isBlocked = blocked;
+		if (blocked)
+		{
+			hit.blockPosition = Vector3(&pxHit.block.position[0]);
+			hit.blockNormal = Vector3(&pxHit.block.normal[0]);
+			if (pxHit.block.actor)
+			{
+				IPhysicsBody* physicsBody = reinterpret_cast<IPhysicsBody*>(pxHit.block.actor->userData);
+				if (physicsBody->getGameObject())
+				{
+					hit.blockComponent = static_cast<Component*>(physicsBody->getGameObject());
+				}
+			}
+		}
+
+		return blocked;
+	}
+
+	bool PhysXEngine::DoBoxCastMulti(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, const Quaternion& quat, const Vector3& halfExtent, PhysicsHit& hit, Array<Component*, true>& ignoredComponents)
+	{
+		return false;
+	}
+
+	bool PhysXEngine::DoBoxCastAny(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, const Quaternion& quat, const Vector3& halfExtent, Array<Component*, true>& ignoreComponents)
+	{
+		return false;
+	}
+
+	bool PhysXEngine::DoSphereCast(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, Float32 radius, PhysicsHit& hit, Array<Component*, true>& ignoredComponents)
+	{
+		PxSweepBuffer pxHit;
+		PxSphereGeometry sphereGeom(radius);
+		PxTransform initialPose(PxVec3(startPos.getX(), startPos.getY(), startPos.getZ()));
+		PxVec3 pxDir(dir.getX(), dir.getY(), dir.getZ());
+
+		PxQueryFilterData queryFilterData;
+		queryFilterData.data.word0 = _groups;
+
+		queryFilterData.flags |= PxQueryFlag::ePREFILTER;
+		DefaultQueryFilterCallback filterCallback(ignoredComponents);
+
+		bool blocked = m_physxScene->sweep(sphereGeom, initialPose, pxDir, distance, pxHit, PxHitFlag::eDEFAULT, queryFilterData, &filterCallback);
+
+		hit.isBlocked = blocked;
+		if (blocked)
+		{
+			hit.blockPosition = Vector3(&pxHit.block.position[0]);
+			hit.blockNormal = Vector3(&pxHit.block.normal[0]);
+			if (pxHit.block.actor)
+			{
+				IPhysicsBody* physicsBody = reinterpret_cast<IPhysicsBody*>(pxHit.block.actor->userData);
+				if (physicsBody->getGameObject())
+				{
+					hit.blockComponent = static_cast<Component*>(physicsBody->getGameObject());
+				}
+			}
+		}
+
+		return blocked;
+	}
+
+	bool PhysXEngine::DoSphereCastMulti(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, Float32 radius, PhysicsHit& hit, Array<Component*, true>& ignoredComponents)
+	{
+		return false;
+	}
+
+	bool PhysXEngine::DoSphereCastAny(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, Float32 radius, Array<Component*, true>& ignoreComponents)
+	{
+		return false;
+	}
+
+	bool PhysXEngine::DoCapsuleCast(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, const Quaternion& quat, Float32 radius, Float32 halfHeight, PhysicsHit& hit, Array<Component*, true>& ignoredComponents)
+	{
+		PxSweepBuffer pxHit;
+		PxCapsuleGeometry sphereGeom(radius, halfHeight);
+		PxTransform initialPose(PxVec3(startPos.getX(), startPos.getY(), startPos.getZ()), PxQuat(quat.getX(), quat.getY(), quat.getZ(), quat.getW()));
+		PxVec3 pxDir(dir.getX(), dir.getY(), dir.getZ());
+
+		PxQueryFilterData queryFilterData;
+		queryFilterData.data.word0 = _groups;
+
+		queryFilterData.flags |= PxQueryFlag::ePREFILTER;
+		DefaultQueryFilterCallback filterCallback(ignoredComponents);
+
+		bool blocked = m_physxScene->sweep(sphereGeom, initialPose, pxDir, distance, pxHit, PxHitFlag::eDEFAULT, queryFilterData, &filterCallback);
+
+		hit.isBlocked = blocked;
+		if (blocked)
+		{
+			hit.blockPosition = Vector3(&pxHit.block.position[0]);
+			hit.blockNormal = Vector3(&pxHit.block.normal[0]);
+			if (pxHit.block.actor)
+			{
+				IPhysicsBody* physicsBody = reinterpret_cast<IPhysicsBody*>(pxHit.block.actor->userData);
+				if (physicsBody->getGameObject())
+				{
+					hit.blockComponent = static_cast<Component*>(physicsBody->getGameObject());
+				}
+			}
+		}
+
+		return blocked;
+	}
+
+	bool PhysXEngine::DoCapsuleCastMulti(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, const Quaternion& quat, Float32 radius, Float32 halfHeight, PhysicsHit& hit, Array<Component*, true>& ignoredComponents)
+	{
+		return false;
+	}
+
+	bool PhysXEngine::DoCapsuleCastAny(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, const Quaternion& quat, Float32 radius, Float32 halfHeight, Array<Component*, true>& ignoredComponents)
+	{
+		return false;
 	}
 
 	void PhysXEngine::onConstraintBreak(physx::PxConstraintInfo* constraints, physx::PxU32 count)

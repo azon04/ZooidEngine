@@ -86,6 +86,11 @@ namespace ZE {
 		}
 	}
 
+	void RenderComponent::setTriggerOnly(bool _bTriggerOnly)
+	{
+		m_bTriggerOnly = _bTriggerOnly;
+	}
+
 	void RenderComponent::setStatic(bool _bStatic)
 	{
 		m_bStatic = _bStatic;
@@ -106,7 +111,7 @@ namespace ZE {
 
 	void RenderComponent::setupPhysics()
 	{
-		if (m_mesh->m_hPhysicsBodySetup.isValid())
+		if (m_mesh && m_mesh->m_hPhysicsBodySetup.isValid())
 		{
 			PhysicsBodySetup* pPhysicsBodySetup = m_mesh->m_hPhysicsBodySetup.getObject<PhysicsBodySetup>();
 			if (m_bStatic)
@@ -125,6 +130,8 @@ namespace ZE {
 				pPhysicsBody->setGameObject(this);
 				pPhysicsBody->setCollisionGroup(m_bStatic ? COLLISION_STATIC : COLLISION_DYNAMIC);
 				pPhysicsBody->enableCollisionGroups(COLLISION_STATIC | COLLISION_DYNAMIC);
+				pPhysicsBody->setTriggerOnly(m_bTriggerOnly);
+				pPhysicsBody->setEnableGravity(m_bEnableGravity);
 				pPhysicsBody->setupCollision();
 			}
 		}

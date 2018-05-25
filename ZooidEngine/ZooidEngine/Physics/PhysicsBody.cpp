@@ -28,6 +28,11 @@ namespace ZE
 		m_bTriggerOnly = _bTriggerOnly;
 	}
 
+	void IPhysicsBody::setEnableGravity(bool _bEnableGravity)
+	{
+		m_bEnableGravity = _bEnableGravity;
+	}
+
 	void IPhysicsBody::setGenerateTouchEvent(bool _bEnableTouchEvent)
 	{
 		m_bGenerateTouchEvent = _bEnableTouchEvent;

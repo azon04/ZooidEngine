@@ -20,13 +20,14 @@ namespace ZE
 	class IPhysicsBody
 	{
 	public:
-		IPhysicsBody() : m_bCollisionEnabled(true), m_bGenerateTouchEvent(false), m_bTriggerOnly(false) {}
+		IPhysicsBody() : m_bCollisionEnabled(true), m_bGenerateTouchEvent(false), m_bTriggerOnly(false), m_bEnableGravity(true) {}
 
 		virtual void setEnableCollision(bool _bCollisionEnabled);
 		virtual void setCollisionGroup(UInt32 _collisionGroup);
 		virtual void enableCollisionGroups(UInt32 _CollisionGroups);
 		virtual void disableCollisionGroups(UInt32 _CollisionGroups);
 		virtual void setTriggerOnly(bool _bTriggerOnly);
+		virtual void setEnableGravity(bool _bEnableGravity);
 
 		virtual void setGenerateTouchEvent(bool _bEnableTouchEvent);
 
@@ -43,6 +44,7 @@ namespace ZE
 		bool m_bGenerateTouchEvent;
 		bool m_bCollisionEnabled;
 		bool m_bTriggerOnly;
+		bool m_bEnableGravity;
 	};
 }
 #endif

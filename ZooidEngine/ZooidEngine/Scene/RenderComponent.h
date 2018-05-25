@@ -13,7 +13,12 @@ namespace ZE {
 		DEFINE_CLASS(RenderComponent)
 
 	public:
-		RenderComponent(GameContext* gameContext) : SceneComponent(gameContext), m_mesh(nullptr), m_bHighlight(false), m_bStatic(true) {}
+		RenderComponent(GameContext* gameContext) : SceneComponent(gameContext), 
+			m_mesh(nullptr), m_bHighlight(false), 
+			m_bStatic(true), m_bTriggerOnly(false),
+			m_bEnableGravity(true)
+		{}
+
 		virtual ~RenderComponent() {}
 
 		virtual void setupComponent() override;
@@ -21,6 +26,7 @@ namespace ZE {
 
 		void fromFile(const char* filePath);
 
+		void setTriggerOnly(bool _bTriggerOnly);
 		void setStatic(bool _bStatic);
 		void setPhysicsEnabled(bool _bEnabled);
 		void handlePhysicsUpdateTransform(Event* pEvent);
@@ -31,6 +37,8 @@ namespace ZE {
 		bool m_bHighlight;
 		bool m_bStatic;
 		bool m_physicsEnabled;
+		bool m_bTriggerOnly;
+		bool m_bEnableGravity;
 		Handle hPhysicsBody;
 	};
 }

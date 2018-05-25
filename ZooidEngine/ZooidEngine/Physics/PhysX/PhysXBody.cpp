@@ -25,6 +25,8 @@ namespace ZE
 			m_filterData.word2 = 0;
 		}
 
+		m_physXRigidActor->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, m_bEnableGravity ? false : true);
+
 		const physx::PxU32 numShapes = m_physXRigidActor->getNbShapes();
 		Array<physx::PxShape*> shapes(numShapes);
 		m_physXRigidActor->getShapes(&shapes[0], numShapes);
@@ -32,6 +34,7 @@ namespace ZE
 		{
 			physx::PxShape* shape = shapes[i];
 			shape->setSimulationFilterData(m_filterData);
+			shape->setQueryFilterData(m_filterData);
 
 			if (m_bTriggerOnly)
 			{

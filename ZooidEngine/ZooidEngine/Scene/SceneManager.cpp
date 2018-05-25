@@ -183,7 +183,7 @@ namespace ZE
 				fileReader->readNextString(buff);
 				if (RenderComponent* pRendComp = dynamic_cast<RenderComponent*>(pComp))
 				{
-					pRendComp->m_bStatic = StringFunc::Compare(buff, "true");
+					pRendComp->m_bStatic = StringFunc::Compare(buff, "true") != 0;
 				}
 			}
 			else if (StringFunc::Compare(buff, "TriggerOnly") == 0)

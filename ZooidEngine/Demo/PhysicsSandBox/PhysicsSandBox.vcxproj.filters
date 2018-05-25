@@ -16,6 +16,9 @@
     <Filter Include="MainFunction">
       <UniqueIdentifier>{d907fe09-868d-4708-a52f-90c58702f246}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{21abac13-0499-4e3e-bc88-07e41289b6bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -24,10 +27,16 @@
     <ClCompile Include="MainFunction\MainFunctions.cpp">
       <Filter>MainFunction</Filter>
     </ClCompile>
+    <ClCompile Include="Scene\ControlledComponent.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainFunction\MainFunctions.h">
       <Filter>MainFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\ControlledComponent.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
