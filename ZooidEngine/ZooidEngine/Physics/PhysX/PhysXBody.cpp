@@ -30,7 +30,7 @@ namespace ZE
 		const physx::PxU32 numShapes = m_physXRigidActor->getNbShapes();
 		Array<physx::PxShape*> shapes(numShapes);
 		m_physXRigidActor->getShapes(&shapes[0], numShapes);
-		for (int i = 0; i < numShapes; i++)
+		for (UInt32 i = 0; i < numShapes; i++)
 		{
 			physx::PxShape* shape = shapes[i];
 			shape->setSimulationFilterData(m_filterData);

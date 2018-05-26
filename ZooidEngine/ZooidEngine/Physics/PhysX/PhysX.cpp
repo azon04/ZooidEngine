@@ -27,11 +27,12 @@ namespace ZE
 			{
 				return PxQueryHitType::eNONE;
 			}
-			else
+			else if(m_ignoredComponent.size() > 0)
 			{
+				IPhysicsBody* pPhysicsBody = reinterpret_cast<IPhysicsBody*>(actor->userData);
 				for (int i = 0; i < m_ignoredComponent.size(); i++)
 				{
-					if (actor->userData == m_ignoredComponent[i])
+					if (pPhysicsBody->getGameObject() == m_ignoredComponent[i])
 					{
 						return PxQueryHitType::eNONE;
 					}
@@ -167,7 +168,7 @@ namespace ZE
 			Event_Physics_POSTUPDATE eventPostUpdate;
 			Event_Physics_UPDATE_TRANSFORM eventUpdateTransform;
 
-			for (int i = 0; i < nbActors; i++)
+			for (UInt32 i = 0; i < nbActors; i++)
 			{
 				physx::PxRigidActor* actor = (physx::PxRigidActor*) actors[i];
 				if (!actor->userData)
@@ -274,6 +275,7 @@ namespace ZE
 		PxQueryFilterData queryFilterData;
 		queryFilterData.data.word0 = _groups;
 
+		queryFilterData.flags |= PxQueryFlag::eANY_HIT;
 		queryFilterData.flags |= PxQueryFlag::ePREFILTER;
 		DefaultQueryFilterCallback filterCallback(ignoredComponents);
 
@@ -299,12 +301,56 @@ namespace ZE
 
 	bool PhysXEngine::DoLineRaycastMulti(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, PhysicsHit& hit, Array<Component*, true>& ignoredComponents)
 	{
-		return false;
-	}
+		PxVec3 pxStartPos(startPos.getX(), startPos.getY(), startPos.getZ());
+		PxVec3 pxUnitDir(dir.getX(), dir.getY(), dir.getZ());
 
-	bool PhysXEngine::DoLineRaycastAny(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, Array<Component*, true>& ignoreComponents)
-	{
-		return false;
+		const UInt32 bufferSize = 256;
+		PxRaycastHit hitBuffer[bufferSize];
+		PxRaycastBuffer buff(hitBuffer, bufferSize);
+
+		PxQueryFilterData queryFilterData;
+		queryFilterData.data.word0 = _groups;
+
+		queryFilterData.flags |= PxQueryFlag::ePREFILTER;
+		queryFilterData.flags |= PxQueryFlag::eNO_BLOCK;
+		DefaultQueryFilterCallback filterCallback(ignoredComponents);
+
+		bool blocked = m_physxScene->raycast(pxStartPos, pxUnitDir, distance, buff, PxHitFlag::eDEFAULT, queryFilterData, &filterCallback);
+		
+		hit.isBlocked = blocked;
+		if (blocked)
+		{
+			hit.blockPosition = Vector3(&buff.block.position[0]);
+			hit.blockNormal = Vector3(&buff.block.normal[0]);
+			if (buff.block.actor)
+			{
+				IPhysicsBody* physicsBody = reinterpret_cast<IPhysicsBody*>(buff.block.actor->userData);
+				if (physicsBody->getGameObject())
+				{
+					hit.blockComponent = static_cast<Component*>(physicsBody->getGameObject());
+				}
+			}
+		}
+
+		hit.hasTouches = buff.nbTouches > 0;
+		for (UInt32 i = 0; i < buff.nbTouches; i++)
+		{
+			PhysicsHit touchHit;
+			touchHit.blockPosition = Vector3(&buff.touches[i].position[0]);
+			touchHit.blockNormal = Vector3(&buff.touches[i].normal[0]);
+			if (buff.touches[i].actor)
+			{
+				IPhysicsBody* physicsBody = reinterpret_cast<IPhysicsBody*>(buff.touches[i].actor->userData);
+				if (physicsBody->getGameObject())
+				{
+					touchHit.blockComponent = static_cast<Component*>(physicsBody->getGameObject());
+				}
+			}
+
+			hit.touches.push_back(touchHit);
+		}
+
+		return blocked;
 	}
 
 	bool PhysXEngine::DoBoxCast(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, const Quaternion& quat, const Vector3& halfExtent, PhysicsHit& hit, Array<Component*, true>& ignoredComponents)
@@ -317,6 +363,7 @@ namespace ZE
 		PxQueryFilterData queryFilterData;
 		queryFilterData.data.word0 = _groups;
 
+		queryFilterData.flags |= PxQueryFlag::eANY_HIT;
 		queryFilterData.flags |= PxQueryFlag::ePREFILTER;
 		DefaultQueryFilterCallback filterCallback(ignoredComponents);
 
@@ -342,12 +389,57 @@ namespace ZE
 
 	bool PhysXEngine::DoBoxCastMulti(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, const Quaternion& quat, const Vector3& halfExtent, PhysicsHit& hit, Array<Component*, true>& ignoredComponents)
 	{
-		return false;
-	}
+		PxBoxGeometry boxGeom(halfExtent.getX(), halfExtent.getY(), halfExtent.getZ());
+		PxTransform initialPose(PxVec3(startPos.getX(), startPos.getY(), startPos.getZ()), PxQuat(quat.getX(), quat.getY(), quat.getZ(), quat.getW()));
+		PxVec3 pxDir(dir.getX(), dir.getY(), dir.getZ());
 
-	bool PhysXEngine::DoBoxCastAny(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, const Quaternion& quat, const Vector3& halfExtent, Array<Component*, true>& ignoreComponents)
-	{
-		return false;
+		const UInt32 bufferSize = 256;
+		PxSweepHit hitBuffer[bufferSize];
+		PxSweepBuffer buff(hitBuffer, bufferSize);
+
+		PxQueryFilterData queryFilterData;
+		queryFilterData.data.word0 = _groups;
+
+		queryFilterData.flags |= PxQueryFlag::eNO_BLOCK;
+		queryFilterData.flags |= PxQueryFlag::ePREFILTER;
+		DefaultQueryFilterCallback filterCallback(ignoredComponents);
+
+		bool blocked = m_physxScene->sweep(boxGeom, initialPose, pxDir, distance, buff, PxHitFlag::eDEFAULT, queryFilterData, &filterCallback);
+
+		hit.isBlocked = blocked;
+		if (blocked)
+		{
+			hit.blockPosition = Vector3(&buff.block.position[0]);
+			hit.blockNormal = Vector3(&buff.block.normal[0]);
+			if (buff.block.actor)
+			{
+				IPhysicsBody* physicsBody = reinterpret_cast<IPhysicsBody*>(buff.block.actor->userData);
+				if (physicsBody->getGameObject())
+				{
+					hit.blockComponent = static_cast<Component*>(physicsBody->getGameObject());
+				}
+			}
+		}
+
+		hit.hasTouches = buff.nbTouches > 0;
+		for (UInt32 i = 0; i < buff.nbTouches; i++)
+		{
+			PhysicsHit touchHit;
+			touchHit.blockPosition = Vector3(&buff.touches[i].position[0]);
+			touchHit.blockNormal = Vector3(&buff.touches[i].normal[0]);
+			if (buff.touches[i].actor)
+			{
+				IPhysicsBody* physicsBody = reinterpret_cast<IPhysicsBody*>(buff.touches[i].actor->userData);
+				if (physicsBody->getGameObject())
+				{
+					touchHit.blockComponent = static_cast<Component*>(physicsBody->getGameObject());
+				}
+			}
+
+			hit.touches.push_back(touchHit);
+		}
+
+		return blocked;
 	}
 
 	bool PhysXEngine::DoSphereCast(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, Float32 radius, PhysicsHit& hit, Array<Component*, true>& ignoredComponents)
@@ -360,6 +452,7 @@ namespace ZE
 		PxQueryFilterData queryFilterData;
 		queryFilterData.data.word0 = _groups;
 
+		queryFilterData.flags |= PxQueryFlag::eANY_HIT;
 		queryFilterData.flags |= PxQueryFlag::ePREFILTER;
 		DefaultQueryFilterCallback filterCallback(ignoredComponents);
 
@@ -385,12 +478,57 @@ namespace ZE
 
 	bool PhysXEngine::DoSphereCastMulti(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, Float32 radius, PhysicsHit& hit, Array<Component*, true>& ignoredComponents)
 	{
-		return false;
-	}
+		PxSphereGeometry sphereGeom(radius);
+		PxTransform initialPose(PxVec3(startPos.getX(), startPos.getY(), startPos.getZ()));
+		PxVec3 pxDir(dir.getX(), dir.getY(), dir.getZ());
 
-	bool PhysXEngine::DoSphereCastAny(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, Float32 radius, Array<Component*, true>& ignoreComponents)
-	{
-		return false;
+		const UInt32 bufferSize = 256;
+		PxSweepHit hitBuffer[bufferSize];
+		PxSweepBuffer buff(hitBuffer, bufferSize);
+
+		PxQueryFilterData queryFilterData;
+		queryFilterData.data.word0 = _groups;
+
+		queryFilterData.flags |= PxQueryFlag::eNO_BLOCK;
+		queryFilterData.flags |= PxQueryFlag::ePREFILTER;
+		DefaultQueryFilterCallback filterCallback(ignoredComponents);
+
+		bool blocked = m_physxScene->sweep(sphereGeom, initialPose, pxDir, distance, buff, PxHitFlag::eDEFAULT, queryFilterData, &filterCallback);
+
+		hit.isBlocked = blocked;
+		if (blocked)
+		{
+			hit.blockPosition = Vector3(&buff.block.position[0]);
+			hit.blockNormal = Vector3(&buff.block.normal[0]);
+			if (buff.block.actor)
+			{
+				IPhysicsBody* physicsBody = reinterpret_cast<IPhysicsBody*>(buff.block.actor->userData);
+				if (physicsBody->getGameObject())
+				{
+					hit.blockComponent = static_cast<Component*>(physicsBody->getGameObject());
+				}
+			}
+		}
+
+		hit.hasTouches = buff.nbTouches > 0;
+		for (UInt32 i = 0; i < buff.nbTouches; i++)
+		{
+			PhysicsHit touchHit;
+			touchHit.blockPosition = Vector3(&buff.touches[i].position[0]);
+			touchHit.blockNormal = Vector3(&buff.touches[i].normal[0]);
+			if (buff.touches[i].actor)
+			{
+				IPhysicsBody* physicsBody = reinterpret_cast<IPhysicsBody*>(buff.touches[i].actor->userData);
+				if (physicsBody->getGameObject())
+				{
+					touchHit.blockComponent = static_cast<Component*>(physicsBody->getGameObject());
+				}
+			}
+
+			hit.touches.push_back(touchHit);
+		}
+
+		return blocked;
 	}
 
 	bool PhysXEngine::DoCapsuleCast(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, const Quaternion& quat, Float32 radius, Float32 halfHeight, PhysicsHit& hit, Array<Component*, true>& ignoredComponents)
@@ -403,6 +541,7 @@ namespace ZE
 		PxQueryFilterData queryFilterData;
 		queryFilterData.data.word0 = _groups;
 
+		queryFilterData.flags |= PxQueryFlag::eANY_HIT;
 		queryFilterData.flags |= PxQueryFlag::ePREFILTER;
 		DefaultQueryFilterCallback filterCallback(ignoredComponents);
 
@@ -428,12 +567,169 @@ namespace ZE
 
 	bool PhysXEngine::DoCapsuleCastMulti(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, const Quaternion& quat, Float32 radius, Float32 halfHeight, PhysicsHit& hit, Array<Component*, true>& ignoredComponents)
 	{
-		return false;
+		PxCapsuleGeometry sphereGeom(radius, halfHeight);
+		PxTransform initialPose(PxVec3(startPos.getX(), startPos.getY(), startPos.getZ()), PxQuat(quat.getX(), quat.getY(), quat.getZ(), quat.getW()));
+		PxVec3 pxDir(dir.getX(), dir.getY(), dir.getZ());
+
+		const UInt32 bufferSize = 256;
+		PxSweepHit hitBuffer[bufferSize];
+		PxSweepBuffer buff(hitBuffer, bufferSize);
+
+		PxQueryFilterData queryFilterData;
+		queryFilterData.data.word0 = _groups;
+
+		queryFilterData.flags |= PxQueryFlag::eNO_BLOCK;
+		queryFilterData.flags |= PxQueryFlag::ePREFILTER;
+		DefaultQueryFilterCallback filterCallback(ignoredComponents);
+
+		bool blocked = m_physxScene->sweep(sphereGeom, initialPose, pxDir, distance, buff, PxHitFlag::eDEFAULT, queryFilterData, &filterCallback);
+
+		hit.isBlocked = blocked;
+		if (blocked)
+		{
+			hit.blockPosition = Vector3(&buff.block.position[0]);
+			hit.blockNormal = Vector3(&buff.block.normal[0]);
+			if (buff.block.actor)
+			{
+				IPhysicsBody* physicsBody = reinterpret_cast<IPhysicsBody*>(buff.block.actor->userData);
+				if (physicsBody->getGameObject())
+				{
+					hit.blockComponent = static_cast<Component*>(physicsBody->getGameObject());
+				}
+			}
+		}
+
+		hit.hasTouches = buff.nbTouches > 0;
+		for (UInt32 i = 0; i < buff.nbTouches; i++)
+		{
+			PhysicsHit touchHit;
+			touchHit.blockPosition = Vector3(&buff.touches[i].position[0]);
+			touchHit.blockNormal = Vector3(&buff.touches[i].normal[0]);
+			if (buff.touches[i].actor)
+			{
+				IPhysicsBody* physicsBody = reinterpret_cast<IPhysicsBody*>(buff.touches[i].actor->userData);
+				if (physicsBody->getGameObject())
+				{
+					touchHit.blockComponent = static_cast<Component*>(physicsBody->getGameObject());
+				}
+			}
+
+			hit.touches.push_back(touchHit);
+		}
+
+		return blocked;
 	}
 
-	bool PhysXEngine::DoCapsuleCastAny(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, const Quaternion& quat, Float32 radius, Float32 halfHeight, Array<Component*, true>& ignoredComponents)
+	bool PhysXEngine::BoxOverlap(const Vector3& position, const Quaternion& quat, const Vector3& halfExtent, Array<IPhysicsBody*, true>& physicsBodyResult)
 	{
-		return false;
+		const UInt32 hitSize = 256;
+		PxOverlapHit hitBuffer[hitSize];
+		PxOverlapBuffer hit(hitBuffer, hitSize);
+
+		PxBoxGeometry boxGeom(PxVec3(halfExtent.getX(), halfExtent.getY(), halfExtent.getZ()));
+		PxTransform shapePose(PxVec3(position.getX(), position.getY(), position.getZ()), PxQuat(quat.getX(), quat.getY(), quat.getZ(), quat.getW()));
+
+		bool status = m_physxScene->overlap(boxGeom, shapePose, hit);
+
+		for (UInt32 i = 0; i < hit.nbTouches; i++)
+		{
+			PxOverlapHit& touchHit = hit.touches[i];
+			if (touchHit.actor && touchHit.actor->userData)
+			{
+				IPhysicsBody* physicBody = reinterpret_cast<IPhysicsBody*>(touchHit.actor->userData);
+				physicsBodyResult.push_back(physicBody);
+			}
+		}
+
+		return status;
+	}
+
+	bool PhysXEngine::SphereOverlap(const Vector3& position, const Quaternion& quat, Float32 radius, Array<IPhysicsBody*, true>& physicsBodyResult)
+	{
+		const UInt32 hitSize = 256;
+		PxOverlapHit hitBuffer[hitSize];
+		PxOverlapBuffer hit(hitBuffer, hitSize);
+
+		PxSphereGeometry sphereGeom(radius);
+		PxTransform shapePose(PxVec3(position.getX(), position.getY(), position.getZ()), PxQuat(quat.getX(), quat.getY(), quat.getZ(), quat.getW()));
+
+		bool status = m_physxScene->overlap(sphereGeom, shapePose, hit);
+
+		for (UInt32 i = 0; i < hit.nbTouches; i++)
+		{
+			PxOverlapHit& touchHit = hit.touches[i];
+			if (touchHit.actor && touchHit.actor->userData)
+			{
+				IPhysicsBody* physicBody = reinterpret_cast<IPhysicsBody*>(touchHit.actor->userData);
+				physicsBodyResult.push_back(physicBody);
+			}
+		}
+
+		return status;
+	}
+
+	bool PhysXEngine::CapsuleOverlap(const Vector3& position, const Quaternion& quat, Float32 radius, Float32 halfHeight, Array<IPhysicsBody*, true>& physicsBodyResult)
+	{
+		const UInt32 hitSize = 256;
+		PxOverlapHit hitBuffer[hitSize];
+		PxOverlapBuffer hit(hitBuffer, hitSize);
+
+		PxCapsuleGeometry capsuleGeom(radius, halfHeight);
+		PxTransform shapePose(PxVec3(position.getX(), position.getY(), position.getZ()), PxQuat(quat.getX(), quat.getY(), quat.getZ(), quat.getW()));
+
+		bool status = m_physxScene->overlap(capsuleGeom, shapePose, hit);
+
+		for (UInt32 i = 0; i < hit.nbTouches; i++)
+		{
+			PxOverlapHit& touchHit = hit.touches[i];
+			if (touchHit.actor && touchHit.actor->userData)
+			{
+				IPhysicsBody* physicBody = reinterpret_cast<IPhysicsBody*>(touchHit.actor->userData);
+				physicsBodyResult.push_back(physicBody);
+			}
+		}
+
+		return status;
+	}
+
+	bool PhysXEngine::PhysicsBodyOverlap(IPhysicsBody* physicsBody, Array<IPhysicsBody*, true>& physicsBodyResult)
+	{
+		PhysXBody* realBody = static_cast<PhysXBody*>(physicsBody);
+		PxRigidActor* actor = realBody->getRigidActor();
+		
+		const physx::PxU32 numShapes = actor->getNbShapes();
+		Array<physx::PxShape*> shapes(numShapes);
+		actor->getShapes(&shapes[0], numShapes);
+
+		bool status = false;
+		for (UInt32 i = 0; i < numShapes; i++)
+		{
+			PxShape* shape = shapes[i];
+			
+			const UInt32 hitSize = 256;
+			PxOverlapHit hitBuffer[hitSize];
+			PxOverlapBuffer hit(hitBuffer, hitSize);
+
+			const PxGeometry& geom = shape->getGeometry().any();
+			PxTransform shapePose = PxShapeExt::getGlobalPose(*shape, *actor);
+
+			status = m_physxScene->overlap(geom, shapePose, hit) || status;
+
+			for (UInt32 i = 0; i < hit.nbTouches; i++)
+			{
+				PxOverlapHit& touchHit = hit.touches[i];
+				if (touchHit.actor && touchHit.actor->userData)
+				{
+					IPhysicsBody* physicBody = reinterpret_cast<IPhysicsBody*>(touchHit.actor->userData);
+					if (!physicsBodyResult.contains(physicsBody))
+					{
+						physicsBodyResult.push_back(physicBody);
+					}
+				}
+			}
+		}
+
+		return status;
 	}
 
 	void PhysXEngine::onConstraintBreak(physx::PxConstraintInfo* constraints, physx::PxU32 count)
@@ -457,7 +753,7 @@ namespace ZE
 		IPhysicsBody* physicBody2 = reinterpret_cast<IPhysicsBody*>(pairHeader.actors[1]->userData);
 		Component* component = static_cast<Component*>(physicBody1->getGameObject());
 		Component* otherComponent = static_cast<Component*>(physicBody2->getGameObject());
-		for (int i = 0; i < nbPairs; i++)
+		for (UInt32 i = 0; i < nbPairs; i++)
 		{
 			const physx::PxContactPair& contactPair = pairs[i];
 
@@ -469,7 +765,7 @@ namespace ZE
 
 				Array<physx::PxContactPairPoint> contactPairPoints(contactPair.contactCount);
 				UInt32 resultCount = contactPair.extractContacts(&contactPairPoints[0], contactPair.contactCount);
-				for (int j = 0; j < resultCount; j++)
+				for (UInt32 j = 0; j < resultCount; j++)
 				{
 					physx::PxContactPairPoint& contactPairPoint = contactPairPoints[j];
 					ContactPhysicsData contactPhysicsData;
@@ -491,7 +787,7 @@ namespace ZE
 
 	void PhysXEngine::onTrigger(physx::PxTriggerPair* pairs, physx::PxU32 count)
 	{
-		for (int i = 0; i < count; i++)
+		for (UInt32 i = 0; i < count; i++)
 		{
 			// ignore pairs when shapes have been deleted
 			if (pairs[i].flags & (physx::PxTriggerPairFlag::eREMOVED_SHAPE_TRIGGER | physx::PxTriggerPairFlag::eREMOVED_SHAPE_OTHER))

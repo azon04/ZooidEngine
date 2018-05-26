@@ -10,9 +10,11 @@
 namespace ZE
 {
 	class Component;
+	class IPhysicsBody;
 
 	enum PhysicsShape : UInt16
 	{
+		NONE,
 		BOX,
 		SPHERE,
 		CAPSULE,
@@ -67,10 +69,16 @@ namespace ZE
 
 	struct PhysicsHit
 	{
+		PhysicsHit() {}
+		~PhysicsHit() {}
+
 		bool isBlocked;
-		Component* blockComponent;
+		Component* blockComponent = nullptr;
 		Vector3 blockPosition;
 		Vector3 blockNormal;
+
+		bool hasTouches = false;
+		Array<PhysicsHit, true> touches;
 	};
 
 	class IPhysics
@@ -93,20 +101,22 @@ namespace ZE
 		// Queries
 		virtual bool DoLineRaycast(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, PhysicsHit& hit, Array<Component*, true>& ignoredComponents = sDefaultIgnoredComponent) = 0;
 		virtual bool DoLineRaycastMulti(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, PhysicsHit& hit, Array<Component*, true>& ignoredComponents = sDefaultIgnoredComponent) = 0;
-		virtual bool DoLineRaycastAny(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, Array<Component*, true>& ignoredComponents = sDefaultIgnoredComponent) = 0;
-
+		
 		virtual bool DoBoxCast(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, const Quaternion& quat, const Vector3& halfExtent, PhysicsHit& hit, Array<Component*, true>& ignoredComponents = sDefaultIgnoredComponent) = 0;
 		virtual bool DoBoxCastMulti(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, const Quaternion& quat, const Vector3& halfExtent, PhysicsHit& hit, Array<Component*, true>& ignoredComponents = sDefaultIgnoredComponent) = 0;
-		virtual bool DoBoxCastAny(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, const Quaternion& quat, const Vector3& halfExtent, Array<Component* , true>& ignoredComponents = sDefaultIgnoredComponent) = 0;
-
+		
 		virtual bool DoSphereCast(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, Float32 radius, PhysicsHit& hit, Array<Component*, true>& ignoredComponents = sDefaultIgnoredComponent) = 0;
 		virtual bool DoSphereCastMulti(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, Float32 radius, PhysicsHit& hit, Array<Component*, true>& ignoredComponents = sDefaultIgnoredComponent) = 0;
-		virtual bool DoSphereCastAny(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, Float32 radius, Array<Component*, true>& ignoredComponents = sDefaultIgnoredComponent) = 0;
 		
 		virtual bool DoCapsuleCast(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, const Quaternion& quat, Float32 radius, Float32 halfHeight, PhysicsHit& hit, Array<Component*, true>& ignoredComponents = sDefaultIgnoredComponent) = 0;
 		virtual bool DoCapsuleCastMulti(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, const Quaternion& quat, Float32 radius, Float32 halfHeight, PhysicsHit& hit, Array<Component*, true>& ignoredComponents = sDefaultIgnoredComponent) = 0;
-		virtual bool DoCapsuleCastAny(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, const Quaternion& quat, Float32 radius, Float32 halfHeight, Array<Component*,true>& ignoredComponents = sDefaultIgnoredComponent) = 0;
-
+		
+		// overlaps
+		virtual bool BoxOverlap(const Vector3& position, const Quaternion& quat, const Vector3& halfExtent, Array<IPhysicsBody*, true>& physicsBodyResult) = 0;
+		virtual bool SphereOverlap(const Vector3& position, const Quaternion& quat, Float32 radius, Array<IPhysicsBody*, true>& physicsBodyResult) = 0;
+		virtual bool CapsuleOverlap(const Vector3& position, const Quaternion& quat, Float32 radius, Float32 halfHeight, Array<IPhysicsBody*, true>& physicsBodyResult) = 0;
+		virtual bool PhysicsBodyOverlap(IPhysicsBody* physicsBody, Array<IPhysicsBody*, true>& physicsBodyResult) = 0;
+		
 		virtual void DestroyPhysicsObject(Handle handle) = 0;
 
 	protected:

@@ -1,6 +1,6 @@
 SceneName TestMap
 FileVersion 1.0
-ComponentCount 10
+ComponentCount 11
 LightComponent DirLight
 BEGIN
 LightType 0
@@ -49,6 +49,14 @@ Mesh PhysicsSandBox/mesh/Crate.meshz
 S 1.0 1.0 1.0
 R 0.0 0.0 0.0
 T -1.0 0.5 0.0
+Physics true
+END
+RenderComponent Crate_6
+BEGIN
+Mesh PhysicsSandBox/mesh/Crate.meshz
+S 1.0 1.0 1.0
+R 0.0 0.0 0.0
+T 1.0 0.5 -1.5
 Physics true
 END
 BoxComponent Box_1

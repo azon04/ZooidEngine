@@ -51,6 +51,7 @@ namespace ZE
 		RETURN_SHAPE_IF(CONVEX_MESHES, shapeName)
 		RETURN_SHAPE_IF(TRIANGLE_MESHES, shapeName)
 		RETURN_SHAPE_IF(HEIGHT_FIELDS, shapeName)
+		return NONE;
 	}
 
 	void loadPhysicsBodySetup(FileReader& fileReader, Mesh* pMesh)

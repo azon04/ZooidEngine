@@ -37,20 +37,22 @@ namespace ZE
 		// Scene Queries
 		virtual bool DoLineRaycast(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, PhysicsHit& hit, Array<Component*, true>& ignoredComponents = sDefaultIgnoredComponent) override;
 		virtual bool DoLineRaycastMulti(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, PhysicsHit& hit, Array<Component*, true>& ignoredComponents = sDefaultIgnoredComponent) override;
-		virtual bool DoLineRaycastAny(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, Array<Component*, true>& ignoredComponents = sDefaultIgnoredComponent) override;
-
+		
 		virtual bool DoBoxCast(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, const Quaternion& quat, const Vector3& halfExtent, PhysicsHit& hit, Array<Component*, true>& ignoredComponets = sDefaultIgnoredComponent) override;
 		virtual bool DoBoxCastMulti(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, const Quaternion& quat, const Vector3& halfExtent, PhysicsHit& hit, Array<Component*, true>& ignoredComponents = sDefaultIgnoredComponent) override;
-		virtual bool DoBoxCastAny(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, const Quaternion& quat, const Vector3& halfExtent, Array<Component*, true>& ignoredComponens = sDefaultIgnoredComponent) override;
-
+		
 		virtual bool DoSphereCast(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, Float32 radius, PhysicsHit& hit, Array<Component*, true>& ignoredComponents = sDefaultIgnoredComponent) override;
 		virtual bool DoSphereCastMulti(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, Float32 radius, PhysicsHit& hit, Array<Component*, true>& ignoredComponents = sDefaultIgnoredComponent) override;
-		virtual bool DoSphereCastAny(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, Float32 radius, Array<Component*, true>& ignoredComponents = sDefaultIgnoredComponent) override;
-
+		
 		virtual bool DoCapsuleCast(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, const Quaternion& quat, Float32 radius, Float32 halfHeight, PhysicsHit& hit, Array<Component*, true>& ignoreComponents) override;
 		virtual bool DoCapsuleCastMulti(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, const Quaternion& quat, Float32 radius, Float32 halfHeight, PhysicsHit& hit, Array<Component*, true>& ignoredComponents) override;
-		virtual bool DoCapsuleCastAny(UInt32 _groups, const Vector3& startPos, const Vector3& dir, Float32 distance, const Quaternion& quat, Float32 radius, Float32 halfHeight, Array<Component*, true>& ignoredComponents) override;
 		
+		// Overlaps
+		virtual bool BoxOverlap(const Vector3& position, const Quaternion& quat, const Vector3& halfExtent, Array<IPhysicsBody*, true>& physicsBodyResult) override;
+		virtual bool SphereOverlap(const Vector3& position, const Quaternion& quat, Float32 radius, Array<IPhysicsBody*, true>& physicsBodyResult) override;
+		virtual bool CapsuleOverlap(const Vector3& position, const Quaternion& quat, Float32 radius, Float32 halfHeight, Array<IPhysicsBody*, true>& physicsBodyResult) override;
+		virtual bool PhysicsBodyOverlap(IPhysicsBody* physicsBody, Array<IPhysicsBody*, true>& physicsBodyResult) override;
+
 		// Implement from PxSimulationEventCallback
 		virtual void onConstraintBreak(physx::PxConstraintInfo* constraints, physx::PxU32 count);
 		virtual void onWake(physx::PxActor** actors, physx::PxU32 count);

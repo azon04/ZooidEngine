@@ -366,8 +366,8 @@ namespace ZE {
 	UInt32 quickSortBlendPartition(Float32* squareDist, UInt32* arr, Int32 lo, Int32 hi)
 	{
 		Float32 pivot = squareDist[arr[hi]];
-		UInt32 i = lo - 1;
-		for (UInt32 j = lo; j < hi; j++)
+		Int32 i = lo - 1;
+		for (Int32 j = lo; j < hi; j++)
 		{
 			if (squareDist[arr[j]] > pivot)
 			{
