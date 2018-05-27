@@ -390,6 +390,9 @@
     <ClInclude Include="Scene\Collision\CapsuleComponent.h">
       <Filter>Scene\Collision</Filter>
     </ClInclude>
+    <ClInclude Include="Physics\PhysicsBodyHolder.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -619,6 +622,9 @@
     </ClCompile>
     <ClCompile Include="Scene\Collision\CapsuleComponent.cpp">
       <Filter>Scene\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\PhysicsBodyHolder.cpp">
+      <Filter>Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

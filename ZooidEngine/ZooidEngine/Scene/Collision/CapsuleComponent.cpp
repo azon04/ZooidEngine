@@ -27,7 +27,7 @@ namespace ZE
 			pPhysicsBody->setCollisionGroup(COLLISION_STATIC);
 			pPhysicsBody->enableCollisionGroups(COLLISION_STATIC | COLLISION_DYNAMIC);
 			pPhysicsBody->setTriggerOnly(m_bTrigger);
-			pPhysicsBody->setupCollision();
+			pPhysicsBody->setupPhysicsBody();
 		}
 	}
 	

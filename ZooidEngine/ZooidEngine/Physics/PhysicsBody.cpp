@@ -33,6 +33,11 @@ namespace ZE
 		m_bEnableGravity = _bEnableGravity;
 	}
 
+	void IPhysicsBody::setMass(float _mass)
+	{
+		m_mass = _mass;
+	}
+
 	void IPhysicsBody::setGenerateTouchEvent(bool _bEnableTouchEvent)
 	{
 		m_bGenerateTouchEvent = _bEnableTouchEvent;

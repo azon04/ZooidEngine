@@ -95,6 +95,15 @@ namespace ZE
 				// #TODO Read HeightField
 				break;
 			}
+
+			// Mass expected
+			fileReader.readNextString(tokenBuffer);
+
+			if (StringFunc::Compare(tokenBuffer, "Mass") == 0)
+			{
+				pPhysicsBodySetup->Mass = fileReader.readNextFloat();
+			}
+
 			pPhysicsBodySetup->m_bodies.push_back(bodyDesc);
 		}
 		else if (StringFunc::Compare(tokenBuffer, "multi") == 0)

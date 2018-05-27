@@ -20,7 +20,12 @@ namespace ZE
 	class IPhysicsBody
 	{
 	public:
-		IPhysicsBody() : m_bCollisionEnabled(true), m_bGenerateTouchEvent(false), m_bTriggerOnly(false), m_bEnableGravity(true) {}
+		IPhysicsBody() : 
+			m_bCollisionEnabled(true), 
+			m_bGenerateTouchEvent(false), 
+			m_bTriggerOnly(false), 
+			m_bEnableGravity(true),
+			m_mass(0.0) {}
 
 		virtual void setEnableCollision(bool _bCollisionEnabled);
 		virtual void setCollisionGroup(UInt32 _collisionGroup);
@@ -28,13 +33,20 @@ namespace ZE
 		virtual void disableCollisionGroups(UInt32 _CollisionGroups);
 		virtual void setTriggerOnly(bool _bTriggerOnly);
 		virtual void setEnableGravity(bool _bEnableGravity);
+		virtual void setMass(float _mass);
 
 		virtual void setGenerateTouchEvent(bool _bEnableTouchEvent);
 
-		virtual void setupCollision() {};
+		virtual void setupPhysicsBody() {};
 
 		Object* getGameObject() { return m_gameObject; }
 		void setGameObject(Object* _gameObject) { m_gameObject = _gameObject; }
+
+		virtual Float32 getMass() const { return m_mass; }
+
+		// Applying forces
+		virtual void AddForceAtPos(const Vector3& globalPos, const Vector3& forceDir, Float32 forceValue, bool bImpulse = false) = 0;
+		virtual void AddForceAtLocalPos(const Vector3& localPos, const Vector3& forceDir, Float32 forceValue, bool bImpulse = false) = 0;
 
 	protected:
 		Object* m_gameObject;
@@ -45,6 +57,7 @@ namespace ZE
 		bool m_bCollisionEnabled;
 		bool m_bTriggerOnly;
 		bool m_bEnableGravity;
+		Float32 m_mass;
 	};
 }
 #endif

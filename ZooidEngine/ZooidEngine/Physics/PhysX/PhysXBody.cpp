@@ -11,7 +11,7 @@ namespace ZE
 		m_physXRigidActor->userData = this;
 	}
 
-	void PhysXBody::setupCollision()
+	void PhysXBody::setupPhysicsBody()
 	{
 		m_filterData.word0 = m_collisionGroup;
 		if (m_bCollisionEnabled)
@@ -46,6 +46,47 @@ namespace ZE
 				shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, true);
 				shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, false);
 			}
+		}
+	}
+
+	void PhysXBody::setMass(Float32 _mass)
+	{
+		IPhysicsBody::setMass(_mass);
+		if (physx::PxRigidDynamic* dyn = (physx::PxRigidDynamic*)(m_physXRigidActor))
+		{
+			dyn->setMass(m_mass);
+		}
+	}
+
+	ZE::Float32 PhysXBody::getMass() const
+	{
+		if (physx::PxRigidDynamic* dyn = (physx::PxRigidDynamic*)(m_physXRigidActor))
+		{
+			return dyn->getMass();
+		}
+
+		return IPhysicsBody::getMass();
+	}
+
+	void PhysXBody::AddForceAtPos(const Vector3& globalPos, const Vector3& forceDir, Float32 forceValue, bool bImpulse /*= false*/)
+	{
+		if (physx::PxRigidBody* rigidBody = (physx::PxRigidBody*)(m_physXRigidActor))
+		{
+			physx::PxVec3 pxGlobalPos(globalPos.getX(), globalPos.getY(), globalPos.getZ());
+			physx::PxVec3 pxForce(forceDir.getX() * forceValue, forceDir.getY() * forceValue, forceDir.getZ() * forceValue);
+			physx::PxForceMode::Enum mode = (bImpulse) ? physx::PxForceMode::eIMPULSE : physx::PxForceMode::eFORCE;
+			physx::PxRigidBodyExt::addForceAtPos(*rigidBody, pxForce, pxGlobalPos, mode);
+		}
+	}
+
+	void PhysXBody::AddForceAtLocalPos(const Vector3& localPos, const Vector3& forceDir, Float32 forceValue, bool bImpulse /*= false*/)
+	{
+		if (physx::PxRigidBody* rigidBody = (physx::PxRigidBody*)(m_physXRigidActor))
+		{
+			physx::PxVec3 pxLocalPos(localPos.getX(), localPos.getY(), localPos.getZ());
+			physx::PxVec3 pxForce(forceDir.getX() * forceValue, forceDir.getY() * forceValue, forceDir.getZ() * forceValue);
+			physx::PxForceMode::Enum mode = (bImpulse) ? physx::PxForceMode::eIMPULSE : physx::PxForceMode::eFORCE;
+			physx::PxRigidBodyExt::addForceAtLocalPos(*rigidBody, pxForce, pxLocalPos, mode);
 		}
 	}
 

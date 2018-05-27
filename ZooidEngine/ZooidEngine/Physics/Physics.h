@@ -44,7 +44,6 @@ namespace ZE
 		PhysicsShape ShapeType;
 
 		Matrix4x4 Transform;
-		Float32 Mass;
 
 		union
 		{
@@ -63,6 +62,8 @@ namespace ZE
 	{
 	public:
 		PhysicsBodySetup() {}
+
+		Float32 Mass;
 
 		Array<PhysicsBodyDesc, true> m_bodies;
 	};

@@ -18,7 +18,7 @@ namespace PhysicsSandBox
 			ZE::Handle h("", sizeof(ControlledComponent));
 			ControlledComponent* controlledComponent = new(h) ControlledComponent(_gameContext);
 			
-			controlledComponent->m_worldTransform.setPos(Vector3(1.0f, 0.5f, 7.0f));
+			controlledComponent->m_worldTransform.setPos(Vector3(0.25f, 0.5f, 7.0f));
 			controlledComponent->setupComponent();
 
 			_gameContext->getRootComponent()->addChild(controlledComponent);

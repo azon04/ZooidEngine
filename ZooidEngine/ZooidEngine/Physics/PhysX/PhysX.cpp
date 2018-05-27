@@ -230,6 +230,7 @@ namespace ZE
 
 		m_physxScene->addActor(*body);
 
+		body->setMass(_setup->Mass);
 		Handle hPhysicsBody("Physics Body", sizeof(PhysXBody));
 		PhysXBody* pPhysicsBody = new(hPhysicsBody) PhysXBody(body);
 

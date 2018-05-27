@@ -209,6 +209,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClInclude Include="Memory\StackAllocator.h" />
     <ClInclude Include="Physics\Physics.h" />
     <ClInclude Include="Physics\PhysicsBody.h" />
+    <ClInclude Include="Physics\PhysicsBodyHolder.h" />
     <ClInclude Include="Physics\PhysicsEvents.h" />
     <ClInclude Include="Physics\PhysicsZooid.h" />
     <ClInclude Include="Physics\PhysX\PhysX.h" />
@@ -298,6 +299,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClCompile Include="Memory\PoolAllocator.cpp" />
     <ClCompile Include="Memory\StackAllocator.cpp" />
     <ClCompile Include="Physics\PhysicsBody.cpp" />
+    <ClCompile Include="Physics\PhysicsBodyHolder.cpp" />
     <ClCompile Include="Physics\PhysicsEvents.cpp" />
     <ClCompile Include="Physics\PhysX\PhysX.cpp" />
     <ClCompile Include="Physics\PhysX\PhysXBody.cpp" />

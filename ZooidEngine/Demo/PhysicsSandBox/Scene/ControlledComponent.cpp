@@ -5,6 +5,7 @@
 
 #include "Physics/Physics.h"
 #include "Physics/PhysicsBody.h"
+#include "Physics/PhysicsBodyHolder.h"
 #include "ZEGameContext.h"
 
 #include "Logging/Log.h"
@@ -39,6 +40,12 @@ namespace PhysicsSandBox
 			if (m_gameContext->getPhysics()->DoLineRaycast(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, m_worldTransform.getPos() - 1.2f * m_worldTransform.getN(), -1 * m_worldTransform.getN(), 20.0f, hit))
 			{
 				ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit %s!", hit.blockComponent->getObjectName());
+				
+				if (hit.blockComponent)
+				{
+					ZE::IPhysicsBodyHolder* pPhysicsBodyHolder = dynamic_cast<ZE::IPhysicsBodyHolder*>(hit.blockComponent);
+					pPhysicsBodyHolder->AddForceAtPos(hit.blockPosition, -1 * m_worldTransform.getN(), 10.0f, true);
+				}
 			}
 		}
 		else if (pRealEvent->m_keyId == 'X')

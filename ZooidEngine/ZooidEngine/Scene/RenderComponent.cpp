@@ -132,9 +132,19 @@ namespace ZE {
 				pPhysicsBody->enableCollisionGroups(COLLISION_STATIC | COLLISION_DYNAMIC);
 				pPhysicsBody->setTriggerOnly(m_bTriggerOnly);
 				pPhysicsBody->setEnableGravity(m_bEnableGravity);
-				pPhysicsBody->setupCollision();
+				pPhysicsBody->setupPhysicsBody();
 			}
 		}
+	}
+
+	bool RenderComponent::hasPhysicsBody()
+	{
+		return hPhysicsBody.isValid();
+	}
+
+	ZE::IPhysicsBody* RenderComponent::getPhysicsBody()
+	{
+		return hPhysicsBody.getObject<IPhysicsBody>();
 	}
 
 }

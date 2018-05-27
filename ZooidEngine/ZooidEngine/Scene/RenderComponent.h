@@ -2,13 +2,15 @@
 #define __ZE_RENDER_COMPONENT__
 
 #include "SceneComponent.h"
+#include "Physics/PhysicsBodyHolder.h"
 
 namespace ZE {
 	
 	class Mesh;
 	class Event;
 
-	class RenderComponent : public SceneComponent {
+	class RenderComponent : public SceneComponent , public IPhysicsBodyHolder
+	{
 		
 		DEFINE_CLASS(RenderComponent)
 
@@ -32,6 +34,10 @@ namespace ZE {
 		void handlePhysicsUpdateTransform(Event* pEvent);
 
 		void setupPhysics();
+
+		// Implement from IPhysicsBodyHolder
+		virtual bool hasPhysicsBody();
+		virtual IPhysicsBody* getPhysicsBody();
 
 		Mesh* m_mesh;
 		bool m_bHighlight;
