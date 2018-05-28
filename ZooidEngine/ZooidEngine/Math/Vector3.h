@@ -21,6 +21,13 @@ public:
 		m_z = _v2.m_z;
 	}
 
+	Vector3(float _data[3])
+	{
+		m_x = _data[0];
+		m_y = _data[1];
+		m_z = _data[2];
+	}
+
 	~Vector3() {}
 
 	// Vector Operation

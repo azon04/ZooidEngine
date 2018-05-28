@@ -13,9 +13,10 @@ namespace ZE {
 		DEFINE_CLASS(Event)
 
 	public:
-		Event() {}
+		Event() : m_bPropagate(true) {}
 		virtual ~Event() {}
 
+		bool m_bPropagate;
 	};
 
 	class Event_UPDATE : public Event

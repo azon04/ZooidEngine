@@ -17,9 +17,9 @@ namespace ZE
 		// TODO init some default debug camera
 		Handle cameraHandle("DEBUG CAMERA", sizeof(DebugCamera));
 		DebugCamera* debugCamera = new(cameraHandle) DebugCamera(_gameContext);
-		debugCamera->m_worldTransform.setPos(Vector3(0.0f, 1.0f, 5.0f));
-		//debugCamera->m_worldTransform.rotateAroundV(DegToRad(15));
-		debugCamera->m_worldTransform.rotateAroundU(DegToRad(-10));
+		debugCamera->m_worldTransform.setPos(Vector3(2.0f, 5.0f, 15.0f));
+		debugCamera->m_worldTransform.rotateAroundV(DegToRad(15));
+		debugCamera->m_worldTransform.rotateAroundU(DegToRad(-15));
 		debugCamera->setupComponent();
 		s_instance->m_currentCamera = debugCamera;
 

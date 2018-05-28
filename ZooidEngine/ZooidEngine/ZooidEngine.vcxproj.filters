@@ -82,6 +82,15 @@
     <Filter Include="Logging">
       <UniqueIdentifier>{8347452e-90d5-4a92-818a-81ae23ee7163}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{bb468680-fc6c-473e-98f0-9da84bcc2230}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\PhysX">
+      <UniqueIdentifier>{f2262f0b-4dd9-44a4-a9aa-6b0cb989f565}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Collision">
+      <UniqueIdentifier>{f9774f21-4f7b-405d-9b14-4ba6c9b045ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ZEngine.h">
@@ -348,6 +357,42 @@
     <ClInclude Include="Math\Vector4.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="Physics\PhysicsZooid.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Physics.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\PhysX\PhysX.h">
+      <Filter>Physics\PhysX</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\PhysX\PhysXZooid.h">
+      <Filter>Physics\PhysX</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\PhysicsBody.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\PhysX\PhysXBody.h">
+      <Filter>Physics\PhysX</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\PhysicsEvents.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Collision\CollisionComponent.h">
+      <Filter>Scene\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Collision\BoxComponent.h">
+      <Filter>Scene\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Collision\SphereComponent.h">
+      <Filter>Scene\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Collision\CapsuleComponent.h">
+      <Filter>Scene\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\PhysicsBodyHolder.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -550,6 +595,36 @@
     </ClCompile>
     <ClCompile Include="ResourceManagers\MeshManager.cpp">
       <Filter>ResourceManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\PhysX\PhysX.cpp">
+      <Filter>Physics\PhysX</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\PhysX\PhysXZooid.cpp">
+      <Filter>Physics\PhysX</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\PhysicsBody.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\PhysX\PhysXBody.cpp">
+      <Filter>Physics\PhysX</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\PhysicsEvents.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Collision\CollisionComponent.cpp">
+      <Filter>Scene\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Collision\BoxComponent.cpp">
+      <Filter>Scene\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Collision\SphereComponent.cpp">
+      <Filter>Scene\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Collision\CapsuleComponent.cpp">
+      <Filter>Scene\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\PhysicsBodyHolder.cpp">
+      <Filter>Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

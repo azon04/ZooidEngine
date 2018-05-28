@@ -1,0 +1,86 @@
+SceneName TestMap
+FileVersion 1.0
+ComponentCount 11
+LightComponent DirLight
+BEGIN
+LightType 0
+R 150.0 0.0 0.0
+END
+RenderComponent Floor
+BEGIN
+Mesh PhysicsSandBox/Mesh/Floor.meshz
+S 20.0 1.0 20.0
+END
+RenderComponent Crate_1
+BEGIN
+Mesh PhysicsSandBox/Mesh/Crate.meshz
+S 1.0 1.0 1.0
+R 0.0 0.0 0.0
+T 0.0 0.5 0.0
+Physics true
+END
+RenderComponent Crate_2
+BEGIN
+Mesh PhysicsSandBox/Mesh/Crate.meshz
+S 1.0 1.0 1.0
+R 0.0 0.0 0.0
+T 0.0 5.0 0.0
+Physics true
+END
+RenderComponent Crate_3
+BEGIN
+Mesh PhysicsSandBox/mesh/Crate.meshz
+S 1.0 1.0 1.0
+R 0.0 0.0 0.0
+T 0.0 1.5 0.0
+Physics true
+END
+RenderComponent Crate_4
+BEGIN
+Mesh PhysicsSandBox/mesh/Crate.meshz
+S 1.0 1.0 1.0
+R 0.0 0.0 0.0
+T 1.0 0.5 0.0
+Physics true
+END
+RenderComponent Crate_5
+BEGIN
+Mesh PhysicsSandBox/mesh/Crate.meshz
+S 1.0 1.0 1.0
+R 0.0 0.0 0.0
+T -1.0 0.5 0.0
+Physics true
+END
+RenderComponent Crate_6
+BEGIN
+Mesh PhysicsSandBox/mesh/Crate.meshz
+S 1.0 1.0 1.0
+R 0.0 0.0 0.0
+T 1.0 0.5 -1.5
+Physics true
+END
+BoxComponent Box_1
+BEGIN
+S 1.0 1.0 1.0
+R 0.0 0.0 0.0
+T -1.0 0.5 2.0
+Extent 0.5 0.5 0.5
+TriggerOnly true
+END
+SphereComponent Sphere_1
+BEGIN
+S 1.0 1.0 1.0
+R 0.0 0.0 0.0
+T 1.0 0.5 2.0
+Radius 1.0
+TriggerOnly true
+END
+CapsuleComponent Capsule_1
+BEGIN
+S 1.0 1.0 1.0
+R 0.0 0.0 0.0
+T 0.0 1.5 3.0
+Radius 0.5
+Height 2.0
+TriggerOnly true
+END

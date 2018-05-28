@@ -14,6 +14,8 @@
 #include "Resources/Mesh.h"
 #include "Resources/Texture.h"
 
+#include "Physics/PhysicsEvents.h"
+
 namespace ZE {
 	void GlobalRegistry::Register()
 	{
@@ -49,6 +51,16 @@ namespace ZE {
 		Event_GATHER_LIGHT::RegClass();
 		Event_GATHER_RENDER::RegClass();
 		Event_RESOURCE_LOADED::RegClass();
+
+		Event_Physics_BASE::RegClass();
+		Event_Physics_ONCOLLIDE::RegClass();
+		Event_Physics_PREUPDATE::RegClass();
+		Event_Physics_UPDATE::RegClass();
+		Event_Physics_POSTUPDATE::RegClass();
+		Event_Physics_UPDATE_TRANSFORM::RegClass();
+		Event_Physics_ON_TRIGGER::RegClass();
+		Event_Physics_ON_BEGIN_TRIGGER::RegClass();
+		Event_Physics_ON_END_TRIGGER::RegClass();
 	}
 
 }

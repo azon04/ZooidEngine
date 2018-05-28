@@ -7,6 +7,9 @@
 #include "Scene/Light/LightComponent.h"
 #include "Scene/RenderComponent.h"
 #include "Scene/CameraComponent.h"
+#include "Collision/BoxComponent.h"
+#include "Collision/SphereComponent.h"
+#include "Collision/CapsuleComponent.h"
 
 #include "Utils/StringFunc.h"
 
@@ -43,6 +46,24 @@ namespace ZE
 		{
 			Handle h("Component", sizeof(CameraComponent));
 			new(h) CameraComponent(m_gameContext);
+			return h;
+		}
+		else if (StringFunc::Compare(componentTypeName, BoxComponent::GetClassName()) == 0)
+		{
+			Handle h("Component", sizeof(BoxComponent));
+			new(h) BoxComponent(m_gameContext);
+			return h;
+		}
+		else if (StringFunc::Compare(componentTypeName, SphereComponent::GetClassName()) == 0)
+		{
+			Handle h("Component", sizeof(SphereComponent));
+			new(h) SphereComponent(m_gameContext);
+			return h;
+		}
+		else if (StringFunc::Compare(componentTypeName, CapsuleComponent::GetClassName()) == 0)
+		{
+			Handle h("Component", sizeof(CapsuleComponent));
+			new(h) CapsuleComponent(m_gameContext);
 			return h;
 		}
 		else
@@ -90,6 +111,7 @@ namespace ZE
 
 		// #TODO component name
 		fileReader->readNextString(buff);
+		pComp->setObjectName(String(buff));
 
 		// BEGIN
 		fileReader->readNextString(buff);
@@ -156,6 +178,50 @@ namespace ZE
 					LoadSceneComponentToComp(fileReader, pComp);
 				}
 			}
+			else if (StringFunc::Compare(buff, "Physics") == 0)
+			{
+				fileReader->readNextString(buff);
+				if (RenderComponent* pRendComp = dynamic_cast<RenderComponent*>(pComp))
+				{
+					pRendComp->m_bStatic = StringFunc::Compare(buff, "true") != 0;
+				}
+			}
+			else if (StringFunc::Compare(buff, "TriggerOnly") == 0)
+			{
+				fileReader->readNextString(buff);
+				if (CollisionComponent* pCollisionComp = dynamic_cast<CollisionComponent*>(pComp))
+				{
+					pCollisionComp->setTrigger(StringFunc::Compare(buff, "true") == 0);
+				}
+			}
+			else if (StringFunc::Compare(buff, "Extent") == 0)
+			{
+				if (BoxComponent* pBoxComponent = dynamic_cast<BoxComponent*>(pComp))
+				{
+					pBoxComponent->m_halfExtent.setX(fileReader->readNextFloat());
+					pBoxComponent->m_halfExtent.setY(fileReader->readNextFloat());
+					pBoxComponent->m_halfExtent.setZ(fileReader->readNextFloat());
+				}
+			}
+			else if (StringFunc::Compare(buff, "Radius") == 0)
+			{
+				if (SphereComponent* pSphereComp = dynamic_cast<SphereComponent*>(pComp))
+				{
+					pSphereComp->m_radius = fileReader->readNextFloat();
+				}
+				else if (CapsuleComponent* pCapsuleComp = dynamic_cast<CapsuleComponent*>(pComp))
+				{
+					pCapsuleComp->m_radius = fileReader->readNextFloat();
+				}
+			}
+			else if (StringFunc::Compare(buff, "Height") == 0)
+			{
+				if (CapsuleComponent* pCapsuleComp = dynamic_cast<CapsuleComponent*>(pComp))
+				{
+					pCapsuleComp->m_height = fileReader->readNextFloat();
+				}
+			}
+
 			fileReader->readNextString(buff);
 		}
 

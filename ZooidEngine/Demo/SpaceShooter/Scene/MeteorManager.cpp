@@ -21,7 +21,7 @@ namespace SpaceShooter
 		{
 			// Spawn Meteor
 			ZE::Handle h("Meteor", sizeof(Meteor));
-			float posY = (rand() % 100) - 50;
+			float posY = (rand() % 100) - 50.0f;
 			Meteor* pMeteor = new(h) Meteor(m_gameContext, Vector3(-10.0f, 0.0f, 0.0f), Vector3(150.0f, posY, 0.0f));
 			pMeteor->setupComponent();
 			addChild(pMeteor);

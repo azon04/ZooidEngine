@@ -71,17 +71,22 @@ namespace ZE {
 
 	void Component::handleEvent(Event* event)
 	{
-		Array<Component*, true>& components = m_eventMap[event->getClassID()];
-		for (int i = 0; i < components.length(); i++)
-		{
-			components[i]->handleEvent(event);
-		}
-
 		// To do check delegates
 		Array<EventDelegate, true>& delegates = m_delegateMap[event->getClassID()];
 		for (int i = 0; i < delegates.length(); i++)
 		{
 			delegates[i].call(event);
+		}
+
+		if (!event->m_bPropagate)
+		{
+			return;
+		}
+
+		Array<Component*, true>& components = m_eventMap[event->getClassID()];
+		for (int i = 0; i < components.length(); i++)
+		{
+			components[i]->handleEvent(event);
 		}
 	}
 

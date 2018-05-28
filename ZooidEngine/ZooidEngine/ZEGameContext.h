@@ -19,6 +19,8 @@ namespace ZE {
 	class InputManager;
 	class IRenderer;
 	class CameraManager;
+	class PhysicsZooid;
+	class IPhysics;
 
 	class GameContext {
 	public:
@@ -27,6 +29,11 @@ namespace ZE {
 
 		RenderZooid* m_renderZooid;
 		IRenderer* m_renderer;
+
+		// Physics
+		PhysicsZooid* m_physicsZooid;
+		IPhysics* m_physics;
+
 		BufferManager* m_bufferManager;
 		ShaderManager* m_shaderManager;
 		DrawList* m_drawList;
@@ -49,6 +56,7 @@ namespace ZE {
 
 		FORCEINLINE RenderZooid* getRenderZooid() const { return m_renderZooid; }
 		FORCEINLINE IRenderer* getRenderer() const { return m_renderer; }
+
 		FORCEINLINE BufferManager* getBufferManager() const { return m_bufferManager; }
 		FORCEINLINE ShaderManager* getShaderManager() const { return m_shaderManager; }
 		FORCEINLINE DrawList* getDrawList() const { return m_drawList; }
@@ -61,6 +69,9 @@ namespace ZE {
 		FORCEINLINE MeshManager* getMeshManager() const { return m_meshManager; }
 		FORCEINLINE SceneManager* getSceneManager() const { return m_sceneManager; }
 
+		// Physics
+		FORCEINLINE PhysicsZooid* getPhysicsZooid() const { return m_physicsZooid; }
+		FORCEINLINE IPhysics* getPhysics() const { return m_physics; }
 	};
 }
 #endif // __ZE_GAME_CONTEXT__

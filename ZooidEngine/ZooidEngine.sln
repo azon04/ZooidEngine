@@ -16,6 +16,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpaceShooter", "Demo\SpaceS
 		{0DFAB8DF-272C-4B1F-B4B1-1182CB68801D} = {0DFAB8DF-272C-4B1F-B4B1-1182CB68801D}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysicsSandBox", "Demo\PhysicsSandBox\PhysicsSandBox.vcxproj", "{1BA5B4D3-CEC5-453A-B18A-05A43A4A166E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0DFAB8DF-272C-4B1F-B4B1-1182CB68801D} = {0DFAB8DF-272C-4B1F-B4B1-1182CB68801D}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -48,6 +53,14 @@ Global
 		{C135D1DC-F334-4497-97A6-AC77E83759BE}.Release|x64.Build.0 = Release|x64
 		{C135D1DC-F334-4497-97A6-AC77E83759BE}.Release|x86.ActiveCfg = Release|Win32
 		{C135D1DC-F334-4497-97A6-AC77E83759BE}.Release|x86.Build.0 = Release|Win32
+		{1BA5B4D3-CEC5-453A-B18A-05A43A4A166E}.Debug|x64.ActiveCfg = Debug|x64
+		{1BA5B4D3-CEC5-453A-B18A-05A43A4A166E}.Debug|x64.Build.0 = Debug|x64
+		{1BA5B4D3-CEC5-453A-B18A-05A43A4A166E}.Debug|x86.ActiveCfg = Debug|Win32
+		{1BA5B4D3-CEC5-453A-B18A-05A43A4A166E}.Debug|x86.Build.0 = Debug|Win32
+		{1BA5B4D3-CEC5-453A-B18A-05A43A4A166E}.Release|x64.ActiveCfg = Release|x64
+		{1BA5B4D3-CEC5-453A-B18A-05A43A4A166E}.Release|x64.Build.0 = Release|x64
+		{1BA5B4D3-CEC5-453A-B18A-05A43A4A166E}.Release|x86.ActiveCfg = Release|Win32
+		{1BA5B4D3-CEC5-453A-B18A-05A43A4A166E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,5 +68,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{C764F814-A223-480C-807A-32E4FCEDDEB7} = {6D7A7765-0253-4B42-9B3A-CF481E0A84E6}
 		{C135D1DC-F334-4497-97A6-AC77E83759BE} = {9BF44113-9F6A-4854-8C94-FB377FFCBD45}
+		{1BA5B4D3-CEC5-453A-B18A-05A43A4A166E} = {9BF44113-9F6A-4854-8C94-FB377FFCBD45}
 	EndGlobalSection
 EndGlobal

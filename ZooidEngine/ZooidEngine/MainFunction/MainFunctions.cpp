@@ -18,6 +18,12 @@
 #include "Renderer/GL/GLRenderZooid.h"
 #endif
 
+#if Z_PHYSICS_PHYSX
+#include "Physics/PhysX/PhysXZooid.h"
+#endif
+
+#include "Physics/Physics.h"
+
 #include "Platform/Thread.h"
 
 namespace ZE {
@@ -111,6 +117,16 @@ namespace ZE {
 			_gameContext->m_inputManager->setupComponent();
 		}
 
+		// Create Physics
+		{
+#if Z_PHYSICS_PHYSX
+			ZEINFO("Initializing Physics...");
+			Handle hPhysXZooidHandle("PhysX Zooid", sizeof(ZE::PhysXZooid));
+			_gameContext->m_physicsZooid = new (hPhysXZooidHandle) ZE::PhysXZooid(_gameContext);
+#endif
+			_gameContext->m_physicsZooid->Init();
+			_gameContext->m_physics = _gameContext->m_physicsZooid->GetPhysics();
+		}
 		ZEINFO("Initializing Camera Manager...");
 		CameraManager::Init(_gameContext);
 		_gameContext->m_cameraManager = CameraManager::GetInstance();
@@ -134,6 +150,9 @@ namespace ZE {
 #endif
 
 		CameraManager::Destroy();
+		
+		_gameContext->m_physicsZooid->Destroy();
+		
 		BufferManager::Destroy();
 		ShaderManager::Destroy();
 		TextureManager::Destroy();
@@ -169,6 +188,14 @@ namespace ZE {
 			handle.release();
 		}
 		_gameContext->getEventDispatcher()->clearEvents(ZE::EVENT_INPUT);
+
+		// Update Physics
+		if (_gameContext->getPhysics())
+		{
+			_gameContext->getPhysics()->PreUpdate();
+			_gameContext->getPhysics()->Update(deltaTime);
+			_gameContext->getPhysics()->PostUpdate();
+		}
 
 #if ZE_RENDER_MULTITHREAD
 		while (g_drawReady) {}
