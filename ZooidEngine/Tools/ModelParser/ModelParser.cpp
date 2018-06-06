@@ -1,8 +1,6 @@
 #include "ModelParser.h"
 
-#include <assimp/Importer.hpp>
 #include <iostream>
-#include <fstream>
 #include <stdio.h>
 
 #include "../Common/Dir.h"
@@ -10,11 +8,15 @@
 namespace ZETools
 {
 
+	ModelParser::~ModelParser()
+	{
+		m_importer.FreeScene();
+	}
+
 	bool ModelParser::loadFile(std::string filePath)
 	{
-		Assimp::Importer import;
-		const aiScene* scene = import.ReadFile(filePath, aiProcess_Triangulate | aiProcess_FlipUVs);
-		
+		const aiScene* scene = m_importer.ReadFile(filePath, aiProcess_Triangulate | aiProcess_FlipUVs);
+
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
 			return false;
@@ -23,7 +25,9 @@ namespace ZETools
 		m_assetDir = filePath.substr(0, filePath.find_last_of(Dir::separator()));
 		m_fileName = filePath.substr(filePath.find_last_of(Dir::separator()));
 
+		processInitialNodes(scene->mRootNode);
 		processNode(scene->mRootNode, scene);
+		processBones(scene->mRootNode);
 
 		return true;
 	}
@@ -37,11 +41,29 @@ namespace ZETools
 		std::string texturePath = Dir::CombinePath(packagePath, "Texture");
 		std::string materialPath = Dir::CombinePath(packagePath, "Material");
 		std::string meshPath = Dir::CombinePath(packagePath, "Mesh");
+		std::string skelPath = Dir::CombinePath(packagePath, "Skeleton");
 
 		Dir::CreateDirectory(getFullPath(outputDir, vertexBufferPath));
 		Dir::CreateDirectory(getFullPath(outputDir, texturePath));
 		Dir::CreateDirectory(getFullPath(outputDir, materialPath));
 		Dir::CreateDirectory(getFullPath(outputDir, meshPath));
+		Dir::CreateDirectory(getFullPath(outputDir, skelPath));
+
+
+		// TODO Create Skel Mesh
+		if(m_bones.size() > 0)
+		{
+			const aiScene* scene = m_importer.GetScene();
+			
+			std::string skeletonFilePath = Dir::CombinePath(skelPath, m_fileName + "_skel.skelz");
+
+			std::ofstream stream;
+			stream.open(getFullPath(outputDir, skeletonFilePath), std::ofstream::out);
+
+			saveBone(scene->mRootNode, stream);
+
+			stream.close();
+		}
 
 		for (unsigned int i = 0; i < m_meshes.size(); i++)
 		{
@@ -167,8 +189,61 @@ namespace ZETools
 					std::cout << "ERROR: Can't create \"" << getFullPath(outputDir, meshFilePath) << "\"" << std::endl;
 				}
 			}
-			
 		}
+
+	}
+
+	void ModelParser::saveBone(aiNode* node, std::ofstream& outStream, int tabNumber)
+	{
+		if (m_boneMarkMap[node])
+		{
+			std::string tab = "";
+			for (int i = 0; i < tabNumber; i++)
+			{
+				tab += "\t";
+			}
+
+			outStream << tab << "Joint " << node->mName.data << std::endl;
+			outStream << tab << "{" << std::endl;
+			// print transform
+			outStream << tab  << "\t" << "Transform ";
+			for (int i = 0; i < 4; i++)
+			{
+				for (int j = 0; j < 4; j++)
+				{
+					outStream << node->mTransformation[j][i] << " ";
+				}
+			}
+			outStream << std::endl;
+
+			// Print Child
+			for (unsigned int i = 0; i < node->mNumChildren; i++)
+			{
+				saveBone(node->mChildren[i], outStream, tabNumber+1);
+			}
+			outStream << tab << "}" << std::endl;
+		}
+		else
+		{
+			// Print Child
+			for (unsigned int i = 0; i < node->mNumChildren; i++)
+			{
+				saveBone(node->mChildren[i], outStream, tabNumber);
+			}
+		}
+	}
+
+	void ModelParser::processInitialNodes(aiNode* node)
+	{
+		m_aiNodes.push_back(node);
+
+		for (unsigned int i = 0; i < node->mNumChildren; i++)
+		{
+			processInitialNodes(node->mChildren[i]);
+		}
+
+		// Mark as no bone
+		m_boneMarkMap[node] = false;
 	}
 
 	void ModelParser::processNode(aiNode* node, const aiScene* scene)
@@ -215,6 +290,21 @@ namespace ZETools
 			}
 
 			outMesh.vertices.push_back(pos);
+		}
+
+		// Vertex Bones if any
+		for (unsigned int i = 0; i < mesh->mNumBones; i++)
+		{
+			aiBone* bone = mesh->mBones[i];
+			processBone(bone, scene);
+			for (unsigned int j = 0; j < bone->mNumWeights; j++)
+			{
+				aiVertexWeight vertexWeight = bone->mWeights[j];
+				VertexBoneWeight outVertexWeight;
+				outVertexWeight.BoneName = bone->mName.data;
+				outVertexWeight.BoneWeight = vertexWeight.mWeight;
+				outMesh.vertexBoneWeightMap[vertexWeight.mVertexId].push_back(outVertexWeight);
+			}
 		}
 
 		// Indices
@@ -267,6 +357,54 @@ namespace ZETools
 		}
 
 		m_meshes.push_back(outMesh);
+	}
+
+	void ModelParser::processBone(aiBone* bone, const aiScene* scene)
+	{
+		std::string boneName = bone->mName.data;
+		aiNode* boneNode = findNodeByName(boneName);
+
+		if (!m_boneMarkMap[boneNode])
+		{
+			m_boneMarkMap[boneNode] = true;
+		}
+	}
+
+	void ModelParser::processBones(aiNode* node)
+	{
+		if (m_boneMarkMap[node])
+		{
+			Bone outBone;
+			outBone.name = node->mName.data;
+			outBone.parentName = m_boneMarkMap[node->mParent] ? node->mParent->mName.data : "";
+			for (unsigned int i = 0; i < 4; i++)
+			{
+				for (unsigned int j = 0; j < 4; j++)
+				{
+					outBone.tranform[i][j] = node->mTransformation[i][j];
+				}
+			}
+
+			m_bones.push_back(outBone);
+			m_boneToIndexMap[outBone.name] = m_bones.size() - 1;
+		}
+
+		for (unsigned int i = 0; i < node->mNumChildren; i++)
+		{
+			processBones(node->mChildren[i]);
+		}
+	}
+
+	aiNode* ModelParser::findNodeByName(std::string name)
+	{
+		for (unsigned int i = 0; i < m_aiNodes.size(); i++)
+		{
+			if (name == m_aiNodes[i]->mName.data)
+			{
+				return m_aiNodes[i];
+			}
+		}
+		return nullptr;
 	}
 
 	std::vector<ZETools::Texture> ModelParser::processTextures(aiMaterial* mat, aiTextureType type)

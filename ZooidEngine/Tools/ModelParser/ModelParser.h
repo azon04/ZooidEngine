@@ -3,9 +3,12 @@
 
 #include <string>
 #include <vector>
+#include <map>
+#include <fstream>
 
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <assimp/Importer.hpp>
 
 namespace ZETools
 {
@@ -14,6 +17,13 @@ namespace ZETools
 		float Position[3];
 		float Normal[3];
 		float TexCoords[2];
+	};
+
+	struct VertexBoneWeight
+	{
+		std::string BoneName;
+		int BoneId;
+		float BoneWeight;
 	};
 
 	enum TextureType
@@ -44,29 +54,55 @@ namespace ZETools
 	{
 		std::string name;
 		std::vector<Vertex> vertices;
+		bool hasBones = false;
+		std::map<int, std::vector<VertexBoneWeight>> vertexBoneWeightMap;
 		std::vector<unsigned int> indices;
 		Material material;
+	};
+
+	struct Bone
+	{
+		std::string name;
+		std::string parentName;
+		float tranform[4][4];
 	};
 
 	class ModelParser
 	{
 	public:
+
+		~ModelParser();
+
 		bool loadFile(std::string filePath);
 		void save(std::string outputDir, std::string packageName);
 		
 	protected:
 
+		void saveBone(aiNode* node, std::ofstream& outStream, int tabNumber = 0);
+
+		void processInitialNodes(aiNode* node);
 		void processNode(aiNode* node, const aiScene* scene);
 		void processMesh(aiMesh* mesh, const aiScene* scene);
+		void processBone(aiBone* bone, const aiScene* scene);
+		void processBones(aiNode* node);
+
+		aiNode* findNodeByName(std::string name);
+
 		std::vector<Texture> processTextures(aiMaterial* mat, aiTextureType type);
 
 		TextureType getTextureType(aiTextureType type);
 		std::string getFullPath(std::string outputDir, std::string path);
 
 	protected:
+		std::vector<aiNode*> m_aiNodes;
+
 		std::string m_assetDir;
 		std::vector<Mesh> m_meshes;
 		std::string m_fileName;
+		std::map<aiNode*, bool> m_boneMarkMap;
+		std::vector<Bone> m_bones;
+		std::map<std::string, unsigned int> m_boneToIndexMap;
+		Assimp::Importer m_importer;
 	};
 }
 #endif

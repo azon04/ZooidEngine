@@ -8,7 +8,7 @@
 #define MAX_COUNT_ADD_POOL 1024
 
 // Max Memory in additional pool is gonna be 2MB
-#define MAX_MEM_ADD_POOL (2 * 1024 * 1024)
+#define MAX_MEM_ADD_POOL (10 * 1024 * 1024)
 
 static unsigned int poolConfig[NPOOL][2] =
 {
@@ -98,7 +98,7 @@ namespace ZE {
 			index++;
 		}
 
-		ZASSERT(index < NPOOL, "Can't find pool for the requested size");
+		//ZASSERT(index < NPOOL, "Can't find pool for the requested size");
 
 		while (index < NPOOL && m_pools[index]->getCountFreeBlock() == 0)
 		{
@@ -131,7 +131,7 @@ namespace ZE {
 				free(m_pAdditionalBlocks[index - NPOOL]);
 				m_pAdditionalBlocks[index - NPOOL] = (void*)malloc(totalSize);
 
-				m_additionalPools[index - NPOOL] = PoolAllocator::constructFromMem(m_pAdditionalBlocks[m_countAddPool], size, poolCount);
+				m_additionalPools[index - NPOOL] = PoolAllocator::constructFromMem(m_pAdditionalBlocks[index - NPOOL], size, poolCount);
 
 				ZELOG(LOG_MEMORY, Log, "Created Additional Memory Pool for %d bytes with %d blocks replacing block on index %d", size, poolCount, index);
 			}

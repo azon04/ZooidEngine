@@ -131,6 +131,17 @@ namespace ZE
 			return *this;
 		}
 
+		bool operator==(const char* text)
+		{
+			return StringFunc::Compare(c_str(), text) == 0;
+		}
+
+		bool operator==(const String& text)
+		{
+			return StringFunc::Compare(const_str(), text.const_str()) == 0;
+		}
+
+		char* const_str() const { return (char*)(m_handle.getObjectConst()); }
 		char* c_str() { return m_handle.getObject<char>(); }
 
 		Int32 length() { return StringFunc::Length(c_str()); }

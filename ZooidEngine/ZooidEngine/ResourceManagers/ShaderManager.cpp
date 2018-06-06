@@ -109,13 +109,11 @@ namespace ZE
 
 	ZE::Handle ShaderManager::loadResource_Internal(const char* resourceFilePath)
 	{
-
 		m_gameContext->getRenderer()->AcquireRenderThreadOwnership();
 
 		Handle hShader = m_gameContext->getRenderZooid()->CreateShader();
 		IShader* pShader = hShader.getObject<IShader>();
 		
-
 		pShader->loadShader(resourceFilePath, getShaderTypeByName(resourceFilePath));
 		
 		m_gameContext->getRenderer()->ReleaseRenderThreadOwnership();

@@ -9,11 +9,13 @@
 #define BUFFER_LAYOUT_V3_TC2 1
 #define BUFFER_LAYOUT_V3_C3_TC2 2
 #define BUFFER_LAYOUT_V3_N3_TC2 3
+#define BUFFER_LAYOUT_V3_N3_TC2_SKIN 4
 
 namespace ZE {
 
 	enum DataType {
-		FLOAT
+		FLOAT,
+		INTEGER
 	};
 
 	struct Layout {
@@ -25,8 +27,17 @@ namespace ZE {
 	};
 
 	class BufferLayout {
+
+	public:
+
+		UInt32 getBufferDataCount() const { return m_bufferDataCount; }
+		UInt32 calculateBufferDataCount();
+
 	public:
 		Array<Layout> m_layouts;
+
+	protected:
+		UInt32 m_bufferDataCount;
 	};
 
 	class BufferLayoutManager {

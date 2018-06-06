@@ -171,6 +171,8 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Animation\Animation.h" />
+    <ClInclude Include="Animation\Skeleton.h" />
     <ClInclude Include="Common\GlobalRegistry.h" />
     <ClInclude Include="Events\EventDispatcher.h" />
     <ClInclude Include="Events\Events.h" />
@@ -237,7 +239,9 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClInclude Include="ResourceManagers\MeshManager.h" />
     <ClInclude Include="ResourceManagers\ResourceManager.h" />
     <ClInclude Include="ResourceManagers\ShaderManager.h" />
+    <ClInclude Include="ResourceManagers\SkeletonManager.h" />
     <ClInclude Include="ResourceManagers\TextureManager.h" />
+    <ClInclude Include="Resources\IResource.h" />
     <ClInclude Include="Resources\Material.h" />
     <ClInclude Include="Resources\Mesh.h" />
     <ClInclude Include="Resources\Texture.h" />
@@ -273,6 +277,8 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClInclude Include="Zooid\BaseZooid.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animation\Animation.cpp" />
+    <ClCompile Include="Animation\Skeleton.cpp" />
     <ClCompile Include="Common\GlobalRegistry.cpp" />
     <ClCompile Include="Events\EventDispatcher.cpp" />
     <ClCompile Include="Events\Events.cpp" />
@@ -325,6 +331,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClCompile Include="ResourceManagers\MeshManager.cpp" />
     <ClCompile Include="ResourceManagers\ResourceManager.cpp" />
     <ClCompile Include="ResourceManagers\ShaderManager.cpp" />
+    <ClCompile Include="ResourceManagers\SkeletonManager.cpp" />
     <ClCompile Include="ResourceManagers\TextureManager.cpp" />
     <ClCompile Include="Resources\Material.cpp" />
     <ClCompile Include="Resources\Mesh.cpp" />

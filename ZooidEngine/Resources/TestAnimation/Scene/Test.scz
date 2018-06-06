@@ -1,0 +1,18 @@
+SceneName TestMap
+FileVersion 1.0
+ComponentCount 3
+LightComponent DirLight
+BEGIN
+LightType 0
+R 150.0 0.0 0.0
+END
+RenderComponent Skin1
+BEGIN
+Mesh TestAnimation/Mesh/Alpha_Joints.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent Skin2
+BEGIN
+Mesh TestAnimation/Mesh/Alpha_Surface.meshz
+S 0.01 0.01 0.01
+END

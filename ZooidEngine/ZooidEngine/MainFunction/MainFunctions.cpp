@@ -26,6 +26,8 @@
 
 #include "Platform/Thread.h"
 
+#include "ResourceManagers/SkeletonManager.h"
+
 namespace ZE {
 
 	ConditionVariable g_drawThreadVariable;
@@ -127,6 +129,10 @@ namespace ZE {
 			_gameContext->m_physicsZooid->Init();
 			_gameContext->m_physics = _gameContext->m_physicsZooid->GetPhysics();
 		}
+
+		ZEINFO("Initializing Skeleton Manager...");
+		SkeletonManager::Init(_gameContext);
+
 		ZEINFO("Initializing Camera Manager...");
 		CameraManager::Init(_gameContext);
 		_gameContext->m_cameraManager = CameraManager::GetInstance();
@@ -156,6 +162,7 @@ namespace ZE {
 		BufferManager::Destroy();
 		ShaderManager::Destroy();
 		TextureManager::Destroy();
+		SkeletonManager::Destroy();
 
 		_gameContext->m_renderZooid->Destroy();
 

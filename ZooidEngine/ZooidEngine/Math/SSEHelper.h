@@ -3,7 +3,7 @@
 #define __ZE_SSE_HELPER_H__
 
 #ifndef  USING_SSE
-#define  USING_SSE 1
+#define  USING_SSE 0
 #endif
 
 #if USING_SSE
