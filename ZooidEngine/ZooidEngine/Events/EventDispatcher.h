@@ -18,7 +18,9 @@ namespace ZE
 	public:
 		EventDispatcher(GameContext* gameContext) :
 			Component(gameContext)
-		{}
+		{
+			setObjectName("EventDispatcher");
+		}
 
 		void addEvent(Handle _eventHandle, EventType _type = EVENT_GENERAL);
 		void clearEvents(EventType _type);

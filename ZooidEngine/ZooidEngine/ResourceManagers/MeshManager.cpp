@@ -139,7 +139,8 @@ namespace ZE
 			if (StringFunc::Compare(tokenBuffer, "vbuff") == 0)
 			{
 				reader.readNextString(tokenBuffer);
-				Handle hVertexBuffer = BufferManager::getInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
+				String path = GetResourcePath(tokenBuffer);
+				Handle hVertexBuffer = BufferManager::getInstance()->loadResource(path.c_str());
 				if (hVertexBuffer.isValid())
 				{
 					pMesh->m_bufferArray = hVertexBuffer.getObject<IGPUBufferArray>();

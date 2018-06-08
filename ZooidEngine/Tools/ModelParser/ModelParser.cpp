@@ -5,6 +5,8 @@
 
 #include "../Common/Dir.h"
 
+#define ANIMATION_SAVE_TIME_FIRST 1
+
 namespace ZETools
 {
 
@@ -15,7 +17,7 @@ namespace ZETools
 
 	bool ModelParser::loadFile(std::string filePath)
 	{
-		const aiScene* scene = m_importer.ReadFile(filePath, aiProcess_Triangulate | aiProcess_FlipUVs);
+		const aiScene* scene = m_importer.ReadFile(filePath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_LimitBoneWeights);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
@@ -24,10 +26,18 @@ namespace ZETools
 
 		m_assetDir = filePath.substr(0, filePath.find_last_of(Dir::separator()));
 		m_fileName = filePath.substr(filePath.find_last_of(Dir::separator()));
+		
+		// Cleaning the filename (remove the extension)
+		m_fileName = m_fileName.substr(0, m_fileName.find_last_of('.'));
 
 		processInitialNodes(scene->mRootNode);
 		processNode(scene->mRootNode, scene);
 		processBones(scene->mRootNode);
+		
+		for (unsigned int i = 0; i < scene->mNumAnimations; i++)
+		{
+			processAnimation(scene->mAnimations[i]);
+		}
 
 		return true;
 	}
@@ -42,12 +52,14 @@ namespace ZETools
 		std::string materialPath = Dir::CombinePath(packagePath, "Material");
 		std::string meshPath = Dir::CombinePath(packagePath, "Mesh");
 		std::string skelPath = Dir::CombinePath(packagePath, "Skeleton");
+		std::string animPath = Dir::CombinePath(packagePath, "Animation");
 
 		Dir::CreateDirectory(getFullPath(outputDir, vertexBufferPath));
 		Dir::CreateDirectory(getFullPath(outputDir, texturePath));
 		Dir::CreateDirectory(getFullPath(outputDir, materialPath));
 		Dir::CreateDirectory(getFullPath(outputDir, meshPath));
 		Dir::CreateDirectory(getFullPath(outputDir, skelPath));
+		Dir::CreateDirectory(getFullPath(outputDir, animPath));
 
 
 		// TODO Create Skel Mesh
@@ -80,13 +92,53 @@ namespace ZETools
 				stream.open(getFullPath(outputDir, vertexFilePath), std::ofstream::out);
 				if (stream.is_open())
 				{
-					stream << "BUFFER_LAYOUT_V3_N3_TC2\n";
+					if (mesh.hasBones)
+					{
+						stream << "BUFFER_LAYOUT_V3_N3_TC2_SKIN\n";
+					}
+					else
+					{
+						stream << "BUFFER_LAYOUT_V3_N3_TC2\n";
+					}
 					stream << mesh.vertices.size() << "\n";
 					for (unsigned int vi = 0; vi < mesh.vertices.size(); vi++)
 					{
 						stream << mesh.vertices[vi].Position[0] << " " << mesh.vertices[vi].Position[1] << " " << mesh.vertices[vi].Position[2] << "\t";
 						stream << mesh.vertices[vi].Normal[0] << " " << mesh.vertices[vi].Normal[1] << " " << mesh.vertices[vi].Normal[2] << "\t";
-						stream << mesh.vertices[vi].TexCoords[0] << " " << mesh.vertices[vi].TexCoords[1] << "\n";
+						stream << mesh.vertices[vi].TexCoords[0] << " " << mesh.vertices[vi].TexCoords[1] << "\t";
+						if (mesh.hasBones)
+						{
+							std::vector<VertexBoneWeight> verticeWeights;
+							if (mesh.vertexBoneWeightMap.find(vi) != mesh.vertexBoneWeightMap.end())
+							{
+								verticeWeights = mesh.vertexBoneWeightMap[vi];
+							}
+
+							for (int bi = 0; bi < 4; bi++)
+							{
+								if (bi < verticeWeights.size())
+								{
+									stream << m_boneToIndexMap[verticeWeights[bi].BoneName] << " ";
+								}
+								else
+								{
+									stream << 0 << " ";
+								}
+							}
+
+							for (int bi = 0; bi < 4; bi++)
+							{
+								if (bi < verticeWeights.size())
+								{
+									stream << verticeWeights[bi].BoneWeight << " ";
+								}
+								else
+								{
+									stream << 0 << " ";
+								}
+							}
+						}
+						stream << "\n";
 					}
 
 					if (mesh.indices.size() > 0)
@@ -191,6 +243,116 @@ namespace ZETools
 			}
 		}
 
+		// Save Animation
+		for (unsigned int i = 0; i < m_animations.size(); i++)
+		{
+			Animation& anim = m_animations[i];
+			
+			std::string animationFilePath = Dir::CombinePath(animPath, m_fileName + "_" + anim.name + ".animz");
+
+			std::ofstream stream;
+			stream.open(getFullPath(outputDir, animationFilePath), std::ofstream::out);
+
+			stream << "Animation " << anim.name << std::endl;
+			stream << "duration " << anim.duration << std::endl;
+			stream << "fps " << anim.tickPerSecond << std::endl;
+
+#if ANIMATION_SAVE_TIME_FIRST
+			for (double time = 0.0; time <= anim.duration; time += 1.0)
+			{
+				stream << "time " << time << std::endl;
+				for (unsigned int nodeIndex = 0; nodeIndex < anim.nodes.size(); nodeIndex++)
+				{
+					AnimationNode& animNode = anim.nodes[nodeIndex];
+					int index = 0;
+					while (index < animNode.keys.size() && animNode.keys[index].time != time)
+					{
+						index++;
+					}
+
+					if (index < animNode.keys.size())
+					{
+						if (animNode.bIsBone)
+						{
+							stream << "bone " << m_boneToIndexMap[animNode.node] << std::endl;
+						}
+						else
+						{
+							stream << "track" << animNode.node << std::endl;
+						}
+
+						AnimationKey& animKey = animNode.keys[index];
+
+						if ((animKey.sqtMask & TRANSLATION_MASK) && (m_settings.animation.sqtMask & TRANSLATION_MASK) )
+						{
+							stream << "T " << animKey.trans[0] << " " << animKey.trans[1] << " " << animKey.trans[2] << std::endl;
+						}
+
+						if ((animKey.sqtMask & QUAT_MASK) && (m_settings.animation.sqtMask & QUAT_MASK))
+						{
+							if (!m_settings.animation.bRecalculateQuatRuntime)
+							{
+								stream << "Q " << animKey.quat[0] << " " << animKey.quat[1] << " " << animKey.quat[2] << " " << animKey.quat[3] << std::endl;
+							}
+							else
+							{
+								stream << "Q3 " << animKey.quat[0] << " " << animKey.quat[1] << " " << animKey.quat[2] << std::endl;
+							}
+						}
+
+						if ((animKey.sqtMask & SCALE_MASK) && (m_settings.animation.sqtMask & SCALE_MASK))
+						{
+							stream << "S " << animKey.scale[0] << " " << animKey.scale[1] << " " << animKey.scale[2] << std::endl;
+						}
+					}
+				}
+			}
+#else
+			for (unsigned int nodeIndex = 0; nodeIndex < anim.nodes.size(); nodeIndex++)
+			{
+				AnimationNode& animNode = anim.nodes[nodeIndex];
+				if (animNode.bIsBone)
+				{
+					stream << "bone " << m_boneToIndexMap[animNode.node] << std::endl;
+				}
+				else
+				{
+					stream << "track" << animNode.node << std::endl;
+				}
+
+				for (unsigned int keyIndex = 0; keyIndex < animNode.keys.size(); keyIndex++)
+				{
+					AnimationKey& animKey = animNode.keys[keyIndex];
+					stream << "time " << animKey.time << std::endl;
+
+					if ((animKey.sqtMask & TRANSLATION_MASK) && (m_settings.animation.sqtMask & TRANSLATION_MASK))
+					{
+						stream << "T " << animKey.trans[0] << " " << animKey.trans[1] << " " << animKey.trans[2] << std::endl;
+					}
+
+					if ((animKey.sqtMask & QUAT_MASK) && (m_settings.animation.sqtMask & QUAT_MASK))
+					{
+						if (!m_settings.animation.bRecalculateQuatRuntime)
+						{
+							stream << "Q " << animKey.quat[0] << " " << animKey.quat[1] << " " << animKey.quat[2] << " " << animKey.quat[3] << std::endl;
+						}
+						else
+						{
+							stream << "Q3 " << animKey.quat[0] << " " << animKey.quat[1] << " " << animKey.quat[2] << std::endl;
+						}
+					}
+
+					if ((animKey.sqtMask & SCALE_MASK) && (m_settings.animation.sqtMask & SCALE_MASK))
+					{
+						stream << "S " << animKey.scale[0] << " " << animKey.scale[1] << " " << animKey.scale[2] << std::endl;
+					}
+				}
+			}
+#endif
+
+			stream.close();
+		}
+
 	}
 
 	void ModelParser::saveBone(aiNode* node, std::ofstream& outStream, int tabNumber)
@@ -292,6 +454,8 @@ namespace ZETools
 			outMesh.vertices.push_back(pos);
 		}
 
+		outMesh.hasBones = mesh->mNumBones > 0;
+
 		// Vertex Bones if any
 		for (unsigned int i = 0; i < mesh->mNumBones; i++)
 		{
@@ -392,6 +556,85 @@ namespace ZETools
 		for (unsigned int i = 0; i < node->mNumChildren; i++)
 		{
 			processBones(node->mChildren[i]);
+		}
+	}
+
+	void ModelParser::processAnimation(aiAnimation* anim)
+	{
+		m_animations.push_back(Animation());
+		Animation& outAnim = m_animations[m_animations.size() - 1];
+		outAnim.name = anim->mName.data;
+		outAnim.duration = anim->mDuration;
+		outAnim.tickPerSecond = anim->mTicksPerSecond;
+
+		for (unsigned int i = 0; i < anim->mNumChannels; i++)
+		{
+			aiNodeAnim* nodeAnim = anim->mChannels[i];
+			outAnim.nodes.push_back(AnimationNode());
+			AnimationNode& outNode = outAnim.nodes[outAnim.nodes.size() - 1];
+			outNode.node = nodeAnim->mNodeName.data;
+			outNode.bIsBone = m_boneToIndexMap.find(outNode.node) != m_boneToIndexMap.end();
+
+			int posIndex = 0;
+			int rotIndex = 0;
+			int scaleIndex = 0;
+			
+			while (posIndex < nodeAnim->mNumPositionKeys ||
+				rotIndex < nodeAnim->mNumRotationKeys ||
+				scaleIndex < nodeAnim->mNumScalingKeys)
+			{
+				double smallestTime = 2 * outAnim.duration;
+				if (posIndex < nodeAnim->mNumPositionKeys)
+				{
+					double localTime = nodeAnim->mPositionKeys[posIndex].mTime;
+					smallestTime = smallestTime < localTime ? smallestTime : localTime;
+				}
+
+				if (rotIndex < nodeAnim->mNumRotationKeys)
+				{
+					double localTime = nodeAnim->mRotationKeys[rotIndex].mTime;
+					smallestTime = smallestTime < localTime ? smallestTime : localTime;
+				}
+
+				if (scaleIndex < nodeAnim->mNumScalingKeys)
+				{
+					double localTime = nodeAnim->mScalingKeys[scaleIndex].mTime;
+					smallestTime = smallestTime < localTime ? smallestTime : localTime;
+				}
+
+				AnimationKey outKey;
+				outKey.time = smallestTime;
+
+				if (posIndex < nodeAnim->mNumPositionKeys && nodeAnim->mPositionKeys[posIndex].mTime == smallestTime)
+				{
+					outKey.sqtMask |= TRANSLATION_MASK;
+					outKey.trans[0] = nodeAnim->mPositionKeys[posIndex].mValue.x;
+					outKey.trans[1] = nodeAnim->mPositionKeys[posIndex].mValue.y;
+					outKey.trans[2] = nodeAnim->mPositionKeys[posIndex].mValue.z;
+					posIndex++;
+				}
+
+				if (rotIndex < nodeAnim->mNumRotationKeys && nodeAnim->mRotationKeys[rotIndex].mTime == smallestTime)
+				{
+					outKey.sqtMask |= QUAT_MASK;
+					outKey.quat[0] = nodeAnim->mRotationKeys[rotIndex].mValue.x;
+					outKey.quat[1] = nodeAnim->mRotationKeys[rotIndex].mValue.y;
+					outKey.quat[2] = nodeAnim->mRotationKeys[rotIndex].mValue.z;
+					outKey.quat[3] = nodeAnim->mRotationKeys[rotIndex].mValue.w;
+					rotIndex++;
+				}
+
+				if (scaleIndex < nodeAnim->mNumScalingKeys && nodeAnim->mScalingKeys[scaleIndex].mTime == smallestTime)
+				{
+					outKey.sqtMask |= SCALE_MASK;
+					outKey.scale[0] = nodeAnim->mScalingKeys[scaleIndex].mValue.x;
+					outKey.scale[1] = nodeAnim->mScalingKeys[scaleIndex].mValue.y;
+					outKey.scale[2] = nodeAnim->mScalingKeys[scaleIndex].mValue.z;
+					scaleIndex++;
+				}
+
+				outNode.keys.push_back(outKey);
+			}
 		}
 	}
 

@@ -93,6 +93,7 @@ namespace ZE {
 			ZEINFO("Initializing Event Dispatcher...");
 			Handle handle("EventDispatcher", sizeof(EventDispatcher));
 			_gameContext->m_mainEventDispatcher = new(handle) EventDispatcher(_gameContext);
+			_gameContext->m_mainEventDispatcher->setupComponent();
 		}
 
 		// Create Root Component and add is as child of Event Dispatcher
@@ -101,6 +102,7 @@ namespace ZE {
 			Handle handle("RootComponent", sizeof(SceneComponent));
 			_gameContext->m_rootComponent = new (handle) SceneComponent(_gameContext);
 			_gameContext->getEventDispatcher()->addChild(_gameContext->m_rootComponent);
+			_gameContext->m_rootComponent->setObjectName("Root Component");
 			_gameContext->m_rootComponent->setupComponent();
 		}
 
@@ -116,6 +118,7 @@ namespace ZE {
 			ZEINFO("Initializing Input Manager...");
 			Handle handle("InputManager", sizeof(InputManager));
 			_gameContext->m_inputManager = new (handle) InputManager(_gameContext);
+			_gameContext->m_inputManager->setObjectName("InputManager");
 			_gameContext->m_inputManager->setupComponent();
 		}
 

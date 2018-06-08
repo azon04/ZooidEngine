@@ -685,5 +685,8 @@
     <None Include="Shaders\DefaultGLSimpleLit_Blend.frag">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="Shaders\DefaultGLSimpleLitSkin.vs">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

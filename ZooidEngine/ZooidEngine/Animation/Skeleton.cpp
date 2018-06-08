@@ -53,6 +53,12 @@ namespace ZE
 		FileReader fileReader;
 		fileReader.open(filePath);
 
+		if (!fileReader.isValid())
+		{
+			ZEWARNING("Mesh file not found : %s", filePath);
+			return;
+		}
+
 		char buffer[56];
 		fileReader.readNextString(buffer);
 		if (StringFunc::Compare(buffer, "Joint") == 0)

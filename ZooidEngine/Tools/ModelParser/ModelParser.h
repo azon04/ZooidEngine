@@ -10,6 +10,10 @@
 #include <assimp/postprocess.h>
 #include <assimp/Importer.hpp>
 
+#define SCALE_MASK (1 << 2)
+#define QUAT_MASK (1 << 1)
+#define TRANSLATION_MASK (1 << 0)
+
 namespace ZETools
 {
 	struct Vertex
@@ -67,6 +71,39 @@ namespace ZETools
 		float tranform[4][4];
 	};
 
+	struct AnimationKey
+	{
+		double time;
+
+		short sqtMask = 0;
+		float scale[3];
+		float quat[4];
+		float trans[3];
+	};
+
+	struct AnimationNode
+	{
+		std::string node;
+		bool bIsBone;
+		std::vector<AnimationKey> keys;
+	};
+
+	struct Animation
+	{
+		std::string name;
+		double duration;
+		double tickPerSecond;
+		std::vector<AnimationNode> nodes;
+	};
+
+	struct ModelParserSettings
+	{
+		struct Animation {
+			short sqtMask = TRANSLATION_MASK | SCALE_MASK | QUAT_MASK;
+			bool bRecalculateQuatRuntime = false;
+		} animation;
+	};
+
 	class ModelParser
 	{
 	public:
@@ -76,6 +113,11 @@ namespace ZETools
 		bool loadFile(std::string filePath);
 		void save(std::string outputDir, std::string packageName);
 		
+		void setSettings(const ModelParserSettings& _settings)
+		{
+			m_settings = _settings;
+		}
+
 	protected:
 
 		void saveBone(aiNode* node, std::ofstream& outStream, int tabNumber = 0);
@@ -85,6 +127,8 @@ namespace ZETools
 		void processMesh(aiMesh* mesh, const aiScene* scene);
 		void processBone(aiBone* bone, const aiScene* scene);
 		void processBones(aiNode* node);
+		void processAnimation(aiAnimation* anim);
+		
 
 		aiNode* findNodeByName(std::string name);
 
@@ -102,7 +146,10 @@ namespace ZETools
 		std::map<aiNode*, bool> m_boneMarkMap;
 		std::vector<Bone> m_bones;
 		std::map<std::string, unsigned int> m_boneToIndexMap;
+		std::vector<Animation> m_animations;
 		Assimp::Importer m_importer;
+
+		ModelParserSettings m_settings;
 	};
 }
 #endif

@@ -1,0 +1,208 @@
+Joint mixamorig:Hips
+{
+	Transform 1 0 0 0 0 1 0 0 0 0 1 0 0 99.6721 0.247052 1 
+	Joint mixamorig:Spine
+	{
+		Transform 1 0 0 0 0 1 0 0 0 0 1 0 5.64832e-07 9.92346 -1.22733 1 
+		Joint mixamorig:Spine1
+		{
+			Transform 1 0 0 0 0 1 0 0 0 0 1 0 -0.000138865 11.6454 -1.42234 1 
+			Joint mixamorig:Spine2
+			{
+				Transform 1 0 0 0 0 1 0 0 0 0 1 0 9.14407e-05 13.3602 -1.62646 1 
+				Joint mixamorig:Neck
+				{
+					Transform 1 0 0 0 0 1 0 0 0 0 1 0 2.52021e-05 15.0325 0.792905 1 
+					Joint mixamorig:Head
+					{
+						Transform 1 0 0 0 0 1 0 0 0 0 1 0 2.37075e-06 10.3218 3.14243 1 
+					}
+				}
+				Joint mixamorig:LeftShoulder
+				{
+					Transform 1 0 0 0 0 1 0 0 0 0 1 0 6.10582 9.11042 0.705551 1 
+					Joint mixamorig:LeftArm
+					{
+						Transform 1 0 0 0 0 1 0 0 0 0 1 0 12.655 -0.265934 -2.60092 1 
+						Joint mixamorig:LeftForeArm
+						{
+							Transform 1 0 0 0 0 1 0 0 0 0 1 0 27.4047 3.91267e-05 6.58811e-06 1 
+							Joint mixamorig:LeftHand
+							{
+								Transform 1 0 0 0 0 1 0 0 0 0 1 0 27.6145 2.89518e-05 1.96466e-05 1 
+								Joint mixamorig:LeftHandMiddle1
+								{
+									Transform 1 0 0 0 0 1 0 0 0 0 1 0 12.7755 1.3342e-05 2.04185e-05 1 
+									Joint mixamorig:LeftHandMiddle2
+									{
+										Transform 1 0 0 0 0 1 0 0 0 0 1 0 3.61397 2.66014e-06 2.46236e-06 1 
+										Joint mixamorig:LeftHandMiddle3
+										{
+											Transform 1 0 0 0 0 1 0 0 0 0 1 0 3.45976 5.43247e-07 -2.64197e-05 1 
+										}
+									}
+								}
+								Joint mixamorig:LeftHandThumb1
+								{
+									Transform 1 0 0 0 0 1 0 0 0 0 1 0 3.78881 -2.167 3.00309 1 
+									Joint mixamorig:LeftHandThumb2
+									{
+										Transform 1 0 0 0 0 1 0 0 0 0 1 0 3.67544 -2.12201 2.12201 1 
+										Joint mixamorig:LeftHandThumb3
+										{
+											Transform 1 0 0 0 0 1 0 0 0 0 1 0 3.39436 -1.95974 1.95979 1 
+										}
+									}
+								}
+								Joint mixamorig:LeftHandIndex1
+								{
+									Transform 1 0 0 0 0 1 0 0 0 0 1 0 12.2666 -0.231669 2.82206 1 
+									Joint mixamorig:LeftHandIndex2
+									{
+										Transform 1 0 0 0 0 1 0 0 0 0 1 0 3.89197 1.68687e-06 3.87215e-05 1 
+										Joint mixamorig:LeftHandIndex3
+										{
+											Transform 1 0 0 0 0 1 0 0 0 0 1 0 3.41516 5.74911e-07 -8.77053e-06 1 
+										}
+									}
+								}
+								Joint mixamorig:LeftHandRing1
+								{
+									Transform 1 0 0 0 0 1 0 0 0 0 1 0 12.147 0.00989498 -2.21663 1 
+									Joint mixamorig:LeftHandRing2
+									{
+										Transform 1 0 0 0 0 1 0 0 0 0 1 0 3.60119 1.51294e-06 3.51122e-05 1 
+										Joint mixamorig:LeftHandRing3
+										{
+											Transform 1 0 0 0 0 1 0 0 0 0 1 0 3.30732 4.53174e-06 -2.08933e-05 1 
+										}
+									}
+								}
+								Joint mixamorig:LeftHandPinky1
+								{
+									Transform 1 0 0 0 0 1 0 0 0 0 1 0 10.9082 -0.226365 -4.72582 1 
+									Joint mixamorig:LeftHandPinky2
+									{
+										Transform 1 0 0 0 0 1 0 0 0 0 1 0 4.13665 2.29995e-06 2.68984e-05 1 
+										Joint mixamorig:LeftHandPinky3
+										{
+											Transform 1 0 0 0 0 1 0 0 0 0 1 0 2.59484 5.93904e-08 -3.6009e-05 1 
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				Joint mixamorig:RightShoulder
+				{
+					Transform 1 0 0 0 0 1 0 0 0 0 1 0 -6.1057 9.11051 0.705563 1 
+					Joint mixamorig:RightArm
+					{
+						Transform 1 0 0 0 0 1 0 0 0 0 1 0 -12.655 -0.266021 -2.6009 1 
+						Joint mixamorig:RightForeArm
+						{
+							Transform 1 0 0 0 0 1 0 0 0 0 1 0 -27.4047 3.28841e-05 5.27564e-06 1 
+							Joint mixamorig:RightHand
+							{
+								Transform 1 0 0 0 0 1 0 0 0 0 1 0 -27.6145 2.26615e-05 1.83241e-05 1 
+								Joint mixamorig:RightHandMiddle1
+								{
+									Transform 1 0 0 0 0 1 0 0 0 0 1 0 -12.7755 8.94577e-06 1.80116e-05 1 
+									Joint mixamorig:RightHandMiddle2
+									{
+										Transform 1 0 0 0 0 1 0 0 0 0 1 0 -3.61397 2.7565e-06 3.08034e-06 1 
+										Joint mixamorig:RightHandMiddle3
+										{
+											Transform 1 0 0 0 0 1 0 0 0 0 1 0 -3.45976 -1.97218e-07 -2.64579e-05 1 
+										}
+									}
+								}
+								Joint mixamorig:RightHandThumb1
+								{
+									Transform 1 0 0 0 0 1 0 0 0 0 1 0 -3.78881 -2.167 3.00309 1 
+									Joint mixamorig:RightHandThumb2
+									{
+										Transform 1 0 0 0 0 1 0 0 0 0 1 0 -3.67544 -2.12201 2.12201 1 
+										Joint mixamorig:RightHandThumb3
+										{
+											Transform 1 0 0 0 0 1 0 0 0 0 1 0 -3.39436 -1.95975 1.95979 1 
+										}
+									}
+								}
+								Joint mixamorig:RightHandIndex1
+								{
+									Transform 1 0 0 0 0 1 0 0 0 0 1 0 -12.2666 -0.231673 2.82206 1 
+									Joint mixamorig:RightHandIndex2
+									{
+										Transform 1 0 0 0 0 1 0 0 0 0 1 0 -3.89197 -7.20555e-08 3.7513e-05 1 
+										Joint mixamorig:RightHandIndex3
+										{
+											Transform 1 0 0 0 0 1 0 0 0 0 1 0 -3.41516 2.52991e-07 -8.60584e-06 1 
+										}
+									}
+								}
+								Joint mixamorig:RightHandRing1
+								{
+									Transform 1 0 0 0 0 1 0 0 0 0 1 0 -12.147 0.0098909 -2.21663 1 
+									Joint mixamorig:RightHandRing2
+									{
+										Transform 1 0 0 0 0 1 0 0 0 0 1 0 -3.60119 2.38565e-07 3.4867e-05 1 
+										Joint mixamorig:RightHandRing3
+										{
+											Transform 1 0 0 0 0 1 0 0 0 0 1 0 -3.30732 3.76018e-06 -2.11146e-05 1 
+										}
+									}
+								}
+								Joint mixamorig:RightHandPinky1
+								{
+									Transform 1 0 0 0 0 1 0 0 0 0 1 0 -10.9082 -0.226369 -4.72582 1 
+									Joint mixamorig:RightHandPinky2
+									{
+										Transform 1 0 0 0 0 1 0 0 0 0 1 0 -4.13665 4.31063e-07 2.56096e-05 1 
+										Joint mixamorig:RightHandPinky3
+										{
+											Transform 1 0 0 0 0 1 0 0 0 0 1 0 -2.59484 -9.57149e-07 -3.66612e-05 1 
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	Joint mixamorig:RightUpLeg
+	{
+		Transform 1 0 0 0 0 1 0 0 0 0 1 0 -9.12445 -6.6564 -0.0553779 1 
+		Joint mixamorig:RightLeg
+		{
+			Transform 1 0 0 0 0 1 0 0 0 0 1 0 -0.24468 -40.5954 -0.514528 1 
+			Joint mixamorig:RightFoot
+			{
+				Transform 1 0 0 0 0 1 0 0 0 0 1 0 0.244669 -42.0479 -2.06023 1 
+				Joint mixamorig:RightToeBase
+				{
+					Transform 1 0 0 0 0 1 0 0 0 0 1 0 -0.37336 -10.4922 12.6407 1 
+				}
+			}
+		}
+	}
+	Joint mixamorig:LeftUpLeg
+	{
+		Transform 1 0 0 0 0 1 0 0 0 0 1 0 9.12445 -6.6564 -0.0553779 1 
+		Joint mixamorig:LeftLeg
+		{
+			Transform 1 0 0 0 0 1 0 0 0 0 1 0 0.24468 -40.5954 -0.517041 1 
+			Joint mixamorig:LeftFoot
+			{
+				Transform 1 0 0 0 0 1 0 0 0 0 1 0 -0.24467 -42.048 -2.05764 1 
+				Joint mixamorig:LeftToeBase
+				{
+					Transform 1 0 0 0 0 1 0 0 0 0 1 0 0.37336 -10.4922 12.6407 1 
+				}
+			}
+		}
+	}
+}

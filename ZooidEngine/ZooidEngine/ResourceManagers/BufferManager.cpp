@@ -13,6 +13,15 @@ namespace ZE {
 
 	IMPLEMENT_CLASS_1(BufferManager, ResourceManager)
 
+	struct MeshSkinData
+	{
+		Float32 Position[3];
+		Float32 Normal[3];
+		Float32 TexCoord[2];
+		Int32 BoneIDs[4];
+		Float32 BoneWeights[4];
+	};
+
 	BufferManager* BufferManager::m_instance = NULL;
 
 	BufferManager::BufferManager(GameContext* _gameContext) : m_gameContext(_gameContext)
@@ -231,34 +240,71 @@ namespace ZE {
 			return Handle();
 		}
 
-		int dataPerVertex = 6;
-		switch (bufferLayoutType)
-		{
-		case BUFFER_LAYOUT_V3_C3:
-			dataPerVertex = 6;
-			break;
-		case BUFFER_LAYOUT_V3_N3_TC2:
-			dataPerVertex = 8;
-			break;
-		default:
-			break;
-		}
-
-		int numVertex = fileReader.readNextInt();
-		int totalSize = dataPerVertex * numVertex;
-		
-		Handle dataHandle("Data", sizeof(Float32) * totalSize);
-		Float32* pData = new(dataHandle) Float32[totalSize];
-
-		for (int i = 0; i < totalSize; ++i)
-		{
-			pData[i] = fileReader.readNextFloat();
-		}
-
 		Handle hVertexBufferData("Buffer Data", sizeof(BufferData));
 		BufferData* pVertexBuffer = new(hVertexBufferData) BufferData(VERTEX_BUFFER);
-		pVertexBuffer->SetData(pData, sizeof(Float32) * dataPerVertex, numVertex);
 		pVertexBuffer->m_bufferLayout = bufferLayoutType;
+
+		int numVertex = fileReader.readNextInt();
+		
+		Handle dataHandle;
+
+		if (bufferLayoutType == BUFFER_LAYOUT_V3_N3_TC2_SKIN)
+		{
+			dataHandle = Handle("Data", sizeof(MeshSkinData) * numVertex);
+			MeshSkinData* pData = new(dataHandle) MeshSkinData[numVertex];
+
+			for (int i = 0; i < numVertex; i++)
+			{
+				pData[i].Position[0] = fileReader.readNextFloat();
+				pData[i].Position[1] = fileReader.readNextFloat();
+				pData[i].Position[2] = fileReader.readNextFloat();
+				pData[i].Normal[0] = fileReader.readNextFloat();
+				pData[i].Normal[1] = fileReader.readNextFloat();
+				pData[i].Normal[2] = fileReader.readNextFloat();
+				pData[i].TexCoord[0] = fileReader.readNextFloat();
+				pData[i].TexCoord[1] = fileReader.readNextFloat();
+				pData[i].BoneIDs[0] = fileReader.readNextInt();
+				pData[i].BoneIDs[1] = fileReader.readNextInt();
+				pData[i].BoneIDs[2] = fileReader.readNextInt();
+				pData[i].BoneIDs[3] = fileReader.readNextInt();
+				pData[i].BoneWeights[0] = fileReader.readNextFloat();
+				pData[i].BoneWeights[1] = fileReader.readNextFloat();
+				pData[i].BoneWeights[2] = fileReader.readNextFloat();
+				pData[i].BoneWeights[3] = fileReader.readNextFloat();
+			}
+
+			pVertexBuffer->SetData(pData, sizeof(MeshSkinData), numVertex);
+		}
+		else
+		{
+			int dataPerVertex = 6;
+			switch (bufferLayoutType)
+			{
+			case BUFFER_LAYOUT_V3_C3:
+				dataPerVertex = 6;
+				break;
+			case BUFFER_LAYOUT_V3_N3_TC2:
+				dataPerVertex = 8;
+				break;
+			case BUFFER_LAYOUT_V3_N3_TC2_SKIN:
+				dataPerVertex = 16;
+				break;
+			default:
+				break;
+			}
+
+			int totalSize = dataPerVertex * numVertex;
+
+			dataHandle = Handle("Data", sizeof(Float32) * totalSize);
+			Float32* pData = new(dataHandle) Float32[totalSize];
+
+			for (int i = 0; i < totalSize; ++i)
+			{
+				pData[i] = fileReader.readNextFloat();
+			}
+			pVertexBuffer->SetData(pData, sizeof(Float32) * dataPerVertex, numVertex);
+		}
+		
 
 		// READ OPTIONAL INDEX BUFFER
 		Handle hIndexBufferData("Buffer Data", sizeof(BufferData));
@@ -325,6 +371,7 @@ namespace ZE {
 	{
 		COMPARE_RETURN(stringType, BUFFER_LAYOUT_V3_C3);
 		COMPARE_RETURN(stringType, BUFFER_LAYOUT_V3_N3_TC2);
+		COMPARE_RETURN(stringType, BUFFER_LAYOUT_V3_N3_TC2_SKIN);
 		return -1;
 	}
 

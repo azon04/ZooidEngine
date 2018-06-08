@@ -364,6 +364,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <None Include="Shaders\DefaultGLSimpleColor.frag" />
     <None Include="Shaders\DefaultGLSimpleLit.frag" />
     <None Include="Shaders\DefaultGLSimpleLit.vs" />
+    <None Include="Shaders\DefaultGLSimpleLitSkin.vs" />
     <None Include="Shaders\DefaultGLSimpleLit_Blend.frag" />
     <None Include="Shaders\DefaultHighlightSimple.frag" />
     <None Include="Shaders\DefaultHighlightSimple.vs" />

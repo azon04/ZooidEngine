@@ -31,16 +31,17 @@ namespace ZE
 		s_instance = new(handle) ShaderManager;
 		s_instance->m_gameContext = _gameContext;
 
-		s_instance->loadResourceAsync("ZooidEngine/Shaders/DefaultGLSimple.vs");
-		s_instance->loadResourceAsync("ZooidEngine/Shaders/TestGLVertexShader.vs");
-		s_instance->loadResourceAsync("ZooidEngine/Shaders/TestGLFragmentShader.frag");
-		s_instance->loadResourceAsync("ZooidEngine/Shaders/DefaultGLSimple.frag");
-		s_instance->loadResourceAsync("ZooidEngine/Shaders/DefaultGLSimpleColor.frag");
-		s_instance->loadResourceAsync("ZooidEngine/Shaders/DefaultGLSimpleLit.vs");
-		s_instance->loadResourceAsync("ZooidEngine/Shaders/DefaultGLSimpleLit.frag");
-		s_instance->loadResourceAsync("ZooidEngine/Shaders/DefaultGLSimpleLit_Blend.frag");
-		s_instance->loadResourceAsync("ZooidEngine/Shaders/DefaultHighlightSimple.vs");
-		s_instance->loadResourceAsync("ZooidEngine/Shaders/DefaultHighlightSimple.frag");
+		s_instance->loadResource("ZooidEngine/Shaders/DefaultGLSimple.vs");
+		s_instance->loadResource("ZooidEngine/Shaders/TestGLVertexShader.vs");
+		s_instance->loadResource("ZooidEngine/Shaders/TestGLFragmentShader.frag");
+		s_instance->loadResource("ZooidEngine/Shaders/DefaultGLSimple.frag");
+		s_instance->loadResource("ZooidEngine/Shaders/DefaultGLSimpleColor.frag");
+		s_instance->loadResource("ZooidEngine/Shaders/DefaultGLSimpleLit.vs");
+		s_instance->loadResource("ZooidEngine/Shaders/DefaultGLSimpleLit.frag");
+		s_instance->loadResource("ZooidEngine/Shaders/DefaultGLSimpleLit_Blend.frag");
+		s_instance->loadResource("ZooidEngine/Shaders/DefaultHighlightSimple.vs");
+		s_instance->loadResource("ZooidEngine/Shaders/DefaultHighlightSimple.frag");
+		s_instance->loadResource("ZooidEngine/Shaders/DefaultGLSimpleLitSkin.vs");
 
 		s_instance->loadAllResource();
 
@@ -87,6 +88,13 @@ namespace ZE
 			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
 			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
 			shaderChain->MakeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultHighlightSimple.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultHighlightSimple.frag"), nullptr, nullptr);
+			s_instance->m_shaderChain.push_back(shaderChain);
+		}
+
+		{
+			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
+			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
+			shaderChain->MakeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLitSkin.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLit.frag"), nullptr, nullptr);
 			s_instance->m_shaderChain.push_back(shaderChain);
 		}
 
