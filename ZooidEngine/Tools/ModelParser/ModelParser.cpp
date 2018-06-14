@@ -25,7 +25,7 @@ namespace ZETools
 		}
 
 		m_assetDir = filePath.substr(0, filePath.find_last_of(Dir::separator()));
-		m_fileName = filePath.substr(filePath.find_last_of(Dir::separator()));
+		m_fileName = filePath.substr(filePath.find_last_of(Dir::separator()) + 1);
 		
 		// Cleaning the filename (remove the extension)
 		m_fileName = m_fileName.substr(0, m_fileName.find_last_of('.'));
@@ -63,12 +63,11 @@ namespace ZETools
 
 
 		// TODO Create Skel Mesh
+		std::string skeletonFilePath = Dir::CombinePath(skelPath, m_fileName + "_skel.skelz");
 		if(m_bones.size() > 0)
 		{
 			const aiScene* scene = m_importer.GetScene();
 			
-			std::string skeletonFilePath = Dir::CombinePath(skelPath, m_fileName + "_skel.skelz");
-
 			std::ofstream stream;
 			stream.open(getFullPath(outputDir, skeletonFilePath), std::ofstream::out);
 
@@ -233,7 +232,10 @@ namespace ZETools
 				{
 					stream << "vbuff " << vertexFilePath << std::endl;
 					stream << "mat " << matFilePath << std::endl;
-
+					if (mesh.hasBones)
+					{
+						stream << "skeleton " << skeletonFilePath << std::endl;
+					}
 					stream.close();
 				}
 				else
@@ -253,13 +255,20 @@ namespace ZETools
 			std::ofstream stream;
 			stream.open(getFullPath(outputDir, animationFilePath), std::ofstream::out);
 
-			stream << "Animation " << anim.name << std::endl;
+			stream << "AnimationClip " << anim.name << std::endl;
 			stream << "duration " << anim.duration << std::endl;
 			stream << "fps " << anim.tickPerSecond << std::endl;
+
+			if (anim.hasSkeleton)
+			{
+				stream << "skeleton " << skeletonFilePath  << std::endl;
+			}
 
 #if ANIMATION_SAVE_TIME_FIRST
 			for (double time = 0.0; time <= anim.duration; time += 1.0)
 			{
+				std::map <unsigned int, AnimationNode*> boneIndexToNodeMap;
+
 				stream << "time " << time << std::endl;
 				for (unsigned int nodeIndex = 0; nodeIndex < anim.nodes.size(); nodeIndex++)
 				{
@@ -274,35 +283,45 @@ namespace ZETools
 					{
 						if (animNode.bIsBone)
 						{
-							stream << "bone " << m_boneToIndexMap[animNode.node] << std::endl;
+							boneIndexToNodeMap[animNode.boneIndex] = &animNode;
+							continue;
 						}
 						else
 						{
-							stream << "track" << animNode.node << std::endl;
+							stream << "track " << animNode.nodeName << std::endl;
 						}
 
 						AnimationKey& animKey = animNode.keys[index];
 
-						if ((animKey.sqtMask & TRANSLATION_MASK) && (m_settings.animation.sqtMask & TRANSLATION_MASK) )
+						saveAnimationKey(animKey, stream);
+					}
+				}
+
+				for (unsigned int i = 0; i < m_bones.size(); i++)
+				{
+					if (boneIndexToNodeMap.find(i) != boneIndexToNodeMap.end())
+					{
+						AnimationNode& animNode = *boneIndexToNodeMap[i];
+						int index = 0;
+						while (index < animNode.keys.size() && animNode.keys[index].time != time)
 						{
-							stream << "T " << animKey.trans[0] << " " << animKey.trans[1] << " " << animKey.trans[2] << std::endl;
+							index++;
 						}
 
-						if ((animKey.sqtMask & QUAT_MASK) && (m_settings.animation.sqtMask & QUAT_MASK))
+						if (index < animNode.keys.size())
 						{
-							if (!m_settings.animation.bRecalculateQuatRuntime)
+							if (animNode.bIsBone)
 							{
-								stream << "Q " << animKey.quat[0] << " " << animKey.quat[1] << " " << animKey.quat[2] << " " << animKey.quat[3] << std::endl;
+								stream << "bone " << animNode.boneIndex << std::endl;
 							}
 							else
 							{
-								stream << "Q3 " << animKey.quat[0] << " " << animKey.quat[1] << " " << animKey.quat[2] << std::endl;
+								stream << "track " << animNode.nodeName << std::endl;
 							}
-						}
 
-						if ((animKey.sqtMask & SCALE_MASK) && (m_settings.animation.sqtMask & SCALE_MASK))
-						{
-							stream << "S " << animKey.scale[0] << " " << animKey.scale[1] << " " << animKey.scale[2] << std::endl;
+							AnimationKey& animKey = animNode.keys[index];
+
+							saveAnimationKey(animKey, stream);
 						}
 					}
 				}
@@ -313,11 +332,11 @@ namespace ZETools
 				AnimationNode& animNode = anim.nodes[nodeIndex];
 				if (animNode.bIsBone)
 				{
-					stream << "bone " << m_boneToIndexMap[animNode.node] << std::endl;
+					stream << "bone " << m_boneToIndexMap[animNode.nodeName] << std::endl;
 				}
 				else
 				{
-					stream << "track" << animNode.node << std::endl;
+					stream << "track " << animNode.nodeName << std::endl;
 				}
 
 				for (unsigned int keyIndex = 0; keyIndex < animNode.keys.size(); keyIndex++)
@@ -325,27 +344,7 @@ namespace ZETools
 					AnimationKey& animKey = animNode.keys[keyIndex];
 					stream << "time " << animKey.time << std::endl;
 
-					if ((animKey.sqtMask & TRANSLATION_MASK) && (m_settings.animation.sqtMask & TRANSLATION_MASK))
-					{
-						stream << "T " << animKey.trans[0] << " " << animKey.trans[1] << " " << animKey.trans[2] << std::endl;
-					}
-
-					if ((animKey.sqtMask & QUAT_MASK) && (m_settings.animation.sqtMask & QUAT_MASK))
-					{
-						if (!m_settings.animation.bRecalculateQuatRuntime)
-						{
-							stream << "Q " << animKey.quat[0] << " " << animKey.quat[1] << " " << animKey.quat[2] << " " << animKey.quat[3] << std::endl;
-						}
-						else
-						{
-							stream << "Q3 " << animKey.quat[0] << " " << animKey.quat[1] << " " << animKey.quat[2] << std::endl;
-						}
-					}
-
-					if ((animKey.sqtMask & SCALE_MASK) && (m_settings.animation.sqtMask & SCALE_MASK))
-					{
-						stream << "S " << animKey.scale[0] << " " << animKey.scale[1] << " " << animKey.scale[2] << std::endl;
-					}
+					saveAnimationKey(animKey, stream);
 				}
 			}
 #endif
@@ -353,6 +352,31 @@ namespace ZETools
 			stream.close();
 		}
 
+	}
+
+	void ModelParser::saveAnimationKey(AnimationKey& animKey, std::ofstream& stream)
+	{
+		if ((animKey.sqtMask & TRANSLATION_MASK) && (m_settings.animation.sqtMask & TRANSLATION_MASK))
+		{
+			stream << "T " << animKey.trans[0] << " " << animKey.trans[1] << " " << animKey.trans[2] << std::endl;
+		}
+
+		if ((animKey.sqtMask & QUAT_MASK) && (m_settings.animation.sqtMask & QUAT_MASK))
+		{
+			if (!m_settings.animation.bRecalculateQuatRuntime)
+			{
+				stream << "Q " << animKey.quat[0] << " " << animKey.quat[1] << " " << animKey.quat[2] << " " << animKey.quat[3] << std::endl;
+			}
+			else
+			{
+				stream << "Q3 " << animKey.quat[0] << " " << animKey.quat[1] << " " << animKey.quat[2] << std::endl;
+			}
+		}
+
+		if ((animKey.sqtMask & SCALE_MASK) && (m_settings.animation.sqtMask & SCALE_MASK))
+		{
+			stream << "S " << animKey.scale[0] << " " << animKey.scale[1] << " " << animKey.scale[2] << std::endl;
+		}
 	}
 
 	void ModelParser::saveBone(aiNode* node, std::ofstream& outStream, int tabNumber)
@@ -572,8 +596,13 @@ namespace ZETools
 			aiNodeAnim* nodeAnim = anim->mChannels[i];
 			outAnim.nodes.push_back(AnimationNode());
 			AnimationNode& outNode = outAnim.nodes[outAnim.nodes.size() - 1];
-			outNode.node = nodeAnim->mNodeName.data;
-			outNode.bIsBone = m_boneToIndexMap.find(outNode.node) != m_boneToIndexMap.end();
+			outNode.nodeName = nodeAnim->mNodeName.data;
+			outNode.bIsBone = m_boneToIndexMap.find(outNode.nodeName) != m_boneToIndexMap.end();
+			if (outNode.bIsBone)
+			{
+				outNode.boneIndex = m_boneToIndexMap[outNode.nodeName];
+				outAnim.hasSkeleton = true;
+			}
 
 			int posIndex = 0;
 			int rotIndex = 0;

@@ -31,6 +31,8 @@ namespace ZE
 	{
 		DEFINE_CLASS(Skeleton)
 
+		friend class SkeletonState;
+
 	public:
 		Skeleton() : m_uniqueId(-1), m_jointCount(0) {}
 		Skeleton(Int32 _uniqueId) : m_uniqueId(_uniqueId), m_jointCount(0) {}
@@ -52,6 +54,42 @@ namespace ZE
 		Int32 m_jointCount;
 		Array<SkeletonJoint, true> m_joints;
 		Array<FastJoint, true> m_fastJoints;
+	};
+
+	struct SkeletonJointState
+	{
+		SkeletonJointState() {}
+		~SkeletonJointState() {}
+
+		Int32 index;
+		Matrix4x4 bindPose;
+	};
+
+	// Skeleton State holds the skeleton final pose to render
+	// and serve as a cache, also query about bone/joint position
+	class SkeletonState : public Object
+	{
+		DEFINE_CLASS(SkeletonState)
+
+	public:
+
+		SkeletonState(Skeleton* _skeleton);
+
+		~SkeletonState() {}
+
+		Vector3 GetJointLocation(Int32 jointIndex);
+		Quaternion GetJointQuat(Int32 jointIndex);
+		void getBindPoseMatrix(Int32 jointIndex, Matrix4x4& bindPose);
+		void getJointMatrixPallete(Int32 jointIndex, Matrix4x4& matrixPallete);
+
+		Skeleton* getSkeleton() const { return m_skeleton; }
+
+	protected:
+		void setupState();
+
+	protected:
+		Skeleton* m_skeleton;
+		Array<SkeletonJointState> m_skeletonJointStates;
 	};
 }
 

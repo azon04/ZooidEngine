@@ -108,14 +108,14 @@ namespace ZE {
 
 		if (index >= NPOOL) // Looking inside the additional pools
 		{
-			while (index < m_countAddPool + NPOOL && size > m_additionalPools[index - NPOOL]->getItemSize() && !m_additionalPools[index - NPOOL]->isEmpty() && m_additionalPools[index - NPOOL]->getCountFreeBlock() == 0)
+			while (index < m_countAddPool + NPOOL && !m_additionalPools[index - NPOOL]->isEmpty() && !(size <= m_additionalPools[index - NPOOL]->getItemSize() && m_additionalPools[index - NPOOL]->getCountFreeBlock() != 0))
 			{
 				index++;
 			}
 
 			if (index >= (NPOOL + m_countAddPool) && m_countAddPool < ADDITIONAL_MAX_POOL)
 			{
-				int poolCount = (MAX_MEM_ADD_POOL / size) < MAX_COUNT_ADD_POOL ? (MAX_MEM_ADD_POOL / size) : MAX_MEM_ADD_POOL;
+				int poolCount = (MAX_MEM_ADD_POOL / size) < MAX_COUNT_ADD_POOL ? (MAX_MEM_ADD_POOL / size) : MAX_COUNT_ADD_POOL;
 				size_t totalSize = PoolAllocator::calculateSizeMem(size, poolCount);
 				m_pAdditionalBlocks[m_countAddPool] = (void*)malloc(totalSize);
 				m_additionalPools[m_countAddPool] = PoolAllocator::constructFromMem(m_pAdditionalBlocks[m_countAddPool], size, poolCount);

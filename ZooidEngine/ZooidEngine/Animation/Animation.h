@@ -72,6 +72,11 @@ namespace ZE
 
 	struct PoseSQT
 	{
+		PoseSQT() : rotation(0.0f, 0.0f, 0.0f, 1.0f), translation(0.0f, 0.0f, 0.0f),
+				scale(1.0f, 1.0f, 1.0f)
+		{}
+		~PoseSQT() {}
+
 		Quaternion rotation;
 		Vector3 translation;
 		Vector3 scale;

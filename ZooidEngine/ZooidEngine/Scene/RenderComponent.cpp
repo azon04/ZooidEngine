@@ -12,6 +12,8 @@
 #include "Physics/PhysicsBody.h"
 #include "Physics/PhysicsEvents.h"
 
+#include "Animation/Skeleton.h"
+
 #include "Resources/Mesh.h"
 #include "Resources/Material.h"
 
@@ -24,6 +26,7 @@ namespace ZE {
 	{
 		SceneComponent::setupComponent();
 		setupPhysics();
+		setupMesh();
 
 		addEventDelegate(Event_GATHER_RENDER, &RenderComponent::handleGatherRender);
 	}
@@ -37,13 +40,15 @@ namespace ZE {
 			if (m_mesh->m_material && m_mesh->m_material->m_isBlend)
 			{
 				shaderAction = &m_gameContext->getDrawList()->getNextSecondPassShaderAction();
-				shader = ShaderManager::getInstance()->getShaderChain(Z_SHADER_CHAIN_3D_DEFAULT_LIT_BLEND);
+				shader = ShaderManager::getInstance()
+					->getShaderChain(m_mesh->hasSkeleton() ? Z_SHADER_CHAIN_3D_DEFAULT_SKIN_LIT_BLEND : Z_SHADER_CHAIN_3D_DEFAULT_LIT_BLEND);
 				EnableAndSetBlendFunc(*shaderAction, SRC_ALPHA, ONE_MINUS_SRC_ALPHA);
 			}
 			else
 			{
 				shaderAction = &m_gameContext->getDrawList()->getNextShaderAction();
-				shader = ShaderManager::getInstance()->getShaderChain(Z_SHADER_CHAIN_3D_DEFAULT_LIT);
+				shader = ShaderManager::getInstance()
+					->getShaderChain(m_mesh->hasSkeleton() ? Z_SHADER_CHAIN_3D_DEFAULT_SKIN_LIT : Z_SHADER_CHAIN_3D_DEFAULT_LIT);
 			}
 
 			if (m_mesh->m_doubleSided)
@@ -59,6 +64,19 @@ namespace ZE {
 			shaderAction->SetConstantsBlockBuffer("shader_data", m_gameContext->getDrawList()->m_mainConstantBuffer);
 			shaderAction->SetConstantsBlockBuffer("light_data", m_gameContext->getDrawList()->m_lightConstantBuffer);
 			
+			if (m_mesh->hasSkeleton() && m_hSkeletonState.isValid())
+			{
+				SkeletonState* pSkeletonState = m_hSkeletonState.getObject<SkeletonState>();
+				char buffer[32];
+				for (int i = 0; i < pSkeletonState->getSkeleton()->getJointCount(); i++)
+				{
+					Matrix4x4 jointPallete;
+					pSkeletonState->getJointMatrixPallete(i, jointPallete);
+					StringFunc::PrintToString(buffer, 32, "boneMats[%d]", i);
+					shaderAction->SetShaderMatVar(buffer, jointPallete);
+				}
+			}
+
 			if (m_bHighlight)
 			{
 				EnableAndSetStencilFunc(*shaderAction, ALWAYS, 1, 0xFF, 0xFF);
@@ -116,17 +134,17 @@ namespace ZE {
 			PhysicsBodySetup* pPhysicsBodySetup = m_mesh->m_hPhysicsBodySetup.getObject<PhysicsBodySetup>();
 			if (m_bStatic)
 			{
-				hPhysicsBody = m_gameContext->getPhysics()->CreateStaticRigidBody(m_worldTransform, pPhysicsBodySetup);
+				m_hPhysicsBody = m_gameContext->getPhysics()->CreateStaticRigidBody(m_worldTransform, pPhysicsBodySetup);
 			}
 			else
 			{
-				hPhysicsBody = m_gameContext->getPhysics()->CreateDynamicRigidBody(m_worldTransform, pPhysicsBodySetup);
+				m_hPhysicsBody = m_gameContext->getPhysics()->CreateDynamicRigidBody(m_worldTransform, pPhysicsBodySetup);
 				addEventDelegate(Event_Physics_UPDATE_TRANSFORM, &RenderComponent::handlePhysicsUpdateTransform);
 			}
 
-			if (hPhysicsBody.isValid())
+			if (m_hPhysicsBody.isValid())
 			{
-				IPhysicsBody* pPhysicsBody = hPhysicsBody.getObject<IPhysicsBody>();
+				IPhysicsBody* pPhysicsBody = m_hPhysicsBody.getObject<IPhysicsBody>();
 				pPhysicsBody->setGameObject(this);
 				pPhysicsBody->setCollisionGroup(m_bStatic ? COLLISION_STATIC : COLLISION_DYNAMIC);
 				pPhysicsBody->enableCollisionGroups(COLLISION_STATIC | COLLISION_DYNAMIC);
@@ -137,14 +155,24 @@ namespace ZE {
 		}
 	}
 
+	void RenderComponent::setupMesh()
+	{
+		if (m_mesh && m_mesh->hasSkeleton())
+		{
+			Skeleton* pSkeleton = m_mesh->m_hSkeleton.getObject<Skeleton>();
+			m_hSkeletonState = Handle("Skeleton State", sizeof(SkeletonState));
+			new(m_hSkeletonState) SkeletonState(pSkeleton);
+		}
+	}
+
 	bool RenderComponent::hasPhysicsBody()
 	{
-		return hPhysicsBody.isValid();
+		return m_hPhysicsBody.isValid();
 	}
 
 	ZE::IPhysicsBody* RenderComponent::getPhysicsBody()
 	{
-		return hPhysicsBody.getObject<IPhysicsBody>();
+		return m_hPhysicsBody.getObject<IPhysicsBody>();
 	}
 
 }

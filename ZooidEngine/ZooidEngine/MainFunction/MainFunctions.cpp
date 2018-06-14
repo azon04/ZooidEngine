@@ -27,6 +27,7 @@
 #include "Platform/Thread.h"
 
 #include "ResourceManagers/SkeletonManager.h"
+#include "ResourceManagers/AnimationManager.h"
 
 namespace ZE {
 
@@ -136,6 +137,9 @@ namespace ZE {
 		ZEINFO("Initializing Skeleton Manager...");
 		SkeletonManager::Init(_gameContext);
 
+		ZEINFO("Initializing Animation Resource Manager...");
+		AnimationManager::Init(_gameContext);
+
 		ZEINFO("Initializing Camera Manager...");
 		CameraManager::Init(_gameContext);
 		_gameContext->m_cameraManager = CameraManager::GetInstance();
@@ -165,6 +169,7 @@ namespace ZE {
 		BufferManager::Destroy();
 		ShaderManager::Destroy();
 		TextureManager::Destroy();
+		AnimationManager::Destroy();
 		SkeletonManager::Destroy();
 
 		_gameContext->m_renderZooid->Destroy();

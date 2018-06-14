@@ -23,7 +23,7 @@ layout (std140) uniform shader_data
 
 const int MAX_BONES = 150;
 
-mat4 boneMats[MAX_BONES];
+uniform mat4 boneMats[MAX_BONES];
 
 void main()
 {

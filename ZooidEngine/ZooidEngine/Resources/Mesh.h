@@ -21,11 +21,14 @@ namespace ZE
 			m_doubleSided(false)
 		{}
 
+		bool hasSkeleton() const { return m_hSkeleton.isValid(); }
+
 		IGPUBufferData* m_vertexBuffer;;
 		IGPUBufferData* m_indexBuffer;
 		IGPUBufferArray* m_bufferArray;
 		Material* m_material;
 		Handle m_hPhysicsBodySetup;
+		Handle m_hSkeleton;
 
 		bool m_doubleSided;
 	};

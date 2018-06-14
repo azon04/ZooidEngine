@@ -226,6 +226,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClInclude Include="Renderer\GL\GLRenderZooid.h" />
     <ClInclude Include="Renderer\GL\GLTexture.h" />
     <ClInclude Include="Renderer\RenderZooid.h" />
+    <ClInclude Include="ResourceManagers\AnimationManager.h" />
     <ClInclude Include="ResourceManagers\BufferManager.h" />
     <ClInclude Include="Renderer\DrawList.h" />
     <ClInclude Include="Renderer\IGPUBufferArray.h" />
@@ -319,6 +320,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClCompile Include="Renderer\GL\GLRenderZooid.cpp" />
     <ClCompile Include="Renderer\GL\GLTexture.cpp" />
     <ClCompile Include="Renderer\RenderZooid.cpp" />
+    <ClCompile Include="ResourceManagers\AnimationManager.cpp" />
     <ClCompile Include="ResourceManagers\BufferManager.cpp" />
     <ClCompile Include="Renderer\DrawList.cpp" />
     <ClCompile Include="Renderer\IGPUBufferArray.cpp" />

@@ -65,6 +65,8 @@ namespace ZE
 		{
 			readJoint(&fileReader, -1);
 		}
+
+		fileReader.close();
 	}
 
 	void Skeleton::readJoint(FileReader* fileReader, Int32 parentJointIndex)
@@ -115,6 +117,64 @@ namespace ZE
 			}
 
 			fileReader->readNextString(buffer);
+		}
+	}
+
+	IMPLEMENT_CLASS_0(SkeletonState)
+
+	SkeletonState::SkeletonState(Skeleton* _skeleton) : m_skeleton(_skeleton)
+	{
+		setupState();
+	}
+
+	Vector3 SkeletonState::GetJointLocation(Int32 jointIndex)
+	{
+		if (jointIndex < m_skeletonJointStates.length())
+		{
+			return m_skeletonJointStates[jointIndex].bindPose.getPos();
+		}
+
+		return Vector3();
+	}
+
+	Quaternion SkeletonState::GetJointQuat(Int32 jointIndex)
+	{
+		if (jointIndex < m_skeletonJointStates.length())
+		{
+			return m_skeletonJointStates[jointIndex].bindPose.toQuaternion();
+		}
+
+		return Quaternion();
+	}
+
+	void SkeletonState::getBindPoseMatrix(Int32 jointIndex, Matrix4x4& bindPose)
+	{
+		if (jointIndex < m_skeletonJointStates.length())
+		{
+			bindPose = m_skeletonJointStates[jointIndex].bindPose;
+		}
+	}
+
+	void SkeletonState::getJointMatrixPallete(Int32 jointIndex, Matrix4x4& matrixPallete)
+	{
+		if (jointIndex < m_skeletonJointStates.length())
+		{
+			matrixPallete = m_skeleton->m_joints[jointIndex].invBindPose * m_skeletonJointStates[jointIndex].bindPose;
+		}
+	}
+
+	void SkeletonState::setupState()
+	{
+		m_skeletonJointStates.reset(m_skeleton->getJointCount());
+		
+		for (int i = 0; i < m_skeleton->getJointCount(); i++)
+		{
+			SkeletonJoint joint;
+			m_skeleton->getJoint(i, joint);
+			SkeletonJointState jointState;
+			jointState.index = i;
+			jointState.bindPose = joint.bindPose;
+			m_skeletonJointStates.push_back(jointState);
 		}
 	}
 

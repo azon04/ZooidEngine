@@ -18,6 +18,8 @@ namespace StringFunc {
 
 	void Concat(const char* string1, const char* string2, char* res);
 
+	void PrintToString(char* string, int stringSize, const char* formatText, ...);
+
 	ZE::UInt32 Hash(const char* string, size_t size);
 
 };

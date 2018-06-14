@@ -98,6 +98,13 @@ namespace ZE
 			s_instance->m_shaderChain.push_back(shaderChain);
 		}
 
+		{
+			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
+			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
+			shaderChain->MakeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLitSkin.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLit_Blend.frag"), nullptr, nullptr);
+			s_instance->m_shaderChain.push_back(shaderChain);
+		}
+
 
 		_gameContext->getRenderer()->ReleaseRenderThreadOwnership();
 	}

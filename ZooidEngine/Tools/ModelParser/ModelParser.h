@@ -83,8 +83,9 @@ namespace ZETools
 
 	struct AnimationNode
 	{
-		std::string node;
+		std::string nodeName;
 		bool bIsBone;
+		unsigned int boneIndex;
 		std::vector<AnimationKey> keys;
 	};
 
@@ -93,6 +94,7 @@ namespace ZETools
 		std::string name;
 		double duration;
 		double tickPerSecond;
+		bool hasSkeleton;
 		std::vector<AnimationNode> nodes;
 	};
 
@@ -120,6 +122,7 @@ namespace ZETools
 
 	protected:
 
+		void saveAnimationKey(AnimationKey& animKey, std::ofstream& stream);
 		void saveBone(aiNode* node, std::ofstream& outStream, int tabNumber = 0);
 
 		void processInitialNodes(aiNode* node);
