@@ -81,6 +81,7 @@ namespace ZE
 		Quaternion GetJointQuat(Int32 jointIndex);
 		void getBindPoseMatrix(Int32 jointIndex, Matrix4x4& bindPose);
 		void getJointMatrixPallete(Int32 jointIndex, Matrix4x4& matrixPallete);
+		void setJointStateMatrices(Array<Matrix4x4>& matrices, bool inBoneTransform);
 
 		Skeleton* getSkeleton() const { return m_skeleton; }
 

@@ -146,6 +146,18 @@ namespace ZE {
 		}
 	}
 
+	ZE::Component* Component::findFirstCompClassId(Int32 classId)
+	{
+		for (int i = 0; i < m_components.length(); i++)
+		{
+			if (m_components[i]->IsA(classId))
+			{
+				return m_components[i];
+			}
+		}
+		return nullptr;
+	}
+
 	void Component::_addEventDelegate(Int32 eventId, EventDelegate::HandleEventFunc eventFunc)
 	{
 		if (!m_delegateMap.hasKey(eventId))

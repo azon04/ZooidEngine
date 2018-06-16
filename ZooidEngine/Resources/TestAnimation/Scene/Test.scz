@@ -8,11 +8,11 @@ R 150.0 0.0 0.0
 END
 RenderComponent Skin1
 BEGIN
-Mesh TestAnimation/Mesh/Alpha_Joints.meshz
+Mesh TestAnimation/Mesh/Walking_baked_0.meshz
 S 0.01 0.01 0.01
 END
 RenderComponent Skin2
 BEGIN
-Mesh TestAnimation/Mesh/Alpha_Surface.meshz
+Mesh TestAnimation/Mesh/Walking_baked_1.meshz
 S 0.01 0.01 0.01
 END

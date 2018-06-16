@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #include "../Common/Dir.h"
+#include "../Common/StringHelper.h"
 
 #define ANIMATION_SAVE_TIME_FIRST 1
 
@@ -17,6 +18,8 @@ namespace ZETools
 
 	bool ModelParser::loadFile(std::string filePath)
 	{
+		std::cout << "Load file " << filePath << "..." << std::endl;
+
 		const aiScene* scene = m_importer.ReadFile(filePath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_LimitBoneWeights);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
@@ -30,10 +33,16 @@ namespace ZETools
 		// Cleaning the filename (remove the extension)
 		m_fileName = m_fileName.substr(0, m_fileName.find_last_of('.'));
 
+		std::cout << "Process Nodes... " << std::endl;
 		processInitialNodes(scene->mRootNode);
+
+		std::cout << "Process Meshes..." << std::endl;
 		processNode(scene->mRootNode, scene);
+
+		std::cout << "Checking Bones... " << std::endl;
 		processBones(scene->mRootNode);
 		
+		std::cout << "Checking Animation... " << std::endl;
 		for (unsigned int i = 0; i < scene->mNumAnimations; i++)
 		{
 			processAnimation(scene->mAnimations[i]);
@@ -61,11 +70,14 @@ namespace ZETools
 		Dir::CreateDirectory(getFullPath(outputDir, skelPath));
 		Dir::CreateDirectory(getFullPath(outputDir, animPath));
 
+		std::cout << "Saving to [" << packagePath << "]... " << std::endl;
 
 		// TODO Create Skel Mesh
 		std::string skeletonFilePath = Dir::CombinePath(skelPath, m_fileName + "_skel.skelz");
 		if(m_bones.size() > 0)
 		{
+			std::cout << "Creating Skeleton file [" << skeletonFilePath << "]... " << std::endl;
+
 			const aiScene* scene = m_importer.GetScene();
 			
 			std::ofstream stream;
@@ -87,6 +99,7 @@ namespace ZETools
 
 			// Export vbuff and indices buffer to file
 			{
+				std::cout << "Creating Vertex Buffer file [" << vertexFilePath << "]... " << std::endl;
 				std::ofstream stream;
 				stream.open(getFullPath(outputDir, vertexFilePath), std::ofstream::out);
 				if (stream.is_open())
@@ -166,6 +179,7 @@ namespace ZETools
 			// Export material
 			// Copying texture files if necessary
 			{
+				std::cout << "Creating Material file [" << matFilePath << "]... " << std::endl;
 				std::ofstream stream;
 				stream.open(getFullPath(outputDir, matFilePath));
 				if (stream.is_open())
@@ -227,6 +241,7 @@ namespace ZETools
 				
 			// #TODO create meshz file
 			{
+				std::cout << "Creating Mesh file [" << meshFilePath << "]... " << std::endl;
 				std::ofstream stream(getFullPath(outputDir, meshFilePath));
 				if (stream.is_open())
 				{
@@ -251,6 +266,8 @@ namespace ZETools
 			Animation& anim = m_animations[i];
 			
 			std::string animationFilePath = Dir::CombinePath(animPath, m_fileName + "_" + anim.name + ".animz");
+
+			std::cout << "Creating Animation file [" << animationFilePath << "]... " << std::endl;
 
 			std::ofstream stream;
 			stream.open(getFullPath(outputDir, animationFilePath), std::ofstream::out);
@@ -392,12 +409,13 @@ namespace ZETools
 			outStream << tab << "Joint " << node->mName.data << std::endl;
 			outStream << tab << "{" << std::endl;
 			// print transform
-			outStream << tab  << "\t" << "Transform ";
+			outStream << tab  << "\t" << "InvXform ";
+			aiMatrix4x4& boneTransform = m_boneTransformMap[node];
 			for (int i = 0; i < 4; i++)
 			{
 				for (int j = 0; j < 4; j++)
 				{
-					outStream << node->mTransformation[j][i] << " ";
+					outStream << boneTransform[j][i] << " ";
 				}
 			}
 			outStream << std::endl;
@@ -555,6 +573,7 @@ namespace ZETools
 		if (!m_boneMarkMap[boneNode])
 		{
 			m_boneMarkMap[boneNode] = true;
+			m_boneTransformMap[boneNode] = bone->mOffsetMatrix;
 		}
 	}
 
@@ -569,7 +588,8 @@ namespace ZETools
 			{
 				for (unsigned int j = 0; j < 4; j++)
 				{
-					outBone.tranform[i][j] = node->mTransformation[i][j];
+					aiMatrix4x4& boneTransform = m_boneTransformMap[node];
+					outBone.tranform[i][j] = boneTransform[i][j];
 				}
 			}
 
@@ -587,7 +607,7 @@ namespace ZETools
 	{
 		m_animations.push_back(Animation());
 		Animation& outAnim = m_animations[m_animations.size() - 1];
-		outAnim.name = anim->mName.data;
+		outAnim.name = StringHelper::CleanString(anim->mName.data);
 		outAnim.duration = anim->mDuration;
 		outAnim.tickPerSecond = anim->mTicksPerSecond;
 

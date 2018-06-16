@@ -1,3 +1,0 @@
-vbuff TestAnimation\VertexBuffer\Alpha_Surface.vbuff
-mat TestAnimation\Material\Alpha_Surface.matz
-skeleton TestAnimation\Skeleton\Walking_skel.skelz

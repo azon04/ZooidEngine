@@ -47,11 +47,14 @@ namespace ZE
 
 		// Read duration
 		fileReader.readNextString(buffer);
-		pAnimClip->m_duration = fileReader.readNextFloat();
+		pAnimClip->m_frameCount = fileReader.readNextFloat();
 
 		// Read FPS
 		fileReader.readNextString(buffer);
 		pAnimClip->m_framePerSecond = fileReader.readNextInt();
+
+		// Calculate Duration
+		pAnimClip->m_duration = pAnimClip->m_frameCount / (float) pAnimClip->m_framePerSecond;
 
 		// Read Skeleton
 		fileReader.readNextString(buffer);
@@ -70,6 +73,8 @@ namespace ZE
 			pAnimClip->m_animationSamples.push_back(AnimationPose());
 			AnimationPose& animPose = pAnimClip->m_animationSamples[pAnimClip->m_animationSamples.size() - 1];
 			
+			fileReader.readNextString(buffer);
+
 			while (true)
 			{
 				if (StringFunc::Compare(buffer, "bone") == 0)
@@ -97,7 +102,7 @@ namespace ZE
 							poseSQT.rotation.m_x = fileReader.readNextFloat();
 							poseSQT.rotation.m_y = fileReader.readNextFloat();
 							poseSQT.rotation.m_z = fileReader.readNextFloat();
-							poseSQT.rotation.m_w = 1 - (poseSQT.rotation.m_x * poseSQT.rotation.m_x + poseSQT.rotation.m_y * poseSQT.rotation.m_y + poseSQT.rotation.m_z * poseSQT.rotation.m_z);
+							poseSQT.rotation.m_w = sqrt(1 - (poseSQT.rotation.m_x * poseSQT.rotation.m_x + poseSQT.rotation.m_y * poseSQT.rotation.m_y + poseSQT.rotation.m_z * poseSQT.rotation.m_z));
 						}
 						else if (StringFunc::Compare("S", buffer) == 0)
 						{
@@ -109,6 +114,8 @@ namespace ZE
 						{
 							break;
 						}
+
+						fileReader.readNextString(buffer);
 					}
 					animPose.jointPoses.push_back(poseSQT);
 				}

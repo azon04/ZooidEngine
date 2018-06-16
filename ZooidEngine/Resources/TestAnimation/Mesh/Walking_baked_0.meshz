@@ -1,0 +1,3 @@
+vbuff TestAnimation\VertexBuffer\Walking_baked_0.vbuff
+mat TestAnimation\Material\Walking_baked_0.matz
+skeleton TestAnimation\Skeleton\Walking_baked_skel.skelz

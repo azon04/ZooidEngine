@@ -147,6 +147,7 @@ namespace ZETools
 		std::vector<Mesh> m_meshes;
 		std::string m_fileName;
 		std::map<aiNode*, bool> m_boneMarkMap;
+		std::map<aiNode*, aiMatrix4x4> m_boneTransformMap;
 		std::vector<Bone> m_bones;
 		std::map<std::string, unsigned int> m_boneToIndexMap;
 		std::vector<Animation> m_animations;

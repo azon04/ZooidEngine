@@ -53,4 +53,45 @@ namespace ZE
 		_result.m_data[0][3] = _result.m_data[1][3] = _result.m_data[2][3] = 0.0f;
 	}
 
+	float MathOps::FLerp(float a, float b, float alpha)
+	{
+		return a + (b - a) * alpha;
+	}
+
+	Vector3 MathOps::VLerp(const Vector3& a, const Vector3& b, float alpha)
+	{
+		return a + (b - a) * alpha;
+	}
+
+	Quaternion MathOps::QSlerp(const Quaternion& q1, const Quaternion& q2, float alpha)
+	{
+		Float32 cosTheta = q1 | q2;
+
+		Quaternion q1Temp = q1;
+
+		if (cosTheta < 0.0f)
+		{
+			q1Temp = -1 * q1Temp;
+			cosTheta = -cosTheta;
+		}
+
+		if (cosTheta > 0.995f)
+		{
+			Quaternion result = q1Temp + alpha * (q2 - q1Temp);
+			result.normalize();
+			return result;
+		}
+
+		Float32 theta_0 = acos(cosTheta);
+		Float32 theta_1 = theta_0 * alpha;
+		Float32 sin_theta_0 = sin(theta_0);
+		Float32 sin_theta_1 = sin(theta_1);
+
+		Float32 s0 = cos(theta_1) - cosTheta * sin_theta_1 / sin_theta_0;
+		Float32 s1 = sin_theta_1 / sin_theta_0;
+
+		return s0 * q1Temp + s1 * q2;
+
+	}
+
 }

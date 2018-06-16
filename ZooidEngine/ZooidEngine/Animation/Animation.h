@@ -77,6 +77,8 @@ namespace ZE
 		{}
 		~PoseSQT() {}
 
+		void toMatrix(Matrix4x4& mat);
+
 		Quaternion rotation;
 		Vector3 translation;
 		Vector3 scale;
@@ -93,6 +95,8 @@ namespace ZE
 
 	public:
 		AnimationClip() {}
+
+		void getAnimationPoseAtTime(float _localTime, AnimationPose& outPose);
 
 		Skeleton* m_skeleton;
 		Int32 m_framePerSecond;

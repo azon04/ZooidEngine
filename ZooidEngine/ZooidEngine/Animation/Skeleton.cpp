@@ -93,7 +93,7 @@ namespace ZE
 			{
 				readJoint(fileReader, index);
 			}
-			else if (StringFunc::Compare(buffer, "Transform") == 0)
+			else if (StringFunc::Compare(buffer, "InvXform") == 0)
 			{
 				Matrix4x4 mat;
 				for (int i = 0; i < 4; i++)
@@ -104,16 +104,24 @@ namespace ZE
 					}
 				}
 
-				if (parentJointIndex != -1)
+				m_joints[index].invBindPose = mat;
+				m_joints[index].bindPose = mat.inverse();
+
+			}
+			else if (StringFunc::Compare(buffer, "Xform") == 0)
+			{
+				Matrix4x4 mat;
+				for (int i = 0; i < 4; i++)
 				{
-					m_joints[index].bindPose = m_joints[parentJointIndex].bindPose * mat;
-				}
-				else
-				{
-					m_joints[index].bindPose = mat;
+					for (int j = 0; j < 4; j++)
+					{
+						mat.m_data[i][j] = fileReader->readNextFloat();
+					}
 				}
 
-				m_joints[index].invBindPose = m_joints[index].bindPose.inverse();
+				m_joints[index].bindPose = mat;
+				m_joints[index].invBindPose = mat.inverse();
+
 			}
 
 			fileReader->readNextString(buffer);
@@ -160,6 +168,27 @@ namespace ZE
 		if (jointIndex < m_skeletonJointStates.length())
 		{
 			matrixPallete = m_skeleton->m_joints[jointIndex].invBindPose * m_skeletonJointStates[jointIndex].bindPose;
+		}
+	}
+
+	void SkeletonState::setJointStateMatrices(Array<Matrix4x4>& matrices, bool inBoneTransform)
+	{
+		ZASSERT(matrices.length() == m_skeletonJointStates.length(), "Matrices and Number of skeleton don't match");
+		for (int i = 0; i < matrices.length(); i++)
+		{
+			m_skeletonJointStates[i].bindPose = matrices[i];
+		}
+
+		if (inBoneTransform)
+		{
+			for (int i = 0; i < matrices.length(); i++)
+			{
+				int parentIndex = m_skeleton->m_joints[i].parentIndex;
+				if (parentIndex >= 0)
+				{
+					m_skeletonJointStates[i].bindPose = m_skeletonJointStates[i].bindPose * m_skeletonJointStates[parentIndex].bindPose;
+				}
+			}
 		}
 	}
 

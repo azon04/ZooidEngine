@@ -113,6 +113,8 @@ namespace ZE
 		fileReader->readNextString(buff);
 		pComp->setObjectName(String(buff));
 
+		m_componentMap.put(buff, compHandle);
+
 		// BEGIN
 		fileReader->readNextString(buff);
 
@@ -227,6 +229,16 @@ namespace ZE
 
 		pComp->setupComponent();
 		parent->addChild(pComp);
+	}
+
+	ZE::Handle SceneManager::getCompByName(const char* name)
+	{
+		if (m_componentMap.hasKey(name))
+		{
+			return m_componentMap[name];
+		}
+
+		return Handle();
 	}
 
 	void SceneManager::Init(GameContext* _gameContext)
