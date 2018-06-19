@@ -75,14 +75,14 @@ namespace ZE
 			
 			fileReader.readNextString(buffer);
 
-			while (true)
+			while (!fileReader.eof())
 			{
 				if (StringFunc::Compare(buffer, "bone") == 0)
 				{
 					Int32 boneIndex = fileReader.readNextInt();
 					PoseSQT poseSQT;
 					fileReader.readNextString(buffer);
-					while (true)
+					while (!fileReader.eof())
 					{
 						if (StringFunc::Compare("T", buffer) == 0)
 						{

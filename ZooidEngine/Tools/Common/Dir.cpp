@@ -40,3 +40,14 @@ std::string ZETools::Dir::CombinePath(std::string path1, std::string path2)
 	return path1 + Dir::separator() + path2;
 }
 
+bool ZETools::Dir::IsExist(std::string path)
+{
+	if (FILE *file = fopen(path.c_str(), "r"))
+	{
+		fclose(file);
+		return true;
+	}
+
+	return false;
+}
+

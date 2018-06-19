@@ -103,7 +103,14 @@ namespace ZETools
 		struct Animation {
 			short sqtMask = TRANSLATION_MASK | SCALE_MASK | QUAT_MASK;
 			bool bRecalculateQuatRuntime = false;
+			bool bRemoveNonBone = true;
 		} animation;
+
+		bool bParseMesh = true;
+		bool bParseAnimation = true;
+		bool bParseSkeleton = true;
+
+		std::string skeletonPath;
 	};
 
 	class ModelParser

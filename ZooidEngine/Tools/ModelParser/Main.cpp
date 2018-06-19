@@ -24,7 +24,9 @@ int main(int argc, char* argv[])
 		cout << "-p | --package path \t package name, package that assets will be saved to. It will outDir/packageName" << endl;
 		cout << "--omitAnimChannel [S|Q|T] \t omit animation channel, S: Scale, Q: Quaternion, T: Translation. e.g omit translation and Scale would use ST " << endl;
 		cout << "--recalculateAnimQuat \t this option will make Quaternion in animation data saved only 3 values (the fourth will be calculated on runtime)  " << endl;
-
+		cout << "--noMesh" << endl;
+		cout << "--noAnimation" << endl;
+		cout << "--skeletonPath path \t path is relative path of skeleton from out directory" << endl;
 		return 0;
 	}
 
@@ -66,10 +68,24 @@ int main(int argc, char* argv[])
 				sqtIndex++;
 			}
 		} 
-		if (strcmp(argv[index], "--recalculateAnimQuat") == 0)
+		else if (strcmp(argv[index], "--recalculateAnimQuat") == 0)
 		{
 			settings.animation.bRecalculateQuatRuntime = true;
 		}
+		else if (strcmp(argv[index], "--noMesh") == 0)
+		{
+			settings.bParseMesh = false;
+		}
+		else if (strcmp(argv[index], "--noAnimation") == 0)
+		{
+			settings.bParseAnimation = false;
+		}
+		else if (strcmp(argv[index], "--skeletonPath") == 0)
+		{
+			settings.bParseSkeleton = false;
+			settings.skeletonPath = argv[++index];
+		}
+		
 		index++;
 	}
 

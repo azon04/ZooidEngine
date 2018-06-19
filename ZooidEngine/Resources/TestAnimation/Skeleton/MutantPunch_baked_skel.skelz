@@ -1,0 +1,124 @@
+Joint Mutant:Hips
+{
+	InvXform 1 0 0 0 0 1 0 0 0 0 1 0 0 -92.5549 -4.5525 1 
+	Joint Mutant:Spine
+	{
+		InvXform 1 0 0 0 0 1 0 0 0 0 1 0 0 -103.319 -5.79602 1 
+		Joint Mutant:Spine1
+		{
+			InvXform 1 0 0 0 0 1 0 0 0 0 1 0 0.0189266 -116.38 -6.0235 1 
+			Joint Mutant:Spine2
+			{
+				InvXform 1 0 0 0 0 1 0 0 0 0 1 0 0.040557 -129.368 -5.10681 1 
+				Joint Mutant:Neck
+				{
+					InvXform 1 0 0 0 0 1 0 0 0 0 1 0 0.0524841 -154.039 -7.13491 1 
+					Joint Mutant:Head
+					{
+						InvXform 1 0 0 0 0 1 0 0 0 0 1 0 0.0524841 -162.856 -13.2375 1 
+					}
+				}
+				Joint Mutant:LeftShoulder
+				{
+					InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -9.51301 -145.434 0.121022 1 
+					Joint Mutant:LeftArm
+					{
+						InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -27.406 -147.5 1.04395 1 
+						Joint Mutant:LeftForeArm
+						{
+							InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -53.7808 -147.5 2.50302 1 
+						}
+					}
+				}
+				Joint Mutant:RightShoulder
+				{
+					InvXform 1 0 0 0 0 1 0 0 0 0 1 0 9.59412 -145.434 0.121022 1 
+					Joint Mutant:RightArm
+					{
+						InvXform 1 0 0 0 0 1 0 0 0 0 1 0 27.406 -147.5 1.04395 1 
+						Joint Mutant:RightForeArm
+						{
+							InvXform 1 0 0 0 0 1 0 0 0 0 1 0 53.7808 -147.5 2.50302 1 
+							Joint Mutant:RightHand
+							{
+								InvXform 1 0 0 0 0 1 0 0 0 0 1 0 80.5342 -147.5 2.503 1 
+								Joint Mutant:RightHandThumb1
+								{
+									InvXform 1 0 0 0 0 1 0 0 0 0 1 0 83.0266 -143.054 -3.66048 1 
+									Joint Mutant:RightHandThumb2
+									{
+										InvXform 1 0 0 0 0 1 0 0 0 0 1 0 89.6292 -138.74 -10.5509 1 
+										Joint Mutant:RightHandThumb3
+										{
+											InvXform 1 0 0 0 0 1 0 0 0 0 1 0 96.414 -135.773 -14.7215 1 
+											Joint Mutant:RightHandThumb4
+											{
+												InvXform 1 0 0 0 0 1 0 0 0 0 1 0 103.545 -133.739 -17.7911 1 
+											}
+										}
+									}
+								}
+								Joint Mutant:RightHandIndex1
+								{
+									InvXform 1 0 0 0 0 1 0 0 0 0 1 0 98.982 -148.98 -6.15125 1 
+									Joint Mutant:RightHandIndex2
+									{
+										InvXform 1 0 0 0 0 1 0 0 0 0 1 0 106.496 -148.98 -6.15125 1 
+										Joint Mutant:RightHandIndex3
+										{
+											InvXform 1 0 0 0 0 1 0 0 0 0 1 0 113.986 -148.98 -6.15125 1 
+										}
+									}
+								}
+								Joint Mutant:RightHandPinky1
+								{
+									InvXform 1 0 0 0 0 1 0 0 0 0 1 0 98.042 -147.022 12.5061 1 
+									Joint Mutant:RightHandPinky2
+									{
+										InvXform 1 0 0 0 0 1 0 0 0 0 1 0 105.086 -147.022 12.5061 1 
+										Joint Mutant:RightHandPinky3
+										{
+											InvXform 1 0 0 0 0 1 0 0 0 0 1 0 112.165 -147.022 12.5061 1 
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	Joint Mutant:LeftUpLeg
+	{
+		InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -13.656 -85.4196 -4.6822 1 
+		Joint Mutant:LeftLeg
+		{
+			InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -13.656 -49.5005 -6.16364 1 
+			Joint Mutant:LeftFoot
+			{
+				InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -13.656 -15.1931 -3.51689 1 
+				Joint Mutant:LeftToeBase
+				{
+					InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -13.656 7.62939e-06 -18.4287 1 
+				}
+			}
+		}
+	}
+	Joint Mutant:RightUpLeg
+	{
+		InvXform 1 0 0 0 0 1 0 0 0 0 1 0 13.656 -85.4196 -4.6822 1 
+		Joint Mutant:RightLeg
+		{
+			InvXform 1 0 0 0 0 1 0 0 0 0 1 0 13.656 -49.5005 -6.16364 1 
+			Joint Mutant:RightFoot
+			{
+				InvXform 1 0 0 0 0 1 0 0 0 0 1 0 13.656 -15.1931 -3.51689 1 
+				Joint Mutant:RightToeBase
+				{
+					InvXform 1 0 0 0 0 1 0 0 0 0 1 0 13.656 7.62939e-06 -18.4287 1 
+				}
+			}
+		}
+	}
+}

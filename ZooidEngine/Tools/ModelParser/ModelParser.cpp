@@ -20,7 +20,7 @@ namespace ZETools
 	{
 		std::cout << "Load file " << filePath << "..." << std::endl;
 
-		const aiScene* scene = m_importer.ReadFile(filePath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_LimitBoneWeights);
+		const aiScene* scene = m_importer.ReadFile(filePath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_LimitBoneWeights | aiProcess_GenNormals);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
@@ -72,9 +72,18 @@ namespace ZETools
 
 		std::cout << "Saving to [" << packagePath << "]... " << std::endl;
 
+		if(!m_settings.bParseSkeleton)
+		{
+			if (!Dir::IsExist(Dir::CombinePath(outputDir, m_settings.skeletonPath)))
+			{
+				std::cout << "WARNING: CAN'T FIND SKELETON PATH: " << m_settings.skeletonPath << std::endl;
+				std::cout << "This might cause problem in the engine" << std::endl;
+			}
+		}
+
 		// TODO Create Skel Mesh
 		std::string skeletonFilePath = Dir::CombinePath(skelPath, m_fileName + "_skel.skelz");
-		if(m_bones.size() > 0)
+		if(m_settings.bParseSkeleton && m_bones.size() > 0)
 		{
 			std::cout << "Creating Skeleton file [" << skeletonFilePath << "]... " << std::endl;
 
@@ -88,239 +97,215 @@ namespace ZETools
 			stream.close();
 		}
 
-		for (unsigned int i = 0; i < m_meshes.size(); i++)
+		if (m_settings.bParseMesh)
 		{
-			Mesh& mesh = m_meshes[i];
-
-			std::string meshFileName = mesh.name.length() > 0 ? mesh.name : m_fileName + "_" + std::to_string(i);
-			std::string vertexFilePath = Dir::CombinePath(vertexBufferPath, meshFileName + ".vbuff");
-			std::string matFilePath = Dir::CombinePath(materialPath, meshFileName + ".matz");
-			std::string meshFilePath = Dir::CombinePath(meshPath, meshFileName + ".meshz");
-
-			// Export vbuff and indices buffer to file
+			for (unsigned int i = 0; i < m_meshes.size(); i++)
 			{
-				std::cout << "Creating Vertex Buffer file [" << vertexFilePath << "]... " << std::endl;
-				std::ofstream stream;
-				stream.open(getFullPath(outputDir, vertexFilePath), std::ofstream::out);
-				if (stream.is_open())
+				Mesh& mesh = m_meshes[i];
+
+				std::string meshFileName = mesh.name.length() > 0 ? mesh.name : m_fileName + "_" + std::to_string(i);
+				std::string vertexFilePath = Dir::CombinePath(vertexBufferPath, meshFileName + ".vbuff");
+				std::string matFilePath = Dir::CombinePath(materialPath, meshFileName + ".matz");
+				std::string meshFilePath = Dir::CombinePath(meshPath, meshFileName + ".meshz");
+
+				// Export vbuff and indices buffer to file
 				{
-					if (mesh.hasBones)
+					std::cout << "Creating Vertex Buffer file [" << vertexFilePath << "]... " << std::endl;
+					std::ofstream stream;
+					stream.open(getFullPath(outputDir, vertexFilePath), std::ofstream::out);
+					if (stream.is_open())
 					{
-						stream << "BUFFER_LAYOUT_V3_N3_TC2_SKIN\n";
-					}
-					else
-					{
-						stream << "BUFFER_LAYOUT_V3_N3_TC2\n";
-					}
-					stream << mesh.vertices.size() << "\n";
-					for (unsigned int vi = 0; vi < mesh.vertices.size(); vi++)
-					{
-						stream << mesh.vertices[vi].Position[0] << " " << mesh.vertices[vi].Position[1] << " " << mesh.vertices[vi].Position[2] << "\t";
-						stream << mesh.vertices[vi].Normal[0] << " " << mesh.vertices[vi].Normal[1] << " " << mesh.vertices[vi].Normal[2] << "\t";
-						stream << mesh.vertices[vi].TexCoords[0] << " " << mesh.vertices[vi].TexCoords[1] << "\t";
 						if (mesh.hasBones)
 						{
-							std::vector<VertexBoneWeight> verticeWeights;
-							if (mesh.vertexBoneWeightMap.find(vi) != mesh.vertexBoneWeightMap.end())
-							{
-								verticeWeights = mesh.vertexBoneWeightMap[vi];
-							}
-
-							for (int bi = 0; bi < 4; bi++)
-							{
-								if (bi < verticeWeights.size())
-								{
-									stream << m_boneToIndexMap[verticeWeights[bi].BoneName] << " ";
-								}
-								else
-								{
-									stream << 0 << " ";
-								}
-							}
-
-							for (int bi = 0; bi < 4; bi++)
-							{
-								if (bi < verticeWeights.size())
-								{
-									stream << verticeWeights[bi].BoneWeight << " ";
-								}
-								else
-								{
-									stream << 0 << " ";
-								}
-							}
-						}
-						stream << "\n";
-					}
-
-					if (mesh.indices.size() > 0)
-					{
-						stream << "INDICE_BUFFER" << std::endl;
-						stream << mesh.indices.size() << std::endl;
-					}
-					else
-					{
-						stream << "INDICE_BUFFER_NONE" << std::endl;
-					}
-
-					for (unsigned int j = 0; j < mesh.indices.size(); j++)
-					{
-						stream << mesh.indices[j] << std::endl;
-					}
-
-					stream.close();
-				}
-				else
-				{
-					std::cout << "ERROR: Can't create \"" << getFullPath(outputDir, vertexFilePath) << "\"" << std::endl;
-				}
-			}
-
-			// Export material
-			// Copying texture files if necessary
-			{
-				std::cout << "Creating Material file [" << matFilePath << "]... " << std::endl;
-				std::ofstream stream;
-				stream.open(getFullPath(outputDir, matFilePath));
-				if (stream.is_open())
-				{
-					Material& mat = m_meshes[i].material;
-					stream << "Ka " << mat.Ka[0] << " " << mat.Ka[1] << " " << mat.Ka[2] << std::endl;
-					stream << "Kd " << mat.Kd[0] << " " << mat.Kd[1] << " " << mat.Kd[2] << std::endl;
-					stream << "Ks " << mat.Ks[0] << " " << mat.Ks[1] << " " << mat.Ks[2] << std::endl;
-					stream << "shininess " << mat.shininess << std::endl;
-
-					for (unsigned int j = 0; j < mat.textures.size(); j++)
-					{
-						Texture& texture = mat.textures[j];
-						switch (texture.type)
-						{
-						case DIFFUSE_TEXTURE:
-							stream << "diffuse ";
-							break;
-						case NORMAL_TEXTURE:
-							stream << "normals ";
-							break;
-						case SPECULAR_TEXTURE:
-							stream << "specular ";
-							break;
-						case BUMP_TEXTURE:
-							stream << "bump ";
-							break;
-						default:
-							stream << "map ";
-							break;
-						}
-							
-						stream << Dir::CombinePath(texturePath, texture.path) << std::endl;
-
-						// Copy Files
-						std::ifstream source(Dir::CombinePath(m_assetDir, texture.path), std::ofstream::binary);
-						if (source.is_open())
-						{
-							std::ofstream dest(getFullPath(outputDir, Dir::CombinePath(texturePath, texture.path)), std::ofstream::binary);
-
-							dest << source.rdbuf();
-
-							source.close();
-							dest.close();
+							stream << "BUFFER_LAYOUT_V3_N3_TC2_SKIN\n";
 						}
 						else
 						{
-							std::cout << "WARNING: Can't copy texture \"" << Dir::CombinePath(m_assetDir, texture.path) << "\". The texture might set something else in the game." << std::endl;
+							stream << "BUFFER_LAYOUT_V3_N3_TC2\n";
 						}
-					}
+						stream << mesh.vertices.size() << "\n";
+						for (unsigned int vi = 0; vi < mesh.vertices.size(); vi++)
+						{
+							stream << mesh.vertices[vi].Position[0] << " " << mesh.vertices[vi].Position[1] << " " << mesh.vertices[vi].Position[2] << "\t";
+							stream << mesh.vertices[vi].Normal[0] << " " << mesh.vertices[vi].Normal[1] << " " << mesh.vertices[vi].Normal[2] << "\t";
+							stream << mesh.vertices[vi].TexCoords[0] << " " << mesh.vertices[vi].TexCoords[1] << "\t";
+							if (mesh.hasBones)
+							{
+								std::vector<VertexBoneWeight> verticeWeights;
+								if (mesh.vertexBoneWeightMap.find(vi) != mesh.vertexBoneWeightMap.end())
+								{
+									verticeWeights = mesh.vertexBoneWeightMap[vi];
+								}
 
-					stream.close();
-				}
-				else
-				{
-					std::cout << "ERROR: Can't create \"" << getFullPath(outputDir, matFilePath) << "\"" << std::endl;
-				}
-			}
-				
-			// #TODO create meshz file
-			{
-				std::cout << "Creating Mesh file [" << meshFilePath << "]... " << std::endl;
-				std::ofstream stream(getFullPath(outputDir, meshFilePath));
-				if (stream.is_open())
-				{
-					stream << "vbuff " << vertexFilePath << std::endl;
-					stream << "mat " << matFilePath << std::endl;
-					if (mesh.hasBones)
-					{
-						stream << "skeleton " << skeletonFilePath << std::endl;
+								for (int bi = 0; bi < 4; bi++)
+								{
+									if (bi < verticeWeights.size())
+									{
+										stream << m_boneToIndexMap[verticeWeights[bi].BoneName] << " ";
+									}
+									else
+									{
+										stream << 0 << " ";
+									}
+								}
+
+								for (int bi = 0; bi < 4; bi++)
+								{
+									if (bi < verticeWeights.size())
+									{
+										stream << verticeWeights[bi].BoneWeight << " ";
+									}
+									else
+									{
+										stream << 0 << " ";
+									}
+								}
+							}
+							stream << "\n";
+						}
+
+						if (mesh.indices.size() > 0)
+						{
+							stream << "INDICE_BUFFER" << std::endl;
+							stream << mesh.indices.size() << std::endl;
+						}
+						else
+						{
+							stream << "INDICE_BUFFER_NONE" << std::endl;
+						}
+
+						for (unsigned int j = 0; j < mesh.indices.size(); j++)
+						{
+							stream << mesh.indices[j] << std::endl;
+						}
+
+						stream.close();
 					}
-					stream.close();
+					else
+					{
+						std::cout << "ERROR: Can't create \"" << getFullPath(outputDir, vertexFilePath) << "\"" << std::endl;
+					}
 				}
-				else
+
+				// Export material
+				// Copying texture files if necessary
 				{
-					std::cout << "ERROR: Can't create \"" << getFullPath(outputDir, meshFilePath) << "\"" << std::endl;
+					std::cout << "Creating Material file [" << matFilePath << "]... " << std::endl;
+					std::ofstream stream;
+					stream.open(getFullPath(outputDir, matFilePath));
+					if (stream.is_open())
+					{
+						Material& mat = m_meshes[i].material;
+						stream << "Ka " << mat.Ka[0] << " " << mat.Ka[1] << " " << mat.Ka[2] << std::endl;
+						stream << "Kd " << mat.Kd[0] << " " << mat.Kd[1] << " " << mat.Kd[2] << std::endl;
+						stream << "Ks " << mat.Ks[0] << " " << mat.Ks[1] << " " << mat.Ks[2] << std::endl;
+						stream << "shininess " << mat.shininess << std::endl;
+
+						for (unsigned int j = 0; j < mat.textures.size(); j++)
+						{
+							Texture& texture = mat.textures[j];
+							switch (texture.type)
+							{
+							case DIFFUSE_TEXTURE:
+								stream << "diffuse ";
+								break;
+							case NORMAL_TEXTURE:
+								stream << "normals ";
+								break;
+							case SPECULAR_TEXTURE:
+								stream << "specular ";
+								break;
+							case BUMP_TEXTURE:
+								stream << "bump ";
+								break;
+							default:
+								stream << "map ";
+								break;
+							}
+
+							stream << Dir::CombinePath(texturePath, texture.path) << std::endl;
+
+							// Copy Files
+							std::ifstream source(Dir::CombinePath(m_assetDir, texture.path), std::ofstream::binary);
+							if (source.is_open())
+							{
+								std::ofstream dest(getFullPath(outputDir, Dir::CombinePath(texturePath, texture.path)), std::ofstream::binary);
+
+								dest << source.rdbuf();
+
+								source.close();
+								dest.close();
+							}
+							else
+							{
+								std::cout << "WARNING: Can't copy texture \"" << Dir::CombinePath(m_assetDir, texture.path) << "\". The texture might set something else in the game." << std::endl;
+							}
+						}
+
+						stream.close();
+					}
+					else
+					{
+						std::cout << "ERROR: Can't create \"" << getFullPath(outputDir, matFilePath) << "\"" << std::endl;
+					}
+				}
+
+				// #TODO create meshz file
+				{
+					std::cout << "Creating Mesh file [" << meshFilePath << "]... " << std::endl;
+					std::ofstream stream(getFullPath(outputDir, meshFilePath));
+					if (stream.is_open())
+					{
+						stream << "vbuff " << vertexFilePath << std::endl;
+						stream << "mat " << matFilePath << std::endl;
+						if (mesh.hasBones)
+						{
+							stream << "skeleton " << (m_settings.bParseSkeleton ? skeletonFilePath : m_settings.skeletonPath) << std::endl;
+						}
+						stream.close();
+					}
+					else
+					{
+						std::cout << "ERROR: Can't create \"" << getFullPath(outputDir, meshFilePath) << "\"" << std::endl;
+					}
 				}
 			}
 		}
 
 		// Save Animation
-		for (unsigned int i = 0; i < m_animations.size(); i++)
+		if (m_settings.bParseAnimation)
 		{
-			Animation& anim = m_animations[i];
-			
-			std::string animationFilePath = Dir::CombinePath(animPath, m_fileName + "_" + anim.name + ".animz");
-
-			std::cout << "Creating Animation file [" << animationFilePath << "]... " << std::endl;
-
-			std::ofstream stream;
-			stream.open(getFullPath(outputDir, animationFilePath), std::ofstream::out);
-
-			stream << "AnimationClip " << anim.name << std::endl;
-			stream << "duration " << anim.duration << std::endl;
-			stream << "fps " << anim.tickPerSecond << std::endl;
-
-			if (anim.hasSkeleton)
+			for (unsigned int i = 0; i < m_animations.size(); i++)
 			{
-				stream << "skeleton " << skeletonFilePath  << std::endl;
-			}
+				Animation& anim = m_animations[i];
 
-#if ANIMATION_SAVE_TIME_FIRST
-			for (double time = 0.0; time <= anim.duration; time += 1.0)
-			{
-				std::map <unsigned int, AnimationNode*> boneIndexToNodeMap;
+				std::string animationFilePath = Dir::CombinePath(animPath, m_fileName + "_" + anim.name + ".animz");
 
-				stream << "time " << time << std::endl;
-				for (unsigned int nodeIndex = 0; nodeIndex < anim.nodes.size(); nodeIndex++)
+				std::cout << "Creating Animation file [" << animationFilePath << "]... " << std::endl;
+
+				std::ofstream stream;
+				stream.open(getFullPath(outputDir, animationFilePath), std::ofstream::out);
+
+				stream << "AnimationClip " << anim.name << std::endl;
+				stream << "duration " << anim.duration << std::endl;
+				stream << "fps " << anim.tickPerSecond << std::endl;
+
+				if (anim.hasSkeleton)
 				{
-					AnimationNode& animNode = anim.nodes[nodeIndex];
-					int index = 0;
-					while (index < animNode.keys.size() && animNode.keys[index].time != time)
-					{
-						index++;
-					}
-
-					if (index < animNode.keys.size())
-					{
-						if (animNode.bIsBone)
-						{
-							boneIndexToNodeMap[animNode.boneIndex] = &animNode;
-							continue;
-						}
-						else
-						{
-							stream << "track " << animNode.nodeName << std::endl;
-						}
-
-						AnimationKey& animKey = animNode.keys[index];
-
-						saveAnimationKey(animKey, stream);
-					}
+					stream << "skeleton " << ( m_settings.bParseSkeleton ? skeletonFilePath : m_settings.skeletonPath ) << std::endl;
 				}
 
-				for (unsigned int i = 0; i < m_bones.size(); i++)
+#if ANIMATION_SAVE_TIME_FIRST
+				for (double time = 0.0; time <= anim.duration; time += 1.0)
 				{
-					if (boneIndexToNodeMap.find(i) != boneIndexToNodeMap.end())
+					std::map <unsigned int, AnimationNode*> boneIndexToNodeMap;
+
+					stream << "time " << time << std::endl;
+					for (unsigned int nodeIndex = 0; nodeIndex < anim.nodes.size(); nodeIndex++)
 					{
-						AnimationNode& animNode = *boneIndexToNodeMap[i];
+						AnimationNode& animNode = anim.nodes[nodeIndex];
 						int index = 0;
-						while (index < animNode.keys.size() && animNode.keys[index].time != time)
+						while (index < animNode.keys.size() && abs(animNode.keys[index].time - time) > 0.000001)
 						{
 							index++;
 						}
@@ -329,11 +314,16 @@ namespace ZETools
 						{
 							if (animNode.bIsBone)
 							{
-								stream << "bone " << animNode.boneIndex << std::endl;
+								boneIndexToNodeMap[animNode.boneIndex] = &animNode;
+								continue;
+							}
+							else if(!m_settings.animation.bRemoveNonBone)
+							{
+								stream << "track " << animNode.nodeName << std::endl;
 							}
 							else
 							{
-								stream << "track " << animNode.nodeName << std::endl;
+								continue; // skip this frame
 							}
 
 							AnimationKey& animKey = animNode.keys[index];
@@ -341,34 +331,62 @@ namespace ZETools
 							saveAnimationKey(animKey, stream);
 						}
 					}
+
+					for (unsigned int i = 0; i < m_bones.size(); i++)
+					{
+						if (boneIndexToNodeMap.find(i) != boneIndexToNodeMap.end())
+						{
+							AnimationNode& animNode = *boneIndexToNodeMap[i];
+							int index = 0;
+							while (index < animNode.keys.size() && abs(animNode.keys[index].time - time) > 0.000001)
+							{
+								index++;
+							}
+
+							if (index < animNode.keys.size())
+							{
+								if (animNode.bIsBone)
+								{
+									stream << "bone " << animNode.boneIndex << std::endl;
+								}
+								else
+								{
+									stream << "track " << animNode.nodeName << std::endl;
+								}
+
+								AnimationKey& animKey = animNode.keys[index];
+
+								saveAnimationKey(animKey, stream);
+							}
+						}
+					}
 				}
-			}
 #else
-			for (unsigned int nodeIndex = 0; nodeIndex < anim.nodes.size(); nodeIndex++)
-			{
-				AnimationNode& animNode = anim.nodes[nodeIndex];
-				if (animNode.bIsBone)
+				for (unsigned int nodeIndex = 0; nodeIndex < anim.nodes.size(); nodeIndex++)
 				{
-					stream << "bone " << m_boneToIndexMap[animNode.nodeName] << std::endl;
-				}
-				else
-				{
-					stream << "track " << animNode.nodeName << std::endl;
-				}
+					AnimationNode& animNode = anim.nodes[nodeIndex];
+					if (animNode.bIsBone)
+					{
+						stream << "bone " << m_boneToIndexMap[animNode.nodeName] << std::endl;
+					}
+					else
+					{
+						stream << "track " << animNode.nodeName << std::endl;
+					}
 
-				for (unsigned int keyIndex = 0; keyIndex < animNode.keys.size(); keyIndex++)
-				{
-					AnimationKey& animKey = animNode.keys[keyIndex];
-					stream << "time " << animKey.time << std::endl;
+					for (unsigned int keyIndex = 0; keyIndex < animNode.keys.size(); keyIndex++)
+					{
+						AnimationKey& animKey = animNode.keys[keyIndex];
+						stream << "time " << animKey.time << std::endl;
 
-					saveAnimationKey(animKey, stream);
+						saveAnimationKey(animKey, stream);
+					}
 				}
-			}
 #endif
 
-			stream.close();
+				stream.close();
+			}
 		}
-
 	}
 
 	void ModelParser::saveAnimationKey(AnimationKey& animKey, std::ofstream& stream)
@@ -466,103 +484,114 @@ namespace ZETools
 
 	void ModelParser::processMesh(aiMesh* mesh, const aiScene* scene)
 	{
-		Mesh outMesh;
-
-		outMesh.name = mesh->mName.C_Str();
-		bool hasNormal = mesh->mNormals != NULL;
-
-		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+		if (m_settings.bParseMesh)
 		{
-			Vertex pos;
-			pos.Position[0] = mesh->mVertices[i].x;
-			pos.Position[1] = mesh->mVertices[i].y;
-			pos.Position[2] = mesh->mVertices[i].z;
-			if (hasNormal)
-			{
-				pos.Normal[0] = mesh->mNormals[i].x;
-				pos.Normal[1] = mesh->mNormals[i].y;
-				pos.Normal[2] = mesh->mNormals[i].z;
-			}
-			pos.TexCoords[0] = 0.0f;
-			pos.TexCoords[1] = 0.0f;
+			Mesh outMesh;
 
-			if (mesh->mTextureCoords[0])
+			outMesh.name = mesh->mName.C_Str();
+			bool hasNormal = mesh->mNormals != NULL;
+
+			for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 			{
-				// #TODO need to support multiple texture coordinates
-				pos.TexCoords[0] = mesh->mTextureCoords[0][i].x;
-				pos.TexCoords[1] = mesh->mTextureCoords[0][i].y;
+				Vertex pos;
+				pos.Position[0] = mesh->mVertices[i].x;
+				pos.Position[1] = mesh->mVertices[i].y;
+				pos.Position[2] = mesh->mVertices[i].z;
+				if (hasNormal)
+				{
+					pos.Normal[0] = mesh->mNormals[i].x;
+					pos.Normal[1] = mesh->mNormals[i].y;
+					pos.Normal[2] = mesh->mNormals[i].z;
+				}
+				pos.TexCoords[0] = 0.0f;
+				pos.TexCoords[1] = 0.0f;
+
+				if (mesh->mTextureCoords[0])
+				{
+					// #TODO need to support multiple texture coordinates
+					pos.TexCoords[0] = mesh->mTextureCoords[0][i].x;
+					pos.TexCoords[1] = mesh->mTextureCoords[0][i].y;
+				}
+
+				outMesh.vertices.push_back(pos);
 			}
 
-			outMesh.vertices.push_back(pos);
+			outMesh.hasBones = mesh->mNumBones > 0;
+
+			// Vertex Bones if any
+			for (unsigned int i = 0; i < mesh->mNumBones; i++)
+			{
+				aiBone* bone = mesh->mBones[i];
+				processBone(bone, scene);
+				for (unsigned int j = 0; j < bone->mNumWeights; j++)
+				{
+					aiVertexWeight vertexWeight = bone->mWeights[j];
+					VertexBoneWeight outVertexWeight;
+					outVertexWeight.BoneName = bone->mName.data;
+					outVertexWeight.BoneWeight = vertexWeight.mWeight;
+					outMesh.vertexBoneWeightMap[vertexWeight.mVertexId].push_back(outVertexWeight);
+				}
+			}
+
+			// Indices
+			for (unsigned int i = 0; i < mesh->mNumFaces; i++)
+			{
+				aiFace& face = mesh->mFaces[i];
+				for (unsigned int j = 0; j < face.mNumIndices; j++)
+				{
+					outMesh.indices.push_back(face.mIndices[j]);
+				}
+			}
+
+			// Material
+			if (mesh->mMaterialIndex >= 0)
+			{
+				Material outMat;
+				aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+
+				aiColor3D MatKa;
+				aiColor3D MatKd;
+				aiColor3D MatKs;
+				ai_real shininess;
+				material->Get(AI_MATKEY_COLOR_AMBIENT, MatKa);
+				material->Get(AI_MATKEY_COLOR_DIFFUSE, MatKd);
+				material->Get(AI_MATKEY_COLOR_SPECULAR, MatKs);
+
+				material->Get(AI_MATKEY_SHININESS, shininess);
+
+				outMat.Ka[0] = MatKa.r;
+				outMat.Ka[1] = MatKa.g;
+				outMat.Ka[2] = MatKa.b;
+
+				outMat.Kd[0] = MatKd.r;
+				outMat.Kd[1] = MatKd.g;
+				outMat.Kd[2] = MatKd.b;
+
+				outMat.Ks[0] = MatKs.r;
+				outMat.Ks[1] = MatKs.g;
+				outMat.Ks[2] = MatKs.b;
+
+				outMat.shininess = shininess;
+
+				for (aiTextureType type = aiTextureType_NONE; type < aiTextureType_UNKNOWN; )
+				{
+					std::vector<Texture> res = processTextures(material, type);
+					outMat.textures.insert(outMat.textures.end(), res.begin(), res.end());
+					type = (aiTextureType)(static_cast<unsigned int>(type) + 1);
+				}
+				outMesh.material = outMat;
+			}
+
+			m_meshes.push_back(outMesh);
 		}
-
-		outMesh.hasBones = mesh->mNumBones > 0;
-
-		// Vertex Bones if any
-		for (unsigned int i = 0; i < mesh->mNumBones; i++)
+		else
 		{
-			aiBone* bone = mesh->mBones[i];
-			processBone(bone, scene);
-			for (unsigned int j = 0; j < bone->mNumWeights; j++)
+			for (unsigned int i = 0; i < mesh->mNumBones; i++)
 			{
-				aiVertexWeight vertexWeight = bone->mWeights[j];
-				VertexBoneWeight outVertexWeight;
-				outVertexWeight.BoneName = bone->mName.data;
-				outVertexWeight.BoneWeight = vertexWeight.mWeight;
-				outMesh.vertexBoneWeightMap[vertexWeight.mVertexId].push_back(outVertexWeight);
+				aiBone* bone = mesh->mBones[i];
+				processBone(bone, scene);
 			}
 		}
-
-		// Indices
-		for (unsigned int i = 0; i < mesh->mNumFaces; i++)
-		{
-			aiFace& face = mesh->mFaces[i];
-			for (unsigned int j = 0; j < face.mNumIndices; j++)
-			{
-				outMesh.indices.push_back(face.mIndices[j]);
-			}
-		}
-
-		// Material
-		if (mesh->mMaterialIndex >= 0)
-		{
-			Material outMat;
-			aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-
-			aiColor3D MatKa;
-			aiColor3D MatKd;
-			aiColor3D MatKs;
-			ai_real shininess;
-			material->Get(AI_MATKEY_COLOR_AMBIENT, MatKa);
-			material->Get(AI_MATKEY_COLOR_DIFFUSE, MatKd);
-			material->Get(AI_MATKEY_COLOR_SPECULAR, MatKs);
-
-			material->Get(AI_MATKEY_SHININESS, shininess);
-
-			outMat.Ka[0] = MatKa.r;
-			outMat.Ka[1] = MatKa.g;
-			outMat.Ka[2] = MatKa.b;
-
-			outMat.Kd[0] = MatKd.r;
-			outMat.Kd[1] = MatKd.g;
-			outMat.Kd[2] = MatKd.b;
-
-			outMat.Ks[0] = MatKs.r;
-			outMat.Ks[1] = MatKs.g;
-			outMat.Ks[2] = MatKs.b;
-
-			outMat.shininess = shininess;
-
-			for (aiTextureType type = aiTextureType_NONE; type < aiTextureType_UNKNOWN; )
-			{
-				std::vector<Texture> res = processTextures(material, type);
-				outMat.textures.insert(outMat.textures.end(), res.begin(), res.end());
-				type = (aiTextureType)(static_cast<unsigned int>(type) + 1);
-			}
-			outMesh.material = outMat;
-		}
-
-		m_meshes.push_back(outMesh);
 	}
 
 	void ModelParser::processBone(aiBone* bone, const aiScene* scene)

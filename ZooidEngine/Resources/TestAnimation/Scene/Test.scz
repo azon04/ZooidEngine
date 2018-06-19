@@ -1,10 +1,15 @@
 SceneName TestMap
 FileVersion 1.0
-ComponentCount 3
+ComponentCount 5
 LightComponent DirLight
 BEGIN
 LightType 0
 R 150.0 0.0 0.0
+END
+RenderComponent Floor
+BEGIN
+Mesh Basic/Mesh/Floor.meshz
+S 10.0 10.0 10.0
 END
 RenderComponent Skin1
 BEGIN
@@ -15,4 +20,10 @@ RenderComponent Skin2
 BEGIN
 Mesh TestAnimation/Mesh/Walking_baked_1.meshz
 S 0.01 0.01 0.01
+END
+RenderComponent Mutant
+BEGIN
+Mesh TestAnimation/Mesh/MutantPunch_baked_0.meshz
+S 0.01 0.01 0.01
+T 0.0 0.0 1.0
 END

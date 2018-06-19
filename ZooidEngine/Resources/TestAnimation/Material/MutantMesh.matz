@@ -1,0 +1,6 @@
+Ka 0.2 0.2 0.2
+Kd 1 1 1
+Ks 0.2 0.2 0.2
+shininess 6.15385
+diffuse TestAnimation\Texture\../../../../home/app/mixamo-mini/tmp/skins_9d342768-ed7f-4799-ba83-41711f0203f1.fbm/Mutant_diffuse.png
+normals TestAnimation\Texture\../../../../home/app/mixamo-mini/tmp/skins_9d342768-ed7f-4799-ba83-41711f0203f1.fbm/Mutant_normal.png

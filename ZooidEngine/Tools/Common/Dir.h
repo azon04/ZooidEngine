@@ -19,6 +19,8 @@ namespace ZETools
 			return '/'
 #endif
 		}
+
+		bool IsExist(std::string path);
 	}
 }
 
