@@ -41,7 +41,7 @@ namespace ZE
 
 		Int32 addJoint(SkeletonJoint& _joint);
 		bool getJoint(Int32 _jointId, SkeletonJoint& _joint);
-		bool getJointByName(String name, Int32& _jointId);
+		bool getJointByName(const String& name, Int32& _jointId);
 		bool getParentJoint(SkeletonJoint& _joint);
 
 		void loadFromFile(const char* filePath);

@@ -97,6 +97,8 @@ namespace ZE
 		AnimationClip() {}
 
 		void getAnimationPoseAtTime(float _localTime, AnimationPose& outPose);
+		void getAnimationPoseAtScaleTime(float _localTime, AnimationPose& outPose, float scale);
+		void getAnimationPoseAtTimeWithDuration(float _localTime, AnimationPose& outPose, float _duration);
 
 		Skeleton* m_skeleton;
 		Int32 m_framePerSecond;
@@ -124,6 +126,14 @@ namespace ZE
 
 		AnimationClip* m_animationClip;
 		HashMap<String, Track*> m_trackMap;
+	};
+
+	namespace AnimationHelper
+	{
+		void LerpPoseSQT(PoseSQT& res, const PoseSQT& pose1, const PoseSQT& pose2, float alpha);
+		void LerpAnimPose(AnimationPose& res, AnimationPose& pose1, AnimationPose& pose2, float alpha);
+		void LerpAnimPartialPose(AnimationPose& res, AnimationPose& target, AnimationPose& pose, Skeleton* skelDef, Int32 boneIndex, float alpha, bool bBlendOrientation = true );
+		void LerpAdditivePose(AnimationPose& res, AnimationPose& target, AnimationPose& addPose, float alpha);
 	};
 }
 #endif

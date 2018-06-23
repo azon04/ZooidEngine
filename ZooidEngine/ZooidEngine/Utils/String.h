@@ -131,12 +131,12 @@ namespace ZE
 			return *this;
 		}
 
-		bool operator==(const char* text)
+		bool operator==(const char* text) const
 		{
-			return StringFunc::Compare(c_str(), text) == 0;
+			return StringFunc::Compare(const_str(), text) == 0;
 		}
 
-		bool operator==(const String& text)
+		bool operator==(const String& text) const 
 		{
 			return StringFunc::Compare(const_str(), text.const_str()) == 0;
 		}

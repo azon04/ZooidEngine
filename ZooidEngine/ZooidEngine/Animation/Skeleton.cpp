@@ -24,7 +24,7 @@ namespace ZE
 		return true;
 	}
 
-	bool Skeleton::getJointByName(String name, Int32& _jointId)
+	bool Skeleton::getJointByName(const String& name, Int32& _jointId)
 	{
 		for (Int32 i = 0; i < m_jointCount; i++)
 		{

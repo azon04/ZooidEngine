@@ -116,6 +116,7 @@ public:
 	{
 		return Vector3(m_x, m_y, m_z);
 	}
+
 	// Quaternion Conjugate
 	Quaternion operator*()
 	{

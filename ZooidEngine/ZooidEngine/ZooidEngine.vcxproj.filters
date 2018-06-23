@@ -414,6 +414,9 @@
     <ClInclude Include="Animation\AnimationComponent.h">
       <Filter>Animation</Filter>
     </ClInclude>
+    <ClInclude Include="Animation\AnimationSM.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -660,6 +663,9 @@
       <Filter>ResourceManagers</Filter>
     </ClCompile>
     <ClCompile Include="Animation\AnimationComponent.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\AnimationSM.cpp">
       <Filter>Animation</Filter>
     </ClCompile>
   </ItemGroup>

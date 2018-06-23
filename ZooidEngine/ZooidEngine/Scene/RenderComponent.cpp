@@ -163,12 +163,6 @@ namespace ZE {
 			Skeleton* pSkeleton = m_mesh->m_hSkeleton.getObject<Skeleton>();
 			m_hSkeletonState = Handle("Skeleton State", sizeof(SkeletonState));
 			new(m_hSkeletonState) SkeletonState(pSkeleton);
-
-			// #TODO set animation component
-			Handle hAnimComp("AnimationComponent", sizeof(AnimationComponent));
-			AnimationComponent* pAnimComp = new(hAnimComp) AnimationComponent(m_gameContext);
-			pAnimComp->setupComponent();
-			addChild(pAnimComp);
 		}
 	}
 

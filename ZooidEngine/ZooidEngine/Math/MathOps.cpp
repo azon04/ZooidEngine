@@ -94,4 +94,10 @@ namespace ZE
 
 	}
 
+	Quaternion MathOps::QLerp(const Quaternion& q1, const Quaternion& q2, float alpha)
+	{
+		return q1 + alpha * (q2 - q1);
+
+	}
+
 }

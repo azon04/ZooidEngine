@@ -22,6 +22,8 @@ namespace ZE
 
 		Quaternion QSlerp(const Quaternion& q1, const Quaternion& q2, float alpha);
 
+		Quaternion QLerp(const Quaternion& q1, const Quaternion& q2, float alpha);
+
 	}
 }
 #endif

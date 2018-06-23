@@ -173,6 +173,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
   <ItemGroup>
     <ClInclude Include="Animation\Animation.h" />
     <ClInclude Include="Animation\AnimationComponent.h" />
+    <ClInclude Include="Animation\AnimationSM.h" />
     <ClInclude Include="Animation\Skeleton.h" />
     <ClInclude Include="Common\GlobalRegistry.h" />
     <ClInclude Include="Events\EventDispatcher.h" />
@@ -281,6 +282,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
   <ItemGroup>
     <ClCompile Include="Animation\Animation.cpp" />
     <ClCompile Include="Animation\AnimationComponent.cpp" />
+    <ClCompile Include="Animation\AnimationSM.cpp" />
     <ClCompile Include="Animation\Skeleton.cpp" />
     <ClCompile Include="Common\GlobalRegistry.cpp" />
     <ClCompile Include="Events\EventDispatcher.cpp" />
