@@ -27,12 +27,15 @@ int main(int argc, char* argv[])
 		cout << "--noMesh" << endl;
 		cout << "--noAnimation" << endl;
 		cout << "--skeletonPath path \t path is relative path of skeleton from out directory" << endl;
+		cout << "--reference path \t path is FBX or raw assets path to use as reference (for making additive animation)" << endl;
 		return 0;
 	}
 
 	ZETools::ModelParser parser;
 	std::string package = "default";
 	std::string outputDir = "";
+
+	std::string referencePath = "";
 
 	ZETools::ModelParserSettings settings;
 
@@ -85,8 +88,25 @@ int main(int argc, char* argv[])
 			settings.bParseSkeleton = false;
 			settings.skeletonPath = argv[++index];
 		}
+		else if (strcmp(argv[index], "--reference") == 0)
+		{
+			referencePath = argv[++index];
+			settings.animation.bCreateAdditive = true;
+		}
 		
 		index++;
+	}
+
+	ZETools::ModelParser referenceParser;
+
+	if (referencePath != "")
+	{
+		ZETools::ModelParserSettings referenceSettings;
+		referenceSettings.bParseMesh = false;
+		referenceParser.setSettings(referenceSettings);
+		referenceParser.loadFile(referencePath);
+
+		parser.setModelReference(&referenceParser);
 	}
 
 	parser.setSettings(settings);

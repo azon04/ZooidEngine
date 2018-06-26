@@ -104,6 +104,7 @@ namespace ZETools
 			short sqtMask = TRANSLATION_MASK | SCALE_MASK | QUAT_MASK;
 			bool bRecalculateQuatRuntime = false;
 			bool bRemoveNonBone = true;
+			bool bCreateAdditive = false;
 		} animation;
 
 		bool bParseMesh = true;
@@ -126,6 +127,8 @@ namespace ZETools
 		{
 			m_settings = _settings;
 		}
+		
+		void setModelReference(ModelParser* modelReference);
 
 	protected:
 
@@ -138,7 +141,6 @@ namespace ZETools
 		void processBone(aiBone* bone, const aiScene* scene);
 		void processBones(aiNode* node);
 		void processAnimation(aiAnimation* anim);
-		
 
 		aiNode* findNodeByName(std::string name);
 
@@ -161,6 +163,8 @@ namespace ZETools
 		Assimp::Importer m_importer;
 
 		ModelParserSettings m_settings;
+
+		ModelParser* m_modelReference = nullptr;
 	};
 }
 #endif

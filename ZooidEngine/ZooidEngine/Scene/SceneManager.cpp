@@ -184,6 +184,12 @@ namespace ZE
 					LoadSceneComponentToComp(fileReader, pComp);
 				}
 			}
+			else if (StringFunc::Compare(buff, "Scene") == 0)
+			{
+				// Read Scene
+				fileReader->readNextString(buff);
+				LoadSceneFileToComp(GetResourcePath(buff).c_str(), pComp);
+			}
 			else if (StringFunc::Compare(buff, "Physics") == 0)
 			{
 				fileReader->readNextString(buff);

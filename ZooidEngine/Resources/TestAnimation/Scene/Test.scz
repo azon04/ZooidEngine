@@ -1,6 +1,6 @@
 SceneName TestMap
 FileVersion 1.0
-ComponentCount 19
+ComponentCount 6
 LightComponent DirLight
 BEGIN
 LightType 0
@@ -8,123 +8,22 @@ R 150.0 0.0 0.0
 END
 RenderComponent Floor
 BEGIN
-Mesh Basic/Mesh/Floor.meshz
-S 10.0 10.0 10.0
+Mesh Basic/Mesh/FloorChecker.meshz
+S 15.0 15.0 15.0
 END
-RenderComponent Skin1_BlendState
+SceneComponent BlendSceneDemo
 BEGIN
-AnimationState TestAnimation/Animation/AnimStateDef.asz
-Mesh TestAnimation/Mesh/Walking_baked_0.meshz
-S 0.01 0.01 0.01
+Scene TestAnimation/Scene/BlendSceneDemo.scz
 END
-RenderComponent Skin2_BlendState
+SceneComponent BlendSceneDemo_Crouched
 BEGIN
-AnimationState TestAnimation/Animation/AnimStateDef.asz
-Mesh TestAnimation/Mesh/Walking_baked_1.meshz
-S 0.01 0.01 0.01
+Scene TestAnimation/Scene/BlendSceneDemo_Crouch.scz
 END
-RenderComponent Skin1_Walk
+SceneComponent AddSceneDemo
 BEGIN
-Animation TestAnimation/Animation/Walking_baked_Take001.animz 1 1.0
-Mesh TestAnimation/Mesh/Walking_baked_0.meshz
-S 0.01 0.01 0.01
-T -1.0 0.0 0.0
+Scene TestAnimation/Scene/AddSceneDemo.scz
 END
-RenderComponent Skin2_Walk
+SceneComponent ComplexSceneDemo
 BEGIN
-Animation TestAnimation/Animation/Walking_baked_Take001.animz 1 1.0
-Mesh TestAnimation/Mesh/Walking_baked_1.meshz
-S 0.01 0.01 0.01
-T -1.0 0.0 0.0
-END
-RenderComponent Skin1_Run
-BEGIN
-Animation TestAnimation/Animation/Running_baked_Take001.animz 1 1.0
-Mesh TestAnimation/Mesh/Walking_baked_0.meshz
-S 0.01 0.01 0.01
-T 1.0 0.0 0.0
-END
-RenderComponent Skin2_Run
-BEGIN
-Animation TestAnimation/Animation/Running_baked_Take001.animz 1 1.0
-Mesh TestAnimation/Mesh/Walking_baked_1.meshz
-S 0.01 0.01 0.01
-T 1.0 0.0 0.0
-END
-RenderComponent Skin1_Aim
-BEGIN
-Animation TestAnimation/Animation/RifleAimingIdle_Baked_Take001.animz 1 1.0
-Mesh TestAnimation/Mesh/Walking_baked_0.meshz
-S 0.01 0.01 0.01
-T -1.0 0.0 1.0
-END
-RenderComponent Skin2_Aim
-BEGIN
-Animation TestAnimation/Animation/RifleAimingIdle_Baked_Take001.animz 1 1.0
-Mesh TestAnimation/Mesh/Walking_baked_1.meshz
-S 0.01 0.01 0.01
-T -1.0 0.0 1.0
-END
-RenderComponent Skin1_PartialBlendState
-BEGIN
-AnimationState TestAnimation/Animation/PartialAnimStateDef.asz
-Mesh TestAnimation/Mesh/Walking_baked_0.meshz
-S 0.01 0.01 0.01
-T 0.0 0.0 1.0
-END
-RenderComponent Skin2_PartialBlendState
-BEGIN
-AnimationState TestAnimation/Animation/PartialAnimStateDef.asz
-Mesh TestAnimation/Mesh/Walking_baked_1.meshz
-S 0.01 0.01 0.01
-T 0.0 0.0 1.0
-END
-RenderComponent Skin1_Crouch
-BEGIN
-Animation TestAnimation/Animation/MaleCrouchPose_Baked_Take001.animz 1 1.0
-Mesh TestAnimation/Mesh/Walking_baked_0.meshz
-S 0.01 0.01 0.01
-T -1.0 0.0 2.0
-END
-RenderComponent Skin2_Crouch
-BEGIN
-Animation TestAnimation/Animation/MaleCrouchPose_Baked_Take001.animz 1 1.0
-Mesh TestAnimation/Mesh/Walking_baked_1.meshz
-S 0.01 0.01 0.01
-T -1.0 0.0 2.0
-END
-RenderComponent Skin1_CrouchWalking
-BEGIN
-Animation TestAnimation/Animation/CrouchedWalking_Baked_Take001.animz 1 1.0
-Mesh TestAnimation/Mesh/Walking_baked_0.meshz
-S 0.01 0.01 0.01
-T 1.0 0.0 2.0
-END
-RenderComponent Skin2_CrouchWalking
-BEGIN
-Animation TestAnimation/Animation/CrouchedWalking_Baked_Take001.animz 1 1.0
-Mesh TestAnimation/Mesh/Walking_baked_1.meshz
-S 0.01 0.01 0.01
-T 1.0 0.0 2.0
-END
-RenderComponent Skin1_CrouchBlendState
-BEGIN
-AnimationState TestAnimation/Animation/CrouchAnimStateDef.asz
-Mesh TestAnimation/Mesh/Walking_baked_0.meshz
-S 0.01 0.01 0.01
-T 0.0 0.0 2.0
-END
-RenderComponent Skin2_CrouchBlendState
-BEGIN
-AnimationState TestAnimation/Animation/CrouchAnimStateDef.asz
-Mesh TestAnimation/Mesh/Walking_baked_1.meshz
-S 0.01 0.01 0.01
-T 0.0 0.0 2.0
-END
-RenderComponent Mutant
-BEGIN
-Animation TestAnimation/Animation/MutantPunch_baked_Take001.animz 1 1.0
-Mesh TestAnimation/Mesh/MutantPunch_baked_0.meshz
-S 0.01 0.01 0.01
-T 0.0 0.0 -2.0
+Scene TestAnimation/Scene/ComplexSceneDemo.scz
 END

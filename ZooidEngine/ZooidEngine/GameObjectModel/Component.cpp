@@ -111,6 +111,13 @@ namespace ZE {
 			registerChildToEvent(eventIds[i], child);
 			registerEventToParent(eventIds[i]);
 		}
+
+		Array<Int32, true> addEventIds = child->m_eventMap.getKeys();
+		for (int i = 0; i < addEventIds.length(); i++)
+		{
+			registerChildToEvent(addEventIds[i], child);
+			registerEventToParent(addEventIds[i]);
+		}
 	}
 
 	void Component::removeChild(Component* child)

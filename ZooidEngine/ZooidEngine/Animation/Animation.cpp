@@ -172,7 +172,7 @@ namespace ZE
 		for (int i = 0; i < target.jointPoses.length(); i++)
 		{
 			skelDef->getJoint(i, jointTemp);
-			if (jointTemp.parentIndex == boneIndex)
+			if (jointTemp.parentIndex == boneIndex || i == boneIndex)
 			{
 				boneMaskMap[i] = true;
 			}
@@ -201,10 +201,8 @@ namespace ZE
 		{
 			skelDef->getJoint(boneIndex, jointTemp);
 			Int32 parentIndex = jointTemp.parentIndex;
-			Quaternion addRot = pose.jointPoses[parentIndex].rotation * (*target.jointPoses[parentIndex].rotation);
-			addRot.normalize();
+			Quaternion addRot = pose.jointPoses[parentIndex].rotation *(*target.jointPoses[parentIndex].rotation);
 			res.jointPoses[boneIndex].rotation = res.jointPoses[boneIndex].rotation * addRot;
-			res.jointPoses[boneIndex].rotation.normalize();
 		}
 	}
 

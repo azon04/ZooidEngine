@@ -1,0 +1,43 @@
+SceneName BlendSceneDemo
+FileVersion 1.0
+ComponentCount 6
+RenderComponent Skin1_BlendState
+BEGIN
+AnimationState TestAnimation/Animation/AnimStateDef.asz
+Mesh TestAnimation/Mesh/Walking_baked_0.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent Skin2_BlendState
+BEGIN
+AnimationState TestAnimation/Animation/AnimStateDef.asz
+Mesh TestAnimation/Mesh/Walking_baked_1.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent Skin1_Walk
+BEGIN
+Animation TestAnimation/Animation/Walking_baked_Take001.animz 1 1.0
+Mesh TestAnimation/Mesh/Walking_baked_0.meshz
+S 0.01 0.01 0.01
+T -1.0 0.0 0.0
+END
+RenderComponent Skin2_Walk
+BEGIN
+Animation TestAnimation/Animation/Walking_baked_Take001.animz 1 1.0
+Mesh TestAnimation/Mesh/Walking_baked_1.meshz
+S 0.01 0.01 0.01
+T -1.0 0.0 0.0
+END
+RenderComponent Skin1_Run
+BEGIN
+Animation TestAnimation/Animation/Running_baked_Take001.animz 1 1.0
+Mesh TestAnimation/Mesh/Walking_baked_0.meshz
+S 0.01 0.01 0.01
+T 1.0 0.0 0.0
+END
+RenderComponent Skin2_Run
+BEGIN
+Animation TestAnimation/Animation/Running_baked_Take001.animz 1 1.0
+Mesh TestAnimation/Mesh/Walking_baked_1.meshz
+S 0.01 0.01 0.01
+T 1.0 0.0 0.0
+END

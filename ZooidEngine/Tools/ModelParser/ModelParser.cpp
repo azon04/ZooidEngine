@@ -640,6 +640,8 @@ namespace ZETools
 		outAnim.duration = anim->mDuration;
 		outAnim.tickPerSecond = anim->mTicksPerSecond;
 
+		unsigned int cAnimIndex = m_animations.size() - 1;
+
 		for (unsigned int i = 0; i < anim->mNumChannels; i++)
 		{
 			aiNodeAnim* nodeAnim = anim->mChannels[i];
@@ -689,6 +691,20 @@ namespace ZETools
 					outKey.trans[0] = nodeAnim->mPositionKeys[posIndex].mValue.x;
 					outKey.trans[1] = nodeAnim->mPositionKeys[posIndex].mValue.y;
 					outKey.trans[2] = nodeAnim->mPositionKeys[posIndex].mValue.z;
+
+					if (m_settings.animation.bCreateAdditive && m_modelReference && cAnimIndex < m_modelReference->m_animations.size())
+					{
+						Animation& refAnim = m_modelReference->m_animations[cAnimIndex];
+						if (i < refAnim.nodes.size() && posIndex < refAnim.nodes[i].keys.size())
+						{
+							float* refTrans = refAnim.nodes[i].keys[posIndex].trans;
+
+							outKey.trans[0] = outKey.trans[0] - refTrans[0];
+							outKey.trans[1] = outKey.trans[1] - refTrans[1];
+							outKey.trans[2] = outKey.trans[2] - refTrans[2];
+						}
+					}
+
 					posIndex++;
 				}
 
@@ -699,6 +715,24 @@ namespace ZETools
 					outKey.quat[1] = nodeAnim->mRotationKeys[rotIndex].mValue.y;
 					outKey.quat[2] = nodeAnim->mRotationKeys[rotIndex].mValue.z;
 					outKey.quat[3] = nodeAnim->mRotationKeys[rotIndex].mValue.w;
+
+					if (m_settings.animation.bCreateAdditive && m_modelReference && cAnimIndex < m_modelReference->m_animations.size())
+					{
+						Animation& refAnim = m_modelReference->m_animations[cAnimIndex];
+						if (i < refAnim.nodes.size() && posIndex < refAnim.nodes[i].keys.size())
+						{
+							float* refRot = refAnim.nodes[i].keys[rotIndex].quat;
+
+							aiQuaternion refQuat(refRot[3], refRot[0], refRot[1], refRot[2]);
+							aiQuaternion resQuat = nodeAnim->mRotationKeys[rotIndex].mValue * refQuat.Conjugate();
+
+							outKey.quat[0] = resQuat.x;
+							outKey.quat[1] = resQuat.y;
+							outKey.quat[2] = resQuat.z;
+							outKey.quat[3] = resQuat.w;
+						}
+					}
+
 					rotIndex++;
 				}
 
@@ -708,12 +742,31 @@ namespace ZETools
 					outKey.scale[0] = nodeAnim->mScalingKeys[scaleIndex].mValue.x;
 					outKey.scale[1] = nodeAnim->mScalingKeys[scaleIndex].mValue.y;
 					outKey.scale[2] = nodeAnim->mScalingKeys[scaleIndex].mValue.z;
+
+					if (m_settings.animation.bCreateAdditive && m_modelReference && cAnimIndex < m_modelReference->m_animations.size())
+					{
+						Animation& refAnim = m_modelReference->m_animations[cAnimIndex];
+						if (i < refAnim.nodes.size() && posIndex < refAnim.nodes[i].keys.size())
+						{
+							float* refScale = refAnim.nodes[i].keys[scaleIndex].scale;
+
+							outKey.scale[0] = outKey.scale[0] / refScale[0];
+							outKey.scale[1] = outKey.scale[1] / refScale[1];
+							outKey.scale[2] = outKey.scale[2] / refScale[2];
+						}
+					}
+
 					scaleIndex++;
 				}
 
 				outNode.keys.push_back(outKey);
 			}
 		}
+	}
+
+	void ModelParser::setModelReference(ModelParser* modelReference)
+	{
+		m_modelReference = modelReference;
 	}
 
 	aiNode* ModelParser::findNodeByName(std::string name)

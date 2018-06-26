@@ -1,0 +1,14 @@
+State_Default Idle
+State Idle
+Node_Additive
+{
+	Node_Clip 
+		{ 
+			Clip TestAnimation\Animation\RifleAimingIdle_Baked_Take001.animz 
+		}
+	Node_Clip 
+		{ 
+			Clip TestAnimation\Animation\RifleAimingAdditiveLeft_Baked_Take001.animz
+		}
+	Alpha 0.5
+}

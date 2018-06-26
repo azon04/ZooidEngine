@@ -7,14 +7,14 @@ Node_Partial
 		Node_Clip 
 			{ 
 				Clip TestAnimation\Animation\Walking_baked_Take001.animz 
-				Duration 1.5
+				Duration 1.0
 			}
 		Node_Clip 
 			{ 
 				Clip TestAnimation\Animation\Running_baked_Take001.animz
-				Duration 1.5
+				Duration 1.0
 			}
-		Alpha 0.0
+		Alpha 0.5
 	}
 	Node_Clip
 	{
