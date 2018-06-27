@@ -87,9 +87,9 @@ namespace ZE
 		Int32 cIndex, nextIndex;
 
 		float portion = _localTime / _duration;
-		cIndex = portion * (m_frameCount);
+		cIndex = portion * m_frameCount;
 		nextIndex = (cIndex + 1) % m_frameCount;
-		float fraction = (portion * (m_frameCount)) - cIndex;
+		float fraction = (portion * m_frameCount) - cIndex;
 
 		// Interpolate between SQT
 		AnimationPose& cPose = m_animationSamples[cIndex];

@@ -137,7 +137,7 @@ namespace ZETools
 									verticeWeights = mesh.vertexBoneWeightMap[vi];
 								}
 
-								for (int bi = 0; bi < 4; bi++)
+								for (unsigned int bi = 0; bi < 4; bi++)
 								{
 									if (bi < verticeWeights.size())
 									{
@@ -149,7 +149,7 @@ namespace ZETools
 									}
 								}
 
-								for (int bi = 0; bi < 4; bi++)
+								for (unsigned int bi = 0; bi < 4; bi++)
 								{
 									if (bi < verticeWeights.size())
 									{
@@ -304,7 +304,7 @@ namespace ZETools
 					for (unsigned int nodeIndex = 0; nodeIndex < anim.nodes.size(); nodeIndex++)
 					{
 						AnimationNode& animNode = anim.nodes[nodeIndex];
-						int index = 0;
+						unsigned int index = 0;
 						while (index < animNode.keys.size() && abs(animNode.keys[index].time - time) > 0.000001)
 						{
 							index++;
@@ -337,7 +337,7 @@ namespace ZETools
 						if (boneIndexToNodeMap.find(i) != boneIndexToNodeMap.end())
 						{
 							AnimationNode& animNode = *boneIndexToNodeMap[i];
-							int index = 0;
+							unsigned int index = 0;
 							while (index < animNode.keys.size() && abs(animNode.keys[index].time - time) > 0.000001)
 							{
 								index++;
@@ -655,9 +655,9 @@ namespace ZETools
 				outAnim.hasSkeleton = true;
 			}
 
-			int posIndex = 0;
-			int rotIndex = 0;
-			int scaleIndex = 0;
+			unsigned int posIndex = 0;
+			unsigned int rotIndex = 0;
+			unsigned int scaleIndex = 0;
 			
 			while (posIndex < nodeAnim->mNumPositionKeys ||
 				rotIndex < nodeAnim->mNumRotationKeys ||

@@ -39,7 +39,7 @@ namespace ZE {
 			free(m_pAlocatorsBlock);
 		}
 
-		for (int i = 0; i < m_countAddPool; i++)
+		for (unsigned int i = 0; i < m_countAddPool; i++)
 		{
 			free(m_pAdditionalBlocks[i]);
 		}
@@ -91,7 +91,7 @@ namespace ZE {
 		ZELOG(LOG_MEMORY, Log, "Allocate memory for %d bytes", size);
 
 		// Check the matched size in pools
-		int index = 0;
+		unsigned int index = 0;
 		while (index < NPOOL && poolConfig[index][0] < size)
 		{
 			ZELOG(LOG_MEMORY, Log, "Cant fit in %d bytes", poolConfig[index][0]);

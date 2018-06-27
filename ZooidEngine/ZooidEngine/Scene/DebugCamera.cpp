@@ -121,8 +121,8 @@ namespace ZE
 
 		if (pMouseDragEvent->m_keyId == VK_RBUTTON)
 		{
-			float deltaPitch = pMouseDragEvent->m_deltaY * 0.001;
-			float deltaYaw = pMouseDragEvent->m_deltaX * 0.001;
+			float deltaPitch = pMouseDragEvent->m_deltaY * 0.001f;
+			float deltaYaw = pMouseDragEvent->m_deltaX * 0.001f;
 
 			m_worldTransform.rotateAroundV(-deltaYaw);
 			m_worldTransform.rotateAroundU(-deltaPitch);

@@ -1,5 +1,5 @@
 AnimationClip Take001
-duration 31
+duration 30
 fps 30
 skeleton TestAnimation\Skeleton\Walking_baked_skel.skelz
 time 0
@@ -4869,4 +4869,3 @@ Q 0.0307768 0.000125599 -0.0181307 0.999362
 bone 51
 T 0.37336 -10.4922 12.6407
 Q -0.077318 -4.16035e-08 1.53783e-08 0.997007
-time 31

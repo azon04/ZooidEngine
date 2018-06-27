@@ -47,7 +47,7 @@ namespace ZE
 
 		// Read duration
 		fileReader.readNextString(buffer);
-		pAnimClip->m_frameCount = fileReader.readNextFloat();
+		pAnimClip->m_frameCount = (ZE::Int32) fileReader.readNextFloat();
 
 		// Read FPS
 		fileReader.readNextString(buffer);
