@@ -1,0 +1,25 @@
+State_Default Idle
+State Idle
+Node_Partial
+{
+	Node_Lerp
+	{
+		Node_Clip 
+			{ 
+				Clip TestAnimation\Animation\Walking_baked_Take001.animz 
+				Duration 1.0
+			}
+		Node_Clip 
+			{ 
+				Clip TestAnimation\Animation\Running_baked_Take001.animz
+				Duration 1.0
+			}
+		Alpha 0.5
+	}
+	Node_Clip
+	{
+		Clip TestAnimation/Animation/RifleAimingIdle_Baked_Take001.animz
+	}
+	Joint mixamorig:Spine
+	Alpha 1.0
+}

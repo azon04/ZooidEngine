@@ -24,7 +24,7 @@ namespace ZE {
 		// Put additional pool next to main pool so you can access additional pool using m_pools
 		PoolAllocator* m_pools[NPOOL];
 		PoolAllocator* m_additionalPools[ADDITIONAL_MAX_POOL];
-		int m_countAddPool;
+		unsigned int m_countAddPool;
 
 		void* m_pAdditionalBlocks[ADDITIONAL_MAX_POOL];
 		

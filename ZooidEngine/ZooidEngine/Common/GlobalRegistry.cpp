@@ -16,6 +16,8 @@
 
 #include "Physics/PhysicsEvents.h"
 
+#include "Animation/AnimationComponent.h"
+
 namespace ZE {
 	void GlobalRegistry::Register()
 	{
@@ -30,6 +32,7 @@ namespace ZE {
 		InputManager::RegClass();
 		KeyboardMouseInput::RegClass();
 		LightComponent::RegClass();
+		AnimationComponent::RegClass();
 
 		// Register Resource Classes
 		Material::RegClass();

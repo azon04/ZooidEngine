@@ -26,6 +26,9 @@
 
 #include "Platform/Thread.h"
 
+#include "ResourceManagers/SkeletonManager.h"
+#include "ResourceManagers/AnimationManager.h"
+
 namespace ZE {
 
 	ConditionVariable g_drawThreadVariable;
@@ -91,6 +94,7 @@ namespace ZE {
 			ZEINFO("Initializing Event Dispatcher...");
 			Handle handle("EventDispatcher", sizeof(EventDispatcher));
 			_gameContext->m_mainEventDispatcher = new(handle) EventDispatcher(_gameContext);
+			_gameContext->m_mainEventDispatcher->setupComponent();
 		}
 
 		// Create Root Component and add is as child of Event Dispatcher
@@ -99,6 +103,7 @@ namespace ZE {
 			Handle handle("RootComponent", sizeof(SceneComponent));
 			_gameContext->m_rootComponent = new (handle) SceneComponent(_gameContext);
 			_gameContext->getEventDispatcher()->addChild(_gameContext->m_rootComponent);
+			_gameContext->m_rootComponent->setObjectName("Root Component");
 			_gameContext->m_rootComponent->setupComponent();
 		}
 
@@ -114,6 +119,7 @@ namespace ZE {
 			ZEINFO("Initializing Input Manager...");
 			Handle handle("InputManager", sizeof(InputManager));
 			_gameContext->m_inputManager = new (handle) InputManager(_gameContext);
+			_gameContext->m_inputManager->setObjectName("InputManager");
 			_gameContext->m_inputManager->setupComponent();
 		}
 
@@ -127,6 +133,13 @@ namespace ZE {
 			_gameContext->m_physicsZooid->Init();
 			_gameContext->m_physics = _gameContext->m_physicsZooid->GetPhysics();
 		}
+
+		ZEINFO("Initializing Skeleton Manager...");
+		SkeletonManager::Init(_gameContext);
+
+		ZEINFO("Initializing Animation Resource Manager...");
+		AnimationManager::Init(_gameContext);
+
 		ZEINFO("Initializing Camera Manager...");
 		CameraManager::Init(_gameContext);
 		_gameContext->m_cameraManager = CameraManager::GetInstance();
@@ -156,6 +169,8 @@ namespace ZE {
 		BufferManager::Destroy();
 		ShaderManager::Destroy();
 		TextureManager::Destroy();
+		AnimationManager::Destroy();
+		SkeletonManager::Destroy();
 
 		_gameContext->m_renderZooid->Destroy();
 

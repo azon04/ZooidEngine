@@ -1,0 +1,29 @@
+SceneName TestMap
+FileVersion 1.0
+ComponentCount 6
+LightComponent DirLight
+BEGIN
+LightType 0
+R 150.0 0.0 0.0
+END
+RenderComponent Floor
+BEGIN
+Mesh Basic/Mesh/FloorChecker.meshz
+S 15.0 15.0 15.0
+END
+SceneComponent BlendSceneDemo
+BEGIN
+Scene TestAnimation/Scene/BlendSceneDemo.scz
+END
+SceneComponent BlendSceneDemo_Crouched
+BEGIN
+Scene TestAnimation/Scene/BlendSceneDemo_Crouch.scz
+END
+SceneComponent AddSceneDemo
+BEGIN
+Scene TestAnimation/Scene/AddSceneDemo.scz
+END
+SceneComponent ComplexSceneDemo
+BEGIN
+Scene TestAnimation/Scene/ComplexSceneDemo.scz
+END

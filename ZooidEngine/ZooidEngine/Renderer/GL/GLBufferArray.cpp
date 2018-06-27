@@ -56,8 +56,20 @@ namespace ZE
 			if (layout->m_layouts[i].dataType == FLOAT) {
 				size_data_type = sizeof(GLfloat);
 			}
+			else if (layout->m_layouts[i].dataType == INTEGER)
+			{
+				size_data_type = sizeof(GLint);
+				dataType = GL_INT;
+			}
 
-			glVertexAttribPointer(i, layout->m_layouts[i].sizePerItem, dataType, GL_FALSE, layout->m_layouts[i].stride, (GLvoid*)(layout->m_layouts[i].offset * size_data_type));
+			if(dataType == GL_INT)
+			{ 
+				glVertexAttribIPointer(i, layout->m_layouts[i].sizePerItem, dataType, layout->m_layouts[i].stride, (GLvoid*)(layout->m_layouts[i].offset * size_data_type));
+			}
+			else
+			{
+				glVertexAttribPointer(i, layout->m_layouts[i].sizePerItem, dataType, GL_FALSE, layout->m_layouts[i].stride, (GLvoid*)(layout->m_layouts[i].offset * size_data_type));
+			}
 			glEnableVertexAttribArray(i);
 		}
 	}

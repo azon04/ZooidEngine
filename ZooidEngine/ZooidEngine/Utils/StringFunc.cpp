@@ -2,6 +2,8 @@
 
 #include <cstdlib>
 #include <cstring>
+#include <stdio.h>
+#include <stdarg.h>
 
 extern "C"
 {
@@ -50,6 +52,17 @@ int StringFunc::Compare(const char* string1, const char* string2)
 void StringFunc::Concat(const char* string1, const char* string2, char* res)
 {
 	sprintf(res, "%s%s", string1, string2);
+}
+
+void StringFunc::PrintToString(char* string, int stringSize, const char* formatText, ...)
+{
+	char szBuff[1024];
+	va_list arg;
+	va_start(arg, formatText);
+	_vsnprintf_s(szBuff, sizeof(szBuff), formatText, arg);
+	va_end(arg);
+
+	StringFunc::WriteTo(string, szBuff, stringSize);
 }
 
 ZE::UInt32 StringFunc::Hash(const char* string, size_t size)

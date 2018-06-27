@@ -27,6 +27,14 @@ namespace ZE {
 		void removeChild(Component* child);
 		void removeFromParents();
 
+		Component* findFirstCompClassId(Int32 classId);
+
+		template<class T>
+		T* findFirstCompByClassId(Int32 classId)
+		{
+			return (T*)findFirstCompClassId(classId);
+		}
+
 		virtual void setupComponent() {}
 
 		void _addEventDelegate(Int32 eventId, EventDelegate::HandleEventFunc eventFunc);

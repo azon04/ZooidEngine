@@ -33,12 +33,12 @@ public:
 	// Vector Operation
 
 	// Vector addition
-	FORCEINLINE Vector3 operator+(const Vector3& _v2) {
+	FORCEINLINE Vector3 operator+(const Vector3& _v2) const {
 		return Vector3(m_x + _v2.m_x, m_y + _v2.m_y, m_z + _v2.m_z);
 	}
 
 	// Vector subtraction
-	FORCEINLINE Vector3 operator-(const Vector3& _v2) {
+	FORCEINLINE Vector3 operator-(const Vector3& _v2) const {
 		return Vector3(m_x - _v2.m_x, m_y - _v2.m_y, m_z - _v2.m_z);
 	}
 

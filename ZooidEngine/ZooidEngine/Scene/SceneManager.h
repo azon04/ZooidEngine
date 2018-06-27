@@ -20,6 +20,8 @@ namespace ZE
 		void LoadSceneFileToComp(const char* filePath, Component* parent);
 		void LoadSceneComponentToComp(FileReader* reader, Component* parent);
 
+		Handle getCompByName(const char* name);
+
 		static void Init(GameContext* _gameContext);
 		static void Destroy();
 
@@ -27,6 +29,8 @@ namespace ZE
 
 	private:
 		Handle CreateSceneComponentByName(const char* componentTypeName);
+
+		HashMap<String, Handle> m_componentMap;
 
 	public:
 		static SceneManager* s_instance;

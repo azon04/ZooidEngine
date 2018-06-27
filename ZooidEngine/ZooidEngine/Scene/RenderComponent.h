@@ -34,6 +34,7 @@ namespace ZE {
 		void handlePhysicsUpdateTransform(Event* pEvent);
 
 		void setupPhysics();
+		void setupMesh();
 
 		// Implement from IPhysicsBodyHolder
 		virtual bool hasPhysicsBody();
@@ -41,11 +42,16 @@ namespace ZE {
 
 		Mesh* m_mesh;
 		bool m_bHighlight;
+
+		// Physics Data
 		bool m_bStatic;
 		bool m_physicsEnabled;
 		bool m_bTriggerOnly;
 		bool m_bEnableGravity;
-		Handle hPhysicsBody;
+		Handle m_hPhysicsBody;
+
+		// Skeleton Data
+		Handle m_hSkeletonState;
 	};
 }
 #endif

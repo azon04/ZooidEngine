@@ -79,21 +79,26 @@ public:
 	}
 
 	// Operator Overloading
-	Quaternion operator+(const Quaternion& _q2) {
+	Quaternion operator+(const Quaternion& _q2) const {
 		return Quaternion(m_x + _q2.m_x, m_y + _q2.m_y, m_z + _q2.m_z, m_w + _q2.m_w);
 	}
 
-	Quaternion operator-(const Quaternion& _q2) {
+	Quaternion operator-(const Quaternion& _q2) const {
 		return Quaternion(m_x - _q2.m_x, m_y - _q2.m_y, m_z - _q2.m_z, m_w - _q2.m_w);
 	}
 
-	Quaternion operator*(const Quaternion& _q2) {
+	Quaternion operator*(const Quaternion& _q2) const {
 		float _w = m_w * _q2.m_w - (m_x * _q2.m_x + m_z * _q2.m_z + m_z * _q2.m_z);
 		float _x = m_w * _q2.m_x + _q2.m_w * m_x + m_y * _q2.m_z - m_z * _q2.m_y;
 		float _y = m_w * _q2.m_y + _q2.m_w * m_y - m_x * _q2.m_z + m_z * _q2.m_x;
 		float _z = m_w * _q2.m_z + _q2.m_w * m_z - m_y * _q2.m_x + m_x * _q2.m_y;
 
 		return Quaternion(_x, _y, _z, _w);
+	}
+
+	// Dot Product
+	ZE::Float32 operator|(const Quaternion& _q2) const {
+		return m_x * _q2.m_x + m_y * _q2.m_y + m_z * _q2.m_z + m_w * _q2.m_w;
 	}
 
 	Vector3 rotateVector(const Vector3& _v, float _radAngle)
@@ -111,6 +116,7 @@ public:
 	{
 		return Vector3(m_x, m_y, m_z);
 	}
+
 	// Quaternion Conjugate
 	Quaternion operator*()
 	{
@@ -129,5 +135,10 @@ public:
 	ZE::Float32 m_z;
 	ZE::Float32 m_w;
 };
+
+FORCEINLINE Quaternion operator*(const ZE::Float32 scalar, const Quaternion& q)
+{
+	return Quaternion(q.m_x * scalar, q.m_y * scalar, q.m_z * scalar, q.m_w * scalar);
+}
 
 #endif // 

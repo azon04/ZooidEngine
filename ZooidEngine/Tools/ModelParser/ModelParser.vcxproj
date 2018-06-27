@@ -149,11 +149,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Common\Dir.cpp" />
+    <ClCompile Include="..\Common\StringHelper.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ModelParser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Common\Dir.h" />
+    <ClInclude Include="..\Common\StringHelper.h" />
     <ClInclude Include="ModelParser.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

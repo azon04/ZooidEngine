@@ -55,7 +55,7 @@ namespace ZE {
 
 		~Handle() {}
 
-		FORCEINLINE bool isValid() 
+		FORCEINLINE bool isValid() const
 		{
 			if(pCache == NULL)
 				return m_poolIndex != INVALID_UINT && m_blockIndex != INVALID_UINT;

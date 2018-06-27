@@ -2,6 +2,7 @@
 
 #include "BufferManager.h"
 #include "MaterialManager.h"
+#include "SkeletonManager.h"
 
 #include "Resources/Mesh.h"
 #include "Resources/Material.h"
@@ -131,15 +132,17 @@ namespace ZE
 			return meshHandle;
 		}
 		
+		char tokenBuffer[256];
+		
 		pMesh = new(meshHandle) Mesh();
 		while (!reader.eof())
 		{
-			char tokenBuffer[126];
 			reader.readNextString(tokenBuffer);
 			if (StringFunc::Compare(tokenBuffer, "vbuff") == 0)
 			{
 				reader.readNextString(tokenBuffer);
-				Handle hVertexBuffer = BufferManager::getInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
+				String path = GetResourcePath(tokenBuffer);
+				Handle hVertexBuffer = BufferManager::getInstance()->loadResource(path.c_str());
 				if (hVertexBuffer.isValid())
 				{
 					pMesh->m_bufferArray = hVertexBuffer.getObject<IGPUBufferArray>();
@@ -163,6 +166,15 @@ namespace ZE
 			else if (StringFunc::Compare(tokenBuffer, "physics") == 0)
 			{
 				loadPhysicsBodySetup(reader, pMesh);
+			}
+			else if (StringFunc::Compare(tokenBuffer, "skeleton") == 0)
+			{
+				reader.readNextString(tokenBuffer);
+				Handle hSkeleton = SkeletonManager::getInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
+				if (hSkeleton.isValid())
+				{
+					pMesh->m_hSkeleton = hSkeleton;
+				}
 			}
 		}
 

@@ -91,6 +91,9 @@
     <Filter Include="Scene\Collision">
       <UniqueIdentifier>{f9774f21-4f7b-405d-9b14-4ba6c9b045ed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{9c518568-4226-40a7-8649-97a30f324d6e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ZEngine.h">
@@ -393,6 +396,27 @@
     <ClInclude Include="Physics\PhysicsBodyHolder.h">
       <Filter>Physics</Filter>
     </ClInclude>
+    <ClInclude Include="Animation\Animation.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\Skeleton.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManagers\SkeletonManager.h">
+      <Filter>ResourceManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\IResource.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManagers\AnimationManager.h">
+      <Filter>ResourceManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\AnimationComponent.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\AnimationSM.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -626,6 +650,24 @@
     <ClCompile Include="Physics\PhysicsBodyHolder.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
+    <ClCompile Include="Animation\Skeleton.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\Animation.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManagers\SkeletonManager.cpp">
+      <Filter>ResourceManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManagers\AnimationManager.cpp">
+      <Filter>ResourceManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\AnimationComponent.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\AnimationSM.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\TestGLVertexShader.vs">
@@ -659,6 +701,9 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="Shaders\DefaultGLSimpleLit_Blend.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\DefaultGLSimpleLitSkin.vs">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

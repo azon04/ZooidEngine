@@ -1,0 +1,208 @@
+Joint mixamorig:Hips
+{
+	InvXform 1 0 0 0 0 1 0 0 0 0 1 0 0 -99.6721 -0.247052 1 
+	Joint mixamorig:Spine
+	{
+		InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -5.64832e-07 -109.596 0.980283 1 
+		Joint mixamorig:Spine1
+		{
+			InvXform 1 0 0 0 0 1 0 0 0 0 1 0 0.0001383 -121.241 2.40262 1 
+			Joint mixamorig:Spine2
+			{
+				InvXform 1 0 0 0 0 1 0 0 0 0 1 0 4.68597e-05 -134.601 4.02908 1 
+				Joint mixamorig:Neck
+				{
+					InvXform 1 0 0 0 0 1 0 0 0 0 1 0 2.16576e-05 -149.634 3.23618 1 
+					Joint mixamorig:Head
+					{
+						InvXform 1 0 0 0 0 1 0 0 0 0 1 0 1.92868e-05 -159.955 0.09375 1 
+					}
+				}
+				Joint mixamorig:LeftShoulder
+				{
+					InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -6.10578 -143.712 3.32353 1 
+					Joint mixamorig:LeftArm
+					{
+						InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -18.7608 -143.446 5.92446 1 
+						Joint mixamorig:LeftForeArm
+						{
+							InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -46.1655 -143.446 5.92445 1 
+							Joint mixamorig:LeftHand
+							{
+								InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -73.78 -143.446 5.92443 1 
+								Joint mixamorig:LeftHandMiddle1
+								{
+									InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -86.5555 -143.446 5.92441 1 
+									Joint mixamorig:LeftHandMiddle2
+									{
+										InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -90.1695 -143.446 5.92441 1 
+										Joint mixamorig:LeftHandMiddle3
+										{
+											InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -93.6292 -143.446 5.92443 1 
+										}
+									}
+								}
+								Joint mixamorig:LeftHandThumb1
+								{
+									InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -77.5688 -141.279 2.92134 1 
+									Joint mixamorig:LeftHandThumb2
+									{
+										InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -81.2442 -139.157 0.799328 1 
+										Joint mixamorig:LeftHandThumb3
+										{
+											InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -84.6386 -137.197 -1.16047 1 
+										}
+									}
+								}
+								Joint mixamorig:LeftHandIndex1
+								{
+									InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -86.0466 -143.214 3.10237 1 
+									Joint mixamorig:LeftHandIndex2
+									{
+										InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -89.9385 -143.214 3.10233 1 
+										Joint mixamorig:LeftHandIndex3
+										{
+											InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -93.3537 -143.214 3.10234 1 
+										}
+									}
+								}
+								Joint mixamorig:LeftHandRing1
+								{
+									InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -85.927 -143.456 8.14106 1 
+									Joint mixamorig:LeftHandRing2
+									{
+										InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -89.5282 -143.456 8.14102 1 
+										Joint mixamorig:LeftHandRing3
+										{
+											InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -92.8355 -143.456 8.14104 1 
+										}
+									}
+								}
+								Joint mixamorig:LeftHandPinky1
+								{
+									InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -84.6882 -143.219 10.6502 1 
+									Joint mixamorig:LeftHandPinky2
+									{
+										InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -88.8248 -143.219 10.6502 1 
+										Joint mixamorig:LeftHandPinky3
+										{
+											InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -91.4196 -143.219 10.6503 1 
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				Joint mixamorig:RightShoulder
+				{
+					InvXform 1 0 0 0 0 1 0 0 0 0 1 0 6.10574 -143.712 3.32352 1 
+					Joint mixamorig:RightArm
+					{
+						InvXform 1 0 0 0 0 1 0 0 0 0 1 0 18.7608 -143.446 5.92442 1 
+						Joint mixamorig:RightForeArm
+						{
+							InvXform 1 0 0 0 0 1 0 0 0 0 1 0 46.1655 -143.446 5.92441 1 
+							Joint mixamorig:RightHand
+							{
+								InvXform 1 0 0 0 0 1 0 0 0 0 1 0 73.7799 -143.446 5.92439 1 
+								Joint mixamorig:RightHandMiddle1
+								{
+									InvXform 1 0 0 0 0 1 0 0 0 0 1 0 86.5555 -143.446 5.92438 1 
+									Joint mixamorig:RightHandMiddle2
+									{
+										InvXform 1 0 0 0 0 1 0 0 0 0 1 0 90.1694 -143.446 5.92437 1 
+										Joint mixamorig:RightHandMiddle3
+										{
+											InvXform 1 0 0 0 0 1 0 0 0 0 1 0 93.6292 -143.446 5.9244 1 
+										}
+									}
+								}
+								Joint mixamorig:RightHandThumb1
+								{
+									InvXform 1 0 0 0 0 1 0 0 0 0 1 0 77.5687 -141.279 2.9213 1 
+									Joint mixamorig:RightHandThumb2
+									{
+										InvXform 1 0 0 0 0 1 0 0 0 0 1 0 81.2442 -139.157 0.799293 1 
+										Joint mixamorig:RightHandThumb3
+										{
+											InvXform 1 0 0 0 0 1 0 0 0 0 1 0 84.6385 -137.197 -1.1605 1 
+										}
+									}
+								}
+								Joint mixamorig:RightHandIndex1
+								{
+									InvXform 1 0 0 0 0 1 0 0 0 0 1 0 86.0465 -143.214 3.10234 1 
+									Joint mixamorig:RightHandIndex2
+									{
+										InvXform 1 0 0 0 0 1 0 0 0 0 1 0 89.9385 -143.214 3.1023 1 
+										Joint mixamorig:RightHandIndex3
+										{
+											InvXform 1 0 0 0 0 1 0 0 0 0 1 0 93.3537 -143.214 3.10231 1 
+										}
+									}
+								}
+								Joint mixamorig:RightHandRing1
+								{
+									InvXform 1 0 0 0 0 1 0 0 0 0 1 0 85.9269 -143.456 8.14102 1 
+									Joint mixamorig:RightHandRing2
+									{
+										InvXform 1 0 0 0 0 1 0 0 0 0 1 0 89.5281 -143.456 8.14099 1 
+										Joint mixamorig:RightHandRing3
+										{
+											InvXform 1 0 0 0 0 1 0 0 0 0 1 0 92.8354 -143.456 8.14101 1 
+										}
+									}
+								}
+								Joint mixamorig:RightHandPinky1
+								{
+									InvXform 1 0 0 0 0 1 0 0 0 0 1 0 84.6881 -143.219 10.6502 1 
+									Joint mixamorig:RightHandPinky2
+									{
+										InvXform 1 0 0 0 0 1 0 0 0 0 1 0 88.8248 -143.219 10.6502 1 
+										Joint mixamorig:RightHandPinky3
+										{
+											InvXform 1 0 0 0 0 1 0 0 0 0 1 0 91.4196 -143.219 10.6502 1 
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	Joint mixamorig:RightUpLeg
+	{
+		InvXform 1 0 0 0 0 1 0 0 0 0 1 0 9.12445 -93.0157 -0.191674 1 
+		Joint mixamorig:RightLeg
+		{
+			InvXform 1 0 0 0 0 1 0 0 0 0 1 0 9.36913 -52.4202 0.322854 1 
+			Joint mixamorig:RightFoot
+			{
+				InvXform 1 0 0 0 0 1 0 0 0 0 1 0 9.12446 -10.3724 2.38309 1 
+				Joint mixamorig:RightToeBase
+				{
+					InvXform 1 0 0 0 0 1 0 0 0 0 1 0 9.49782 0.119831 -10.2576 1 
+				}
+			}
+		}
+	}
+	Joint mixamorig:LeftUpLeg
+	{
+		InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -9.12445 -93.0157 -0.191674 1 
+		Joint mixamorig:LeftLeg
+		{
+			InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -9.36913 -52.4203 0.325367 1 
+			Joint mixamorig:LeftFoot
+			{
+				InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -9.12446 -10.3723 2.38301 1 
+				Joint mixamorig:LeftToeBase
+				{
+					InvXform 1 0 0 0 0 1 0 0 0 0 1 0 -9.49782 0.119926 -10.2577 1 
+				}
+			}
+		}
+	}
+}

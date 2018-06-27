@@ -10,6 +10,10 @@
 #include "Collision/BoxComponent.h"
 #include "Collision/SphereComponent.h"
 #include "Collision/CapsuleComponent.h"
+#include "Animation/AnimationComponent.h"
+#include "Animation/AnimationSM.h"
+
+#include "ResourceManagers/AnimationManager.h"
 
 #include "Utils/StringFunc.h"
 
@@ -113,11 +117,13 @@ namespace ZE
 		fileReader->readNextString(buff);
 		pComp->setObjectName(String(buff));
 
+		m_componentMap.put(buff, compHandle);
+
 		// BEGIN
 		fileReader->readNextString(buff);
 
 		fileReader->readNextString(buff);
-		while (StringFunc::Compare(buff, "END") > 0)
+		while (StringFunc::Compare(buff, "END") != 0)
 		{
 			if (StringFunc::Compare(buff, "R") == 0)
 			{
@@ -178,6 +184,12 @@ namespace ZE
 					LoadSceneComponentToComp(fileReader, pComp);
 				}
 			}
+			else if (StringFunc::Compare(buff, "Scene") == 0)
+			{
+				// Read Scene
+				fileReader->readNextString(buff);
+				LoadSceneFileToComp(GetResourcePath(buff).c_str(), pComp);
+			}
 			else if (StringFunc::Compare(buff, "Physics") == 0)
 			{
 				fileReader->readNextString(buff);
@@ -221,12 +233,54 @@ namespace ZE
 					pCapsuleComp->m_height = fileReader->readNextFloat();
 				}
 			}
+			else if (StringFunc::Compare(buff, "Animation") == 0)
+			{
+				Handle hAnimationComp("Animation Component", sizeof(AnimationComponent));
+				AnimationComponent* pAnimationComp = new(hAnimationComp) AnimationComponent(m_gameContext);
+				pAnimationComp->setupComponent();
+				
+				// Read Animation path
+				fileReader->readNextString(buff);
+				Handle hAnimClip = AnimationManager::getInstance()->loadResource(GetResourcePath(buff).c_str());
+				bool bLoop = fileReader->readNextInt() == 1;
+				float rate = fileReader->readNextFloat();
+
+				if (hAnimClip.isValid())
+				{
+					AnimationClip* pAnimClip = hAnimClip.getObject<AnimationClip>();
+					pAnimationComp->playAnimationClip(pAnimClip, bLoop, rate);
+				}
+
+				pComp->addChild(pAnimationComp);
+			}
+			else if (StringFunc::Compare(buff, "AnimationState") == 0)
+			{
+				Handle hAnimationSM("Animation SM", sizeof(AnimationSM));
+				AnimationSM* pAnimSM = new(hAnimationSM) AnimationSM(m_gameContext);
+				pAnimSM->setupComponent();
+
+				// Read Animation State Def
+				fileReader->readNextString(buff);
+				pAnimSM->readAnimStateDef(GetResourcePath(buff).c_str());
+
+				pComp->addChild(pAnimSM);
+			}
 
 			fileReader->readNextString(buff);
 		}
 
 		pComp->setupComponent();
 		parent->addChild(pComp);
+	}
+
+	ZE::Handle SceneManager::getCompByName(const char* name)
+	{
+		if (m_componentMap.hasKey(name))
+		{
+			return m_componentMap[name];
+		}
+
+		return Handle();
 	}
 
 	void SceneManager::Init(GameContext* _gameContext)

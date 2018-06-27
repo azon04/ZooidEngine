@@ -421,6 +421,8 @@ public:
 	{
 #if USING_SSE
 		__m128 m_sseData[4];
+
+		__declspec(align(16))
 #endif
 		ZE::Float32 m_data[4][4];
 	};

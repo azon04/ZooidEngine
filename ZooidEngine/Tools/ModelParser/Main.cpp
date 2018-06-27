@@ -22,13 +22,22 @@ int main(int argc, char* argv[])
 		cout << "MeshParser filepath [-o outputDir | --out outputDir] [-p packageName | --package packageName]" << endl;
 		cout << "-o | --out path \t Output directory" << endl;
 		cout << "-p | --package path \t package name, package that assets will be saved to. It will outDir/packageName" << endl;
-
+		cout << "--omitAnimChannel [S|Q|T] \t omit animation channel, S: Scale, Q: Quaternion, T: Translation. e.g omit translation and Scale would use ST " << endl;
+		cout << "--recalculateAnimQuat \t this option will make Quaternion in animation data saved only 3 values (the fourth will be calculated on runtime)  " << endl;
+		cout << "--noMesh" << endl;
+		cout << "--noAnimation" << endl;
+		cout << "--skeletonPath path \t path is relative path of skeleton from out directory" << endl;
+		cout << "--reference path \t path is FBX or raw assets path to use as reference (for making additive animation)" << endl;
 		return 0;
 	}
 
 	ZETools::ModelParser parser;
 	std::string package = "default";
 	std::string outputDir = "";
+
+	std::string referencePath = "";
+
+	ZETools::ModelParserSettings settings;
 
 	int index = 2;
 	while (index < argc)
@@ -41,10 +50,66 @@ int main(int argc, char* argv[])
 		{
 			package = argv[++index];
 		}
+		else if (strcmp(argv[index], "--omitAnimChannel") == 0)
+		{
+			char* sqtString = argv[++index];
+			int sqtIndex = 0;
+			while (sqtString[sqtIndex])
+			{
+				if (sqtString[sqtIndex] == 'S')
+				{
+					settings.animation.sqtMask &= ~(0xff & SCALE_MASK);
+				}
+				else if (sqtString[sqtIndex] == 'Q')
+				{
+					settings.animation.sqtMask &= ~(0xff & QUAT_MASK);
+				}
+				else if (sqtString[sqtIndex] == 'T')
+				{
+					settings.animation.sqtMask &= ~(0xff & TRANSLATION_MASK);
+				}
+				sqtIndex++;
+			}
+		} 
+		else if (strcmp(argv[index], "--recalculateAnimQuat") == 0)
+		{
+			settings.animation.bRecalculateQuatRuntime = true;
+		}
+		else if (strcmp(argv[index], "--noMesh") == 0)
+		{
+			settings.bParseMesh = false;
+		}
+		else if (strcmp(argv[index], "--noAnimation") == 0)
+		{
+			settings.bParseAnimation = false;
+		}
+		else if (strcmp(argv[index], "--skeletonPath") == 0)
+		{
+			settings.bParseSkeleton = false;
+			settings.skeletonPath = argv[++index];
+		}
+		else if (strcmp(argv[index], "--reference") == 0)
+		{
+			referencePath = argv[++index];
+			settings.animation.bCreateAdditive = true;
+		}
+		
 		index++;
 	}
 
+	ZETools::ModelParser referenceParser;
 
+	if (referencePath != "")
+	{
+		ZETools::ModelParserSettings referenceSettings;
+		referenceSettings.bParseMesh = false;
+		referenceParser.setSettings(referenceSettings);
+		referenceParser.loadFile(referencePath);
+
+		parser.setModelReference(&referenceParser);
+	}
+
+	parser.setSettings(settings);
 	parser.loadFile(filePath);
 	parser.save(outputDir, package);
 
