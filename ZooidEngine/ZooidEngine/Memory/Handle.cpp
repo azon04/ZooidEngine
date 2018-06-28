@@ -1,13 +1,14 @@
 #include "Handle.h"
 
 
-namespace ZE {
+namespace ZE 
+{
 
 	void Handle::release()
 	{
-		if (isValid() && MemoryManager::getInstance())
+		if (isValid() && MemoryManager::GetInstance())
 		{
-			MemoryManager::getInstance()->freeBlock(m_poolIndex, m_blockIndex);
+			MemoryManager::GetInstance()->freeBlock(m_poolIndex, m_blockIndex);
 		}
 		m_poolIndex = INVALID_UINT;
 		m_blockIndex = INVALID_UINT;
@@ -34,7 +35,7 @@ void operator delete(void* mem, ZE::Handle& handle)
 	}
 	else
 	{
-		ZE::MemoryManager::getInstance()->freeBlockAtAddress(mem);
+		ZE::MemoryManager::GetInstance()->freeBlockAtAddress(mem);
 	}
 }
 
@@ -46,6 +47,6 @@ void operator delete[](void* mem, ZE::Handle& handle)
 	}
 	else
 	{
-		ZE::MemoryManager::getInstance()->freeBlockAtAddress(mem);
+		ZE::MemoryManager::GetInstance()->freeBlockAtAddress(mem);
 	}
 }

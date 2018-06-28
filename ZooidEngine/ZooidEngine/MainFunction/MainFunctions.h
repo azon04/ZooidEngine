@@ -7,7 +7,8 @@
 #define ZE_RENDER_MULTITHREAD 1
 #endif
 
-namespace ZE {
+namespace ZE 
+{
 	void MainSetup(GameContext* _gameContext);
 	void MainClean(GameContext* _gameContext);
 
@@ -19,4 +20,4 @@ namespace ZE {
 	extern Mutex g_drawMutex;
 	extern bool g_drawReady;
 }
-#endif // 
+#endif 

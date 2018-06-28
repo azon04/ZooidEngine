@@ -30,52 +30,71 @@ public:
 
 	~Vector3() {}
 
-	// Vector Operation
-
 	// Vector addition
-	FORCEINLINE Vector3 operator+(const Vector3& _v2) const {
+	FORCEINLINE Vector3 operator+(const Vector3& _v2) const 
+	{
 		return Vector3(m_x + _v2.m_x, m_y + _v2.m_y, m_z + _v2.m_z);
 	}
 
 	// Vector subtraction
-	FORCEINLINE Vector3 operator-(const Vector3& _v2) const {
+	FORCEINLINE Vector3 operator-(const Vector3& _v2) const 
+	{
 		return Vector3(m_x - _v2.m_x, m_y - _v2.m_y, m_z - _v2.m_z);
 	}
 
 	// Vector Division
-	FORCEINLINE Vector3 operator/(const float _n) {
+	FORCEINLINE Vector3 operator/(const float _n) 
+	{
 		return Vector3(m_x / _n, m_y / _n, m_z / _n);
 	}
 
 	// Vector multiplication.
-	FORCEINLINE Vector3 operator*(const Vector3& _v2) {
+	FORCEINLINE Vector3 operator*(const Vector3& _v2) const 
+	{
 		return Vector3(m_x * _v2.m_x, m_y * _v2.m_y, m_z * _v2.m_z);
 	}
 
 	// Dot Product
-	FORCEINLINE ZE::Float32 dotProduct(const Vector3& _v2) {
+	FORCEINLINE ZE::Float32 dotProduct(const Vector3& _v2) const
+	{
 		return m_x * _v2.m_x + m_y * _v2.m_y + m_z * _v2.m_z;
 	}
 
+	// Dot product
+	ZE::Float32 operator|(const Vector3& _v2) const
+	{
+		return dotProduct(_v2);
+	}
+
 	// Cross Product
-	FORCEINLINE Vector3 crossProduct(const Vector3& _v2) {
+	FORCEINLINE Vector3 crossProduct(const Vector3& _v2) const
+	{
 		return Vector3(m_y * _v2.m_z - m_z * _v2.m_y,
 			m_z * _v2.m_x - m_x * _v2.m_z,
 			m_x * _v2.m_y - m_y * _v2.m_x);
 	}
 
+	// Cross product
+	Vector3 operator^(const Vector3& _v2) const
+	{
+		return crossProduct(_v2);
+	}
+
 	// SquareLength
-	FORCEINLINE ZE::Float32 lengthSquare() {
+	FORCEINLINE ZE::Float32 lengthSquare() 
+	{
 		return m_x * m_x + m_y * m_y + m_z * m_z;
 	}
 
 	// Length
-	FORCEINLINE ZE::Float32 length() {
+	FORCEINLINE ZE::Float32 length() 
+	{
 		return sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
 	}
 
 	// Normalize
-	void normalize() {
+	void normalize() 
+	{
 		ZE::Float32 d = length();
 		
 		assert(d > 0.0f);
@@ -108,13 +127,14 @@ public:
 
 
 // Vector multiplication
-FORCEINLINE Vector3 operator*(const float _number, const Vector3& _v) {
+FORCEINLINE Vector3 operator*(const float _number, const Vector3& _v) 
+{
 	return Vector3(_v.m_x * _number, _v.m_y * _number, _v.m_z * _number);
 }
 
-FORCEINLINE Vector3 operator*(const Vector3& _v, const float _number) {
+FORCEINLINE Vector3 operator*(const Vector3& _v, const float _number) 
+{
 	return Vector3(_v.m_x * _number, _v.m_y * _number, _v.m_z * _number);
 }
-
 
 #endif

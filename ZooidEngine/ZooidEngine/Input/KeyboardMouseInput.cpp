@@ -11,7 +11,8 @@
 #else
 #endif
 
-namespace ZE {
+namespace ZE 
+{
 
 	IMPLEMENT_CLASS_1(KeyboardMouseInput, Component)
 

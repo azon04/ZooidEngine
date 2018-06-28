@@ -1,7 +1,8 @@
 #include "Component.h"
 #include "Events/Events.h"
 
-namespace ZE {
+namespace ZE 
+{
 	IMPLEMENT_CLASS_0(Component)
 
 	// Return true if child added to event map

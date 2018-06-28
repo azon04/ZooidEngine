@@ -11,6 +11,7 @@ namespace ZE {
 		StackAllocator();
 		virtual ~StackAllocator();
 
+		// IAllocator implementation
 		virtual void init(size_t totalSize) override;
 		virtual void destroy() override;
 
@@ -21,8 +22,12 @@ namespace ZE {
 		virtual void deallocateAlign(void* _mem) override;
 
 		virtual void clear() override;
+		// end of IAllocator implementation
 
+		// get current marker of stack allocator
 		unsigned int getCurrentMarker();
+
+		// set current marker of stack allocator
 		void setCurrentMarker(unsigned int marker_location);
 
 	private:

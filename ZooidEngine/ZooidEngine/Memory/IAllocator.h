@@ -1,8 +1,11 @@
 #ifndef __ZE_INTERFACE_ALLOCATOR__
 #define __ZE_INTERFACE_ALLOCATOR__
 
-namespace ZE {
-	class IAllocator {
+namespace ZE 
+{
+
+	class IAllocator 
+	{
 
 	public:
 		virtual void init(size_t totalsize) = 0;

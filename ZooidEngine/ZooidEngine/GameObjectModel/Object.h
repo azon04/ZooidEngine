@@ -6,17 +6,20 @@
 #include "RTTI.h"
 #include "Utils/String.h"
 
-namespace ZE {
+namespace ZE 
+{
 
 	template<class T, bool resizable>
 	class Array;
 
-	class Object {
+	class Object 
+	{
 	public:
 		Object() {}
 		virtual ~Object();
 
 		virtual int getClassID() = 0;
+		
 		virtual const char* getClassName() = 0;
 
 		static Array<Int32, true>& ClassMap();
@@ -24,12 +27,10 @@ namespace ZE {
 		static void RegisterClass() {};
 
 		void setObjectName(String name) { m_name = name; }
-		String getObjectName() const { return m_name; }
+		FORCEINLINE String getObjectName() const { return m_name; }
 
 	protected:
-
 		String m_name;
-
 	};
 
 	

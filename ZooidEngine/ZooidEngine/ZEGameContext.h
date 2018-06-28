@@ -4,7 +4,8 @@
 #include "Platform/Thread.h"
 #include "Utils/Timer.h"
 
-namespace ZE {
+namespace ZE 
+{
 	
 	class MaterialManager;
 	class MeshManager;

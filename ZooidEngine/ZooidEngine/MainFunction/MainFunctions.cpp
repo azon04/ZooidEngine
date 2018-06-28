@@ -29,7 +29,8 @@
 #include "ResourceManagers/SkeletonManager.h"
 #include "ResourceManagers/AnimationManager.h"
 
-namespace ZE {
+namespace ZE 
+{
 
 	ConditionVariable g_drawThreadVariable;
 	Mutex g_drawMutex;

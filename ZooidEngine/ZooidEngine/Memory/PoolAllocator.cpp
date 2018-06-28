@@ -7,7 +7,8 @@
 #include <cstdint>
 #include <new>
 
-namespace ZE {
+namespace ZE 
+{
 
 	PoolAllocator::PoolAllocator(UINT32 poolSize, size_t itemSize, bool alligned) 
 		: m_poolSize(poolSize), m_itemSize(itemSize), m_pMemBlock(NULL), m_aligned(alligned)
@@ -53,14 +54,15 @@ namespace ZE {
 			void* mem = (void*)(reinterpret_cast<uintptr_t>(m_pMemBlock) + m_itemSize * idx);
 			return mem;
 		}
-		else {
+		else 
+		{
 			return NULL;
 		}
 	}
 
 	void PoolAllocator::deallocate(void* _mem)
 	{
-		// Mark as avail
+		// Mark as available
 		int idx = (reinterpret_cast<uintptr_t>(_mem) - reinterpret_cast<uintptr_t>(m_pMemBlock)) / m_itemSize;
 		m_avails[m_freeBlock++] = idx;
 	}
@@ -78,7 +80,8 @@ namespace ZE {
 
 	void PoolAllocator::clear()
 	{
-		for (int idx = 0; idx < m_poolSize; idx++) {
+		for (int idx = 0; idx < m_poolSize; idx++) 
+		{
 			m_avails[idx] = idx;
 		}
 	}
@@ -101,12 +104,8 @@ namespace ZE {
 		return diff / m_itemSize;
 	}
 
-	PoolAllocator* PoolAllocator::constructFromMem(void* pMem, size_t itemSize, unsigned int blockCount)
+	PoolAllocator* PoolAllocator::ConstructFromMem(void* pMem, size_t itemSize, unsigned int blockCount)
 	{
-		// NOTE : This allocation method, need to assign the vtable.
-		// Not to do that I need to make this class have no vtable.
-		// which mean no virtual method.
-
 		// Using new(pMem) it will handle vtable allocation for us
 		PoolAllocator* poolAllocator =  new(pMem) PoolAllocator(blockCount, itemSize, false);
 		poolAllocator->m_totalSize = itemSize * blockCount;
@@ -127,7 +126,7 @@ namespace ZE {
 		return poolAllocator;
 	}
 
-	size_t PoolAllocator::calculateSizeMem(size_t itemSize, unsigned int blockCount)
+	size_t PoolAllocator::CalculateSizeMem(size_t itemSize, unsigned int blockCount)
 	{
 		size_t size = sizeof(PoolAllocator);
 		size += sizeof(unsigned int) * blockCount;

@@ -23,9 +23,10 @@ namespace ZE
 			: Component(inGameContext)
 		{}
 
+		// get keyboard mouse input component
 		KeyboardMouseInput* getKeyboardMouseInput();
 
-		virtual void setupComponent();
+		virtual void setupComponent() override;
 
 		bool IsKeyDown(Short m_keyId);
 	};

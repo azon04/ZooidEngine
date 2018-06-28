@@ -3,8 +3,8 @@
 #include "UnitTest/UnitTest.h"
 #include "Renderer/DrawList.h"
 
-int main(int argc, char** argv) {
-
+int main(int argc, char** argv) 
+{
 	// Init Engine
 	ZE::GameContext gameContext;
 	
@@ -13,7 +13,8 @@ int main(int argc, char** argv) {
 	UnitTest::RunMainTest();
 
 	// Main Loop
-	while (!gameContext.getRenderer()->IsClose()) {
+	while (!gameContext.getRenderer()->IsClose()) 
+	{
 		ZE::MainThreadJob(&gameContext);
 	}
 

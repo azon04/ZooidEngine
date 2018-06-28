@@ -30,7 +30,7 @@ namespace SpaceShooter
 		if (m_worldTransform.getPos().getX() < -20)
 		{
 			removeFromParents();
-			ZE::MemoryManager::getInstance()->freeBlockAtAddress(this);
+			ZE::MemoryManager::GetInstance()->freeBlockAtAddress(this);
 		}
 	}
 

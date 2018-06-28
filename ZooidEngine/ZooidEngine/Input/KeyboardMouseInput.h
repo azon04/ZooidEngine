@@ -18,8 +18,10 @@ namespace ZE
 
 		virtual void setupComponent();
 
+		// handle event update
 		void handleUpdate(Event* event);
 
+		// Get current mouse position relative to the window
 		FORCEINLINE void getMousePosition(int& mouseX, int& mouseY)
 		{
 			mouseX = m_mouseX;

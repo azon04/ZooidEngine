@@ -21,6 +21,7 @@ namespace ZE
 			: m_object(Obj), m_eventFunc(eventFunc)
 		{}
 
+		// Call binded function
 		void call(Event* event)
 		{
 			if (m_object && m_eventFunc)
@@ -35,10 +36,12 @@ namespace ZE
 				&& m_eventFunc == other.m_eventFunc;
 		}
 
+		// Check if delegate is valid
 		FORCEINLINE bool isValid() {
 			return m_object && m_eventFunc;
 		}
 		
+	protected:
 		HandleEventFunc m_eventFunc = NULL;
 		Object* m_object = NULL;
 	};
@@ -50,10 +53,9 @@ namespace ZE
 
 		NativeEventDelegate(HandleEventFunc eventFunc)
 			: m_eventFunc(eventFunc)
-		{
+		{ }
 
-		}
-
+		// Call binded function
 		void call(Event* event)
 		{
 			if (m_eventFunc)
@@ -62,6 +64,7 @@ namespace ZE
 			}
 		}
 
+	protected:
 		HandleEventFunc m_eventFunc = NULL;
 	};
 

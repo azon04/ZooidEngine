@@ -3,30 +3,33 @@
 
 #include "Utils/PrimitiveTypes.h"
 
-namespace ZE {
+namespace ZE 
+{
 	
-	struct RTTI_Properties {
+	struct RTTI_Properties 
+	{
 
 	};
 
-	struct RTTI {
-		char m_className[32];
-		Int32 m_classID = -1;
-		RTTI* m_parentRTTI = nullptr;
+	struct RTTI 
+	{
+		char ClassName[32];
+		Int32 ClassID = -1;
+		RTTI* ParentRTTI = nullptr;
 
 		bool IsA(Int32 classID) const
 		{
-			if (this->m_classID == classID)
+			if (this->ClassID == classID)
 				return true;
 
-			RTTI* current = m_parentRTTI;
+			RTTI* current = ParentRTTI;
 			while (current)
 			{
-				if (current->m_classID == classID)
+				if (current->ClassID == classID)
 				{
 					return true;
 				}
-				current = current->m_parentRTTI;
+				current = current->ParentRTTI;
 			}
 
 			return false;

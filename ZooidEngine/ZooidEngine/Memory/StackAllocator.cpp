@@ -3,7 +3,8 @@
 #include <cstdlib>
 #include <cstdint>
 
-namespace ZE {
+namespace ZE 
+{
 
 	StackAllocator::StackAllocator()
 	{
@@ -81,7 +82,8 @@ namespace ZE {
 
 	StackAllocator::~StackAllocator()
 	{
-		if (m_pMemBlock) {
+		if (m_pMemBlock) 
+		{
 			destroy();
 		}
 	}

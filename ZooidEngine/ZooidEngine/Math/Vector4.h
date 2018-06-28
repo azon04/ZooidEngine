@@ -1,13 +1,14 @@
 #ifndef __VECTOR4_Z__
 #define __VECTOR4_Z__
 
+#include "SSEHelper.h"
 #include "MathUtil.h"
 #include "Utils/Macros.h"
 #include "Utils/PrimitiveTypes.h"
-#include "SSEHelper.h"
 #include "Memory/MemoryHelper.h"
 
-class Vector4 {
+class Vector4 
+{
 
 public:
 	Vector4() :
