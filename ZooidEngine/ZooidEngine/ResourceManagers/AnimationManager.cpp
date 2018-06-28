@@ -86,29 +86,29 @@ namespace ZE
 					{
 						if (StringFunc::Compare("T", buffer) == 0)
 						{
-							poseSQT.translation.setX(fileReader.readNextFloat());
-							poseSQT.translation.setY(fileReader.readNextFloat());
-							poseSQT.translation.setZ(fileReader.readNextFloat());
+							poseSQT.Translation.setX(fileReader.readNextFloat());
+							poseSQT.Translation.setY(fileReader.readNextFloat());
+							poseSQT.Translation.setZ(fileReader.readNextFloat());
 						}
 						else if (StringFunc::Compare("Q", buffer) == 0)
 						{
-							poseSQT.rotation.m_x = fileReader.readNextFloat();
-							poseSQT.rotation.m_y = fileReader.readNextFloat();
-							poseSQT.rotation.m_z = fileReader.readNextFloat();
-							poseSQT.rotation.m_w = fileReader.readNextFloat();
+							poseSQT.Rotation.m_x = fileReader.readNextFloat();
+							poseSQT.Rotation.m_y = fileReader.readNextFloat();
+							poseSQT.Rotation.m_z = fileReader.readNextFloat();
+							poseSQT.Rotation.m_w = fileReader.readNextFloat();
 						}
 						else if (StringFunc::Compare("Q3", buffer) == 0)
 						{
-							poseSQT.rotation.m_x = fileReader.readNextFloat();
-							poseSQT.rotation.m_y = fileReader.readNextFloat();
-							poseSQT.rotation.m_z = fileReader.readNextFloat();
-							poseSQT.rotation.m_w = sqrt(1 - (poseSQT.rotation.m_x * poseSQT.rotation.m_x + poseSQT.rotation.m_y * poseSQT.rotation.m_y + poseSQT.rotation.m_z * poseSQT.rotation.m_z));
+							poseSQT.Rotation.m_x = fileReader.readNextFloat();
+							poseSQT.Rotation.m_y = fileReader.readNextFloat();
+							poseSQT.Rotation.m_z = fileReader.readNextFloat();
+							poseSQT.Rotation.m_w = sqrt(1 - (poseSQT.Rotation.m_x * poseSQT.Rotation.m_x + poseSQT.Rotation.m_y * poseSQT.Rotation.m_y + poseSQT.Rotation.m_z * poseSQT.Rotation.m_z));
 						}
 						else if (StringFunc::Compare("S", buffer) == 0)
 						{
-							poseSQT.scale.setX(fileReader.readNextFloat());
-							poseSQT.scale.setY(fileReader.readNextFloat());
-							poseSQT.scale.setZ(fileReader.readNextFloat());
+							poseSQT.Scale.setX(fileReader.readNextFloat());
+							poseSQT.Scale.setY(fileReader.readNextFloat());
+							poseSQT.Scale.setZ(fileReader.readNextFloat());
 						}
 						else
 						{
@@ -117,7 +117,7 @@ namespace ZE
 
 						fileReader.readNextString(buffer);
 					}
-					animPose.jointPoses.push_back(poseSQT);
+					animPose.JointPoses.push_back(poseSQT);
 				}
 				else
 				{

@@ -11,7 +11,6 @@ namespace ZE
 	{
 
 		DEFINE_CLASS(AnimationManager)
-
 	public:
 
 		static void Init(GameContext* gameContext);

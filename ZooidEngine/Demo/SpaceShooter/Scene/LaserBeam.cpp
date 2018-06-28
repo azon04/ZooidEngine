@@ -26,7 +26,7 @@ namespace SpaceShooter
 		ZE::RenderComponent::handleUpdateEvent(event);
 
 		ZE::Event_UPDATE* eventUpdate = (ZE::Event_UPDATE*) event;
-		m_worldTransform.setPos(m_worldTransform.getPos() + (m_velocity * eventUpdate->m_deltaTime / 1000.0f));
+		m_worldTransform.setPos(m_worldTransform.getPos() + (m_velocity * eventUpdate->m_deltaSeconds));
 		
 		if (m_worldTransform.getPos().getX() > 500)
 		{

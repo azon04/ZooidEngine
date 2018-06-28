@@ -29,7 +29,7 @@ namespace ZE
 		}
 	}
 
-	bool FileReader::isValid()
+	bool FileReader::isValid() const
 	{
 		return m_fileHandle != nullptr;
 	}
@@ -58,7 +58,7 @@ namespace ZE
 		return result;
 	}
 
-	bool FileReader::eof()
+	bool FileReader::eof() const
 	{
 		return feof(m_fileHandle) > 0;
 	}

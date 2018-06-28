@@ -22,7 +22,10 @@ namespace ZE
 			setObjectName("EventDispatcher");
 		}
 
+		// Add Event (using handle) into EventDispatcher to be processed
 		void addEvent(Handle _eventHandle, EventType _type = EVENT_GENERAL);
+
+		// Clear Event by type
 		void clearEvents(EventType _type);
 
 		FORCEINLINE Array<Handle, true>& getEvents(EventType _type)
@@ -31,7 +34,6 @@ namespace ZE
 			{
 				return m_inputEvents;
 			}
-
 			return m_generalEvents;
 		}
 

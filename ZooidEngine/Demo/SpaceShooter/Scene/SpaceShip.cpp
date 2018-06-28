@@ -63,7 +63,7 @@ namespace SpaceShooter
 		ZE::RenderComponent::handleUpdateEvent(event);
 
 		ZE::Event_UPDATE* eventUpdate = (ZE::Event_UPDATE*) event;
-		float deltaTime = eventUpdate->m_deltaTime / 1000.0f;
+		float deltaTime = eventUpdate->m_deltaSeconds;
 		m_worldTransform.setPos(m_worldTransform.getPos() + (m_movementSpeed * deltaTime));
 	}
 

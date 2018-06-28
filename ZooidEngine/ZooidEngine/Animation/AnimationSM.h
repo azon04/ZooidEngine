@@ -58,8 +58,10 @@ namespace ZE
 
 		virtual void setupComponent();
 
+		// Handle update event
 		virtual void handleEventUpdate(Event* evt);
 
+		// Read Anim State Definition file
 		void readAnimStateDef(const char* file);
 
 	protected:

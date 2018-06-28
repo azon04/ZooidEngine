@@ -28,24 +28,24 @@ namespace ZE
 		if (m_bPlaying && m_currentClip)
 		{
 			Float32 playTime;
-			m_currentLocalTime += pEventUpdate->m_deltaTime / 1000.0f * m_playRate;
+			m_currentLocalTime += pEventUpdate->m_deltaSeconds * m_playRate;
 			if (m_bLoop)
 			{
 				if (m_playRate > 0.0f)
 				{
-					while (m_currentLocalTime > m_currentClip->m_duration)
+					while (m_currentLocalTime > m_currentClip->getClipDuration())
 					{
-						m_currentLocalTime -= m_currentClip->m_duration;
+						m_currentLocalTime -= m_currentClip->getClipDuration();
 					}
 					playTime = m_currentLocalTime;
 				}
 				else
 				{
-					while (m_currentLocalTime < -m_currentClip->m_duration)
+					while (m_currentLocalTime < -m_currentClip->getClipDuration())
 					{
-						m_currentLocalTime += m_currentClip->m_duration;
+						m_currentLocalTime += m_currentClip->getClipDuration();
 					}
-					playTime = m_currentClip->m_duration + m_currentLocalTime;
+					playTime = m_currentClip->getClipDuration() + m_currentLocalTime;
 				}
 			}
 			else if(!m_bLoop)
@@ -53,7 +53,7 @@ namespace ZE
 				m_bPlaying = false;
 			}
 
-			// TODO update animation state
+			// update Skeleton state
 			AnimationPose pose;
 			m_currentClip->getAnimationPoseAtTime(playTime, pose);
 
@@ -62,14 +62,14 @@ namespace ZE
 				RenderComponent* pRenderComp = (RenderComponent*)m_parents[0];
 				SkeletonState* pSkelState = pRenderComp->m_hSkeletonState.getObject<SkeletonState>();
 				
-				ZASSERT(pSkelState->getSkeleton() == m_currentClip->m_skeleton, "Skeleton using in render and animation didn't match");
+				ZASSERT(pSkelState->getSkeleton() == m_currentClip->getSkeleton(), "Skeleton using in render and animation mismatch");
 
-				Array<Matrix4x4> mats(m_currentClip->m_skeleton->getJointCount());
+				Array<Matrix4x4> mats(m_currentClip->getSkeleton()->getJointCount());
 
-				for (int i = 0; i < m_currentClip->m_skeleton->getJointCount(); i++)
+				for (int i = 0; i < m_currentClip->getSkeleton()->getJointCount(); i++)
 				{
 					mats.push_back(Matrix4x4());
-					pose.jointPoses[i].toMatrix(mats[i]);
+					pose.JointPoses[i].toMatrix(mats[i]);
 				}
 
 				pSkelState->setJointStateMatrices(mats, true);

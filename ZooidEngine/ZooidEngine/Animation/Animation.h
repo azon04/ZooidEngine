@@ -12,6 +12,7 @@
 namespace ZE
 {
 	class Skeleton;
+	class AnimationManager;
 
 	enum InterpolationType
 	{
@@ -72,34 +73,46 @@ namespace ZE
 
 	struct PoseSQT
 	{
-		PoseSQT() : rotation(0.0f, 0.0f, 0.0f, 1.0f), translation(0.0f, 0.0f, 0.0f),
-				scale(1.0f, 1.0f, 1.0f)
+		PoseSQT() : Rotation(0.0f, 0.0f, 0.0f, 1.0f), Translation(0.0f, 0.0f, 0.0f),
+				Scale(1.0f, 1.0f, 1.0f)
 		{}
 		~PoseSQT() {}
 
 		void toMatrix(Matrix4x4& mat);
 
-		Quaternion rotation;
-		Vector3 translation;
-		Vector3 scale;
+		Quaternion Rotation;
+		Vector3 Translation;
+		Vector3 Scale;
 	};
 
 	struct AnimationPose
 	{
-		Array<PoseSQT, true> jointPoses;
+		Array<PoseSQT, true> JointPoses;
 	};
 
 	class AnimationClip : public Object
 	{
 		DEFINE_CLASS(AnimationClip)
 
+		friend class AnimationManager;
+
 	public:
 		AnimationClip() {}
 
+		// Get animation pose based on local time of animation
 		void getAnimationPoseAtTime(float _localTime, AnimationPose& outPose);
-		void getAnimationPoseAtScaleTime(float _localTime, AnimationPose& outPose, float scale);
-		void getAnimationPoseAtTimeWithDuration(float _localTime, AnimationPose& outPose, float _duration);
 
+		// Get animation pose based on local time of scaled animation duration
+		void getAnimationPoseAtScaleTime(float _localTime, AnimationPose& outPose, float scale);
+
+		// Get animation pose based on local time of duration
+		void getAnimationPoseAtTimeWithDuration(float _localTime, AnimationPose& outPose, float _duration);
+		
+		FORCEINLINE Skeleton* getSkeleton() const { return m_skeleton; }
+
+		FORCEINLINE Float32 getClipDuration() const { return m_duration; }
+
+	protected:
 		Skeleton* m_skeleton;
 		Int32 m_framePerSecond;
 		Int32 m_frameCount;
@@ -114,6 +127,7 @@ namespace ZE
 	public:
 		AnimationSet() {}
 
+	protected:
 		Array<AnimationClip*, true> m_animationClips;
 	};
 
@@ -124,15 +138,24 @@ namespace ZE
 	public:
 		AnimationData() {}
 
+	protected:
 		AnimationClip* m_animationClip;
 		HashMap<String, Track*> m_trackMap;
 	};
 
 	namespace AnimationHelper
 	{
+		// Lerp per component of PoseSQT (Scale, Quaternion - using slerp, Translation) based on alpha
 		void LerpPoseSQT(PoseSQT& res, const PoseSQT& pose1, const PoseSQT& pose2, float alpha);
+
+		// Lerp 2 Animation Poses based on alpha
 		void LerpAnimPose(AnimationPose& res, AnimationPose& pose1, AnimationPose& pose2, float alpha);
+		
+		// Do partial animation and lerp on target based on pose and on alpha.
+		// bBlenOrientation: whether target and pose orientation blended and apply to partial animation
 		void LerpAnimPartialPose(AnimationPose& res, AnimationPose& target, AnimationPose& pose, Skeleton* skelDef, Int32 boneIndex, float alpha, bool bBlendOrientation = true );
+		
+		// Do lerp on additive pose based on alpha
 		void LerpAdditivePose(AnimationPose& res, AnimationPose& target, AnimationPose& addPose, float alpha);
 	};
 }

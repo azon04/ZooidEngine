@@ -16,7 +16,7 @@ namespace SpaceShooter
 	{
 		ZE::Event_UPDATE* eventUpdate = (ZE::Event_UPDATE*) event;
 
-		m_delay -= eventUpdate->m_deltaTime / 1000.0f;
+		m_delay -= eventUpdate->m_deltaSeconds;
 		if (m_delay < 0.0f)
 		{
 			// Spawn Meteor

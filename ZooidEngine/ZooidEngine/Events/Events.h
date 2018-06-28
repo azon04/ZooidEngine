@@ -16,6 +16,9 @@ namespace ZE {
 		Event() : m_bPropagate(true) {}
 		virtual ~Event() {}
 
+		FORCEINLINE bool isPropagate() const { return m_bPropagate; }
+
+	protected:
 		bool m_bPropagate;
 	};
 
@@ -28,7 +31,10 @@ namespace ZE {
 		virtual ~Event_UPDATE() {}
 
 		// Delta Time in milliseconds
-		double m_deltaTime;
+		double m_deltaMilliseconds;
+
+		// Delta Time in Seconds
+		Float32 m_deltaSeconds;
 	};
 
 	class Event_GATHER_LIGHT : public Event
@@ -57,6 +63,7 @@ namespace ZE {
 		Event_RESOURCE_LOADED() {}
 		virtual ~Event_RESOURCE_LOADED() {}
 
+		// Resource handle of loaded resource
 		Handle m_resourceHandle;
 	};
 };

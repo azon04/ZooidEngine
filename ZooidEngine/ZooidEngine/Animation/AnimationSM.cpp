@@ -31,7 +31,7 @@ namespace ZE
 	{
 		Event_UPDATE* pRealEvt = (Event_UPDATE*)evt;
 
-		m_currentTime += pRealEvt->m_deltaTime / 1000.0f;
+		m_currentTime += pRealEvt->m_deltaSeconds;
 
 		if (m_stateCache)
 		{
@@ -44,14 +44,14 @@ namespace ZE
 				AnimationPose pose;
 				processAnimNode(pose, m_stateCache->Node, m_currentTime, pSkelState->getSkeleton());
 
-				ZASSERT(pSkelState->getSkeleton()->getJointCount() == pose.jointPoses.length(), "Pose and Skeleton Definition mismatch!");
+				ZASSERT(pSkelState->getSkeleton()->getJointCount() == pose.JointPoses.length(), "Pose and Skeleton Definition mismatch!");
 				
 				Array<Matrix4x4> mats(pSkelState->getSkeleton()->getJointCount());
 
 				for (int i = 0; i < pSkelState->getSkeleton()->getJointCount(); i++)
 				{
 					mats.push_back(Matrix4x4());
-					pose.jointPoses[i].toMatrix(mats[i]);
+					pose.JointPoses[i].toMatrix(mats[i]);
 				}
 
 				pSkelState->setJointStateMatrices(mats, true);
@@ -231,7 +231,7 @@ namespace ZE
 		{
 			if (node.PartialJointIndex == -1)
 			{
-				skeletonDef->getJointByName(node.PartialJointName, node.PartialJointIndex);
+				skeletonDef->getJointIndexByName(node.PartialJointName, node.PartialJointIndex);
 			}
 			
 			// TODO this can use a bit of threading

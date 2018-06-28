@@ -77,7 +77,7 @@ namespace ZE {
 
 		if (m_isCurrentDragged)
 		{
-			m_currentDragTime += pEventUpdate->m_deltaTime;
+			m_currentDragTime += pEventUpdate->m_deltaMilliseconds;
 
 			const float deltaTime = 10.0f;
 			if (m_currentDragTime > deltaTime)

@@ -21,7 +21,7 @@ namespace ZE
 	void DebugCamera::handleUpdateEvent(Event* _event)
 	{
 		Event_UPDATE* pRealEvent = static_cast<Event_UPDATE*>(_event);
-		Float32 deltaInSeconds = (Float32)(pRealEvent->m_deltaTime / 1000.0);
+		Float32 deltaInSeconds = pRealEvent->m_deltaSeconds;
 		m_worldTransform.setPos(m_worldTransform.getPos() + (m_worldTransform.getU() * m_velocity.getX() + m_worldTransform.getN() * m_velocity.getZ()) * deltaInSeconds );
 		m_worldTransform.rotateAroundU(DegToRad(m_rotation.getX() * deltaInSeconds));
 		m_worldTransform.rotateAroundV(DegToRad(m_rotation.getY() * deltaInSeconds));

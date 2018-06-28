@@ -24,7 +24,7 @@ namespace SpaceShooter
 	void Meteor::handleUpdateEvent(ZE::Event* event)
 	{
 		ZE::Event_UPDATE* updateEvent = (ZE::Event_UPDATE*) event;
-		m_worldTransform.setPos(m_worldTransform.getPos() + m_velocity * updateEvent->m_deltaTime / 1000.0f);
+		m_worldTransform.setPos(m_worldTransform.getPos() + m_velocity * updateEvent->m_deltaSeconds);
 		//m_worldTransform.rotateAroundN(DegToRad( 90.0f * updateEvent->m_deltaTime / 1000.0f));
 		
 		if (m_worldTransform.getPos().getX() < -20)

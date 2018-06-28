@@ -15,6 +15,7 @@ namespace ZE
 		Event_INPUT() {}
 		virtual ~Event_INPUT() {}
 
+		// Key Id of input event
 		Short m_keyId;
 	};
 
@@ -44,7 +45,10 @@ namespace ZE
 		Event_MOUSE_DRAG() {}
 		virtual ~Event_MOUSE_DRAG() {}
 
+		// Delta X change in pixel
 		int m_deltaX;
+
+		// Delta Y change in pixel
 		int m_deltaY;
 	};
 }

@@ -78,7 +78,7 @@ namespace ZE {
 			delegates[i].call(event);
 		}
 
-		if (!event->m_bPropagate)
+		if (!event->isPropagate())
 		{
 			return;
 		}

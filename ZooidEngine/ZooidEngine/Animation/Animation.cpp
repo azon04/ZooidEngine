@@ -10,69 +10,14 @@ namespace ZE
 
 	void AnimationClip::getAnimationPoseAtTime(float _localTime, AnimationPose& outPose)
 	{
-		// Wrap the time by duration
-		while (_localTime > m_duration)
-		{
-			_localTime = _localTime - m_duration;
-		}
-
-		// TODO Find the current index and next index
-		Int32 cIndex, nextIndex;
-
-		float portion = _localTime / m_duration;
-		cIndex = portion * m_frameCount;
-		nextIndex = (cIndex + 1) % m_frameCount;
-		float fraction = (portion * (m_frameCount)) - cIndex;
-
-		// Interpolate between SQT
-		AnimationPose& cPose = m_animationSamples[cIndex];
-		AnimationPose& nextPose = m_animationSamples[nextIndex];
-
-		for (int i = 0; i < cPose.jointPoses.length(); i++)
-		{
-			outPose.jointPoses.push_back(PoseSQT());
-			PoseSQT& outPoseSQT = outPose.jointPoses[i];
-			PoseSQT& cSQT = cPose.jointPoses[i];
-			PoseSQT& nextSQT = nextPose.jointPoses[i];
-
-			outPoseSQT.translation = MathOps::VLerp(cSQT.translation, nextSQT.translation, fraction);
-			outPoseSQT.rotation = MathOps::QSlerp(cSQT.rotation, nextSQT.rotation, fraction);
-			outPoseSQT.scale = MathOps::VLerp(cSQT.scale, nextSQT.scale, fraction);
-		}
+		getAnimationPoseAtTimeWithDuration(_localTime, outPose, m_duration);
 	}
 
 	void AnimationClip::getAnimationPoseAtScaleTime(float _localTime, AnimationPose& outPose, float scale)
 	{
 		// Wrap the time by duration
 		float scaledDuration = m_duration * scale;
-		while (_localTime > scaledDuration)
-		{
-			_localTime = _localTime - scaledDuration;
-		}
-
-		// TODO Find the current index and next index
-		Int32 cIndex, nextIndex;
-
-		float portion = _localTime / scaledDuration;
-		cIndex = portion * (m_frameCount);
-		nextIndex = (cIndex + 1) % m_frameCount;
-		float fraction = (portion * (m_frameCount)) - cIndex;
-
-		// Interpolate between SQT
-		AnimationPose& cPose = m_animationSamples[cIndex];
-		AnimationPose& nextPose = m_animationSamples[nextIndex];
-
-		for (int i = 0; i < cPose.jointPoses.length(); i++)
-		{
-			outPose.jointPoses.push_back(PoseSQT());
-			PoseSQT& outPoseSQT = outPose.jointPoses[i];
-			PoseSQT& cSQT = cPose.jointPoses[i];
-			PoseSQT& nextSQT = nextPose.jointPoses[i];
-
-			outPoseSQT.translation = MathOps::VLerp(cSQT.translation, nextSQT.translation, fraction);
-			outPoseSQT.rotation = MathOps::QSlerp(cSQT.rotation, nextSQT.rotation, fraction);
-			outPoseSQT.scale = MathOps::VLerp(cSQT.scale, nextSQT.scale, fraction);
-		}
+		getAnimationPoseAtTimeWithDuration(_localTime, outPose, scaledDuration);
 	}
 
 	void AnimationClip::getAnimationPoseAtTimeWithDuration(float _localTime, AnimationPose& outPose, float _duration)
@@ -83,7 +28,7 @@ namespace ZE
 			_localTime = _localTime - _duration;
 		}
 
-		// TODO Find the current index and next index
+		// Find the current index and next index
 		Int32 cIndex, nextIndex;
 
 		float portion = _localTime / _duration;
@@ -91,20 +36,19 @@ namespace ZE
 		nextIndex = (cIndex + 1) % m_frameCount;
 		float fraction = (portion * m_frameCount) - cIndex;
 
-		// Interpolate between SQT
+		// Interpolate between Animation Poses
 		AnimationPose& cPose = m_animationSamples[cIndex];
 		AnimationPose& nextPose = m_animationSamples[nextIndex];
-
-		for (int i = 0; i < cPose.jointPoses.length(); i++)
+		for (int i = 0; i < cPose.JointPoses.length(); i++)
 		{
-			outPose.jointPoses.push_back(PoseSQT());
-			PoseSQT& outPoseSQT = outPose.jointPoses[i];
-			PoseSQT& cSQT = cPose.jointPoses[i];
-			PoseSQT& nextSQT = nextPose.jointPoses[i];
+			outPose.JointPoses.push_back(PoseSQT());
+			PoseSQT& outPoseSQT = outPose.JointPoses[i];
+			PoseSQT& cSQT = cPose.JointPoses[i];
+			PoseSQT& nextSQT = nextPose.JointPoses[i];
 
-			outPoseSQT.translation = MathOps::VLerp(cSQT.translation, nextSQT.translation, fraction);
-			outPoseSQT.rotation = MathOps::QSlerp(cSQT.rotation, nextSQT.rotation, fraction);
-			outPoseSQT.scale = MathOps::VLerp(cSQT.scale, nextSQT.scale, fraction);
+			outPoseSQT.Translation = MathOps::VLerp(cSQT.Translation, nextSQT.Translation, fraction);
+			outPoseSQT.Rotation = MathOps::QSlerp(cSQT.Rotation, nextSQT.Rotation, fraction);
+			outPoseSQT.Scale = MathOps::VLerp(cSQT.Scale, nextSQT.Scale, fraction);
 		}
 	}
 
@@ -134,51 +78,51 @@ namespace ZE
 	void PoseSQT::toMatrix(Matrix4x4& mat)
 	{
 		mat = Matrix4x4();
-		mat.fromQuaternion(rotation);
-		mat.scale(scale);
-		mat.translate(translation);
+		mat.fromQuaternion(Rotation);
+		mat.scale(Scale);
+		mat.translate(Translation);
 	}
 
 	void AnimationHelper::LerpPoseSQT(PoseSQT& res, const PoseSQT& pose1, const PoseSQT& pose2, float alpha)
 	{
-		res.translation = MathOps::VLerp(pose1.translation, pose2.translation, alpha);
-		res.rotation = MathOps::QSlerp(pose1.rotation, pose2.rotation, alpha);
-		res.scale = MathOps::VLerp(pose1.scale, pose2.scale, alpha);
+		res.Translation = MathOps::VLerp(pose1.Translation, pose2.Translation, alpha);
+		res.Rotation = MathOps::QSlerp(pose1.Rotation, pose2.Rotation, alpha);
+		res.Scale = MathOps::VLerp(pose1.Scale, pose2.Scale, alpha);
 	}
 
 	void AnimationHelper::LerpAnimPose(AnimationPose& res, AnimationPose& pose1, AnimationPose& pose2, float alpha)
 	{
-		res.jointPoses.clear();
+		res.JointPoses.clear();
 		
-		ZASSERT(pose1.jointPoses.length() == pose2.jointPoses.length(), "Poses is not for the same skeleton");
+		ZASSERT(pose1.JointPoses.length() == pose2.JointPoses.length(), "Poses is not for the same skeleton");
 
-		for (int i = 0; i < pose1.jointPoses.length(); i++)
+		for (int i = 0; i < pose1.JointPoses.length(); i++)
 		{
 			PoseSQT poseSQT;
-			LerpPoseSQT(poseSQT, pose1.jointPoses[i], pose2.jointPoses[i], alpha);
-			res.jointPoses.push_back(poseSQT);
+			LerpPoseSQT(poseSQT, pose1.JointPoses[i], pose2.JointPoses[i], alpha);
+			res.JointPoses.push_back(poseSQT);
 		}
 	}
 
 	void AnimationHelper::LerpAnimPartialPose(AnimationPose& res, AnimationPose& target, AnimationPose& pose, Skeleton* skelDef, Int32 boneIndex, float alpha, bool bBlendOrientation)
 	{
-		res.jointPoses.clear();
+		res.JointPoses.clear();
 
-		ZASSERT(target.jointPoses.length() == pose.jointPoses.length(), "Poses is not for the same skeleton");
+		ZASSERT(target.JointPoses.length() == pose.JointPoses.length(), "Poses is not for the same skeleton");
 
 		Array<bool> boneMaskMap(skelDef->getJointCount());
 		SkeletonJoint jointTemp;
 
-		for (int i = 0; i < target.jointPoses.length(); i++)
+		for (int i = 0; i < target.JointPoses.length(); i++)
 		{
 			skelDef->getJoint(i, jointTemp);
-			if (jointTemp.parentIndex == boneIndex || i == boneIndex)
+			if (jointTemp.ParentIndex == boneIndex || i == boneIndex)
 			{
 				boneMaskMap[i] = true;
 			}
-			else if (jointTemp.parentIndex >= 0)
+			else if (jointTemp.ParentIndex >= 0)
 			{
-				boneMaskMap[i] = boneMaskMap[jointTemp.parentIndex];
+				boneMaskMap[i] = boneMaskMap[jointTemp.ParentIndex];
 			}
 			else
 			{
@@ -188,40 +132,40 @@ namespace ZE
 			if (boneMaskMap[i])
 			{
 				PoseSQT poseSQT;
-				LerpPoseSQT(poseSQT, target.jointPoses[i], pose.jointPoses[i], alpha);
-				res.jointPoses.push_back(poseSQT);
+				LerpPoseSQT(poseSQT, target.JointPoses[i], pose.JointPoses[i], alpha);
+				res.JointPoses.push_back(poseSQT);
 			}
 			else
 			{
-				res.jointPoses.push_back(target.jointPoses[i]);
+				res.JointPoses.push_back(target.JointPoses[i]);
 			}
 		}
 
 		if (bBlendOrientation && boneIndex > 0)
 		{
 			skelDef->getJoint(boneIndex, jointTemp);
-			Int32 parentIndex = jointTemp.parentIndex;
-			Quaternion addRot = pose.jointPoses[parentIndex].rotation *(*target.jointPoses[parentIndex].rotation);
-			res.jointPoses[boneIndex].rotation = res.jointPoses[boneIndex].rotation * addRot;
+			Int32 parentIndex = jointTemp.ParentIndex;
+			Quaternion addRot = pose.JointPoses[parentIndex].Rotation *(*target.JointPoses[parentIndex].Rotation);
+			res.JointPoses[boneIndex].Rotation = res.JointPoses[boneIndex].Rotation * addRot;
 		}
 	}
 
 	void AnimationHelper::LerpAdditivePose(AnimationPose& res, AnimationPose& target, AnimationPose& addPose, float alpha)
 	{
-		res.jointPoses.clear();
+		res.JointPoses.clear();
 
-		ZASSERT(target.jointPoses.length() == addPose.jointPoses.length(), "Poses is not for the same skeleton");
+		ZASSERT(target.JointPoses.length() == addPose.JointPoses.length(), "Poses is not for the same skeleton");
 
-		for (int i = 0; i < target.jointPoses.length(); i++)
+		for (int i = 0; i < target.JointPoses.length(); i++)
 		{
 			PoseSQT afterAddPose;
-			afterAddPose.translation = target.jointPoses[i].translation + addPose.jointPoses[i].translation;
-			afterAddPose.rotation = target.jointPoses[i].rotation * addPose.jointPoses[i].rotation;
-			afterAddPose.scale = target.jointPoses[i].scale * addPose.jointPoses[i].scale;
+			afterAddPose.Translation = target.JointPoses[i].Translation + addPose.JointPoses[i].Translation;
+			afterAddPose.Rotation = target.JointPoses[i].Rotation * addPose.JointPoses[i].Rotation;
+			afterAddPose.Scale = target.JointPoses[i].Scale * addPose.JointPoses[i].Scale;
 
 			PoseSQT poseSQT;
-			LerpPoseSQT(poseSQT, target.jointPoses[i], afterAddPose, alpha);
-			res.jointPoses.push_back(poseSQT);
+			LerpPoseSQT(poseSQT, target.JointPoses[i], afterAddPose, alpha);
+			res.JointPoses.push_back(poseSQT);
 		}
 	}
 

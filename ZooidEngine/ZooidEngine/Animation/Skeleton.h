@@ -13,18 +13,18 @@ namespace ZE
 
 	struct SkeletonJoint
 	{
-		String name;
-		Int32 parentIndex;
-		Matrix4x4 invBindPose;
-		Matrix4x4 bindPose;
+		String Name;
+		Int32 ParentIndex;
+		Matrix4x4 InvBindPose;
+		Matrix4x4 BindPose;
 	};
 
 	struct FastJoint
 	{
-		String name;
-		FastJoint* parent;
-		SkeletonJoint* skeletonJoint;
-		Array<FastJoint*, true> childs;
+		String Name;
+		FastJoint* Parent;
+		SkeletonJoint* pSkeletonJoint;
+		Array<FastJoint*, true> Childs;
 	};
 
 	class Skeleton : public Object
@@ -37,15 +37,26 @@ namespace ZE
 		Skeleton() : m_uniqueId(-1), m_jointCount(0) {}
 		Skeleton(Int32 _uniqueId) : m_uniqueId(_uniqueId), m_jointCount(0) {}
 
-		FORCEINLINE Int32 getJointCount() const { return m_jointCount; }
-
+		// Add joint to the skeleton, return the index of the joint
 		Int32 addJoint(SkeletonJoint& _joint);
+
+		// Get Joint at index, return true if found
 		bool getJoint(Int32 _jointId, SkeletonJoint& _joint);
-		bool getJointByName(const String& name, Int32& _jointId);
+
+		// Get index of joint with name, return true if found
+		bool getJointIndexByName(const String& name, Int32& _jointId);
+
+		// Get parent joint, return true if found
 		bool getParentJoint(SkeletonJoint& _joint);
 
+		// Get joint by name, return true if found
+		bool getJointByName(const String& _jointName, SkeletonJoint& _jointOut);
+
+		// Load joint from file
 		void loadFromFile(const char* filePath);
 
+		FORCEINLINE Int32 getJointCount() const { return m_jointCount; }
+	
 	protected:
 		void readJoint(FileReader* fileReader, Int32 m_parentJointIndex);
 
@@ -61,8 +72,8 @@ namespace ZE
 		SkeletonJointState() {}
 		~SkeletonJointState() {}
 
-		Int32 index;
-		Matrix4x4 bindPose;
+		Int32 Index;
+		Matrix4x4 BindPose;
 	};
 
 	// Skeleton State holds the skeleton final pose to render
@@ -77,13 +88,23 @@ namespace ZE
 
 		~SkeletonState() {}
 
+		// Get joint location by joint index
 		Vector3 GetJointLocation(Int32 jointIndex);
+		
+		// Get joint rotation (in Quaternion) by joint index
 		Quaternion GetJointQuat(Int32 jointIndex);
-		void getBindPoseMatrix(Int32 jointIndex, Matrix4x4& bindPose);
-		void getJointMatrixPallete(Int32 jointIndex, Matrix4x4& matrixPallete);
-		void setJointStateMatrices(Array<Matrix4x4>& matrices, bool inBoneTransform);
 
-		Skeleton* getSkeleton() const { return m_skeleton; }
+		// Get Bind Pose matrix by joint index
+		void getBindPoseMatrix(Int32 jointIndex, Matrix4x4& bindPose);
+
+		// Get Matrix Pallete for joint index
+		void getJointMatrixPallete(Int32 jointIndex, Matrix4x4& matrixPallete);
+
+		// Set joint state matrices;
+		// inBoneTransform: true if the matrices in bone transform
+		void setJointStateMatrices(Array<Matrix4x4>& matrices, bool inBoneTransform = true);
+
+		FORCEINLINE Skeleton* getSkeleton() const { return m_skeleton; }
 
 	protected:
 		void setupState();
@@ -94,4 +115,4 @@ namespace ZE
 	};
 }
 
-#endif // !__ZE_SKELETON_H__
+#endif

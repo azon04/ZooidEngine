@@ -16,11 +16,16 @@ namespace ZE
 		
 		FileReader(const char* filePath);
 
+		// Open file
 		void open(const char* filePath);
+		
+		// Close file
 		void close();
 
-		bool isValid();
+		// check whether the file reader is valid (i.e. file exist or not, or not readable)
+		bool isValid() const;
 
+		// Read file to buffer
 		size_t readToBuffer(void* buffer, size_t bufferSize);
 		
 		// Reading for text string
@@ -32,13 +37,20 @@ namespace ZE
 		// Reading for float
 		float readNextFloat();
 
-		bool eof();
+		// Check if file reaches end of the file
+		bool eof() const;
 
+		// Size of file, in byte
 		long size();
+
+		// Check current position of cursor
 		long getCurrentPosition();
 
-		String getPath() { return m_path; }
-		FILE* getInternalFileHandle() { return m_fileHandle; }
+		// Get File Path
+		String getPath() const { return m_path; }
+
+		// Get actual File handle
+		FILE* getInternalFileHandle() const { return m_fileHandle; }
 
 	protected:
 		FILE* m_fileHandle;

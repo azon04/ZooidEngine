@@ -187,7 +187,8 @@ namespace ZE {
 		{
 			ZE::Handle handleUpdate("EventUpdate", sizeof(ZE::Event_UPDATE));
 			ZE::Event_UPDATE* eventUpdate = new(handleUpdate) ZE::Event_UPDATE();
-			eventUpdate->m_deltaTime = deltaTime;
+			eventUpdate->m_deltaMilliseconds = deltaTime;
+			eventUpdate->m_deltaSeconds = deltaTime * 0.001f;
 			_gameContext->getEventDispatcher()->handleEvent(eventUpdate);
 			_gameContext->getInputManager()->handleEvent(eventUpdate);
 			handleUpdate.release();

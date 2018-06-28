@@ -24,11 +24,11 @@ namespace ZE
 		return true;
 	}
 
-	bool Skeleton::getJointByName(const String& name, Int32& _jointId)
+	bool Skeleton::getJointIndexByName(const String& name, Int32& _jointId)
 	{
 		for (Int32 i = 0; i < m_jointCount; i++)
 		{
-			if (name == m_joints[i].name)
+			if (name == m_joints[i].Name)
 			{
 				_jointId = i;
 				return true;
@@ -46,6 +46,19 @@ namespace ZE
 
 		_joint = m_joints[0];
 		return true;
+	}
+
+	bool Skeleton::getJointByName(const String& _jointName, SkeletonJoint& _jointOut)
+	{
+		for (Int32 i = 0; i < m_jointCount; i++)
+		{
+			if (_jointName == m_joints[i].Name)
+			{
+				_jointOut = m_joints[i];
+				return true;
+			}
+		}
+		return false;
 	}
 
 	void Skeleton::loadFromFile(const char* filePath)
@@ -76,8 +89,8 @@ namespace ZE
 
 		// Read Name
 		fileReader->readNextString(buffer);
-		joint.name = buffer;
-		joint.parentIndex = parentJointIndex;
+		joint.Name = buffer;
+		joint.ParentIndex = parentJointIndex;
 
 		Int32 index = addJoint(joint);
 
@@ -104,8 +117,8 @@ namespace ZE
 					}
 				}
 
-				m_joints[index].invBindPose = mat;
-				m_joints[index].bindPose = mat.inverse();
+				m_joints[index].InvBindPose = mat;
+				m_joints[index].BindPose = mat.inverse();
 
 			}
 			else if (StringFunc::Compare(buffer, "Xform") == 0)
@@ -119,8 +132,8 @@ namespace ZE
 					}
 				}
 
-				m_joints[index].bindPose = mat;
-				m_joints[index].invBindPose = mat.inverse();
+				m_joints[index].BindPose = mat;
+				m_joints[index].InvBindPose = mat.inverse();
 
 			}
 
@@ -139,7 +152,7 @@ namespace ZE
 	{
 		if (jointIndex < m_skeletonJointStates.length())
 		{
-			return m_skeletonJointStates[jointIndex].bindPose.getPos();
+			return m_skeletonJointStates[jointIndex].BindPose.getPos();
 		}
 
 		return Vector3();
@@ -149,7 +162,7 @@ namespace ZE
 	{
 		if (jointIndex < m_skeletonJointStates.length())
 		{
-			return m_skeletonJointStates[jointIndex].bindPose.toQuaternion();
+			return m_skeletonJointStates[jointIndex].BindPose.toQuaternion();
 		}
 
 		return Quaternion();
@@ -159,7 +172,7 @@ namespace ZE
 	{
 		if (jointIndex < m_skeletonJointStates.length())
 		{
-			bindPose = m_skeletonJointStates[jointIndex].bindPose;
+			bindPose = m_skeletonJointStates[jointIndex].BindPose;
 		}
 	}
 
@@ -167,7 +180,7 @@ namespace ZE
 	{
 		if (jointIndex < m_skeletonJointStates.length())
 		{
-			matrixPallete = m_skeleton->m_joints[jointIndex].invBindPose * m_skeletonJointStates[jointIndex].bindPose;
+			matrixPallete = m_skeleton->m_joints[jointIndex].InvBindPose * m_skeletonJointStates[jointIndex].BindPose;
 		}
 	}
 
@@ -176,17 +189,17 @@ namespace ZE
 		ZASSERT(matrices.length() == m_skeletonJointStates.length(), "Matrices and Number of skeleton don't match");
 		for (int i = 0; i < matrices.length(); i++)
 		{
-			m_skeletonJointStates[i].bindPose = matrices[i];
+			m_skeletonJointStates[i].BindPose = matrices[i];
 		}
 
 		if (inBoneTransform)
 		{
 			for (int i = 0; i < matrices.length(); i++)
 			{
-				int parentIndex = m_skeleton->m_joints[i].parentIndex;
+				int parentIndex = m_skeleton->m_joints[i].ParentIndex;
 				if (parentIndex >= 0)
 				{
-					m_skeletonJointStates[i].bindPose = m_skeletonJointStates[i].bindPose * m_skeletonJointStates[parentIndex].bindPose;
+					m_skeletonJointStates[i].BindPose = m_skeletonJointStates[i].BindPose * m_skeletonJointStates[parentIndex].BindPose;
 				}
 			}
 		}
@@ -201,8 +214,8 @@ namespace ZE
 			SkeletonJoint joint;
 			m_skeleton->getJoint(i, joint);
 			SkeletonJointState jointState;
-			jointState.index = i;
-			jointState.bindPose = joint.bindPose;
+			jointState.Index = i;
+			jointState.BindPose = joint.BindPose;
 			m_skeletonJointStates.push_back(jointState);
 		}
 	}

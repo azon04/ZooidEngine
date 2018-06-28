@@ -14,12 +14,19 @@ namespace ZE
 		FileWriter() {}
 		FileWriter(const char* filePath);
 
+		// Open File
 		void open(const char* filePath);
+
+		// Close file
 		void close();
 		
+		// Check if file writer is valid (i.e can create file, or file is writable)
 		bool isValid();
 
+		// Write to file from given buffer and size
 		void writeFromBuffer(void* buffer, size_t bufferSize);
+
+		// Write formatted text to file
 		void writeFormatText(const char* formatText, ...);
 
 		char* getPath() { return &m_path[0]; }
