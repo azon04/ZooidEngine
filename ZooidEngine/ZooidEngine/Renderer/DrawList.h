@@ -9,8 +9,10 @@
 #define MAX_DRAW_LIST 1024
 #define MAX_SECONDPASS_DRAW_LIST 1024
 
-namespace ZE {
-	class DrawList {
+namespace ZE 
+{
+	class DrawList 
+	{
 	public:
 		
 		DrawList() {
@@ -47,4 +49,4 @@ namespace ZE {
 	};
 
 };
-#endif // 
+#endif

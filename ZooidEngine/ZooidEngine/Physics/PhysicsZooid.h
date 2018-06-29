@@ -19,6 +19,7 @@ namespace ZE
 
 		FORCEINLINE IPhysics* GetPhysics() const { return m_physics; }
 
+	protected:
 		IPhysics* m_physics;
 	};
 }

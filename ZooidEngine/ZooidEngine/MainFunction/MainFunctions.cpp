@@ -223,7 +223,7 @@ namespace ZE
 			ZE::ShaderAction& shaderAction = _gameContext->getDrawList()->getNextShaderAction();
 			ZE::IShaderChain* shader = ZE::ShaderManager::getInstance()->getShaderChain(2);
 
-			shaderAction.SetShaderAndBuffer(shader, ZE::BufferManager::getInstance()->m_GPUBufferArrays[2]);
+			shaderAction.SetShaderAndBuffer(shader, ZE::BufferManager::getInstance()->getBufferArray(2));
 			shaderAction.SetShaderMatVar("modelMat", Matrix4x4());
 			shaderAction.SetConstantsBlockBuffer("shader_data", _gameContext->getDrawList()->m_mainConstantBuffer);
 		}

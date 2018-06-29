@@ -3,16 +3,19 @@
 
 #include "Utils/PrimitiveTypes.h"
 
-namespace ZE {
+namespace ZE 
+{
 
-enum BufferType {
+enum BufferType 
+{
 	UNIFORM_BUFFER,
 	VERTEX_BUFFER,
 	INDEX_BUFFER,
 	COMPUTE_BUFFER
 };
 
-class BufferData {
+class BufferData 
+{
 
 public:
 	BufferData(BufferType type) : m_type(type)
@@ -20,17 +23,18 @@ public:
 
 	virtual ~BufferData() {}
 
-	void SetData(void* Data, unsigned int sizePerItem, unsigned int count = 1) {
+	void SetData(void* Data, unsigned int sizePerItem, unsigned int count = 1) 
+	{
 		m_data = Data;
 		m_size = sizePerItem * count;
 		m_count = count;
 	}
 
 	void* m_data;
+	ZE::Int32 m_bufferLayout;
 	ZE::UInt32 m_count;
 	ZE::UInt32 m_size;
 	BufferType m_type;
-	ZE::Int32 m_bufferLayout;
 };
 
 };

@@ -11,6 +11,7 @@ namespace ZE
 		GLRenderZooid(GameContext* gameContext) : RenderZooid(gameContext)
 		{}
 
+		// RenderZooid implementation
 		virtual Handle CreateRenderBufferData() override;
 		virtual Handle CreateRenderBufferArray() override;
 		virtual Handle CreateRenderTexture() override;

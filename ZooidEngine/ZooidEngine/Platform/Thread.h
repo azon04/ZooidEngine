@@ -1,5 +1,6 @@
 #ifndef __ZE_THREAD__
 #define __ZE_THREAD__
+
 // #TODO This is C++11, need to change if in another platform is not working
 #include <thread>
 #include <mutex>

@@ -17,7 +17,7 @@ namespace ZE {
 
 		if (m_bufferType == VERTEX_BUFFER)
 		{
-			SetupLayout(BufferLayoutManager::getInstance()->m_bufferLayout[_bufferData->m_bufferLayout]);
+			SetupLayout(BufferLayoutManager::GetInstance()->getBufferLayoutByFormat(_bufferData->m_bufferLayout));
 		}
 	}
 

@@ -315,9 +315,6 @@
     <ClInclude Include="Renderer\IShader.h">
       <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="GLShader.h">
-      <Filter>Renderer\GL</Filter>
-    </ClInclude>
     <ClInclude Include="Platform\Thread.h">
       <Filter>Platform</Filter>
     </ClInclude>
@@ -416,6 +413,9 @@
     </ClInclude>
     <ClInclude Include="Animation\AnimationSM.h">
       <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\GL\GLShader.h">
+      <Filter>Renderer\GL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -590,9 +590,6 @@
     <ClCompile Include="Renderer\IShader.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="GLShader.cpp">
-      <Filter>Renderer\GL</Filter>
-    </ClCompile>
     <ClCompile Include="Platform\Thread.cpp">
       <Filter>Platform</Filter>
     </ClCompile>
@@ -667,6 +664,9 @@
     </ClCompile>
     <ClCompile Include="Animation\AnimationSM.cpp">
       <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\GL\GLShader.cpp">
+      <Filter>Renderer\GL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

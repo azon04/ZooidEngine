@@ -16,13 +16,14 @@ namespace ZE
 
 		physx::PxRigidActor* getRigidActor() const { return m_physXRigidActor; }
 
+		// IPhysicsBody Implementation
 		virtual void setupPhysicsBody() override;
 
 		virtual void setMass(Float32 _mass) override;
 		virtual Float32 getMass() const override;
 
-		virtual void AddForceAtPos(const Vector3& globalPos, const Vector3& forceDir, Float32 forceValue, bool bImpulse = false);
-		virtual void AddForceAtLocalPos(const Vector3& localPos, const Vector3& forceDir, Float32 forceValue, bool bImpulse = false);
+		virtual void AddForceAtPos(const Vector3& globalPos, const Vector3& forceDir, Float32 forceValue, bool bImpulse = false) override;
+		virtual void AddForceAtLocalPos(const Vector3& localPos, const Vector3& forceDir, Float32 forceValue, bool bImpulse = false) override;
 		
 	private:
 		physx::PxRigidActor* m_physXRigidActor;

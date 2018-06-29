@@ -2,7 +2,8 @@
 
 #include "ResourceManagers/BufferManager.h"
 
-namespace ZE {
+namespace ZE 
+{
 
 	void DrawList::Reset()
 	{

@@ -8,6 +8,7 @@ namespace ZE
 {
 	class IPhysicsBody;
 
+	// Interface class for object that can have PhysicsBody
 	class IPhysicsBodyHolder
 	{
 

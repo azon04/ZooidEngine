@@ -10,7 +10,8 @@
 
 #include <cstring>
 
-namespace ZE {
+namespace ZE 
+{
 
 	GLRenderer::GLRenderer()
 	{
@@ -60,7 +61,8 @@ namespace ZE {
 		glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 		
 		m_window = glfwCreateWindow(WIDTH, HEIGHT, "ZooidEngine - Windows", nullptr, nullptr);
-		if (!m_window) {
+		if (!m_window) 
+		{
 			glfwTerminate();
 			ZASSERT(true, "Failed to create GLFW window");
 			return;
@@ -75,7 +77,8 @@ namespace ZE {
 		// Init glfw
 		glewExperimental = GL_TRUE;
 		GLenum err = glewInit();
-		if (err != GLEW_OK) {
+		if (err != GLEW_OK) 
+		{
 			glfwTerminate();
 			ZASSERT(false, "GL Init Error: %s", glewGetErrorString(err));
 			return;

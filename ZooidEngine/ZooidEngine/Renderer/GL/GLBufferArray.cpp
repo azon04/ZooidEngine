@@ -13,12 +13,12 @@ namespace ZE
 			glGenVertexArrays(1, &m_VAO);
 
 		glBindVertexArray(m_VAO);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexGLBuffer->m_BBO);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexGLBuffer->getBBO());
 		m_dataCount = _vertexBuffer->m_dataCount;
 		m_buffers.push_back(_vertexBuffer);
 
 		if (_indexBuffer) {
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexGLBuffer->m_BBO);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexGLBuffer->getBBO());
 			m_dataCount = _indexBuffer->m_dataCount;
 			m_buffers.push_back(_indexBuffer);
 		}
@@ -53,10 +53,10 @@ namespace ZE
 		for (int i = 0; i < layout->m_layouts.length(); i++) {
 			GLenum dataType = GL_FLOAT;
 			unsigned int size_data_type = 1;
-			if (layout->m_layouts[i].dataType == FLOAT) {
+			if (layout->m_layouts[i].DataType == FLOAT) {
 				size_data_type = sizeof(GLfloat);
 			}
-			else if (layout->m_layouts[i].dataType == INTEGER)
+			else if (layout->m_layouts[i].DataType == INTEGER)
 			{
 				size_data_type = sizeof(GLint);
 				dataType = GL_INT;
@@ -64,11 +64,11 @@ namespace ZE
 
 			if(dataType == GL_INT)
 			{ 
-				glVertexAttribIPointer(i, layout->m_layouts[i].sizePerItem, dataType, layout->m_layouts[i].stride, (GLvoid*)(layout->m_layouts[i].offset * size_data_type));
+				glVertexAttribIPointer(i, layout->m_layouts[i].SizePerItem, dataType, layout->m_layouts[i].Stride, (GLvoid*)(layout->m_layouts[i].Offset * size_data_type));
 			}
 			else
 			{
-				glVertexAttribPointer(i, layout->m_layouts[i].sizePerItem, dataType, GL_FALSE, layout->m_layouts[i].stride, (GLvoid*)(layout->m_layouts[i].offset * size_data_type));
+				glVertexAttribPointer(i, layout->m_layouts[i].SizePerItem, dataType, GL_FALSE, layout->m_layouts[i].Stride, (GLvoid*)(layout->m_layouts[i].Offset * size_data_type));
 			}
 			glEnableVertexAttribArray(i);
 		}

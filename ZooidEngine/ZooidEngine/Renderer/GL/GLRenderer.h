@@ -13,17 +13,20 @@
 #define WIDTH 1280
 #define HEIGHT 720
 
-namespace ZE {
+namespace ZE 
+{
 
 class BufferData;
 class IGPUBufferData;
 
-class GLRenderer : public IRenderer {
+class GLRenderer : public IRenderer 
+{
 	
 public:
 	GLRenderer();
 	virtual ~GLRenderer() {}
 
+	// IRenderer implementation
 	virtual void Setup() override;
 	virtual void BeginRender() override;
 	virtual void EndRender() override;
@@ -53,9 +56,11 @@ public:
 		return m_winWindow;
 	}
 
+private:
 	HWND m_winWindow;
 #endif
 
+private:
 	void ProcessShaderFeature(ShaderFeature& shaderFeature);
 	void SortBlendShaderActions(const Vector3& cameraPosition, const Vector3& cameraDirection,  ShaderAction* inArray, UInt32* outIndexArray, UInt32 count);
 

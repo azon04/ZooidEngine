@@ -11,26 +11,33 @@
 #define BUFFER_LAYOUT_V3_N3_TC2 3
 #define BUFFER_LAYOUT_V3_N3_TC2_SKIN 4
 
-namespace ZE {
+namespace ZE 
+{
 
-	enum DataType {
+	enum DataType 
+	{
 		FLOAT,
 		INTEGER
 	};
 
-	struct Layout {
-		ZE::Int32 index;
-		ZE::UInt32 sizePerItem;
-		DataType dataType;
-		ZE::UInt32 stride;
-		ZE::Int32 offset;
+	struct Layout 
+	{
+		ZE::Int32 Index;
+		ZE::UInt32 SizePerItem;
+		DataType DataType;
+		ZE::UInt32 Stride;
+		ZE::Int32 Offset;
 	};
 
-	class BufferLayout {
+	class BufferLayout 
+	{
 
 	public:
 
+		// Get buffer data count
 		UInt32 getBufferDataCount() const { return m_bufferDataCount; }
+
+		// Calculate buffer data count
 		UInt32 calculateBufferDataCount();
 
 	public:
@@ -40,19 +47,35 @@ namespace ZE {
 		UInt32 m_bufferDataCount;
 	};
 
-	class BufferLayoutManager {
-		static BufferLayoutManager* m_instance;
+	class BufferLayoutManager 
+	{
+		
 	public:
+
+		// Init buffer layout manager
 		static void Init();
-		static BufferLayoutManager* getInstance();
+
+		// Get instance of BufferLayoutManager
+		static BufferLayoutManager* GetInstance();
+
+		// Destroy instance of buffer layout manager
 		static void Destroy();
 
+		// Init layout for the manager
 		void InitLayout();
+
+		// Destroy all layout for the manager
 		void DestroyLayout();
 
+		// get buffer layout by format type
+		BufferLayout* getBufferLayoutByFormat(int format);
+
+	protected:
+		// List of the buffer layouts
 		Array<BufferLayout*> m_bufferLayout;
 
-		BufferLayout* getBufferLayoutByFormat(int format);
+	private:
+		static BufferLayoutManager* m_instance;
 	};
 }
 

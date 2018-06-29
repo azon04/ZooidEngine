@@ -13,14 +13,17 @@ namespace ZE
 
 		GLBufferArray() : m_VAO(0) {}
 
+		// IGPUBufferArray implementation
 		virtual void SetupBufferArray(IGPUBufferData* _vertexBuffer, IGPUBufferData* _indexBuffer, IGPUBufferData* _computeBuffer) override;
 
 		virtual void Bind() override;
 		virtual void Unbind() override;
 		virtual void release() override;
 
+		// Bind Layout
 		void BindLayout(BufferLayout* layout);
 
+	private:
 		GLuint m_VAO;
 	};
 }

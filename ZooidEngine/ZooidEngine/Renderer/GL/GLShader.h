@@ -12,9 +12,13 @@ namespace ZE
 	public:
 		GLShader() : m_GLShader(0) {}
 
+		// IShader implementation
 		virtual void loadShaderFromBuffer(char* _shaderBuffer, size_t _bufferSize) override;
 		virtual void release() override;
 
+		FORCEINLINE  GLuint getGLShader() const { return m_GLShader; }
+
+	private:
 		GLuint m_GLShader;
 		
 	};
@@ -27,6 +31,7 @@ namespace ZE
 			m_topology = TOPOLOGY_TRIANGLE;
 		}
 
+		// IShaderChain Implementation
 		virtual void MakeChain(IShader* vsShader, IShader* psShader, IShader* gsShader, IShader* csShader);
 		virtual void Release();
 
@@ -40,8 +45,11 @@ namespace ZE
 		virtual void SetTexture(const char* _constName, IGPUTexture* _texture, Int32 _textureIndex) override;
 
 		virtual void BindConstantBuffer(const char* _blockName, IGPUBufferData* _constantBuffer) override;
+
+		// Get uniform position
 		GLint getUniformPosition(const char* _varName);
 
+	private:
 		GLuint m_GLProgram;
 	};
 

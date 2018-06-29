@@ -12,6 +12,7 @@ namespace ZE
 		PhysXZooid(GameContext* gameContext) : PhysicsZooid(gameContext)
 		{}
 
+		// PhysicsZooid implementation override
 		virtual void Init() override;
 		virtual void Destroy() override;
 

@@ -22,6 +22,7 @@ namespace ZE
 
 	public:
 		
+		// IPhysics Implementation
 		virtual void Setup() override;
 		virtual void PreUpdate() override;
 		virtual void Update(float _deltaMS) override;
@@ -52,6 +53,7 @@ namespace ZE
 		virtual bool SphereOverlap(const Vector3& position, const Quaternion& quat, Float32 radius, Array<IPhysicsBody*, true>& physicsBodyResult) override;
 		virtual bool CapsuleOverlap(const Vector3& position, const Quaternion& quat, Float32 radius, Float32 halfHeight, Array<IPhysicsBody*, true>& physicsBodyResult) override;
 		virtual bool PhysicsBodyOverlap(IPhysicsBody* physicsBody, Array<IPhysicsBody*, true>& physicsBodyResult) override;
+		// End IPhysics Implementation
 
 		// Implement from PxSimulationEventCallback
 		virtual void onConstraintBreak(physx::PxConstraintInfo* constraints, physx::PxU32 count);
@@ -62,7 +64,6 @@ namespace ZE
 		virtual void onAdvance(const physx::PxRigidBody*const* bodyBuffer, const physx::PxTransform* poseBuffer, const physx::PxU32 count);
 
 	private:
-
 		physx::PxShape* CreateShape(PhysicsBodyDesc* _data, Vector3 scale);
 
 		physx::PxFoundation* m_physxFoundation;

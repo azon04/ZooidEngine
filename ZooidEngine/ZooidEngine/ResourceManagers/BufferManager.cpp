@@ -9,7 +9,8 @@
 
 #include "Renderer/IRenderer.h"
 
-namespace ZE {
+namespace ZE 
+{
 
 	IMPLEMENT_CLASS_1(BufferManager, ResourceManager)
 

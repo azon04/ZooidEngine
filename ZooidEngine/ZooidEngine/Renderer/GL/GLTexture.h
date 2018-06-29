@@ -12,12 +12,14 @@ namespace ZE
 	public:
 		GLTexture() : m_textureBuffer(0) {}
 
+		// IGPUTexture implementation
 		virtual void FromTexture(Texture* texture) override;
 		virtual void release() override;
 
 		virtual void Bind() override;
 		virtual void Unbind() override;
 
+	private:
 		GLuint m_textureBuffer;
 	};
 }

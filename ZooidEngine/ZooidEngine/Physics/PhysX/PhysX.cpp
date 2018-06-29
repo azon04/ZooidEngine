@@ -282,17 +282,17 @@ namespace ZE
 
 		bool blocked = m_physxScene->raycast(pxStartPos, pxUnitDir, distance, pxHit, PxHitFlag::eDEFAULT, queryFilterData, &filterCallback);
 
-		hit.isBlocked = blocked;
+		hit.bIsBlocked = blocked;
 		if (blocked)
 		{
-			hit.blockPosition = Vector3(&pxHit.block.position[0]);
-			hit.blockNormal = Vector3(&pxHit.block.normal[0]);
+			hit.BlockedPosition = Vector3(&pxHit.block.position[0]);
+			hit.BlockedNormal = Vector3(&pxHit.block.normal[0]);
 			if (pxHit.block.actor)
 			{
 				IPhysicsBody* physicsBody = reinterpret_cast<IPhysicsBody*>(pxHit.block.actor->userData);
 				if (physicsBody->getGameObject())
 				{
-					hit.blockComponent = static_cast<Component*>(physicsBody->getGameObject());
+					hit.BlockedComponent = static_cast<Component*>(physicsBody->getGameObject());
 				}
 			}
 		}
@@ -318,37 +318,37 @@ namespace ZE
 
 		bool blocked = m_physxScene->raycast(pxStartPos, pxUnitDir, distance, buff, PxHitFlag::eDEFAULT, queryFilterData, &filterCallback);
 		
-		hit.isBlocked = blocked;
+		hit.bIsBlocked = blocked;
 		if (blocked)
 		{
-			hit.blockPosition = Vector3(&buff.block.position[0]);
-			hit.blockNormal = Vector3(&buff.block.normal[0]);
+			hit.BlockedPosition = Vector3(&buff.block.position[0]);
+			hit.BlockedNormal = Vector3(&buff.block.normal[0]);
 			if (buff.block.actor)
 			{
 				IPhysicsBody* physicsBody = reinterpret_cast<IPhysicsBody*>(buff.block.actor->userData);
 				if (physicsBody->getGameObject())
 				{
-					hit.blockComponent = static_cast<Component*>(physicsBody->getGameObject());
+					hit.BlockedComponent = static_cast<Component*>(physicsBody->getGameObject());
 				}
 			}
 		}
 
-		hit.hasTouches = buff.nbTouches > 0;
+		hit.bHasTouches = buff.nbTouches > 0;
 		for (UInt32 i = 0; i < buff.nbTouches; i++)
 		{
 			PhysicsHit touchHit;
-			touchHit.blockPosition = Vector3(&buff.touches[i].position[0]);
-			touchHit.blockNormal = Vector3(&buff.touches[i].normal[0]);
+			touchHit.BlockedPosition = Vector3(&buff.touches[i].position[0]);
+			touchHit.BlockedNormal = Vector3(&buff.touches[i].normal[0]);
 			if (buff.touches[i].actor)
 			{
 				IPhysicsBody* physicsBody = reinterpret_cast<IPhysicsBody*>(buff.touches[i].actor->userData);
 				if (physicsBody->getGameObject())
 				{
-					touchHit.blockComponent = static_cast<Component*>(physicsBody->getGameObject());
+					touchHit.BlockedComponent = static_cast<Component*>(physicsBody->getGameObject());
 				}
 			}
 
-			hit.touches.push_back(touchHit);
+			hit.Touches.push_back(touchHit);
 		}
 
 		return blocked;
@@ -370,17 +370,17 @@ namespace ZE
 
 		bool blocked = m_physxScene->sweep(boxGeom, initialPose, pxDir, distance, pxHit, PxHitFlag::eDEFAULT, queryFilterData, &filterCallback);
 
-		hit.isBlocked = blocked;
+		hit.bIsBlocked = blocked;
 		if (blocked)
 		{
-			hit.blockPosition = Vector3(&pxHit.block.position[0]);
-			hit.blockNormal = Vector3(&pxHit.block.normal[0]);
+			hit.BlockedPosition = Vector3(&pxHit.block.position[0]);
+			hit.BlockedNormal = Vector3(&pxHit.block.normal[0]);
 			if (pxHit.block.actor)
 			{
 				IPhysicsBody* physicsBody = reinterpret_cast<IPhysicsBody*>(pxHit.block.actor->userData);
 				if (physicsBody->getGameObject())
 				{
-					hit.blockComponent = static_cast<Component*>(physicsBody->getGameObject());
+					hit.BlockedComponent = static_cast<Component*>(physicsBody->getGameObject());
 				}
 			}
 		}
@@ -407,37 +407,37 @@ namespace ZE
 
 		bool blocked = m_physxScene->sweep(boxGeom, initialPose, pxDir, distance, buff, PxHitFlag::eDEFAULT, queryFilterData, &filterCallback);
 
-		hit.isBlocked = blocked;
+		hit.bIsBlocked = blocked;
 		if (blocked)
 		{
-			hit.blockPosition = Vector3(&buff.block.position[0]);
-			hit.blockNormal = Vector3(&buff.block.normal[0]);
+			hit.BlockedPosition = Vector3(&buff.block.position[0]);
+			hit.BlockedNormal = Vector3(&buff.block.normal[0]);
 			if (buff.block.actor)
 			{
 				IPhysicsBody* physicsBody = reinterpret_cast<IPhysicsBody*>(buff.block.actor->userData);
 				if (physicsBody->getGameObject())
 				{
-					hit.blockComponent = static_cast<Component*>(physicsBody->getGameObject());
+					hit.BlockedComponent = static_cast<Component*>(physicsBody->getGameObject());
 				}
 			}
 		}
 
-		hit.hasTouches = buff.nbTouches > 0;
+		hit.bHasTouches = buff.nbTouches > 0;
 		for (UInt32 i = 0; i < buff.nbTouches; i++)
 		{
 			PhysicsHit touchHit;
-			touchHit.blockPosition = Vector3(&buff.touches[i].position[0]);
-			touchHit.blockNormal = Vector3(&buff.touches[i].normal[0]);
+			touchHit.BlockedPosition = Vector3(&buff.touches[i].position[0]);
+			touchHit.BlockedNormal = Vector3(&buff.touches[i].normal[0]);
 			if (buff.touches[i].actor)
 			{
 				IPhysicsBody* physicsBody = reinterpret_cast<IPhysicsBody*>(buff.touches[i].actor->userData);
 				if (physicsBody->getGameObject())
 				{
-					touchHit.blockComponent = static_cast<Component*>(physicsBody->getGameObject());
+					touchHit.BlockedComponent = static_cast<Component*>(physicsBody->getGameObject());
 				}
 			}
 
-			hit.touches.push_back(touchHit);
+			hit.Touches.push_back(touchHit);
 		}
 
 		return blocked;
@@ -459,17 +459,17 @@ namespace ZE
 
 		bool blocked = m_physxScene->sweep(sphereGeom, initialPose, pxDir, distance, pxHit, PxHitFlag::eDEFAULT, queryFilterData, &filterCallback);
 
-		hit.isBlocked = blocked;
+		hit.bIsBlocked = blocked;
 		if (blocked)
 		{
-			hit.blockPosition = Vector3(&pxHit.block.position[0]);
-			hit.blockNormal = Vector3(&pxHit.block.normal[0]);
+			hit.BlockedPosition = Vector3(&pxHit.block.position[0]);
+			hit.BlockedNormal = Vector3(&pxHit.block.normal[0]);
 			if (pxHit.block.actor)
 			{
 				IPhysicsBody* physicsBody = reinterpret_cast<IPhysicsBody*>(pxHit.block.actor->userData);
 				if (physicsBody->getGameObject())
 				{
-					hit.blockComponent = static_cast<Component*>(physicsBody->getGameObject());
+					hit.BlockedComponent = static_cast<Component*>(physicsBody->getGameObject());
 				}
 			}
 		}
@@ -496,37 +496,37 @@ namespace ZE
 
 		bool blocked = m_physxScene->sweep(sphereGeom, initialPose, pxDir, distance, buff, PxHitFlag::eDEFAULT, queryFilterData, &filterCallback);
 
-		hit.isBlocked = blocked;
+		hit.bIsBlocked = blocked;
 		if (blocked)
 		{
-			hit.blockPosition = Vector3(&buff.block.position[0]);
-			hit.blockNormal = Vector3(&buff.block.normal[0]);
+			hit.BlockedPosition = Vector3(&buff.block.position[0]);
+			hit.BlockedNormal = Vector3(&buff.block.normal[0]);
 			if (buff.block.actor)
 			{
 				IPhysicsBody* physicsBody = reinterpret_cast<IPhysicsBody*>(buff.block.actor->userData);
 				if (physicsBody->getGameObject())
 				{
-					hit.blockComponent = static_cast<Component*>(physicsBody->getGameObject());
+					hit.BlockedComponent = static_cast<Component*>(physicsBody->getGameObject());
 				}
 			}
 		}
 
-		hit.hasTouches = buff.nbTouches > 0;
+		hit.bHasTouches = buff.nbTouches > 0;
 		for (UInt32 i = 0; i < buff.nbTouches; i++)
 		{
 			PhysicsHit touchHit;
-			touchHit.blockPosition = Vector3(&buff.touches[i].position[0]);
-			touchHit.blockNormal = Vector3(&buff.touches[i].normal[0]);
+			touchHit.BlockedPosition = Vector3(&buff.touches[i].position[0]);
+			touchHit.BlockedNormal = Vector3(&buff.touches[i].normal[0]);
 			if (buff.touches[i].actor)
 			{
 				IPhysicsBody* physicsBody = reinterpret_cast<IPhysicsBody*>(buff.touches[i].actor->userData);
 				if (physicsBody->getGameObject())
 				{
-					touchHit.blockComponent = static_cast<Component*>(physicsBody->getGameObject());
+					touchHit.BlockedComponent = static_cast<Component*>(physicsBody->getGameObject());
 				}
 			}
 
-			hit.touches.push_back(touchHit);
+			hit.Touches.push_back(touchHit);
 		}
 
 		return blocked;
@@ -548,17 +548,17 @@ namespace ZE
 
 		bool blocked = m_physxScene->sweep(sphereGeom, initialPose, pxDir, distance, pxHit, PxHitFlag::eDEFAULT, queryFilterData, &filterCallback);
 
-		hit.isBlocked = blocked;
+		hit.bIsBlocked = blocked;
 		if (blocked)
 		{
-			hit.blockPosition = Vector3(&pxHit.block.position[0]);
-			hit.blockNormal = Vector3(&pxHit.block.normal[0]);
+			hit.BlockedPosition = Vector3(&pxHit.block.position[0]);
+			hit.BlockedNormal = Vector3(&pxHit.block.normal[0]);
 			if (pxHit.block.actor)
 			{
 				IPhysicsBody* physicsBody = reinterpret_cast<IPhysicsBody*>(pxHit.block.actor->userData);
 				if (physicsBody->getGameObject())
 				{
-					hit.blockComponent = static_cast<Component*>(physicsBody->getGameObject());
+					hit.BlockedComponent = static_cast<Component*>(physicsBody->getGameObject());
 				}
 			}
 		}
@@ -585,37 +585,37 @@ namespace ZE
 
 		bool blocked = m_physxScene->sweep(sphereGeom, initialPose, pxDir, distance, buff, PxHitFlag::eDEFAULT, queryFilterData, &filterCallback);
 
-		hit.isBlocked = blocked;
+		hit.bIsBlocked = blocked;
 		if (blocked)
 		{
-			hit.blockPosition = Vector3(&buff.block.position[0]);
-			hit.blockNormal = Vector3(&buff.block.normal[0]);
+			hit.BlockedPosition = Vector3(&buff.block.position[0]);
+			hit.BlockedNormal = Vector3(&buff.block.normal[0]);
 			if (buff.block.actor)
 			{
 				IPhysicsBody* physicsBody = reinterpret_cast<IPhysicsBody*>(buff.block.actor->userData);
 				if (physicsBody->getGameObject())
 				{
-					hit.blockComponent = static_cast<Component*>(physicsBody->getGameObject());
+					hit.BlockedComponent = static_cast<Component*>(physicsBody->getGameObject());
 				}
 			}
 		}
 
-		hit.hasTouches = buff.nbTouches > 0;
+		hit.bHasTouches = buff.nbTouches > 0;
 		for (UInt32 i = 0; i < buff.nbTouches; i++)
 		{
 			PhysicsHit touchHit;
-			touchHit.blockPosition = Vector3(&buff.touches[i].position[0]);
-			touchHit.blockNormal = Vector3(&buff.touches[i].normal[0]);
+			touchHit.BlockedPosition = Vector3(&buff.touches[i].position[0]);
+			touchHit.BlockedNormal = Vector3(&buff.touches[i].normal[0]);
 			if (buff.touches[i].actor)
 			{
 				IPhysicsBody* physicsBody = reinterpret_cast<IPhysicsBody*>(buff.touches[i].actor->userData);
 				if (physicsBody->getGameObject())
 				{
-					touchHit.blockComponent = static_cast<Component*>(physicsBody->getGameObject());
+					touchHit.BlockedComponent = static_cast<Component*>(physicsBody->getGameObject());
 				}
 			}
 
-			hit.touches.push_back(touchHit);
+			hit.Touches.push_back(touchHit);
 		}
 
 		return blocked;
@@ -770,12 +770,12 @@ namespace ZE
 				{
 					physx::PxContactPairPoint& contactPairPoint = contactPairPoints[j];
 					ContactPhysicsData contactPhysicsData;
-					contactPhysicsData.m_component = component;
-					contactPhysicsData.m_otherComponent = otherComponent;
+					contactPhysicsData.MainComponent = component;
+					contactPhysicsData.OtherComponent = otherComponent;
 
-					contactPhysicsData.m_contactPos = Vector3(contactPairPoint.position.x, contactPairPoint.position.y, contactPairPoint.position.z);
-					contactPhysicsData.m_contactNormal = Vector3(contactPairPoint.normal.x, contactPairPoint.normal.y, contactPairPoint.normal.z);
-					contactPhysicsData.m_contactImpulse = Vector3(contactPairPoint.impulse.x, contactPairPoint.impulse.y, contactPairPoint.impulse.z);
+					contactPhysicsData.ContactPos = Vector3(contactPairPoint.position.x, contactPairPoint.position.y, contactPairPoint.position.z);
+					contactPhysicsData.ContactNormal = Vector3(contactPairPoint.normal.x, contactPairPoint.normal.y, contactPairPoint.normal.z);
+					contactPhysicsData.ContactImpulse = Vector3(contactPairPoint.impulse.x, contactPairPoint.impulse.y, contactPairPoint.impulse.z);
 
 					collideEvent.m_contacts.push_back(contactPhysicsData);
 				}

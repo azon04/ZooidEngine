@@ -39,12 +39,12 @@ namespace PhysicsSandBox
 
 			if (m_gameContext->getPhysics()->DoLineRaycast(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, m_worldTransform.getPos() - 1.2f * m_worldTransform.getN(), -1 * m_worldTransform.getN(), 20.0f, hit))
 			{
-				ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit %s!", hit.blockComponent->getObjectName());
+				ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit %s!", hit.BlockedComponent->getObjectName());
 				
-				if (hit.blockComponent)
+				if (hit.BlockedComponent)
 				{
-					ZE::IPhysicsBodyHolder* pPhysicsBodyHolder = dynamic_cast<ZE::IPhysicsBodyHolder*>(hit.blockComponent);
-					pPhysicsBodyHolder->AddForceAtPos(hit.blockPosition, -1 * m_worldTransform.getN(), 10.0f, true);
+					ZE::IPhysicsBodyHolder* pPhysicsBodyHolder = dynamic_cast<ZE::IPhysicsBodyHolder*>(hit.BlockedComponent);
+					pPhysicsBodyHolder->AddForceAtPos(hit.BlockedPosition, -1 * m_worldTransform.getN(), 10.0f, true);
 				}
 			}
 		}
@@ -54,7 +54,7 @@ namespace PhysicsSandBox
 
 			if (m_gameContext->getPhysics()->DoBoxCast(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, m_worldTransform.getPos() - 1.2f * m_worldTransform.getN(), -1 * m_worldTransform.getN(), 20.0f, Quaternion(), Vector3(0.25f, 0.25f, 0.25f), hit))
 			{
-				ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit %s!", hit.blockComponent->getObjectName());
+				ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit %s!", hit.BlockedComponent->getObjectName());
 			}
 		}
 		else if (pRealEvent->m_keyId == 'C')
@@ -63,7 +63,7 @@ namespace PhysicsSandBox
 
 			if (m_gameContext->getPhysics()->DoCapsuleCast(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, m_worldTransform.getPos() - 1.2f * m_worldTransform.getN(), -1 * m_worldTransform.getN(), 20.0f, Quaternion(), 0.45f, 0.45f, hit))
 			{
-				ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit %s!", hit.blockComponent->getObjectName());
+				ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit %s!", hit.BlockedComponent->getObjectName());
 			}
 		}
 		else if (pRealEvent->m_keyId == 'V')
@@ -72,7 +72,7 @@ namespace PhysicsSandBox
 
 			if (m_gameContext->getPhysics()->DoSphereCast(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, m_worldTransform.getPos() - 1.2f * m_worldTransform.getN(), -1 * m_worldTransform.getN(), 20.0f, 0.45f, hit))
 			{
-				ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit %s!", hit.blockComponent->getObjectName());
+				ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit %s!", hit.BlockedComponent->getObjectName());
 			}
 		}
 		else if (pRealEvent->m_keyId == 'B')
@@ -81,16 +81,16 @@ namespace PhysicsSandBox
 
 			if (m_gameContext->getPhysics()->DoLineRaycastMulti(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, m_worldTransform.getPos() - 1.2f * m_worldTransform.getN(), -1 * m_worldTransform.getN(), 20.0f, hit))
 			{
-				if (hit.blockComponent)
+				if (hit.BlockedComponent)
 				{
-					ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit %s!", hit.blockComponent->getObjectName());
+					ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit %s!", hit.BlockedComponent->getObjectName());
 				}
 
-				ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit has %d touches", hit.touches.size());
-				for (int i = 0; i < hit.touches.size(); i++)
+				ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit has %d touches", hit.Touches.size());
+				for (int i = 0; i < hit.Touches.size(); i++)
 				{
-					ZE::PhysicsHit& touchHit = hit.touches[i];
-					ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Touches Hit %s!", touchHit.blockComponent->getObjectName());
+					ZE::PhysicsHit& touchHit = hit.Touches[i];
+					ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Touches Hit %s!", touchHit.BlockedComponent->getObjectName());
 				}
 			}
 		}
@@ -100,16 +100,16 @@ namespace PhysicsSandBox
 
 			if (m_gameContext->getPhysics()->DoBoxCastMulti(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, m_worldTransform.getPos() - 1.2f * m_worldTransform.getN(), -1 * m_worldTransform.getN(), 20.0f, Quaternion(), Vector3(0.25f, 0.25f, 0.25f), hit))
 			{
-				if (hit.blockComponent)
+				if (hit.BlockedComponent)
 				{
-					ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit %s!", hit.blockComponent->getObjectName());
+					ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit %s!", hit.BlockedComponent->getObjectName());
 				}
 
-				ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit has %d touches", hit.touches.size());
-				for (int i = 0; i < hit.touches.size(); i++)
+				ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit has %d touches", hit.Touches.size());
+				for (int i = 0; i < hit.Touches.size(); i++)
 				{
-					ZE::PhysicsHit& touchHit = hit.touches[i];
-					ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Touches Hit %s!", touchHit.blockComponent->getObjectName());
+					ZE::PhysicsHit& touchHit = hit.Touches[i];
+					ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Touches Hit %s!", touchHit.BlockedComponent->getObjectName());
 				}
 			}
 		}
@@ -119,16 +119,16 @@ namespace PhysicsSandBox
 
 			if (m_gameContext->getPhysics()->DoSphereCastMulti(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, m_worldTransform.getPos() - 1.2f * m_worldTransform.getN(), -1 * m_worldTransform.getN(), 20.0f, 0.45f, hit))
 			{
-				if (hit.blockComponent)
+				if (hit.BlockedComponent)
 				{
-					ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit %s!", hit.blockComponent->getObjectName());
+					ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit %s!", hit.BlockedComponent->getObjectName());
 				}
 
-				ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit has %d touches", hit.touches.size());
-				for (int i = 0; i < hit.touches.size(); i++)
+				ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit has %d touches", hit.Touches.size());
+				for (int i = 0; i < hit.Touches.size(); i++)
 				{
-					ZE::PhysicsHit& touchHit = hit.touches[i];
-					ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Touches Hit %s!", touchHit.blockComponent->getObjectName());
+					ZE::PhysicsHit& touchHit = hit.Touches[i];
+					ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Touches Hit %s!", touchHit.BlockedComponent->getObjectName());
 				}
 			}
 		}
@@ -138,16 +138,16 @@ namespace PhysicsSandBox
 
 			if (m_gameContext->getPhysics()->DoCapsuleCastMulti(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, m_worldTransform.getPos() - 1.2f * m_worldTransform.getN(), -1 * m_worldTransform.getN(), 20.0f, Quaternion(), 0.45f, 0.45f, hit))
 			{
-				if (hit.blockComponent)
+				if (hit.BlockedComponent)
 				{
-					ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit %s!", hit.blockComponent->getObjectName());
+					ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit %s!", hit.BlockedComponent->getObjectName());
 				}
 
-				ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit has %d touches", hit.touches.size());
-				for (int i = 0; i < hit.touches.size(); i++)
+				ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit has %d touches", hit.Touches.size());
+				for (int i = 0; i < hit.Touches.size(); i++)
 				{
-					ZE::PhysicsHit& touchHit = hit.touches[i];
-					ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Touches Hit %s!", touchHit.blockComponent->getObjectName());
+					ZE::PhysicsHit& touchHit = hit.Touches[i];
+					ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Touches Hit %s!", touchHit.BlockedComponent->getObjectName());
 				}
 			}
 		}

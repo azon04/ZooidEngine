@@ -12,24 +12,24 @@ namespace ZE
 	public:
 
 		GLBufferData()
-		{
-			m_BBO = 0;
-		}
+			: m_BBO(0)
+		{}
 
 		GLBufferData(bool _isStaticBuffer)
-			: IGPUBufferData(_isStaticBuffer)
-		{
-			m_BBO = 0;
-		}
+			: IGPUBufferData(_isStaticBuffer), m_BBO(0)
+		{}
 
+		// IGPUBufferData implementation
 		virtual void FromBufferData(BufferData* _bufferData) override;
 
 		virtual void Bind() override;
 		virtual void UnBind() override;
 		virtual void release() override;
 
-		GLuint m_BBO;
+		FORCEINLINE GLuint getBBO() const { return m_BBO; }
 
+	private:
+		GLuint m_BBO;
 	};
 }
 

@@ -2,7 +2,8 @@
 
 #include <GL/glew.h>
 
-namespace ZE {
+namespace ZE 
+{
 
 	BufferLayoutManager* BufferLayoutManager::m_instance = nullptr;
 
@@ -12,7 +13,7 @@ namespace ZE {
 		m_instance->InitLayout();
 	}
 
-	ZE::BufferLayoutManager* BufferLayoutManager::getInstance()
+	ZE::BufferLayoutManager* BufferLayoutManager::GetInstance()
 	{
 		return m_instance;
 	}
@@ -98,7 +99,6 @@ namespace ZE {
 
 	void BufferLayoutManager::DestroyLayout()
 	{
-
 		m_bufferLayout.clear();
 	}
 
@@ -112,7 +112,7 @@ namespace ZE {
 		m_bufferDataCount = 0;
 		for (int i = 0; i < m_layouts.length(); i++)
 		{
-			m_bufferDataCount += m_layouts[i].sizePerItem;
+			m_bufferDataCount += m_layouts[i].SizePerItem;
 		}
 		return m_bufferDataCount;
 	}

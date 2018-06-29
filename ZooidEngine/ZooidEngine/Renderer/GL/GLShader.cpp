@@ -4,7 +4,6 @@
 
 namespace ZE
 {
-
 	void GLShader::loadShaderFromBuffer(char* _shaderBuffer, size_t _bufferSize)
 	{
 		GLenum glShaderType = GL_VERTEX_SHADER;
@@ -56,28 +55,28 @@ namespace ZE
 		{
 			GLShader* vsGLShader = static_cast<GLShader*>(vsShader);
 			ZASSERT(vsShader->m_shaderType == Z_SHADER_VERTEX, "This isn't Vertex Shader");
-			glAttachShader(m_GLProgram, vsGLShader->m_GLShader);
+			glAttachShader(m_GLProgram, vsGLShader->getGLShader());
 		}
 
 		if (psShader)
 		{
 			GLShader* psGLShader = static_cast<GLShader*>(psShader);
 			ZASSERT(psShader->m_shaderType == Z_SHADER_PIXEL, "This isn't Pixel Shader");
-			glAttachShader(m_GLProgram, psGLShader->m_GLShader);
+			glAttachShader(m_GLProgram, psGLShader->getGLShader());
 		}
 
 		if (gsShader)
 		{
 			GLShader* gsGLShader = static_cast<GLShader*>(gsShader);
 			ZASSERT(gsShader->m_shaderType == Z_SHADER_GEOMETRY, "This isn't Geometry Shader");
-			glAttachShader(m_GLProgram, gsGLShader->m_GLShader);
+			glAttachShader(m_GLProgram, gsGLShader->getGLShader());
 		}
 
 		if (csShader)
 		{
 			GLShader* csGLShader = static_cast<GLShader*>(csShader);
 			ZASSERT(csShader->m_shaderType == Z_SHADER_COMPUTE, "This isn't Compute Shader");
-			glAttachShader(m_GLProgram, csGLShader->m_GLShader);
+			glAttachShader(m_GLProgram, csGLShader->getGLShader());
 		}
 
 		glLinkProgram(m_GLProgram);

@@ -9,12 +9,14 @@ namespace ZE
 
 		GLenum usage = m_isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW;
 		glGenBuffers(1, &m_BBO);
-		if (m_bufferType == VERTEX_BUFFER) {
+		if (m_bufferType == VERTEX_BUFFER) 
+		{
 			glBindBuffer(GL_ARRAY_BUFFER, m_BBO);
 			glBufferData(GL_ARRAY_BUFFER, _bufferData->m_size, _bufferData->m_data, usage);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
-		else if (m_bufferType == INDEX_BUFFER) {
+		else if (m_bufferType == INDEX_BUFFER) 
+		{
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_BBO);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, _bufferData->m_size, _bufferData->m_data, usage);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -30,7 +32,8 @@ namespace ZE
 
 	void GLBufferData::Bind()
 	{
-		if (m_bufferType == VERTEX_BUFFER) {
+		if (m_bufferType == VERTEX_BUFFER)
+		{
 			glBindBuffer(GL_ARRAY_BUFFER, m_BBO);
 			if (!m_isStatic)
 			{
@@ -39,7 +42,8 @@ namespace ZE
 				glUnmapBuffer(GL_ARRAY_BUFFER);
 			}
 		}
-		else if (m_bufferType == INDEX_BUFFER) {
+		else if (m_bufferType == INDEX_BUFFER) 
+		{
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_BBO);
 			if (!m_isStatic)
 			{
@@ -62,10 +66,12 @@ namespace ZE
 
 	void GLBufferData::UnBind()
 	{
-		if (m_bufferType == VERTEX_BUFFER) {
+		if (m_bufferType == VERTEX_BUFFER) 
+		{
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
-		else if (m_bufferType == INDEX_BUFFER) {
+		else if (m_bufferType == INDEX_BUFFER) 
+		{
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		}
 		else if (m_bufferType == UNIFORM_BUFFER)

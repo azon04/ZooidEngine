@@ -55,7 +55,7 @@ namespace ZE
 	
 	void GLRenderZooid::Destroy()
 	{
-		// TODO Destroying GLRenderer
+		// Destroying GLRenderer
 		m_renderer->Clean();
 		m_renderer = nullptr;
 	}
