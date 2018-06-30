@@ -14,14 +14,19 @@ namespace ZE
 
 		virtual ~IGPUTexture() { release(); }
 
-		virtual void FromTexture(Texture* texture);
+		// From CPU Texture
+		virtual void fromTexture(Texture* texture);
+
+		// Release GPU Texture
 		virtual void release();
 
-		virtual void Bind() = 0;
-		virtual void Unbind() = 0;
+		// bind texture to rendering pipeline
+		virtual void bind() = 0;
+
+		// unbind texture from rendering pipeline
+		virtual void unbind() = 0;
 
 	protected:
-
 		Texture* m_textureRes;
 	};
 }

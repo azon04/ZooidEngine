@@ -24,27 +24,27 @@ namespace ZE
 
 struct ShaderVariable
 {
-	char m_varName[32];
-	UInt8 m_varType;
+	char VarName[32];
+	UInt8 VarType;
 
 	union
 	{
-		Matrix4x4 mat_value;
-		Vector3 vec3_value;
-		float float_value;
-		Int32 int_value;
-		void* data_value;
+		Matrix4x4 Mat_value;
+		Vector3 Vec3_value;
+		float Float_value;
+		Int32 Int_value;
+		void* Data_value;
 
 		struct tTexture 
 		{
-			IGPUTexture* texture_data;
-			Int32 texture_index;
+			IGPUTexture* Texture_data;
+			Int32 Texture_index;
 		} texture_value;
 
-		IGPUBufferData* constant_buffer;
+		IGPUBufferData* Constant_buffer;
 	};
 
-	ShaderVariable() : mat_value(Matrix4x4())
+	ShaderVariable() : Mat_value(Matrix4x4())
 	{}
 
 	ShaderVariable(const ShaderVariable& _other);
@@ -54,9 +54,9 @@ struct ShaderVariable
 
 union ShaderFeatureVar
 {
-	UInt32 uint_value;
-	Int32 int_value;
-	void* paddress;
+	UInt32 Uint_value;
+	Int32 Int_value;
+	void* pAddress;
 };
 
 struct ShaderFeature
@@ -84,7 +84,8 @@ struct ShaderFeature
 	Array<ShaderFeatureVar, true> m_shaderFeatureVar;
 };
 
-class ShaderAction {
+class ShaderAction 
+{
 public:
 
 	ShaderAction();

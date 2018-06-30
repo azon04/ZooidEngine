@@ -6,28 +6,29 @@
 #include <fstream>
 #include <sstream>
 
-namespace ZE {
+namespace ZE 
+{
 
 	IShaderChain::~IShaderChain()
 	{
-		Release();
+		release();
 	}
 
-	void IShaderChain::MakeChain(IShader* vsShader, IShader* psShader, IShader* gsShader, IShader* csShader)
+	void IShaderChain::makeChain(IShader* vsShader, IShader* psShader, IShader* gsShader, IShader* csShader)
 	{
 		
 	}
 
-	void IShaderChain::Release()
+	void IShaderChain::release()
 	{
 	}
 
-	void IShaderChain::SetLayout(BufferLayout* _layout)
+	void IShaderChain::setLayout(BufferLayout* _layout)
 	{
 		m_layout = _layout;
 	}
 
-	void IShader::loadShader(const char* _shaderFilePath, UInt8 _shaderType)
+	void IShader::loadShader(const char* _shaderFilePath, ShaderType _shaderType)
 	{
 		FileReader file(_shaderFilePath);
 		Handle bufferHandle(sizeof(char) * (file.size() + 1));

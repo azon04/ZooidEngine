@@ -4,7 +4,8 @@
 
 #include <cstring>
 
-namespace ZE {
+namespace ZE 
+{
 
 	ShaderAction::ShaderAction()
 	{
@@ -30,42 +31,42 @@ namespace ZE {
 	{
 		m_shader = _shader;
 		m_bufferArray = _bufferArray;
-		m_vertexSize = _bufferArray->m_dataCount;
+		m_vertexSize = _bufferArray->getDataCount();
 	}
 
 	void ShaderAction::SetShaderFloatVar(const char* _name, float _value)
 	{
 		ShaderVariable shaderVariable;
-		StringFunc::WriteTo(shaderVariable.m_varName, _name, 32);
-		shaderVariable.m_varType = SHADER_VAR_TYPE_FLOAT;
-		shaderVariable.float_value = _value;
+		StringFunc::WriteTo(shaderVariable.VarName, _name, 32);
+		shaderVariable.VarType = SHADER_VAR_TYPE_FLOAT;
+		shaderVariable.Float_value = _value;
 		m_shaderVariables.push_back(shaderVariable);
 	}
 
 	void ShaderAction::SetShaderIntVar(const char* _name, Int32 _value)
 	{
 		ShaderVariable shaderVariable;
-		StringFunc::WriteTo(shaderVariable.m_varName, _name, 32);
-		shaderVariable.m_varType = SHADER_VAR_TYPE_INT;
-		shaderVariable.int_value = _value;
+		StringFunc::WriteTo(shaderVariable.VarName, _name, 32);
+		shaderVariable.VarType = SHADER_VAR_TYPE_INT;
+		shaderVariable.Int_value = _value;
 		m_shaderVariables.push_back(shaderVariable);
 	}
 
 	void ShaderAction::SetShaderVec3Var(const char* _name, const Vector3& _value)
 	{
 		ShaderVariable shaderVariable;
-		StringFunc::WriteTo(shaderVariable.m_varName, _name, 32);
-		shaderVariable.m_varType = SHADER_VAR_TYPE_VECTOR3;
-		shaderVariable.vec3_value = _value;
+		StringFunc::WriteTo(shaderVariable.VarName, _name, 32);
+		shaderVariable.VarType = SHADER_VAR_TYPE_VECTOR3;
+		shaderVariable.Vec3_value = _value;
 		m_shaderVariables.push_back(shaderVariable);
 	}
 
 	void ShaderAction::SetShaderMatVar(const char* _name, const Matrix4x4& _value)
 	{
 		ShaderVariable shaderVariable;
-		StringFunc::WriteTo(shaderVariable.m_varName, _name, 32);
-		shaderVariable.m_varType = SHADER_VAR_TYPE_MATRIX;
-		shaderVariable.mat_value = _value;
+		StringFunc::WriteTo(shaderVariable.VarName, _name, 32);
+		shaderVariable.VarType = SHADER_VAR_TYPE_MATRIX;
+		shaderVariable.Mat_value = _value;
 		m_shaderVariables.push_back(shaderVariable);
 	}
 
@@ -77,8 +78,8 @@ namespace ZE {
 	void ShaderAction::SetShaderTextureVar(const char* _name, IGPUTexture* _texture, Int32 _texture_index)
 	{
 		ShaderVariable shaderVariable;
-		StringFunc::WriteTo(shaderVariable.m_varName, _name, 32);
-		shaderVariable.m_varType = SHADER_VAR_TYPE_TEXTURE;
+		StringFunc::WriteTo(shaderVariable.VarName, _name, 32);
+		shaderVariable.VarType = SHADER_VAR_TYPE_TEXTURE;
 		shaderVariable.texture_value = { _texture, _texture_index };
 		m_shaderVariables.push_back(shaderVariable);
 	}
@@ -91,9 +92,9 @@ namespace ZE {
 	void ShaderAction::SetConstantsBlockBuffer(const char* _name, IGPUBufferData* _constantBlockBuffer)
 	{
 		ShaderVariable shaderVariable;
-		StringFunc::WriteTo(shaderVariable.m_varName, _name, 32);
-		shaderVariable.m_varType = SHADER_VAR_TYPE_BLOCK_BUFFER;
-		shaderVariable.constant_buffer = _constantBlockBuffer;
+		StringFunc::WriteTo(shaderVariable.VarName, _name, 32);
+		shaderVariable.VarType = SHADER_VAR_TYPE_BLOCK_BUFFER;
+		shaderVariable.Constant_buffer = _constantBlockBuffer;
 		m_shaderVariables.push_back(shaderVariable);
 	}
 
@@ -101,9 +102,9 @@ namespace ZE {
 	{
 		for (int i = 0; i < m_shaderVariables.length(); i++)
 		{
-			if (StringFunc::Compare(m_shaderVariables[i].m_varName, _name) == 0)
+			if (StringFunc::Compare(m_shaderVariables[i].VarName, _name) == 0)
 			{
-				_value = m_shaderVariables[i].mat_value;
+				_value = m_shaderVariables[i].Mat_value;
 				return;
 			}
 		}
@@ -119,9 +120,9 @@ namespace ZE {
 
 	ShaderVariable::ShaderVariable(const ShaderVariable& _other)
 	{
-		StringFunc::WriteTo(m_varName, _other.m_varName, 32);
-		m_varType = _other.m_varType;
-		memcpy(&mat_value, &_other.mat_value, sizeof(mat_value));
+		StringFunc::WriteTo(VarName, _other.VarName, 32);
+		VarType = _other.VarType;
+		memcpy(&Mat_value, &_other.Mat_value, sizeof(Mat_value));
 	}
 
 	void EnableAndSetDepthFunction(ShaderAction& shaderAction, RendererCompareFunc func)
@@ -132,7 +133,7 @@ namespace ZE {
 		shaderFeature.m_bFeatureEnabled = true;
 		
 		ShaderFeatureVar shaderFunc;
-		shaderFunc.uint_value = func;
+		shaderFunc.Uint_value = func;
 		
 		shaderFeature.m_shaderFeatureVar.push_back(shaderFunc);
 	}
@@ -145,22 +146,22 @@ namespace ZE {
 		shaderFeature.m_bFeatureEnabled = true;
 
 		ShaderFeatureVar shaderFunc;
-		shaderFunc.uint_value = func;
+		shaderFunc.Uint_value = func;
 
 		shaderFeature.m_shaderFeatureVar.push_back(shaderFunc);
 
 		ShaderFeatureVar refVar;
-		refVar.int_value = ref;
+		refVar.Int_value = ref;
 
 		shaderFeature.m_shaderFeatureVar.push_back(refVar);
 
 		ShaderFeatureVar refMaskVar;
-		refMaskVar.uint_value = refMask;
+		refMaskVar.Uint_value = refMask;
 
 		shaderFeature.m_shaderFeatureVar.push_back(refMaskVar);
 		
 		ShaderFeatureVar stencilMaskVar;
-		stencilMaskVar.uint_value = stencilWriteMask;
+		stencilMaskVar.Uint_value = stencilWriteMask;
 
 		shaderFeature.m_shaderFeatureVar.push_back(stencilMaskVar);
 
@@ -174,12 +175,12 @@ namespace ZE {
 		shaderFeature.m_bFeatureEnabled = true;
 
 		ShaderFeatureVar sourceBlendFactorVar;
-		sourceBlendFactorVar.uint_value = sourceBlendFactor;
+		sourceBlendFactorVar.Uint_value = sourceBlendFactor;
 
 		shaderFeature.m_shaderFeatureVar.push_back(sourceBlendFactorVar);
 
 		ShaderFeatureVar destBlendFactorVar;
-		destBlendFactorVar.uint_value = dstBlendFactor;
+		destBlendFactorVar.Uint_value = dstBlendFactor;
 
 		shaderFeature.m_shaderFeatureVar.push_back(destBlendFactorVar);
 	}
@@ -192,12 +193,12 @@ namespace ZE {
 		shaderFeature.m_bFeatureEnabled = true;
 
 		ShaderFeatureVar faceOrderVar;
-		faceOrderVar.uint_value = faceOrder;
+		faceOrderVar.Uint_value = faceOrder;
 
 		shaderFeature.m_shaderFeatureVar.push_back(faceOrderVar);
 
 		ShaderFeatureVar cullFaceVar;
-		cullFaceVar.uint_value = cullFace;
+		cullFaceVar.Uint_value = cullFace;
 
 		shaderFeature.m_shaderFeatureVar.push_back(cullFaceVar);
 	}

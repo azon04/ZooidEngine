@@ -52,7 +52,7 @@ namespace ZE
 
 			hGPUTexture = m_gameContext->getRenderZooid()->CreateRenderTexture();
 			IGPUTexture* pGPUTexture = hGPUTexture.getObject<IGPUTexture>();
-			pGPUTexture->FromTexture(hCPUTexture.getObject<Texture>());
+			pGPUTexture->fromTexture(hCPUTexture.getObject<Texture>());
 
 			m_gameContext->getRenderer()->ReleaseRenderThreadOwnership();
 		}

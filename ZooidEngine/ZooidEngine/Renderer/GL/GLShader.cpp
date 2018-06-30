@@ -9,16 +9,16 @@ namespace ZE
 		GLenum glShaderType = GL_VERTEX_SHADER;
 		switch (m_shaderType)
 		{
-		case Z_SHADER_VERTEX:
+		case SHADER_VERTEX:
 			glShaderType = GL_VERTEX_SHADER;
 			break;
-		case Z_SHADER_PIXEL:
+		case SHADER_PIXEL:
 			glShaderType = GL_FRAGMENT_SHADER;
 			break;
-		case Z_SHADER_GEOMETRY:
+		case SHADER_GEOMETRY:
 			glShaderType = GL_GEOMETRY_SHADER;
 			break;
-		case Z_SHADER_COMPUTE:
+		case SHADER_COMPUTE:
 			glShaderType = GL_COMPUTE_SHADER;
 			break;
 		}
@@ -44,9 +44,9 @@ namespace ZE
 		}
 	}
 
-	void GLShaderChain::MakeChain(IShader* vsShader, IShader* psShader, IShader* gsShader, IShader* csShader)
+	void GLShaderChain::makeChain(IShader* vsShader, IShader* psShader, IShader* gsShader, IShader* csShader)
 	{
-		IShaderChain::MakeChain(vsShader, psShader, gsShader, csShader);
+		IShaderChain::makeChain(vsShader, psShader, gsShader, csShader);
 
 		// Shader Program
 		m_GLProgram = glCreateProgram();
@@ -54,28 +54,28 @@ namespace ZE
 		if (vsShader)
 		{
 			GLShader* vsGLShader = static_cast<GLShader*>(vsShader);
-			ZASSERT(vsShader->m_shaderType == Z_SHADER_VERTEX, "This isn't Vertex Shader");
+			ZASSERT(vsShader->getShaderType() == SHADER_VERTEX, "This isn't Vertex Shader");
 			glAttachShader(m_GLProgram, vsGLShader->getGLShader());
 		}
 
 		if (psShader)
 		{
 			GLShader* psGLShader = static_cast<GLShader*>(psShader);
-			ZASSERT(psShader->m_shaderType == Z_SHADER_PIXEL, "This isn't Pixel Shader");
+			ZASSERT(psShader->getShaderType() == SHADER_PIXEL, "This isn't Pixel Shader");
 			glAttachShader(m_GLProgram, psGLShader->getGLShader());
 		}
 
 		if (gsShader)
 		{
 			GLShader* gsGLShader = static_cast<GLShader*>(gsShader);
-			ZASSERT(gsShader->m_shaderType == Z_SHADER_GEOMETRY, "This isn't Geometry Shader");
+			ZASSERT(gsShader->getShaderType() == SHADER_GEOMETRY, "This isn't Geometry Shader");
 			glAttachShader(m_GLProgram, gsGLShader->getGLShader());
 		}
 
 		if (csShader)
 		{
 			GLShader* csGLShader = static_cast<GLShader*>(csShader);
-			ZASSERT(csShader->m_shaderType == Z_SHADER_COMPUTE, "This isn't Compute Shader");
+			ZASSERT(csShader->getShaderType() == SHADER_COMPUTE, "This isn't Compute Shader");
 			glAttachShader(m_GLProgram, csGLShader->getGLShader());
 		}
 
@@ -90,9 +90,9 @@ namespace ZE
 		}
 	}
 
-	void GLShaderChain::Release()
+	void GLShaderChain::release()
 	{
-		IShaderChain::Release();
+		IShaderChain::release();
 
 		if (m_GLProgram)
 		{
@@ -100,47 +100,47 @@ namespace ZE
 		}
 	}
 
-	void GLShaderChain::Bind()
+	void GLShaderChain::bind()
 	{
 		glUseProgram(m_GLProgram);
 	}
 
-	void GLShaderChain::Unbind()
+	void GLShaderChain::unbind()
 	{
 		glUseProgram(0);
 	}
 
-	void GLShaderChain::SetVec3(const char* _constName, Vector3 _value)
+	void GLShaderChain::setVec3(const char* _constName, Vector3 _value)
 	{
 		glUniform3f(getUniformPosition(_constName), _value.getX(), _value.getY(), _value.getZ());
 	}
 
-	void GLShaderChain::SetFloat(const char* _constName, float _value)
+	void GLShaderChain::setFloat(const char* _constName, float _value)
 	{
 		glUniform1f(getUniformPosition(_constName), _value);
 	}
 
-	void GLShaderChain::SetMat(const char* _constName, const Matrix4x4& _value)
+	void GLShaderChain::setMat(const char* _constName, const Matrix4x4& _value)
 	{
 		glUniformMatrix4fv(getUniformPosition(_constName), 1, GL_FALSE, &_value.m_data[0][0]);
 	}
 
-	void GLShaderChain::SetInt(const char* _constName, int _value)
+	void GLShaderChain::setInt(const char* _constName, int _value)
 	{
 		glUniform1i(getUniformPosition(_constName), _value);
 	}
 
-	void GLShaderChain::SetTexture(const char* _constName, IGPUTexture* _texture, Int32 _textureIndex)
+	void GLShaderChain::setTexture(const char* _constName, IGPUTexture* _texture, Int32 _textureIndex)
 	{
 		glUniform1i(getUniformPosition(_constName), _textureIndex);
 	}
 
-	void GLShaderChain::BindConstantBuffer(const char* _blockName, IGPUBufferData* _constantBuffer)
+	void GLShaderChain::bindConstantBuffer(const char* _blockName, IGPUBufferData* _constantBuffer)
 	{
 		GLint block_index = glGetUniformBlockIndex(m_GLProgram, _blockName);
 		if (block_index >= 0)
 		{
-			glUniformBlockBinding(m_GLProgram, block_index, _constantBuffer->m_bindingIndex);
+			glUniformBlockBinding(m_GLProgram, block_index, _constantBuffer->getBindingIndex());
 		}
 	}
 

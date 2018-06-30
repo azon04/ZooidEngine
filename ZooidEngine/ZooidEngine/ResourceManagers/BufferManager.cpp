@@ -168,7 +168,7 @@ namespace ZE
 		if (!_bufferData) return nullptr;
 		Handle handle = m_gameContext->getRenderZooid()->CreateRenderBufferData();
 		IGPUBufferData* GPUBuffer = handle.getObject<IGPUBufferData>();
-		GPUBuffer->m_isStatic = _bStatic;
+		GPUBuffer->setStatic(_bStatic);
 		GPUBuffer->FromBufferData(_bufferData);
 
 		if (!_manualManage)
@@ -360,10 +360,12 @@ namespace ZE
 		if (gpuBufferArray)
 		{
 			gpuBufferArray->release();
-			for (int i = 0; i < gpuBufferArray->m_buffers.length(); ++i)
+			Int32 bufferCount = gpuBufferArray->getBufferCount();
+			for (int i = 0; i < bufferCount; ++i)
 			{
-				gpuBufferArray->m_buffers[i]->release();
-				m_GPUBuffers.removeAt(m_GPUBuffers.firstIndexOf(gpuBufferArray->m_buffers[i]));
+				IGPUBufferData* bufferData = gpuBufferArray->getBufferAtIndex(i);
+				bufferData->release();
+				m_GPUBuffers.removeAt(m_GPUBuffers.firstIndexOf(bufferData));
 			}
 		}
 	}

@@ -2,7 +2,8 @@
 
 #include <GL/glew.h>
 
-namespace ZE {
+namespace ZE 
+{
 
 	IGPUBufferData::~IGPUBufferData()
 	{

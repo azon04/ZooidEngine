@@ -2,7 +2,7 @@
 
 namespace ZE
 {
-	void IGPUTexture::FromTexture(Texture* texture)
+	void IGPUTexture::fromTexture(Texture* texture)
 	{
 		m_textureRes = texture;
 	}

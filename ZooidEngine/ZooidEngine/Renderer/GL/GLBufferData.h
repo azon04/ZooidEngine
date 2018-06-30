@@ -22,8 +22,8 @@ namespace ZE
 		// IGPUBufferData implementation
 		virtual void FromBufferData(BufferData* _bufferData) override;
 
-		virtual void Bind() override;
-		virtual void UnBind() override;
+		virtual void bind() override;
+		virtual void unbind() override;
 		virtual void release() override;
 
 		FORCEINLINE GLuint getBBO() const { return m_BBO; }

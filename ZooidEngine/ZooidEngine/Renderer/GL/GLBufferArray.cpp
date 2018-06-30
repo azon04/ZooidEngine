@@ -14,33 +14,34 @@ namespace ZE
 
 		glBindVertexArray(m_VAO);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexGLBuffer->getBBO());
-		m_dataCount = _vertexBuffer->m_dataCount;
+		m_dataCount = _vertexBuffer->getDataCount();
 		m_buffers.push_back(_vertexBuffer);
 
 		if (_indexBuffer) {
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexGLBuffer->getBBO());
-			m_dataCount = _indexBuffer->m_dataCount;
+			m_dataCount = _indexBuffer->getDataCount();
 			m_buffers.push_back(_indexBuffer);
 		}
 		m_bUsingIndexBuffer = _indexBuffer != nullptr;
 
-		BindLayout(_vertexBuffer->m_layout);
+		BindLayout(_vertexBuffer->getBufferLayout());
 
 		glBindVertexArray(0);
 	}
 
-	void GLBufferArray::Bind()
+	void GLBufferArray::bind()
 	{
 		glBindVertexArray(m_VAO);
 	}
 
-	void GLBufferArray::Unbind()
+	void GLBufferArray::unbind()
 	{
 		glBindVertexArray(0);
 	}
 
 	void GLBufferArray::release()
 	{
+		IGPUBufferArray::release();
 		if (m_VAO > 0)
 		{
 			glDeleteVertexArrays(1, &m_VAO);

@@ -24,6 +24,7 @@ namespace ZE
 
 		FORCEINLINE IRenderer* GetRenderer() const { return m_renderer; }
 
+	protected:
 		IRenderer* m_renderer;
 	};
 }

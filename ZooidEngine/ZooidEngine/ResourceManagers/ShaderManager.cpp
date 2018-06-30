@@ -8,19 +8,19 @@ namespace ZE
 {
 	IMPLEMENT_CLASS_1(ShaderManager, ResourceManager)
 
-	UInt8 ShaderManager::getShaderTypeByName(const char* resourceFilePath)
+	ShaderType ShaderManager::getShaderTypeByName(const char* resourceFilePath)
 	{
 		Int32 length = StringFunc::Length(resourceFilePath);
 
 		if (resourceFilePath[length - 2] == 'v' && resourceFilePath[length - 1] == 's')
 		{
-			return Z_SHADER_VERTEX;
+			return SHADER_VERTEX;
 		}
 		else if (resourceFilePath[length - 4] == 'f' && resourceFilePath[length - 3] == 'r' && resourceFilePath[length - 2] == 'a' && resourceFilePath[length - 1] == 'g')
 		{
-			return Z_SHADER_PIXEL;
+			return SHADER_PIXEL;
 		}
-		return 0;
+		return SHADER_MAX;
 	}
 
 	ShaderManager* ShaderManager::s_instance = nullptr;
@@ -51,21 +51,21 @@ namespace ZE
 		{
 			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
 			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
-			shaderChain->MakeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/TestGLVertexShader.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/TestGLFragmentShader.frag"), nullptr, nullptr);
+			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/TestGLVertexShader.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/TestGLFragmentShader.frag"), nullptr, nullptr);
 			s_instance->m_shaderChain.push_back(shaderChain);
 		}
 
 		{	
 			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
 			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
-			shaderChain->MakeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimple.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimple.frag"), nullptr, nullptr);
+			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimple.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimple.frag"), nullptr, nullptr);
 			s_instance->m_shaderChain.push_back(shaderChain);
 		}
 
 		{	
 			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
 			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
-			shaderChain->MakeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimple.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleColor.frag"), nullptr, nullptr);
+			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimple.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleColor.frag"), nullptr, nullptr);
 			shaderChain->m_topology = TOPOLOGY_LINE;
 			s_instance->m_shaderChain.push_back(shaderChain);
 		}
@@ -73,35 +73,35 @@ namespace ZE
 		{
 			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
 			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>(); 
-			shaderChain->MakeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLit.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLit.frag"), nullptr, nullptr);
+			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLit.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLit.frag"), nullptr, nullptr);
 			s_instance->m_shaderChain.push_back(shaderChain);
 		}
 
 		{
 			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
 			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
-			shaderChain->MakeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLit.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLit_Blend.frag"), nullptr, nullptr);
+			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLit.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLit_Blend.frag"), nullptr, nullptr);
 			s_instance->m_shaderChain.push_back(shaderChain);
 		}
 
 		{
 			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
 			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
-			shaderChain->MakeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultHighlightSimple.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultHighlightSimple.frag"), nullptr, nullptr);
+			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultHighlightSimple.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultHighlightSimple.frag"), nullptr, nullptr);
 			s_instance->m_shaderChain.push_back(shaderChain);
 		}
 
 		{
 			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
 			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
-			shaderChain->MakeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLitSkin.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLit.frag"), nullptr, nullptr);
+			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLitSkin.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLit.frag"), nullptr, nullptr);
 			s_instance->m_shaderChain.push_back(shaderChain);
 		}
 
 		{
 			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
 			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
-			shaderChain->MakeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLitSkin.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLit_Blend.frag"), nullptr, nullptr);
+			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLitSkin.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLit_Blend.frag"), nullptr, nullptr);
 			s_instance->m_shaderChain.push_back(shaderChain);
 		}
 
@@ -113,7 +113,7 @@ namespace ZE
 	{
 		for (int i = 0; i < s_instance->m_shaderChain.length(); i++)
 		{
-			s_instance->m_shaderChain[i]->Release();
+			s_instance->m_shaderChain[i]->release();
 		}
 
 		if (s_instance)

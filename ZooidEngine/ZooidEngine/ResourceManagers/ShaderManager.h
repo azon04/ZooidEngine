@@ -27,7 +27,7 @@ namespace ZE
 		GameContext* m_gameContext;
 	protected:
 
-		UInt8 getShaderTypeByName(const char* resourceFilePath);
+		ShaderType getShaderTypeByName(const char* resourceFilePath);
 
 		static ShaderManager* s_instance;
 

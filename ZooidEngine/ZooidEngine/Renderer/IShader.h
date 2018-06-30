@@ -19,15 +19,20 @@
 #define Z_SHADER_CHAIN_3D_DEFAULT_SKIN_LIT 6
 #define Z_SHADER_CHAIN_3D_DEFAULT_SKIN_LIT_BLEND 7
 
-#define Z_SHADER_VERTEX 0
-#define Z_SHADER_PIXEL 1
-#define Z_SHADER_GEOMETRY 2
-#define Z_SHADER_COMPUTE 3
-
-namespace ZE {
+namespace ZE 
+{
 
 class IGPUTexture;
 class IGPUBufferData;
+
+enum ShaderType : UInt8
+{
+	SHADER_VERTEX = 0,
+	SHADER_PIXEL = 1,
+	SHADER_GEOMETRY = 2,
+	SHADER_COMPUTE = 3,
+	SHADER_MAX
+};
 
 enum RenderTopologyEnum : UInt8
 {
@@ -36,20 +41,32 @@ enum RenderTopologyEnum : UInt8
 	TOPOLOGY_LINE
 };
 
-class IShader {
+class IShader 
+{
 public:
 	IShader()
 	{
 	}
 
-	virtual void loadShader(const char* _shaderFilePath, UInt8 _shaderType);
+	// Load shader from file
+	virtual void loadShader(const char* _shaderFilePath, ShaderType _shaderType);
+	
+	// Load shader from buffer
 	virtual void loadShaderFromBuffer(char* _shaderBuffer, size_t _bufferSize) = 0;
+	
+	// Release shader
 	virtual void release();
 
-	UInt8 m_shaderType = Z_SHADER_VERTEX;
+	FORCEINLINE ShaderType getShaderType() const { return m_shaderType; }
+
+protected:
+	ShaderType m_shaderType = SHADER_VERTEX;
 };
 
-class IShaderChain {
+class IShaderChain 
+{
+	friend class ShaderManager;
+
 public:
 	IShaderChain()
 	{
@@ -57,24 +74,45 @@ public:
 	}
 	virtual ~IShaderChain();
 	
-	virtual void MakeChain(IShader* vsShader, IShader* psShader, IShader* gsShader, IShader* csShader);
-	virtual void Release();
+	// make shader chain from vsShader, psShader, geometry shader, and compute shader
+	virtual void makeChain(IShader* vsShader, IShader* psShader, IShader* gsShader, IShader* csShader);
+	
+	// Release shader chain
+	virtual void release();
 
-	void SetLayout(BufferLayout* _layout);
-	virtual void Bind() = 0;
-	virtual void Unbind() = 0;
+	void setLayout(BufferLayout* _layout);
+	
+	// Bind shader chain to render pipeline
+	virtual void bind() = 0;
 
-	virtual void SetVec3(const char* _constName, Vector3 _value) = 0;
-	virtual void SetFloat(const char* _constName, float _value) = 0;
-	virtual void SetMat(const char* _constName, const Matrix4x4& _value) = 0;
-	virtual void SetInt(const char* _constName, int _value) = 0;
-	virtual void SetTexture(const char* _constName, IGPUTexture* _texture, Int32 _textureIndex) = 0;
+	// Unbind shader chain from render pipeline
+	virtual void unbind() = 0;
 
-	virtual void BindConstantBuffer(const char* _blockName, IGPUBufferData* _constantBuffer) = 0;
-		
-	BufferLayout *m_layout;
+	// set vec3
+	virtual void setVec3(const char* _constName, Vector3 _value) = 0;
+
+	// set float variable in shader chain
+	virtual void setFloat(const char* _constName, float _value) = 0;
+	
+	// set Matrix4x4 variable in shader chain
+	virtual void setMat(const char* _constName, const Matrix4x4& _value) = 0;
+	
+	// set integer variable in shader chain
+	virtual void setInt(const char* _constName, int _value) = 0;
+	
+	// set Texture variable in shader chain
+	virtual void setTexture(const char* _constName, IGPUTexture* _texture, Int32 _textureIndex) = 0;
+
+	// Bind constant buffer to shader chain
+	virtual void bindConstantBuffer(const char* _blockName, IGPUBufferData* _constantBuffer) = 0;
+	
+	FORCEINLINE RenderTopologyEnum getRenderTopology() const { return m_topology; }
+
+protected:
+	BufferLayout* m_layout;
 	RenderTopologyEnum m_topology;
 };
 };
-#endif // !__Z_SHADER__
+
+#endif
 

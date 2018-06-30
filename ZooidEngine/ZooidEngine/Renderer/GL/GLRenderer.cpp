@@ -127,12 +127,12 @@ namespace ZE
 	{
 		if (drawList->m_mainConstantBuffer)
 		{
-			drawList->m_mainConstantBuffer->Bind();
+			drawList->m_mainConstantBuffer->bind();
 		}
 
 		if (drawList->m_lightConstantBuffer)
 		{
-			drawList->m_lightConstantBuffer->Bind();
+			drawList->m_lightConstantBuffer->bind();
 		}
 
 		for (int i = 0; i < drawList->m_size; ++i)
@@ -149,12 +149,12 @@ namespace ZE
 
 		if (drawList->m_mainConstantBuffer)
 		{
-			drawList->m_mainConstantBuffer->UnBind();
+			drawList->m_mainConstantBuffer->unbind();
 		}
 
 		if (drawList->m_lightConstantBuffer)
 		{
-			drawList->m_lightConstantBuffer->UnBind();
+			drawList->m_lightConstantBuffer->unbind();
 		}
 	}
 
@@ -170,7 +170,7 @@ namespace ZE
 
 	void GLRenderer::Draw(ShaderAction* shaderAction)
 	{
-		shaderAction->m_shader->Bind();
+		shaderAction->m_shader->bind();
 		
 		for (int i = 0; i < shaderAction->m_shaderFeatures.length(); i++)
 		{
@@ -187,33 +187,33 @@ namespace ZE
 		for (int i = 0; i < shaderAction->m_shaderVariables.length(); i++)
 		{
 			ShaderVariable& shaderVariable = shaderAction->m_shaderVariables[i];
-			switch (shaderVariable.m_varType)
+			switch (shaderVariable.VarType)
 			{
 			case SHADER_VAR_TYPE_FLOAT:
-				shaderAction->m_shader->SetFloat(shaderVariable.m_varName, shaderVariable.float_value);
+				shaderAction->m_shader->setFloat(shaderVariable.VarName, shaderVariable.Float_value);
 				break;
 			case SHADER_VAR_TYPE_INT:
-				shaderAction->m_shader->SetInt(shaderVariable.m_varName, shaderVariable.int_value);
+				shaderAction->m_shader->setInt(shaderVariable.VarName, shaderVariable.Int_value);
 				break;
 			case SHADER_VAR_TYPE_VECTOR3:
-				shaderAction->m_shader->SetVec3(shaderVariable.m_varName, shaderVariable.vec3_value);
+				shaderAction->m_shader->setVec3(shaderVariable.VarName, shaderVariable.Vec3_value);
 				break;
 			case SHADER_VAR_TYPE_MATRIX:
-				shaderAction->m_shader->SetMat(shaderVariable.m_varName, shaderVariable.mat_value);
+				shaderAction->m_shader->setMat(shaderVariable.VarName, shaderVariable.Mat_value);
 				break;
 			case SHADER_VAR_TYPE_TEXTURE:
-				shaderAction->m_shader->SetTexture(shaderVariable.m_varName, shaderVariable.texture_value.texture_data, shaderVariable.texture_value.texture_index);
-				glActiveTexture(GL_TEXTURE0 + shaderVariable.texture_value.texture_index);
-				shaderVariable.texture_value.texture_data->Bind();
+				shaderAction->m_shader->setTexture(shaderVariable.VarName, shaderVariable.texture_value.Texture_data, shaderVariable.texture_value.Texture_index);
+				glActiveTexture(GL_TEXTURE0 + shaderVariable.texture_value.Texture_index);
+				shaderVariable.texture_value.Texture_data->bind();
 				break;
 			case SHADER_VAR_TYPE_BLOCK_BUFFER:
-				shaderAction->m_shader->BindConstantBuffer(shaderVariable.m_varName, shaderVariable.constant_buffer);
+				shaderAction->m_shader->bindConstantBuffer(shaderVariable.VarName, shaderVariable.Constant_buffer);
 			}
 		}
 
 		GLenum drawTopology = GL_TRIANGLES;
 
-		switch (shaderAction->m_shader->m_topology)
+		switch (shaderAction->m_shader->getRenderTopology())
 		{
 		case TOPOLOGY_LINE:
 			drawTopology = GL_LINES;
@@ -226,8 +226,8 @@ namespace ZE
 			break;
 		}
 
-		shaderAction->m_bufferArray->Bind();
-		if (shaderAction->m_bufferArray->m_bUsingIndexBuffer) 
+		shaderAction->m_bufferArray->bind();
+		if (shaderAction->m_bufferArray->isUsingIndexBuffer()) 
 		{
 			glDrawElements(drawTopology, shaderAction->m_vertexSize, GL_UNSIGNED_INT, 0);
 		}
@@ -240,11 +240,11 @@ namespace ZE
 		for (int i = 0; i < shaderAction->m_shaderVariables.length(); i++)
 		{
 			ShaderVariable& shaderVariable = shaderAction->m_shaderVariables[i];
-			switch (shaderVariable.m_varType)
+			switch (shaderVariable.VarType)
 			{
 			case SHADER_VAR_TYPE_TEXTURE:
-				glActiveTexture(GL_TEXTURE0 + shaderVariable.texture_value.texture_index);
-				shaderVariable.texture_value.texture_data->Unbind();
+				glActiveTexture(GL_TEXTURE0 + shaderVariable.texture_value.Texture_index);
+				shaderVariable.texture_value.Texture_data->unbind();
 				break;
 			}
 		}
@@ -264,8 +264,8 @@ namespace ZE
 			}
 		}
 
-		shaderAction->m_bufferArray->Unbind();
-		shaderAction->m_shader->Unbind();
+		shaderAction->m_bufferArray->unbind();
+		shaderAction->m_shader->unbind();
 	}
 
 	bool GLRenderer::IsClose()
@@ -335,29 +335,29 @@ namespace ZE
 
 				if (shaderFeature.m_shaderFeatureVar.length() > 0)
 				{
-					glDepthFunc(HashCompareFuncToRealGLVar[shaderFeature.m_shaderFeatureVar[0].uint_value]);
+					glDepthFunc(HashCompareFuncToRealGLVar[shaderFeature.m_shaderFeatureVar[0].Uint_value]);
 				}
 			}
 			else if (shaderFeature.m_rendererFeature == RendererFeature::STENCIL_TEST)
 			{
 				if (shaderFeature.m_shaderFeatureVar.length() > 0)
 				{
-					glStencilFunc(HashCompareFuncToRealGLVar[shaderFeature.m_shaderFeatureVar[0].uint_value], 
-						shaderFeature.m_shaderFeatureVar[1].int_value, 
-						shaderFeature.m_shaderFeatureVar[2].uint_value);
-					glStencilMask(shaderFeature.m_shaderFeatureVar[3].uint_value);
+					glStencilFunc(HashCompareFuncToRealGLVar[shaderFeature.m_shaderFeatureVar[0].Uint_value], 
+						shaderFeature.m_shaderFeatureVar[1].Int_value, 
+						shaderFeature.m_shaderFeatureVar[2].Uint_value);
+					glStencilMask(shaderFeature.m_shaderFeatureVar[3].Uint_value);
 				}
 			}
 			else if(shaderFeature.m_rendererFeature == RendererFeature::BLEND)
 			{
-				GLenum sourceFactor = HashBlendFactorToRealGLVar[shaderFeature.m_shaderFeatureVar[0].uint_value];
-				GLenum destFactor = HashBlendFactorToRealGLVar[shaderFeature.m_shaderFeatureVar[1].uint_value];
+				GLenum sourceFactor = HashBlendFactorToRealGLVar[shaderFeature.m_shaderFeatureVar[0].Uint_value];
+				GLenum destFactor = HashBlendFactorToRealGLVar[shaderFeature.m_shaderFeatureVar[1].Uint_value];
 				glBlendFunc(sourceFactor, destFactor);
 			}
 			else if (shaderFeature.m_rendererFeature == RendererFeature::FACE_CULING)
 			{
-				glFrontFace(HashFaceFrontOrder[shaderFeature.m_shaderFeatureVar[0].uint_value]);
-				glCullFace(HashCullFace[shaderFeature.m_shaderFeatureVar[1].uint_value]);
+				glFrontFace(HashFaceFrontOrder[shaderFeature.m_shaderFeatureVar[0].Uint_value]);
+				glCullFace(HashCullFace[shaderFeature.m_shaderFeatureVar[1].Uint_value]);
 			}
 		}
 		else

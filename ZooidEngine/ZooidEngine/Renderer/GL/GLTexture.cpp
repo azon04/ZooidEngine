@@ -4,9 +4,9 @@
 namespace ZE
 { 
 
-	void GLTexture::FromTexture(Texture* texture)
+	void GLTexture::fromTexture(Texture* texture)
 	{
-		IGPUTexture::FromTexture(texture);
+		IGPUTexture::fromTexture(texture);
 
 		GLenum imageFormat;
 		switch (texture->getChannel())
@@ -55,7 +55,7 @@ namespace ZE
 		}
 	}
 
-	void GLTexture::Bind()
+	void GLTexture::bind()
 	{
 		if (m_textureBuffer != 0)
 		{
@@ -63,7 +63,7 @@ namespace ZE
 		}
 	}
 
-	void GLTexture::Unbind()
+	void GLTexture::unbind()
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}

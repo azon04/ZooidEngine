@@ -30,7 +30,7 @@ namespace ZE
 
 	}
 
-	void GLBufferData::Bind()
+	void GLBufferData::bind()
 	{
 		if (m_bufferType == VERTEX_BUFFER)
 		{
@@ -64,7 +64,7 @@ namespace ZE
 		}
 	}
 
-	void GLBufferData::UnBind()
+	void GLBufferData::unbind()
 	{
 		if (m_bufferType == VERTEX_BUFFER) 
 		{

@@ -1,7 +1,8 @@
 #include "IGPUBufferArray.h"
 
 
-namespace ZE {
+namespace ZE 
+{
 
 	IGPUBufferArray::IGPUBufferArray()
 	{
