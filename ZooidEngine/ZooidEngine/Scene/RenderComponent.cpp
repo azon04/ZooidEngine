@@ -38,32 +38,32 @@ namespace ZE {
 		{
 			ShaderAction* shaderAction;
 			IShaderChain* shader;
-			if (m_mesh->m_material && m_mesh->m_material->m_isBlend)
+			if (m_mesh->getMaterial() && m_mesh->getMaterial()->IsBlend())
 			{
 				shaderAction = &m_gameContext->getDrawList()->getNextSecondPassShaderAction();
-				shader = ShaderManager::getInstance()
+				shader = ShaderManager::GetInstance()
 					->getShaderChain(m_mesh->hasSkeleton() ? Z_SHADER_CHAIN_3D_DEFAULT_SKIN_LIT_BLEND : Z_SHADER_CHAIN_3D_DEFAULT_LIT_BLEND);
 				EnableAndSetBlendFunc(*shaderAction, SRC_ALPHA, ONE_MINUS_SRC_ALPHA);
 			}
 			else
 			{
 				shaderAction = &m_gameContext->getDrawList()->getNextShaderAction();
-				shader = ShaderManager::getInstance()
+				shader = ShaderManager::GetInstance()
 					->getShaderChain(m_mesh->hasSkeleton() ? Z_SHADER_CHAIN_3D_DEFAULT_SKIN_LIT : Z_SHADER_CHAIN_3D_DEFAULT_LIT);
 			}
 
-			if (m_mesh->m_doubleSided)
+			if (m_mesh->isDoubleSided())
 			{
-				shaderAction->AddShaderFeature(FACE_CULING, false);
+				shaderAction->addShaderFeature(FACE_CULING, false);
 			}
 
-			shaderAction->SetShaderAndBuffer(shader, m_mesh->m_bufferArray);
-			shaderAction->SetShaderMatVar("modelMat", m_worldTransform);
+			shaderAction->setShaderAndBuffer(shader, m_mesh->getGPUBufferArray());
+			shaderAction->setShaderMatVar("modelMat", m_worldTransform);
 			
-			m_mesh->m_material ? m_mesh->m_material->Bind(*shaderAction) : nullptr;
+			m_mesh->getMaterial() ? m_mesh->getMaterial()->Bind(*shaderAction) : nullptr;
 
-			shaderAction->SetConstantsBlockBuffer("shader_data", m_gameContext->getDrawList()->m_mainConstantBuffer);
-			shaderAction->SetConstantsBlockBuffer("light_data", m_gameContext->getDrawList()->m_lightConstantBuffer);
+			shaderAction->setConstantsBlockBuffer("shader_data", m_gameContext->getDrawList()->m_mainConstantBuffer);
+			shaderAction->setConstantsBlockBuffer("light_data", m_gameContext->getDrawList()->m_lightConstantBuffer);
 			
 			if (m_mesh->hasSkeleton() && m_hSkeletonState.isValid())
 			{
@@ -74,7 +74,7 @@ namespace ZE {
 					Matrix4x4 jointPallete;
 					pSkeletonState->getJointMatrixPallete(i, jointPallete);
 					StringFunc::PrintToString(buffer, 32, "boneMats[%d]", i);
-					shaderAction->SetShaderMatVar(buffer, jointPallete);
+					shaderAction->setShaderMatVar(buffer, jointPallete);
 				}
 			}
 
@@ -84,12 +84,12 @@ namespace ZE {
 
 				ShaderAction& highlightAction = m_gameContext->getDrawList()->getNextShaderAction();
 
-				highlightAction.SetShaderAndBuffer(ShaderManager::getInstance()->getShaderChain(Z_SHADER_CHAIN_3D_HIGHLIGHT), m_mesh->m_bufferArray);
+				highlightAction.setShaderAndBuffer(ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_3D_HIGHLIGHT), m_mesh->getGPUBufferArray());
 				Matrix4x4 m_scaledTransform = m_worldTransform;
 				m_scaledTransform.scale(Vector3(1.05f, 1.05f, 1.05f));
 
-				highlightAction.SetShaderMatVar("modelMat", m_scaledTransform);
-				highlightAction.SetShaderVec3Var("highlightColor", Vector3(1.0f, 0.5, 0.3f));
+				highlightAction.setShaderMatVar("modelMat", m_scaledTransform);
+				highlightAction.setShaderVec3Var("highlightColor", Vector3(1.0f, 0.5, 0.3f));
 
 				EnableAndSetStencilFunc(highlightAction, NOTEQUAL, 1, 0xFF, 0x00);
 			}
@@ -98,7 +98,7 @@ namespace ZE {
 
 	void RenderComponent::fromFile(const char* filePath)
 	{
-		Handle hMesh = MeshManager::getInstance()->loadResource(filePath);
+		Handle hMesh = MeshManager::GetInstance()->loadResource(filePath);
 		if (hMesh.isValid())
 		{
 			m_mesh = hMesh.getObject<Mesh>();
@@ -130,9 +130,9 @@ namespace ZE {
 
 	void RenderComponent::setupPhysics()
 	{
-		if (m_mesh && m_mesh->m_hPhysicsBodySetup.isValid())
+		if (m_mesh && m_mesh->getPhysicsBodySetup().isValid())
 		{
-			PhysicsBodySetup* pPhysicsBodySetup = m_mesh->m_hPhysicsBodySetup.getObject<PhysicsBodySetup>();
+			PhysicsBodySetup* pPhysicsBodySetup = m_mesh->getPhysicsBodySetup().getObject<PhysicsBodySetup>();
 			if (m_bStatic)
 			{
 				m_hPhysicsBody = m_gameContext->getPhysics()->CreateStaticRigidBody(m_worldTransform, pPhysicsBodySetup);
@@ -160,7 +160,7 @@ namespace ZE {
 	{
 		if (m_mesh && m_mesh->hasSkeleton())
 		{
-			Skeleton* pSkeleton = m_mesh->m_hSkeleton.getObject<Skeleton>();
+			Skeleton* pSkeleton = m_mesh->getSkeletonHandle().getObject<Skeleton>();
 			m_hSkeletonState = Handle("Skeleton State", sizeof(SkeletonState));
 			new(m_hSkeletonState) SkeletonState(pSkeleton);
 		}

@@ -9,19 +9,21 @@ namespace ZE {
 	{
 		DEFINE_CLASS(MaterialManager);
 
-	private:
-
-		static MaterialManager* s_instance;
-
 	public:
 
-		static MaterialManager* getInstance();
+		static MaterialManager* GetInstance();
 
 		static void Init();
 		static void Destroy();
 
+	protected:
+		// ResourceManager implementation
 		virtual Handle loadResource_Internal(const char* resourceFilePath) override;
 		virtual void preUnloadResource(Resource* _resource) override;
+
+	private:
+		static MaterialManager* s_instance;
+
 	};
 }
 #endif

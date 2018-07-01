@@ -27,6 +27,7 @@ namespace ZE
 	{
 		DEFINE_CLASS(Material)
 
+		friend class MaterialManager;
 	public:
 
 		Material() 
@@ -37,6 +38,12 @@ namespace ZE
 		{
 		}
 
+		void Bind(ShaderAction& shaderAction);
+
+		// Does material have transparency?
+		bool IsBlend() { return m_isBlend; }
+
+	protected:
 		Vector3 m_Ka;
 		Vector3 m_Kd;
 		Vector3 m_Ks;
@@ -44,7 +51,6 @@ namespace ZE
 		Float32 m_shininess;
 		bool m_isBlend;
 
-		void Bind(ShaderAction& shaderAction);
 	};
 }
 #endif

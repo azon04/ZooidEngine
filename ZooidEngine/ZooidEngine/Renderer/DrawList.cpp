@@ -9,12 +9,12 @@ namespace ZE
 	{
 		for (int i = 0; i < m_size; i++)
 		{
-			m_drawList[i].Reset();
+			m_drawList[i].reset();
 		}
 
 		for (int i = 0; i < m_secondPassSize; i++)
 		{
-			m_secondPassDrawList[i].Reset();
+			m_secondPassDrawList[i].reset();
 		}
 
 		m_size = 0;

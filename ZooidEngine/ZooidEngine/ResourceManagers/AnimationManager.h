@@ -15,13 +15,14 @@ namespace ZE
 
 		static void Init(GameContext* gameContext);
 		static void Destroy();
-		static AnimationManager* getInstance() { return s_instance; }
+		static AnimationManager* GetInstance() { return s_instance; }
 
+	protected:
+		// Resource Manager implementation
 		virtual Handle loadResource_Internal(const char* resourceFilePath) override;
 		virtual void preUnloadResource(Resource* _resource) override;
 
-	protected:
-
+	private:
 		static AnimationManager* s_instance;
 	};
 }

@@ -59,7 +59,7 @@ namespace ZE
 		// Read Skeleton
 		fileReader.readNextString(buffer);
 		fileReader.readNextString(buffer);
-		Handle hSkeleton = SkeletonManager::getInstance()->loadResource(GetResourcePath(buffer).c_str());
+		Handle hSkeleton = SkeletonManager::GetInstance()->loadResource(GetResourcePath(buffer).c_str());
 		if (hSkeleton.isValid())
 		{
 			pAnimClip->m_skeleton = hSkeleton.getObject<Skeleton>();

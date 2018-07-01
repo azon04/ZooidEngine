@@ -160,7 +160,7 @@ namespace ZE
 
 	void GLRenderer::ProcessShaderAction(ShaderAction* shaderAction)
 	{
-		switch (shaderAction->m_shaderActionType)
+		switch (shaderAction->getShaderActionType())
 		{
 		case SHADER_ACTION_DRAW:
 			Draw(shaderAction);
@@ -170,7 +170,7 @@ namespace ZE
 
 	void GLRenderer::Draw(ShaderAction* shaderAction)
 	{
-		shaderAction->m_shader->bind();
+		shaderAction->getShaderChain()->bind();
 		
 		for (int i = 0; i < shaderAction->m_shaderFeatures.length(); i++)
 		{
@@ -184,36 +184,37 @@ namespace ZE
 			shaderFeature.m_bFeatureEnabled = bDefaultEnable;
 		}
 
-		for (int i = 0; i < shaderAction->m_shaderVariables.length(); i++)
+		Int32 variableCount = shaderAction->m_shaderVariables.length();
+		for (int i = 0; i < variableCount; i++)
 		{
 			ShaderVariable& shaderVariable = shaderAction->m_shaderVariables[i];
 			switch (shaderVariable.VarType)
 			{
 			case SHADER_VAR_TYPE_FLOAT:
-				shaderAction->m_shader->setFloat(shaderVariable.VarName, shaderVariable.Float_value);
+				shaderAction->getShaderChain()->setFloat(shaderVariable.VarName, shaderVariable.Float_value);
 				break;
 			case SHADER_VAR_TYPE_INT:
-				shaderAction->m_shader->setInt(shaderVariable.VarName, shaderVariable.Int_value);
+				shaderAction->getShaderChain()->setInt(shaderVariable.VarName, shaderVariable.Int_value);
 				break;
 			case SHADER_VAR_TYPE_VECTOR3:
-				shaderAction->m_shader->setVec3(shaderVariable.VarName, shaderVariable.Vec3_value);
+				shaderAction->getShaderChain()->setVec3(shaderVariable.VarName, shaderVariable.Vec3_value);
 				break;
 			case SHADER_VAR_TYPE_MATRIX:
-				shaderAction->m_shader->setMat(shaderVariable.VarName, shaderVariable.Mat_value);
+				shaderAction->getShaderChain()->setMat(shaderVariable.VarName, shaderVariable.Mat_value);
 				break;
 			case SHADER_VAR_TYPE_TEXTURE:
-				shaderAction->m_shader->setTexture(shaderVariable.VarName, shaderVariable.texture_value.Texture_data, shaderVariable.texture_value.Texture_index);
+				shaderAction->getShaderChain()->setTexture(shaderVariable.VarName, shaderVariable.texture_value.Texture_data, shaderVariable.texture_value.Texture_index);
 				glActiveTexture(GL_TEXTURE0 + shaderVariable.texture_value.Texture_index);
 				shaderVariable.texture_value.Texture_data->bind();
 				break;
 			case SHADER_VAR_TYPE_BLOCK_BUFFER:
-				shaderAction->m_shader->bindConstantBuffer(shaderVariable.VarName, shaderVariable.Constant_buffer);
+				shaderAction->getShaderChain()->bindConstantBuffer(shaderVariable.VarName, shaderVariable.Constant_buffer);
 			}
 		}
 
 		GLenum drawTopology = GL_TRIANGLES;
 
-		switch (shaderAction->m_shader->getRenderTopology())
+		switch (shaderAction->getShaderChain()->getRenderTopology())
 		{
 		case TOPOLOGY_LINE:
 			drawTopology = GL_LINES;
@@ -226,14 +227,14 @@ namespace ZE
 			break;
 		}
 
-		shaderAction->m_bufferArray->bind();
-		if (shaderAction->m_bufferArray->isUsingIndexBuffer()) 
+		shaderAction->getBufferArray()->bind();
+		if (shaderAction->getBufferArray()->isUsingIndexBuffer()) 
 		{
-			glDrawElements(drawTopology, shaderAction->m_vertexSize, GL_UNSIGNED_INT, 0);
+			glDrawElements(drawTopology, shaderAction->getVertexSize(), GL_UNSIGNED_INT, 0);
 		}
 		else 
 		{
-			glDrawArrays(drawTopology, 0, shaderAction->m_vertexSize);
+			glDrawArrays(drawTopology, 0, shaderAction->getVertexSize());
 		}
 		
 		// Unbind textures, buffer array and shader
@@ -264,8 +265,8 @@ namespace ZE
 			}
 		}
 
-		shaderAction->m_bufferArray->unbind();
-		shaderAction->m_shader->unbind();
+		shaderAction->getBufferArray()->unbind();
+		shaderAction->getShaderChain()->unbind();
 	}
 
 	bool GLRenderer::IsClose()
@@ -405,7 +406,7 @@ namespace ZE
 		for (UInt32 i = 0; i < count; i++)
 		{
 			Matrix4x4 worldTransform;
-			inArray[i].GetShaderMatVar("modelMat", worldTransform);
+			inArray[i].getShaderMatVar("modelMat", worldTransform);
 			squareDists[i] = (worldTransform.getPos() - cameraPosition).lengthSquare();
 			outIndexArray[i] = i;
 		}

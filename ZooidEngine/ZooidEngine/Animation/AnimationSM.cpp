@@ -130,7 +130,7 @@ namespace ZE
 			if (StringFunc::Compare("Clip", buffer) == 0)
 			{
 				reader->readNextString(buffer);
-				Handle hClip = AnimationManager::getInstance()->loadResource(GetResourcePath(buffer).c_str());
+				Handle hClip = AnimationManager::GetInstance()->loadResource(GetResourcePath(buffer).c_str());
 				if (hClip.isValid())
 				{
 					node.Clip = hClip.getObject<AnimationClip>();

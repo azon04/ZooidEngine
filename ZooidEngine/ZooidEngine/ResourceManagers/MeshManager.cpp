@@ -38,7 +38,7 @@ namespace ZE
 		s_instance = nullptr;
 	}
 
-	ZE::MeshManager* MeshManager::getInstance()
+	ZE::MeshManager* MeshManager::GetInstance()
 	{
 		return s_instance;
 	}
@@ -55,7 +55,7 @@ namespace ZE
 		return NONE;
 	}
 
-	void loadPhysicsBodySetup(FileReader& fileReader, Mesh* pMesh)
+	void MeshManager::loadPhysicsBodySetup(FileReader* fileReader, Mesh* pMesh)
 	{
 		Handle hPhysicsBodySetup("Physics Body Setup", sizeof(PhysicsBodySetup));
 		PhysicsBodySetup* pPhysicsBodySetup = new(hPhysicsBodySetup) PhysicsBodySetup();
@@ -63,26 +63,26 @@ namespace ZE
 		char tokenBuffer[64];
 		
 		// Read physic data type : single/file/multi
-		fileReader.readNextString(tokenBuffer);
+		fileReader->readNextString(tokenBuffer);
 
 		if (StringFunc::Compare(tokenBuffer, "single") == 0)
 		{
 			PhysicsBodyDesc bodyDesc;
-			fileReader.readNextString(tokenBuffer);
+			fileReader->readNextString(tokenBuffer);
 			bodyDesc.ShapeType = GetShapeFromString(tokenBuffer);
 			switch (bodyDesc.ShapeType)
 			{
 			case BOX:
-				bodyDesc.HalfExtent.setX(fileReader.readNextFloat());
-				bodyDesc.HalfExtent.setY(fileReader.readNextFloat());
-				bodyDesc.HalfExtent.setZ(fileReader.readNextFloat());
+				bodyDesc.HalfExtent.setX(fileReader->readNextFloat());
+				bodyDesc.HalfExtent.setY(fileReader->readNextFloat());
+				bodyDesc.HalfExtent.setZ(fileReader->readNextFloat());
 				break;
 			case SPHERE:
-				bodyDesc.Radius = fileReader.readNextFloat();
+				bodyDesc.Radius = fileReader->readNextFloat();
 				break;
 			case CAPSULE:
-				bodyDesc.Radius = fileReader.readNextFloat();
-				bodyDesc.HalfHeight = fileReader.readNextFloat();
+				bodyDesc.Radius = fileReader->readNextFloat();
+				bodyDesc.HalfHeight = fileReader->readNextFloat();
 				break;
 			case PLANE:
 				break;
@@ -98,11 +98,11 @@ namespace ZE
 			}
 
 			// Mass expected
-			fileReader.readNextString(tokenBuffer);
+			fileReader->readNextString(tokenBuffer);
 
 			if (StringFunc::Compare(tokenBuffer, "Mass") == 0)
 			{
-				pPhysicsBodySetup->Mass = fileReader.readNextFloat();
+				pPhysicsBodySetup->Mass = fileReader->readNextFloat();
 			}
 
 			pPhysicsBodySetup->m_bodies.push_back(bodyDesc);
@@ -152,7 +152,7 @@ namespace ZE
 			{
 				reader.readNextString(tokenBuffer);
 
-				Handle hMaterial = MaterialManager::getInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
+				Handle hMaterial = MaterialManager::GetInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
 				if (hMaterial.isValid())
 				{
 					pMesh->m_material = hMaterial.getObject<Material>();
@@ -165,12 +165,12 @@ namespace ZE
 			}
 			else if (StringFunc::Compare(tokenBuffer, "physics") == 0)
 			{
-				loadPhysicsBodySetup(reader, pMesh);
+				loadPhysicsBodySetup(&reader, pMesh);
 			}
 			else if (StringFunc::Compare(tokenBuffer, "skeleton") == 0)
 			{
 				reader.readNextString(tokenBuffer);
-				Handle hSkeleton = SkeletonManager::getInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
+				Handle hSkeleton = SkeletonManager::GetInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
 				if (hSkeleton.isValid())
 				{
 					pMesh->m_hSkeleton = hSkeleton;

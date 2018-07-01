@@ -17,7 +17,7 @@ namespace ZE
 		m_shader = shader;
 	}
 
-	void ShaderAction::Reset()
+	void ShaderAction::reset()
 	{
 		m_shader = nullptr;
 		m_shaderVariables.clear();
@@ -27,14 +27,14 @@ namespace ZE
 		m_vertexSize = 0;
 	}
 
-	void ShaderAction::SetShaderAndBuffer(IShaderChain* _shader, IGPUBufferArray* _bufferArray)
+	void ShaderAction::setShaderAndBuffer(IShaderChain* _shader, IGPUBufferArray* _bufferArray)
 	{
 		m_shader = _shader;
 		m_bufferArray = _bufferArray;
 		m_vertexSize = _bufferArray->getDataCount();
 	}
 
-	void ShaderAction::SetShaderFloatVar(const char* _name, float _value)
+	void ShaderAction::setShaderFloatVar(const char* _name, float _value)
 	{
 		ShaderVariable shaderVariable;
 		StringFunc::WriteTo(shaderVariable.VarName, _name, 32);
@@ -43,7 +43,7 @@ namespace ZE
 		m_shaderVariables.push_back(shaderVariable);
 	}
 
-	void ShaderAction::SetShaderIntVar(const char* _name, Int32 _value)
+	void ShaderAction::setShaderIntVar(const char* _name, Int32 _value)
 	{
 		ShaderVariable shaderVariable;
 		StringFunc::WriteTo(shaderVariable.VarName, _name, 32);
@@ -52,7 +52,7 @@ namespace ZE
 		m_shaderVariables.push_back(shaderVariable);
 	}
 
-	void ShaderAction::SetShaderVec3Var(const char* _name, const Vector3& _value)
+	void ShaderAction::setShaderVec3Var(const char* _name, const Vector3& _value)
 	{
 		ShaderVariable shaderVariable;
 		StringFunc::WriteTo(shaderVariable.VarName, _name, 32);
@@ -61,7 +61,7 @@ namespace ZE
 		m_shaderVariables.push_back(shaderVariable);
 	}
 
-	void ShaderAction::SetShaderMatVar(const char* _name, const Matrix4x4& _value)
+	void ShaderAction::setShaderMatVar(const char* _name, const Matrix4x4& _value)
 	{
 		ShaderVariable shaderVariable;
 		StringFunc::WriteTo(shaderVariable.VarName, _name, 32);
@@ -70,12 +70,12 @@ namespace ZE
 		m_shaderVariables.push_back(shaderVariable);
 	}
 
-	void ShaderAction::SetData(const char* _name, void* _data)
+	void ShaderAction::setData(const char* _name, void* _data)
 	{
 
 	}
 
-	void ShaderAction::SetShaderTextureVar(const char* _name, IGPUTexture* _texture, Int32 _texture_index)
+	void ShaderAction::setShaderTextureVar(const char* _name, IGPUTexture* _texture, Int32 _texture_index)
 	{
 		ShaderVariable shaderVariable;
 		StringFunc::WriteTo(shaderVariable.VarName, _name, 32);
@@ -84,12 +84,12 @@ namespace ZE
 		m_shaderVariables.push_back(shaderVariable);
 	}
 
-	void ShaderAction::SetType(ZE::UInt16 _shaderActionType)
+	void ShaderAction::setType(ZE::UInt16 _shaderActionType)
 	{
 		m_shaderActionType = _shaderActionType;
 	}
 
-	void ShaderAction::SetConstantsBlockBuffer(const char* _name, IGPUBufferData* _constantBlockBuffer)
+	void ShaderAction::setConstantsBlockBuffer(const char* _name, IGPUBufferData* _constantBlockBuffer)
 	{
 		ShaderVariable shaderVariable;
 		StringFunc::WriteTo(shaderVariable.VarName, _name, 32);
@@ -98,7 +98,7 @@ namespace ZE
 		m_shaderVariables.push_back(shaderVariable);
 	}
 
-	void ShaderAction::GetShaderMatVar(const char* _name, Matrix4x4& _value)
+	void ShaderAction::getShaderMatVar(const char* _name, Matrix4x4& _value)
 	{
 		for (int i = 0; i < m_shaderVariables.length(); i++)
 		{
@@ -110,7 +110,7 @@ namespace ZE
 		}
 	}
 
-	void ShaderAction::AddShaderFeature(UInt32 _feature, bool _enabled)
+	void ShaderAction::addShaderFeature(UInt32 _feature, bool _enabled)
 	{
 		ShaderFeature shaderFeature;
 		shaderFeature.m_rendererFeature = _feature;

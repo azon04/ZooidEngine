@@ -14,13 +14,19 @@ namespace ZE
 	public:
 		Texture() {}
 
+		// load texture from file
 		static Handle loadTexture(const char* filePath);
 
+		// Get pointer to image
 		FORCEINLINE UChar* getImage() const { return m_image; }
+
 		FORCEINLINE UInt32 getWidth() const { return m_width; }
 		FORCEINLINE UInt32 getHeight() const { return m_height; }
+		
 		FORCEINLINE UInt32 getChannel() const { return m_channel; }
+
 		void release();
+
 
 	protected:
 		UChar* m_image;

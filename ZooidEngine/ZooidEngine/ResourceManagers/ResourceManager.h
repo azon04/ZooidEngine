@@ -56,9 +56,6 @@ namespace ZE
 		// cycle that deal with load and unload
 		void doLoadUnload();
 
-		// Pre unload the resource. Do everything to clear the assets
-		virtual void preUnloadResource(Resource* _resource) = 0;
-
 		template<class T>
 		T* getResource(const char* filePath)
 		{
@@ -71,6 +68,8 @@ namespace ZE
 		// This must override in the child class to provide memory handle to actual resource pointer
 		virtual Handle loadResource_Internal(const char* resourceFilePath) = 0;
 
+		// Pre unload the resource. Do everything to clear the assets
+		virtual void preUnloadResource(Resource* _resource) = 0;
 
 	protected:
 		HashMap<String, Resource> m_resourceMap;

@@ -22,7 +22,7 @@ namespace ZE
 		}
 	}
 
-	ZE::SkeletonManager* SkeletonManager::getInstance()
+	ZE::SkeletonManager* SkeletonManager::GetInstance()
 	{
 		return s_instance;
 	}

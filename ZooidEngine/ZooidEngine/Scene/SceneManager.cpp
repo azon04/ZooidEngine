@@ -241,7 +241,7 @@ namespace ZE
 				
 				// Read Animation path
 				fileReader->readNextString(buff);
-				Handle hAnimClip = AnimationManager::getInstance()->loadResource(GetResourcePath(buff).c_str());
+				Handle hAnimClip = AnimationManager::GetInstance()->loadResource(GetResourcePath(buff).c_str());
 				bool bLoop = fileReader->readNextInt() == 1;
 				float rate = fileReader->readNextFloat();
 

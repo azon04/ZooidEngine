@@ -16,8 +16,10 @@ namespace ZE
 
 		static void Init(GameContext* _gameContext);
 		static void Destroy();
-		static SkeletonManager* getInstance();
+		static SkeletonManager* GetInstance();
 
+	protected:
+		// ResourceManager implementation
 		virtual Handle loadResource_Internal(const char* resourceFilePath) override;
 		virtual void preUnloadResource(Resource* _resource) override;
 

@@ -15,7 +15,7 @@ namespace ZE
 
 	MaterialManager* MaterialManager::s_instance = nullptr;
 
-	MaterialManager* MaterialManager::getInstance()
+	MaterialManager* MaterialManager::GetInstance()
 	{
 		return s_instance;
 	}
@@ -55,7 +55,7 @@ namespace ZE
 			if (StringFunc::Compare(tokenBuffer, "diffuse") == 0)
 			{
 				reader.readNextString(tokenBuffer);
-				Handle hTexture = TextureManager::getInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
+				Handle hTexture = TextureManager::GetInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
 				if (hTexture.isValid())
 				{
 					MaterialTexture texture;
@@ -67,7 +67,7 @@ namespace ZE
 			else if (StringFunc::Compare(tokenBuffer, "specular") == 0)
 			{
 				reader.readNextString(tokenBuffer);
-				Handle hTexture = TextureManager::getInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
+				Handle hTexture = TextureManager::GetInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
 				if (hTexture.isValid())
 				{
 					MaterialTexture texture;

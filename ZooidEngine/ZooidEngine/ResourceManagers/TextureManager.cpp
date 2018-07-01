@@ -30,7 +30,7 @@ namespace ZE
 		s_instance->doLoadUnload();
 	}
 
-	TextureManager* TextureManager::getInstance()
+	TextureManager* TextureManager::GetInstance()
 	{
 		return s_instance;
 	}

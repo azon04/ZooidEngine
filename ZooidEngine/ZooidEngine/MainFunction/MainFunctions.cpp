@@ -65,7 +65,7 @@ namespace ZE
 
 		ZEINFO("Initializing Shaders...");
 		ShaderManager::Init(_gameContext);
-		_gameContext->m_shaderManager = ShaderManager::getInstance();
+		_gameContext->m_shaderManager = ShaderManager::GetInstance();
 
 		ZEINFO("Initializing Buffer Manager...");
 		BufferManager::Init(_gameContext);
@@ -73,15 +73,15 @@ namespace ZE
 		
 		ZEINFO("Initializing Texture Manager...");
 		TextureManager::Init(_gameContext);
-		_gameContext->m_textureManager = TextureManager::getInstance();
+		_gameContext->m_textureManager = TextureManager::GetInstance();
 
 		ZEINFO("Initializing Material Manager...");
 		MaterialManager::Init();
-		_gameContext->m_materialManager = MaterialManager::getInstance();
+		_gameContext->m_materialManager = MaterialManager::GetInstance();
 
 		ZEINFO("Initializing Mesh Manager...");
 		MeshManager::Init();
-		_gameContext->m_meshManager = MeshManager::getInstance();
+		_gameContext->m_meshManager = MeshManager::GetInstance();
 
 		{
 			ZEINFO("Initializing DrawList...");
@@ -221,11 +221,11 @@ namespace ZE
 		// Draw Base Lines
 		{
 			ZE::ShaderAction& shaderAction = _gameContext->getDrawList()->getNextShaderAction();
-			ZE::IShaderChain* shader = ZE::ShaderManager::getInstance()->getShaderChain(2);
+			ZE::IShaderChain* shader = ZE::ShaderManager::GetInstance()->getShaderChain(2);
 
-			shaderAction.SetShaderAndBuffer(shader, ZE::BufferManager::getInstance()->getBufferArray(2));
-			shaderAction.SetShaderMatVar("modelMat", Matrix4x4());
-			shaderAction.SetConstantsBlockBuffer("shader_data", _gameContext->getDrawList()->m_mainConstantBuffer);
+			shaderAction.setShaderAndBuffer(shader, ZE::BufferManager::getInstance()->getBufferArray(2));
+			shaderAction.setShaderMatVar("modelMat", Matrix4x4());
+			shaderAction.setConstantsBlockBuffer("shader_data", _gameContext->getDrawList()->m_mainConstantBuffer);
 		}
 
 		// Handle Event_GATHER_RENDER
@@ -237,7 +237,7 @@ namespace ZE
 		}
 
 		// Handle Event_GATHER_LIGHT
-		_gameContext->getDrawList()->m_lightData.numLight = 0;
+		_gameContext->getDrawList()->m_lightData.NumLight = 0;
 		{
 			ZE::Handle handleGatherLight("EventGatherLight", sizeof(ZE::Event_GATHER_LIGHT));
 			ZE::Event_GATHER_LIGHT* eventGatherLight = new(handleGatherLight) Event_GATHER_LIGHT();

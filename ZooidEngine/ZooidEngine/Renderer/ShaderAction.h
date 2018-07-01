@@ -91,35 +91,67 @@ public:
 	ShaderAction();
 	ShaderAction(IShaderChain* shader);
 
-	void Reset();
-	void SetShaderAndBuffer(IShaderChain* _shader, IGPUBufferArray* _bufferArray);
-	void SetShaderFloatVar(const char* _name, float _value);
-	void SetShaderIntVar(const char* _name, Int32 _value);
-	void SetShaderVec3Var(const char* _name, const Vector3& _value);
-	void SetShaderMatVar(const char* _name, const Matrix4x4& _value);
-	void SetData(const char* _name, void* _data);
-	void SetShaderTextureVar(const char* _name, IGPUTexture* _texture, Int32 _texture_index);
-	void SetType(ZE::UInt16 _shaderActionType);
-	void SetConstantsBlockBuffer(const char* _name, IGPUBufferData* _constantBlockBuffer);
+	// reset/clear shader action values
+	void reset();
+
+	// set main shader and buffer
+	void setShaderAndBuffer(IShaderChain* _shader, IGPUBufferArray* _bufferArray);
 	
-	void GetShaderMatVar(const char* _name, Matrix4x4& _value);
+	// set shader variable float value
+	void setShaderFloatVar(const char* _name, float _value);
+	
+	// set shader variable integer value
+	void setShaderIntVar(const char* _name, Int32 _value);
 
-	void AddShaderFeature(UInt32 _feature, bool _enabled);
+	// set shader variable vector value
+	void setShaderVec3Var(const char* _name, const Vector3& _value);
 
+	// set shader variable matrix value
+	void setShaderMatVar(const char* _name, const Matrix4x4& _value);
+
+	// set shader variable value / basically copy buffer to variable
+	void setData(const char* _name, void* _data);
+
+	// set Shader Texture variable value
+	void setShaderTextureVar(const char* _name, IGPUTexture* _texture, Int32 _texture_index);
+
+	// set type of shader action
+	// SHADER_ACTION_DRAW: for drawing
+	// SHADER_ACTION_SETGLOBAL: set global buffer value
+	void setType(ZE::UInt16 _shaderActionType);
+
+	// set constants block buffer variable
+	void setConstantsBlockBuffer(const char* _name, IGPUBufferData* _constantBlockBuffer);
+	
+	// get shader matrix variable value
+	void getShaderMatVar(const char* _name, Matrix4x4& _value);
+
+	// disable/enable ShaderFeature, see ShaderFeature
+	void addShaderFeature(UInt32 _feature, bool _enabled);
+
+	FORCEINLINE Int32 getVertexSize() const { return m_vertexSize; }
+	FORCEINLINE UInt16 getShaderActionType() const { return m_shaderActionType; }
+
+	FORCEINLINE IShaderChain* getShaderChain() const { return m_shader; }
+	FORCEINLINE IGPUBufferArray* getBufferArray() const { return m_bufferArray; }
+
+	friend void EnableAndSetDepthFunction(ShaderAction& shaderAction, RendererCompareFunc func);
+	friend void EnableAndSetStencilFunc(ShaderAction& shaderAction, RendererCompareFunc func, Int32 ref, UInt32 refMask, UInt32 stencilWriteMask);
+	friend void EnableAndSetBlendFunc(ShaderAction& shaderAction, RendererBlendFactor sourceBlenFactor, RendererBlendFactor dstBlendFactor);
+	friend void EnableAndSetFaceCull(ShaderAction& shaderAction, FaceFrontOrder faceOrder, CullFace cullFace);
+
+public:
+	Array<ShaderFeature, true> m_shaderFeatures;
+	Array<ShaderVariable, true> m_shaderVariables;
+
+private:
 	ZE::Int32 m_vertexSize;
 	ZE::UInt16 m_shaderActionType;
 	
 	IShaderChain* m_shader;
 	IGPUBufferArray* m_bufferArray;
-	Array<ShaderVariable, true> m_shaderVariables;
-	Array<ShaderFeature, true> m_shaderFeatures;
 };
 
-// Shader Action Helper; Representative Name of function
-void EnableAndSetDepthFunction(ShaderAction& shaderAction, RendererCompareFunc func);
-void EnableAndSetStencilFunc(ShaderAction& shaderAction, RendererCompareFunc func, Int32 ref, UInt32 refMask, UInt32 stencilWriteMask);
-void EnableAndSetBlendFunc(ShaderAction& shaderAction, RendererBlendFactor sourceBlenFactor, RendererBlendFactor dstBlendFactor);
-void EnableAndSetFaceCull(ShaderAction& shaderAction, FaceFrontOrder faceOrder, CullFace cullFace);
 
 };
-#endif // __Z_SHADER_ACTION__
+#endif

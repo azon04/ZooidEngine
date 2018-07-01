@@ -15,14 +15,21 @@ namespace ZE
 	{
 		DEFINE_CLASS(Mesh)
 
+			friend class MeshManager;
 	public:
 
 		Mesh() :
 			m_doubleSided(false)
 		{}
 
-		bool hasSkeleton() const { return m_hSkeleton.isValid(); }
+		FORCEINLINE bool hasSkeleton() const { return m_hSkeleton.isValid(); }
+		FORCEINLINE bool isDoubleSided() const { return m_doubleSided; }
 
+		FORCEINLINE IGPUBufferArray* getGPUBufferArray() const { return m_bufferArray; }
+		FORCEINLINE Handle getSkeletonHandle() { return m_hSkeleton; }
+		FORCEINLINE Material* getMaterial() { return m_material; }
+		FORCEINLINE Handle getPhysicsBodySetup() { return m_hPhysicsBodySetup; }
+	protected:
 		IGPUBufferData* m_vertexBuffer;;
 		IGPUBufferData* m_indexBuffer;
 		IGPUBufferArray* m_bufferArray;

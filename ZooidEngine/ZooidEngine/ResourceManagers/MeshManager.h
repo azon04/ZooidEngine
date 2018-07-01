@@ -5,6 +5,9 @@
 
 namespace ZE
 {
+	class FileReader;
+	class Mesh;
+
 	class MeshManager : public ResourceManager
 	{
 		DEFINE_CLASS(MeshManager)
@@ -13,13 +16,18 @@ namespace ZE
 
 		static void Init();
 		static void Destroy();
-		static MeshManager* getInstance();
+		static MeshManager* GetInstance();
 
+	protected:
+		// ResourceManager implementation
 		virtual Handle loadResource_Internal(const char* resourceFilePath) override;
 		virtual void preUnloadResource(Resource* _resource) override;
 
 	private:
 		static MeshManager* s_instance;
+
+		void loadPhysicsBodySetup(FileReader* fileReader, Mesh* pMesh);
+
 	};
 }
 #endif

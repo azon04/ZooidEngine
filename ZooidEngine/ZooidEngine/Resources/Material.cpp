@@ -29,16 +29,16 @@ namespace ZE
 			default:
 				break;
 			}
-			shaderAction.SetShaderTextureVar(varName.c_str(), matTexture.texture, i);
+			shaderAction.setShaderTextureVar(varName.c_str(), matTexture.texture, i);
 		}
 
-		shaderAction.SetShaderFloatVar("material.diffuseMapBound", iDiffuse > 0 ? 1.0f : 0.0f);
-		shaderAction.SetShaderFloatVar("material.specularMapBound", iSpecular > 0 ? 1.0f : 0.0f);
+		shaderAction.setShaderFloatVar("material.diffuseMapBound", iDiffuse > 0 ? 1.0f : 0.0f);
+		shaderAction.setShaderFloatVar("material.specularMapBound", iSpecular > 0 ? 1.0f : 0.0f);
 
-		shaderAction.SetShaderFloatVar("material.shininess", m_shininess);
-		shaderAction.SetShaderVec3Var("material.Ka", m_Ka);
-		shaderAction.SetShaderVec3Var("material.Kd", m_Kd);
-		shaderAction.SetShaderVec3Var("material.Ks", m_Ks);
+		shaderAction.setShaderFloatVar("material.shininess", m_shininess);
+		shaderAction.setShaderVec3Var("material.Ka", m_Ka);
+		shaderAction.setShaderVec3Var("material.Kd", m_Kd);
+		shaderAction.setShaderVec3Var("material.Ks", m_Ks);
 	}
 
 }
