@@ -7,8 +7,8 @@ namespace ZE
 {
 	class FileReader;
 
-	class SceneManager : public Component {
-
+	class SceneManager : public Component 
+	{
 		DEFINE_CLASS(SceneManager)
 	
 	public:
@@ -16,9 +16,9 @@ namespace ZE
 		SceneManager(GameContext* gameContext) : Component(gameContext) {}
 		virtual ~SceneManager() {}
 
-		void LoadSceneFile(const char* filePath);
-		void LoadSceneFileToComp(const char* filePath, Component* parent);
-		void LoadSceneComponentToComp(FileReader* reader, Component* parent);
+		void loadSceneFile(const char* filePath);
+		void loadSceneFileToComp(const char* filePath, Component* parent);
+		void loadSceneComponentToComp(FileReader* reader, Component* parent);
 
 		Handle getCompByName(const char* name);
 
@@ -29,12 +29,10 @@ namespace ZE
 
 	private:
 		Handle CreateSceneComponentByName(const char* componentTypeName);
-
 		HashMap<String, Handle> m_componentMap;
-
-	public:
 		static SceneManager* s_instance;
 
+	public:
 		String m_currentSceneFile;
 		
 	};

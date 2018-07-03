@@ -1,5 +1,6 @@
 #include "ZEGameContext.h"
 
-namespace ZE {
+namespace ZE 
+{
 
 }

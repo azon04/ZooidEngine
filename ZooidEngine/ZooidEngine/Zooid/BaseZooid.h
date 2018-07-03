@@ -5,6 +5,7 @@
 
 namespace ZE
 {
+	// Base Zooid (Zooid = Module)
 	class BaseZooid
 	{
 	public:
@@ -15,6 +16,7 @@ namespace ZE
 		virtual void Init() = 0;
 		virtual void Destroy() = 0;
 
+	protected:
 		GameContext* m_gameContext;
 	};
 }

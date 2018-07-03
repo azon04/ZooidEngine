@@ -3,7 +3,8 @@
 
 #include "UnitTest.h"
 
-class VectorUnitTest : public UnitTest {
+class VectorUnitTest : public UnitTest 
+{
 
 public:
 	virtual void RunTest() override;

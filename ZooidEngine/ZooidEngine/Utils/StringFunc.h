@@ -14,12 +14,15 @@ namespace StringFunc {
 	// Length of char* string, including null terminated char
 	int Length(const char* string);
 
+	// Compare two string (char*), return 0 if the same
 	int Compare(const char* string1, const char* string2);
 
 	void Concat(const char* string1, const char* string2, char* res);
 
 	void PrintToString(char* string, int stringSize, const char* formatText, ...);
 
+	// Calculate Hash value for a string.
+	// Currently using LookUp3
 	ZE::UInt32 Hash(const char* string, size_t size);
 
 };

@@ -29,9 +29,17 @@
 #include "ResourceManagers/SkeletonManager.h"
 #include "ResourceManagers/AnimationManager.h"
 
+// TODO for NVIDIA Optimus :  This enable the program to use NVIDIA instead of integrated Intel graphics
+#if WIN32 || WIN64
+extern "C"
+{
+#include <windows.h>
+	_declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
+}
+#endif
+
 namespace ZE 
 {
-
 	ConditionVariable g_drawThreadVariable;
 	Mutex g_drawMutex;
 	bool g_drawReady = false;

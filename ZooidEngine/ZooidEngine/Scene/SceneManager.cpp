@@ -27,9 +27,9 @@ namespace ZE
 
 	SceneManager* SceneManager::s_instance = nullptr;
 
-	void SceneManager::LoadSceneFile(const char* filePath)
+	void SceneManager::loadSceneFile(const char* filePath)
 	{
-		LoadSceneFileToComp(filePath, m_gameContext->getRootComponent());
+		loadSceneFileToComp(filePath, m_gameContext->getRootComponent());
 	}
 
 	Handle SceneManager::CreateSceneComponentByName(const char* componentTypeName)
@@ -78,7 +78,7 @@ namespace ZE
 		}
 	}
 
-	void SceneManager::LoadSceneFileToComp(const char* filePath, Component* parent)
+	void SceneManager::loadSceneFileToComp(const char* filePath, Component* parent)
 	{
 		FileReader fileReader(filePath);
 		if (!fileReader.isValid())
@@ -101,11 +101,11 @@ namespace ZE
 		Int32 compCount = fileReader.readNextInt();
 		for (Int32 i = 0; i < compCount; i++)
 		{
-			LoadSceneComponentToComp(&fileReader, parent);
+			loadSceneComponentToComp(&fileReader, parent);
 		}
 	}
 
-	void SceneManager::LoadSceneComponentToComp(FileReader* fileReader, Component* parent)
+	void SceneManager::loadSceneComponentToComp(FileReader* fileReader, Component* parent)
 	{
 		char buff[256];
 		// Component type
@@ -180,14 +180,14 @@ namespace ZE
 				Int32 count = fileReader->readNextInt();
 				for (Int32 i = 0; i < count; i++)
 				{
-					LoadSceneComponentToComp(fileReader, pComp);
+					loadSceneComponentToComp(fileReader, pComp);
 				}
 			}
 			else if (StringFunc::Compare(buff, "Scene") == 0)
 			{
 				// Read Scene
 				fileReader->readNextString(buff);
-				LoadSceneFileToComp(GetResourcePath(buff).c_str(), pComp);
+				loadSceneFileToComp(GetResourcePath(buff).c_str(), pComp);
 			}
 			else if (StringFunc::Compare(buff, "Physics") == 0)
 			{

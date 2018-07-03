@@ -3,7 +3,8 @@
 
 #include <cstdint>
 
-namespace ZE {
+namespace ZE 
+{
 	
 	// 32 bit Float
 	typedef float Float32;

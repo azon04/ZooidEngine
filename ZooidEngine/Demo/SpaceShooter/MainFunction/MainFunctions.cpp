@@ -14,7 +14,7 @@ using namespace ZE;
 
 void SpaceShooter::MainSetup(ZE::GameContext* _gameContext)
 {
-	_gameContext->getSceneManager()->LoadSceneFile(ZE::GetResourcePath("SpaceShooter/Scene/Test.scz").c_str());
+	_gameContext->getSceneManager()->loadSceneFile(ZE::GetResourcePath("SpaceShooter/Scene/Test.scz").c_str());
 	
 	{
 		ZE::Handle h("SpaceShip", sizeof(SpaceShip));

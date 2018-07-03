@@ -6,7 +6,6 @@
 
 namespace ZE 
 {
-	
 	class MaterialManager;
 	class MeshManager;
 	class RenderZooid;

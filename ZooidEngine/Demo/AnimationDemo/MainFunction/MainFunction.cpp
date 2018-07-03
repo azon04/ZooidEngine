@@ -17,7 +17,7 @@ namespace AnimationDemo
 
 	void MainSetup(ZE::GameContext* _gameContext)
 	{
-		_gameContext->getSceneManager()->LoadSceneFile(ZE::GetPackageAssetPath("TestAnimation", "Scene", "Test.scz").c_str());
+		_gameContext->getSceneManager()->loadSceneFile(ZE::GetPackageAssetPath("TestAnimation", "Scene", "Test.scz").c_str());
 		
 		{
 			ZE::CameraComponent* cameraComp = ZE::CameraManager::GetInstance()->getCurrentCamera();

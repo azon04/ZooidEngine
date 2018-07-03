@@ -11,7 +11,8 @@
 
 #define HASH_MAP_PROBING HASH_MAP_LINEAR_PROBING
 
-namespace ZE {
+namespace ZE 
+{
 
 	template<class K, class V>
 	struct HashKeyValue
@@ -392,7 +393,6 @@ namespace ZE {
 			return keys;
 		}
 	};
-
 
 }
 #endif // ! __ZE_HASHMAP__

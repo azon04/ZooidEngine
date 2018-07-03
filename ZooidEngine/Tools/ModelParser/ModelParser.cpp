@@ -250,7 +250,7 @@ namespace ZETools
 					}
 				}
 
-				// #TODO create meshz file
+				// Create meshz file
 				{
 					std::cout << "Creating Mesh file [" << meshFilePath << "]... " << std::endl;
 					std::ofstream stream(getFullPath(outputDir, meshFilePath));

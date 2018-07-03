@@ -100,7 +100,8 @@ namespace ZETools
 
 	struct ModelParserSettings
 	{
-		struct Animation {
+		struct Animation 
+		{
 			short sqtMask = TRANSLATION_MASK | SCALE_MASK | QUAT_MASK;
 			bool bRecalculateQuatRuntime = false;
 			bool bRemoveNonBone = true;

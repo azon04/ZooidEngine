@@ -12,7 +12,7 @@ namespace PhysicsSandBox
 
 	void MainSetup(ZE::GameContext* _gameContext)
 	{
-		_gameContext->getSceneManager()->LoadSceneFile(ZE::GetPackageAssetPath("PhysicsSandBox", "Scene", "Test.scz").c_str());
+		_gameContext->getSceneManager()->loadSceneFile(ZE::GetPackageAssetPath("PhysicsSandBox", "Scene", "Test.scz").c_str());
 		
 		{
 			ZE::Handle h("", sizeof(ControlledComponent));

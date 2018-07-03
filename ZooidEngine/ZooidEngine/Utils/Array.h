@@ -9,7 +9,8 @@
 #include <cstdlib>
 #include <new>
 
-namespace ZE {
+namespace ZE 
+{
 	
 	template<class T, bool resizable = false>
 	class Array
@@ -101,7 +102,6 @@ namespace ZE {
 			return *this;
 		}
 
-		// doubling the size
 		void resize(int size)
 		{
 			if (!resizable) return;
