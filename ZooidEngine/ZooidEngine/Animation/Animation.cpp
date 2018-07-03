@@ -147,6 +147,7 @@ namespace ZE
 			Int32 parentIndex = jointTemp.ParentIndex;
 			Quaternion addRot = pose.JointPoses[parentIndex].Rotation *(*target.JointPoses[parentIndex].Rotation);
 			res.JointPoses[boneIndex].Rotation = res.JointPoses[boneIndex].Rotation * addRot;
+			res.JointPoses[boneIndex].Rotation.normalize();
 		}
 	}
 

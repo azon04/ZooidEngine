@@ -407,22 +407,22 @@ public:
 #endif
 	}
 
-	FORCEINLINE Vector3 getU() 
+	FORCEINLINE Vector3 getU() const
 	{
 		return Vector3(m_data[0][0], m_data[0][1], m_data[0][2]);
 	}
 
-	FORCEINLINE Vector3 getV() 
+	FORCEINLINE Vector3 getV() const
 	{
 		return Vector3(m_data[1][0], m_data[1][1], m_data[1][2]);
 	}
 
-	FORCEINLINE Vector3 getN() 
+	FORCEINLINE Vector3 getN() const
 	{
 		return Vector3(m_data[2][0], m_data[2][1], m_data[2][2]);
 	}
 
-	FORCEINLINE Vector3 getPos() 
+	FORCEINLINE Vector3 getPos() const
 	{
 		return Vector3(m_data[3][0], m_data[3][1], m_data[3][2]);
 	}

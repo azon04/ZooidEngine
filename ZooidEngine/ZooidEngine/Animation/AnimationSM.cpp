@@ -38,7 +38,7 @@ namespace ZE
 			if (m_parents.length() > 0)
 			{
 				RenderComponent* pRenderComp = (RenderComponent*)m_parents[0];
-				SkeletonState* pSkelState = pRenderComp->m_hSkeletonState.getObject<SkeletonState>();
+				SkeletonState* pSkelState = pRenderComp->getSkeletonStateHandle().getObject<SkeletonState>();
 
 				// TODO Update Animation State
 				AnimationPose pose;

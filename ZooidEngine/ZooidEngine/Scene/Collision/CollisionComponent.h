@@ -15,10 +15,15 @@ namespace ZE
 		CollisionComponent(GameContext* gameContext) : SceneComponent(gameContext) {}
 		virtual ~CollisionComponent() {}
 
+		// Component override
 		virtual void setupComponent() override;
+		
+		// Setup physics
 		virtual void setupPhysics();
 
 		void setStatic(bool _bStatic) { m_bStatic = _bStatic; }
+
+		// Make this collision component, trigger only
 		void setTrigger(bool _bTrigger) { m_bTrigger = _bTrigger; }
 
 	protected:

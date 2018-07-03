@@ -4,8 +4,8 @@
 #include "SceneComponent.h"
 #include "Physics/PhysicsBodyHolder.h"
 
-namespace ZE {
-	
+namespace ZE 
+{	
 	class Mesh;
 	class Event;
 
@@ -24,13 +24,22 @@ namespace ZE {
 		virtual ~RenderComponent() {}
 
 		virtual void setupComponent() override;
+		
+		// Handle Gather event
 		void handleGatherRender(Event* pEvent);
 
-		void fromFile(const char* filePath);
+		// Load mesh from File
+		void loadMeshFromFile(const char* filePath);
 
+		// Physics: Set this render object as trigger only
 		void setTriggerOnly(bool _bTriggerOnly);
+
+		// Physics: set this render component as static component
 		void setStatic(bool _bStatic);
+
 		void setPhysicsEnabled(bool _bEnabled);
+		
+		// Physics: handle physics update transform event
 		void handlePhysicsUpdateTransform(Event* pEvent);
 
 		void setupPhysics();
@@ -40,6 +49,9 @@ namespace ZE {
 		virtual bool hasPhysicsBody();
 		virtual IPhysicsBody* getPhysicsBody();
 
+		FORCEINLINE Handle getSkeletonStateHandle() { return m_hSkeletonState; }
+
+	protected:
 		Mesh* m_mesh;
 		bool m_bHighlight;
 

@@ -1,6 +1,6 @@
 SceneName TestMap
 FileVersion 1.0
-ComponentCount 6
+ComponentCount 9
 LightComponent DirLight
 BEGIN
 LightType 0
@@ -10,6 +10,24 @@ RenderComponent Floor
 BEGIN
 Mesh Basic/Mesh/FloorChecker.meshz
 S 15.0 15.0 15.0
+END
+RenderComponent Floor1
+BEGIN
+Mesh Basic/Mesh/FloorChecker.meshz
+S 15.0 15.0 15.0
+T 0.0 0.0 -15.0
+END
+RenderComponent Floor2
+BEGIN
+Mesh Basic/Mesh/FloorChecker.meshz
+S 15.0 15.0 15.0
+T 15.0 0.0 0.0
+END
+RenderComponent Floor3
+BEGIN
+Mesh Basic/Mesh/FloorChecker.meshz
+S 15.0 15.0 15.0
+T 15.0 0.0 -15.0
 END
 SceneComponent BlendSceneDemo
 BEGIN

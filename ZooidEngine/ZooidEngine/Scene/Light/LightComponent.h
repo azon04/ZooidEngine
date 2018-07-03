@@ -22,6 +22,8 @@ namespace ZE
 		LightComponent(GameContext* gameContext, LightType _lightType);
 
 		virtual void setupComponent() override;
+
+		// Handle gather light event
 		virtual void handleGatherLight(Event* event);
 		
 		LightType m_lightType;
@@ -35,7 +37,7 @@ namespace ZE
 		Float32 m_attLinear;
 		Float32 m_attQuadratic;
 
-		// Spot Light
+		// Spot Light Attributes
 		Float32 m_innerRadius;
 		Float32 m_outerRadius;
 	};

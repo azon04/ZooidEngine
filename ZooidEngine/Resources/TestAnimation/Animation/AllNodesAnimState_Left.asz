@@ -30,5 +30,5 @@ Node_Additive
 		{ 
 			Clip TestAnimation\Animation\RifleAimingAdditiveLeft_Baked_Take001.animz
 		}
-	Alpha 0.5
+	Alpha 1.0
 }

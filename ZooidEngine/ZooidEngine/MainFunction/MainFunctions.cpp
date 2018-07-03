@@ -300,8 +300,8 @@ namespace ZE
 				currentCamera->getViewMatrix(viewMat);
 
 				_gameContext->getDrawList()->m_shaderData.setViewMat(viewMat);
-				_gameContext->getDrawList()->m_cameraPosition = currentCamera->m_worldTransform.getPos();
-				_gameContext->getDrawList()->m_cameraDirection = currentCamera->m_worldTransform.getN();
+				_gameContext->getDrawList()->m_cameraPosition = currentCamera->getWorldPosition();
+				_gameContext->getDrawList()->m_cameraDirection = currentCamera->getForwardVector();
 
 				ZE::IRenderer* renderer = _gameContext->getRenderer();
 				if (currentCamera->m_bUsingOrthoProjection)
@@ -314,7 +314,7 @@ namespace ZE
 				}
 				_gameContext->getDrawList()->m_shaderData.setProjectionMat(projectionMat);
 
-				_gameContext->getDrawList()->m_lightData.setViewPos(currentCamera->m_worldTransform.getPos());
+				_gameContext->getDrawList()->m_lightData.setViewPos(currentCamera->getWorldPosition());
 			}
 		}
 

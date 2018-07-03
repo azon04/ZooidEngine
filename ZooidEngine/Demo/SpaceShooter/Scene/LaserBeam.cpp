@@ -18,7 +18,7 @@ namespace SpaceShooter
 	{
 		ZE::RenderComponent::setupComponent();
 
-		this->fromFile(ZE::GetResourcePath("SpaceShooter/Mesh/Cylinder.meshz").c_str());
+		this->loadMeshFromFile(ZE::GetResourcePath("SpaceShooter/Mesh/Cylinder.meshz").c_str());
 	}
 
 	void LaserBeam::handleUpdateEvent(ZE::Event* event)

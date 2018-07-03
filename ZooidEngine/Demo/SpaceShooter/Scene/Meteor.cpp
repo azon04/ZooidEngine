@@ -17,7 +17,7 @@ namespace SpaceShooter
 	void Meteor::setupComponent()
 	{
 		ZE::RenderComponent::setupComponent();
-		fromFile(ZE::GetResourcePath("SpaceShooter/Mesh/Sphere01.meshz").c_str());
+		loadMeshFromFile(ZE::GetResourcePath("SpaceShooter/Mesh/Sphere01.meshz").c_str());
 		m_worldTransform.scale(Vector3(0.25f, 0.25f, 0.25f));
 	}
 

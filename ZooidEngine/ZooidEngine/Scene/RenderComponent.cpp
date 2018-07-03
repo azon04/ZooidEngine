@@ -20,7 +20,8 @@
 
 #include "ZEGameContext.h"
 
-namespace ZE {
+namespace ZE 
+{
 	IMPLEMENT_CLASS_1(RenderComponent, SceneComponent)
 
 	void RenderComponent::setupComponent()
@@ -96,7 +97,7 @@ namespace ZE {
 		}
 	}
 
-	void RenderComponent::fromFile(const char* filePath)
+	void RenderComponent::loadMeshFromFile(const char* filePath)
 	{
 		Handle hMesh = MeshManager::GetInstance()->loadResource(filePath);
 		if (hMesh.isValid())

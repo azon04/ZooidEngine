@@ -14,11 +14,17 @@ namespace ZE
 		DebugCamera(GameContext* gameContext) : CameraComponent(gameContext)
 		{}
 
+		// CameraComponent implementation
 		virtual void setupComponent() override;
 		virtual void handleUpdateEvent(Event* _event) override;
 
+		// Handle key down event
 		void handleKeyDownEvent(Event* _event);
+
+		// Handle key up event
 		void handleKeyUpEvent(Event* _event);
+
+		// Handle mouse drag interaction
 		void handleMouseDragEvent(Event* _event);
 
 	protected:

@@ -19,7 +19,7 @@ namespace PhysicsSandBox
 		addEventDelegate(ZE::Event_KEY_UP, &ControlledComponent::handleKeyUpEvent);
 		addEventDelegate(ZE::Event_KEY_DOWN, &ControlledComponent::handleKeyDownEvent);
 
-		fromFile(ZE::GetResourcePath("PhysicsSandBox/Mesh/Crate.meshz").c_str());
+		loadMeshFromFile(ZE::GetResourcePath("PhysicsSandBox/Mesh/Crate.meshz").c_str());
 
 		m_bStatic = false;
 		m_physicsEnabled = true;

@@ -133,9 +133,8 @@ namespace ZE
 				y = fileReader->readNextFloat();
 				z = fileReader->readNextFloat();
 
-				pComp->m_worldTransform.rotateAroundU(DegToRad(x));
-				pComp->m_worldTransform.rotateAroundV(DegToRad(y));
-				pComp->m_worldTransform.rotateAroundN(DegToRad(z));
+				Vector3 rotationInDeg(x, y, z);
+				pComp->rotateInDeg(rotationInDeg);
 			}
 			else if (StringFunc::Compare(buff, "S") == 0)
 			{
@@ -145,7 +144,7 @@ namespace ZE
 				scale.m_y = fileReader->readNextFloat();
 				scale.m_z = fileReader->readNextFloat();
 
-				pComp->m_worldTransform.scale(scale);
+				pComp->setScale(scale);
 			}
 			else if (StringFunc::Compare(buff, "T") == 0)
 			{
@@ -155,7 +154,7 @@ namespace ZE
 				pos.m_y = fileReader->readNextFloat();
 				pos.m_z = fileReader->readNextFloat();
 
-				pComp->m_worldTransform.setPos(pos);
+				pComp->setWorldPosition(pos);
 			}
 			else if (StringFunc::Compare(buff, "Mesh") == 0)
 			{
@@ -163,7 +162,7 @@ namespace ZE
 				fileReader->readNextString(buff);
 				if (RenderComponent* pRendComp = (RenderComponent*) pComp)
 				{
-					pRendComp->fromFile(GetResourcePath(buff).c_str());
+					pRendComp->loadMeshFromFile(GetResourcePath(buff).c_str());
 				}
 			}
 			else if (StringFunc::Compare(buff, "LightType") == 0)
@@ -195,7 +194,7 @@ namespace ZE
 				fileReader->readNextString(buff);
 				if (RenderComponent* pRendComp = dynamic_cast<RenderComponent*>(pComp))
 				{
-					pRendComp->m_bStatic = StringFunc::Compare(buff, "true") != 0;
+					pRendComp->setStatic( StringFunc::Compare(buff, "true") != 0 );
 				}
 			}
 			else if (StringFunc::Compare(buff, "TriggerOnly") == 0)
@@ -210,27 +209,29 @@ namespace ZE
 			{
 				if (BoxComponent* pBoxComponent = dynamic_cast<BoxComponent*>(pComp))
 				{
-					pBoxComponent->m_halfExtent.setX(fileReader->readNextFloat());
-					pBoxComponent->m_halfExtent.setY(fileReader->readNextFloat());
-					pBoxComponent->m_halfExtent.setZ(fileReader->readNextFloat());
+					Vector3 halfExtent;
+					halfExtent.setX(fileReader->readNextFloat());
+					halfExtent.setY(fileReader->readNextFloat());
+					halfExtent.setZ(fileReader->readNextFloat());
+					pBoxComponent->setHalfExtent(halfExtent);
 				}
 			}
 			else if (StringFunc::Compare(buff, "Radius") == 0)
 			{
 				if (SphereComponent* pSphereComp = dynamic_cast<SphereComponent*>(pComp))
 				{
-					pSphereComp->m_radius = fileReader->readNextFloat();
+					pSphereComp->setRadius( fileReader->readNextFloat() );
 				}
 				else if (CapsuleComponent* pCapsuleComp = dynamic_cast<CapsuleComponent*>(pComp))
 				{
-					pCapsuleComp->m_radius = fileReader->readNextFloat();
+					pCapsuleComp->setRadius( fileReader->readNextFloat() );
 				}
 			}
 			else if (StringFunc::Compare(buff, "Height") == 0)
 			{
 				if (CapsuleComponent* pCapsuleComp = dynamic_cast<CapsuleComponent*>(pComp))
 				{
-					pCapsuleComp->m_height = fileReader->readNextFloat();
+					pCapsuleComp->setHeight( fileReader->readNextFloat() );
 				}
 			}
 			else if (StringFunc::Compare(buff, "Animation") == 0)

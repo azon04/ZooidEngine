@@ -15,8 +15,12 @@ namespace ZE
 
 		virtual ~SphereComponent() {}
 
+		// CollisionComponent  implementation
 		virtual void setupPhysics() override;
 		
+		void setRadius(Float32 _radius) { m_radius = _radius; }
+		FORCEINLINE Float32 getRadius() const { return m_radius; }
+	private:
 		Float32 m_radius;
 	};
 }

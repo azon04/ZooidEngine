@@ -15,7 +15,7 @@ namespace SpaceShooter
 	void SpaceShip::setupComponent()
 	{
 
-		this->fromFile(ZE::GetResourcePath("SpaceShooter/Mesh/Starship.meshz").c_str());
+		this->loadMeshFromFile(ZE::GetResourcePath("SpaceShooter/Mesh/Starship.meshz").c_str());
 
 		ZE::RenderComponent::setupComponent();
 		addEventDelegate(ZE::Event_KEY_DOWN, &SpaceShooter::SpaceShip::handleMovementInput);

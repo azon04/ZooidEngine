@@ -25,8 +25,6 @@ namespace ZE
 			s_instance->m_gameContext = _gameContext;
 		}
 
-		s_instance->loadResourceAsync(GetPackageAssetPath("Basic", "Texture", "container2.png").c_str());
-
 		s_instance->doLoadUnload();
 	}
 
@@ -37,8 +35,6 @@ namespace ZE
 
 	void TextureManager::Destroy()
 	{
-		s_instance->unloadResource(GetPackageAssetPath("Basic", "Texture", "container2.png").c_str());
-
 		s_instance->unloadResources();
 	}
 

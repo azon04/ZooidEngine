@@ -3,12 +3,12 @@
 
 #include "GameObjectModel/Component.h"
 
-namespace ZE {
-	
+namespace ZE 
+{
 	class CameraComponent;
 	
-	class CameraManager : public Component {
-
+	class CameraManager : public Component 
+	{
 		DEFINE_CLASS(CameraManager)
 	public:
 		CameraManager(GameContext* gameContext) : Component(gameContext) {}
@@ -16,7 +16,6 @@ namespace ZE {
 
 		static void Init(GameContext* _gameContext);
 		static void Destroy();
-
 		static CameraManager* GetInstance();
 
 		CameraComponent* getCurrentCamera() const { return m_currentCamera; }
@@ -25,7 +24,6 @@ namespace ZE {
 		static CameraManager* s_instance;
 		
 		Array<Handle, true> m_cameras;
-		
 		CameraComponent* m_currentCamera;
 	};
 }

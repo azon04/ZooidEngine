@@ -154,8 +154,6 @@ namespace ZE
 		}
 
 		_gameContext->getRenderer()->ReleaseRenderThreadOwnership();
-
-		getInstance()->loadResource(GetPackageAssetPath("Basic", "VertexBuffer", "Cube.vbuff").c_str());
 	}
 
 	void BufferManager::Destroy()

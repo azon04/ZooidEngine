@@ -5,13 +5,15 @@
 
 namespace ZE
 {
-	class CameraComponent : public SceneComponent {
+	class CameraComponent : public SceneComponent 
+	{
 		DEFINE_CLASS(CameraComponent)
 
 	public:
 		CameraComponent(GameContext* gameContext);
 		virtual ~CameraComponent() {}
 
+		// Get view matrix for camera
 		void getViewMatrix(Matrix4x4& _outMat);
 
 		ZE::Float32 m_near;
