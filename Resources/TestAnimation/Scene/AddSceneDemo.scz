@@ -1,0 +1,45 @@
+SceneName AddSceneDemo
+FileVersion 1.0
+ComponentCount 6
+RenderComponent Skin1_Aim
+BEGIN
+Animation TestAnimation/Animation/RifleAimingIdle_Baked_Take001.animz 1 1.0
+Mesh TestAnimation/Mesh/Walking_baked_0.meshz
+S 0.01 0.01 0.01
+T 4.0 0.0 0.0
+END
+RenderComponent Skin2_Aim
+BEGIN
+Animation TestAnimation/Animation/RifleAimingIdle_Baked_Take001.animz 1 1.0
+Mesh TestAnimation/Mesh/Walking_baked_1.meshz
+S 0.01 0.01 0.01
+T 4.0 0.0 0.0
+END
+RenderComponent Skin1_AimLeftAdd
+BEGIN
+AnimationState TestAnimation/Animation/LeftAddAnimStateDef.asz
+Mesh TestAnimation/Mesh/Walking_baked_0.meshz
+S 0.01 0.01 0.01
+T 5.0 0.0 0.0
+END
+RenderComponent Skin2_AimLeftAdd
+BEGIN
+AnimationState TestAnimation/Animation/LeftAddAnimStateDef.asz
+Mesh TestAnimation/Mesh/Walking_baked_1.meshz
+S 0.01 0.01 0.01
+T 5.0 0.0 0.0
+END
+RenderComponent Skin1_AimLRightAdd
+BEGIN
+AnimationState TestAnimation/Animation/RightAddAnimStateDef.asz
+Mesh TestAnimation/Mesh/Walking_baked_0.meshz
+S 0.01 0.01 0.01
+T 3.0 0.0 0.0
+END
+RenderComponent Skin2_AimRightAdd
+BEGIN
+AnimationState TestAnimation/Animation/RightAddAnimStateDef.asz
+Mesh TestAnimation/Mesh/Walking_baked_1.meshz
+S 0.01 0.01 0.01
+T 3.0 0.0 0.0
+END

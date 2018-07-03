@@ -1,0 +1,31 @@
+SceneName BlendSceneDemo_Crouch
+FileVersion 1.0
+ComponentCount 4
+RenderComponent Skin1_Crouch
+BEGIN
+Animation TestAnimation/Animation/MaleCrouchPose_Baked_Take001.animz 1 1.0
+Mesh TestAnimation/Mesh/Walking_baked_0.meshz
+S 0.01 0.01 0.01
+T 7.0 0.0 0.0
+END
+RenderComponent Skin2_Crouch
+BEGIN
+Animation TestAnimation/Animation/MaleCrouchPose_Baked_Take001.animz 1 1.0
+Mesh TestAnimation/Mesh/Walking_baked_1.meshz
+S 0.01 0.01 0.01
+T 7.0 0.0 0.0
+END
+RenderComponent Skin1_CrouchBlendState
+BEGIN
+AnimationState TestAnimation/Animation/CrouchAnimStateDef.asz
+Mesh TestAnimation/Mesh/Walking_baked_0.meshz
+S 0.01 0.01 0.01
+T 8.0 0.0 0.0
+END
+RenderComponent Skin2_CrouchBlendState
+BEGIN
+AnimationState TestAnimation/Animation/CrouchAnimStateDef.asz
+Mesh TestAnimation/Mesh/Walking_baked_1.meshz
+S 0.01 0.01 0.01
+T 8.0 0.0 0.0
+END
