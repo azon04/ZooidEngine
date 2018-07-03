@@ -18,27 +18,10 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="MainFunction\Main.cpp" />
-    <ClCompile Include="MainFunction\MainFunctions.cpp" />
-    <ClCompile Include="Scene\LaserBeam.cpp" />
-    <ClCompile Include="Scene\Meteor.cpp" />
-    <ClCompile Include="Scene\MeteorManager.cpp" />
-    <ClCompile Include="Scene\PlayerTopCamera.cpp" />
-    <ClCompile Include="Scene\SpaceShip.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="MainFunction\MainFunctions.h" />
-    <ClInclude Include="Scene\LaserBeam.h" />
-    <ClInclude Include="Scene\Meteor.h" />
-    <ClInclude Include="Scene\MeteorManager.h" />
-    <ClInclude Include="Scene\PlayerTopCamera.h" />
-    <ClInclude Include="Scene\SpaceShip.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{C135D1DC-F334-4497-97A6-AC77E83759BE}</ProjectGuid>
+    <ProjectGuid>{C764F814-A223-480C-807A-32E4FCEDDEB7}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>SpaceShooter</RootNamespace>
+    <RootNamespace>ModelParser</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -87,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>false</LinkIncremental>
-    <ExecutablePath>$(Physx)\..\PxShared\bin\vc14win32;$(Physx)\Bin\vc14win32;$(ExecutablePath)</ExecutablePath>
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)Dependencies\Builds\assimp\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -106,20 +89,16 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;$(SolutionDir)ZooidEngine\;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>LowLevelAABBDEBUG.lib;LowLevelClothDEBUG.lib;LowLevelDEBUG.lib;LowLevelDynamicsDEBUG.lib;LowLevelParticlesDEBUG.lib;PhysX3CharacterKinematicDEBUG_x86.lib;PhysX3CommonDEBUG_x86.lib;PhysX3CookingDEBUG_x86.lib;PhysX3DEBUG_x86.lib;PhysX3ExtensionsDEBUG.lib;PhysX3VehicleDEBUG.lib;SceneQueryDEBUG.lib;SimulationControllerDEBUG.lib;PsFastXmlDEBUG_x86.lib;PxFoundationDEBUG_x86.lib;PxPvdSDKDEBUG_x86.lib;PxTaskDEBUG_x86.lib;ZooidEngine.lib;glew32.lib;glfw3.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)glew-2.0.0\lib\Release\Win32;$(Physx)\Lib\vc14win32;$(Physx)\..\PxShared\lib\vc14win32;$(SolutionDir)glfw\Debug\lib-vc2015;$(SolutionDir)$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\Builds\assimp\Debug\x86-vs140;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <ProjectReference>
-      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
-    </ProjectReference>
+    <PostBuildEvent>
+      <Command>XCOPY "$(SolutionDir)Dependencies\Builds\assimp\Debug\x86-vs140\*.DLL" "$(TargetDir)" /D /K /Y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -168,6 +147,17 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Common\Dir.cpp" />
+    <ClCompile Include="..\Common\StringHelper.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="ModelParser.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Common\Dir.h" />
+    <ClInclude Include="..\Common\StringHelper.h" />
+    <ClInclude Include="ModelParser.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
