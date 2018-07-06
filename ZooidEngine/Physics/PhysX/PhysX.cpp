@@ -3,6 +3,7 @@
 #include "Memory/MemoryHelper.h"
 #include "GameObjectModel/Component.h"
 #include "Physics/PhysicsEvents.h"
+#include "Renderer/DebugRenderer.h"
 
 #include "PxPhysicsAPI.h"
 
@@ -130,6 +131,12 @@ namespace ZE
 		}
 
 		m_defaultPhysicsMaterial = m_physxPhysics->createMaterial(0.5f, 0.5f, 0.6f);
+
+		// Debug Visualization Setup
+		m_physxScene->setVisualizationParameter(PxVisualizationParameter::eSCALE, 1.0f);
+		m_physxScene->setVisualizationParameter(PxVisualizationParameter::eCOLLISION_SHAPES, 1.0f);
+		m_physxScene->setVisualizationParameter(PxVisualizationParameter::eACTOR_AXES, 1.0f);
+
 	}
 
 	void PhysXEngine::PreUpdate()
@@ -191,7 +198,24 @@ namespace ZE
 
 	void PhysXEngine::DrawDebug()
 	{
+		const PxRenderBuffer& rb = m_physxScene->getRenderBuffer();
+		for (UInt32 i = 0; i < rb.getNbLines(); ++i)
+		{
+			const PxDebugLine& line = rb.getLines()[i];
+			// Extract color UInt ARGB
+			UInt32 red = (line.color0 & 0x00ff0000) >> 16;
+			UInt32 green = (line.color0 & 0x0000ff00) >> 8;
+			UInt32 blue = (line.color0 & 0x000000ff);
 
+			Vector3 color;
+			color.setX(red / 255.0f);
+			color.setY(green / 255.0f);
+			color.setZ(blue / 255.0f);
+
+			DebugRenderer::GetInstance()->drawLine(Vector3(line.pos0.x, line.pos0.y, line.pos0.z),
+				Vector3(line.pos1.x, line.pos1.y, line.pos1.z),
+				color);
+		}
 	}
 
 	void PhysXEngine::Destroy()

@@ -221,6 +221,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClInclude Include="Platform\Thread.h" />
     <ClInclude Include="Renderer\BufferData.h" />
     <ClInclude Include="Renderer\BufferLayout.h" />
+    <ClInclude Include="Renderer\DebugRenderer.h" />
     <ClInclude Include="Renderer\GL\GLBufferArray.h" />
     <ClInclude Include="Renderer\GL\GLBufferData.h" />
     <ClInclude Include="Renderer\GL\GLRenderer.h" />
@@ -317,6 +318,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClCompile Include="Platform\Thread.cpp" />
     <ClCompile Include="Renderer\BufferData.cpp" />
     <ClCompile Include="Renderer\BufferLayout.cpp" />
+    <ClCompile Include="Renderer\DebugRenderer.cpp" />
     <ClCompile Include="Renderer\GL\GLBufferArray.cpp" />
     <ClCompile Include="Renderer\GL\GLBufferData.cpp" />
     <ClCompile Include="Renderer\GL\GLRenderer.cpp" />

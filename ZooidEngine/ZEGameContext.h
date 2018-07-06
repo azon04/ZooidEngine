@@ -21,6 +21,7 @@ namespace ZE
 	class CameraManager;
 	class PhysicsZooid;
 	class IPhysics;
+	class DebugRenderer;
 
 	class GameContext {
 	public:
@@ -47,7 +48,8 @@ namespace ZE
 		MeshManager* m_meshManager;
 
 		SceneManager* m_sceneManager;
-		
+		DebugRenderer* m_debugRenderer;
+
 		Thread* m_drawThread;
 
 		Timer m_mainTimer;
@@ -68,6 +70,7 @@ namespace ZE
 		FORCEINLINE MaterialManager* getMaterialManager() const { return m_materialManager; }
 		FORCEINLINE MeshManager* getMeshManager() const { return m_meshManager; }
 		FORCEINLINE SceneManager* getSceneManager() const { return m_sceneManager; }
+		FORCEINLINE DebugRenderer* getDebugRenderer() const { return m_debugRenderer; }
 
 		// Physics
 		FORCEINLINE PhysicsZooid* getPhysicsZooid() const { return m_physicsZooid; }

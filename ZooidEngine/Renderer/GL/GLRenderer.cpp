@@ -127,12 +127,12 @@ namespace ZE
 	{
 		if (drawList->m_mainConstantBuffer)
 		{
-			drawList->m_mainConstantBuffer->bind();
+			drawList->m_mainConstantBuffer->bindAndRefresh();
 		}
 
 		if (drawList->m_lightConstantBuffer)
 		{
-			drawList->m_lightConstantBuffer->bind();
+			drawList->m_lightConstantBuffer->bindAndRefresh();
 		}
 
 		for (int i = 0; i < drawList->m_size; ++i)

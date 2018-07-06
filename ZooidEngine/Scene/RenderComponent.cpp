@@ -7,6 +7,7 @@
 #include "Renderer/ShaderAction.h"
 #include "Renderer/IShader.h"
 #include "ResourceManagers/ShaderManager.h"
+#include "Renderer/DebugRenderer.h"
 
 #include "Physics/Physics.h"
 #include "Physics/PhysicsBody.h"
@@ -77,6 +78,17 @@ namespace ZE
 					StringFunc::PrintToString(buffer, 32, "boneMats[%d]", i);
 					shaderAction->setShaderMatVar(buffer, jointPallete);
 				}
+
+				// Draw Skeleton Debug
+#if DEBUG_SKELETON
+				for (int i = 0; i < pSkeletonState->getSkeleton()->getJointCount(); i++)
+				{
+					Matrix4x4 bindPose;
+					pSkeletonState->getBindPoseMatrix(i, bindPose);
+					DebugRenderer::GetInstance()->drawMatrixBasis(bindPose * m_worldTransform);
+				}
+#endif
+
 			}
 
 			if (m_bHighlight)

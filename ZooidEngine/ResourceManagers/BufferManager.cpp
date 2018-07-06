@@ -209,10 +209,14 @@ namespace ZE
 		IGPUBufferData* indexBufferGPU = createGPUBufferFromBuffer(_indexBuffer);
 		IGPUBufferData* computeGPUBuffer = createGPUBufferFromBuffer(_gpuBuffer);
 	
+		return createBufferArray(vertexBufferGPU, indexBufferGPU, computeGPUBuffer);
+	}
+
+	ZE::Handle BufferManager::createBufferArray(IGPUBufferData* _vertexBuffer, IGPUBufferData* _indexBuffer, IGPUBufferData* _conputeBuffer)
+	{
 		Handle handle = m_gameContext->getRenderZooid()->CreateRenderBufferArray();
 		IGPUBufferArray* bufferArray = handle.getObject<IGPUBufferArray>();
-		bufferArray->SetupBufferArray(vertexBufferGPU, indexBufferGPU, computeGPUBuffer);
-
+		bufferArray->SetupBufferArray(_vertexBuffer, _indexBuffer, _conputeBuffer);
 
 		m_GPUBufferArrays.push_back(bufferArray);
 		return handle;

@@ -25,6 +25,8 @@ namespace ZE
 		virtual void bind() override;
 		virtual void unbind() override;
 		virtual void release() override;
+		virtual void refresh() override;
+		virtual void bindAndRefresh() override;
 
 		FORCEINLINE GLuint getBBO() const { return m_BBO; }
 

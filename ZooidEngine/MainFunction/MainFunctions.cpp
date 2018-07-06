@@ -29,6 +29,8 @@
 #include "ResourceManagers/SkeletonManager.h"
 #include "ResourceManagers/AnimationManager.h"
 
+#include "Renderer/DebugRenderer.h"
+
 // TODO for NVIDIA Optimus :  This enable the program to use NVIDIA instead of integrated Intel graphics
 #if WIN32 || WIN64
 extern "C"
@@ -116,6 +118,14 @@ namespace ZE
 			_gameContext->m_rootComponent->setupComponent();
 		}
 
+		// Init Debug Renderer
+		{
+			ZEINFO("Initializing Debug Renderer...");
+			DebugRenderer::Init(_gameContext);
+			_gameContext->m_debugRenderer = DebugRenderer::GetInstance();
+			_gameContext->m_mainEventDispatcher->addChild(_gameContext->m_debugRenderer);
+		}
+
 		// Create SceneManager
 		{
 			SceneManager::Init(_gameContext);
@@ -175,11 +185,13 @@ namespace ZE
 		
 		_gameContext->m_physicsZooid->Destroy();
 		
+		DebugRenderer::Destroy();
+		AnimationManager::Destroy();
+		SkeletonManager::Destroy();
+		
 		BufferManager::Destroy();
 		ShaderManager::Destroy();
 		TextureManager::Destroy();
-		AnimationManager::Destroy();
-		SkeletonManager::Destroy();
 
 		_gameContext->m_renderZooid->Destroy();
 
@@ -220,6 +232,7 @@ namespace ZE
 			_gameContext->getPhysics()->PreUpdate();
 			_gameContext->getPhysics()->Update(deltaTime);
 			_gameContext->getPhysics()->PostUpdate();
+			_gameContext->getPhysics()->DrawDebug();
 		}
 
 #if ZE_RENDER_MULTITHREAD
@@ -227,14 +240,7 @@ namespace ZE
 #endif
 
 		// Draw Base Lines
-		{
-			ZE::ShaderAction& shaderAction = _gameContext->getDrawList()->getNextShaderAction();
-			ZE::IShaderChain* shader = ZE::ShaderManager::GetInstance()->getShaderChain(2);
-
-			shaderAction.setShaderAndBuffer(shader, ZE::BufferManager::getInstance()->getBufferArray(2));
-			shaderAction.setShaderMatVar("modelMat", Matrix4x4());
-			shaderAction.setConstantsBlockBuffer("shader_data", _gameContext->getDrawList()->m_mainConstantBuffer);
-		}
+		_gameContext->getDebugRenderer()->drawMatrixBasis(Matrix4x4());
 
 		// Handle Event_GATHER_RENDER
 		{

@@ -417,6 +417,9 @@
     <ClInclude Include="Renderer\GL\GLShader.h">
       <Filter>Renderer\GL</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer\DebugRenderer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -667,6 +670,9 @@
     </ClCompile>
     <ClCompile Include="Renderer\GL\GLShader.cpp">
       <Filter>Renderer\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\DebugRenderer.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
