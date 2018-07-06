@@ -129,6 +129,9 @@ public:
 	// disable/enable ShaderFeature, see ShaderFeature
 	void addShaderFeature(UInt32 _feature, bool _enabled);
 
+	// Override the vertex size (so it will not draw all vertex inside the buffer array)
+	void setVertexSize(Int32 _overrideSize) { m_vertexSize = _overrideSize; }
+
 	FORCEINLINE Int32 getVertexSize() const { return m_vertexSize; }
 	FORCEINLINE UInt16 getShaderActionType() const { return m_shaderActionType; }
 

@@ -128,7 +128,7 @@ namespace ZE
 		virtual void PreUpdate() = 0;
 
 		// Update the physics states
-		virtual void Update(float _deltaMS) = 0;
+		virtual void Update(float _deltaSeconds) = 0;
 
 		// PostUpdate after physics states changed
 		virtual void PostUpdate() = 0;

@@ -44,6 +44,12 @@ public:
 	// Release GPU buffer data
 	virtual void release() {};
 
+	// Refresh data to GPU
+	virtual void refresh() = 0;
+
+	// Bind and refresh
+	virtual void bindAndRefresh() = 0;
+
 	// Set if the buffer is static
 	void setStatic(bool _bStatic) { m_isStatic = _bStatic; }
 

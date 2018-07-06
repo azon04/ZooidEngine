@@ -43,6 +43,8 @@ public:
 	// Create buffer array from vertex buffer, index buffer, and gpu buffer
 	Handle createBufferArray(BufferData* _vertexBuffer, BufferData* _indexBuffer, BufferData* _gpuBuffer);
 
+	Handle createBufferArray(IGPUBufferData* _vertexBuffer, IGPUBufferData* _indexBuffer, IGPUBufferData* _buffer);
+
 	// ResourceManager override
 	virtual Handle loadResource_Internal(const char* resourceFilePath) override;
 	virtual void preUnloadResource(Resource* _resource) override;
