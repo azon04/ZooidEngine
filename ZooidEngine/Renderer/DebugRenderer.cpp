@@ -45,6 +45,16 @@ namespace ZE
 
 	}
 
+	void DebugRenderer::DrawMatrixBasis(Matrix4x4& mats)
+	{
+		s_instance->drawMatrixBasis(mats);
+	}
+
+	void DebugRenderer::DrawLine(const Vector3& p1, const Vector3& p2, const Vector3& color)
+	{
+		s_instance->drawLine(p1, p2, color);
+	}
+
 	void DebugRenderer::setupComponent()
 	{
 		Component::setupComponent();
@@ -64,7 +74,7 @@ namespace ZE
 			shaderAction.setShaderMatVar("modelMat", Matrix4x4());
 			shaderAction.setConstantsBlockBuffer("shader_data", m_gameContext->getDrawList()->m_mainConstantBuffer);
 
-			// Updat Line data
+			// Update Line data
 			m_gameContext->getRenderer()->AcquireRenderThreadOwnership();
 
 			m_lineGPUBufferData->refresh();

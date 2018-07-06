@@ -253,7 +253,7 @@ public:
 		{
 			float v[3];
 
-			int i = 0, j, k;
+			int i = 0;
 			for (int d = 1; d < 3; d++) 
 			{
 				if (m_data[d][d] > m_data[i][i]) 
@@ -262,8 +262,8 @@ public:
 				}
 			}
 
-			j = (i + 1) % 3;
-			k = (k + 1) % 3;
+			int j = (i + 1) % 3;
+			int k = (k + 1) % 3;
 
 			v[i] = sqrt(m_data[i][i] - m_data[j][j] - m_data[k][k] + 1) * 0.5f;
 			

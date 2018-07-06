@@ -78,9 +78,9 @@ namespace ZE
 
 		if (m_isCurrentDragged)
 		{
-			m_currentDragTime += pEventUpdate->m_deltaMilliseconds;
+			m_currentDragTime += pEventUpdate->m_deltaSeconds;
 
-			const float deltaTime = 10.0f;
+			const float deltaTime = 0.01f;
 			if (m_currentDragTime > deltaTime)
 			{
 				Handle handle("MouseDragInput", sizeof(Event_MOUSE_DRAG));

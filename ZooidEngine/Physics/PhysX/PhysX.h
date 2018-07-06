@@ -25,7 +25,7 @@ namespace ZE
 		// IPhysics Implementation
 		virtual void Setup() override;
 		virtual void PreUpdate() override;
-		virtual void Update(float _deltaMS) override;
+		virtual void Update(float _deltaSeconds) override;
 		virtual void PostUpdate() override;
 		virtual void DrawDebug() override;
 		virtual void Destroy() override;

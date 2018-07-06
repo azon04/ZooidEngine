@@ -135,7 +135,7 @@ namespace ZE
 		// Debug Visualization Setup
 		m_physxScene->setVisualizationParameter(PxVisualizationParameter::eSCALE, 1.0f);
 		m_physxScene->setVisualizationParameter(PxVisualizationParameter::eCOLLISION_SHAPES, 1.0f);
-		m_physxScene->setVisualizationParameter(PxVisualizationParameter::eACTOR_AXES, 1.0f);
+		//m_physxScene->setVisualizationParameter(PxVisualizationParameter::eACTOR_AXES, 1.0f);
 
 	}
 
@@ -144,10 +144,10 @@ namespace ZE
 
 	}
 
-	void PhysXEngine::Update(float _deltaMS)
+	void PhysXEngine::Update(float _deltaSeconds)
 	{
 		// Pick the smallest one, to make sure the simulation is stable
-		float elapsedTime = _deltaMS / 1000.0f > 1.0f / 60.0f ? 1.0f / 60.0f : _deltaMS / 1000.0f;
+		float elapsedTime = _deltaSeconds > 1.0f / 60.0f ? 1.0f / 60.0f : _deltaSeconds;
 		m_physxScene->simulate(elapsedTime);
 		m_physxScene->fetchResults(true);
 	}
@@ -212,7 +212,7 @@ namespace ZE
 			color.setY(green / 255.0f);
 			color.setZ(blue / 255.0f);
 
-			DebugRenderer::GetInstance()->drawLine(Vector3(line.pos0.x, line.pos0.y, line.pos0.z),
+			DebugRenderer::DrawLine(Vector3(line.pos0.x, line.pos0.y, line.pos0.z),
 				Vector3(line.pos1.x, line.pos1.y, line.pos1.z),
 				color);
 		}

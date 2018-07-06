@@ -85,7 +85,7 @@ namespace ZE
 				{
 					Matrix4x4 bindPose;
 					pSkeletonState->getBindPoseMatrix(i, bindPose);
-					DebugRenderer::GetInstance()->drawMatrixBasis(bindPose * m_worldTransform);
+					DebugRenderer::DrawMatrixBasis(bindPose * m_worldTransform);
 				}
 #endif
 

@@ -201,6 +201,7 @@ namespace ZE
 	void MainThreadJob(GameContext* _gameContext)
 	{
 		double deltaTime = _gameContext->m_mainTimer.ResetAndGetDeltaMS();
+		float deltaSeconds = static_cast<Float32>(deltaTime * 0.001f);
 
 		ZELOG(LOG_GAME, Log, "Delta Time : %.2f ms", deltaTime);
 
@@ -209,7 +210,7 @@ namespace ZE
 			ZE::Handle handleUpdate("EventUpdate", sizeof(ZE::Event_UPDATE));
 			ZE::Event_UPDATE* eventUpdate = new(handleUpdate) ZE::Event_UPDATE();
 			eventUpdate->m_deltaMilliseconds = deltaTime;
-			eventUpdate->m_deltaSeconds = deltaTime * 0.001f;
+			eventUpdate->m_deltaSeconds = deltaSeconds;
 			_gameContext->getEventDispatcher()->handleEvent(eventUpdate);
 			_gameContext->getInputManager()->handleEvent(eventUpdate);
 			handleUpdate.release();
@@ -230,7 +231,7 @@ namespace ZE
 		if (_gameContext->getPhysics())
 		{
 			_gameContext->getPhysics()->PreUpdate();
-			_gameContext->getPhysics()->Update(deltaTime);
+			_gameContext->getPhysics()->Update(deltaSeconds);
 			_gameContext->getPhysics()->PostUpdate();
 			_gameContext->getPhysics()->DrawDebug();
 		}
@@ -240,7 +241,7 @@ namespace ZE
 #endif
 
 		// Draw Base Lines
-		_gameContext->getDebugRenderer()->drawMatrixBasis(Matrix4x4());
+		DebugRenderer::DrawMatrixBasis(Matrix4x4());
 
 		// Handle Event_GATHER_RENDER
 		{

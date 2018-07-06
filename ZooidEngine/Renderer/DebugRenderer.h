@@ -38,11 +38,22 @@ namespace ZE
 		static void Destroy();
 		static DebugRenderer* GetInstance() { return s_instance; }
 
-		virtual void setupComponent();
+		// Draw Matrix Basis (Static call)
+		static void DrawMatrixBasis(Matrix4x4& mats);
+		
+		// Draw Line in 3D world (Static call)
+		static void DrawLine(const Vector3& p1, const Vector3& p2, const Vector3& color);
 
+		virtual void setupComponent() override;
+
+		// Handle Gather render event
 		void handleGatherRender(Event* _event);
 
+	protected:
+		// Draw Matrix Basis
 		void drawMatrixBasis(Matrix4x4& mats);
+		
+		// Draw Line in 3D world
 		void drawLine(const Vector3& p1, const Vector3& p2, const Vector3& color);
 	
 	private:
