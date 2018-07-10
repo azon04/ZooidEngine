@@ -89,7 +89,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;Z_RENDER_OPENGL;Z_PHYSICS_PHYSX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\glew-2.0.0\include;$(SolutionDir)Dependencies\glfw\include;$(Physx)\..\PxShared\include;$(Physx)\Include;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\glew-2.0.0\include;$(SolutionDir)Dependencies\glfw\include;$(SolutionDir)Dependencies\freetype-2.9.1\include;$(Physx)\..\PxShared\include;$(Physx)\Include;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessToFile>false</PreprocessToFile>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -109,6 +109,8 @@
       <Command>XCOPY "$(SolutionDir)Dependencies\glew-2.0.0\bin\Release\Win32\*.DLL" "$(TargetDir)" /D /K /Y
 XCOPY "$(SolutionDir)Dependencies\Builds\assimp\Debug\x86-vs140\*.DLL" "$(TargetDir)" /D /K /Y
 XCOPY "$(SolutionDir)Dependencies\Builds\assimp\Debug\x86-vs140\*.pdb" "$(TargetDir)" /D /K /Y
+XCOPY "$(SolutionDir)Dependencies\freetype-2.9.1\win32\lib-vc2015\debug\*.dll" "$(TargetDir)" /D /Y
+XCOPY "$(SolutionDir)Dependencies\freetype-2.9.1\win32\lib-vc2015\debug\*.pdb" "$(TargetDir)" /D /Y
 XCOPY "$(PhysX)\Bin\vc14win32\*DEBUG_x86.DLL" "$(TargetDir)" /D /K /Y
 XCOPY "$(PhysX)\Bin\vc14win32\nvToolsExt32_1.DLL" "$(TargetDir)" /D /K /Y
 XCOPY "$(PhysX)\Bin\vc14win32\PhysXDevice32.DLL" "$(TargetDir)" /D /K /Y
