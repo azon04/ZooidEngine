@@ -10,6 +10,7 @@
 #define BUFFER_LAYOUT_V3_C3_TC2 2
 #define BUFFER_LAYOUT_V3_N3_TC2 3
 #define BUFFER_LAYOUT_V3_N3_TC2_SKIN 4
+#define BUFFER_LAYOUT_V4 5
 
 namespace ZE 
 {

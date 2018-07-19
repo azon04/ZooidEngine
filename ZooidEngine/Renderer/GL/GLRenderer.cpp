@@ -281,8 +281,8 @@ namespace ZE
 
 	void GLRenderer::AcquireRenderThreadOwnership()
 	{
-		glfwMakeContextCurrent(m_window);
 		m_renderLock.lock();
+		glfwMakeContextCurrent(m_window);
 	}
 
 	void GLRenderer::ReleaseRenderThreadOwnership()

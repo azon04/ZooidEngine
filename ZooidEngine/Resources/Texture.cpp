@@ -30,6 +30,14 @@ namespace ZE
 		return textureHandle;
 	}
 
+	void Texture::loadFromBuffer(void* buffer, UInt32 _width, UInt32 _height, UInt32 _channel)
+	{
+		m_image = (UChar*)buffer;
+		m_width = _width;
+		m_height = _height;
+		m_channel = _channel;
+	}
+
 	void Texture::release()
 	{
 		// #TODO texture raw data is not part of Memory management since it's loaded using stbi, convert it later.

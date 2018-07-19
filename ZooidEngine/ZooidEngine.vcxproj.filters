@@ -94,6 +94,9 @@
     <Filter Include="Animation">
       <UniqueIdentifier>{9c518568-4226-40a7-8649-97a30f324d6e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\Shader2D">
+      <UniqueIdentifier>{d5228377-e70a-450e-aeb5-7dc99c2d4118}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ZEngine.h">
@@ -420,6 +423,12 @@
     <ClInclude Include="Renderer\DebugRenderer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Resources\Font.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManagers\FontManager.h">
+      <Filter>ResourceManagers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -674,6 +683,12 @@
     <ClCompile Include="Renderer\DebugRenderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Resources\Font.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManagers\FontManager.cpp">
+      <Filter>ResourceManagers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\TestGLVertexShader.vs">
@@ -711,6 +726,12 @@
     </None>
     <None Include="Shaders\DefaultGLSimpleLitSkin.vs">
       <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Shader2D\TextShader.frag">
+      <Filter>Shaders\Shader2D</Filter>
+    </None>
+    <None Include="Shaders\Shader2D\TextShader.vs">
+      <Filter>Shaders\Shader2D</Filter>
     </None>
   </ItemGroup>
 </Project>

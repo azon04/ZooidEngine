@@ -58,6 +58,7 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\ZooidEngineDebug-x86-Engine.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -98,8 +99,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)glfw\lib-vc2015;$(SolutionDir)glew-2.0.0\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>
@@ -241,12 +242,14 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClInclude Include="Renderer\IShader.h" />
     <ClInclude Include="Renderer\ShaderAction.h" />
     <ClInclude Include="Renderer\ShaderData.h" />
+    <ClInclude Include="ResourceManagers\FontManager.h" />
     <ClInclude Include="ResourceManagers\MaterialManager.h" />
     <ClInclude Include="ResourceManagers\MeshManager.h" />
     <ClInclude Include="ResourceManagers\ResourceManager.h" />
     <ClInclude Include="ResourceManagers\ShaderManager.h" />
     <ClInclude Include="ResourceManagers\SkeletonManager.h" />
     <ClInclude Include="ResourceManagers\TextureManager.h" />
+    <ClInclude Include="Resources\Font.h" />
     <ClInclude Include="Resources\IResource.h" />
     <ClInclude Include="Resources\Material.h" />
     <ClInclude Include="Resources\Mesh.h" />
@@ -337,12 +340,14 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClCompile Include="Renderer\IShader.cpp" />
     <ClCompile Include="Renderer\ShaderAction.cpp" />
     <ClCompile Include="Renderer\ShaderData.cpp" />
+    <ClCompile Include="ResourceManagers\FontManager.cpp" />
     <ClCompile Include="ResourceManagers\MaterialManager.cpp" />
     <ClCompile Include="ResourceManagers\MeshManager.cpp" />
     <ClCompile Include="ResourceManagers\ResourceManager.cpp" />
     <ClCompile Include="ResourceManagers\ShaderManager.cpp" />
     <ClCompile Include="ResourceManagers\SkeletonManager.cpp" />
     <ClCompile Include="ResourceManagers\TextureManager.cpp" />
+    <ClCompile Include="Resources\Font.cpp" />
     <ClCompile Include="Resources\Material.cpp" />
     <ClCompile Include="Resources\Mesh.cpp" />
     <ClCompile Include="Resources\Texture.cpp" />
@@ -378,6 +383,8 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <None Include="Shaders\DefaultGLSimpleLit_Blend.frag" />
     <None Include="Shaders\DefaultHighlightSimple.frag" />
     <None Include="Shaders\DefaultHighlightSimple.vs" />
+    <None Include="Shaders\Shader2D\TextShader.frag" />
+    <None Include="Shaders\Shader2D\TextShader.vs" />
     <None Include="Shaders\ShaderData.ubs" />
     <None Include="Shaders\TestGLFragmentShader.frag" />
     <None Include="Shaders\TestGLVertexShader.vs" />

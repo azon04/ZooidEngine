@@ -61,7 +61,18 @@ public:
 
 	ZE::Float32 getAngleInRad() 
 	{
-		return static_cast<float>(acos(m_w));
+		return static_cast<float>(acos(m_w)) * 2.0f;
+	}
+
+	void extractAxisAngle(Vector3& axis, ZE::Float32& _radAngle)
+	{
+		ZE::Float32 sinA = sqrt(1 - m_w * m_w);
+
+		axis.m_x = m_x / sinA;
+		axis.m_y = m_y / sinA;
+		axis.m_z = m_z / sinA;
+
+		_radAngle = getAngleInRad();
 	}
 
 	void updateAngleInRad(ZE::Float32 _radAngle) 
@@ -139,10 +150,18 @@ public:
 	ZE::Float32 getW() const { return m_w; }
 
 	// DATA MEMBER
-	ZE::Float32 m_x;
-	ZE::Float32 m_y;
-	ZE::Float32 m_z;
-	ZE::Float32 m_w;
+	union 
+	{
+		struct 
+		{
+			ZE::Float32 m_x;
+			ZE::Float32 m_y;
+			ZE::Float32 m_z;
+			ZE::Float32 m_w;
+		};
+
+		ZE::Float32 m_data[4];
+	};
 };
 
 FORCEINLINE Quaternion operator*(const ZE::Float32 scalar, const Quaternion& q)

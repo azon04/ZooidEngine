@@ -28,6 +28,7 @@
 
 #include "ResourceManagers/SkeletonManager.h"
 #include "ResourceManagers/AnimationManager.h"
+#include "ResourceManagers/FontManager.h"
 
 #include "Renderer/DebugRenderer.h"
 
@@ -118,6 +119,12 @@ namespace ZE
 			_gameContext->m_rootComponent->setupComponent();
 		}
 
+		// Init Font Manager
+		{
+			ZEINFO("Initializing Font Manager...");
+			FontManager::Init(_gameContext);
+		}
+
 		// Init Debug Renderer
 		{
 			ZEINFO("Initializing Debug Renderer...");
@@ -130,7 +137,6 @@ namespace ZE
 		{
 			SceneManager::Init(_gameContext);
 			_gameContext->m_sceneManager = SceneManager::GetInstance();
-
 		}
 
 		// Create Input Manager
@@ -186,6 +192,7 @@ namespace ZE
 		_gameContext->m_physicsZooid->Destroy();
 		
 		DebugRenderer::Destroy();
+		FontManager::Destroy();
 		AnimationManager::Destroy();
 		SkeletonManager::Destroy();
 		
