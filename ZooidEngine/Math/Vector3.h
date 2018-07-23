@@ -15,6 +15,10 @@ public:
 		m_x(_x), m_y(_y), m_z(_z)
 	{}
 
+	Vector3(float _f) :
+		Vector3(_f, _f, _f)
+	{}
+
 	Vector3(const Vector3& _v2) {
 		m_x = _v2.m_x;
 		m_y = _v2.m_y;

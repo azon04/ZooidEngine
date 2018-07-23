@@ -141,6 +141,11 @@ namespace ZE
 			return StringFunc::Compare(const_str(), text.const_str()) == 0;
 		}
 
+		bool operator!=(const String& text) const
+		{
+			return StringFunc::Compare(const_str(), text.const_str()) != 0;
+		}
+
 		char* const_str() const { return (char*)(m_handle.getObjectConst()); }
 		char* c_str() { return m_handle.getObject<char>(); }
 

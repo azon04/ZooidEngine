@@ -19,7 +19,7 @@ class BufferData
 {
 
 public:
-	BufferData(BufferType type) : m_type(type)
+	BufferData(BufferType type) : m_type(type), m_bStatic(true)
 	{}
 
 	virtual ~BufferData() {}
@@ -41,6 +41,9 @@ public:
 	UInt32 getCount() const { return m_count; }
 	UInt32 getSize() const { return m_size; }
 	BufferType getBufferType() const { return m_type; }
+	void setStaticBuffer(bool bStatic) { m_bStatic = bStatic; }
+	bool isStaticBuffer() const { return m_bStatic; }
+
 
 private:
 	Handle m_hData;
@@ -49,6 +52,7 @@ private:
 	UInt32 m_count;
 	UInt32 m_size;
 	BufferType m_type;
+	bool m_bStatic;
 };
 
 };

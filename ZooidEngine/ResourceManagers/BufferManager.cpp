@@ -161,12 +161,11 @@ namespace ZE
 		getInstance()->unloadResources();
 	}
 
-	ZE::IGPUBufferData* BufferManager::createGPUBufferFromBuffer(BufferData* _bufferData, bool _bStatic, bool _manualManage)
+	ZE::IGPUBufferData* BufferManager::createGPUBufferFromBuffer(BufferData* _bufferData, bool _manualManage)
 	{
 		if (!_bufferData) return nullptr;
 		Handle handle = m_gameContext->getRenderZooid()->CreateRenderBufferData();
 		IGPUBufferData* GPUBuffer = handle.getObject<IGPUBufferData>();
-		GPUBuffer->setStatic(_bStatic);
 		GPUBuffer->FromBufferData(_bufferData);
 
 		if (!_manualManage)
@@ -179,7 +178,7 @@ namespace ZE
 
 	ZE::IGPUBufferData* BufferManager::createConstantBufferFromBuffer(BufferData* _bufferData)
 	{
-		IGPUBufferData* bufferData = createGPUBufferFromBuffer(_bufferData, false, true);
+		IGPUBufferData* bufferData = createGPUBufferFromBuffer(_bufferData, true);
 		bufferData->m_bindingIndex = m_constantGPUBuffer.length();
 		m_constantGPUBuffer.push_back(bufferData);
 		return bufferData;
@@ -190,6 +189,7 @@ namespace ZE
 		Handle hBufferData("BasisBufferData", sizeof(BufferData));
 		BufferData* bufferData = new(hBufferData) BufferData(BufferType::UNIFORM_BUFFER);
 		bufferData->SetData(data, size);
+		bufferData->setStaticBuffer(false);
 
 		// Buffer Data need to be saved since the data will be changed eventually
 		m_buffers.push_back(bufferData);

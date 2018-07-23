@@ -44,6 +44,8 @@ namespace ZE
 		s_instance->loadResource("ZooidEngine/Shaders/DefaultGLSimpleLitSkin.vs");
 		s_instance->loadResource("ZooidEngine/Shaders/Shader2D/TextShader.vs");
 		s_instance->loadResource("ZooidEngine/Shaders/Shader2D/TextShader.frag");
+		s_instance->loadResource("ZooidEngine/Shaders/TextWorldShader.vs");
+		s_instance->loadResource("ZooidEngine/Shaders/TextWorldShader.frag");
 		s_instance->loadAllResource();
 
 
@@ -103,6 +105,13 @@ namespace ZE
 			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
 			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
 			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLitSkin.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLit_Blend.frag"), nullptr, nullptr);
+			s_instance->m_shaderChain.push_back(shaderChain);
+		}
+
+		{
+			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
+			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
+			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/TextWorldShader.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/TextWorldShader.frag"), nullptr, nullptr);
 			s_instance->m_shaderChain.push_back(shaderChain);
 		}
 

@@ -6,6 +6,7 @@
 namespace ZE
 {
 	class GameContext;
+	class Font;
 
 	class FontManager : public ResourceManager
 	{
@@ -15,6 +16,7 @@ namespace ZE
 		static void Init(GameContext* _gameContext);
 		static FontManager* GetInstance() { return s_instance; }
 		static void Destroy();
+		static Font* GetDefaultFont();
 
 	protected:
 		// ResourceManager Implementation

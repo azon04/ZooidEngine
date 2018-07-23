@@ -429,6 +429,12 @@
     <ClInclude Include="ResourceManagers\FontManager.h">
       <Filter>ResourceManagers</Filter>
     </ClInclude>
+    <ClInclude Include="Resources\TextMesh.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\TextComponent.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -689,6 +695,12 @@
     <ClCompile Include="ResourceManagers\FontManager.cpp">
       <Filter>ResourceManagers</Filter>
     </ClCompile>
+    <ClCompile Include="Resources\TextMesh.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\TextComponent.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\TestGLVertexShader.vs">
@@ -732,6 +744,12 @@
     </None>
     <None Include="Shaders\Shader2D\TextShader.vs">
       <Filter>Shaders\Shader2D</Filter>
+    </None>
+    <None Include="Shaders\TextWorldShader.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\TextWorldShader.frag">
+      <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -170,11 +170,19 @@ public:
 		setN(getN() * _scale);
 	}
 
+	// Add scale (Scale more)
 	void scale(Vector3 _vScale)
 	{
 		setU(getU() * _vScale.getX());
 		setV(getV() * _vScale.getY());
 		setN(getN() * _vScale.getZ());
+	}
+
+	// Override current Scale
+	void setScale(Vector3 _vScale)
+	{
+		normalizeScale();
+		scale(_vScale);
 	}
 
 	Vector3 extractScale()

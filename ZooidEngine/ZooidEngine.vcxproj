@@ -253,6 +253,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClInclude Include="Resources\IResource.h" />
     <ClInclude Include="Resources\Material.h" />
     <ClInclude Include="Resources\Mesh.h" />
+    <ClInclude Include="Resources\TextMesh.h" />
     <ClInclude Include="Resources\Texture.h" />
     <ClInclude Include="Scene\Actor.h" />
     <ClInclude Include="Scene\CameraComponent.h" />
@@ -266,6 +267,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClInclude Include="Scene\RenderComponent.h" />
     <ClInclude Include="Scene\SceneComponent.h" />
     <ClInclude Include="Scene\SceneManager.h" />
+    <ClInclude Include="Scene\TextComponent.h" />
     <ClInclude Include="UnitTest\ArrayTest.h" />
     <ClInclude Include="UnitTest\FileTest.h" />
     <ClInclude Include="UnitTest\HashMapTest.h" />
@@ -350,6 +352,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClCompile Include="Resources\Font.cpp" />
     <ClCompile Include="Resources\Material.cpp" />
     <ClCompile Include="Resources\Mesh.cpp" />
+    <ClCompile Include="Resources\TextMesh.cpp" />
     <ClCompile Include="Resources\Texture.cpp" />
     <ClCompile Include="Scene\Actor.cpp" />
     <ClCompile Include="Scene\CameraComponent.cpp" />
@@ -363,6 +366,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClCompile Include="Scene\RenderComponent.cpp" />
     <ClCompile Include="Scene\SceneComponent.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
+    <ClCompile Include="Scene\TextComponent.cpp" />
     <ClCompile Include="UnitTest\ArrayTest.cpp" />
     <ClCompile Include="UnitTest\FileTest.cpp" />
     <ClCompile Include="UnitTest\HashMapTest.cpp" />
@@ -388,6 +392,8 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <None Include="Shaders\ShaderData.ubs" />
     <None Include="Shaders\TestGLFragmentShader.frag" />
     <None Include="Shaders\TestGLVertexShader.vs" />
+    <None Include="Shaders\TextWorldShader.frag" />
+    <None Include="Shaders\TextWorldShader.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -7,6 +7,8 @@ namespace ZE
 	{
 		IGPUBufferData::FromBufferData(_bufferData);
 
+		m_isStatic = _bufferData->isStaticBuffer();
+
 		GLenum usage = m_isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW;
 		if (m_BBO == 0)
 		{

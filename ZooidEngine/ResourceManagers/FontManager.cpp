@@ -6,6 +6,7 @@ namespace ZE
 {
 	IMPLEMENT_CLASS_1(FontManager, ResourceManager);
 
+	const char* defaultFontPath = GET_PACKAGE_PATH("\\Basic\\Font\\open-sans\\OpenSans-Light.ttf");
 	void FontManager::Init(GameContext* _gameContext)
 	{
 		if (!s_instance)
@@ -15,7 +16,7 @@ namespace ZE
 			s_instance->m_gameContext = _gameContext;
 		}
 
-		s_instance->loadResource(GetPackageAssetPath("Basic", "Font", "open-sans\\OpenSans-Light.ttf").c_str());
+		s_instance->loadResource(defaultFontPath);
 
 		s_instance->doLoadUnload();
 	}
@@ -23,6 +24,11 @@ namespace ZE
 	void FontManager::Destroy()
 	{
 		s_instance->unloadResources();
+	}
+
+	ZE::Font* FontManager::GetDefaultFont()
+	{
+		return s_instance->getResource<Font>(defaultFontPath);
 	}
 
 	ZE::Handle FontManager::loadResource_Internal(const char* resourceFilePath)

@@ -1,12 +1,17 @@
 #include "Font.h"
-#include "Memory/MemoryHelper.h"
+
 #include "Texture.h"
+#include "ZEGameContext.h"
+
+#include "Memory/MemoryHelper.h"
+
 #include "Renderer/IGPUTexture.h"
 #include "Renderer/RenderZooid.h"
-#include "ZEGameContext.h"
 #include "Renderer/IRenderer.h"
 #include "Renderer/BufferData.h"
+#include "Renderer/BufferLayout.h"
 
+// Outer engine includes
 #include "ft2build.h"
 #include FT_FREETYPE_H
 
@@ -33,18 +38,19 @@ namespace ZE
 			return hRes;
 		}
 
-		const Int32 fontHeight = 48;
+		const Int32 fontHeight = 24;
 		FT_Set_Pixel_Sizes(face, 0, fontHeight);
 
 		Font* pFont = new(hRes) Font;
 
 		pFont->m_charFontDescs.reset(128);
+		pFont->m_fontHeight = fontHeight;
 
 		// First calculate the texture size
 		Vector2 TextureDimension(0.0f, 0.0f);
 		
 		const Int32 numberPerRow = 15;
-		const Int32 padding = 10;
+		const Float32 padding = 10.0f;
 		Vector2 curPos(padding, padding);
 		Int32 texSize = 0;
 		for (UInt8 c = 0; c < 128; c++)
@@ -59,25 +65,26 @@ namespace ZE
 
 			curPos.setX(curPos.getX() + padding + face->glyph->bitmap.width);
 
-			if (texSize < curPos.getX() + face->glyph->bitmap.width)
+			if (texSize < static_cast<Int32>(curPos.getX() + face->glyph->bitmap.width))
 			{
-				texSize = curPos.getX() + face->glyph->bitmap.width;
+				texSize = static_cast<Int32>(curPos.getX()) + face->glyph->bitmap.width;
 			}
 
 			if ((c+1) % numberPerRow == 0)
 			{
 				curPos.setX(padding);
-				curPos.setY(curPos.getY() + padding + fontHeight);
+				curPos.setY(curPos.getY() + padding + pFont->m_fontHeight);
 			}
 
-			if (texSize < curPos.getY() + fontHeight)
+			if (texSize < static_cast<Int32>(curPos.getY() + pFont->m_fontHeight))
 			{
-				texSize = curPos.getY() + fontHeight;
+				texSize = static_cast<Int32>(curPos.getY() + pFont->m_fontHeight);
 			}
 		}
 
 		// Texture size must be multiply by 4
 		texSize = (texSize / 4 + 1) * 4;
+		pFont->m_textureSize = texSize;
 
 		// Init memory for texture atlas
 		Handle hTAtlas("Font Atlas", sizeof(char) * texSize * texSize);
@@ -97,14 +104,13 @@ namespace ZE
 			}
 
 			CharFontDesc& charFontDesc = pFont->m_charFontDescs[c];
-			charFontDesc.Dimension = Vector2(face->glyph->bitmap.width, face->glyph->bitmap.rows);
+			charFontDesc.Dimension = Vector2(face->glyph->bitmap.width * 1.0f, face->glyph->bitmap.rows * 1.0f);
 			charFontDesc.Advance = face->glyph->advance.x >> 6;
-			charFontDesc.Bearing = Vector2(face->glyph->bitmap_left, face->glyph->bitmap_top);
+			charFontDesc.Bearing = Vector2(face->glyph->bitmap_left * 1.0f, face->glyph->bitmap_top * 1.0f);
 			charFontDesc.TexCoord.setX(charFontDesc.TexCoord.getX() / (Float32)texSize);
 			charFontDesc.TexCoord.setY(charFontDesc.TexCoord.getY() / (Float32)texSize);
-			charFontDesc.TexCoordSize = charFontDesc.Dimension / (Float32)texSize;
 
-			MemoryHelper::CopyTexture(pTAtlas, texSize, texSize, curPos.getX(), curPos.getY(), 
+			MemoryHelper::CopyTexture(pTAtlas, texSize, texSize, static_cast<Int32>(curPos.getX()), static_cast<Int32>(curPos.getY()), 
 				face->glyph->bitmap.buffer, face->glyph->bitmap.width, face->glyph->bitmap.rows, sizeof(char));
 			
 			curPos.setX(curPos.getX() + padding + face->glyph->bitmap.width);
@@ -116,6 +122,7 @@ namespace ZE
 			}
 		}
 
+		// #TODO this should be handled by TextureManager ???
 		Handle hTexture("Font Texture", sizeof(Texture));
 		Texture* pTexture = new(hTexture) Texture;
 		pTexture->loadFromBuffer(pTAtlas, texSize, texSize, 1);
@@ -166,9 +173,10 @@ namespace ZE
 		return calculateRenderTextLength(sText.const_str(), scale);
 	}
 
-	bool Font::generateBufferDataForText(const char* text, Float32 scale, BufferData* bufferData)
+	bool Font::generateBufferDataForText(const char* text, Float32 scale, BufferData* bufferData, bool bNormalize)
 	{
 		Handle handle = bufferData->getHandle();
+		bufferData->setBufferLayout(BUFFER_LAYOUT_V4);
 
 		Int32 textLength = StringFunc::Length(text);
 		size_t totalSize = textLength * (6 * (4 * sizeof(Float32)));
@@ -190,18 +198,21 @@ namespace ZE
 		UInt32 index = 0;
 		Float32 x = 0.0f;
 		Float32 y = 0.0f;
+		Float32 normalizeFactor = bNormalize ? 1.0f / Float32(m_fontHeight) : 1.0f;
 
-		for (UInt32 i = 0; i < textLength; i++)
+		for (Int32 i = 0; i < textLength; i++)
 		{
 			char c = text[i];
 			CharFontDesc& charFontDesc = m_charFontDescs[c];
 
-			Float32 xPos = x + charFontDesc.Bearing.getX() * scale;
-			Float32 yPos = y - (charFontDesc.Dimension.getY() - charFontDesc.Bearing.getY()) * scale;
+			Float32 xPos = x + charFontDesc.Bearing.getX() * scale * normalizeFactor ;
+			Float32 yPos = y - (charFontDesc.Dimension.getY() - charFontDesc.Bearing.getY()) * scale * normalizeFactor;
 
-			Float32 w = charFontDesc.Dimension.getX() * scale;
-			Float32 h = charFontDesc.Dimension.getY() * scale;
+			Float32 w = charFontDesc.Dimension.getX() * scale * normalizeFactor;
+			Float32 h = charFontDesc.Dimension.getY() * scale * normalizeFactor;
 			
+			Vector2 texCoordSize = charFontDesc.Dimension / static_cast<Float32>(m_textureSize);
+
 			pData[index++] = xPos;
 			pData[index++] = yPos + h;
 			pData[index++] = charFontDesc.TexCoord.getX();
@@ -210,12 +221,12 @@ namespace ZE
 			pData[index++] = xPos;
 			pData[index++] = yPos;
 			pData[index++] = charFontDesc.TexCoord.getX();
-			pData[index++] = charFontDesc.TexCoord.getY() + charFontDesc.TexCoordSize.getY();
+			pData[index++] = charFontDesc.TexCoord.getY() + texCoordSize.getY();
 
 			pData[index++] = xPos + w;
 			pData[index++] = yPos;
-			pData[index++] = charFontDesc.TexCoord.getX() + charFontDesc.TexCoordSize.getX();
-			pData[index++] = charFontDesc.TexCoord.getY() + charFontDesc.TexCoordSize.getY();
+			pData[index++] = charFontDesc.TexCoord.getX() + texCoordSize.getX();
+			pData[index++] = charFontDesc.TexCoord.getY() + texCoordSize.getY();
 
 			pData[index++] = xPos;
 			pData[index++] = yPos + h;
@@ -224,20 +235,29 @@ namespace ZE
 
 			pData[index++] = xPos + w;
 			pData[index++] = yPos;
-			pData[index++] = charFontDesc.TexCoord.getX() + charFontDesc.TexCoordSize.getX();
-			pData[index++] = charFontDesc.TexCoord.getY() + charFontDesc.TexCoordSize.getY();
+			pData[index++] = charFontDesc.TexCoord.getX() + texCoordSize.getX();
+			pData[index++] = charFontDesc.TexCoord.getY() + texCoordSize.getY();
 
 			pData[index++] = xPos + w;
 			pData[index++] = yPos + h;
-			pData[index++] = charFontDesc.TexCoord.getX() + charFontDesc.TexCoordSize.getX();
+			pData[index++] = charFontDesc.TexCoord.getX() + texCoordSize.getX();
 			pData[index++] = charFontDesc.TexCoord.getY();
 
-			x += charFontDesc.Advance * scale;
+			x += charFontDesc.Advance * scale * normalizeFactor;
 		}
 
 		bufferData->setData(handle, 4 * sizeof(Float32), 6 * textLength);
 
 		return true;
+	}
+
+	ZE::IGPUTexture* Font::getGPUTexture()
+	{
+		if (m_hGPUTexture.isValid())
+		{
+			return m_hGPUTexture.getObject<IGPUTexture>();
+		}
+		return nullptr;
 	}
 
 }

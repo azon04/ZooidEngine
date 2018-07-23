@@ -4,6 +4,7 @@
 #include "Utils/String.h"
 
 #define PACKAGE_ROOT_PATH "Resources"
+#define GET_PACKAGE_PATH(path) PACKAGE_ROOT_PATH path
 
 namespace ZE
 {
