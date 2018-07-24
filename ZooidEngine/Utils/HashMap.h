@@ -90,7 +90,8 @@ namespace ZE
 #if HASH_MAP_PROBING == HASH_MAP_QUADRATIC_PROBING
 			int q_offset = 1;
 #endif
-			while (get(index).m_occupied == 1)
+			// first check on the index
+			if (get(index).m_occupied == 1)
 			{
 				// Try to reposition the current index for better performance
 				HashKeyValue<K, V>& hashKeyValue = get(index);
@@ -98,8 +99,16 @@ namespace ZE
 				m_length--;
 				put_internal(hashKeyValue.m_key, hashKeyValue.m_value);
 
-				if (get(index).m_occupied != 1) { break; }
+#if HASH_MAP_PROBING == HASH_MAP_LINEAR_PROBING
+				index = (index + 1) % m_capacity;
+#elif HASH_MAP_PROBING == HASH_MAP_QUADRATIC_PROBING
+				index = (initial_index + (q_offset * q_offset)) % m_capacity;
+				q_offset++;
+#endif
+			}
 
+			while (get(index).m_occupied == 1)
+			{
 #if HASH_MAP_PROBING == HASH_MAP_LINEAR_PROBING
 				index = (index + 1) % m_capacity;
 #elif HASH_MAP_PROBING == HASH_MAP_QUADRATIC_PROBING
@@ -209,6 +218,16 @@ namespace ZE
 			return hasKey_internal(key, index);
 		}
 
+		bool getIndex(const K& key, int& index)
+		{
+			return hasKey_internal(key, index);
+		}
+
+		V& getValue(int index)
+		{
+			return get(index).m_value;
+		}
+
 		void erase(const K& key)
 		{
 			int index = 0;
@@ -267,16 +286,26 @@ namespace ZE
 #if HASH_MAP_PROBING == HASH_MAP_QUADRATIC_PROBING
 			int q_offset = 1;
 #endif
-			while (get(index).m_occupied == 1)
+
+			// first check on the index
+			if (get(index).m_occupied == 1)
 			{
 				// Try to reposition the current index for better performance
 				HashKeyValue<String, V>& hashKeyValue = get(index);
 				hashKeyValue.m_occupied = 0;
 				m_length--;
 				put_internal(hashKeyValue.m_key.c_str(), hashKeyValue.m_value);
-				
-				if(!get(index).m_occupied) { break; }
 
+#if HASH_MAP_PROBING == HASH_MAP_LINEAR_PROBING
+				index = (index + 1) % m_capacity;
+#elif HASH_MAP_PROBING == HASH_MAP_QUADRATIC_PROBING
+				index = (initial_index + (q_offset * q_offset)) % m_capacity;
+				q_offset++;
+#endif
+			}
+
+			while (get(index).m_occupied == 1)
+			{
 #if HASH_MAP_PROBING == HASH_MAP_LINEAR_PROBING
 				index = (index + 1) % m_capacity;
 #elif HASH_MAP_PROBING == HASH_MAP_QUADRATIC_PROBING

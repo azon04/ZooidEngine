@@ -43,19 +43,24 @@ namespace ZE
 
 		Font* pFont = new(hRes) Font;
 
-		pFont->m_charFontDescs.reset(128);
+		// Font attributes
+		UInt32 charCount = face->num_glyphs;
+		
+		pFont->m_charFontDescs.reset(charCount);
 		pFont->m_fontHeight = fontHeight;
 
 		// First calculate the texture size
 		Vector2 TextureDimension(0.0f, 0.0f);
-		
-		const Int32 numberPerRow = 15;
 		const Float32 padding = 10.0f;
+		
+		// Calculate possible number per row
+		Int32 numberPerRow = (Int32)(sqrt((fontHeight + padding) / (0.5f * fontHeight + padding) * charCount));
+
 		Vector2 curPos(padding, padding);
 		Int32 texSize = 0;
-		for (UInt8 c = 0; c < 128; c++)
+		for (UInt32 c = 0; c < charCount; c++)
 		{
-			if (FT_Load_Char(face, c, FT_LOAD_BITMAP_METRICS_ONLY))
+			if (FT_Load_Glyph(face, c, FT_LOAD_BITMAP_METRICS_ONLY))
 			{
 				ZEERROR("Failed to load Glyph");
 				continue;
@@ -95,9 +100,9 @@ namespace ZE
 		// Load Glyph bitmap and copy to the atlas
 		curPos.setX(padding);
 		curPos.setY(padding);
-		for (UInt8 c = 0; c < 128; c++)
+		for (UInt32 c = 0; c < charCount; c++)
 		{
-			if (FT_Load_Char(face, c, FT_LOAD_RENDER))
+			if (FT_Load_Glyph(face, c, FT_LOAD_RENDER))
 			{
 				ZEERROR("Failed to load Glyph");
 				continue;
@@ -120,6 +125,16 @@ namespace ZE
 				curPos.setX(padding);
 				curPos.setY(curPos.getY() + padding + fontHeight);
 			}
+		}
+
+		// Generate HashMap
+		UInt32 glyphIndex = 0;
+		UInt32 charCode = FT_Get_First_Char(face, &glyphIndex);
+		pFont->m_charMap.reset(charCount);
+		while (glyphIndex != 0)
+		{
+			pFont->m_charMap.put(charCode, glyphIndex);
+			charCode = FT_Get_Next_Char(face, charCode, &glyphIndex);
 		}
 
 		// #TODO this should be handled by TextureManager ???
@@ -161,7 +176,7 @@ namespace ZE
 		Float32 result = 0.0f;
 		while (c != '\0')
 		{
-			result += scale * m_charFontDescs[c].Advance;
+			result += scale * m_charFontDescs[getCharIndex(c)].Advance;
 			c = text[index++];
 		}
 
@@ -203,7 +218,7 @@ namespace ZE
 		for (Int32 i = 0; i < textLength; i++)
 		{
 			char c = text[i];
-			CharFontDesc& charFontDesc = m_charFontDescs[c];
+			CharFontDesc& charFontDesc = m_charFontDescs[getCharIndex(c)];
 
 			Float32 xPos = x + charFontDesc.Bearing.getX() * scale * normalizeFactor ;
 			Float32 yPos = y - (charFontDesc.Dimension.getY() - charFontDesc.Bearing.getY()) * scale * normalizeFactor;
@@ -258,6 +273,17 @@ namespace ZE
 			return m_hGPUTexture.getObject<IGPUTexture>();
 		}
 		return nullptr;
+	}
+
+	ZE::Int32 Font::getCharIndex(char c)
+	{
+		int index;
+		if (m_charMap.getIndex((UInt32)c, index))
+		{
+			return m_charMap.getValue(index);
+		}
+
+		return 0;
 	}
 
 }

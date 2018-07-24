@@ -6,6 +6,7 @@
 #include "Memory/Handle.h"
 #include "Math/Vector2.h"
 #include "Utils/Array.h"
+#include "Utils/HashMap.h"
 
 namespace ZE
 {
@@ -42,8 +43,13 @@ namespace ZE
 
 		IGPUTexture* getGPUTexture();
 
+	private:
+
+		Int32 getCharIndex(char c);
+
 	protected:
 		Array<CharFontDesc> m_charFontDescs;
+		HashMap<UInt32, UInt32> m_charMap;
 		Handle m_hGPUTexture;
 		Float32 m_fontHeight;
 		Int32 m_textureSize;
