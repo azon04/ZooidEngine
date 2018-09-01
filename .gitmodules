@@ -1,3 +1,6 @@
 [submodule "Dependencies/assimp"]
 	path = Dependencies/assimp
 	url = https://github.com/assimp/assimp.git
+[submodule "Dependencies/msdfgen"]
+	path = Dependencies/msdfgen
+	url = https://github.com/Chlumsky/msdfgen.git
