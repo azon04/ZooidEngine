@@ -38,7 +38,7 @@ namespace ZE
 			return hRes;
 		}
 
-		const Int32 fontHeight = 24;
+		const Int32 fontHeight = 32;
 		FT_Set_Pixel_Sizes(face, 0, fontHeight);
 
 		Font* pFont = new(hRes) Font;

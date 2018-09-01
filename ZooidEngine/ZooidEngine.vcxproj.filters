@@ -435,6 +435,9 @@
     <ClInclude Include="Scene\TextComponent.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="External\Image\SDFGenerator.h">
+      <Filter>External\Image</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -700,6 +703,9 @@
     </ClCompile>
     <ClCompile Include="Scene\TextComponent.cpp">
       <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="External\Image\SDFGenerator.cpp">
+      <Filter>External\Image</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
