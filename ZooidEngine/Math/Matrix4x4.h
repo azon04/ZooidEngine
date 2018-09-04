@@ -271,7 +271,7 @@ public:
 			}
 
 			int j = (i + 1) % 3;
-			int k = (k + 1) % 3;
+			int k = (j + 1) % 3;
 
 			v[i] = sqrt(m_data[i][i] - m_data[j][j] - m_data[k][k] + 1) * 0.5f;
 			
