@@ -16,6 +16,9 @@ namespace ZE
 
 	// Get absolute package asset path using relative resource path
 	String GetResourcePath(const char* resourcePath);
+
+	// Get Location Path from full filepath
+	String GetLocationPath(const char* filePath);
 }
 
 #endif

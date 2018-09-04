@@ -123,7 +123,7 @@ namespace ZE {
 			}
 			else if (m_additionalPools[index - NPOOL]->isEmpty() && size > m_additionalPools[index - NPOOL]->getItemSize()) // For empty additional block
 			{
-				int poolCount = (MAX_MEM_ADD_POOL / size) < MAX_COUNT_ADD_POOL ? (MAX_MEM_ADD_POOL / size) : MAX_MEM_ADD_POOL;
+				int poolCount = (MAX_MEM_ADD_POOL / size) < MAX_COUNT_ADD_POOL ? (MAX_MEM_ADD_POOL / size) : MAX_COUNT_ADD_POOL;
 				size_t totalSize = PoolAllocator::CalculateSizeMem(size, poolCount);
 				// Free Empty additional block
 				free(m_pAdditionalBlocks[index - NPOOL]);

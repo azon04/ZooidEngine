@@ -14,6 +14,15 @@ namespace ZE
 	class BufferData;
 	class IGPUTexture;
 
+	enum FontRenderMethod : UInt8
+	{
+		FONT_RENDER_NONE = 0,
+		FONT_RENDER_TEX = 1,
+		FONT_RENDER_SDF = 2,
+		FONT_RENDER_PSDF = 3,
+		FONT_RENDER_MSDF = 4
+	};
+
 	struct CharFontDesc
 	{
 		Vector2 TexCoord;
@@ -31,6 +40,7 @@ namespace ZE
 
 		// Load font from file
 		static Handle LoadFont(const char* filePath, GameContext* _gameContext);
+		static Handle LoadFontFile(const char* filePath, GameContext* _gameContext);
 
 		void release();
 
@@ -38,7 +48,7 @@ namespace ZE
 		Float32 calculateRenderTextLength(String sText, Float32 scale);
 
 		Float32 getFontHeight() const { return m_fontHeight; }
-
+		FontRenderMethod getFontRenderMethod() const { return m_renderMethod; }
 		bool generateBufferDataForText(const char* text, Float32 scale, BufferData* bufferData, bool bNormalize = false);
 
 		IGPUTexture* getGPUTexture();
@@ -46,6 +56,7 @@ namespace ZE
 	private:
 
 		Int32 getCharIndex(char c);
+		static FontRenderMethod getRenderMethodFromString(const char* renderMethodString);
 
 	protected:
 		Array<CharFontDesc> m_charFontDescs;
@@ -53,6 +64,8 @@ namespace ZE
 		Handle m_hGPUTexture;
 		Float32 m_fontHeight;
 		Int32 m_textureSize;
+		FontRenderMethod m_renderMethod = FONT_RENDER_NONE;
+		bool m_bNeedToClearTex = true;
 	};
 }
 #endif

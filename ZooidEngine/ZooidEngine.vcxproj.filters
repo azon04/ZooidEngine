@@ -757,5 +757,17 @@
     <None Include="Shaders\TextWorldShader.frag">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="Shaders\Shader2D\TextShader_SDF.frag">
+      <Filter>Shaders\Shader2D</Filter>
+    </None>
+    <None Include="Shaders\TextWorldShader_SDF.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Shader2D\TextShader_MSDF.frag">
+      <Filter>Shaders\Shader2D</Filter>
+    </None>
+    <None Include="Shaders\TextWorldShader_MSDF.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

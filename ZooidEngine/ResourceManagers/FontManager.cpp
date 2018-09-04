@@ -6,7 +6,8 @@ namespace ZE
 {
 	IMPLEMENT_CLASS_1(FontManager, ResourceManager);
 
-	const char* defaultFontPath = GET_PACKAGE_PATH("\\Basic\\Font\\open-sans\\OpenSans-Light.ttf");
+	const char* defaultFontPath = GET_PACKAGE_PATH("\\Basic\\Font\\OpenSans-Light_SDF.zFont");
+
 	void FontManager::Init(GameContext* _gameContext)
 	{
 		if (!s_instance)

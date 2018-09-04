@@ -55,7 +55,20 @@ namespace ZE
 			if (m_drawSpace == DRAW_SCREEN)
 			{
 				ShaderAction& shaderAction = m_gameContext->getDrawList()->getNextSecondPassShaderAction();
-				shaderAction.setShaderAndBuffer(ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_SCREEN_TEXT_SHADER), m_textMesh->getGPUBufferArray());
+				int shaderType = Z_SHADER_CHAIN_SCREEN_TEXT_SHADER;
+				switch (m_font->getFontRenderMethod())
+				{
+				case FONT_RENDER_SDF:
+				case FONT_RENDER_PSDF:
+					shaderType = Z_SHADER_CHAIN_SCREEN_TEXT_SHADER_SDF;
+					break;
+				case FONT_RENDER_MSDF:
+					shaderType = Z_SHADER_CHAIN_SCREEN_TEXT_SHADER_MSDF;
+					break;
+				default:
+					break;
+				}
+				shaderAction.setShaderAndBuffer(ShaderManager::GetInstance()->getShaderChain(shaderType), m_textMesh->getGPUBufferArray());
 				shaderAction.setShaderFloatVar("screenHeight", m_gameContext->getRenderer()->GetHeight());
 				shaderAction.setShaderFloatVar("screenWidth", m_gameContext->getRenderer()->GetWidth());
 				shaderAction.setShaderMatVar("model", m_worldTransform);
@@ -67,7 +80,22 @@ namespace ZE
 			else
 			{
 				ShaderAction& shaderAction = m_gameContext->getDrawList()->getNextSecondPassShaderAction();
-				shaderAction.setShaderAndBuffer(ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_WORLD_TEXT_SHADER), m_textMesh->getGPUBufferArray());
+
+				int shaderType = Z_SHADER_CHAIN_WORLD_TEXT_SHADER;
+				switch (m_font->getFontRenderMethod())
+				{
+				case FONT_RENDER_SDF:
+				case FONT_RENDER_PSDF:
+					shaderType = Z_SHADER_CHAIN_WORLD_TEXT_SHADER_SDF;
+					break;
+				case FONT_RENDER_MSDF:
+					shaderType = Z_SHADER_CHAIN_WORLD_TEXT_SHADER_MSDF;
+					break;
+				default:
+					break;
+				}
+
+				shaderAction.setShaderAndBuffer(ShaderManager::GetInstance()->getShaderChain(shaderType), m_textMesh->getGPUBufferArray());
 				shaderAction.setShaderMatVar("modelMat", m_worldTransform);
 
 				shaderAction.setShaderTextureVar("fontTexture", m_font->getGPUTexture(), 0);

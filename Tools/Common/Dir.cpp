@@ -70,7 +70,7 @@ std::string ZETools::Dir::GetFileName(std::string path1, bool bWithExt /*= false
 		lastSepPos = 0;
 	}
 
-	std::string fileName = path1.substr(lastSepPos);
+	std::string fileName = path1.substr(lastSepPos+1);
 	if (!bWithExt)
 	{
 		fileName = fileName.substr(0, fileName.find_last_of("."));

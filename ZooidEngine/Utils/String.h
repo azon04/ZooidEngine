@@ -68,6 +68,16 @@ namespace ZE
 			return *this;
 		}
 
+		char& operator[](const Int32 index)
+		{
+			return m_handle.getObject<char>()[index];
+		}
+
+		char& operator[](const Int32 index) const
+		{
+			return ((char*)m_handle.getObjectConst())[index];
+		}
+
 		String(const char* text)
 		{
 			size_t size = StringFunc::Length(text) + 1;

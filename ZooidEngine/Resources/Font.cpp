@@ -5,11 +5,18 @@
 
 #include "Memory/MemoryHelper.h"
 
+#include "FileSystem/DirectoryHelper.h"
+#include "FileSystem/FileReader.h"
+
 #include "Renderer/IGPUTexture.h"
 #include "Renderer/RenderZooid.h"
 #include "Renderer/IRenderer.h"
 #include "Renderer/BufferData.h"
 #include "Renderer/BufferLayout.h"
+
+#include "Utils/StringFunc.h"
+
+#include "ResourceManagers/TextureManager.h"
 
 // Outer engine includes
 #include "ft2build.h"
@@ -19,7 +26,73 @@ namespace ZE
 {
 	IMPLEMENT_CLASS_0(Font)
 
-	Handle Font::LoadFont(const char* filePath, GameContext* gameContext)
+	ZE::Handle Font::LoadFont(const char* filePath, GameContext* _gameContext)
+	{
+		Handle hRes("Font", sizeof(Font));
+
+		FileReader reader(filePath);
+
+		char buffer[255];
+
+		reader.readNextString(buffer);
+
+		if (StringFunc::Compare(buffer, "FontFile") == 0)
+		{
+			// Using Font File
+			hRes = LoadFontFile(filePath, _gameContext);
+			reader.close();
+			return hRes;
+		}
+
+		
+		Font* pFont = new(hRes) Font();
+
+		// Read "Image"
+		reader.readNextString(buffer);
+
+		String texturePath = GetLocationPath(filePath);
+		texturePath += buffer;
+
+		pFont->m_hGPUTexture = TextureManager::GetInstance()->loadResource(texturePath.const_str());
+		pFont->m_textureSize = pFont->getGPUTexture()->getWidth();
+		pFont->m_bNeedToClearTex = false;
+
+		// Read "Method"
+		reader.readNextString(buffer);
+		reader.readNextString(buffer);
+
+		pFont->m_renderMethod = getRenderMethodFromString(buffer);
+
+		// Read "GlyphHeight"
+		reader.readNextString(buffer);
+
+		pFont->m_fontHeight = reader.readNextFloat();
+
+		// Read Glyph Count
+		reader.readNextString(buffer);
+		int count = reader.readNextInt();
+
+		pFont->m_charFontDescs.reset(count);
+		pFont->m_charMap.reset(count);
+		for (int i = 0; i < count; i++)
+		{
+			int charCode = reader.readNextInt();
+			CharFontDesc& desc = pFont->m_charFontDescs[i];
+			desc.TexCoord.m_x = reader.readNextInt() / static_cast<float> (pFont->m_textureSize);
+			desc.TexCoord.m_y = reader.readNextInt() / static_cast<float> (pFont->m_textureSize);
+			desc.Dimension.m_x = reader.readNextFloat();
+			desc.Dimension.m_y = reader.readNextFloat();
+			desc.Bearing.m_x = reader.readNextFloat();
+			desc.Bearing.m_y = reader.readNextFloat();
+			desc.Advance = reader.readNextInt();
+
+			pFont->m_charMap.put(charCode, i);
+		}
+
+		return hRes;
+	}
+
+	Handle Font::LoadFontFile(const char* filePath, GameContext* gameContext)
 	{
 		Handle hRes("Font", sizeof(Font));
 
@@ -161,7 +234,7 @@ namespace ZE
 
 	void Font::release()
 	{
-		if (m_hGPUTexture.isValid())
+		if (m_hGPUTexture.isValid() && m_bNeedToClearTex)
 		{
 			IGPUTexture* pTexture = m_hGPUTexture.getObject<IGPUTexture>();
 			pTexture->release();
@@ -284,6 +357,27 @@ namespace ZE
 		}
 
 		return 0;
+	}
+
+	ZE::FontRenderMethod Font::getRenderMethodFromString(const char* renderMethodString)
+	{
+		if (StringFunc::Compare(renderMethodString, "TEXTURE") == 0)
+		{
+			return FONT_RENDER_TEX;
+		}
+		else if (StringFunc::Compare(renderMethodString, "SDF") == 0)
+		{
+			return FONT_RENDER_SDF;
+		}
+		else if (StringFunc::Compare(renderMethodString, "PSDF") == 0)
+		{
+			return FONT_RENDER_PSDF;
+		}
+		else if (StringFunc::Compare(renderMethodString, "MSDF") == 0)
+		{
+			return FONT_RENDER_MSDF;
+		}
+		return FONT_RENDER_NONE;
 	}
 
 }

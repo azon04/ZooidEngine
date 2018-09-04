@@ -20,6 +20,8 @@
 
 #define LARGE 1e240
 
+#define PX_RANGE 4.0
+
 // Hack to get FT_Face from msdfgen::FontHandle
 class HackFontHandle
 {
@@ -29,7 +31,7 @@ public:
 	FT_Face& getFace() { return face; }
 };
 
-struct FontDesc
+struct FontGlyphDesc
 {
 	unsigned long charCode;
 	unsigned int posX;
@@ -39,6 +41,13 @@ struct FontDesc
 	unsigned int advance;
 	int bearingX;
 	int bearingY;
+};
+
+struct FontDesc
+{
+	std::string textureName;
+	std::string methodName;
+	unsigned int pixelHeight;
 };
 
 void copyTexture(unsigned char* dest, int width, int height, int targetX, int targetY, unsigned char* src, int srcWidth, int srcHeight)
@@ -123,7 +132,7 @@ void saveRGB(msdfgen::FloatRGB* rgbBitmap, unsigned int height, unsigned int wid
 	lodepng::encode(fileName, pixels, width, height, LCT_RGB);
 }
 
-int getAllCharCode(std::vector<FontDesc>& fontMap, FT_Face& face)
+int getAllCharCode(std::vector<FontGlyphDesc>& fontMap, FT_Face& face)
 {
 	std::cout << "Populating All Character Code..." << std::endl;
 
@@ -142,7 +151,7 @@ int getAllCharCode(std::vector<FontDesc>& fontMap, FT_Face& face)
 	return actualCharCount;
 }
 
-int calculateTextureDimAndPopulateFontMapData(std::vector<FontDesc>& fontMap, FT_Face& face, int actualCharCount, int pixelHeight, int padding)
+int calculateTextureDimAndPopulateFontMapData(std::vector<FontGlyphDesc>& fontMap, FT_Face& face, int actualCharCount, int pixelHeight, int padding)
 {
 	std::cout << "Calculating Possible Texture Dimension..." << std::endl;
 
@@ -187,12 +196,15 @@ int calculateTextureDimAndPopulateFontMapData(std::vector<FontDesc>& fontMap, FT
 
 	textureDimension += padding;
 
+	textureDimension = (textureDimension / 4 + 1) * 4;
+
 	std::cout << "Texture Dimension " << textureDimension << "x" << textureDimension << std::endl;
+
 
 	return textureDimension;
 }
 
-void cleanUpFontMap(std::vector<FontDesc>& fontMap)
+void cleanUpFontMap(std::vector<FontGlyphDesc>& fontMap)
 {
 	for (int i = fontMap.size() - 1; i > 0; i--)
 	{
@@ -203,17 +215,19 @@ void cleanUpFontMap(std::vector<FontDesc>& fontMap)
 	}
 }
 
-void generateDescFile(std::vector<FontDesc>& fontMap, const char* resultPath, const char* fileName, const char* textureName)
+void generateDescFile(std::vector<FontGlyphDesc>& fontMap, const char* resultPath, const char* fileName, FontDesc& fontDesc)
 {
-	std::string fullPath = std::string(resultPath) + fileName + ".zFont";
+	std::string fullPath = std::string(resultPath) + "\\" + fileName + ".zFont";
 	std::ofstream outStream;
 	outStream.open(fullPath, std::ofstream::out);
 
-	outStream << textureName << std::endl;
-	outStream << fontMap.size() << std::endl;
+	outStream << "Image " << fontDesc.textureName << std::endl;
+	outStream << "Method " << fontDesc.methodName << std::endl;
+	outStream << "GlyphHeight " << fontDesc.pixelHeight << std::endl;
+	outStream << "Glyph "<< fontMap.size() << std::endl;
 	for (int i = 0; i < fontMap.size(); i++)
 	{
-		FontDesc& desc = fontMap[i];
+		FontGlyphDesc& desc = fontMap[i];
 		outStream << desc.charCode << " ";
 		outStream << desc.posX << " " << desc.posY << " ";
 		outStream << desc.width << " " << desc.height << " ";
@@ -247,7 +261,7 @@ void generateFontMap(const char* fontFilePath, const char* resultPath, int pixel
 
 	int padding = 5;
 	int charCount = face->num_glyphs;
-	std::vector<FontDesc> fontMap(charCount);
+	std::vector<FontGlyphDesc> fontMap(charCount);
 	
 	// Get all char code
 	int actualCharCount = getAllCharCode(fontMap, face);
@@ -273,7 +287,7 @@ void generateFontMap(const char* fontFilePath, const char* resultPath, int pixel
 			std::cout << percentage << "%" << std::endl;
 		}
 
-		FontDesc& desc = fontMap[c];
+		FontGlyphDesc& desc = fontMap[c];
 
 		if(bDebugOutput)
 			saveGreyPng(face->glyph->bitmap.buffer, desc.height, desc.width, (std::to_string(c) + ".png").c_str());
@@ -281,13 +295,18 @@ void generateFontMap(const char* fontFilePath, const char* resultPath, int pixel
 		copyTexture(grayMap, textureDimension, textureDimension, desc.posX, desc.posY, face->glyph->bitmap.buffer, desc.width, desc.height);
 	}
 
-	std::string fullPath = (resultPath + outFileName + ".png");
+	std::string fullPath = (std::string(resultPath) + "\\" + outFileName + ".png");
 	std::cout << "Saving the generated texture to: " << fullPath << std::endl;
 	saveGreyPng(grayMap, textureDimension, textureDimension, fullPath.c_str());
 	
 	cleanUpFontMap(fontMap);
 	std::cout << "Saving the font desc file to: " << resultPath << outFileName << ".zFont" << std::endl;
-	generateDescFile(fontMap, resultPath, outFileName.c_str(), (outFileName + ".png").c_str());
+
+	FontDesc fontDesc;
+	fontDesc.methodName = "TEXTURE";
+	fontDesc.textureName = outFileName + ".png";
+	fontDesc.pixelHeight = pixelHeight;
+	generateDescFile(fontMap, resultPath, outFileName.c_str(), fontDesc);
 	
 	FT_Done_Face(face);
 	FT_Done_FreeType(ft);
@@ -320,7 +339,7 @@ void generateFontSDF(const char* fontFilePath, const char* resultPath, int pixel
 
 	int padding = 5;
 	int charCount = face->num_glyphs;
-	std::vector<FontDesc> fontMap(charCount);
+	std::vector<FontGlyphDesc> fontMap(charCount);
 
 	// Get all char code
 	int actualCharCount = getAllCharCode(fontMap, face);
@@ -336,7 +355,7 @@ void generateFontSDF(const char* fontFilePath, const char* resultPath, int pixel
 	{
 		msdfgen::Shape shape;
 		double advance;
-		FontDesc& desc = fontMap[c];
+		FontGlyphDesc& desc = fontMap[c];
 
 		if ((desc.charCode == 0 && c != 0) || !msdfgen::loadGlyph(shape, font, desc.charCode, &advance))
 		{
@@ -351,36 +370,58 @@ void generateFontSDF(const char* fontFilePath, const char* resultPath, int pixel
 
 		shape.normalize();
 
-		double pxRange = 5.0;
+		msdfgen::Bitmap<float> charMap(desc.width + 2 * padding, desc.height + 2 * padding);
+
 		double l = LARGE, r = -LARGE, t = -LARGE , b = LARGE;
 		shape.bounds(l, b, r, t);
-		msdfgen::Bitmap<float> charMap(desc.width + 2 * padding, desc.height + 2 * padding);
 		msdfgen::Vector2 frame(charMap.width(), charMap.height());
-		frame -= 2 * pxRange + 2 * padding;
+		frame -= 2 * padding;
 		msdfgen::Vector2 scale(1.0);
 		if (l >= r || b >= t)
 			l = 0, b = 0, r = 1, t = 1;
 		msdfgen::Vector2 dims(r - l, t - b);
 		msdfgen::Vector2 trans(0.0);
-		trans = .5*(frame / scale - dims) -msdfgen::Vector2(l, b);
-		double range = pxRange / scale.x;
-		trans += range + padding / scale.x;
+
+		if (dims.x*frame.y < dims.y*frame.x) {
+			trans.set(.5*(frame.x / frame.y*dims.y - dims.x) - l, -b);
+			scale = frame.y / dims.y;
+		}
+		else {
+			trans.set(-l, .5*(frame.y / frame.x*dims.x - dims.y) - b);
+			scale = frame.x / dims.x;
+		}
+
+		double range = padding / scale.x;
+		trans += padding / scale;
 
 		msdfgen::generateSDF(charMap, shape, range, scale, trans);
 
 		copyTexture(floatMap, charMap, desc.posX - padding, desc.posY - padding);
 		
+		// TODO Fit desc to generated frame of SDF
+		desc.posY -= padding;
+		desc.posX -= padding;
+		if (desc.width > 0) { desc.width += 2 * padding; }
+		if (desc.height > 0) { desc.height += 2 * padding; }
+		desc.bearingX -= padding;
+		desc.bearingY += padding;
+
 		if (bDebugOutput)
 			msdfgen::savePng(charMap, (std::to_string( desc.charCode ) + ".png").c_str());
 	}
 	
-	std::string fullPath = (resultPath + outFileName + ".png");
+	std::string fullPath = (std::string(resultPath) + "\\" + outFileName + ".png");
 	std::cout << "Saving the generated texture to: " << fullPath << std::endl;
 	msdfgen::savePng(floatMap, fullPath.c_str());
 	
 	cleanUpFontMap(fontMap);
 	std::cout << "Saving the font desc file to: " << resultPath << outFileName << ".zFont" << std::endl;
-	generateDescFile(fontMap, resultPath, outFileName.c_str(), (outFileName + ".png").c_str());
+	
+	FontDesc fontDesc;
+	fontDesc.methodName = "SDF";
+	fontDesc.textureName = outFileName + ".png";
+	fontDesc.pixelHeight = pixelHeight;
+	generateDescFile(fontMap, resultPath, outFileName.c_str(), fontDesc);
 
 	msdfgen::destroyFont(font);
 	msdfgen::deinitializeFreetype(ft);
@@ -413,7 +454,7 @@ void generateFontPSDF(const char* fontFilePath, const char* resultPath, int pixe
 
 	int padding = 5;
 	int charCount = face->num_glyphs;
-	std::vector<FontDesc> fontMap(charCount);
+	std::vector<FontGlyphDesc> fontMap(charCount);
 
 	// Get all char code
 	int actualCharCount = getAllCharCode(fontMap, face);
@@ -429,7 +470,7 @@ void generateFontPSDF(const char* fontFilePath, const char* resultPath, int pixe
 	{
 		msdfgen::Shape shape;
 		double advance;
-		FontDesc& desc = fontMap[c];
+		FontGlyphDesc& desc = fontMap[c];
 
 		if ((desc.charCode == 0 && c != 0) || !msdfgen::loadGlyph(shape, font, desc.charCode, &advance))
 		{
@@ -444,36 +485,58 @@ void generateFontPSDF(const char* fontFilePath, const char* resultPath, int pixe
 
 		shape.normalize();
 
-		double pxRange = 5.0;
+		msdfgen::Bitmap<float> charMap(desc.width + 2 * padding, desc.height + 2 * padding);
+
 		double l = LARGE, r = -LARGE, t = -LARGE, b = LARGE;
 		shape.bounds(l, b, r, t);
-		msdfgen::Bitmap<float> charMap(desc.width + 2 * padding, desc.height + 2 * padding);
 		msdfgen::Vector2 frame(charMap.width(), charMap.height());
-		frame -= 2 * pxRange + 2 * padding;
+		frame -= 2 * padding;
 		msdfgen::Vector2 scale(1.0);
 		if (l >= r || b >= t)
 			l = 0, b = 0, r = 1, t = 1;
 		msdfgen::Vector2 dims(r - l, t - b);
 		msdfgen::Vector2 trans(0.0);
-		trans = .5*(frame / scale - dims) - msdfgen::Vector2(l, b);
-		double range = pxRange / scale.x;
-		trans += range + padding / scale.x;
+
+		if (dims.x*frame.y < dims.y*frame.x) {
+			trans.set(.5*(frame.x / frame.y*dims.y - dims.x) - l, -b);
+			scale = frame.y / dims.y;
+		}
+		else {
+			trans.set(-l, .5*(frame.y / frame.x*dims.x - dims.y) - b);
+			scale = frame.x / dims.x;
+		}
+
+		double range = padding / scale.x;
+		trans += padding / scale;
 
 		msdfgen::generatePseudoSDF(charMap, shape, range, scale, trans);
 
 		copyTexture(floatMap, charMap, desc.posX - padding, desc.posY - padding);
 
+		// TODO Fit desc to generated frame of SDF
+		desc.posY -= padding;
+		desc.posX -= padding;
+		if (desc.width > 0) { desc.width += 2 * padding; }
+		if (desc.height > 0) { desc.height += 2 * padding; }
+		desc.bearingX -= padding;
+		desc.bearingY += padding;
+
 		if (bDebugOutput)
 			msdfgen::savePng(charMap, (std::to_string(desc.charCode) + ".png").c_str());
 	}
 
-	std::string fullPath = (resultPath + outFileName + ".png");
+	std::string fullPath = (std::string(resultPath) + "\\" + outFileName + ".png");
 	std::cout << "Saving the generated texture to: " << fullPath << std::endl;
 	msdfgen::savePng(floatMap, fullPath.c_str());
 
 	cleanUpFontMap(fontMap);
 	std::cout << "Saving the font desc file to: " << resultPath << outFileName << ".zFont" << std::endl;
-	generateDescFile(fontMap, resultPath, outFileName.c_str(), (outFileName + ".png").c_str());
+	
+	FontDesc fontDesc;
+	fontDesc.methodName = "PSDF";
+	fontDesc.textureName = outFileName + ".png";
+	fontDesc.pixelHeight = pixelHeight;
+	generateDescFile(fontMap, resultPath, outFileName.c_str(), fontDesc);
 
 	msdfgen::destroyFont(font);
 	msdfgen::deinitializeFreetype(ft);
@@ -506,7 +569,7 @@ void generateFontMSDF(const char* fontFilePath, const char* resultPath, int pixe
 
 	int padding = 5;
 	int charCount = face->num_glyphs;
-	std::vector<FontDesc> fontMap(charCount);
+	std::vector<FontGlyphDesc> fontMap(charCount);
 
 	// Get all char code
 	int actualCharCount = getAllCharCode(fontMap, face);
@@ -522,7 +585,7 @@ void generateFontMSDF(const char* fontFilePath, const char* resultPath, int pixe
 	{
 		msdfgen::Shape shape;
 		double advance;
-		FontDesc& desc = fontMap[c];
+		FontGlyphDesc& desc = fontMap[c];
 
 		if ((desc.charCode == 0 && c != 0) || !msdfgen::loadGlyph(shape, font, desc.charCode, &advance))
 		{
@@ -539,36 +602,58 @@ void generateFontMSDF(const char* fontFilePath, const char* resultPath, int pixe
 		
 		msdfgen::edgeColoringSimple(shape, 3.0);
 
-		double pxRange = 5.0;
+		msdfgen::Bitmap<msdfgen::FloatRGB> charMap(desc.width + 2 * padding, desc.height + 2 * padding);
+
 		double l = LARGE, r = -LARGE, t = -LARGE, b = LARGE;
 		shape.bounds(l, b, r, t);
-		msdfgen::Bitmap<msdfgen::FloatRGB> charMap(desc.width + 2 * padding, desc.height + 2 * padding);
 		msdfgen::Vector2 frame(charMap.width(), charMap.height());
-		frame -= 2 * pxRange + 2 * padding;
+		frame -= 2 * padding;
 		msdfgen::Vector2 scale(1.0);
 		if (l >= r || b >= t)
 			l = 0, b = 0, r = 1, t = 1;
 		msdfgen::Vector2 dims(r - l, t - b);
 		msdfgen::Vector2 trans(0.0);
-		trans = .5*(frame / scale - dims) - msdfgen::Vector2(l, b);
-		double range = pxRange / scale.x;
-		trans += range + padding / scale.x;
+
+		if (dims.x*frame.y < dims.y*frame.x) {
+			trans.set(.5*(frame.x / frame.y*dims.y - dims.x) - l, -b);
+			scale = frame.y / dims.y;
+		}
+		else {
+			trans.set(-l, .5*(frame.y / frame.x*dims.x - dims.y) - b);
+			scale = frame.x / dims.x;
+		}
+
+		double range = padding / scale.x;
+		trans += padding / scale;
 
 		msdfgen::generateMSDF(charMap, shape, range, scale, trans);
 
 		copyTexture(floatMap, charMap, desc.posX - padding, desc.posY - padding);
 
+		// TODO Fit desc to generated frame of SDF
+		desc.posY -= padding;
+		desc.posX -= padding;
+		if (desc.width > 0) { desc.width += 2 * padding; }
+		if (desc.height > 0) { desc.height += 2 * padding; }
+		desc.bearingX -= padding;
+		desc.bearingY += padding;
+
 		if (bDebugOutput)
 			msdfgen::savePng(charMap, (std::to_string(desc.charCode) + ".png").c_str());
 	}
 
-	std::string fullPath = (resultPath + outFileName + ".png");
+	std::string fullPath = (std::string(resultPath) + "\\" + outFileName + ".png");
 	std::cout << "Saving the generated texture to: " << fullPath << std::endl;
 	msdfgen::savePng(floatMap, fullPath.c_str());
 
 	cleanUpFontMap(fontMap);
 	std::cout << "Saving the font desc file to: " << resultPath << outFileName << ".zFont" << std::endl;
-	generateDescFile(fontMap, resultPath, outFileName.c_str(), (outFileName + ".png").c_str());
+	
+	FontDesc fontDesc;
+	fontDesc.methodName = "MSDF";
+	fontDesc.textureName = outFileName + ".png";
+	fontDesc.pixelHeight = pixelHeight;
+	generateDescFile(fontMap, resultPath, outFileName.c_str(), fontDesc);
 
 	msdfgen::destroyFont(font);
 	msdfgen::deinitializeFreetype(ft);

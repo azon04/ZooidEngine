@@ -248,9 +248,14 @@ namespace ZE
 #endif
 
 		// Draw Debug Text
-		DebugRenderer::DrawTextScreen("Zooid Engine", Vector2(10.0f, 10.0f), Vector3(1.0f, 0.0f, 0.0f));
+		DebugRenderer::DrawTextScreen("Zooid Engine ", Vector2(10.0f, 10.0f), Vector3(1.0f, 0.0f, 0.0f), 0.5f);
 		StringFunc::PrintToString(StringFunc::Buffer, STRING_FUNC_BUFFER_SIZE, "Delta Time: %.2f ms; FPS: %d", deltaTime, static_cast<int>(1000.0f / deltaTime));
-		DebugRenderer::DrawTextScreen(StringFunc::Buffer, Vector2(10.0f, _gameContext->getRenderer()->GetHeight() - 30.0f), Vector3(1.0f, 1.0f, 0.0f), 0.75f);
+		DebugRenderer::DrawTextScreen(StringFunc::Buffer, Vector2(10.0f, _gameContext->getRenderer()->GetHeight() - 30.0f), Vector3(1.0f, 1.0f, 0.0f), 0.5f);
+
+		// Draw World Text
+		Matrix4x4 mat;
+		mat.translate(Vector3(0.0f, 0.1f, 0.0f));
+		DebugRenderer::DrawTextWorld("Zooid Engine", mat);
 
 		// Draw Base Lines
 		DebugRenderer::DrawMatrixBasis(Matrix4x4());

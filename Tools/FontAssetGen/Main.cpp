@@ -9,6 +9,7 @@
 #define RENDER_SDF 1
 #define RENDER_PSDF 2
 #define RENDER_MSDF 3
+#define RENDER_ALL 4
 
 #define COMPARE_ARG1(arg, val) (strcmp(arg, val) == 0)
 #define COMPARE_ARG2(arg, val, altval) (strcmp(arg, val) == 0 || strcmp(argv[index], altval) == 0)
@@ -24,7 +25,7 @@ void showHelp()
 	cout << "-o | -out path \t Output Directory" << endl;
 	cout << "-p | --package path \t package name, package that assets will be save to. It will outDir/packageName" << endl;
 	cout << "-pxh | --pixelHeight value \t set pixel height for font. " << endl;
-	cout << "-rm | --renderMethod {TEX|SDF|PSDF|MSDF} \t Render method that will be used for the font in the engine. And it will affect the result texture too" << endl;
+	cout << "-rm | --renderMethod {TEX|SDF|PSDF|MSDF|ALL} \t Render method that will be used for the font in the engine. And it will affect the result texture too. ALL: Generate all available methods." << endl;
 	cout << "-d | --debug \t Debug output will result an image for each font glyph in the font file" << endl;
 }
 
@@ -85,6 +86,10 @@ int main(int argc, char* argv[])
 			{
 				renderMethod = RENDER_MSDF;
 			}
+			else if (COMPARE_ARG1(renderArg, "ALL"))
+			{
+				renderMethod = RENDER_ALL;
+			}
 		}
 		else if (COMPARE_ARG2(arg, "-d", "--debug"))
 		{
@@ -108,6 +113,13 @@ int main(int argc, char* argv[])
 		generateFontPSDF(filePath.c_str(), fullOutputPath.c_str(), pixelHeight, bDebug);
 		break;
 	case RENDER_MSDF:
+		generateFontMSDF(filePath.c_str(), fullOutputPath.c_str(), pixelHeight, bDebug);
+		break;
+	case RENDER_ALL:
+		cout << "Generating All available methods' textures and desc files..." << endl;
+		generateFontMap(filePath.c_str(), fullOutputPath.c_str(), pixelHeight, bDebug);
+		generateFontSDF(filePath.c_str(), fullOutputPath.c_str(), pixelHeight, bDebug);
+		generateFontPSDF(filePath.c_str(), fullOutputPath.c_str(), pixelHeight, bDebug);
 		generateFontMSDF(filePath.c_str(), fullOutputPath.c_str(), pixelHeight, bDebug);
 		break;
 	default:

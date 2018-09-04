@@ -391,11 +391,15 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <None Include="Shaders\DefaultHighlightSimple.vs" />
     <None Include="Shaders\Shader2D\TextShader.frag" />
     <None Include="Shaders\Shader2D\TextShader.vs" />
+    <None Include="Shaders\Shader2D\TextShader_MSDF.frag" />
+    <None Include="Shaders\Shader2D\TextShader_SDF.frag" />
     <None Include="Shaders\ShaderData.ubs" />
     <None Include="Shaders\TestGLFragmentShader.frag" />
     <None Include="Shaders\TestGLVertexShader.vs" />
     <None Include="Shaders\TextWorldShader.frag" />
     <None Include="Shaders\TextWorldShader.vs" />
+    <None Include="Shaders\TextWorldShader_MSDF.frag" />
+    <None Include="Shaders\TextWorldShader_SDF.frag" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
