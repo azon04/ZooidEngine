@@ -43,6 +43,8 @@ These are some features that I made for this version of the engine.
 * **Basic Log Manager** - support grouping log, enabling or disabling certain group, and put log into file (currently too intrusive)
 * **Basic Physics** - Currently using PhysX 3.4 (put "Physx" with PhysX path in Environment Variable)
 * **Skeletal Animation** - Basic Skeletal animation, including full-body animation, partial-body animation, animation blend and additive animation blend. The setting/animation blend can be setting using tree/hierarchical animation blending (setup using text file).
+* **Font Rendering** - The engine is now able to render font from font file, texture, generated SDF texture, and Multi-channel SDF texture.
+* **Font Texture Generation Tools** - generating font glyphs texture and descriptor file for the texture to read in the engine. The tools can generate SDF texture and Multi-channel SDF texture. The tools is used https://github.com/Chlumsky/msdfgen to help in SDF and MSDF generation. 
 * **Simple Game Demo: Space Shooter** - basic input and simple spawn and destroying a component in runtime
 * **Demo: Animation Demo** - basic demo how animation set up and played. See "Resources/TestAnimation" for the assets used in the demo.
 * **Misc**
@@ -57,6 +59,7 @@ This list consists all libraries and code that help me implementing the engine.
 * **lookup3.c, by Bob Jenkins** - http://burtleburtle.net/bob/c/lookup3.c used in HashMap that using String as a key.
 * **assimp** - https://github.com/assimp/assimp to export from outer mesh format to internal mesh format
 * **NVidia PhysX 3.4** - https://www.geforce.com/hardware/technology/physx
+* **MSDFGen** - https://github.com/Chlumsky/msdfgen
 
 ## Assets
 * **Mixamo** Animation assets using for the demo and testing are grabbed from https://www.mixamo.com/
