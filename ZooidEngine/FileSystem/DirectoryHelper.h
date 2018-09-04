@@ -4,6 +4,7 @@
 #include "Utils/String.h"
 
 #define PACKAGE_ROOT_PATH "Resources"
+#define GET_PACKAGE_PATH(path) PACKAGE_ROOT_PATH path
 
 namespace ZE
 {
@@ -15,6 +16,9 @@ namespace ZE
 
 	// Get absolute package asset path using relative resource path
 	String GetResourcePath(const char* resourcePath);
+
+	// Get Location Path from full filepath
+	String GetLocationPath(const char* filePath);
 }
 
 #endif

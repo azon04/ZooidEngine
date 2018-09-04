@@ -53,6 +53,24 @@ namespace ZE
 		_result.m_data[0][3] = _result.m_data[1][3] = _result.m_data[2][3] = 0.0f;
 	}
 
+	void MathOps::CreateOrthoProjEx(Matrix4x4& _result, Float32 _bottom, Float32 _top, Float32 _left, Float32 _right, Float32 _near, Float32 _far)
+	{
+		_result.m_data[0][0] = 1.0f / (_right - _left);
+		_result.m_data[3][0] = -(_right + _left) / (_right - _left);
+		_result.m_data[1][0] = _result.m_data[2][0] = 0.0f;
+
+		_result.m_data[1][1] = 1.0f / (_top - _bottom);
+		_result.m_data[3][1] = -(_top + _bottom) / (_top - _bottom);
+		_result.m_data[0][1] = _result.m_data[2][1] = 0.0f;
+
+		_result.m_data[2][2] = -2 / (_far - _near);
+		_result.m_data[3][2] = -(_far + _near) / (_far - _near);
+		_result.m_data[0][2] = _result.m_data[2][1] = 0.0f;
+
+		_result.m_data[3][3] = 1;
+		_result.m_data[0][3] = _result.m_data[1][3] = _result.m_data[2][3] = 0.0f;
+	}
+
 	float MathOps::FLerp(float a, float b, float alpha)
 	{
 		return a + (b - a) * alpha;

@@ -4,6 +4,7 @@
 #include "GameObjectModel/Component.h"
 #include "Utils/Array.h"
 #include "Math/Vector3.h"
+#include "Math/Vector2.h"
 #include "Math/Matrix4x4.h"
 
 #define MAX_LINE 2048
@@ -14,6 +15,7 @@ namespace ZE
 	class BufferData;
 	class IGPUBufferData;
 	class IGPUBufferArray;
+	class TextComponent;
 
 	struct DebugPointStruct
 	{
@@ -44,6 +46,12 @@ namespace ZE
 		// Draw Line in 3D world (Static call)
 		static void DrawLine(const Vector3& p1, const Vector3& p2, const Vector3& color);
 
+		// Draw Text on Screen (Static call)
+		static void DrawTextScreen(const char* text, const Vector2& _position, const Vector3& _color, Float32 _scale = 1.0f);
+
+		// Draw Text in World Space (Static call)
+		static void DrawTextWorld(const char* text, Matrix4x4& _transform);
+
 		virtual void setupComponent() override;
 
 		// Handle Gather render event
@@ -55,7 +63,13 @@ namespace ZE
 		
 		// Draw Line in 3D world
 		void drawLine(const Vector3& p1, const Vector3& p2, const Vector3& color);
-	
+		
+		// Draw Text on Screen
+		void drawScreenText(const char* text, const Vector2& _position, const Vector3& _color, Float32 _scale = 1.0f);
+
+		// Draw Text on World
+		void drawWorldText(const char* text, Matrix4x4& _transform);
+
 	private:
 		static DebugRenderer* s_instance;
 		BufferData* m_lineBufferData;
@@ -63,6 +77,8 @@ namespace ZE
 		IGPUBufferArray* m_lineBufferArray;
 		DebugPointStruct m_lineBuffers[MAX_LINE * 2];
 		Int32 m_currentIndex;
+		TextComponent* m_textComponents[1024];
+		Int32 m_currentTextIndex;
 	};
 }
 #endif

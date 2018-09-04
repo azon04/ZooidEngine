@@ -26,7 +26,7 @@ namespace ZE
 
 	void BufferLayoutManager::InitLayout()
 	{
-		m_bufferLayout.reset(5);
+		m_bufferLayout.reset(6);
 
 		{
 			// Vertex : { Position, Color }
@@ -91,6 +91,18 @@ namespace ZE
 			normalTexCoordLayout->m_layouts.push_back({ 2, 2, DataType::FLOAT, stride, 6 });
 			normalTexCoordLayout->m_layouts.push_back({ 3, 4, DataType::INTEGER, stride, 8 });
 			normalTexCoordLayout->m_layouts.push_back({ 4, 4, DataType::FLOAT, stride, 12 });
+			normalTexCoordLayout->calculateBufferDataCount();
+
+			m_bufferLayout.push_back(normalTexCoordLayout);
+		}
+
+		{
+			// Vertex : { Vector4 }
+
+			Handle h("Buffer Layout", sizeof(BufferLayout));
+			BufferLayout* normalTexCoordLayout = new(h) BufferLayout();
+			normalTexCoordLayout->m_layouts.reset(1);
+			normalTexCoordLayout->m_layouts.push_back({ 0, 4, DataType::FLOAT, 4 * sizeof(float), 0 });
 			normalTexCoordLayout->calculateBufferDataCount();
 
 			m_bufferLayout.push_back(normalTexCoordLayout);

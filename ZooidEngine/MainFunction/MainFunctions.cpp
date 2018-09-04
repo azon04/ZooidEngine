@@ -28,6 +28,7 @@
 
 #include "ResourceManagers/SkeletonManager.h"
 #include "ResourceManagers/AnimationManager.h"
+#include "ResourceManagers/FontManager.h"
 
 #include "Renderer/DebugRenderer.h"
 
@@ -118,6 +119,12 @@ namespace ZE
 			_gameContext->m_rootComponent->setupComponent();
 		}
 
+		// Init Font Manager
+		{
+			ZEINFO("Initializing Font Manager...");
+			FontManager::Init(_gameContext);
+		}
+
 		// Init Debug Renderer
 		{
 			ZEINFO("Initializing Debug Renderer...");
@@ -130,7 +137,6 @@ namespace ZE
 		{
 			SceneManager::Init(_gameContext);
 			_gameContext->m_sceneManager = SceneManager::GetInstance();
-
 		}
 
 		// Create Input Manager
@@ -186,6 +192,7 @@ namespace ZE
 		_gameContext->m_physicsZooid->Destroy();
 		
 		DebugRenderer::Destroy();
+		FontManager::Destroy();
 		AnimationManager::Destroy();
 		SkeletonManager::Destroy();
 		
@@ -239,6 +246,16 @@ namespace ZE
 #if ZE_RENDER_MULTITHREAD
 		while (g_drawReady) {}
 #endif
+
+		// Draw Debug Text
+		DebugRenderer::DrawTextScreen("Zooid Engine", Vector2(10.0f, 10.0f), Vector3(1.0f, 0.0f, 0.0f), 0.5f);
+		StringFunc::PrintToString(StringFunc::Buffer, STRING_FUNC_BUFFER_SIZE, "Delta Time: %.2f ms; FPS: %d", deltaTime, static_cast<int>(1000.0f / deltaTime));
+		DebugRenderer::DrawTextScreen(StringFunc::Buffer, Vector2(10.0f, _gameContext->getRenderer()->GetHeight() - 30.0f), Vector3(1.0f, 1.0f, 0.0f), 0.5f);
+
+		// Draw World Text
+		Matrix4x4 mat;
+		mat.translate(Vector3(0.0f, 0.1f, 0.0f));
+		DebugRenderer::DrawTextWorld("Zooid Engine", mat);
 
 		// Draw Base Lines
 		DebugRenderer::DrawMatrixBasis(Matrix4x4());

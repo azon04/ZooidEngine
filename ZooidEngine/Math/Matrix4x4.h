@@ -170,11 +170,19 @@ public:
 		setN(getN() * _scale);
 	}
 
+	// Add scale (Scale more)
 	void scale(Vector3 _vScale)
 	{
 		setU(getU() * _vScale.getX());
 		setV(getV() * _vScale.getY());
 		setN(getN() * _vScale.getZ());
+	}
+
+	// Override current Scale
+	void setScale(Vector3 _vScale)
+	{
+		normalizeScale();
+		scale(_vScale);
 	}
 
 	Vector3 extractScale()
@@ -263,7 +271,7 @@ public:
 			}
 
 			int j = (i + 1) % 3;
-			int k = (k + 1) % 3;
+			int k = (j + 1) % 3;
 
 			v[i] = sqrt(m_data[i][i] - m_data[j][j] - m_data[k][k] + 1) * 0.5f;
 			

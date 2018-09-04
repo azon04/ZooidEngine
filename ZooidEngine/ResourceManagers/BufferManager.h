@@ -32,7 +32,7 @@ public:
 	static void Destroy();
 
 	// Create GPU buffer from BufferData object
-	IGPUBufferData* createGPUBufferFromBuffer(BufferData* _bufferData, bool _bStatic = true, bool _manualManage = false);
+	IGPUBufferData* createGPUBufferFromBuffer(BufferData* _bufferData, bool _manualManage = false);
 
 	// Create constant buffer from BufferData object
 	IGPUBufferData* createConstantBufferFromBuffer(BufferData* _bufferData);

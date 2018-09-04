@@ -58,6 +58,7 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\ZooidEngineDebug-x86-Engine.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -89,7 +90,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;Z_RENDER_OPENGL;Z_PHYSICS_PHYSX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\glew-2.0.0\include;$(SolutionDir)Dependencies\glfw\include;$(Physx)\..\PxShared\include;$(Physx)\Include;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\glew-2.0.0\include;$(SolutionDir)Dependencies\glfw\include;$(SolutionDir)Dependencies\freetype-2.9.1\include;$(Physx)\..\PxShared\include;$(Physx)\Include;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessToFile>false</PreprocessToFile>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -98,8 +99,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)glfw\lib-vc2015;$(SolutionDir)glew-2.0.0\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>
@@ -109,6 +110,8 @@
       <Command>XCOPY "$(SolutionDir)Dependencies\glew-2.0.0\bin\Release\Win32\*.DLL" "$(TargetDir)" /D /K /Y
 XCOPY "$(SolutionDir)Dependencies\Builds\assimp\Debug\x86-vs140\*.DLL" "$(TargetDir)" /D /K /Y
 XCOPY "$(SolutionDir)Dependencies\Builds\assimp\Debug\x86-vs140\*.pdb" "$(TargetDir)" /D /K /Y
+XCOPY "$(SolutionDir)Dependencies\freetype-2.9.1\win32\lib-vc2015\debug\*.dll" "$(TargetDir)" /D /Y
+XCOPY "$(SolutionDir)Dependencies\freetype-2.9.1\win32\lib-vc2015\debug\*.pdb" "$(TargetDir)" /D /Y
 XCOPY "$(PhysX)\Bin\vc14win32\*DEBUG_x86.DLL" "$(TargetDir)" /D /K /Y
 XCOPY "$(PhysX)\Bin\vc14win32\nvToolsExt32_1.DLL" "$(TargetDir)" /D /K /Y
 XCOPY "$(PhysX)\Bin\vc14win32\PhysXDevice32.DLL" "$(TargetDir)" /D /K /Y
@@ -180,6 +183,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClInclude Include="Events\Events.h" />
     <ClInclude Include="Events\InputEvents.h" />
     <ClInclude Include="External\Hash\lookup3.h" />
+    <ClInclude Include="External\Image\SDFGenerator.h" />
     <ClInclude Include="External\Image\stb_image.h" />
     <ClInclude Include="FileSystem\DirectoryHelper.h" />
     <ClInclude Include="FileSystem\FileReader.h" />
@@ -239,15 +243,18 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClInclude Include="Renderer\IShader.h" />
     <ClInclude Include="Renderer\ShaderAction.h" />
     <ClInclude Include="Renderer\ShaderData.h" />
+    <ClInclude Include="ResourceManagers\FontManager.h" />
     <ClInclude Include="ResourceManagers\MaterialManager.h" />
     <ClInclude Include="ResourceManagers\MeshManager.h" />
     <ClInclude Include="ResourceManagers\ResourceManager.h" />
     <ClInclude Include="ResourceManagers\ShaderManager.h" />
     <ClInclude Include="ResourceManagers\SkeletonManager.h" />
     <ClInclude Include="ResourceManagers\TextureManager.h" />
+    <ClInclude Include="Resources\Font.h" />
     <ClInclude Include="Resources\IResource.h" />
     <ClInclude Include="Resources\Material.h" />
     <ClInclude Include="Resources\Mesh.h" />
+    <ClInclude Include="Resources\TextMesh.h" />
     <ClInclude Include="Resources\Texture.h" />
     <ClInclude Include="Scene\Actor.h" />
     <ClInclude Include="Scene\CameraComponent.h" />
@@ -261,6 +268,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClInclude Include="Scene\RenderComponent.h" />
     <ClInclude Include="Scene\SceneComponent.h" />
     <ClInclude Include="Scene\SceneManager.h" />
+    <ClInclude Include="Scene\TextComponent.h" />
     <ClInclude Include="UnitTest\ArrayTest.h" />
     <ClInclude Include="UnitTest\FileTest.h" />
     <ClInclude Include="UnitTest\HashMapTest.h" />
@@ -290,6 +298,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClCompile Include="Events\Events.cpp" />
     <ClCompile Include="Events\InputEvents.cpp" />
     <ClCompile Include="External\Hash\lookup3.c" />
+    <ClCompile Include="External\Image\SDFGenerator.cpp" />
     <ClCompile Include="External\Image\stb_image.cpp" />
     <ClCompile Include="FileSystem\DirectoryHelper.cpp" />
     <ClCompile Include="FileSystem\FileReader.cpp" />
@@ -335,14 +344,17 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClCompile Include="Renderer\IShader.cpp" />
     <ClCompile Include="Renderer\ShaderAction.cpp" />
     <ClCompile Include="Renderer\ShaderData.cpp" />
+    <ClCompile Include="ResourceManagers\FontManager.cpp" />
     <ClCompile Include="ResourceManagers\MaterialManager.cpp" />
     <ClCompile Include="ResourceManagers\MeshManager.cpp" />
     <ClCompile Include="ResourceManagers\ResourceManager.cpp" />
     <ClCompile Include="ResourceManagers\ShaderManager.cpp" />
     <ClCompile Include="ResourceManagers\SkeletonManager.cpp" />
     <ClCompile Include="ResourceManagers\TextureManager.cpp" />
+    <ClCompile Include="Resources\Font.cpp" />
     <ClCompile Include="Resources\Material.cpp" />
     <ClCompile Include="Resources\Mesh.cpp" />
+    <ClCompile Include="Resources\TextMesh.cpp" />
     <ClCompile Include="Resources\Texture.cpp" />
     <ClCompile Include="Scene\Actor.cpp" />
     <ClCompile Include="Scene\CameraComponent.cpp" />
@@ -356,6 +368,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClCompile Include="Scene\RenderComponent.cpp" />
     <ClCompile Include="Scene\SceneComponent.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
+    <ClCompile Include="Scene\TextComponent.cpp" />
     <ClCompile Include="UnitTest\ArrayTest.cpp" />
     <ClCompile Include="UnitTest\FileTest.cpp" />
     <ClCompile Include="UnitTest\HashMapTest.cpp" />
@@ -376,9 +389,17 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <None Include="Shaders\DefaultGLSimpleLit_Blend.frag" />
     <None Include="Shaders\DefaultHighlightSimple.frag" />
     <None Include="Shaders\DefaultHighlightSimple.vs" />
+    <None Include="Shaders\Shader2D\TextShader.frag" />
+    <None Include="Shaders\Shader2D\TextShader.vs" />
+    <None Include="Shaders\Shader2D\TextShader_MSDF.frag" />
+    <None Include="Shaders\Shader2D\TextShader_SDF.frag" />
     <None Include="Shaders\ShaderData.ubs" />
     <None Include="Shaders\TestGLFragmentShader.frag" />
     <None Include="Shaders\TestGLVertexShader.vs" />
+    <None Include="Shaders\TextWorldShader.frag" />
+    <None Include="Shaders\TextWorldShader.vs" />
+    <None Include="Shaders\TextWorldShader_MSDF.frag" />
+    <None Include="Shaders\TextWorldShader_SDF.frag" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

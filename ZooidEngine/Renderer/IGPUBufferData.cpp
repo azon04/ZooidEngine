@@ -12,13 +12,13 @@ namespace ZE
 
 	void IGPUBufferData::FromBufferData(BufferData* _bufferData)
 	{
-		m_bufferType = _bufferData->m_type;
+		m_bufferType = _bufferData->getBufferType();
 		m_BufferData = _bufferData;
-		m_dataCount = _bufferData->m_count;
+		m_dataCount = _bufferData->getCount();
 
 		if (m_bufferType == VERTEX_BUFFER)
 		{
-			SetupLayout(BufferLayoutManager::GetInstance()->getBufferLayoutByFormat(_bufferData->m_bufferLayout));
+			SetupLayout(BufferLayoutManager::GetInstance()->getBufferLayoutByFormat(_bufferData->getBufferLayout()));
 		}
 	}
 

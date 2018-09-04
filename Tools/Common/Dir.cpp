@@ -51,3 +51,31 @@ bool ZETools::Dir::IsExist(std::string path)
 	return false;
 }
 
+std::string ZETools::Dir::GetFileName(std::string path1, bool bWithExt /*= false*/)
+{
+	size_t lastSepPos = path1.find_last_of("\\");
+	size_t altLastSepPos = path1.find_last_of("/");
+
+	if (lastSepPos == std::string::npos)
+	{
+		lastSepPos = altLastSepPos;
+	}
+	else if (altLastSepPos != std::string::npos && altLastSepPos > lastSepPos)
+	{
+		lastSepPos = altLastSepPos;
+	}
+
+	if (lastSepPos == std::string::npos)
+	{
+		lastSepPos = 0;
+	}
+
+	std::string fileName = path1.substr(lastSepPos+1);
+	if (!bWithExt)
+	{
+		fileName = fileName.substr(0, fileName.find_last_of("."));
+	}
+
+	return fileName;
+}
+

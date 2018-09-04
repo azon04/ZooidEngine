@@ -18,6 +18,9 @@ namespace ZE
 		// Create Orthographic projection
 		void CreateOrthoProj(Matrix4x4& _result, Float32 _right, Float32 _top, Float32 _near, Float32 _far);
 		
+		// Create Orthographic projection, with specified bottom, top, right, left
+		void CreateOrthoProjEx(Matrix4x4& _result, Float32 _bottom, Float32 _top, Float32 _left, Float32 _right, Float32 _near, Float32 _far);
+
 		// Float Lerp
 		float FLerp(float a, float b, float alpha);
 

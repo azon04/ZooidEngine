@@ -132,6 +132,11 @@ namespace ZE
 			return get(index);
 		}
 
+		FORCEINLINE T& operator[](int index) const
+		{
+			return get(index);
+		}
+
 		FORCEINLINE T& get(int index)
 		{
 			return *(T*)((void*)((uintptr_t)m_handle.getObject() + (uintptr_t)(index * sizeof(T))));

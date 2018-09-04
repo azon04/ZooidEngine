@@ -12,6 +12,7 @@
 #include "ZEGameContext.h"
 #include "Renderer/DrawList.h"
 #include "ResourceManagers/ShaderManager.h"
+#include "Scene/TextComponent.h"
 
 namespace ZE
 {
@@ -26,7 +27,7 @@ namespace ZE
 
 		Handle hBufferData("Buffer Data", sizeof(BufferData));
 		s_instance->m_lineBufferData = new(hBufferData) BufferData(VERTEX_BUFFER);
-		s_instance->m_lineBufferData->m_bufferLayout = BUFFER_LAYOUT_V3_C3;
+		s_instance->m_lineBufferData->setBufferLayout( BUFFER_LAYOUT_V3_C3);
 		s_instance->m_lineBufferData->SetData(s_instance->m_lineBuffers, sizeof(DebugPointStruct), MAX_LINE * 2);
 		s_instance->m_lineGPUBufferData = BufferManager::getInstance()->createGPUBufferFromBuffer(s_instance->m_lineBufferData, false);
 		
@@ -36,8 +37,11 @@ namespace ZE
 		gameContext->getRenderer()->ReleaseRenderThreadOwnership();
 
 		s_instance->m_currentIndex = 0;
+		s_instance->m_currentTextIndex = 0;
 
 		s_instance->setupComponent();
+
+		MemoryHelper::Zero(s_instance->m_textComponents, sizeof(s_instance->m_textComponents));
 	}
 
 	void DebugRenderer::Destroy()
@@ -53,6 +57,16 @@ namespace ZE
 	void DebugRenderer::DrawLine(const Vector3& p1, const Vector3& p2, const Vector3& color)
 	{
 		s_instance->drawLine(p1, p2, color);
+	}
+
+	void DebugRenderer::DrawTextScreen(const char* text, const Vector2& _position, const Vector3& _color, Float32 _scale)
+	{
+		s_instance->drawScreenText(text, _position, _color, _scale);
+	}
+
+	void DebugRenderer::DrawTextWorld(const char* text, Matrix4x4& _transform)
+	{
+		s_instance->drawWorldText(text, _transform);
 	}
 
 	void DebugRenderer::setupComponent()
@@ -82,8 +96,14 @@ namespace ZE
 			m_gameContext->getRenderer()->ReleaseRenderThreadOwnership();
 		}
 
+		while (m_textComponents[m_currentTextIndex] != NULL)
+		{
+			m_textComponents[m_currentTextIndex++]->setVisible(false);
+		}
+
 		// Reset
 		m_currentIndex = 0;
+		m_currentTextIndex = 0;
 	}
 
 	void DebugRenderer::drawMatrixBasis(Matrix4x4& mat)
@@ -110,6 +130,45 @@ namespace ZE
 		{
 			ZEWARNING("Not Enough Debug Lines Data to Render.");
 		}
+	}
+
+	void DebugRenderer::drawScreenText(const char* text, const Vector2& _position, const Vector3& _color, Float32 _scale)
+	{
+		if (m_textComponents[m_currentTextIndex] == NULL)
+		{
+			Handle hTextComponent("Text Component", sizeof(TextComponent));
+			m_textComponents[m_currentTextIndex] = new(hTextComponent) TextComponent(m_gameContext);
+
+			addChild(m_textComponents[m_currentTextIndex]);
+			m_textComponents[m_currentTextIndex]->setupComponent();
+		}
+
+		TextComponent* textComponent = m_textComponents[m_currentTextIndex++];
+		textComponent->setVisible(true);
+		textComponent->setText(text);
+		textComponent->setWorldPosition(Vector3(_position.getX(), _position.getY(), 0.0f));
+		textComponent->setColor(_color);
+		textComponent->setScale(Vector3(_scale, _scale, 1.0f));
+		textComponent->setDrawSpace(DRAW_SCREEN);
+	}
+
+	void DebugRenderer::drawWorldText(const char* text, Matrix4x4& _transform)
+	{
+		if(m_textComponents[m_currentTextIndex] == NULL)
+		{
+			Handle hTextComponent("Text Component", sizeof(TextComponent));
+			m_textComponents[m_currentTextIndex] = new(hTextComponent) TextComponent(m_gameContext);
+
+			addChild(m_textComponents[m_currentTextIndex]);
+			m_textComponents[m_currentTextIndex]->setupComponent();
+		}
+
+		TextComponent* textComponent = m_textComponents[m_currentTextIndex++];
+		textComponent->setVisible(true);
+		textComponent->setText(text);
+		textComponent->setColor(Vector3(1.0f, 1.0f, 1.0f));
+		textComponent->setWorldTransform(_transform);
+		textComponent->setDrawSpace(DRAW_WORLD_SPACE);
 	}
 
 	ZE::DebugRenderer* DebugRenderer::s_instance = nullptr;

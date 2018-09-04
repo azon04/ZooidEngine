@@ -21,6 +21,9 @@ namespace ZE
 
 	private:
 		GLuint m_textureBuffer;
+
+		GLint getTextureWrap(TextureWrap wrap);
+		GLint getTextureFilter(TextureFilter filter);
 	};
 }
 #endif

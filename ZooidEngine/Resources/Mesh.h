@@ -15,7 +15,7 @@ namespace ZE
 	{
 		DEFINE_CLASS(Mesh)
 
-			friend class MeshManager;
+		friend class MeshManager;
 	public:
 
 		Mesh() :
@@ -29,8 +29,9 @@ namespace ZE
 		FORCEINLINE Handle getSkeletonHandle() { return m_hSkeleton; }
 		FORCEINLINE Material* getMaterial() { return m_material; }
 		FORCEINLINE Handle getPhysicsBodySetup() { return m_hPhysicsBodySetup; }
+
 	protected:
-		IGPUBufferData* m_vertexBuffer;;
+		IGPUBufferData* m_vertexBuffer;
 		IGPUBufferData* m_indexBuffer;
 		IGPUBufferArray* m_bufferArray;
 		Material* m_material;

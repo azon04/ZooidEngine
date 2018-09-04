@@ -64,6 +64,9 @@ public:
 	// Get buffer layout
 	FORCEINLINE BufferLayout* getBufferLayout() const { return m_layout; }
 
+	// Get current CPU Buffer Data
+	FORCEINLINE BufferData* getBufferData() const { return m_BufferData; }
+
 protected:
 	BufferType m_bufferType;
 	BufferData* m_BufferData;

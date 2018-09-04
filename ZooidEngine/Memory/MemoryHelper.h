@@ -2,6 +2,7 @@
 #define __ZE_MEM_HELPER__
 
 #include "Utils/Macros.h"
+#include "Utils/PrimitiveTypes.h"
 
 namespace ZE
 {
@@ -16,6 +17,10 @@ namespace ZE
 
 		// Zeroed the dest memory
 		void Zero(void* dest, size_t size);
+
+		// Copy texture memory to another texture memory
+		void CopyTexture(void* destTexMemory, Int32 destWidth, Int32 destHeight, Int32 targetX, Int32 targetY, void* srcTexMemory, Int32 srcWidth, Int32 srcHeight, size_t itemSize);
+
 	};
 };
 

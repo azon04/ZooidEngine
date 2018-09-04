@@ -52,7 +52,7 @@ namespace ZE {
 
 	void SceneComponent::setScale(Vector3 _scale)
 	{
-		m_worldTransform.scale(_scale);
+		m_worldTransform.setScale(_scale);
 
 		// #TODO Calculate new world transform to its children
 	}

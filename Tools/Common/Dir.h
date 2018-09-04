@@ -21,6 +21,8 @@ namespace ZETools
 		}
 
 		bool IsExist(std::string path);
+
+		std::string GetFileName(std::string path1, bool bWithExt = false);
 	}
 }
 
