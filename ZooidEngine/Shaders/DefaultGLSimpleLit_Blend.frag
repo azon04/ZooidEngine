@@ -19,6 +19,7 @@ struct Material
 };
 
 #define MAX_NUM_LIGHTS 8
+#define MAX_SHADOW_MAP 16
 
 struct Light {
 
@@ -39,6 +40,10 @@ struct Light {
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
+
+	mat4 viewProj;
+
+	ivec4 shadowMapIndices;
 };
 
 layout (std140) uniform light_data
@@ -47,8 +52,9 @@ layout (std140) uniform light_data
 	int numLight;
 
 	Light lights[MAX_NUM_LIGHTS];
-
 };
+
+uniform sampler2D shadowMaps[MAX_SHADOW_MAP];
 
 out vec4 fColor;
 

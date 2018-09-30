@@ -31,6 +31,10 @@
 #include "ResourceManagers/FontManager.h"
 
 #include "Renderer/DebugRenderer.h"
+#include "Renderer/IGPUFrameBuffer.h"
+#include "Renderer/ShaderData.h"
+
+#include "scene/Light/LightComponent.h"
 
 // TODO for NVIDIA Optimus :  This enable the program to use NVIDIA instead of integrated Intel graphics
 #if WIN32 || WIN64
@@ -316,11 +320,98 @@ namespace ZE
 
 	void DrawJob(GameContext* _gameContext)
 	{
-		_gameContext->getRenderer()->AcquireRenderThreadOwnership();
+		IRenderer* renderer = _gameContext->getRenderer();
+		DrawList* drawList = _gameContext->getDrawList();
 
-		_gameContext->getRenderer()->BeginRender();
+		renderer->AcquireRenderThreadOwnership();
 
-		_gameContext->getRenderer()->ClearScreen();
+		// For each Light render Shadows
+		for (UInt32 iShadowData = 0; iShadowData < drawList->m_lightShadowSize; iShadowData++)
+		{
+			LightShadowMapData& shadowMapData = drawList->m_lightShadowMapData[iShadowData];
+			LightStruct& light = drawList->m_lightData.lights[shadowMapData.lightIndex];
+			
+			if(!shadowMapData.dynamicShadowFrameBuffer) { continue; }
+
+			// TODO Set appropriate shader data
+			Matrix4x4 view;
+			Matrix4x4 proj;
+
+			if (light.Type == LightType::DIRECTIONAL_LIGHT)
+			{
+				MathOps::LookAt(view, light.getDirection() * -5.0f, Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
+				MathOps::CreateOrthoProjEx(proj, -5.0f, 5.0f, -5.0f, 5.0f, 0.1f, 10.0f);
+			}
+			
+			light.setViewProjMatrix(view * proj);
+
+			drawList->m_shaderData.setViewMat(view);
+			drawList->m_shaderData.setProjectionMat(proj);
+			drawList->m_mainConstantBuffer->bindAndRefresh();
+
+			UInt32 shadowMapIndex = 0;
+
+			// Set Shader Chain for this light pass
+			for (UInt32 iDynObj = 0; iDynObj < drawList->m_staticShadowObjSize; iDynObj++)
+			{
+				ShaderAction& shaderAction = drawList->m_staticShadowObjList[iDynObj];
+				if (shaderAction.isSkin())
+				{
+					shaderAction.setShaderChain(shadowMapData.skinnedShaderChain);
+				}
+				else
+				{
+					shaderAction.setShaderChain(shadowMapData.normalShaderChain);
+				}
+
+				// TODO Set the var if any
+			}
+
+			if (!shadowMapData.staticShadowTexture)
+			{
+				for (UInt32 iDynObj = 0; iDynObj < drawList->m_dynamicShadowObjSize; iDynObj++)
+				{
+					ShaderAction& shaderAction = drawList->m_dynamicShadowObjList[iDynObj];
+					if (shaderAction.isSkin())
+					{
+						shaderAction.setShaderChain(shadowMapData.skinnedShaderChain);
+					}
+					else
+					{
+						shaderAction.setShaderChain(shadowMapData.normalShaderChain);
+					}
+
+					// TODO Set the var if any
+				}
+			}
+			else
+			{
+				drawList->m_shadowMap[drawList->m_shadowMapSize] = shadowMapData.staticShadowTexture;
+				light.shadowMapIndices[shadowMapIndex++] = drawList->m_shadowMapSize;
+				drawList->m_shadowMapSize++;
+			}
+			
+			drawList->m_shadowMap[drawList->m_shadowMapSize] = shadowMapData.dynamicShadowTexture;
+			light.shadowMapIndices[shadowMapIndex++] = drawList->m_shadowMapSize;
+			drawList->m_shadowMapSize++;
+
+			while (shadowMapIndex < 4)
+			{
+				light.shadowMapIndices[shadowMapIndex++] = -1;
+			}
+
+			// Process Shadow Render
+			shadowMapData.dynamicShadowFrameBuffer->bind(); // Bind Frame Buffer
+
+			renderer->ProcessShadowMapList(drawList, !shadowMapData.staticShadowTexture);
+
+			shadowMapData.dynamicShadowFrameBuffer->unbind(); // Unbind frame buffer
+
+		}
+
+		renderer->BeginRender();
+
+		renderer->ClearScreen();
 
 		{
 			Matrix4x4 viewMat;

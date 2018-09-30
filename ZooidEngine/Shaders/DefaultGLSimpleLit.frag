@@ -22,6 +22,7 @@ struct Material
 };
 
 #define MAX_NUM_LIGHTS 8
+#define MAX_SHADOW_MAP 16
 
 struct Light {
 
@@ -42,6 +43,10 @@ struct Light {
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
+
+	mat4 viewProj;
+
+	ivec4 shadowMapIndices;
 };
 
 layout (std140) uniform light_data
@@ -50,9 +55,10 @@ layout (std140) uniform light_data
 	int numLight;
 
 	Light lights[MAX_NUM_LIGHTS];
-
 };
 
+uniform sampler2D shadowMaps[MAX_SHADOW_MAP];
+ 
 out vec4 fColor;
 
 in vec2 vsTexCoord;
@@ -61,9 +67,13 @@ in vec3 vsFragPos;
 
 uniform Material material;
 
+const float shadowBias = 0.002;
+
 vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir);
 vec3 CalcSpotLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir);
+float CalcShadow(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir, int shadowMapIndex);
+float CalcShadowPCF(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir, int shadowMapIndex);
 
 void main()
 {
@@ -94,6 +104,58 @@ void main()
 	fColor = vec4(result, 1.0f);
 }
 
+float CalcShadow(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir, int shadowMapIndex)
+{
+	// Perform perspective divide
+	vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+	// [0,1]
+	projCoords = projCoords * 0.5 + 0.5;
+
+	//Comparison current depth and expected depth in shadow map
+	float closestDepth = texture(shadowMaps[shadowMapIndex], projCoords.xy).r;
+	float currentDepth = projCoords.z;
+
+	// Calculate bias to prevent Shadow Acne
+	float bias = max(0.005 * (1.0 - dot(normal, lightDir)), shadowBias);
+	float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
+
+	// Set shadow to 0 if the pos outside the light view frustrum
+	if(projCoords.z > 1.0)
+		shadow = 0.0;
+
+	return shadow;
+}
+
+float CalcShadowPCF(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir, int shadowMapIndex)
+{
+	// Perform perspective divide
+	vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+	// [0,1]
+	projCoords = projCoords * 0.5 + 0.5;
+
+	//Comparison current depth and expected depth in shadow map
+	float currentDepth = projCoords.z;
+
+	// Calculate bias to prevent Shadow Acne
+	float shadow = 0.0;
+	vec2 texelSize = 1.0 / textureSize( shadowMaps[shadowMapIndex], 0 );
+	for(int x = -1; x <= 1; ++x)
+	{
+		for(int y = -1; y <= 1; ++y)
+		{
+			float closestDepth = texture(shadowMaps[shadowMapIndex], projCoords.xy + vec2(x, y) * texelSize).r;
+			shadow += currentDepth > closestDepth ? 1.0 : 0.0;
+		}
+	}
+	shadow /= 9.0;
+
+	// Set shadow to 0 if the pos outside the light view frustrum
+	if(projCoords.z > 1.0)
+		shadow = 0.0;
+
+	return shadow;
+}
+
 vec3 CalculateDiffuseColor()
 {
 	return mix(vec3(1.0, 1.0, 1.0), vec3(texture(material.diffuseMap, vsTexCoord)), material.diffuseMapBound);
@@ -107,17 +169,30 @@ vec3 CalculateSpecularColor()
 vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir)
 {
 	vec3 lightDir = normalize(-light.direction);
+	
 	// diffuse shading
 	float diff = max( dot(normal, lightDir), 0.0);
+	
 	// specular shading
 	vec3 reflectDir = reflect(-lightDir, normal);
 	float spec = material.shininess > 0.0 ? pow( max( dot( viewDir, reflectDir ), 0.0), material.shininess ) : 0;
+	
 	// combine results
 	vec3 ambient = light.ambient * material.Ka * CalculateDiffuseColor();
 	vec3 diffuse = light.diffuse * diff * material.Kd * CalculateDiffuseColor();
 	vec3 specular = light.specular * spec * material.Ks * CalculateSpecularColor();
 	
-	return (ambient + diffuse + specular);
+	// Calculate shadow
+	float shadow = 0.0;
+	for(int i=0; i < 4; i++)
+	{
+		if(light.shadowMapIndices[i] != -1)
+		{
+			shadow = max(shadow, CalcShadowPCF(light.viewProj * vec4(vsFragPos, 1.0), normal, lightDir, light.shadowMapIndices[i]));
+		}
+	}
+
+	return ambient + (1.0 - shadow) * (diffuse + specular);
 }
 
 vec3 CalcPointLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir)

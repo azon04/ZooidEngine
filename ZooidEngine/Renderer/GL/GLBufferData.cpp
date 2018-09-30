@@ -1,4 +1,6 @@
 #include "GLBufferData.h"
+#include "Renderer/BufferData.h"
+#include "Memory/MemoryHelper.h"
 
 namespace ZE
 {

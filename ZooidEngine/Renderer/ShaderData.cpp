@@ -40,6 +40,21 @@ namespace ZE
 		MemoryHelper::Copy(&_specular.m_data[0], Specular, sizeof(Float32) * 3);
 	}
 
+	void LightStruct::setViewProjMatrix(Matrix4x4& _viewProj)
+	{
+		MemoryHelper::Copy(_viewProj.m_data, lightViewProj, sizeof(lightViewProj));
+	}
+
+	Vector3 LightStruct::getDirection()
+	{
+		return Vector3(Direction);
+	}
+
+	Vector3 LightStruct::getPosition()
+	{
+		return Vector3(Position);
+	}
+
 	void LightData::setViewPos(Vector3& _viewPos)
 	{
 		MemoryHelper::Copy(&_viewPos.m_data[0], ViewPos, sizeof(Float32) * 3);

@@ -32,9 +32,10 @@ public:
 	virtual void EndRender() override;
 	virtual void Clean() override;
 	virtual void ClearScreen() override;
+	virtual void ProcessShadowMapList(DrawList* drawList, bool bWithStatic) override;
 	virtual void ProcessDrawList(DrawList* drawList) override;
-	virtual void ProcessShaderAction(ShaderAction* shaderAction) override;
-	virtual void Draw(ShaderAction* shaderAction) override;
+	virtual void ProcessShaderAction(DrawList* drawList, ShaderAction* shaderAction) override;
+	virtual void Draw(DrawList* drawList, ShaderAction* shaderAction) override;
 	virtual bool IsClose() override;
 
 	virtual void PollEvent() override;
@@ -61,6 +62,8 @@ private:
 #endif
 
 private:
+	void BindShadowMaps(DrawList* _drawList, IShaderChain* shaderChain, int offset);
+	void UnbindShadowMaps(DrawList* _drawList, IShaderChain* shaderChain, int offset);
 	void ProcessShaderFeature(ShaderFeature& shaderFeature);
 	void SortBlendShaderActions(const Vector3& cameraPosition, const Vector3& cameraDirection,  ShaderAction* inArray, UInt32* outIndexArray, UInt32 count);
 

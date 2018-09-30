@@ -28,7 +28,7 @@ namespace ZE
 		m_layout = _layout;
 	}
 
-	void IShader::loadShader(const char* _shaderFilePath, ShaderType _shaderType)
+	void IShader::loadShader(const char* _shaderFilePath, EShaderType _shaderType)
 	{
 		FileReader file(_shaderFilePath);
 		Handle bufferHandle(sizeof(char) * (file.size() + 1));

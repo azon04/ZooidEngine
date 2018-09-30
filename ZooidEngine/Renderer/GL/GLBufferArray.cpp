@@ -1,5 +1,6 @@
 #include "GLBufferArray.h"
 #include "GLBufferData.h"
+#include "Renderer/BufferLayout.h"
 
 namespace ZE
 {

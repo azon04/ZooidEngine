@@ -3,7 +3,7 @@
 
 #include "Utils/PrimitiveTypes.h"
 #include "Utils/Array.h"
-
+#include "Enums.h"
 
 #define BUFFER_LAYOUT_V3_C3 0
 #define BUFFER_LAYOUT_V3_TC2 1
@@ -15,17 +15,11 @@
 namespace ZE 
 {
 
-	enum DataType 
-	{
-		FLOAT,
-		INTEGER
-	};
-
-	struct Layout 
+	struct Layout
 	{
 		ZE::Int32 Index;
 		ZE::UInt32 SizePerItem;
-		DataType DataType;
+		EDataType DataType;
 		ZE::UInt32 Stride;
 		ZE::Int32 Offset;
 	};

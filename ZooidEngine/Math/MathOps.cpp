@@ -55,11 +55,11 @@ namespace ZE
 
 	void MathOps::CreateOrthoProjEx(Matrix4x4& _result, Float32 _bottom, Float32 _top, Float32 _left, Float32 _right, Float32 _near, Float32 _far)
 	{
-		_result.m_data[0][0] = 1.0f / (_right - _left);
+		_result.m_data[0][0] = 2.0f / (_right - _left);
 		_result.m_data[3][0] = -(_right + _left) / (_right - _left);
 		_result.m_data[1][0] = _result.m_data[2][0] = 0.0f;
 
-		_result.m_data[1][1] = 1.0f / (_top - _bottom);
+		_result.m_data[1][1] = 2.0f / (_top - _bottom);
 		_result.m_data[3][1] = -(_top + _bottom) / (_top - _bottom);
 		_result.m_data[0][1] = _result.m_data[2][1] = 0.0f;
 
@@ -69,6 +69,27 @@ namespace ZE
 
 		_result.m_data[3][3] = 1;
 		_result.m_data[0][3] = _result.m_data[1][3] = _result.m_data[2][3] = 0.0f;
+	}
+
+	void MathOps::LookAt(Matrix4x4& _result, const Vector3& _position, const Vector3& _target, const Vector3& _up)
+	{
+		Vector3 zAxis = _target - _position;
+		zAxis.normalize();
+
+		Vector3 xAxis = zAxis ^ _up;
+		xAxis.normalize();
+
+		Vector3 yAxis = xAxis ^ zAxis;
+
+		zAxis = zAxis * -1.0f;
+		_result.setU(xAxis);
+		_result.setV(yAxis);
+		_result.setN(zAxis);
+
+		_result = _result.transpose();
+
+		Vector3 newPos( xAxis | _position * -1.0f, yAxis | _position * -1.0f, zAxis | _position * -1.0);
+		_result.setPos(newPos);
 	}
 
 	float MathOps::FLerp(float a, float b, float alpha)

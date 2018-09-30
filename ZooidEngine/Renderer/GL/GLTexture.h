@@ -2,6 +2,7 @@
 #define __Z_GL_TEXTURE__
 
 #include "Renderer/IGPUTexture.h"
+#include "Renderer/BufferLayout.h"
 
 #include <GL/glew.h>
 
@@ -19,11 +20,9 @@ namespace ZE
 		virtual void bind() override;
 		virtual void unbind() override;
 
+		GLuint getTextureBuffer() const { return m_textureBuffer; }
 	private:
 		GLuint m_textureBuffer;
-
-		GLint getTextureWrap(TextureWrap wrap);
-		GLint getTextureFilter(TextureFilter filter);
 	};
 }
 #endif

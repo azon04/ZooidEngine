@@ -17,6 +17,8 @@ namespace ZE
 		virtual Handle CreateRenderTexture() override;
 		virtual Handle CreateShader() override;
 		virtual Handle CreateShaderChain() override;
+		virtual Handle CreateRenderBuffer() override;
+		virtual Handle CreateFrameBuffer() override;
 
 		virtual void Init() override;
 		virtual void Destroy() override;

@@ -7,6 +7,8 @@
 
 namespace ZE
 {
+	class BufferLayout;
+
 	class GLBufferArray : public IGPUBufferArray
 	{
 	public:

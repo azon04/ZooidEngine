@@ -1,6 +1,7 @@
 #include "GLRenderer.h"
 
 #include "ZEngine.h"
+#include "Enums.h"
 
 #if defined(_WIN32) || defined(_WIN64)
 	#define GLFW_EXPOSE_NATIVE_WIN32
@@ -20,36 +21,36 @@ namespace ZE
 		HashFeatureToRealGLVar.put(RendererFeature::BLEND, GL_BLEND);
 		HashFeatureToRealGLVar.put(RendererFeature::FACE_CULING, GL_CULL_FACE);
 
-		HashCompareFuncToRealGLVar.put(RendererCompareFunc::ALWAYS, GL_ALWAYS);
-		HashCompareFuncToRealGLVar.put(RendererCompareFunc::NEVER, GL_NEVER);
-		HashCompareFuncToRealGLVar.put(RendererCompareFunc::LESS, GL_LESS);
-		HashCompareFuncToRealGLVar.put(RendererCompareFunc::EQUAL, GL_EQUAL);
-		HashCompareFuncToRealGLVar.put(RendererCompareFunc::LEQUAL, GL_LEQUAL);
-		HashCompareFuncToRealGLVar.put(RendererCompareFunc::GREATER, GL_GREATER);
-		HashCompareFuncToRealGLVar.put(RendererCompareFunc::NOTEQUAL, GL_NOTEQUAL);
-		HashCompareFuncToRealGLVar.put(RendererCompareFunc::GEQUAL, GL_GEQUAL);
+		HashCompareFuncToRealGLVar.put(ERendererCompareFunc::ALWAYS, GL_ALWAYS);
+		HashCompareFuncToRealGLVar.put(ERendererCompareFunc::NEVER, GL_NEVER);
+		HashCompareFuncToRealGLVar.put(ERendererCompareFunc::LESS, GL_LESS);
+		HashCompareFuncToRealGLVar.put(ERendererCompareFunc::EQUAL, GL_EQUAL);
+		HashCompareFuncToRealGLVar.put(ERendererCompareFunc::LEQUAL, GL_LEQUAL);
+		HashCompareFuncToRealGLVar.put(ERendererCompareFunc::GREATER, GL_GREATER);
+		HashCompareFuncToRealGLVar.put(ERendererCompareFunc::NOTEQUAL, GL_NOTEQUAL);
+		HashCompareFuncToRealGLVar.put(ERendererCompareFunc::GEQUAL, GL_GEQUAL);
 
-		HashBlendFactorToRealGLVar.put(RendererBlendFactor::ZERO, GL_ZERO);
-		HashBlendFactorToRealGLVar.put(RendererBlendFactor::ONE, GL_ONE);
-		HashBlendFactorToRealGLVar.put(RendererBlendFactor::SRC_COLOR, GL_SRC_COLOR);
-		HashBlendFactorToRealGLVar.put(RendererBlendFactor::ONE_MINUS_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR);
-		HashBlendFactorToRealGLVar.put(RendererBlendFactor::DST_COLOR, GL_DST_COLOR);
-		HashBlendFactorToRealGLVar.put(RendererBlendFactor::ONE_MINUS_DST_COLOR, GL_ONE_MINUS_DST_COLOR);
-		HashBlendFactorToRealGLVar.put(RendererBlendFactor::SRC_ALPHA, GL_SRC_ALPHA);
-		HashBlendFactorToRealGLVar.put(RendererBlendFactor::ONE_MINUS_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		HashBlendFactorToRealGLVar.put(RendererBlendFactor::DST_ALPHA, GL_DST_ALPHA);
-		HashBlendFactorToRealGLVar.put(RendererBlendFactor::ONE_MINUS_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA);
-		HashBlendFactorToRealGLVar.put(RendererBlendFactor::CONSTANT_COLOR, GL_CONSTANT_COLOR);
-		HashBlendFactorToRealGLVar.put(RendererBlendFactor::ONE_MINUS_CONSTANT_COLOR, GL_ONE_MINUS_CONSTANT_COLOR);
-		HashBlendFactorToRealGLVar.put(RendererBlendFactor::CONSTANT_ALPHA, GL_CONSTANT_ALPHA);
-		HashBlendFactorToRealGLVar.put(RendererBlendFactor::ONE_MINUS_CONSTANT_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);
+		HashBlendFactorToRealGLVar.put(ERendererBlendFactor::ZERO, GL_ZERO);
+		HashBlendFactorToRealGLVar.put(ERendererBlendFactor::ONE, GL_ONE);
+		HashBlendFactorToRealGLVar.put(ERendererBlendFactor::SRC_COLOR, GL_SRC_COLOR);
+		HashBlendFactorToRealGLVar.put(ERendererBlendFactor::ONE_MINUS_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR);
+		HashBlendFactorToRealGLVar.put(ERendererBlendFactor::DST_COLOR, GL_DST_COLOR);
+		HashBlendFactorToRealGLVar.put(ERendererBlendFactor::ONE_MINUS_DST_COLOR, GL_ONE_MINUS_DST_COLOR);
+		HashBlendFactorToRealGLVar.put(ERendererBlendFactor::SRC_ALPHA, GL_SRC_ALPHA);
+		HashBlendFactorToRealGLVar.put(ERendererBlendFactor::ONE_MINUS_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		HashBlendFactorToRealGLVar.put(ERendererBlendFactor::DST_ALPHA, GL_DST_ALPHA);
+		HashBlendFactorToRealGLVar.put(ERendererBlendFactor::ONE_MINUS_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA);
+		HashBlendFactorToRealGLVar.put(ERendererBlendFactor::CONSTANT_COLOR, GL_CONSTANT_COLOR);
+		HashBlendFactorToRealGLVar.put(ERendererBlendFactor::ONE_MINUS_CONSTANT_COLOR, GL_ONE_MINUS_CONSTANT_COLOR);
+		HashBlendFactorToRealGLVar.put(ERendererBlendFactor::CONSTANT_ALPHA, GL_CONSTANT_ALPHA);
+		HashBlendFactorToRealGLVar.put(ERendererBlendFactor::ONE_MINUS_CONSTANT_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);
 		
-		HashCullFace[CullFace::FRONT] = GL_FRONT;
-		HashCullFace[CullFace::BACK] = GL_BACK;
-		HashCullFace[CullFace::FRONT_AND_BACK] = GL_FRONT_AND_BACK;
+		HashCullFace[ECullFace::FRONT] = GL_FRONT;
+		HashCullFace[ECullFace::BACK] = GL_BACK;
+		HashCullFace[ECullFace::FRONT_AND_BACK] = GL_FRONT_AND_BACK;
 
-		HashFaceFrontOrder[FaceFrontOrder::CCW] = GL_CCW;
-		HashFaceFrontOrder[FaceFrontOrder::CW] = GL_CW;
+		HashFaceFrontOrder[EFaceFrontOrder::CCW] = GL_CCW;
+		HashFaceFrontOrder[EFaceFrontOrder::CW] = GL_CW;
 	}
 
 	void GLRenderer::Setup()
@@ -102,6 +103,7 @@ namespace ZE
 
 	void GLRenderer::BeginRender()
 	{
+		glViewport(0, 0, WIDTH, HEIGHT);
 	}
 
 	void GLRenderer::EndRender()
@@ -123,6 +125,29 @@ namespace ZE
 		glStencilMask(0x00); // Disable writing to stencil buffer
 	}
 
+	void GLRenderer::ProcessShadowMapList(DrawList* drawList, bool bWithStatic)
+	{
+		// Current peter panning solution
+		glCullFace(GL_FRONT);
+
+		glClear(GL_DEPTH_BUFFER_BIT);
+
+		for (UInt32 i = 0; i < drawList->m_dynamicShadowObjSize; i++)
+		{
+			ProcessShaderAction(drawList, &drawList->m_dynamicShadowObjList[i]);
+		}
+
+		if (bWithStatic)
+		{
+			for (UInt32 i = 0; i < drawList->m_staticShadowObjSize; i++)
+			{
+				ProcessShaderAction(drawList, &drawList->m_staticShadowObjList[i]);
+			}
+		}
+
+		glCullFace(GL_BACK);
+	}
+
 	void GLRenderer::ProcessDrawList(DrawList* drawList)
 	{
 		if (drawList->m_mainConstantBuffer)
@@ -137,14 +162,14 @@ namespace ZE
 
 		for (int i = 0; i < drawList->m_size; ++i)
 		{
-			ProcessShaderAction(&drawList->m_drawList[i]);
+			ProcessShaderAction(drawList, &drawList->m_drawList[i]);
 		}
 
 		UInt32 blendSortIndices[MAX_SECONDPASS_DRAW_LIST];
 		SortBlendShaderActions(drawList->m_cameraPosition, drawList->m_cameraDirection, drawList->m_secondPassDrawList, blendSortIndices, drawList->m_secondPassSize);
 		for (int i = 0; i < drawList->m_secondPassSize; ++i)
 		{
-			ProcessShaderAction(&drawList->m_secondPassDrawList[blendSortIndices[i]]);
+			ProcessShaderAction(drawList, &drawList->m_secondPassDrawList[blendSortIndices[i]]);
 		}
 
 		if (drawList->m_mainConstantBuffer)
@@ -158,17 +183,17 @@ namespace ZE
 		}
 	}
 
-	void GLRenderer::ProcessShaderAction(ShaderAction* shaderAction)
+	void GLRenderer::ProcessShaderAction(DrawList* drawList, ShaderAction* shaderAction)
 	{
 		switch (shaderAction->getShaderActionType())
 		{
 		case SHADER_ACTION_DRAW:
-			Draw(shaderAction);
+			Draw(drawList, shaderAction);
 			break;
 		}
 	}
 
-	void GLRenderer::Draw(ShaderAction* shaderAction)
+	void GLRenderer::Draw(DrawList* drawList, ShaderAction* shaderAction)
 	{
 		shaderAction->getShaderChain()->bind();
 		
@@ -185,6 +210,7 @@ namespace ZE
 		}
 
 		Int32 variableCount = shaderAction->m_shaderVariables.length();
+		Int32 shadowMapOffset = 0;
 		for (int i = 0; i < variableCount; i++)
 		{
 			ShaderVariable& shaderVariable = shaderAction->m_shaderVariables[i];
@@ -206,11 +232,17 @@ namespace ZE
 				shaderAction->getShaderChain()->setTexture(shaderVariable.VarName, shaderVariable.texture_value.Texture_data, shaderVariable.texture_value.Texture_index);
 				glActiveTexture(GL_TEXTURE0 + shaderVariable.texture_value.Texture_index);
 				shaderVariable.texture_value.Texture_data->bind();
+				if (shadowMapOffset <= shaderVariable.texture_value.Texture_index)
+				{
+					shadowMapOffset = shaderVariable.texture_value.Texture_index + 1;
+				}
 				break;
 			case SHADER_VAR_TYPE_BLOCK_BUFFER:
 				shaderAction->getShaderChain()->bindConstantBuffer(shaderVariable.VarName, shaderVariable.Constant_buffer);
 			}
 		}
+
+		BindShadowMaps(drawList, shaderAction->getShaderChain(), shadowMapOffset);
 
 		GLenum drawTopology = GL_TRIANGLES;
 
@@ -249,6 +281,8 @@ namespace ZE
 				break;
 			}
 		}
+
+		UnbindShadowMaps(drawList, shaderAction->getShaderChain(), shadowMapOffset);
 
 		// Revert Render Feature
 		for (int i = 0; i < shaderAction->m_shaderFeatures.length(); i++)
@@ -322,6 +356,27 @@ namespace ZE
 		{
 			glFrontFace(GL_CCW);
 			glCullFace(GL_BACK);
+		}
+	}
+
+	void GLRenderer::BindShadowMaps(DrawList* _drawList, IShaderChain* shaderChain, int offset)
+	{
+		char buffer[25];
+		for (UInt32 i = 0; i < _drawList->m_shadowMapSize; i++)
+		{
+			StringFunc::PrintToString(buffer, 25, "shadowMaps[%d]", i);
+			shaderChain->setTexture(buffer, _drawList->m_shadowMap[i], offset + i);
+			glActiveTexture(GL_TEXTURE0 + offset + i);
+			_drawList->m_shadowMap[i]->bind();
+		}
+	}
+
+	void GLRenderer::UnbindShadowMaps(DrawList* _drawList, IShaderChain* shaderChain, int offset)
+	{
+		for (UInt32 i = 0; i < _drawList->m_shadowMapSize; i++)
+		{
+			glActiveTexture(GL_TEXTURE0 + offset + i);
+			_drawList->m_shadowMap[i]->unbind();
 		}
 	}
 

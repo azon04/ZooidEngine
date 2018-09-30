@@ -1,12 +1,15 @@
 #ifndef __Z_GL_BUFFER_DATA__
 #define __Z_GL_BUFFER_DATA__
 
+#include "Utils/Macros.h"
 #include "Renderer/IGPUBufferData.h"
 
 #include <GL/glew.h>
 
 namespace ZE
 {
+	class BufferData;
+
 	class GLBufferData : public IGPUBufferData
 	{
 	public:

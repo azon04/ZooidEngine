@@ -21,6 +21,8 @@ namespace ZE
 		virtual Handle CreateRenderTexture() = 0;
 		virtual Handle CreateShader() = 0;
 		virtual Handle CreateShaderChain() = 0;
+		virtual Handle CreateRenderBuffer() = 0;
+		virtual Handle CreateFrameBuffer() = 0;
 
 		FORCEINLINE IRenderer* GetRenderer() const { return m_renderer; }
 

@@ -25,6 +25,18 @@ namespace ZE
 		m_bufferArray = nullptr;
 		m_shaderActionType = SHADER_ACTION_DRAW;
 		m_vertexSize = 0;
+		m_bSkin = false;
+	}
+
+	void ShaderAction::setShaderChain(IShaderChain* _shader)
+	{
+		m_shader = _shader;
+	}
+
+	void ShaderAction::setBuffer(IGPUBufferArray* _bufferArray)
+	{
+		m_bufferArray = _bufferArray;
+		m_vertexSize = _bufferArray->getDataCount();
 	}
 
 	void ShaderAction::setShaderAndBuffer(IShaderChain* _shader, IGPUBufferArray* _bufferArray)
@@ -125,7 +137,7 @@ namespace ZE
 		memcpy(&Mat_value, &_other.Mat_value, sizeof(Mat_value));
 	}
 
-	void EnableAndSetDepthFunction(ShaderAction& shaderAction, RendererCompareFunc func)
+	void EnableAndSetDepthFunction(ShaderAction& shaderAction, ERendererCompareFunc func)
 	{
 		shaderAction.m_shaderFeatures.push_back(ShaderFeature());
 		ShaderFeature& shaderFeature = shaderAction.m_shaderFeatures[shaderAction.m_shaderFeatures.length() - 1];
@@ -138,7 +150,7 @@ namespace ZE
 		shaderFeature.m_shaderFeatureVar.push_back(shaderFunc);
 	}
 
-	void EnableAndSetStencilFunc(ShaderAction& shaderAction, RendererCompareFunc func, Int32 ref, UInt32 refMask, UInt32 stencilWriteMask)
+	void EnableAndSetStencilFunc(ShaderAction& shaderAction, ERendererCompareFunc func, Int32 ref, UInt32 refMask, UInt32 stencilWriteMask)
 	{
 		shaderAction.m_shaderFeatures.push_back(ShaderFeature());
 		ShaderFeature& shaderFeature = shaderAction.m_shaderFeatures[shaderAction.m_shaderFeatures.length() - 1];
@@ -167,7 +179,7 @@ namespace ZE
 
 	}
 
-	void EnableAndSetBlendFunc(ShaderAction& shaderAction, RendererBlendFactor sourceBlendFactor, RendererBlendFactor dstBlendFactor)
+	void EnableAndSetBlendFunc(ShaderAction& shaderAction, ERendererBlendFactor sourceBlendFactor, ERendererBlendFactor dstBlendFactor)
 	{
 		shaderAction.m_shaderFeatures.push_back(ShaderFeature());
 		ShaderFeature& shaderFeature = shaderAction.m_shaderFeatures[shaderAction.m_shaderFeatures.length() - 1];
@@ -185,7 +197,7 @@ namespace ZE
 		shaderFeature.m_shaderFeatureVar.push_back(destBlendFactorVar);
 	}
 
-	void EnableAndSetFaceCull(ShaderAction& shaderAction, FaceFrontOrder faceOrder, CullFace cullFace)
+	void EnableAndSetFaceCull(ShaderAction& shaderAction, EFaceFrontOrder faceOrder, ECullFace cullFace)
 	{
 		shaderAction.m_shaderFeatures.push_back(ShaderFeature());
 		ShaderFeature& shaderFeature = shaderAction.m_shaderFeatures[shaderAction.m_shaderFeatures.length() - 1];
