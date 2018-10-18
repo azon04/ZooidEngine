@@ -498,11 +498,13 @@ void generateFontPSDF(const char* fontFilePath, const char* resultPath, int pixe
 		msdfgen::Vector2 dims(r - l, t - b);
 		msdfgen::Vector2 trans(0.0);
 
-		if (dims.x*frame.y < dims.y*frame.x) {
+		if (dims.x*frame.y < dims.y*frame.x) 
+		{
 			trans.set(.5*(frame.x / frame.y*dims.y - dims.x) - l, -b);
 			scale = frame.y / dims.y;
 		}
-		else {
+		else 
+		{
 			trans.set(-l, .5*(frame.y / frame.x*dims.x - dims.y) - b);
 			scale = frame.x / dims.x;
 		}

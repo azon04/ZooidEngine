@@ -7,6 +7,9 @@
 #include "Renderer/DrawList.h"
 #include "Renderer/RenderZooid.h"
 #include "Renderer/IGPUFrameBuffer.h"
+#include "Renderer/DebugRenderer.h"
+
+#include "Math/MathUtil.h"
 
 #include "ResourceManagers/TextureManager.h"
 #include "ResourceManagers/ShaderManager.h"
@@ -25,6 +28,8 @@ namespace ZE
 		m_attLinear(0.07f),
 		m_attQuadratic(0.017f),
 		m_bGenerateShadow(true),
+		m_innerRadius(DegToRad(17.0f)),
+		m_outerRadius(DegToRad(20.0f)),
 		m_shadowMapWidth(2048),
 		m_shadowMapHeight(2048)
 	{}
@@ -71,8 +76,8 @@ namespace ZE
 			light.Att_constant = m_attConstant;
 			light.Att_linear = m_attLinear;
 			light.Att_quadratic = m_attQuadratic;
-			light.CutOff = m_innerRadius;
-			light.OuterCutOff = m_outerRadius;
+			light.CutOff = cos(m_innerRadius);
+			light.OuterCutOff = cos(m_outerRadius);
 			break;
 		default:
 			break;
@@ -88,6 +93,8 @@ namespace ZE
 			shadowMapData.normalShaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_SHADOW_DEPTH);
 			shadowMapData.skinnedShaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_cHAIN_SHADOW_DEPTH_SKINNED);
 		}
+
+		DebugRenderer::DrawMatrixBasis(m_worldTransform);
 	}
 
 	void LightComponent::setStatic(bool bStatic)

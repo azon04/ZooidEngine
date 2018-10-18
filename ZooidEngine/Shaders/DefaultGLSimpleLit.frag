@@ -224,7 +224,7 @@ vec3 CalcSpotLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir)
 	float diff = max( dot(normal, lightDir), 0.0);
 	// specular shading
 	vec3 reflectDir = reflect(-lightDir, normal);
-	float spec = pow( max( dot( viewDir, reflectDir ), 0.0), material.shininess );
+	float spec = material.shininess > 0.0 ? pow( max( dot( viewDir, reflectDir ), 0.0), material.shininess ) : 0;
 	// attenuation
 	float distance = length(light.position - fragPos);
 	float attenuation = 1.0 / (light.att_constant + light.att_linear * distance + light.att_quadratic * distance * distance);
@@ -240,6 +240,16 @@ vec3 CalcSpotLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir)
 	diffuse *= attenuation * intensity;
 	specular *= attenuation * intensity;
 
-	return (ambient + diffuse + specular);
+	// Calculate shadow
+	float shadow = 0.0;
+	for(int i=0; i < 4; i++)
+	{
+		if(light.shadowMapIndices[i] != -1)
+		{
+			shadow = max(shadow, CalcShadowPCF(light.viewProj * vec4(vsFragPos, 1.0), normal, lightDir, light.shadowMapIndices[i]));
+		}
+	}
+
+	return ambient + (1.0 - shadow) * (diffuse + specular);
 
 }

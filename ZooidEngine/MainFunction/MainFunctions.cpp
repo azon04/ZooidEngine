@@ -257,9 +257,9 @@ namespace ZE
 		DebugRenderer::DrawTextScreen(StringFunc::Buffer, Vector2(10.0f, _gameContext->getRenderer()->GetHeight() - 30.0f), Vector3(1.0f, 1.0f, 0.0f), 0.5f);
 
 		// Draw World Text
-		Matrix4x4 mat;
-		mat.translate(Vector3(0.0f, 0.1f, 0.0f));
-		DebugRenderer::DrawTextWorld("Zooid Engine", mat);
+		//Matrix4x4 mat;
+		//mat.translate(Vector3(0.0f, 0.1f, 0.0f));
+		//DebugRenderer::DrawTextWorld("Zooid Engine", mat);
 
 		// Draw Base Lines
 		DebugRenderer::DrawMatrixBasis(Matrix4x4());
@@ -341,6 +341,11 @@ namespace ZE
 			{
 				MathOps::LookAt(view, light.getDirection() * -5.0f, Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
 				MathOps::CreateOrthoProjEx(proj, -5.0f, 5.0f, -5.0f, 5.0f, 0.1f, 10.0f);
+			}
+			else if (light.Type == LightType::SPOT_LIGHT)
+			{
+				MathOps::LookAt(view, light.getPosition(), light.getPosition() + light.getDirection(), Vector3(1.0f, 0.0f, 0.0f));
+				MathOps::CreatePerspectiveProjEx(proj, 1.0f,  2.0 * RadToDeg(acos(light.OuterCutOff)), 0.1f, 10.0f);
 			}
 			
 			light.setViewProjMatrix(view * proj);

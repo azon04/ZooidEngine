@@ -5,12 +5,14 @@
 
 #include "MainFunction.h"
 
-int main(int argc, char** argv) 
+#include <windows.h>
+
+int main(int argc, char** argv)
 {
 
 	// Init Engine
 	ZE::GameContext gameContext;
-
+	
 	ZE::MainSetup(&gameContext);
 
 	AnimationDemo::MainSetup(&gameContext);

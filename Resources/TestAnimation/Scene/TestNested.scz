@@ -3,8 +3,9 @@ FileVersion 1.0
 ComponentCount 2
 LightComponent DirLight
 BEGIN
-LightType 0
-R 150.0 0.0 0.0
+LightType 2
+R 90.0 0.0 0.0
+T 0.0 2.0 0.0
 END
 SceneComponent BlendSceneDemo
 BEGIN
