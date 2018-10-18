@@ -77,6 +77,12 @@ namespace ZE
 		zAxis.normalize();
 
 		Vector3 xAxis = zAxis ^ _up;
+		if (xAxis.lengthSquare() == 0.0f)
+		{
+			Vector3 newUp(_up.m_z, _up.m_x, _up.m_y);
+			xAxis = zAxis ^ newUp;
+		}
+
 		xAxis.normalize();
 
 		Vector3 yAxis = xAxis ^ zAxis;

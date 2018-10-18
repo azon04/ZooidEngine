@@ -344,7 +344,7 @@ namespace ZE
 			}
 			else if (light.Type == LightType::SPOT_LIGHT)
 			{
-				MathOps::LookAt(view, light.getPosition(), light.getPosition() + light.getDirection(), Vector3(1.0f, 0.0f, 0.0f));
+				MathOps::LookAt(view, light.getPosition(), light.getPosition() + light.getDirection(), Vector3(0.0f, 1.0f, 0.0f));
 				MathOps::CreatePerspectiveProjEx(proj, 1.0f,  2.0 * RadToDeg(acos(light.OuterCutOff)), 0.1f, 10.0f);
 			}
 			
