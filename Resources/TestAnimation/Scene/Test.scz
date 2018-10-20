@@ -1,10 +1,19 @@
 SceneName TestMap
 FileVersion 1.0
-ComponentCount 9
+ComponentCount 10
 LightComponent DirLight
 BEGIN
 LightType 0
-R 150.0 0.0 0.0
+R 160.0 0.0 0.0
+T 0.0 3.0 3.0
+END
+LightComponent SpotLight
+BEGIN
+LightType 2
+R 90.0 0.0 0.0
+T 0.0 3.0 0.0
+Radius 35.0
+OuterRadius 50.0
 END
 RenderComponent Floor
 BEGIN

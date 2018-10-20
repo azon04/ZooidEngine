@@ -156,8 +156,8 @@ namespace ZE
 			return StringFunc::Compare(const_str(), text.const_str()) != 0;
 		}
 
-		char* const_str() const { return (char*)(m_handle.getObjectConst()); }
-		char* c_str() { return m_handle.getObject<char>(); }
+		char* const_str() const { return (char*)(m_handle.isValid() ? m_handle.getObjectConst() : nullptr); }
+		char* c_str() { return m_handle.isValid() ? m_handle.getObject<char>() : nullptr; }
 
 		Int32 length() { return StringFunc::Length(c_str()); }
 		Handle getHandle() const { return m_handle; }

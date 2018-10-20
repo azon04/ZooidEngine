@@ -1,4 +1,7 @@
 #include "IGPUBufferData.h"
+#include "BufferData.h"
+
+#include "Renderer/BufferLayout.h"
 
 #include <GL/glew.h>
 

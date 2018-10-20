@@ -9,6 +9,7 @@
 #include "Math/Matrix4x4.h"
 #include "Utils/PrimitiveTypes.h"
 #include "Memory/Handle.h"
+#include "Enums.h"
 
 #define Z_SHADER_CHAIN_SIMPLE 0
 #define Z_SHADER_CHAIN_3D_DEFAULT 1
@@ -24,28 +25,14 @@
 #define Z_SHADER_CHAIN_SCREEN_TEXT_SHADER 11
 #define Z_SHADER_CHAIN_SCREEN_TEXT_SHADER_SDF 12
 #define Z_SHADER_CHAIN_SCREEN_TEXT_SHADER_MSDF 13
+#define Z_SHADER_CHAIN_SHADOW_DEPTH 14
+#define Z_SHADER_cHAIN_SHADOW_DEPTH_SKINNED 15
 
 namespace ZE 
 {
 
 class IGPUTexture;
 class IGPUBufferData;
-
-enum ShaderType : UInt8
-{
-	SHADER_VERTEX = 0,
-	SHADER_PIXEL = 1,
-	SHADER_GEOMETRY = 2,
-	SHADER_COMPUTE = 3,
-	SHADER_MAX
-};
-
-enum RenderTopologyEnum : UInt8
-{
-	TOPOLOGY_TRIANGLE,
-	TOPOLOGY_POINT,
-	TOPOLOGY_LINE
-};
 
 class IShader 
 {
@@ -55,7 +42,7 @@ public:
 	}
 
 	// Load shader from file
-	virtual void loadShader(const char* _shaderFilePath, ShaderType _shaderType);
+	virtual void loadShader(const char* _shaderFilePath, EShaderType _shaderType);
 	
 	// Load shader from buffer
 	virtual void loadShaderFromBuffer(char* _shaderBuffer, size_t _bufferSize) = 0;
@@ -63,10 +50,10 @@ public:
 	// Release shader
 	virtual void release();
 
-	FORCEINLINE ShaderType getShaderType() const { return m_shaderType; }
+	FORCEINLINE EShaderType getShaderType() const { return m_shaderType; }
 
 protected:
-	ShaderType m_shaderType = SHADER_VERTEX;
+	EShaderType m_shaderType = SHADER_VERTEX;
 };
 
 class IShaderChain 
@@ -112,11 +99,11 @@ public:
 	// Bind constant buffer to shader chain
 	virtual void bindConstantBuffer(const char* _blockName, IGPUBufferData* _constantBuffer) = 0;
 	
-	FORCEINLINE RenderTopologyEnum getRenderTopology() const { return m_topology; }
+	FORCEINLINE ERenderTopologyEnum getRenderTopology() const { return m_topology; }
 
 protected:
 	BufferLayout* m_layout;
-	RenderTopologyEnum m_topology;
+	ERenderTopologyEnum m_topology;
 };
 };
 

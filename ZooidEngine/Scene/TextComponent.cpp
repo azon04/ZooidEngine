@@ -75,7 +75,7 @@ namespace ZE
 
 				shaderAction.setShaderTextureVar("fontTexture", m_font->getGPUTexture(), 0);
 				shaderAction.setShaderVec3Var("color", m_color);
-				EnableAndSetBlendFunc(shaderAction, RendererBlendFactor::SRC_ALPHA, RendererBlendFactor::ONE_MINUS_SRC_ALPHA);
+				EnableAndSetBlendFunc(shaderAction, ERendererBlendFactor::SRC_ALPHA, ERendererBlendFactor::ONE_MINUS_SRC_ALPHA);
 			}
 			else
 			{
@@ -100,7 +100,7 @@ namespace ZE
 
 				shaderAction.setShaderTextureVar("fontTexture", m_font->getGPUTexture(), 0);
 				shaderAction.setShaderVec3Var("color", m_color);
-				EnableAndSetBlendFunc(shaderAction, RendererBlendFactor::SRC_ALPHA, RendererBlendFactor::ONE_MINUS_SRC_ALPHA);
+				EnableAndSetBlendFunc(shaderAction, ERendererBlendFactor::SRC_ALPHA, ERendererBlendFactor::ONE_MINUS_SRC_ALPHA);
 				shaderAction.addShaderFeature(FACE_CULING, false);
 			}
 		}

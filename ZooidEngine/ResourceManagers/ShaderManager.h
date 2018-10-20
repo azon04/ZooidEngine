@@ -25,7 +25,7 @@ namespace ZE
 		virtual Handle loadResource_Internal(const char* resourceFilePath) override;
 		virtual void preUnloadResource(Resource* _resource) override;
 
-		ShaderType getShaderTypeByName(const char* resourceFilePath);
+		EShaderType getShaderTypeByName(const char* resourceFilePath);
 
 
 	protected:

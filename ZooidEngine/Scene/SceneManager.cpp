@@ -226,6 +226,17 @@ namespace ZE
 				{
 					pCapsuleComp->setRadius( fileReader->readNextFloat() );
 				}
+				else if (LightComponent* pLightComponent = dynamic_cast<LightComponent*>(pComp))
+				{
+					pLightComponent->m_innerRadius = DegToRad(fileReader->readNextFloat());
+				}
+			}
+			else if (StringFunc::Compare(buff, "OuterRadius") == 0)
+			{
+				if (LightComponent* pLightComponent = dynamic_cast<LightComponent*>(pComp))
+				{
+					pLightComponent->m_outerRadius = DegToRad(fileReader->readNextFloat());
+				}
 			}
 			else if (StringFunc::Compare(buff, "Height") == 0)
 			{

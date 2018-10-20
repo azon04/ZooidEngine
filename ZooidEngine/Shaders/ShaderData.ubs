@@ -25,6 +25,9 @@ struct Light {
 	float constant;
 	float linear;
 	float quadratic;
+
+	// Use for Shadow ViewProj
+	mat4 viewProj;
 };
 
 layout (std140) uniform light_data

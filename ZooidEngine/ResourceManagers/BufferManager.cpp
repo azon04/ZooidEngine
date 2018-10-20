@@ -55,7 +55,7 @@ namespace ZE
 			};
 
 			Handle hBufferData("Buffer Data", sizeof(BufferData));
-			BufferData* bufferData = new(hBufferData) BufferData(BufferType::VERTEX_BUFFER);
+			BufferData* bufferData = new(hBufferData) BufferData(EBufferType::VERTEX_BUFFER);
 			bufferData->SetData(vertices_color, 6 * sizeof(float), 3);
 			bufferData->setBufferLayout(BUFFER_LAYOUT_V3_C3);
 
@@ -115,7 +115,7 @@ namespace ZE
 			};
 
 			Handle hBufferData("CubeBuffer Data", sizeof(BufferData));
-			BufferData* bufferData = new(hBufferData) BufferData(BufferType::VERTEX_BUFFER);
+			BufferData* bufferData = new(hBufferData) BufferData(EBufferType::VERTEX_BUFFER);
 			bufferData->SetData(cube_vertices, 8 * sizeof(float), 36);
 			bufferData->setBufferLayout(BUFFER_LAYOUT_V3_N3_TC2);
 
@@ -143,7 +143,7 @@ namespace ZE
 			};
 
 			Handle hBufferData("BasisBufferData", sizeof(BufferData));
-			BufferData* bufferData = new(hBufferData) BufferData(BufferType::VERTEX_BUFFER);
+			BufferData* bufferData = new(hBufferData) BufferData(EBufferType::VERTEX_BUFFER);
 			bufferData->SetData(basis_data, 6 * sizeof(float), 6);
 			bufferData->setBufferLayout(BUFFER_LAYOUT_V3_C3);
 
@@ -187,7 +187,7 @@ namespace ZE
 	ZE::IGPUBufferData* BufferManager::createConstantBuffer(void* data, size_t size)
 	{
 		Handle hBufferData("BasisBufferData", sizeof(BufferData));
-		BufferData* bufferData = new(hBufferData) BufferData(BufferType::UNIFORM_BUFFER);
+		BufferData* bufferData = new(hBufferData) BufferData(EBufferType::UNIFORM_BUFFER);
 		bufferData->SetData(data, size);
 		bufferData->setStaticBuffer(false);
 

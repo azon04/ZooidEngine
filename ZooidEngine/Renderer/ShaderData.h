@@ -40,12 +40,18 @@ namespace ZE
 		Float32 Diffuse[4];
 		Float32 Specular[4];
 
+		Float32 lightViewProj[4][4];
+		Int32 shadowMapIndices[4];
+
 		void setPosition(Vector3& _position);
 		void setDirection(Vector3& _direction);
 		void setAmbient(Vector3& _ambient);
 		void setDiffuse(Vector3& _diffuse);
 		void setSpecular(Vector3& _specular);
+		void setViewProjMatrix(Matrix4x4& _viewProj);
 
+		Vector3 getDirection();
+		Vector3 getPosition();
 	};
 
 	struct LightData

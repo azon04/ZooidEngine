@@ -106,6 +106,37 @@ namespace ZE
 
 				EnableAndSetStencilFunc(highlightAction, NOTEQUAL, 1, 0xFF, 0x00);
 			}
+
+			if (m_bCastShadow)
+			{
+				ShaderAction* shadowShaderAction = nullptr;
+
+				if (m_bStatic)
+				{
+					shadowShaderAction = &m_gameContext->getDrawList()->getNextStaticShadowShaderAction();
+				}
+				else
+				{
+					shadowShaderAction = &m_gameContext->getDrawList()->getNextDynamicShadowShaderAction();
+				}
+
+				shadowShaderAction->setShaderAndBuffer(nullptr, m_mesh->getGPUBufferArray());
+				shadowShaderAction->setShaderMatVar("modelMat", m_worldTransform);
+				
+				if (m_mesh->hasSkeleton() && m_hSkeletonState.isValid())
+				{
+					shadowShaderAction->setSkin(true);
+					SkeletonState* pSkeletonState = m_hSkeletonState.getObject<SkeletonState>();
+					char buffer[32];
+					for (int i = 0; i < pSkeletonState->getSkeleton()->getJointCount(); i++)
+					{
+						Matrix4x4 jointPallete;
+						pSkeletonState->getJointMatrixPallete(i, jointPallete);
+						StringFunc::PrintToString(buffer, 32, "boneMats[%d]", i);
+						shadowShaderAction->setShaderMatVar(buffer, jointPallete);
+					}
+				}
+			}
 		}
 	}
 
@@ -143,7 +174,7 @@ namespace ZE
 
 	void RenderComponent::setupPhysics()
 	{
-		if (m_mesh && m_mesh->getPhysicsBodySetup().isValid())
+		if (m_mesh && m_mesh->getPhysicsBodySetup().isValid() && m_physicsEnabled)
 		{
 			PhysicsBodySetup* pPhysicsBodySetup = m_mesh->getPhysicsBodySetup().getObject<PhysicsBodySetup>();
 			if (m_bStatic)

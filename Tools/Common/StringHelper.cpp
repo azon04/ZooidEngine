@@ -5,7 +5,7 @@ std::string replaceStr(std::string str, const char* replace, const char* newStri
 {
 	size_t found = str.find_first_of(replace);
 	int length = strlen(replace);
-
+	
 	while (found != std::string::npos)
 	{
 		str.replace(str.begin() + found, str.begin() + found + length, newString);

@@ -97,6 +97,9 @@
     <Filter Include="Shaders\Shader2D">
       <UniqueIdentifier>{d5228377-e70a-450e-aeb5-7dc99c2d4118}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\Shadows">
+      <UniqueIdentifier>{d5a14ca4-c309-4bf1-ab7f-6d062ec39103}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ZEngine.h">
@@ -438,6 +441,24 @@
     <ClInclude Include="External\Image\SDFGenerator.h">
       <Filter>External\Image</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer\IGPURenderBuffer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\GL\GLRenderBuffer.h">
+      <Filter>Renderer\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\IGPUFrameBuffer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\GL\GLFrameBuffer.h">
+      <Filter>Renderer\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Enums.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\GL\Enums.h">
+      <Filter>Renderer\GL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -707,6 +728,18 @@
     <ClCompile Include="External\Image\SDFGenerator.cpp">
       <Filter>External\Image</Filter>
     </ClCompile>
+    <ClCompile Include="Renderer\IGPURenderBuffer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\GL\GLRenderBuffer.cpp">
+      <Filter>Renderer\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\IGPUFrameBuffer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\GL\GLFrameBuffer.cpp">
+      <Filter>Renderer\GL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\TestGLVertexShader.vs">
@@ -768,6 +801,15 @@
     </None>
     <None Include="Shaders\TextWorldShader_MSDF.frag">
       <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Shadows\DefaultDepthShader.vs">
+      <Filter>Shaders\Shadows</Filter>
+    </None>
+    <None Include="Shaders\Shadows\DefaultDepthShader.frag">
+      <Filter>Shaders\Shadows</Filter>
+    </None>
+    <None Include="Shaders\Shadows\DefaultSkinDepthShader.vs">
+      <Filter>Shaders\Shadows</Filter>
     </None>
   </ItemGroup>
 </Project>

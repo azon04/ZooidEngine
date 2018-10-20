@@ -29,6 +29,7 @@ namespace ZE
 		s_instance->m_lineBufferData = new(hBufferData) BufferData(VERTEX_BUFFER);
 		s_instance->m_lineBufferData->setBufferLayout( BUFFER_LAYOUT_V3_C3);
 		s_instance->m_lineBufferData->SetData(s_instance->m_lineBuffers, sizeof(DebugPointStruct), MAX_LINE * 2);
+		s_instance->m_lineBufferData->setStaticBuffer(false);
 		s_instance->m_lineGPUBufferData = BufferManager::getInstance()->createGPUBufferFromBuffer(s_instance->m_lineBufferData, false);
 		
 		Handle hBufferArray = BufferManager::getInstance()->createBufferArray(s_instance->m_lineGPUBufferData, nullptr, nullptr);

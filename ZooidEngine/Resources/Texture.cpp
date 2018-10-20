@@ -17,10 +17,7 @@ namespace ZE
 		{
 			Texture* texture = new(textureHandle) Texture();
 			
-			texture->m_image = image;
-			texture->m_height = height;
-			texture->m_width = width;
-			texture->m_channel = channel;
+			texture->loadFromBuffer(image, width, height, channel);
 		}
 		else
 		{
@@ -36,6 +33,30 @@ namespace ZE
 		m_width = _width;
 		m_height = _height;
 		m_channel = _channel;
+
+		switch (m_channel)
+		{
+		case 1:
+			m_format = TEX_RED;
+			break;
+		case 2:
+			m_format = TEX_RED_GREEN;
+			break;
+		case 3:
+			m_format = TEX_RGB;
+			break;
+		case 4:
+			m_format = TEX_RGBA;
+			break;
+		}
+	}
+
+	void Texture::createEmpty(UInt32 _width, UInt32 _height, ETextureFormat _format)
+	{
+		m_width = _width;
+		m_height = _height;
+		m_format = _format;
+		m_image = nullptr;
 	}
 
 	void Texture::release()

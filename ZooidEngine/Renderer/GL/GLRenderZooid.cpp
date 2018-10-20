@@ -5,6 +5,8 @@
 #include "GLBufferArray.h"
 #include "GLTexture.h"
 #include "GLShader.h"
+#include "GLRenderBuffer.h"
+#include "GLFrameBuffer.h"
 
 #include "Memory/Handle.h"
 
@@ -44,6 +46,21 @@ namespace ZE
 		Handle hShaderChain("Render Shader Chain", sizeof(GLShaderChain));
 		GLShaderChain* pShaderChain = new(hShaderChain) GLShaderChain();
 		return hShaderChain;
+	}
+
+	ZE::Handle GLRenderZooid::CreateRenderBuffer()
+	{
+		Handle renderBufferHandle("GL Render Buffer", sizeof(GLRenderBuffer));
+		GLRenderBuffer* pRenderBuffer = new(renderBufferHandle) GLRenderBuffer();
+		return renderBufferHandle;
+	}
+
+	ZE::Handle GLRenderZooid::CreateFrameBuffer()
+	{
+		Handle frameBufferHandle("GL Frame Buffer", sizeof(GLFrameBuffer));
+		GLFrameBuffer* pFrameBuffer = new(frameBufferHandle) GLFrameBuffer();
+		pFrameBuffer->create();
+		return frameBufferHandle;
 	}
 
 	void GLRenderZooid::Init()

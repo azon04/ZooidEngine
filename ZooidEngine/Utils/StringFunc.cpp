@@ -29,6 +29,7 @@ void StringFunc::WriteTo(char* to, const char* from, unsigned int size)
 
 int StringFunc::Length(const char* string)
 {
+	if (string == NULL) { return 0; }
 	int length = 0;
 	while(string[length++] != '\0') {}
 	return length-1;

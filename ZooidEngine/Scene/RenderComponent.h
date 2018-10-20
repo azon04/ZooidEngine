@@ -62,6 +62,9 @@ namespace ZE
 		bool m_bEnableGravity;
 		Handle m_hPhysicsBody;
 
+		// Shadow configuration
+		bool m_bCastShadow;
+
 		// Skeleton Data
 		Handle m_hSkeletonState;
 	};

@@ -94,6 +94,12 @@ public:
 	// reset/clear shader action values
 	void reset();
 
+	// Set shader chain
+	void setShaderChain(IShaderChain* _shader);
+
+	// Set Buffer
+	void setBuffer(IGPUBufferArray* _bufferArray);
+
 	// set main shader and buffer
 	void setShaderAndBuffer(IShaderChain* _shader, IGPUBufferArray* _bufferArray);
 	
@@ -132,16 +138,22 @@ public:
 	// Override the vertex size (so it will not draw all vertex inside the buffer array)
 	void setVertexSize(Int32 _overrideSize) { m_vertexSize = _overrideSize; }
 
+	// Set whether the object/buffer is skinned (skeleton)
+	void setSkin(bool bSkin) { m_bSkin = bSkin; }
+	
+	// Check if the ShaderAction contain Skin vertices/data
+	FORCEINLINE bool isSkin() const { return m_bSkin; }
+
 	FORCEINLINE Int32 getVertexSize() const { return m_vertexSize; }
 	FORCEINLINE UInt16 getShaderActionType() const { return m_shaderActionType; }
 
 	FORCEINLINE IShaderChain* getShaderChain() const { return m_shader; }
 	FORCEINLINE IGPUBufferArray* getBufferArray() const { return m_bufferArray; }
 
-	friend void EnableAndSetDepthFunction(ShaderAction& shaderAction, RendererCompareFunc func);
-	friend void EnableAndSetStencilFunc(ShaderAction& shaderAction, RendererCompareFunc func, Int32 ref, UInt32 refMask, UInt32 stencilWriteMask);
-	friend void EnableAndSetBlendFunc(ShaderAction& shaderAction, RendererBlendFactor sourceBlenFactor, RendererBlendFactor dstBlendFactor);
-	friend void EnableAndSetFaceCull(ShaderAction& shaderAction, FaceFrontOrder faceOrder, CullFace cullFace);
+	friend void EnableAndSetDepthFunction(ShaderAction& shaderAction, ERendererCompareFunc func);
+	friend void EnableAndSetStencilFunc(ShaderAction& shaderAction, ERendererCompareFunc func, Int32 ref, UInt32 refMask, UInt32 stencilWriteMask);
+	friend void EnableAndSetBlendFunc(ShaderAction& shaderAction, ERendererBlendFactor sourceBlenFactor, ERendererBlendFactor dstBlendFactor);
+	friend void EnableAndSetFaceCull(ShaderAction& shaderAction, EFaceFrontOrder faceOrder, ECullFace cullFace);
 
 public:
 	Array<ShaderFeature, true> m_shaderFeatures;
@@ -153,6 +165,7 @@ private:
 	
 	IShaderChain* m_shader;
 	IGPUBufferArray* m_bufferArray;
+	bool m_bSkin = false;
 };
 
 
