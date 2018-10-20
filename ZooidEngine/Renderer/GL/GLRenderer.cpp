@@ -127,21 +127,21 @@ namespace ZE
 
 	void GLRenderer::ProcessShadowMapList(DrawList* drawList, bool bWithStatic)
 	{
-		// Current peter panning solution
+		// Current peter panning solution: Render with front face culled.
 		glCullFace(GL_FRONT);
 
 		glClear(GL_DEPTH_BUFFER_BIT);
 
 		for (UInt32 i = 0; i < drawList->m_dynamicShadowObjSize; i++)
 		{
-			ProcessShaderAction(drawList, &drawList->m_dynamicShadowObjList[i]);
+			DrawEx(drawList, &drawList->m_dynamicShadowObjList[i], false);
 		}
 
 		if (bWithStatic)
 		{
 			for (UInt32 i = 0; i < drawList->m_staticShadowObjSize; i++)
 			{
-				ProcessShaderAction(drawList, &drawList->m_staticShadowObjList[i]);
+				DrawEx(drawList, &drawList->m_staticShadowObjList[i], false);
 			}
 		}
 
@@ -195,112 +195,7 @@ namespace ZE
 
 	void GLRenderer::Draw(DrawList* drawList, ShaderAction* shaderAction)
 	{
-		shaderAction->getShaderChain()->bind();
-		
-		for (int i = 0; i < shaderAction->m_shaderFeatures.length(); i++)
-		{
-			ShaderFeature& shaderFeature = shaderAction->m_shaderFeatures[i];
-			
-			bool bDefaultEnable = IsFeatureEnabled(shaderFeature.m_rendererFeature);
-			
-			ProcessShaderFeature(shaderFeature);
-
-			// Save the default value for reverting the renderer feature
-			shaderFeature.m_bFeatureEnabled = bDefaultEnable;
-		}
-
-		Int32 variableCount = shaderAction->m_shaderVariables.length();
-		Int32 shadowMapOffset = 0;
-		for (int i = 0; i < variableCount; i++)
-		{
-			ShaderVariable& shaderVariable = shaderAction->m_shaderVariables[i];
-			switch (shaderVariable.VarType)
-			{
-			case SHADER_VAR_TYPE_FLOAT:
-				shaderAction->getShaderChain()->setFloat(shaderVariable.VarName, shaderVariable.Float_value);
-				break;
-			case SHADER_VAR_TYPE_INT:
-				shaderAction->getShaderChain()->setInt(shaderVariable.VarName, shaderVariable.Int_value);
-				break;
-			case SHADER_VAR_TYPE_VECTOR3:
-				shaderAction->getShaderChain()->setVec3(shaderVariable.VarName, shaderVariable.Vec3_value);
-				break;
-			case SHADER_VAR_TYPE_MATRIX:
-				shaderAction->getShaderChain()->setMat(shaderVariable.VarName, shaderVariable.Mat_value);
-				break;
-			case SHADER_VAR_TYPE_TEXTURE:
-				shaderAction->getShaderChain()->setTexture(shaderVariable.VarName, shaderVariable.texture_value.Texture_data, shaderVariable.texture_value.Texture_index);
-				glActiveTexture(GL_TEXTURE0 + shaderVariable.texture_value.Texture_index);
-				shaderVariable.texture_value.Texture_data->bind();
-				if (shadowMapOffset <= shaderVariable.texture_value.Texture_index)
-				{
-					shadowMapOffset = shaderVariable.texture_value.Texture_index + 1;
-				}
-				break;
-			case SHADER_VAR_TYPE_BLOCK_BUFFER:
-				shaderAction->getShaderChain()->bindConstantBuffer(shaderVariable.VarName, shaderVariable.Constant_buffer);
-			}
-		}
-
-		BindShadowMaps(drawList, shaderAction->getShaderChain(), shadowMapOffset);
-
-		GLenum drawTopology = GL_TRIANGLES;
-
-		switch (shaderAction->getShaderChain()->getRenderTopology())
-		{
-		case TOPOLOGY_LINE:
-			drawTopology = GL_LINES;
-			break;
-		case TOPOLOGY_TRIANGLE:
-			drawTopology = GL_TRIANGLES;
-			break;
-		case TOPOLOGY_POINT:
-			drawTopology = GL_POINTS;
-			break;
-		}
-
-		shaderAction->getBufferArray()->bind();
-		if (shaderAction->getBufferArray()->isUsingIndexBuffer()) 
-		{
-			glDrawElements(drawTopology, shaderAction->getVertexSize(), GL_UNSIGNED_INT, 0);
-		}
-		else 
-		{
-			glDrawArrays(drawTopology, 0, shaderAction->getVertexSize());
-		}
-		
-		// Unbind textures, buffer array and shader
-		for (int i = 0; i < shaderAction->m_shaderVariables.length(); i++)
-		{
-			ShaderVariable& shaderVariable = shaderAction->m_shaderVariables[i];
-			switch (shaderVariable.VarType)
-			{
-			case SHADER_VAR_TYPE_TEXTURE:
-				glActiveTexture(GL_TEXTURE0 + shaderVariable.texture_value.Texture_index);
-				shaderVariable.texture_value.Texture_data->unbind();
-				break;
-			}
-		}
-
-		UnbindShadowMaps(drawList, shaderAction->getShaderChain(), shadowMapOffset);
-
-		// Revert Render Feature
-		for (int i = 0; i < shaderAction->m_shaderFeatures.length(); i++)
-		{
-			ShaderFeature& shaderFeature = shaderAction->m_shaderFeatures[i];
-			if (shaderFeature.m_bFeatureEnabled)
-			{
-				EnableFeature(shaderFeature.m_rendererFeature);
-				ResetFeature(shaderFeature.m_rendererFeature);
-			}
-			else
-			{
-				DisableFeature(shaderFeature.m_rendererFeature);
-			}
-		}
-
-		shaderAction->getBufferArray()->unbind();
-		shaderAction->getShaderChain()->unbind();
+		DrawEx(drawList, shaderAction, true);
 	}
 
 	bool GLRenderer::IsClose()
@@ -357,6 +252,122 @@ namespace ZE
 			glFrontFace(GL_CCW);
 			glCullFace(GL_BACK);
 		}
+	}
+
+	void GLRenderer::DrawEx(DrawList* drawList, ShaderAction* shaderAction, bool bWithShadow)
+	{
+		shaderAction->getShaderChain()->bind();
+
+		for (int i = 0; i < shaderAction->m_shaderFeatures.length(); i++)
+		{
+			ShaderFeature& shaderFeature = shaderAction->m_shaderFeatures[i];
+
+			bool bDefaultEnable = IsFeatureEnabled(shaderFeature.m_rendererFeature);
+
+			ProcessShaderFeature(shaderFeature);
+
+			// Save the default value for reverting the renderer feature
+			shaderFeature.m_bFeatureEnabled = bDefaultEnable;
+		}
+
+		Int32 variableCount = shaderAction->m_shaderVariables.length();
+		Int32 shadowMapOffset = 0;
+		for (int i = 0; i < variableCount; i++)
+		{
+			ShaderVariable& shaderVariable = shaderAction->m_shaderVariables[i];
+			switch (shaderVariable.VarType)
+			{
+			case SHADER_VAR_TYPE_FLOAT:
+				shaderAction->getShaderChain()->setFloat(shaderVariable.VarName, shaderVariable.Float_value);
+				break;
+			case SHADER_VAR_TYPE_INT:
+				shaderAction->getShaderChain()->setInt(shaderVariable.VarName, shaderVariable.Int_value);
+				break;
+			case SHADER_VAR_TYPE_VECTOR3:
+				shaderAction->getShaderChain()->setVec3(shaderVariable.VarName, shaderVariable.Vec3_value);
+				break;
+			case SHADER_VAR_TYPE_MATRIX:
+				shaderAction->getShaderChain()->setMat(shaderVariable.VarName, shaderVariable.Mat_value);
+				break;
+			case SHADER_VAR_TYPE_TEXTURE:
+				shaderAction->getShaderChain()->setTexture(shaderVariable.VarName, shaderVariable.texture_value.Texture_data, shaderVariable.texture_value.Texture_index);
+				glActiveTexture(GL_TEXTURE0 + shaderVariable.texture_value.Texture_index);
+				shaderVariable.texture_value.Texture_data->bind();
+				if (bWithShadow && shadowMapOffset <= shaderVariable.texture_value.Texture_index)
+				{
+					shadowMapOffset = shaderVariable.texture_value.Texture_index + 1;
+				}
+				break;
+			case SHADER_VAR_TYPE_BLOCK_BUFFER:
+				shaderAction->getShaderChain()->bindConstantBuffer(shaderVariable.VarName, shaderVariable.Constant_buffer);
+			}
+		}
+
+		if (bWithShadow)
+		{
+			BindShadowMaps(drawList, shaderAction->getShaderChain(), shadowMapOffset);
+		}
+
+		GLenum drawTopology = GL_TRIANGLES;
+
+		switch (shaderAction->getShaderChain()->getRenderTopology())
+		{
+		case TOPOLOGY_LINE:
+			drawTopology = GL_LINES;
+			break;
+		case TOPOLOGY_TRIANGLE:
+			drawTopology = GL_TRIANGLES;
+			break;
+		case TOPOLOGY_POINT:
+			drawTopology = GL_POINTS;
+			break;
+		}
+
+		shaderAction->getBufferArray()->bind();
+		if (shaderAction->getBufferArray()->isUsingIndexBuffer())
+		{
+			glDrawElements(drawTopology, shaderAction->getVertexSize(), GL_UNSIGNED_INT, 0);
+		}
+		else
+		{
+			glDrawArrays(drawTopology, 0, shaderAction->getVertexSize());
+		}
+
+		// Unbind textures, buffer array and shader
+		for (int i = 0; i < shaderAction->m_shaderVariables.length(); i++)
+		{
+			ShaderVariable& shaderVariable = shaderAction->m_shaderVariables[i];
+			switch (shaderVariable.VarType)
+			{
+			case SHADER_VAR_TYPE_TEXTURE:
+				glActiveTexture(GL_TEXTURE0 + shaderVariable.texture_value.Texture_index);
+				shaderVariable.texture_value.Texture_data->unbind();
+				break;
+			}
+		}
+
+		if (bWithShadow)
+		{
+			UnbindShadowMaps(drawList, shaderAction->getShaderChain(), shadowMapOffset);
+		}
+
+		// Revert Render Feature
+		for (int i = 0; i < shaderAction->m_shaderFeatures.length(); i++)
+		{
+			ShaderFeature& shaderFeature = shaderAction->m_shaderFeatures[i];
+			if (shaderFeature.m_bFeatureEnabled)
+			{
+				EnableFeature(shaderFeature.m_rendererFeature);
+				ResetFeature(shaderFeature.m_rendererFeature);
+			}
+			else
+			{
+				DisableFeature(shaderFeature.m_rendererFeature);
+			}
+		}
+
+		shaderAction->getBufferArray()->unbind();
+		shaderAction->getShaderChain()->unbind();
 	}
 
 	void GLRenderer::BindShadowMaps(DrawList* _drawList, IShaderChain* shaderChain, int offset)

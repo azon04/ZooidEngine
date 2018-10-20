@@ -62,6 +62,7 @@ private:
 #endif
 
 private:
+	void DrawEx(DrawList* drawList, ShaderAction* shaderAction, bool bWithShadow);
 	void BindShadowMaps(DrawList* _drawList, IShaderChain* shaderChain, int offset);
 	void UnbindShadowMaps(DrawList* _drawList, IShaderChain* shaderChain, int offset);
 	void ProcessShaderFeature(ShaderFeature& shaderFeature);

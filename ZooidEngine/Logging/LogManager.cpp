@@ -3,8 +3,13 @@
 
 #include <stdarg.h>
 
-#define LOG_TYPED(logGroupName, logType, text) \
+// Write to development output log
+#define LOG_DEV_TYPED(logGroupName, logType, text) \
 	ZE::Debug::PrintDebugString("ZooidEngine: [%s] %s: %s \r\n", logGroupName, #logType, text );
+
+// Write to Console (if any)
+#define LOG_CONSOLE_TYPE(logGroupName, logType, text) \
+	printf("ZooidEngine: [%s] %s: %s \r\n", logGroupName, #logType, text);
 
 #define LOG_FILE(logWriter, logGroupName, logType, text) \
 	logWriter.writeFormatText( "ZooidEngine: [%s] %s: %s \r\n", logGroupName, #logType, text );
@@ -45,16 +50,19 @@ namespace ZE
 			switch (logType)
 			{
 			case ZE::Log:
-				LOG_TYPED(logGroupName, Log, szBuff);
+				LOG_DEV_TYPED(logGroupName, Log, szBuff);
+				LOG_CONSOLE_TYPE(logGroupName, Log, szBuff);
 				LOG_FILE(m_logWriter, logGroupName, Log, szBuff);
 				break;
 			case ZE::Warning:
-				LOG_TYPED(logGroupName, Warning, szBuff);
-				LOG_FILE(m_logWriter, logGroupName, Log, szBuff);
+				LOG_DEV_TYPED(logGroupName, Warning, szBuff);
+				LOG_CONSOLE_TYPE(logGroupName, Warning, szBuff);
+				LOG_FILE(m_logWriter, logGroupName, Warning, szBuff);
 				break;
 			case ZE::Error:
-				LOG_TYPED(logGroupName, Error, szBuff);
-				LOG_FILE(m_logWriter, logGroupName, Log, szBuff);
+				LOG_DEV_TYPED(logGroupName, Error, szBuff);
+				LOG_CONSOLE_TYPE(logGroupName, Error, szBuff);
+				LOG_FILE(m_logWriter, logGroupName, Error, szBuff);
 				break;
 			default:
 				break;

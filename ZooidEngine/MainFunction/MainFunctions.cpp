@@ -214,8 +214,6 @@ namespace ZE
 		double deltaTime = _gameContext->m_mainTimer.ResetAndGetDeltaMS();
 		float deltaSeconds = static_cast<Float32>(deltaTime * 0.001f);
 
-		ZELOG(LOG_GAME, Log, "Delta Time : %.2f ms", deltaTime);
-
 		// Handle Event_Update
 		{
 			ZE::Handle handleUpdate("EventUpdate", sizeof(ZE::Event_UPDATE));
@@ -309,7 +307,7 @@ namespace ZE
 		{
 			double deltaTime = _gameContext->m_renderThreadTimer.ResetAndGetDeltaMS();
 
-			ZELOG(LOG_RENDERING, Log, "Render Delta Time : %.2f ms", deltaTime);
+			//ZELOG(LOG_RENDERING, Log, "Render Delta Time : %.2f ms", deltaTime);
 
 			DrawJob(_gameContext);
 
