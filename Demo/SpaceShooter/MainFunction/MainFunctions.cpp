@@ -6,9 +6,9 @@
 #include "ZooidEngine/Scene/RenderComponent.h"
 #include "ZooidEngine/Scene/CameraManager.h"
 
-#include "Scene/SpaceShip.h"
-#include "Scene/PlayerTopCamera.h"
-#include "Scene/MeteorManager.h"
+#include "../Scene/SpaceShip.h"
+#include "../Scene/PlayerTopCamera.h"
+#include "../Scene/MeteorManager.h"
 
 using namespace ZE;
 

@@ -22,7 +22,8 @@
 #if defined(ZE_PLATFORM_WINDOWS)
 #define ZE_SUPPORT_SIMD
 #define USING_SSE 1
-#elif
+#else
+
 #endif
 
 #if defined(ZE_SUPPORT_SIMD)

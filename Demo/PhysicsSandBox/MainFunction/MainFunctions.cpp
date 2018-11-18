@@ -5,7 +5,7 @@
 #include "ZooidEngine/Scene/SceneManager.h"
 #include "ZooidEngine/FileSystem/DirectoryHelper.h"
 
-#include "Scene/ControlledComponent.h"
+#include "../Scene/ControlledComponent.h"
 
 namespace PhysicsSandBox
 {

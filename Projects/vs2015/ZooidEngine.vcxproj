@@ -1,0 +1,427 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{0DFAB8DF-272C-4B1F-B4B1-1182CB68801D}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>ZooidEngine</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\PropertySheets\ZooidEngineDebug-x86-Engine.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\PropertySheets\ZooidEngineDebug-x86-Engine.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetExt>.lib</TargetExt>
+    <IntDir>Intermediate\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IntDir>Intermediate\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;Z_RENDER_OPENGL;Z_PHYSICS_PHYSX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\Dependencies\glew-2.0.0\include;$(SolutionDir)..\..\Dependencies\glfw\include;$(SolutionDir)..\..\Dependencies\freetype-2.9.1\include;$(Physx)\..\PxShared\include;$(Physx)\Include;.;E:\Projects\Game\ZEngine\ZooidEngine</AdditionalIncludeDirectories>
+      <PreprocessToFile>false</PreprocessToFile>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>XCOPY "$(SolutionDir)..\..\Dependencies\glew-2.0.0\bin\Release\Win32\*.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(SolutionDir)..\..\Dependencies\Builds\assimp\Debug\x86-vs140\*.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(SolutionDir)..\..\Dependencies\Builds\assimp\Debug\x86-vs140\*.pdb" "$(TargetDir)" /D /K /Y
+XCOPY "$(SolutionDir)..\..\Dependencies\freetype-2.9.1\win32\lib-vc2015\debug\*.dll" "$(TargetDir)" /D /Y
+XCOPY "$(SolutionDir)..\..\Dependencies\freetype-2.9.1\win32\lib-vc2015\debug\*.pdb" "$(TargetDir)" /D /Y
+XCOPY "$(PhysX)\Bin\vc14win32\*DEBUG_x86.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(PhysX)\Bin\vc14win32\nvToolsExt32_1.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(PhysX)\Bin\vc14win32\PhysXDevice32.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(PhysX)\Bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /Y
+XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /Y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\glfw\include;$(SolutionDir)\glew-2.0.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)glew-2.0.0\lib\Release\x64;$(SolutionDir)glfw\x64\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>XCOPY "$(SolutionDir)"glew-2.0.0\bin\Release\x64\*.DLL "$(TargetDir)" /D /K /Y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\ZooidEngine\Animation\Animation.h" />
+    <ClInclude Include="..\..\ZooidEngine\Animation\AnimationComponent.h" />
+    <ClInclude Include="..\..\ZooidEngine\Animation\AnimationSM.h" />
+    <ClInclude Include="..\..\ZooidEngine\Animation\Skeleton.h" />
+    <ClInclude Include="..\..\ZooidEngine\Common\GlobalRegistry.h" />
+    <ClInclude Include="..\..\ZooidEngine\Events\EventDispatcher.h" />
+    <ClInclude Include="..\..\ZooidEngine\Events\Events.h" />
+    <ClInclude Include="..\..\ZooidEngine\Events\InputEvents.h" />
+    <ClInclude Include="..\..\ZooidEngine\External\Hash\lookup3.h" />
+    <ClInclude Include="..\..\ZooidEngine\External\Image\SDFGenerator.h" />
+    <ClInclude Include="..\..\ZooidEngine\External\Image\stb_image.h" />
+    <ClInclude Include="..\..\ZooidEngine\FileSystem\DirectoryHelper.h" />
+    <ClInclude Include="..\..\ZooidEngine\FileSystem\FileReader.h" />
+    <ClInclude Include="..\..\ZooidEngine\FileSystem\FileWriter.h" />
+    <ClInclude Include="..\..\ZooidEngine\GameObjectModel\CompDecl.h" />
+    <ClInclude Include="..\..\ZooidEngine\GameObjectModel\Component.h" />
+    <ClInclude Include="..\..\ZooidEngine\GameObjectModel\FunctionDelegates.h" />
+    <ClInclude Include="..\..\ZooidEngine\GameObjectModel\ObjDecl.h" />
+    <ClInclude Include="..\..\ZooidEngine\GameObjectModel\Object.h" />
+    <ClInclude Include="..\..\ZooidEngine\GameObjectModel\RTTI.h" />
+    <ClInclude Include="..\..\ZooidEngine\Input\InputManager.h" />
+    <ClInclude Include="..\..\ZooidEngine\Input\KeyboardMouseInput.h" />
+    <ClInclude Include="..\..\ZooidEngine\Logging\Log.h" />
+    <ClInclude Include="..\..\ZooidEngine\Logging\LogManager.h" />
+    <ClInclude Include="..\..\ZooidEngine\MainFunction\MainFunctions.h" />
+    <ClInclude Include="..\..\ZooidEngine\Math\MathOps.h" />
+    <ClInclude Include="..\..\ZooidEngine\Math\MathUtil.h" />
+    <ClInclude Include="..\..\ZooidEngine\Math\Matrix3x3.h" />
+    <ClInclude Include="..\..\ZooidEngine\Math\Matrix4x4.h" />
+    <ClInclude Include="..\..\ZooidEngine\Math\Quaternion.h" />
+    <ClInclude Include="..\..\ZooidEngine\Math\SSEHelper.h" />
+    <ClInclude Include="..\..\ZooidEngine\Math\Vector2.h" />
+    <ClInclude Include="..\..\ZooidEngine\Math\Vector3.h" />
+    <ClInclude Include="..\..\ZooidEngine\Math\Vector4.h" />
+    <ClInclude Include="..\..\ZooidEngine\Memory\Handle.h" />
+    <ClInclude Include="..\..\ZooidEngine\Memory\IAllocator.h" />
+    <ClInclude Include="..\..\ZooidEngine\Memory\MemoryHelper.h" />
+    <ClInclude Include="..\..\ZooidEngine\Memory\MemoryManager.h" />
+    <ClInclude Include="..\..\ZooidEngine\Memory\PoolAllocator.h" />
+    <ClInclude Include="..\..\ZooidEngine\Memory\StackAllocator.h" />
+    <ClInclude Include="..\..\ZooidEngine\Physics\Physics.h" />
+    <ClInclude Include="..\..\ZooidEngine\Physics\PhysicsBody.h" />
+    <ClInclude Include="..\..\ZooidEngine\Physics\PhysicsBodyHolder.h" />
+    <ClInclude Include="..\..\ZooidEngine\Physics\PhysicsEvents.h" />
+    <ClInclude Include="..\..\ZooidEngine\Physics\PhysicsZooid.h" />
+    <ClInclude Include="..\..\ZooidEngine\Physics\PhysX\PhysX.h" />
+    <ClInclude Include="..\..\ZooidEngine\Physics\PhysX\PhysXBody.h" />
+    <ClInclude Include="..\..\ZooidEngine\Physics\PhysX\PhysXZooid.h" />
+    <ClInclude Include="..\..\ZooidEngine\Platform\Platform.h" />
+    <ClInclude Include="..\..\ZooidEngine\Platform\Thread.h" />
+    <ClInclude Include="..\..\ZooidEngine\Platform\Win32\Win_Platform.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\BufferData.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\BufferLayout.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\DebugRenderer.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\Enums.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\GL\Enums.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\GL\GLBufferArray.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\GL\GLBufferData.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\GL\GLFrameBuffer.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\GL\GLRenderBuffer.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\GL\GLRenderer.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\GL\GLRenderZooid.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\GL\GLShader.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\GL\GLTexture.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\IGPUFrameBuffer.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\IGPURenderBuffer.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\RenderZooid.h" />
+    <ClInclude Include="..\..\ZooidEngine\ResourceManagers\AnimationManager.h" />
+    <ClInclude Include="..\..\ZooidEngine\ResourceManagers\BufferManager.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\DrawList.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\IGPUBufferArray.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\IGPUBufferData.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\IGPUTexture.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\IRenderer.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\IShader.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\ShaderAction.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\ShaderData.h" />
+    <ClInclude Include="..\..\ZooidEngine\ResourceManagers\FontManager.h" />
+    <ClInclude Include="..\..\ZooidEngine\ResourceManagers\MaterialManager.h" />
+    <ClInclude Include="..\..\ZooidEngine\ResourceManagers\MeshManager.h" />
+    <ClInclude Include="..\..\ZooidEngine\ResourceManagers\ResourceManager.h" />
+    <ClInclude Include="..\..\ZooidEngine\ResourceManagers\ShaderManager.h" />
+    <ClInclude Include="..\..\ZooidEngine\ResourceManagers\SkeletonManager.h" />
+    <ClInclude Include="..\..\ZooidEngine\ResourceManagers\TextureManager.h" />
+    <ClInclude Include="..\..\ZooidEngine\Resources\Font.h" />
+    <ClInclude Include="..\..\ZooidEngine\Resources\IResource.h" />
+    <ClInclude Include="..\..\ZooidEngine\Resources\Material.h" />
+    <ClInclude Include="..\..\ZooidEngine\Resources\Mesh.h" />
+    <ClInclude Include="..\..\ZooidEngine\Resources\TextMesh.h" />
+    <ClInclude Include="..\..\ZooidEngine\Resources\Texture.h" />
+    <ClInclude Include="..\..\ZooidEngine\Scene\Actor.h" />
+    <ClInclude Include="..\..\ZooidEngine\Scene\CameraComponent.h" />
+    <ClInclude Include="..\..\ZooidEngine\Scene\CameraManager.h" />
+    <ClInclude Include="..\..\ZooidEngine\Scene\Collision\BoxComponent.h" />
+    <ClInclude Include="..\..\ZooidEngine\Scene\Collision\CapsuleComponent.h" />
+    <ClInclude Include="..\..\ZooidEngine\Scene\Collision\CollisionComponent.h" />
+    <ClInclude Include="..\..\ZooidEngine\Scene\Collision\SphereComponent.h" />
+    <ClInclude Include="..\..\ZooidEngine\Scene\DebugCamera.h" />
+    <ClInclude Include="..\..\ZooidEngine\Scene\Light\LightComponent.h" />
+    <ClInclude Include="..\..\ZooidEngine\Scene\RenderComponent.h" />
+    <ClInclude Include="..\..\ZooidEngine\Scene\SceneComponent.h" />
+    <ClInclude Include="..\..\ZooidEngine\Scene\SceneManager.h" />
+    <ClInclude Include="..\..\ZooidEngine\Scene\TextComponent.h" />
+    <ClInclude Include="..\..\ZooidEngine\UnitTest\ArrayTest.h" />
+    <ClInclude Include="..\..\ZooidEngine\UnitTest\FileTest.h" />
+    <ClInclude Include="..\..\ZooidEngine\UnitTest\HashMapTest.h" />
+    <ClInclude Include="..\..\ZooidEngine\UnitTest\UnitTest.h" />
+    <ClInclude Include="..\..\ZooidEngine\UnitTest\VectorTest.h" />
+    <ClInclude Include="..\..\ZooidEngine\Utils\Array.h" />
+    <ClInclude Include="..\..\ZooidEngine\Utils\Debug.h" />
+    <ClInclude Include="..\..\ZooidEngine\Utils\HashMap.h" />
+    <ClInclude Include="..\..\ZooidEngine\Utils\Macros.h" />
+    <ClInclude Include="..\..\ZooidEngine\Utils\PrimitiveTypes.h" />
+    <ClInclude Include="..\..\ZooidEngine\Utils\String.h" />
+    <ClInclude Include="..\..\ZooidEngine\Utils\StringFunc.h" />
+    <ClInclude Include="..\..\ZooidEngine\Utils\Timer.h" />
+    <ClInclude Include="..\..\ZooidEngine\Utils\ZEngineHelper.h" />
+    <ClInclude Include="..\..\ZooidEngine\ZEGameContext.h" />
+    <ClInclude Include="..\..\ZooidEngine\ZEngine.h" />
+    <ClInclude Include="..\..\ZooidEngine\ZEngineIncl.h" />
+    <ClInclude Include="..\..\ZooidEngine\Zooid\BaseZooid.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\ZooidEngine\Animation\Animation.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Animation\AnimationComponent.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Animation\AnimationSM.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Animation\Skeleton.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Common\GlobalRegistry.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Events\EventDispatcher.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Events\Events.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Events\InputEvents.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\External\Hash\lookup3.c" />
+    <ClCompile Include="..\..\ZooidEngine\External\Image\SDFGenerator.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\External\Image\stb_image.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\FileSystem\DirectoryHelper.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\FileSystem\FileReader.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\FileSystem\FileWriter.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\GameObjectModel\Component.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\GameObjectModel\FunctionDelegates.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\GameObjectModel\Object.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Input\InputManager.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Input\KeyboardMouseInput.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Logging\LogManager.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\MainFunction\Main.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\MainFunction\MainFunctions.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Math\MathOps.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Memory\Handle.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Memory\IAllocator.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Memory\MemoryHelper.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Memory\MemoryManager.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Memory\PoolAllocator.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Memory\StackAllocator.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Physics\PhysicsBody.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Physics\PhysicsBodyHolder.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Physics\PhysicsEvents.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Physics\PhysX\PhysX.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Physics\PhysX\PhysXBody.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Physics\PhysX\PhysXZooid.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Platform\Platform.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Platform\Thread.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Platform\Win32\Win_Platform.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Renderer\BufferData.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Renderer\BufferLayout.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Renderer\DebugRenderer.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Renderer\GL\GLBufferArray.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Renderer\GL\GLBufferData.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Renderer\GL\GLFrameBuffer.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Renderer\GL\GLRenderBuffer.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Renderer\GL\GLRenderer.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Renderer\GL\GLRenderZooid.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Renderer\GL\GLShader.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Renderer\GL\GLTexture.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Renderer\IGPUFrameBuffer.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Renderer\IGPURenderBuffer.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Renderer\RenderZooid.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\ResourceManagers\AnimationManager.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\ResourceManagers\BufferManager.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Renderer\DrawList.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Renderer\IGPUBufferArray.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Renderer\IGPUBufferData.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Renderer\IGPUTexture.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Renderer\IShader.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Renderer\ShaderAction.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Renderer\ShaderData.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\ResourceManagers\FontManager.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\ResourceManagers\MaterialManager.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\ResourceManagers\MeshManager.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\ResourceManagers\ResourceManager.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\ResourceManagers\ShaderManager.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\ResourceManagers\SkeletonManager.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\ResourceManagers\TextureManager.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Resources\Font.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Resources\Material.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Resources\Mesh.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Resources\TextMesh.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Resources\Texture.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Scene\Actor.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Scene\CameraComponent.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Scene\CameraManager.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Scene\Collision\BoxComponent.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Scene\Collision\CapsuleComponent.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Scene\Collision\CollisionComponent.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Scene\Collision\SphereComponent.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Scene\DebugCamera.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Scene\Light\LightComponent.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Scene\RenderComponent.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Scene\SceneComponent.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Scene\SceneManager.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Scene\TextComponent.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\UnitTest\ArrayTest.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\UnitTest\FileTest.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\UnitTest\HashMapTest.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\UnitTest\UnitTest.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\UnitTest\VectorTest.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Utils\Debug.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Utils\StringFunc.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\ZEGameContext.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Zooid\BaseZooid.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\ZooidEngine\Shaders\DefaultGLSimple.frag" />
+    <None Include="..\..\ZooidEngine\Shaders\DefaultGLSimple.vs" />
+    <None Include="..\..\ZooidEngine\Shaders\DefaultGLSimpleColor.frag" />
+    <None Include="..\..\ZooidEngine\Shaders\DefaultGLSimpleLit.frag" />
+    <None Include="..\..\ZooidEngine\Shaders\DefaultGLSimpleLit.vs" />
+    <None Include="..\..\ZooidEngine\Shaders\DefaultGLSimpleLitSkin.vs" />
+    <None Include="..\..\ZooidEngine\Shaders\DefaultGLSimpleLit_Blend.frag" />
+    <None Include="..\..\ZooidEngine\Shaders\DefaultHighlightSimple.frag" />
+    <None Include="..\..\ZooidEngine\Shaders\DefaultHighlightSimple.vs" />
+    <None Include="..\..\ZooidEngine\Shaders\Shader2D\TextShader.frag" />
+    <None Include="..\..\ZooidEngine\Shaders\Shader2D\TextShader.vs" />
+    <None Include="..\..\ZooidEngine\Shaders\Shader2D\TextShader_MSDF.frag" />
+    <None Include="..\..\ZooidEngine\Shaders\Shader2D\TextShader_SDF.frag" />
+    <None Include="..\..\ZooidEngine\Shaders\ShaderData.ubs" />
+    <None Include="..\..\ZooidEngine\Shaders\Shadows\DefaultDepthShader.frag" />
+    <None Include="..\..\ZooidEngine\Shaders\Shadows\DefaultDepthShader.vs" />
+    <None Include="..\..\ZooidEngine\Shaders\Shadows\DefaultSkinDepthShader.vs" />
+    <None Include="..\..\ZooidEngine\Shaders\TestGLFragmentShader.frag" />
+    <None Include="..\..\ZooidEngine\Shaders\TestGLVertexShader.vs" />
+    <None Include="..\..\ZooidEngine\Shaders\TextWorldShader.frag" />
+    <None Include="..\..\ZooidEngine\Shaders\TextWorldShader.vs" />
+    <None Include="..\..\ZooidEngine\Shaders\TextWorldShader_MSDF.frag" />
+    <None Include="..\..\ZooidEngine\Shaders\TextWorldShader_SDF.frag" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
