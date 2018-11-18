@@ -100,6 +100,9 @@
     <Filter Include="Shaders\Shadows">
       <UniqueIdentifier>{d5a14ca4-c309-4bf1-ab7f-6d062ec39103}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform\Win32">
+      <UniqueIdentifier>{a87557ad-3bdc-4dd5-baef-3c25cbcbd186}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ZEngine.h">
@@ -459,6 +462,12 @@
     <ClInclude Include="Renderer\GL\Enums.h">
       <Filter>Renderer\GL</Filter>
     </ClInclude>
+    <ClInclude Include="Platform\Platform.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Win32\Win_Platform.h">
+      <Filter>Platform\Win32</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFunction\Main.cpp">
@@ -739,6 +748,12 @@
     </ClCompile>
     <ClCompile Include="Renderer\GL\GLFrameBuffer.cpp">
       <Filter>Renderer\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\Platform.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\Win32\Win_Platform.cpp">
+      <Filter>Platform\Win32</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

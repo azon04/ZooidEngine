@@ -2,13 +2,15 @@
 #include "ZooidEngine/MainFunction/MainFunctions.h"
 #include "ZooidEngine/UnitTest/UnitTest.h"
 #include "ZooidEngine/Renderer/DrawList.h"
+#include "ZooidEngine/Platform/Platform.h"
 
 #include "MainFunction.h"
 
 #include <windows.h>
 
-int main(int argc, char** argv)
+ZE_MAIN()
 {
+	ZE_INITPLATFORM();
 
 	// Init Engine
 	ZE::GameContext gameContext;
@@ -18,7 +20,7 @@ int main(int argc, char** argv)
 	AnimationDemo::MainSetup(&gameContext);
 
 	// Main Loop
-	while (!gameContext.getRenderer()->IsClose())
+	ZE_PLATFORMLOOP()
 	{
 		ZE::MainThreadJob(&gameContext);
 	}
@@ -28,5 +30,5 @@ int main(int argc, char** argv)
 	AnimationDemo::MainClean(&gameContext);
 	ZE::MainClean(&gameContext);
 
-	return 0;
+	ZE_DESTROYPLATFORM();
 }

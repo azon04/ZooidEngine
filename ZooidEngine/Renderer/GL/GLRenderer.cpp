@@ -2,13 +2,13 @@
 
 #include "ZEngine.h"
 #include "Enums.h"
+#include "Platform/Platform.h"
 
 #if defined(_WIN32) || defined(_WIN64)
 	#define GLFW_EXPOSE_NATIVE_WIN32
 #endif
 
 #include "GLFW/glfw3native.h"
-
 #include <cstring>
 
 namespace ZE 
@@ -206,6 +206,10 @@ namespace ZE
 	void GLRenderer::PollEvent()
 	{
 		glfwPollEvents();
+		if ( glfwWindowShouldClose(m_window) == 1 )
+		{
+			Platform::RequestExit(0);
+		}
 	}
 
 	void GLRenderer::AcquireRenderThreadOwnership()
