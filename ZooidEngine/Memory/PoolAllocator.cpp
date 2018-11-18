@@ -7,6 +7,8 @@
 #include <cstdint>
 #include <new>
 
+#define ALLIGNMENT 16
+
 namespace ZE 
 {
 
@@ -104,14 +106,14 @@ namespace ZE
 		return diff / m_itemSize;
 	}
 
-	PoolAllocator* PoolAllocator::ConstructFromMem(void* pMem, size_t itemSize, unsigned int blockCount)
+	PoolAllocator* PoolAllocator::ConstructFromMem(void* pMem, size_t itemSize, unsigned int blockCount, bool bAlign, int alignment)
 	{
 		// Using new(pMem) it will handle vtable allocation for us
 		PoolAllocator* poolAllocator =  new(pMem) PoolAllocator(blockCount, itemSize, false);
 		poolAllocator->m_totalSize = itemSize * blockCount;
 		poolAllocator->m_itemSize = itemSize;
 		poolAllocator->m_poolSize = blockCount;
-		poolAllocator->m_aligned = false;
+		poolAllocator->m_aligned = bAlign;
 		poolAllocator->m_bNeedToFree = false;
 		poolAllocator->m_freeBlock = blockCount;
 
@@ -120,21 +122,23 @@ namespace ZE
 			poolAllocator->m_avails[i] = i;
 		}
 
-		poolAllocator->m_pMemBlock = (void*)((uintptr_t)poolAllocator->m_avails + (uintptr_t)(blockCount * sizeof(unsigned int)));
+		void* blockMem = (void*)((uintptr_t)poolAllocator->m_avails + (uintptr_t)(blockCount * sizeof(unsigned int)));
+		
 		// #TODO need to align
+		size_t mask = alignment - 1;
+		uintptr_t misaligned = ((uintptr_t)(blockMem) & mask);
+		ptrdiff_t adjustment = alignment - misaligned;
+
+		poolAllocator->m_pMemBlock = (void*)((uintptr_t)(blockMem)+adjustment);
 
 		return poolAllocator;
 	}
 
-	size_t PoolAllocator::CalculateSizeMem(size_t itemSize, unsigned int blockCount)
+	size_t PoolAllocator::CalculateSizeMem(size_t itemSize, unsigned int blockCount, bool bAlign, int alignment)
 	{
 		size_t size = sizeof(PoolAllocator);
 		size += sizeof(unsigned int) * blockCount;
-		// Need Align
-
-		// #TODO need to align
-
-		size += itemSize * blockCount;
+		size += itemSize * blockCount + (bAlign ? alignment : 0);
 		return size;
 	}
 

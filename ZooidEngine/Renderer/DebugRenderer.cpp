@@ -41,8 +41,6 @@ namespace ZE
 		s_instance->m_currentTextIndex = 0;
 
 		s_instance->setupComponent();
-
-		MemoryHelper::Zero(s_instance->m_textComponents, sizeof(s_instance->m_textComponents));
 	}
 
 	void DebugRenderer::Destroy()
@@ -97,7 +95,7 @@ namespace ZE
 			m_gameContext->getRenderer()->ReleaseRenderThreadOwnership();
 		}
 
-		while (m_textComponents[m_currentTextIndex] != NULL)
+		while (m_currentTextIndex < m_textComponents.size())
 		{
 			m_textComponents[m_currentTextIndex++]->setVisible(false);
 		}
@@ -135,10 +133,10 @@ namespace ZE
 
 	void DebugRenderer::drawScreenText(const char* text, const Vector2& _position, const Vector3& _color, Float32 _scale)
 	{
-		if (m_textComponents[m_currentTextIndex] == NULL)
+		if (m_currentTextIndex >= m_textComponents.size())
 		{
 			Handle hTextComponent("Text Component", sizeof(TextComponent));
-			m_textComponents[m_currentTextIndex] = new(hTextComponent) TextComponent(m_gameContext);
+			m_textComponents.push_back(new(hTextComponent) TextComponent(m_gameContext));
 
 			addChild(m_textComponents[m_currentTextIndex]);
 			m_textComponents[m_currentTextIndex]->setupComponent();
@@ -155,10 +153,10 @@ namespace ZE
 
 	void DebugRenderer::drawWorldText(const char* text, Matrix4x4& _transform)
 	{
-		if(m_textComponents[m_currentTextIndex] == NULL)
+		if(m_currentTextIndex >= m_textComponents.size())
 		{
 			Handle hTextComponent("Text Component", sizeof(TextComponent));
-			m_textComponents[m_currentTextIndex] = new(hTextComponent) TextComponent(m_gameContext);
+			m_textComponents.push_back(new(hTextComponent) TextComponent(m_gameContext));
 
 			addChild(m_textComponents[m_currentTextIndex]);
 			m_textComponents[m_currentTextIndex]->setupComponent();

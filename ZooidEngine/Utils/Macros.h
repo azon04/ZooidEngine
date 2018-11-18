@@ -3,6 +3,12 @@
 
 // This is macros helper
 
+#if defined(WIN32) || defined(WIN64)
+#define ZE_PLATFORM_WINDOWS
+#else
+#define ZE_PLATFORM_UNKNOWN
+#endif
+
 #define VISUAL_CPP 0
 #define OTHER 999
 
@@ -12,6 +18,18 @@
 	#define COMPILER	OTHER
 #endif
 
+// Platform specific support
+#if defined(ZE_PLATFORM_WINDOWS)
+#define ZE_SUPPORT_SIMD
+#define USING_SSE 1
+#elif
+#endif
+
+#if defined(ZE_SUPPORT_SIMD)
+#define ALIGN16 __declspec(align(16))
+#else
+#define ALIGN16
+#endif
 
 // Inline helper
 #if COMPILER == VISUAL_CPP

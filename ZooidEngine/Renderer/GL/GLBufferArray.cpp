@@ -13,6 +13,9 @@ namespace ZE
 		if (m_VAO == 0)
 			glGenVertexArrays(1, &m_VAO);
 
+		// Clear current buffer
+		m_buffers.clear();
+
 		glBindVertexArray(m_VAO);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexGLBuffer->getBBO());
 		m_dataCount = _vertexBuffer->getDataCount();

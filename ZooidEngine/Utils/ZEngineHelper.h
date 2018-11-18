@@ -4,6 +4,9 @@
 #include "Macros.h"
 #include "Debug.h"
 
+#define ZELOG(logGroup, logType, logFormat, ... ) \
+	ZE::LogManager::getInstance()->PrintLog(logGroup, #logGroup, logType, logFormat, __VA_ARGS__);
+
 #define ZEINFO(textFormat, ...) \
 	ZE::Debug::PrintDebugString("ZE_INFO: " ## textFormat ## "\r\n", __VA_ARGS__);
 
@@ -20,8 +23,5 @@
 		ZEERROR(textFormat, __VA_ARGS__); \
 		assert(condition); \
 	}
-
-#define ZELOG(logGroup, logType, logFormat, ... ) \
-	ZE::LogManager::getInstance()->PrintLog(logGroup, #logGroup, logType, logFormat, __VA_ARGS__);
 
 #endif 

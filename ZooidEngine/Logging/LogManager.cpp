@@ -14,13 +14,16 @@
 #define LOG_FILE(logWriter, logGroupName, logType, text) \
 	logWriter.writeFormatText( "ZooidEngine: [%s] %s: %s \r\n", logGroupName, #logType, text );
 
+#define COMPARE_LOGGROUP_RETURN(logGroup1, logGroup2) \
+	if(logGroup1 == logGroup2) { return #logGroup1; }
+
 namespace ZE
 {
 
 	LogManager::LogManager()
 		: m_logMask(0xFFFFFFFF)
 	{
-		DisableLogGroup(LOG_MEMORY);
+		//DisableLogGroup(LOG_MEMORY);
 		// #TODO Need to improve Logging file (too intrusive)
 		m_logWriter = FileWriter("Log.txt");
 	}
@@ -37,10 +40,26 @@ namespace ZE
 		return &logManager;
 	}
 
-	void LogManager::PrintLog(UInt32 logGroup, const char* logGroupName, LogType logType, const char* logFormat, ...)
+	const char* getLogGroupName(UInt32 logGroup)
+	{
+		COMPARE_LOGGROUP_RETURN(LOG_ENGINE, logGroup);
+		COMPARE_LOGGROUP_RETURN(LOG_GAME, logGroup);
+		COMPARE_LOGGROUP_RETURN(LOG_RENDERING, logGroup);
+		COMPARE_LOGGROUP_RETURN(LOG_MEMORY, logGroup);
+		COMPARE_LOGGROUP_RETURN(LOG_PHYSICS, logGroup);
+		return "\0";
+	}
+
+	void LogManager::PrintLog(UInt32 logGroup, const char* logGroupNameParam, LogType logType, const char* logFormat, ...)
 	{
 		if ((1 << logGroup) & m_logMask)
 		{
+			const char* logGroupName = getLogGroupName(logGroup);
+			if (logGroupName[0] == '\0')
+			{
+				logGroupName = logGroupNameParam;
+			}
+
 			char szBuff[1024];
 			va_list arg;
 			va_start(arg, logFormat);

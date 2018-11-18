@@ -2,9 +2,12 @@
 #include "MainFunctions.h"
 #include "UnitTest/UnitTest.h"
 #include "Renderer/DrawList.h"
+#include "Platform/Platform.h"
 
-int main(int argc, char** argv) 
+ZE_MAIN()
 {
+	ZE_INITPLATFORM();
+
 	// Init Engine
 	ZE::GameContext gameContext;
 	
@@ -13,7 +16,7 @@ int main(int argc, char** argv)
 	UnitTest::RunMainTest();
 
 	// Main Loop
-	while (!gameContext.getRenderer()->IsClose()) 
+	ZE_PLATFORMLOOP()
 	{
 		ZE::MainThreadJob(&gameContext);
 	}
@@ -22,6 +25,6 @@ int main(int argc, char** argv)
 
 	ZE::MainClean(&gameContext);
 
-	return 0;
+	ZE_DESTROYPLATFORM();
 
 }
