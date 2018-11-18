@@ -36,6 +36,7 @@ namespace ZE
 			glBindBuffer(GL_UNIFORM_BUFFER, 0);
 		}
 
+		m_currentSize = _bufferData->getSize();
 	}
 
 	void GLBufferData::bind()
@@ -83,36 +84,54 @@ namespace ZE
 	{
 		if (m_bufferType == VERTEX_BUFFER)
 		{
-			glBindBuffer(GL_ARRAY_BUFFER, m_BBO);
 			if (!m_isStatic)
 			{
-				GLvoid* p = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-				MemoryHelper::Copy(m_BufferData->getData(), p, m_BufferData->getSize());
-				glUnmapBuffer(GL_ARRAY_BUFFER);
+				glBindBuffer(GL_ARRAY_BUFFER, m_BBO);
+				if (m_currentSize >= m_BufferData->getSize())
+				{
+					glBufferSubData(GL_ARRAY_BUFFER, 0, m_BufferData->getSize(), m_BufferData->getData());
+				}
+				else
+				{
+					glBufferData(GL_ARRAY_BUFFER, m_BufferData->getSize(), m_BufferData->getData(), GL_DYNAMIC_DRAW);
+					m_currentSize = m_BufferData->getSize();
+				}
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
 			}
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
 		else if (m_bufferType == INDEX_BUFFER)
 		{
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_BBO);
 			if (!m_isStatic)
 			{
-				GLvoid* p = glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_WRITE_ONLY);
-				MemoryHelper::Copy(m_BufferData->getData(), p, m_BufferData->getSize());
-				glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_BBO);
+				if (m_currentSize >= m_BufferData->getSize())
+				{
+					glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, m_BufferData->getSize(), m_BufferData->getData());
+				}
+				else
+				{
+					glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_BufferData->getSize(), m_BufferData->getData(), GL_DYNAMIC_DRAW);
+					m_currentSize = m_BufferData->getSize();
+				}
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 			}
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		}
 		else if (m_bufferType == UNIFORM_BUFFER)
 		{
-			glBindBufferBase(GL_UNIFORM_BUFFER, m_bindingIndex, m_BBO);
 			if (!m_isStatic)
 			{
-				GLvoid* p = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY);
-				MemoryHelper::Copy(m_BufferData->getData(), p, m_BufferData->getSize());
-				glUnmapBuffer(GL_UNIFORM_BUFFER);
+				glBindBufferBase(GL_UNIFORM_BUFFER, m_bindingIndex, m_BBO);
+				if (m_currentSize >= m_BufferData->getSize())
+				{
+					glBufferSubData(GL_UNIFORM_BUFFER, 0, m_BufferData->getSize(), m_BufferData->getData());
+				}
+				else
+				{
+					glBufferData(GL_UNIFORM_BUFFER, m_BufferData->getSize(), m_BufferData->getData(), GL_DYNAMIC_DRAW);
+					m_currentSize = m_BufferData->getSize();
+				}
+				glBindBufferBase(GL_UNIFORM_BUFFER, m_bindingIndex, 0);
 			}
-			glBindBufferBase(GL_UNIFORM_BUFFER, m_bindingIndex, 0);
 		}
 	}
 
@@ -123,9 +142,15 @@ namespace ZE
 			glBindBuffer(GL_ARRAY_BUFFER, m_BBO);
 			if (!m_isStatic)
 			{
-				GLvoid* p = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-				MemoryHelper::Copy(m_BufferData->getData(), p, m_BufferData->getSize());
-				glUnmapBuffer(GL_ARRAY_BUFFER);
+				if (m_currentSize >= m_BufferData->getSize())
+				{
+					glBufferSubData(GL_ARRAY_BUFFER, 0, m_BufferData->getSize(), m_BufferData->getData());
+				}
+				else
+				{
+					glBufferData(GL_ARRAY_BUFFER, m_BufferData->getSize(), m_BufferData->getData(), GL_DYNAMIC_DRAW);
+					m_currentSize = m_BufferData->getSize();
+				}
 			}
 		}
 		else if (m_bufferType == INDEX_BUFFER)
@@ -133,9 +158,15 @@ namespace ZE
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_BBO);
 			if (!m_isStatic)
 			{
-				GLvoid* p = glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_WRITE_ONLY);
-				MemoryHelper::Copy(m_BufferData->getData(), p, m_BufferData->getSize());
-				glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
+				if (m_currentSize >= m_BufferData->getSize())
+				{
+					glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, m_BufferData->getSize(), m_BufferData->getData());
+				}
+				else
+				{
+					glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_BufferData->getSize(), m_BufferData->getData(), GL_DYNAMIC_DRAW);
+					m_currentSize = m_BufferData->getSize();
+				}
 			}
 		}
 		else if (m_bufferType == UNIFORM_BUFFER)
@@ -143,9 +174,15 @@ namespace ZE
 			glBindBufferBase(GL_UNIFORM_BUFFER, m_bindingIndex, m_BBO);
 			if (!m_isStatic)
 			{
-				GLvoid* p = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY);
-				MemoryHelper::Copy(m_BufferData->getData(), p, m_BufferData->getSize());
-				glUnmapBuffer(GL_UNIFORM_BUFFER);
+				if (m_currentSize >= m_BufferData->getSize())
+				{
+					glBufferSubData(GL_UNIFORM_BUFFER, 0, m_BufferData->getSize(), m_BufferData->getData());
+				}
+				else
+				{
+					glBufferData(GL_UNIFORM_BUFFER, m_BufferData->getSize(), m_BufferData->getData(), GL_DYNAMIC_DRAW);
+					m_currentSize = m_BufferData->getSize();
+				}
 			}
 		}
 	}

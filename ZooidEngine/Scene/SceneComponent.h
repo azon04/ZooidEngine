@@ -40,8 +40,8 @@ namespace ZE
 
 		virtual void handleUpdateEvent(Event* event);
 
-		Matrix4x4 m_localTransform;
-		Matrix4x4 m_worldTransform;
+		ALIGN16 Matrix4x4 m_localTransform;
+		ALIGN16 Matrix4x4 m_worldTransform;
 	};
 }
 

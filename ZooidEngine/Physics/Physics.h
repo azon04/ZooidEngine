@@ -56,7 +56,7 @@ namespace ZE
 		PhysicsShape ShapeType;
 
 		// local transform of PhysicsBody
-		Matrix4x4 Transform;
+		ALIGN16 Matrix4x4 Transform;
 
 		union
 		{

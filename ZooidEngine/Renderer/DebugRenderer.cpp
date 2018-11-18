@@ -18,6 +18,12 @@ namespace ZE
 {
 	IMPLEMENT_CLASS_1(DebugRenderer, Component)
 
+	DebugRenderer::DebugRenderer(GameContext* gameContext) 
+		: Component(gameContext)
+	{
+		m_lineBuffers.reset(2);
+	}
+
 	void DebugRenderer::Init(GameContext* gameContext)
 	{
 		gameContext->getRenderer()->AcquireRenderThreadOwnership();
@@ -28,7 +34,7 @@ namespace ZE
 		Handle hBufferData("Buffer Data", sizeof(BufferData));
 		s_instance->m_lineBufferData = new(hBufferData) BufferData(VERTEX_BUFFER);
 		s_instance->m_lineBufferData->setBufferLayout( BUFFER_LAYOUT_V3_C3);
-		s_instance->m_lineBufferData->SetData(s_instance->m_lineBuffers, sizeof(DebugPointStruct), MAX_LINE * 2);
+		s_instance->m_lineBufferData->SetData(&s_instance->m_lineBuffers[0], sizeof(DebugPointStruct), s_instance->m_lineBuffers.size());
 		s_instance->m_lineBufferData->setStaticBuffer(false);
 		s_instance->m_lineGPUBufferData = BufferManager::getInstance()->createGPUBufferFromBuffer(s_instance->m_lineBufferData, false);
 		
@@ -88,6 +94,8 @@ namespace ZE
 			shaderAction.setConstantsBlockBuffer("shader_data", m_gameContext->getDrawList()->m_mainConstantBuffer);
 
 			// Update Line data
+			s_instance->m_lineBufferData->SetData(&s_instance->m_lineBuffers[0], sizeof(DebugPointStruct), s_instance->m_lineBuffers.size());
+			
 			m_gameContext->getRenderer()->AcquireRenderThreadOwnership();
 
 			m_lineGPUBufferData->refresh();
@@ -115,20 +123,19 @@ namespace ZE
 
 	void DebugRenderer::drawLine(const Vector3& p1, const Vector3& p2, const Vector3& color)
 	{
-		if (m_currentIndex < MAX_LINE * 2)
+		if (m_currentIndex >= m_lineBuffers.size())
 		{
-			DebugPointStruct& p1Struct = m_lineBuffers[m_currentIndex++];
-			p1Struct.Point = p1;
-			p1Struct.Color = color;
+			m_lineBuffers.push_back(DebugPointStruct());
+			m_lineBuffers.push_back(DebugPointStruct());
+		}
 
-			DebugPointStruct& p2Struct = m_lineBuffers[m_currentIndex++];
-			p2Struct.Point = p2;
-			p2Struct.Color = color;
-		}
-		else
-		{
-			ZEWARNING("Not Enough Debug Lines Data to Render.");
-		}
+		DebugPointStruct& p1Struct = m_lineBuffers[m_currentIndex++];
+		p1Struct.Point = p1;
+		p1Struct.Color = color;
+
+		DebugPointStruct& p2Struct = m_lineBuffers[m_currentIndex++];
+		p2Struct.Point = p2;
+		p2Struct.Color = color;
 	}
 
 	void DebugRenderer::drawScreenText(const char* text, const Vector2& _position, const Vector3& _color, Float32 _scale)

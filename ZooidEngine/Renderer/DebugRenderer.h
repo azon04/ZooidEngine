@@ -7,8 +7,6 @@
 #include "Math/Vector2.h"
 #include "Math/Matrix4x4.h"
 
-#define MAX_LINE 1024
-
 namespace ZE
 {
 	class GameContext;
@@ -30,9 +28,7 @@ namespace ZE
 
 	public:
 
-		DebugRenderer(GameContext* gameContext) 
-			: Component(gameContext)
-		{}
+		DebugRenderer(GameContext* gameContext);
 
 		virtual ~DebugRenderer() {}
 
@@ -75,7 +71,7 @@ namespace ZE
 		BufferData* m_lineBufferData;
 		IGPUBufferData* m_lineGPUBufferData;
 		IGPUBufferArray* m_lineBufferArray;
-		DebugPointStruct m_lineBuffers[MAX_LINE * 2];
+		Array<DebugPointStruct,1> m_lineBuffers;
 		Int32 m_currentIndex;
 		Array<TextComponent*, true> m_textComponents;
 		Int32 m_currentTextIndex;

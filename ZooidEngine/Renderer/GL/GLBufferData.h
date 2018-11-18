@@ -35,6 +35,7 @@ namespace ZE
 
 	private:
 		GLuint m_BBO;
+		UInt32 m_currentSize;
 	};
 }
 

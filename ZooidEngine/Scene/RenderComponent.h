@@ -18,7 +18,7 @@ namespace ZE
 		RenderComponent(GameContext* gameContext) : SceneComponent(gameContext), 
 			m_mesh(nullptr), m_bHighlight(false), 
 			m_bStatic(true), m_bTriggerOnly(false),
-			m_bEnableGravity(true)
+			m_bEnableGravity(true), m_physicsEnabled(true)
 		{}
 
 		virtual ~RenderComponent() {}
