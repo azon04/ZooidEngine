@@ -55,10 +55,10 @@ namespace ZE {
 
 		// Construct PoolAllocator using memory address, size of block and number of block needed
 		// pMem should be memory address allocate with size of CalculateSizeMem return value
-		static PoolAllocator* ConstructFromMem(void* pMem, size_t itemSize, unsigned int blockCount);
+		static PoolAllocator* ConstructFromMem(void* pMem, size_t itemSize, unsigned int blockCount, bool bAlign, int alignment);
 
 		// Calculate size of memory needed to create pool alocator with itemSize and number of block needed
-		static size_t CalculateSizeMem(size_t itemSize, unsigned int blockCount);
+		static size_t CalculateSizeMem(size_t itemSize, unsigned int blockCount, bool bAlign, int alignment);
 
 		size_t getItemSize() const
 		{

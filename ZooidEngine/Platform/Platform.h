@@ -1,11 +1,10 @@
 #ifndef __ZE_PLATFORM_H__
 #define __ZE_PLATFORM_H__
 
-#if defined(WIN32) || defined (WIN64)
+#include "Utils/Macros.h"
 
+#if defined(ZE_PLATFORM_WINDOWS)
 #include "Win32/Win_Platform.h"
-#define ZE_PLATFORM_WINDOWS
-
 #else
 #error No Platform Implementation for this platform
 #endif
@@ -25,9 +24,10 @@ namespace ZE
 		virtual bool getArgByIndex(int index, char* buff) = 0;
 		virtual int getArgCount() = 0;
 
-	public:
 		// #TODO implement this on specific platform
 		static Platform* GetPlatform();
+	
+	public:
 
 		static bool IsRequestedExit();
 		static void RequestExit(int errorCode);

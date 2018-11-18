@@ -7,7 +7,7 @@
 #include "Math/Vector2.h"
 #include "Math/Matrix4x4.h"
 
-#define MAX_LINE 2048
+#define MAX_LINE 1024
 
 namespace ZE
 {
@@ -77,7 +77,7 @@ namespace ZE
 		IGPUBufferArray* m_lineBufferArray;
 		DebugPointStruct m_lineBuffers[MAX_LINE * 2];
 		Int32 m_currentIndex;
-		TextComponent* m_textComponents[1024];
+		Array<TextComponent*, true> m_textComponents;
 		Int32 m_currentTextIndex;
 	};
 }

@@ -108,18 +108,12 @@ public:
 	union 
 	{
 
-#if USING_SSE
-		__declspec(align(16))
-#endif
-		struct 
+		ALIGN16 struct 
 		{
 			ZE::Float32 m_x, m_y, m_z, m_w;
 		};
 
-#if USING_SSE
-		__declspec(align(16))
-#endif
-		ZE::Float32 m_data[4];
+		ALIGN16 ZE::Float32 m_data[4];
 
 #if USING_SSE
 		__m128 m_sseData;

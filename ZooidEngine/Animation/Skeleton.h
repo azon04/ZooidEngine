@@ -15,8 +15,8 @@ namespace ZE
 	{
 		String Name;
 		Int32 ParentIndex;
-		Matrix4x4 InvBindPose;
-		Matrix4x4 BindPose;
+		ALIGN16 Matrix4x4 InvBindPose;
+		ALIGN16 Matrix4x4 BindPose;
 	};
 
 	struct FastJoint

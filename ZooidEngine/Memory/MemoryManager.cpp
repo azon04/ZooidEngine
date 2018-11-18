@@ -5,10 +5,12 @@
 
 #include <cstdlib>
 
-#define MAX_COUNT_ADD_POOL 1024
+#define MAX_COUNT_ADD_POOL 512
 
-// Max Memory in additional pool is gonna be 2MB
-#define MAX_MEM_ADD_POOL (10 * 1024 * 1024)
+// Max Memory in additional pool is gonna be 1MB
+#define MAX_MEM_ADD_POOL (1 * 1024 * 1024)
+
+#define ALLIGN_SIZE(size)  (size % ALLIGNMENT == 0) ? size : (((size + ALLIGNMENT) / ALLIGNMENT) * ALLIGNMENT)
 
 static unsigned int poolConfig[NPOOL][2] =
 {
@@ -53,7 +55,7 @@ namespace ZE {
 		size_t totalSize = 0;
 		for (unsigned int i = 0; i < NPOOL; i++)
 		{
-			totalSize += PoolAllocator::CalculateSizeMem(poolConfig[i][0], poolConfig[i][1]) + ALLIGNMENT;
+			totalSize += PoolAllocator::CalculateSizeMem(poolConfig[i][0], poolConfig[i][1], true, ALLIGNMENT);
 		}
 
 		ZELOG(LOG_MEMORY, Log, "Total Mem Size : %d bytes ~ %f MB", totalSize, totalSize / (1024.0f * 1024.0f));
@@ -65,13 +67,8 @@ namespace ZE {
 		void* pMem = s_instance->m_pAlocatorsBlock;
 		for (unsigned int i = 0; i < NPOOL; i++)
 		{
-			size_t mask = ALLIGNMENT - 1;
-			uintptr_t misaligned = ((uintptr_t)(pMem)& mask);
-			ptrdiff_t adjustment = ALLIGNMENT - misaligned;
-
-			pMem = (void*)((uintptr_t)pMem + adjustment);
-			s_instance->m_pools[i] = PoolAllocator::ConstructFromMem(pMem, poolConfig[i][0], poolConfig[i][1]);
-			pMem = (void*) ((uintptr_t) pMem + PoolAllocator::CalculateSizeMem(poolConfig[i][0], poolConfig[i][1]));
+			s_instance->m_pools[i] = PoolAllocator::ConstructFromMem(pMem, poolConfig[i][0], poolConfig[i][1], true, ALLIGNMENT);
+			pMem = (void*) ((uintptr_t) pMem + PoolAllocator::CalculateSizeMem(poolConfig[i][0], poolConfig[i][1], true, ALLIGNMENT));
 		}
 
 		
@@ -88,19 +85,19 @@ namespace ZE {
 	{
 		m_memoryLock.lock();
 
-		ZELOG(LOG_MEMORY, Log, "Allocate memory for %d bytes", size);
+		//ZELOG(LOG_MEMORY, Log, "Allocate memory for %d bytes", size);
 
 		// Check the matched size in pools
 		unsigned int index = 0;
 		while (index < NPOOL && poolConfig[index][0] < size)
 		{
-			ZELOG(LOG_MEMORY, Log, "Cant fit in %d bytes", poolConfig[index][0]);
+			//ZELOG(LOG_MEMORY, Log, "Cant fit in %d bytes", poolConfig[index][0]);
 			index++;
 		}
 
 		while (index < NPOOL && m_pools[index]->getCountFreeBlock() == 0)
 		{
-			ZELOG(LOG_MEMORY, Log, "Cant find free block in %d bytes", poolConfig[index][0]);
+			//ZELOG(LOG_MEMORY, Log, "Cant find free block in %d bytes", poolConfig[index][0]);
 			index++;
 		}
 
@@ -113,23 +110,27 @@ namespace ZE {
 
 			if (index >= (NPOOL + m_countAddPool) && m_countAddPool < ADDITIONAL_MAX_POOL)
 			{
-				int poolCount = (MAX_MEM_ADD_POOL / size) < MAX_COUNT_ADD_POOL ? (MAX_MEM_ADD_POOL / size) : MAX_COUNT_ADD_POOL;
-				size_t totalSize = PoolAllocator::CalculateSizeMem(size, poolCount);
+				size_t alignSize = ALLIGN_SIZE(size);
+				int poolCount = (MAX_MEM_ADD_POOL / alignSize) < MAX_COUNT_ADD_POOL ? (MAX_MEM_ADD_POOL / alignSize) : MAX_COUNT_ADD_POOL;
+				if (poolCount == 0) { poolCount = 1; } // If by any chance the the size is more than MAX_MEM_ADD_POOL, just make 1
+				size_t totalSize = PoolAllocator::CalculateSizeMem(alignSize, poolCount, true, ALLIGNMENT);
 				m_pAdditionalBlocks[m_countAddPool] = (void*)malloc(totalSize);
-				m_additionalPools[m_countAddPool] = PoolAllocator::ConstructFromMem(m_pAdditionalBlocks[m_countAddPool], size, poolCount);
+				m_additionalPools[m_countAddPool] = PoolAllocator::ConstructFromMem(m_pAdditionalBlocks[m_countAddPool], alignSize, poolCount, true, ALLIGNMENT);
 				m_countAddPool++;
 
-				ZELOG(LOG_MEMORY, Log, "Created Additional Memory Pool for %d bytes with %d blocks", size, poolCount);
+				ZELOG(LOG_MEMORY, Log, "Created Additional Memory Pool for %d bytes with %d blocks on index %d", size, poolCount, index);
 			}
-			else if (m_additionalPools[index - NPOOL]->isEmpty() && size > m_additionalPools[index - NPOOL]->getItemSize()) // For empty additional block
+			else if (m_additionalPools[index - NPOOL]->isEmpty() && (size < m_additionalPools[index - NPOOL]->getItemSize() / 2 || size > m_additionalPools[index - NPOOL]->getItemSize())) // For empty additional block && if the size is 25% smaller
 			{
-				int poolCount = (MAX_MEM_ADD_POOL / size) < MAX_COUNT_ADD_POOL ? (MAX_MEM_ADD_POOL / size) : MAX_COUNT_ADD_POOL;
-				size_t totalSize = PoolAllocator::CalculateSizeMem(size, poolCount);
+				size_t alignSize = ALLIGN_SIZE(size);
+				int poolCount = (MAX_MEM_ADD_POOL / alignSize) < MAX_COUNT_ADD_POOL ? (MAX_MEM_ADD_POOL / alignSize) : MAX_COUNT_ADD_POOL;
+				if (poolCount == 0) { poolCount = 1; } // If by any chance the the size is more than MAX_MEM_ADD_POOL, just make 1
+				size_t totalSize = PoolAllocator::CalculateSizeMem(alignSize, poolCount, true, ALLIGNMENT);
 				// Free Empty additional block
 				free(m_pAdditionalBlocks[index - NPOOL]);
 				m_pAdditionalBlocks[index - NPOOL] = (void*)malloc(totalSize);
 
-				m_additionalPools[index - NPOOL] = PoolAllocator::ConstructFromMem(m_pAdditionalBlocks[index - NPOOL], size, poolCount);
+				m_additionalPools[index - NPOOL] = PoolAllocator::ConstructFromMem(m_pAdditionalBlocks[index - NPOOL], alignSize, poolCount, true, ALLIGNMENT);
 
 				ZELOG(LOG_MEMORY, Log, "Created Additional Memory Pool for %d bytes with %d blocks replacing block on index %d", size, poolCount, index);
 			}
