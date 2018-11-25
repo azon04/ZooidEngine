@@ -19,6 +19,18 @@ public:
 	// Setup Buffer Array from vertex buffer, index buffer and compute buffer (optional)
 	virtual void SetupBufferArray(IGPUBufferData* _vertexBuffer, IGPUBufferData* _indexBuffer, IGPUBufferData* _computeBuffer) = 0;
 	
+	// Setup Buffer Array from multiple vertex buffers, multiple index bufers and multiple compute buffers  (optional)
+	virtual void SetupBufferArray(IGPUBufferData** _vertexBuffers, UInt32 _vertexBufferCount, IGPUBufferData** _indexBuffers, UInt32 _indexBufferCount, IGPUBufferData** _computeBuffers = nullptr, UInt32 _computeBufferCount = 0) = 0;
+
+	// Add Additional Vertex Buffer
+	virtual void AddVertexBuffer(IGPUBufferData* _vertexBuffer) = 0;
+
+	// Add Additional Index Buffer
+	virtual void AddIndexBuffer(IGPUBufferData* _indexBuffer) = 0;
+
+	// Add Additional Compute Buffer
+	virtual void AddComputeBuffer(IGPUBufferData* _computeBuffer) = 0;
+
 	// Bind buffer array to rendering pipeline
 	virtual void bind() = 0;
 

@@ -31,164 +31,53 @@ namespace ZE
 		s_instance = new(handle) ShaderManager;
 		s_instance->m_gameContext = _gameContext;
 
-		s_instance->loadResource("ZooidEngine/Shaders/DefaultGLSimple.vs");
-		s_instance->loadResource("ZooidEngine/Shaders/TestGLVertexShader.vs");
-		s_instance->loadResource("ZooidEngine/Shaders/TestGLFragmentShader.frag");
-		s_instance->loadResource("ZooidEngine/Shaders/DefaultGLSimple.frag");
-		s_instance->loadResource("ZooidEngine/Shaders/DefaultGLSimpleColor.frag");
-		s_instance->loadResource("ZooidEngine/Shaders/DefaultGLSimpleLit.vs");
-		s_instance->loadResource("ZooidEngine/Shaders/DefaultGLSimpleLit.frag");
-		s_instance->loadResource("ZooidEngine/Shaders/DefaultGLSimpleLit_Blend.frag");
-		s_instance->loadResource("ZooidEngine/Shaders/DefaultHighlightSimple.vs");
-		s_instance->loadResource("ZooidEngine/Shaders/DefaultHighlightSimple.frag");
-		s_instance->loadResource("ZooidEngine/Shaders/DefaultGLSimpleLitSkin.vs");
-		s_instance->loadResource("ZooidEngine/Shaders/Shader2D/TextShader.vs");
-		s_instance->loadResource("ZooidEngine/Shaders/Shader2D/TextShader.frag");
-		s_instance->loadResource("ZooidEngine/Shaders/Shader2D/TextShader_SDF.frag");
-		s_instance->loadResource("ZooidEngine/Shaders/Shader2D/TextShader_MSDF.frag");
-		s_instance->loadResource("ZooidEngine/Shaders/TextWorldShader.vs");
-		s_instance->loadResource("ZooidEngine/Shaders/TextWorldShader.frag");
-		s_instance->loadResource("ZooidEngine/Shaders/TextWorldShader_SDF.frag");
-		s_instance->loadResource("ZooidEngine/Shaders/TextWorldShader_MSDF.frag");
-		s_instance->loadResource("ZooidEngine/Shaders/Shadows/DefaultDepthShader.vs");
-		s_instance->loadResource("ZooidEngine/Shaders/Shadows/DefaultDepthShader.frag");
-		s_instance->loadResource("ZooidEngine/Shaders/Shadows/DefaultSkinDepthShader.vs");
-		s_instance->loadAllResource();
-
-
-		_gameContext->getRenderer()->AcquireRenderThreadOwnership();
-
 		// Z_SHADER_CHAIN_SIMPLE
-		{
-			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
-			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
-			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/TestGLVertexShader.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/TestGLFragmentShader.frag"), nullptr, nullptr);
-			s_instance->m_shaderChain.push_back(shaderChain);
-		}
+		s_instance->makeShaderChain("ZooidEngine/Shaders/TestGLVertexShader.vs", "ZooidEngine/Shaders/TestGLFragmentShader.frag", nullptr, nullptr);
 
 		// Z_SHADER_CHAIN_3D_DEFAULT
-		{	
-			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
-			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
-			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimple.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimple.frag"), nullptr, nullptr);
-			s_instance->m_shaderChain.push_back(shaderChain);
-		}
+		s_instance->makeShaderChain("ZooidEngine/Shaders/DefaultGLSimple.vs", "ZooidEngine/Shaders/DefaultGLSimple.frag", nullptr, nullptr);
 
 		// Z_SHADER_CHAIN_3D_DEFAULT_COLOR_LINE
-		{	
-			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
-			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
-			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimple.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleColor.frag"), nullptr, nullptr);
-			shaderChain->m_topology = TOPOLOGY_LINE;
-			s_instance->m_shaderChain.push_back(shaderChain);
-		}
+		s_instance->makeShaderChain("ZooidEngine/Shaders/DefaultGLSimple.vs", "ZooidEngine/Shaders/DefaultGLSimpleColor.frag", nullptr, nullptr);
 
 		// Z_SHADER_CHAIN_3D_DEFAULT_LIT
-		{
-			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
-			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>(); 
-			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLit.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLit.frag"), nullptr, nullptr);
-			s_instance->m_shaderChain.push_back(shaderChain);
-		}
+		s_instance->makeShaderChain("ZooidEngine/Shaders/DefaultGLSimpleLit.vs", "ZooidEngine/Shaders/DefaultGLSimpleLit.frag", nullptr, nullptr);
 
 		// Z_SHADER_CHAIN_3D_DEFAULT_LIT_BLEND
-		{
-			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
-			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
-			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLit.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLit_Blend.frag"), nullptr, nullptr);
-			s_instance->m_shaderChain.push_back(shaderChain);
-		}
+		s_instance->makeShaderChain("ZooidEngine/Shaders/DefaultGLSimpleLit.vs", "ZooidEngine/Shaders/DefaultGLSimpleLit_Blend.frag", nullptr, nullptr);
 
 		// Z_SHADER_CHAIN_3D_HIGHLIGHT
-		{
-			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
-			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
-			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultHighlightSimple.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultHighlightSimple.frag"), nullptr, nullptr);
-			s_instance->m_shaderChain.push_back(shaderChain);
-		}
+		s_instance->makeShaderChain("ZooidEngine/Shaders/DefaultHighlightSimple.vs", "ZooidEngine/Shaders/DefaultHighlightSimple.frag", nullptr, nullptr);
 
 		// Z_SHADER_CHAIN_3D_DEFAULT_SKIN_LIT
-		{
-			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
-			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
-			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLitSkin.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLit.frag"), nullptr, nullptr);
-			s_instance->m_shaderChain.push_back(shaderChain);
-		}
+		s_instance->makeShaderChain("ZooidEngine/Shaders/DefaultGLSimpleLitSkin.vs", "ZooidEngine/Shaders/DefaultGLSimpleLit.frag", nullptr, nullptr);
 
 		// Z_SHADER_CHAIN_3D_DEFAULT_SKIN_LIT_BLEND
-		{
-			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
-			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
-			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLitSkin.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/DefaultGLSimpleLit_Blend.frag"), nullptr, nullptr);
-			s_instance->m_shaderChain.push_back(shaderChain);
-		}
+		s_instance->makeShaderChain("ZooidEngine/Shaders/DefaultGLSimpleLitSkin.vs", "ZooidEngine/Shaders/DefaultGLSimpleLit_Blend.frag", nullptr, nullptr);
 
 		// Z_SHADER_CHAIN_WORLD_TEXT_SHADER
-		{
-			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
-			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
-			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/TextWorldShader.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/TextWorldShader.frag"), nullptr, nullptr);
-			s_instance->m_shaderChain.push_back(shaderChain);
-		}
+		s_instance->makeShaderChain("ZooidEngine/Shaders/TextWorldShader.vs", "ZooidEngine/Shaders/TextWorldShader.frag", nullptr, nullptr);
 
 		// Z_SHADER_CHAIN_WORLD_TEXT_SHADER_SDF
-		{
-			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
-			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
-			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/TextWorldShader.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/TextWorldShader_SDF.frag"), nullptr, nullptr);
-			s_instance->m_shaderChain.push_back(shaderChain);
-		}
+		s_instance->makeShaderChain("ZooidEngine/Shaders/TextWorldShader.vs", "ZooidEngine/Shaders/TextWorldShader_SDF.frag", nullptr, nullptr);
 
 		// Z_SHADER_CHAIN_WORLD_TEXT_SHADER_MSDF
-		{
-			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
-			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
-			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/TextWorldShader.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/TextWorldShader_MSDF.frag"), nullptr, nullptr);
-			s_instance->m_shaderChain.push_back(shaderChain);
-		}
+		s_instance->makeShaderChain("ZooidEngine/Shaders/TextWorldShader.vs", "ZooidEngine/Shaders/TextWorldShader_MSDF.frag", nullptr, nullptr);
 
 		// Z_SHADER_CHAIN_SCREEN_TEXT_SHADER
-		{
-			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
-			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
-			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/Shader2D/TextShader.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/Shader2D/TextShader.frag"), nullptr, nullptr);
-			s_instance->m_shaderChain.push_back(shaderChain);
-		}
+		s_instance->makeShaderChain("ZooidEngine/Shaders/Shader2D/TextShader.vs", "ZooidEngine/Shaders/Shader2D/TextShader.frag", nullptr, nullptr);
 
 		// Z_SHADER_CHAIN_SCREEN_TEXT_SHADER_SDF
-		{
-			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
-			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
-			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/Shader2D/TextShader.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/Shader2D/TextShader_SDF.frag"), nullptr, nullptr);
-			s_instance->m_shaderChain.push_back(shaderChain);
-		}
+		s_instance->makeShaderChain("ZooidEngine/Shaders/Shader2D/TextShader.vs", "ZooidEngine/Shaders/Shader2D/TextShader_SDF.frag", nullptr, nullptr);
 
 		// Z_SHADER_CHAIN_SCREEN_TEXT_SHADER_MSDF
-		{
-			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
-			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
-			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/Shader2D/TextShader.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/Shader2D/TextShader_MSDF.frag"), nullptr, nullptr);
-			s_instance->m_shaderChain.push_back(shaderChain);
-		}
+		s_instance->makeShaderChain("ZooidEngine/Shaders/Shader2D/TextShader.vs", "ZooidEngine/Shaders/Shader2D/TextShader_MSDF.frag", nullptr, nullptr);
 
 		// Z_SHADER_CHAIN_SHADOW_DEPTH
-		{
-			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
-			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
-			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/Shadows/DefaultDepthShader.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/Shadows/DefaultDepthShader.frag"), nullptr, nullptr);
-			s_instance->m_shaderChain.push_back(shaderChain);
-		}
+		s_instance->makeShaderChain("ZooidEngine/Shaders/Shadows/DefaultDepthShader.vs", "ZooidEngine/Shaders/Shadows/DefaultDepthShader.frag", nullptr, nullptr);
 
 		// Z_SHADER_CHAIN_SHADOW_DEPTH_SKINNED
-		{
-			Handle hShaderChain = _gameContext->getRenderZooid()->CreateShaderChain();
-			IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
-			shaderChain->makeChain(s_instance->getResource<IShader>("ZooidEngine/Shaders/Shadows/DefaultSkinDepthShader.vs"), s_instance->getResource<IShader>("ZooidEngine/Shaders/Shadows/DefaultDepthShader.frag"), nullptr, nullptr);
-			s_instance->m_shaderChain.push_back(shaderChain);
-		}
-
-
-		_gameContext->getRenderer()->ReleaseRenderThreadOwnership();
+		s_instance->makeShaderChain("ZooidEngine/Shaders/Shadows/DefaultSkinDepthShader.vs", "ZooidEngine/Shaders/Shadows/DefaultDepthShader.frag", nullptr, nullptr);
 	}
 
 	void ShaderManager::Destroy()
@@ -206,14 +95,12 @@ namespace ZE
 
 	ZE::Handle ShaderManager::loadResource_Internal(const char* resourceFilePath)
 	{
-		m_gameContext->getRenderer()->AcquireRenderThreadOwnership();
-
+		ScopedRenderThreadOwnership renderLock(m_gameContext->getRenderer());
+		
 		Handle hShader = m_gameContext->getRenderZooid()->CreateShader();
 		IShader* pShader = hShader.getObject<IShader>();
 		
 		pShader->loadShader(resourceFilePath, getShaderTypeByName(resourceFilePath));
-		
-		m_gameContext->getRenderer()->ReleaseRenderThreadOwnership();
 		
 		return hShader;
 	}
@@ -227,6 +114,20 @@ namespace ZE
 	ZE::IShaderChain* ShaderManager::getShaderChain(int id)
 	{
 		return m_shaderChain[id];
+	}
+
+	IShaderChain* ShaderManager::makeShaderChain(const char* vertexShaderPath, const char* fragmentShaderPath, const char* geomShaderPath, const char* computeShaderPath)
+	{
+		ScopedRenderThreadOwnership renderLock(m_gameContext->getRenderer());
+		Handle hShaderChain = m_gameContext->getRenderZooid()->CreateShaderChain();
+		IShaderChain* shaderChain = hShaderChain.getObject<IShaderChain>();
+		shaderChain->makeChain(
+			vertexShaderPath ? s_instance->loadResource<IShader>(vertexShaderPath) : nullptr,
+			fragmentShaderPath ? s_instance->loadResource<IShader>(fragmentShaderPath) : nullptr,
+			geomShaderPath ? s_instance->loadResource<IShader>(geomShaderPath) : nullptr,
+			computeShaderPath ? s_instance->loadResource<IShader>(computeShaderPath) : nullptr);
+		m_shaderChain.push_back(shaderChain);
+		return shaderChain;
 	}
 
 }

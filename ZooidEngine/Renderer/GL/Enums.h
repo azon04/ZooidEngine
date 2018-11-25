@@ -131,5 +131,26 @@ namespace ZE
 			return GL_NONE;
 		}
 	}
+
+	FORCEINLINE GLenum getClearBitMask(UInt32 masks)
+	{
+		GLenum result = 0;
+		if (masks & EClearBit::COLOR_BUFFER_BIT)
+		{
+			result |= GL_COLOR_BUFFER_BIT;
+		}
+
+		if (masks & EClearBit::DEPTH_BUFFER_BIT)
+		{
+			result |= GL_DEPTH_BUFFER_BIT;
+		}
+
+		if (masks & EClearBit::STENCIL_BUFFER_BIT)
+		{
+			result |= GL_STENCIL_BUFFER_BIT;
+		}
+
+		return result;
+	}
 }
 #endif

@@ -280,6 +280,9 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClInclude Include="..\..\ZooidEngine\Scene\SceneComponent.h" />
     <ClInclude Include="..\..\ZooidEngine\Scene\SceneManager.h" />
     <ClInclude Include="..\..\ZooidEngine\Scene\TextComponent.h" />
+    <ClInclude Include="..\..\ZooidEngine\UI\UIRenderer.h" />
+    <ClInclude Include="..\..\ZooidEngine\UI\ZooidUI.h" />
+    <ClInclude Include="..\..\ZooidEngine\UI\ZooidUI_Config.h" />
     <ClInclude Include="..\..\ZooidEngine\UnitTest\ArrayTest.h" />
     <ClInclude Include="..\..\ZooidEngine\UnitTest\FileTest.h" />
     <ClInclude Include="..\..\ZooidEngine\UnitTest\HashMapTest.h" />
@@ -386,6 +389,8 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClCompile Include="..\..\ZooidEngine\Scene\SceneComponent.cpp" />
     <ClCompile Include="..\..\ZooidEngine\Scene\SceneManager.cpp" />
     <ClCompile Include="..\..\ZooidEngine\Scene\TextComponent.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\UI\UIRenderer.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\UI\ZooidUI.cpp" />
     <ClCompile Include="..\..\ZooidEngine\UnitTest\ArrayTest.cpp" />
     <ClCompile Include="..\..\ZooidEngine\UnitTest\FileTest.cpp" />
     <ClCompile Include="..\..\ZooidEngine\UnitTest\HashMapTest.cpp" />

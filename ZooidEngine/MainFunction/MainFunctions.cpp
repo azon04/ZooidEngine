@@ -36,6 +36,8 @@
 
 #include "scene/Light/LightComponent.h"
 
+#include "UI/ZooidUI.h"
+
 // TODO for NVIDIA Optimus :  This enable the program to use NVIDIA instead of integrated Intel graphics
 #if WIN32 || WIN64
 extern "C"
@@ -53,6 +55,8 @@ namespace ZE
 
 	void MainSetup(GameContext* _gameContext)
 	{
+		gGameContext = _gameContext;
+
 		ZEINFO("Zooid Engine Main Setup");
 		ZEINFO("=======================");
 
@@ -173,6 +177,9 @@ namespace ZE
 		CameraManager::Init(_gameContext);
 		_gameContext->m_cameraManager = CameraManager::GetInstance();
 		
+		ZEINFO("Initializing Zooid UI...");
+		UI::Init(_gameContext->getRenderer()->GetWidth(), _gameContext->getRenderer()->GetHeight());
+
 		_gameContext->m_mainTimer.Reset();
 
 #if ZE_RENDER_MULTITHREAD
@@ -190,6 +197,8 @@ namespace ZE
 			_gameContext->m_drawThread->join();
 		}
 #endif
+
+		UI::Destroy();
 
 		CameraManager::Destroy();
 		
@@ -321,7 +330,7 @@ namespace ZE
 		IRenderer* renderer = _gameContext->getRenderer();
 		DrawList* drawList = _gameContext->getDrawList();
 
-		renderer->AcquireRenderThreadOwnership();
+		ScopedRenderThreadOwnership renderLock(renderer);
 
 		// For each Light render Shadows
 		for (UInt32 iShadowData = 0; iShadowData < drawList->m_lightShadowSize; iShadowData++)
@@ -449,8 +458,6 @@ namespace ZE
 		_gameContext->getRenderer()->EndRender();
 
 		_gameContext->getDrawList()->Reset();
-
-		_gameContext->getRenderer()->ReleaseRenderThreadOwnership();
 	}
 
 }

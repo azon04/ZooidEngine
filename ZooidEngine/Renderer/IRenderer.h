@@ -34,6 +34,10 @@ namespace ZE
 		// Clear Screen
 		virtual void ClearScreen() = 0;
 
+		// Clear buffer bit
+		// if FrameBuffer is bound, then clear bit for that FrameBuffer, otherwise it will clear bits in Screen
+		virtual void Clear(UInt32 clearBits) = 0;
+
 		// Process Shadow Map
 		virtual void ProcessShadowMapList(DrawList* drawList, bool bWithStatic) = 0;
 
@@ -54,6 +58,9 @@ namespace ZE
 
 		// Multithread: call this after processing renderer related assets: texture, buffers, etc
 		virtual void ReleaseRenderThreadOwnership() = 0;
+
+		// Multithread: check RenderThreadOwnership
+		virtual bool HasRenderThreadOwnership() = 0;
 
 		// Enable Renderer feature. See RendererFeature
 		virtual void EnableFeature(UInt32 feature) = 0;
@@ -82,5 +89,31 @@ namespace ZE
 
 	};
 
+	// Helper to scope getting and releasing RenderThread lock
+	class ScopedRenderThreadOwnership
+	{
+	public:
+		ScopedRenderThreadOwnership(IRenderer* renderer)
+			: m_renderer(renderer)
+		{
+			m_hasLock = m_renderer->HasRenderThreadOwnership();
+			if (!m_hasLock)
+			{
+				m_renderer->AcquireRenderThreadOwnership();
+			}
+		}
+
+		~ScopedRenderThreadOwnership()
+		{
+			if (!m_hasLock)
+			{
+				m_renderer->ReleaseRenderThreadOwnership();
+			}
+		}
+
+	protected:
+		bool m_hasLock;
+		IRenderer* m_renderer;
+	};
 }
 #endif

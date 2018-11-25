@@ -215,13 +215,13 @@ namespace ZE
 		Texture* pTexture = new(hTexture) Texture;
 		pTexture->loadFromBuffer(pTAtlas, texSize, texSize, 1);
 
-		gameContext->getRenderer()->AcquireRenderThreadOwnership();
-		
-		pFont->m_hGPUTexture = gameContext->getRenderZooid()->CreateRenderTexture();
-		IGPUTexture* gpuTexture = pFont->m_hGPUTexture.getObject<IGPUTexture>();
-		gpuTexture->fromTexture(pTexture);
+		{
+			ScopedRenderThreadOwnership renderLock(gameContext->getRenderer());
 
-		gameContext->getRenderer()->ReleaseRenderThreadOwnership();
+			pFont->m_hGPUTexture = gameContext->getRenderZooid()->CreateRenderTexture();
+			IGPUTexture* gpuTexture = pFont->m_hGPUTexture.getObject<IGPUTexture>();
+			gpuTexture->fromTexture(pTexture);
+		}
 
 		FT_Done_Face(face);
 		FT_Done_FreeType(ft);

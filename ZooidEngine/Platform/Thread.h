@@ -14,7 +14,7 @@ namespace ZE
 	typedef std::condition_variable ConditionVariable;
 	typedef std::thread::id ThreadId;
 	typedef std::unique_lock<std::mutex> UniqueLock;
-
+	
 	ThreadId getThreadId();
 
 	const ThreadId MAIN_THREAD_ID = ZE::getThreadId();

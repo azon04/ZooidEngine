@@ -32,6 +32,7 @@ public:
 	virtual void EndRender() override;
 	virtual void Clean() override;
 	virtual void ClearScreen() override;
+	virtual void Clear(UInt32 clearBits) override;
 	virtual void ProcessShadowMapList(DrawList* drawList, bool bWithStatic) override;
 	virtual void ProcessDrawList(DrawList* drawList) override;
 	virtual void ProcessShaderAction(DrawList* drawList, ShaderAction* shaderAction) override;
@@ -42,6 +43,7 @@ public:
 
 	virtual void AcquireRenderThreadOwnership() override;
 	virtual void ReleaseRenderThreadOwnership() override;
+	virtual bool HasRenderThreadOwnership() override;
 
 	virtual void EnableFeature(UInt32 feature) override;
 	virtual void DisableFeature(UInt32 feature) override;
@@ -76,6 +78,7 @@ private:
 	HashMap<UInt32, GLenum> HashBlendFactorToRealGLVar;
 	GLenum HashFaceFrontOrder[2];
 	GLenum HashCullFace[3];
+	ThreadId m_currentThreadHasLock;
 };
 }
 #endif

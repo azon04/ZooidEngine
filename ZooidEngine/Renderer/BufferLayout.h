@@ -22,6 +22,7 @@ namespace ZE
 		EDataType DataType;
 		ZE::UInt32 Stride;
 		ZE::Int32 Offset;
+		bool bInstanceData;
 	};
 
 	class BufferLayout 
@@ -65,9 +66,15 @@ namespace ZE
 		// get buffer layout by format type
 		BufferLayout* getBufferLayoutByFormat(int format);
 
+		// Add new Buffer Layout to the manager: Return index
+		UInt32 addNewBufferLayout(BufferLayout* bufferLayout);
+
+		// Create and Add Empty Buffer Layout
+		BufferLayout* createAndAddBufferLayout(UInt32& bufferIndex);
+
 	protected:
 		// List of the buffer layouts
-		Array<BufferLayout*> m_bufferLayout;
+		Array<BufferLayout*, true> m_bufferLayout;
 
 	private:
 		static BufferLayoutManager* m_instance;

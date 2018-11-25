@@ -125,6 +125,12 @@ namespace ZE
 		glStencilMask(0x00); // Disable writing to stencil buffer
 	}
 
+	void GLRenderer::Clear(UInt32 clearBits)
+	{
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		glClear(getClearBitMask(clearBits));
+	}
+
 	void GLRenderer::ProcessShadowMapList(DrawList* drawList, bool bWithStatic)
 	{
 		// Current peter panning solution: Render with front face culled.
@@ -216,13 +222,19 @@ namespace ZE
 	{
 		m_renderLock.lock();
 		glfwMakeContextCurrent(m_window);
+		m_currentThreadHasLock = ZE::getThreadId();
 	}
 
 	void GLRenderer::ReleaseRenderThreadOwnership()
 	{	
 		glfwMakeContextCurrent(nullptr);
 		m_renderLock.unlock();
+		m_currentThreadHasLock = ThreadId();
+	}
 
+	bool GLRenderer::HasRenderThreadOwnership()
+	{
+		return m_currentThreadHasLock == ZE::getThreadId();
 	}
 
 	void GLRenderer::EnableFeature(UInt32 feature)

@@ -12,7 +12,7 @@
 namespace ZE 
 {
 	
-	template<class T, bool resizable = false>
+	template<class T, bool resizable = true>
 	class Array
 	{
 	public:
@@ -134,7 +134,7 @@ namespace ZE
 
 		FORCEINLINE T& operator[](int index) const
 		{
-			return get(index);
+			return getConst(index);
 		}
 
 		FORCEINLINE T& get(int index)

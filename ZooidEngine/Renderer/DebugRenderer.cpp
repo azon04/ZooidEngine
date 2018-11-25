@@ -26,7 +26,7 @@ namespace ZE
 
 	void DebugRenderer::Init(GameContext* gameContext)
 	{
-		gameContext->getRenderer()->AcquireRenderThreadOwnership();
+		ScopedRenderThreadOwnership renderLock(gameContext->getRenderer());
 
 		Handle hDebugRenderer("Debug Renderer", sizeof(DebugRenderer));
 		s_instance = new(hDebugRenderer) DebugRenderer(gameContext);
@@ -40,8 +40,6 @@ namespace ZE
 		
 		Handle hBufferArray = BufferManager::getInstance()->createBufferArray(s_instance->m_lineGPUBufferData, nullptr, nullptr);
 		s_instance->m_lineBufferArray = hBufferArray.getObject<IGPUBufferArray>();
-
-		gameContext->getRenderer()->ReleaseRenderThreadOwnership();
 
 		s_instance->m_currentIndex = 0;
 		s_instance->m_currentTextIndex = 0;
@@ -94,13 +92,12 @@ namespace ZE
 			shaderAction.setConstantsBlockBuffer("shader_data", m_gameContext->getDrawList()->m_mainConstantBuffer);
 
 			// Update Line data
-			s_instance->m_lineBufferData->SetData(&s_instance->m_lineBuffers[0], sizeof(DebugPointStruct), s_instance->m_lineBuffers.size());
+			m_lineBufferData->SetData(&s_instance->m_lineBuffers[0], sizeof(DebugPointStruct), s_instance->m_lineBuffers.size());
 			
-			m_gameContext->getRenderer()->AcquireRenderThreadOwnership();
-
-			m_lineGPUBufferData->refresh();
-			
-			m_gameContext->getRenderer()->ReleaseRenderThreadOwnership();
+			{
+				ScopedRenderThreadOwnership renderLock(m_gameContext->getRenderer());
+				m_lineGPUBufferData->refresh();
+			}
 		}
 
 		while (m_currentTextIndex < m_textComponents.size())

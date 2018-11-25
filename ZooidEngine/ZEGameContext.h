@@ -76,5 +76,9 @@ namespace ZE
 		FORCEINLINE PhysicsZooid* getPhysicsZooid() const { return m_physicsZooid; }
 		FORCEINLINE IPhysics* getPhysics() const { return m_physics; }
 	};
+
+	extern GameContext* gGameContext;
+
+	GameContext* GetGameContext();
 }
 #endif // __ZE_GAME_CONTEXT__
