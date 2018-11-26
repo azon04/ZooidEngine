@@ -313,7 +313,7 @@ namespace ZE
 		static void Init();
 		static void Destroy();
 
-		static UITexture* loadTexture(const UIChar* fontFilePath, UIRenderer* renderer);
+		static UITexture* LoadTexture(const UIChar* fontFilePath, UIRenderer* renderer);
 
 	private:
 		static UITextureManager* s_instance;
@@ -429,13 +429,18 @@ namespace ZE
 		// Slider
 		Float32 DoSlider(Int32 _id, const UIRect& rect, Float32 percent, const UISliderStyle& sliderStyle = DefaultSliderStyle);
 
-		void DrawText(Int32 _id, UIVector2& pos, const UIChar* text, const UIVector4& fillColor, UIFont* font = DefaultFont, Float32 scale = 1.0f);
+		void DrawTextInPos(Int32 _id, UIVector2& pos, const UIChar* text, const UIVector4& fillColor, UIFont* font = DefaultFont, Float32 scale = 1.0f);
 		void DrawTextInRect(Int32 _id, UIRect& rect, const UIChar* text, UIVector4& fillColor, ETextAlign textAlign = TEXT_LEFT, ETextVerticalAlign vAlign = TEXT_V_CENTER, Float32 scale = 1.0f, UIFont* font = DefaultFont);
 		void DrawMultiLineText(Int32 _id, const UIRect& rect, const UIChar* text, const UIVector4& fillColor, ETextAlign textAlign = TEXT_LEFT, ETextVerticalAlign vAlign = TEXT_V_TOP, Float32 scale = 1.0f, UIFont* font = DefaultFont);
 
 		void DrawTexture(Int32 _id, const UIVector2& pos, UITexture* texture, const UIVector4& colorMultiplier, ETextureScale textureScale = SCALE_IMAGE, const UIVector4& scaleOffset = UIVector4(0.0f));
 
 		void DrawTexture(Int32 _id, const UIRect& rect, UITexture* texture, const UIVector4& colorMultiplier, ETextureScale textureScale = SCALE_IMAGE, const UIVector4& scaleOffset = UIVector4(0.0f));
+
+		void ProcessDrawList();
+
+		// Texture Load
+		UITexture* LoadTexture(const char* filePath);
 
 		// Utils
 		Float32 Lerp(Float32 start, Float32 next, Float32 alpha);

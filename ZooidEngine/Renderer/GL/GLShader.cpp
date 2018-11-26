@@ -110,9 +110,19 @@ namespace ZE
 		glUseProgram(0);
 	}
 
-	void GLShaderChain::setVec3(const char* _constName, Vector3 _value)
+	void GLShaderChain::setVec2(const char* _constName, const Vector2& _value)
+	{
+		glUniform2f(getUniformPosition(_constName), _value.getX(), _value.getY());
+	}
+
+	void GLShaderChain::setVec3(const char* _constName, const Vector3& _value)
 	{
 		glUniform3f(getUniformPosition(_constName), _value.getX(), _value.getY(), _value.getZ());
+	}
+
+	void GLShaderChain::setVec4(const char* _constName, const Vector4& _value)
+	{
+		glUniform4f(getUniformPosition(_constName), _value.getX(), _value.getY(), _value.getZ(), _value.getW());
 	}
 
 	void GLShaderChain::setFloat(const char* _constName, float _value)
@@ -133,6 +143,7 @@ namespace ZE
 	void GLShaderChain::setTexture(const char* _constName, IGPUTexture* _texture, Int32 _textureIndex)
 	{
 		glUniform1i(getUniformPosition(_constName), _textureIndex);
+		glActiveTexture(GL_TEXTURE0 + _textureIndex);
 	}
 
 	void GLShaderChain::bindConstantBuffer(const char* _blockName, IGPUBufferData* _constantBuffer)

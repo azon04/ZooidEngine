@@ -104,6 +104,12 @@ public:
 #endif
 	}
 
+	// Getter
+	FORCEINLINE ZE::Float32 getX() const { return m_x; }
+	FORCEINLINE ZE::Float32 getY() const { return m_y; }
+	FORCEINLINE ZE::Float32 getZ() const { return m_z; }
+	FORCEINLINE ZE::Float32 getW() const { return m_w; }
+	
 	// Data Member
 	union 
 	{

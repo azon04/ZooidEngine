@@ -152,6 +152,11 @@ namespace ZE
 			(T*)((void*)((uintptr_t)m_handle.getObject() + (uintptr_t)(index * sizeof(T))));
 		}
 
+		FORCEINLINE T* data() const 
+		{
+			return (T*) m_handle.getObjectConst();
+		}
+
 		void push_back(const T& item)
 		{
 			if (m_length + 1 > m_capacity)

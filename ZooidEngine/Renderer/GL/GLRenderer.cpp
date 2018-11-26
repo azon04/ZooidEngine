@@ -204,6 +204,64 @@ namespace ZE
 		DrawEx(drawList, shaderAction, true);
 	}
 
+	void GLRenderer::DrawBufferArray(IShaderChain* shader, IGPUBufferArray* gpuBufferArray, UInt32 count, UInt32 offset)
+	{
+		GLenum drawTopology = GL_TRIANGLES;
+
+		switch (shader->getRenderTopology())
+		{
+		case TOPOLOGY_LINE:
+			drawTopology = GL_LINES;
+			break;
+		case TOPOLOGY_TRIANGLE:
+			drawTopology = GL_TRIANGLES;
+			break;
+		case TOPOLOGY_POINT:
+			drawTopology = GL_POINTS;
+			break;
+		}
+
+		gpuBufferArray->bind();
+		if (gpuBufferArray->isUsingIndexBuffer())
+		{
+			glDrawElements(drawTopology, count, GL_UNSIGNED_INT, 0);
+		}
+		else
+		{
+			glDrawArrays(drawTopology, offset, count);
+		}
+		gpuBufferArray->unbind();
+	}
+
+	void GLRenderer::DrawBufferArrayInstanced(IShaderChain* shader, IGPUBufferArray* gpuBufferArray, UInt32 count, UInt32 offset, UInt32 instanceCount)
+	{
+		GLenum drawTopology = GL_TRIANGLES;
+
+		switch (shader->getRenderTopology())
+		{
+		case TOPOLOGY_LINE:
+			drawTopology = GL_LINES;
+			break;
+		case TOPOLOGY_TRIANGLE:
+			drawTopology = GL_TRIANGLES;
+			break;
+		case TOPOLOGY_POINT:
+			drawTopology = GL_POINTS;
+			break;
+		}
+
+		gpuBufferArray->bind();
+		if (gpuBufferArray->isUsingIndexBuffer())
+		{
+			glDrawElementsInstanced(drawTopology, count, GL_UNSIGNED_INT, 0, instanceCount);
+		}
+		else
+		{
+			glDrawArraysInstanced(drawTopology, offset, count, instanceCount);
+		}
+		gpuBufferArray->unbind();
+	}
+
 	bool GLRenderer::IsClose()
 	{
 		return glfwWindowShouldClose(m_window) == 1;
@@ -307,7 +365,6 @@ namespace ZE
 				break;
 			case SHADER_VAR_TYPE_TEXTURE:
 				shaderAction->getShaderChain()->setTexture(shaderVariable.VarName, shaderVariable.texture_value.Texture_data, shaderVariable.texture_value.Texture_index);
-				glActiveTexture(GL_TEXTURE0 + shaderVariable.texture_value.Texture_index);
 				shaderVariable.texture_value.Texture_data->bind();
 				if (bWithShadow && shadowMapOffset <= shaderVariable.texture_value.Texture_index)
 				{
@@ -356,7 +413,6 @@ namespace ZE
 			switch (shaderVariable.VarType)
 			{
 			case SHADER_VAR_TYPE_TEXTURE:
-				glActiveTexture(GL_TEXTURE0 + shaderVariable.texture_value.Texture_index);
 				shaderVariable.texture_value.Texture_data->unbind();
 				break;
 			}
@@ -393,7 +449,6 @@ namespace ZE
 		{
 			StringFunc::PrintToString(buffer, 25, "shadowMaps[%d]", i);
 			shaderChain->setTexture(buffer, _drawList->m_shadowMap[i], offset + i);
-			glActiveTexture(GL_TEXTURE0 + offset + i);
 			_drawList->m_shadowMap[i]->bind();
 		}
 	}
@@ -402,7 +457,6 @@ namespace ZE
 	{
 		for (UInt32 i = 0; i < _drawList->m_shadowMapSize; i++)
 		{
-			glActiveTexture(GL_TEXTURE0 + offset + i);
 			_drawList->m_shadowMap[i]->unbind();
 		}
 	}

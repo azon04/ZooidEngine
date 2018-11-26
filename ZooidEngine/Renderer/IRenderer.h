@@ -13,6 +13,8 @@ namespace ZE
 	struct ShaderData;
 	class ShaderAction;
 	class DrawList;
+	class IShaderChain;
+	class IGPUBufferArray;
 
 	class IRenderer {
 	public:
@@ -46,6 +48,12 @@ namespace ZE
 
 		// Draw based on parameters in shaderAction
 		virtual void Draw(DrawList* drawList, ShaderAction* shaderAction) = 0;
+
+		// Draw GPUBufferArray Only
+		virtual void DrawBufferArray(IShaderChain* shader, IGPUBufferArray* gpuBufferArray, UInt32 count, UInt32 offset = 0) = 0;
+
+		// Draw GPUBufferArray Instance
+		virtual void DrawBufferArrayInstanced(IShaderChain* shader, IGPUBufferArray* gpuBufferArray, UInt32 count, UInt32 offset, UInt32 instanceCount) = 0;
 
 		// Process Shader Action
 		virtual void ProcessShaderAction(DrawList* drawList, ShaderAction* shaderAction) = 0;

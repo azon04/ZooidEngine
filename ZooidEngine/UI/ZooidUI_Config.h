@@ -19,7 +19,7 @@
 
 // HashMap Find and assign
 #define HashMapHasAndAssign(hashmap, key, defaultValue, out) \
-	{ int hashMapIdx; out = hashmap.getIndex(key, hashMapIdx) ? defaultValue : hashmap.getValue(hashMapIdx);  }
+	{ int hashMapIdx; out = hashmap.getIndex(key, hashMapIdx) ? hashmap.getValue(hashMapIdx) : defaultValue;  }
 
 // Allocation function. Change to other if needed
 #define UINEW(Class) new Class

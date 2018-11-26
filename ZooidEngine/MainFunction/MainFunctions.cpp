@@ -223,6 +223,9 @@ namespace ZE
 		double deltaTime = _gameContext->m_mainTimer.ResetAndGetDeltaMS();
 		float deltaSeconds = static_cast<Float32>(deltaTime * 0.001f);
 
+		// UI Begin
+		ZE::UI::BeginFrame();
+
 		// Handle Event_Update
 		{
 			ZE::Handle handleUpdate("EventUpdate", sizeof(ZE::Event_UPDATE));
@@ -271,6 +274,9 @@ namespace ZE
 		// Draw Base Lines
 		DebugRenderer::DrawMatrixBasis(Matrix4x4());
 
+		// Test UI
+		ZE::UI::DrawTextInPos(0, ZE::UIVector2(0.0f, 0.0f), "Zooid Engine", ZE::UIVector4(1.0f, 1.0f, 1.0f, 1.0f));
+		
 		// Handle Event_GATHER_RENDER
 		{
 			Handle handleGatherRender("EventGatherRender", sizeof(Event_GATHER_RENDER));
@@ -287,6 +293,10 @@ namespace ZE
 			_gameContext->getEventDispatcher()->handleEvent(eventGatherLight);
 			handleGatherLight.release();
 		}
+
+
+		// UI End Frame
+		ZE::UI::EndFrame();
 
 #if ZE_RENDER_MULTITHREAD
 		UniqueLock lck(g_drawMutex);
@@ -454,6 +464,9 @@ namespace ZE
 		}
 
 		_gameContext->getRenderer()->ProcessDrawList(_gameContext->getDrawList());
+
+		// Inject UI Rendering
+		ZE::UI::ProcessDrawList();
 
 		_gameContext->getRenderer()->EndRender();
 

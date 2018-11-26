@@ -41,17 +41,17 @@ namespace ZE
 		UITextureManager::Init();
 
 		// Default Textures
-		ZE::UITexture* checkBoxBg = ZE::UITextureManager::loadTexture(MERGE_PATH(RESOURCE_FOLDER,"Textures/CheckBox_Bg.png"), MainUIState.renderer);
-		ZE::UITexture* checkBoxChecked = ZE::UITextureManager::loadTexture(MERGE_PATH(RESOURCE_FOLDER, "Textures/CheckBox_Checked.png"), MainUIState.renderer);
-		ZE::UITexture* radioBtnBg = ZE::UITextureManager::loadTexture(MERGE_PATH(RESOURCE_FOLDER, "Textures/RadioBtn_Bg.png"), MainUIState.renderer);
-		ZE::UITexture* radioBtnChecked = ZE::UITextureManager::loadTexture(MERGE_PATH(RESOURCE_FOLDER, "Textures/RadioBtn_Checked.png"), MainUIState.renderer);
-		ZE::UITexture* panelOpenIcon = ZE::UITextureManager::loadTexture(MERGE_PATH(RESOURCE_FOLDER, "Textures/PanelOpen.png"), MainUIState.renderer);
-		ZE::UITexture* panelClosedIcon = ZE::UITextureManager::loadTexture(MERGE_PATH(RESOURCE_FOLDER, "Textures/PanelClosed.png"), MainUIState.renderer);
-		ZE::UITexture* panelBg = ZE::UITextureManager::loadTexture(MERGE_PATH(RESOURCE_FOLDER, "Textures/PanelBgSmall_Style.png"), MainUIState.renderer);
-		ZE::UITexture* panelClosedBg = ZE::UITextureManager::loadTexture(MERGE_PATH(RESOURCE_FOLDER, "Textures/PanelBgSmallClosed_Style.png"), MainUIState.renderer);
-		ZE::UITexture* ButtonBgUp = ZE::UITextureManager::loadTexture(MERGE_PATH(RESOURCE_FOLDER, "Textures/ButtonBg_Up.png"), MainUIState.renderer);
-		ZE::UITexture* ButtonBgHovered = ZE::UITextureManager::loadTexture(MERGE_PATH(RESOURCE_FOLDER, "Textures/ButtonBg_Hovered.png"), MainUIState.renderer);
-		ZE::UITexture* ButtonBgDown = ZE::UITextureManager::loadTexture(MERGE_PATH(RESOURCE_FOLDER, "Textures/ButtonBg_Down.png"), MainUIState.renderer);
+		ZE::UITexture* checkBoxBg = ZE::UITextureManager::LoadTexture(MERGE_PATH(RESOURCE_FOLDER,"Textures/CheckBox_Bg.png"), MainUIState.renderer);
+		ZE::UITexture* checkBoxChecked = ZE::UITextureManager::LoadTexture(MERGE_PATH(RESOURCE_FOLDER, "Textures/CheckBox_Checked.png"), MainUIState.renderer);
+		ZE::UITexture* radioBtnBg = ZE::UITextureManager::LoadTexture(MERGE_PATH(RESOURCE_FOLDER, "Textures/RadioBtn_Bg.png"), MainUIState.renderer);
+		ZE::UITexture* radioBtnChecked = ZE::UITextureManager::LoadTexture(MERGE_PATH(RESOURCE_FOLDER, "Textures/RadioBtn_Checked.png"), MainUIState.renderer);
+		ZE::UITexture* panelOpenIcon = ZE::UITextureManager::LoadTexture(MERGE_PATH(RESOURCE_FOLDER, "Textures/PanelOpen.png"), MainUIState.renderer);
+		ZE::UITexture* panelClosedIcon = ZE::UITextureManager::LoadTexture(MERGE_PATH(RESOURCE_FOLDER, "Textures/PanelClosed.png"), MainUIState.renderer);
+		ZE::UITexture* panelBg = ZE::UITextureManager::LoadTexture(MERGE_PATH(RESOURCE_FOLDER, "Textures/PanelBgSmall_Style.png"), MainUIState.renderer);
+		ZE::UITexture* panelClosedBg = ZE::UITextureManager::LoadTexture(MERGE_PATH(RESOURCE_FOLDER, "Textures/PanelBgSmallClosed_Style.png"), MainUIState.renderer);
+		ZE::UITexture* ButtonBgUp = ZE::UITextureManager::LoadTexture(MERGE_PATH(RESOURCE_FOLDER, "Textures/ButtonBg_Up.png"), MainUIState.renderer);
+		ZE::UITexture* ButtonBgHovered = ZE::UITextureManager::LoadTexture(MERGE_PATH(RESOURCE_FOLDER, "Textures/ButtonBg_Hovered.png"), MainUIState.renderer);
+		ZE::UITexture* ButtonBgDown = ZE::UITextureManager::LoadTexture(MERGE_PATH(RESOURCE_FOLDER, "Textures/ButtonBg_Down.png"), MainUIState.renderer);
 
 		// Default Font
 		DefaultFont = ZE::UIFont::loadFontFile(MERGE_PATH(RESOURCE_FOLDER, DEFAULT_FONT_PATH), MainUIState.renderer, 16);
@@ -625,7 +625,7 @@ namespace ZE
 
 	}
 
-	void UI::DrawText(Int32 _id, UIVector2& pos, const UIChar* text, const UIVector4& fillColor, UIFont* font, Float32 scale)
+	void UI::DrawTextInPos(Int32 _id, UIVector2& pos, const UIChar* text, const UIVector4& fillColor, UIFont* font, Float32 scale)
 	{
 		MainUIState.drawer->DrawText(pos, fillColor, font, text, scale);
 	}
@@ -687,6 +687,16 @@ namespace ZE
 		rect.m_pos = pos;
 		rect.m_dimension = { (Float32)texture->getWidth(), (Float32)texture->getHeight() };
 		MainUIState.drawer->DrawTexture(rect, texture, colorMultiplier, textureScale, scaleOffset);
+	}
+
+	void UI::ProcessDrawList()
+	{
+		MainUIState.renderer->ProcessCurrentDrawList();
+	}
+
+	ZE::UITexture* UI::LoadTexture(const char* filePath)
+	{
+		return UITextureManager::LoadTexture(filePath, MainUIState.renderer);
 	}
 
 	ZE::Float32 UI::Lerp(Float32 start, Float32 next, Float32 alpha)
@@ -1188,7 +1198,7 @@ namespace ZE
 			desc.Advance = ftFace->glyph->advance.x >> 6;
 			desc.Bearing = { 1.0f * ftFace->glyph->bitmap_left, 1.0f * ftFace->glyph->bitmap_top };
 
-			CopyTexture(pAtlas, texSize, texSize, desc.TexCoord.x, desc.TexCoord.y, ftFace->glyph->bitmap.buffer, ftFace->glyph->bitmap.width, ftFace->glyph->bitmap.rows, sizeof(char));
+			CopyTexture(pAtlas, texSize, texSize, static_cast<Int32>(desc.TexCoord.x), static_cast<Int32>(desc.TexCoord.y), ftFace->glyph->bitmap.buffer, ftFace->glyph->bitmap.width, ftFace->glyph->bitmap.rows, sizeof(char));
 		} 
 
 		// Generate Map
@@ -1485,14 +1495,14 @@ namespace ZE
 
 			if (cX + charDesc.Advance * scale >= maxWidth)
 			{
-				return cX;
+				return static_cast<Int32>(cX);
 			}
 			
 			c = text[index++];
 			cX += charDesc.Advance * scale;
 		}
 
-		return cX;
+		return static_cast<Int32>(cX);
 	}
 
 	void UITextureManager::Init()
@@ -1503,7 +1513,7 @@ namespace ZE
 		}
 	}
 
-	ZE::UITexture* UITextureManager::loadTexture(const UIChar* fontFilePath, UIRenderer* renderer)
+	ZE::UITexture* UITextureManager::LoadTexture(const UIChar* fontFilePath, UIRenderer* renderer)
 	{
 		UITexture* resTexture = UINEW(UITexture);
 
@@ -1539,7 +1549,7 @@ namespace ZE
 	{
 		if (s_instance)
 		{
-			for (int i = 0; i < s_instance->m_textures.size(); i++)
+			for (int i = 0; i < static_cast<int>(s_instance->m_textures.size()); i++)
 			{
 				UIFREE(s_instance->m_textures[i]);
 			}

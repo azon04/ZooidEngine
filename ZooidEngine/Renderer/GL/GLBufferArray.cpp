@@ -57,6 +57,7 @@ namespace ZE
 			m_buffers.push_back(vertexBuffer);
 		}
 
+		m_bUsingIndexBuffer = _indexBufferCount > 0;
 		for (int i = 0; i < _indexBufferCount; i++)
 		{
 			GLBufferData* indexBuffer = static_cast<GLBufferData*>(_indexBuffers[i]);

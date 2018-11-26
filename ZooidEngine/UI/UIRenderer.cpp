@@ -163,6 +163,7 @@ namespace ZE
 		m_instanceBuffer = new(hInstanceBuffer) BufferData(VERTEX_BUFFER);
 		m_instanceBuffer->setBufferLayout(uiVertexInstanceLayout);
 		m_instanceBuffer->SetData(nullptr, sizeof(UIInstance), 0);
+		m_instanceBuffer->setStaticBuffer(false);
 
 		{			
 			IGPUBufferData* gpuBuffers[2];
@@ -207,6 +208,7 @@ namespace ZE
 		m_drawBuffer = new(hDrawBuffer) BufferData(VERTEX_BUFFER);
 		m_drawBuffer->setBufferLayout(uiVertexLayout);
 		m_drawBuffer->SetData(nullptr, sizeof(UIVertex), 0);
+		m_drawBuffer->setStaticBuffer(false);
 
 		{
 			IGPUBufferData* m_drawGPUBuffer = BufferManager::getInstance()->createGPUBufferFromBuffer(textRectBuffer);
@@ -231,6 +233,7 @@ namespace ZE
 		renderer->EnableFeature(RendererFeature::BLEND);
 		
 		m_frameBuffer->bind();
+		renderer->Clear(EClearBit::COLOR_BUFFER_BIT | EClearBit::DEPTH_BUFFER_BIT);
 
 		for (int i = 0; i < m_drawList->itemCount(); i++)
 		{
@@ -321,7 +324,70 @@ namespace ZE
 
 	void ZE_UIRenderer::processDrawItem(UIDrawItem* drawItem)
 	{
+		IRenderer* mainRenderer = GetGameContext()->getRenderer();
+
+		bool isFont = drawItem->getTextureHandle() && drawItem->isFont();
+		bool isUsingRect = drawItem->isUsingRectInstance();
 		
+		IGPUBufferArray* bufferArray = isUsingRect ? m_instanceGPUBufferArray : m_drawBufferArray;
+		IShaderChain* shader = m_drawShader;
+		if (drawItem->getTextureHandle() > 0)
+		{
+			if (isFont)
+			{
+				bufferArray = isUsingRect ? m_instanceTextGPUBufferArray : m_drawBufferArray;
+				shader = isUsingRect ? m_textInstanceShader : m_textShader;
+				shader->bind();
+			}
+			else
+			{
+				shader = isUsingRect ? m_drawInstanceTexShader : m_drawTexShader;
+				shader->bind();
+			}
+			Handle& hTexture = textureHandles[drawItem->getTextureHandle()];
+			IGPUTexture* texture = hTexture.getObject<IGPUTexture>();
+			shader->setTexture("InTexture", texture, 0);
+			texture->bind();
+		}
+		else if (isUsingRect)
+		{
+			bufferArray = m_instanceGPUBufferArray;
+			shader = m_drawInstanceShader;
+			shader->bind();
+		}
+		else
+		{
+			shader->bind();
+			shader->setFloat("roundness", drawItem->getRoundness());
+			shader->setVec2("shapeDimension", Vector2(drawItem->getDimension().x, drawItem->getDimension().y));
+		}
+
+		shader->setVec2("screenDimension", Vector2(mainRenderer->GetWidth(), mainRenderer->GetHeight()));
+
+		if (drawItem->getVertices().size() > 0)
+		{
+			m_drawBuffer->SetData(drawItem->getVertices().data(), sizeof(UIVertex), drawItem->getVertices().length());
+			m_drawGPUBuffer->refresh();
+		}
+
+		if (drawItem->getInstances().size() > 0)
+		{
+			m_instanceBuffer->SetData(drawItem->getInstances().data(), sizeof(UIInstance), drawItem->getInstances().length());
+			m_instanceGPUBuffer->refresh();
+		}
+
+		if (isUsingRect)
+		{
+			// Draw Instance
+			mainRenderer->DrawBufferArrayInstanced(shader, bufferArray, 6, 0, drawItem->getInstances().size());
+		}
+		else
+		{
+			// Draw Vertex
+			mainRenderer->DrawBufferArray(shader, bufferArray, drawItem->getVertices().length());
+		}
+
+		shader->unbind();
 	}
 
 	ZE::UIRenderer* UI::Platform::CreateRenderer()

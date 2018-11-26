@@ -36,7 +36,10 @@ public:
 	virtual void ProcessShadowMapList(DrawList* drawList, bool bWithStatic) override;
 	virtual void ProcessDrawList(DrawList* drawList) override;
 	virtual void ProcessShaderAction(DrawList* drawList, ShaderAction* shaderAction) override;
-	virtual void Draw(DrawList* drawList, ShaderAction* shaderAction) override;
+	virtual void Draw(DrawList* drawList, ShaderAction* shaderAction) override; 
+	virtual void DrawBufferArray(IShaderChain* shader, IGPUBufferArray* gpuBufferArray, UInt32 count, UInt32 offset = 0) override;
+	virtual void DrawBufferArrayInstanced(IShaderChain* shader, IGPUBufferArray* gpuBufferArray, UInt32 count, UInt32 offset, UInt32 instanceCount) override;
+
 	virtual bool IsClose() override;
 
 	virtual void PollEvent() override;
