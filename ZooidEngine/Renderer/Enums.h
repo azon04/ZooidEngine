@@ -135,6 +135,13 @@ namespace ZE
 		TEX_DEPTH = 5,
 		TEXT_DEPTH_STENCIL = 6
 	};
+
+	enum EClearBit : UInt32
+	{
+		COLOR_BUFFER_BIT = 1 << 1,
+		DEPTH_BUFFER_BIT = 1 << 2,
+		STENCIL_BUFFER_BIT = 1 << 3
+	};
 }
 #endif // !__ZE_RENDERER_ENUMS_H__
 

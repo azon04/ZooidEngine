@@ -20,13 +20,14 @@ namespace ZE
 		
 		IShaderChain* getShaderChain(int id);
 
+		IShaderChain* makeShaderChain(const char* vertexShaderPath, const char* fragmentShaderPath, const char* geomShaderPath, const char* computeShaderPath);
+
 	protected:
 		// ResourceManager implementation
 		virtual Handle loadResource_Internal(const char* resourceFilePath) override;
 		virtual void preUnloadResource(Resource* _resource) override;
 
 		EShaderType getShaderTypeByName(const char* resourceFilePath);
-
 
 	protected:
 		static ShaderManager* s_instance;

@@ -38,6 +38,14 @@ namespace ZE
 		// Load Resource Sync
 		Handle loadResource(const char* resourceFilePath);
 
+		//Load Resource Sync and get the result
+		template<class T>
+		T* loadResource(const char* resourceFilePath)
+		{
+			Handle h = loadResource(resourceFilePath);
+			return h.getObject<T>();
+		}
+
 		// Register resource to load ( not actually load the res, only register it )
 		void loadResourceAsync(const char* resourceFilePath, EventDelegate callback = EventDelegate());
 

@@ -91,6 +91,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <ExecutablePath>$(Physx)\..\PxShared\bin\vc14win32;$(Physx)\Bin\vc14win32;$(ExecutablePath)</ExecutablePath>
+    <IntDir>$(Configuration)\$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>

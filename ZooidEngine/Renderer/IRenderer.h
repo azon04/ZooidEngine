@@ -1,7 +1,9 @@
 #ifndef __Z_RENDERER__
 #define __Z_RENDERER__
 
+#include "Math/Vector2.h"
 #include "Utils/PrimitiveTypes.h"
+#include "ShaderAction.h"
 #include "Enums.h"
 
 #if defined(_WIN32) || defined(_WIN64)
@@ -13,6 +15,9 @@ namespace ZE
 	struct ShaderData;
 	class ShaderAction;
 	class DrawList;
+	class IShaderChain;
+	class IGPUBufferArray;
+	class IGPUTexture;
 
 	class IRenderer {
 	public:
@@ -34,6 +39,10 @@ namespace ZE
 		// Clear Screen
 		virtual void ClearScreen() = 0;
 
+		// Clear buffer bit
+		// if FrameBuffer is bound, then clear bit for that FrameBuffer, otherwise it will clear bits in Screen
+		virtual void Clear(UInt32 clearBits) = 0;
+
 		// Process Shadow Map
 		virtual void ProcessShadowMapList(DrawList* drawList, bool bWithStatic) = 0;
 
@@ -42,6 +51,15 @@ namespace ZE
 
 		// Draw based on parameters in shaderAction
 		virtual void Draw(DrawList* drawList, ShaderAction* shaderAction) = 0;
+
+		// Draw GPUBufferArray Only
+		virtual void DrawBufferArray(IShaderChain* shader, IGPUBufferArray* gpuBufferArray, UInt32 count, UInt32 offset = 0) = 0;
+
+		// Draw GPUBufferArray Instance
+		virtual void DrawBufferArrayInstanced(IShaderChain* shader, IGPUBufferArray* gpuBufferArray, UInt32 count, UInt32 offset, UInt32 instanceCount) = 0;
+
+		// Utility Function to draw texture to screen
+		virtual void DrawTextureToScreen(IGPUTexture* texture, const Vector2& screenPos, const Vector2& screenDimension) = 0;
 
 		// Process Shader Action
 		virtual void ProcessShaderAction(DrawList* drawList, ShaderAction* shaderAction) = 0;
@@ -55,6 +73,9 @@ namespace ZE
 		// Multithread: call this after processing renderer related assets: texture, buffers, etc
 		virtual void ReleaseRenderThreadOwnership() = 0;
 
+		// Multithread: check RenderThreadOwnership
+		virtual bool HasRenderThreadOwnership() = 0;
+
 		// Enable Renderer feature. See RendererFeature
 		virtual void EnableFeature(UInt32 feature) = 0;
 
@@ -63,6 +84,9 @@ namespace ZE
 
 		// Reset feature to default. See RendererFeature
 		virtual void ResetFeature(UInt32 feature) = 0;
+
+		// Process ShaderFeature
+		virtual void ProcessShaderFeature(ShaderFeature& shaderFeature) = 0;
 
 		// Check if feature enabled. See RendererFeature
 		virtual bool IsFeatureEnabled(UInt32 feature) { return false; };
@@ -82,5 +106,31 @@ namespace ZE
 
 	};
 
+	// Helper to scope getting and releasing RenderThread lock
+	class ScopedRenderThreadOwnership
+	{
+	public:
+		ScopedRenderThreadOwnership(IRenderer* renderer)
+			: m_renderer(renderer)
+		{
+			m_hasLock = m_renderer->HasRenderThreadOwnership();
+			if (!m_hasLock)
+			{
+				m_renderer->AcquireRenderThreadOwnership();
+			}
+		}
+
+		~ScopedRenderThreadOwnership()
+		{
+			if (!m_hasLock)
+			{
+				m_renderer->ReleaseRenderThreadOwnership();
+			}
+		}
+
+	protected:
+		bool m_hasLock;
+		IRenderer* m_renderer;
+	};
 }
 #endif

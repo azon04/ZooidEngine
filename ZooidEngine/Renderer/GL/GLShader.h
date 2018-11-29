@@ -38,7 +38,9 @@ namespace ZE
 		virtual void bind() override;
 		virtual void unbind() override;
 
-		virtual void setVec3(const char* _constName, Vector3 _value) override;
+		virtual void setVec2(const char* _constName, const Vector2& _value) override;
+		virtual void setVec3(const char* _constName, const Vector3& _value) override;
+		virtual void setVec4(const char* _constName, const Vector4& _value) override;
 		virtual void setFloat(const char* _constName, float _value) override;
 		virtual void setMat(const char* _constName, const Matrix4x4& _value) override;
 		virtual void setInt(const char* _constName, int _value) override;

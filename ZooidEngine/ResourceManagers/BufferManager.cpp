@@ -41,27 +41,27 @@ namespace ZE
 
 		BufferLayoutManager::Init();
 
-		_gameContext->getRenderer()->AcquireRenderThreadOwnership();
+		ScopedRenderThreadOwnership renderLock(_gameContext->getRenderer());
 
 		// Create sample vertex Color buffer
 		{
-			Handle handle("Data Triangle", sizeof(float) * 18);
-			handle.getObject();
-			float* vertices_color = new(handle) float[18]{
-				// Positions		// Colors			
-				0.5, -0.5f, 0.0f,	1.0f, 0.0f, 0.0f, // Bottom Right
-				-0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // Bottom Left
-				0.0f, 0.5f, 0.0f,	0.0f, 0.0f, 1.0f	// Top
+			float quadVertices[] =
+			{
+				-1.0f, -1.0f, 0.0f,		0.0f, 0.0f,
+				1.0f, -1.0f, 0.0f,		1.0f, 0.0f,
+				-1.0f, 1.0f, 0.0f,		0.0f, 1.0f,
+
+				1.0f, -1.0f, 0.0f,		1.0f, 0.0f,
+				1.0f, 1.0f, 0.0f,		1.0f, 1.0f,
+				-1.0f, 1.0f, 0.0f,		0.0f, 1.0f
 			};
 
 			Handle hBufferData("Buffer Data", sizeof(BufferData));
 			BufferData* bufferData = new(hBufferData) BufferData(EBufferType::VERTEX_BUFFER);
-			bufferData->SetData(vertices_color, 6 * sizeof(float), 3);
-			bufferData->setBufferLayout(BUFFER_LAYOUT_V3_C3);
+			bufferData->SetData(quadVertices, 5 * sizeof(float), 6);
+			bufferData->setBufferLayout(BUFFER_LAYOUT_V3_TC2);
 
 			getInstance()->createBufferArray(bufferData, nullptr, nullptr);
-
-			// #TODO do we really need BufferData to be saved?
 			hBufferData.release();
 		}
 
@@ -152,8 +152,6 @@ namespace ZE
 			// #TODO do we really need BufferData to be saved?
 			hBufferData.release();
 		}
-
-		_gameContext->getRenderer()->ReleaseRenderThreadOwnership();
 	}
 
 	void BufferManager::Destroy()
@@ -194,12 +192,12 @@ namespace ZE
 		// Buffer Data need to be saved since the data will be changed eventually
 		m_buffers.push_back(bufferData);
 
-		m_gameContext->getRenderer()->AcquireRenderThreadOwnership();
+		IGPUBufferData* res = nullptr;
+		{
+			ScopedRenderThreadOwnership renderLock(m_gameContext->getRenderer());
 
-		IGPUBufferData* res = createConstantBufferFromBuffer(bufferData);
-
-		m_gameContext->getRenderer()->ReleaseRenderThreadOwnership();
-
+			res = createConstantBufferFromBuffer(bufferData);
+		}
 		return res;
 	}
 
@@ -332,11 +330,9 @@ namespace ZE
 
 		fileReader.close();
 		
-		m_gameContext->getRenderer()->AcquireRenderThreadOwnership();
+		ScopedRenderThreadOwnership renderLock(m_gameContext->getRenderer());
 
 		Handle hResult = createBufferArray(pVertexBuffer, pIndexBuffer, nullptr);
-
-		m_gameContext->getRenderer()->ReleaseRenderThreadOwnership();
 
 		if (hVertexBufferData.isValid())
 		{

@@ -162,7 +162,7 @@ namespace ZE
 			}
 		}
 
-		m_gameContext->getRenderer()->AcquireRenderThreadOwnership();
+		ScopedRenderThreadOwnership renderLock(m_gameContext->getRenderer());
 
 		// Setup Dynamic Texture
 		Handle hTexture( "Texture", sizeof(Texture));
@@ -193,8 +193,6 @@ namespace ZE
 			m_dynamicShadowFrameBuffer->setupAttachments();
 			m_dynamicShadowFrameBuffer->unbind();
 		}
-
-		m_gameContext->getRenderer()->ReleaseRenderThreadOwnership();
 
 		m_bLightSetup = true;
 	}

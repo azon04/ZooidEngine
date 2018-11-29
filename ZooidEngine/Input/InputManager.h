@@ -29,6 +29,11 @@ namespace ZE
 		virtual void setupComponent() override;
 
 		bool IsKeyDown(Short m_keyId);
+		void getMousePosition(Int32& mouseX, Int32& mouseY);
+
+	protected:
+		// Cache KeyboardMouseInput
+		KeyboardMouseInput* m_keyboardMouseInput;
 	};
 }
 #endif

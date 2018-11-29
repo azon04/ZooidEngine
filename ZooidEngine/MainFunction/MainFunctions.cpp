@@ -36,6 +36,10 @@
 
 #include "scene/Light/LightComponent.h"
 
+#include "UI/UIManager.h"
+
+#include "Math/MathOps.h"
+
 // TODO for NVIDIA Optimus :  This enable the program to use NVIDIA instead of integrated Intel graphics
 #if WIN32 || WIN64
 extern "C"
@@ -45,6 +49,9 @@ extern "C"
 }
 #endif
 
+ZE::Float32 g_gameThreadTime;
+ZE::Float32 g_gpuDrawTime;
+
 namespace ZE 
 {
 	ConditionVariable g_drawThreadVariable;
@@ -53,6 +60,8 @@ namespace ZE
 
 	void MainSetup(GameContext* _gameContext)
 	{
+		gGameContext = _gameContext;
+
 		ZEINFO("Zooid Engine Main Setup");
 		ZEINFO("=======================");
 
@@ -173,6 +182,9 @@ namespace ZE
 		CameraManager::Init(_gameContext);
 		_gameContext->m_cameraManager = CameraManager::GetInstance();
 		
+		ZEINFO("Initializing Zooid UI...");
+		UIManager::Init(_gameContext);
+
 		_gameContext->m_mainTimer.Reset();
 
 #if ZE_RENDER_MULTITHREAD
@@ -190,6 +202,8 @@ namespace ZE
 			_gameContext->m_drawThread->join();
 		}
 #endif
+
+		UIManager::Destroy();
 
 		CameraManager::Destroy();
 		
@@ -213,6 +227,9 @@ namespace ZE
 	{
 		double deltaTime = _gameContext->m_mainTimer.ResetAndGetDeltaMS();
 		float deltaSeconds = static_cast<Float32>(deltaTime * 0.001f);
+
+		// UI Begin
+		ZE::UI::BeginFrame();
 
 		// Handle Event_Update
 		{
@@ -249,18 +266,36 @@ namespace ZE
 		while (g_drawReady) {}
 #endif
 
-		// Draw Debug Text
-		DebugRenderer::DrawTextScreen("Zooid Engine", Vector2(10.0f, 10.0f), Vector3(1.0f, 0.0f, 0.0f), 0.5f);
-		StringFunc::PrintToString(StringFunc::Buffer, STRING_FUNC_BUFFER_SIZE, "Delta Time: %.2f ms; FPS: %d", deltaTime, static_cast<int>(1000.0f / deltaTime));
-		DebugRenderer::DrawTextScreen(StringFunc::Buffer, Vector2(10.0f, _gameContext->getRenderer()->GetHeight() - 30.0f), Vector3(1.0f, 1.0f, 0.0f), 0.5f);
-
-		// Draw World Text
-		//Matrix4x4 mat;
-		//mat.translate(Vector3(0.0f, 0.1f, 0.0f));
-		//DebugRenderer::DrawTextWorld("Zooid Engine", mat);
-
 		// Draw Base Lines
 		DebugRenderer::DrawMatrixBasis(Matrix4x4());
+
+		{
+			static ZE::UIRect panelRect( UIVector2{ 10,10 }, UIVector2{ 250, 100 } );
+
+			ZE::UIVector2 contentPos;
+
+			ZE::UI::DoDragablePanel(0, panelRect, "Performance Counter", 10, contentPos);
+
+			ZE::UIRect textRect;
+			textRect.m_pos = contentPos;
+			textRect.m_dimension = { 320, 100 };
+
+			// Write on Total Delta time
+			g_gameThreadTime = MathOps::FLerp(g_gameThreadTime, deltaTime, 0.01f);
+
+			char buffer[256];
+
+			StringFunc::PrintToString(buffer, 256, "Global Time: %.2fms", g_gameThreadTime);
+			ZE::UI::DrawTextInPos(1, contentPos, buffer, UIVector4(1.0f));
+			
+			contentPos.y += UI::DefaultFont->calculateTextHeight(1.0f) + 2.0f;
+			StringFunc::PrintToString(buffer, 256, "GPU Draw Time: %.2fms", g_gpuDrawTime);
+			ZE::UI::DrawTextInPos(2, contentPos, buffer, UIVector4(1.0f));
+
+			contentPos.y += UI::DefaultFont->calculateTextHeight(1.0f) + 2.0f;
+			StringFunc::PrintToString(buffer, 256, "FPS: %.2f", 1000.0f / g_gameThreadTime);
+			ZE::UI::DrawTextInPos(3, contentPos, buffer, UIVector4(1.0f));
+		}
 
 		// Handle Event_GATHER_RENDER
 		{
@@ -278,6 +313,10 @@ namespace ZE
 			_gameContext->getEventDispatcher()->handleEvent(eventGatherLight);
 			handleGatherLight.release();
 		}
+
+
+		// UI End Frame
+		ZE::UI::EndFrame();
 
 #if ZE_RENDER_MULTITHREAD
 		UniqueLock lck(g_drawMutex);
@@ -307,10 +346,12 @@ namespace ZE
 		{
 			double deltaTime = _gameContext->m_renderThreadTimer.ResetAndGetDeltaMS();
 
-			//ZELOG(LOG_RENDERING, Log, "Render Delta Time : %.2f ms", deltaTime);
-
 			DrawJob(_gameContext);
 
+			deltaTime = _gameContext->m_renderThreadTimer.ResetAndGetDeltaMS();
+
+			g_gpuDrawTime = MathOps::FLerp(g_gpuDrawTime, deltaTime, 0.01f);
+			
 			g_drawReady = false;
 			while (!g_drawReady) g_drawThreadVariable.wait(lck);
 		}
@@ -321,7 +362,7 @@ namespace ZE
 		IRenderer* renderer = _gameContext->getRenderer();
 		DrawList* drawList = _gameContext->getDrawList();
 
-		renderer->AcquireRenderThreadOwnership();
+		ScopedRenderThreadOwnership renderLock(renderer);
 
 		// For each Light render Shadows
 		for (UInt32 iShadowData = 0; iShadowData < drawList->m_lightShadowSize; iShadowData++)
@@ -446,11 +487,12 @@ namespace ZE
 
 		_gameContext->getRenderer()->ProcessDrawList(_gameContext->getDrawList());
 
+		// Inject UI Rendering
+		ZE::UI::ProcessDrawList();
+
 		_gameContext->getRenderer()->EndRender();
 
 		_gameContext->getDrawList()->Reset();
-
-		_gameContext->getRenderer()->ReleaseRenderThreadOwnership();
 	}
 
 }

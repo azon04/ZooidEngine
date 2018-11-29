@@ -4,6 +4,8 @@
 #include "Enums.h"
 #include "Platform/Platform.h"
 
+#include "ResourceManagers/ShaderManager.h"
+
 #if defined(_WIN32) || defined(_WIN64)
 	#define GLFW_EXPOSE_NATIVE_WIN32
 #endif
@@ -125,6 +127,12 @@ namespace ZE
 		glStencilMask(0x00); // Disable writing to stencil buffer
 	}
 
+	void GLRenderer::Clear(UInt32 clearBits)
+	{
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		glClear(getClearBitMask(clearBits));
+	}
+
 	void GLRenderer::ProcessShadowMapList(DrawList* drawList, bool bWithStatic)
 	{
 		// Current peter panning solution: Render with front face culled.
@@ -198,6 +206,81 @@ namespace ZE
 		DrawEx(drawList, shaderAction, true);
 	}
 
+	void GLRenderer::DrawBufferArray(IShaderChain* shader, IGPUBufferArray* gpuBufferArray, UInt32 count, UInt32 offset)
+	{
+		GLenum drawTopology = GL_TRIANGLES;
+
+		switch (shader->getRenderTopology())
+		{
+		case TOPOLOGY_LINE:
+			drawTopology = GL_LINES;
+			break;
+		case TOPOLOGY_TRIANGLE:
+			drawTopology = GL_TRIANGLES;
+			break;
+		case TOPOLOGY_POINT:
+			drawTopology = GL_POINTS;
+			break;
+		}
+
+		gpuBufferArray->bind();
+		if (gpuBufferArray->isUsingIndexBuffer())
+		{
+			glDrawElements(drawTopology, count, GL_UNSIGNED_INT, 0);
+		}
+		else
+		{
+			glDrawArrays(drawTopology, offset, count);
+		}
+		gpuBufferArray->unbind();
+	}
+
+	void GLRenderer::DrawBufferArrayInstanced(IShaderChain* shader, IGPUBufferArray* gpuBufferArray, UInt32 count, UInt32 offset, UInt32 instanceCount)
+	{
+		GLenum drawTopology = GL_TRIANGLES;
+
+		switch (shader->getRenderTopology())
+		{
+		case TOPOLOGY_LINE:
+			drawTopology = GL_LINES;
+			break;
+		case TOPOLOGY_TRIANGLE:
+			drawTopology = GL_TRIANGLES;
+			break;
+		case TOPOLOGY_POINT:
+			drawTopology = GL_POINTS;
+			break;
+		}
+
+		gpuBufferArray->bind();
+		if (gpuBufferArray->isUsingIndexBuffer())
+		{
+			glDrawElementsInstanced(drawTopology, count, GL_UNSIGNED_INT, 0, instanceCount);
+		}
+		else
+		{
+			glDrawArraysInstanced(drawTopology, offset, count, instanceCount);
+		}
+		gpuBufferArray->unbind();
+	}
+
+	void GLRenderer::DrawTextureToScreen(IGPUTexture* texture, const Vector2& screenPos, const Vector2& screenDimension)
+	{
+		IShaderChain* shader = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_DRAW_SCREEN_QUAD);
+		IGPUBufferArray* quadVAO = BufferManager::getInstance()->getBufferArray(BUFFER_ARRAY_QUAD_V3_TC2);
+
+		shader->bind();
+		shader->setVec2("offsetPos", screenPos);
+		shader->setVec2("dimension", screenDimension);
+		shader->setTexture("InTexture", texture, 0);
+		texture->bind();
+
+		DrawBufferArray(shader, quadVAO, 6);
+
+		texture->unbind();
+		shader->unbind();
+	}
+
 	bool GLRenderer::IsClose()
 	{
 		return glfwWindowShouldClose(m_window) == 1;
@@ -216,13 +299,19 @@ namespace ZE
 	{
 		m_renderLock.lock();
 		glfwMakeContextCurrent(m_window);
+		m_currentThreadHasLock = ZE::getThreadId();
 	}
 
 	void GLRenderer::ReleaseRenderThreadOwnership()
 	{	
 		glfwMakeContextCurrent(nullptr);
 		m_renderLock.unlock();
+		m_currentThreadHasLock = ThreadId();
+	}
 
+	bool GLRenderer::HasRenderThreadOwnership()
+	{
+		return m_currentThreadHasLock == ZE::getThreadId();
 	}
 
 	void GLRenderer::EnableFeature(UInt32 feature)
@@ -295,7 +384,6 @@ namespace ZE
 				break;
 			case SHADER_VAR_TYPE_TEXTURE:
 				shaderAction->getShaderChain()->setTexture(shaderVariable.VarName, shaderVariable.texture_value.Texture_data, shaderVariable.texture_value.Texture_index);
-				glActiveTexture(GL_TEXTURE0 + shaderVariable.texture_value.Texture_index);
 				shaderVariable.texture_value.Texture_data->bind();
 				if (bWithShadow && shadowMapOffset <= shaderVariable.texture_value.Texture_index)
 				{
@@ -344,7 +432,6 @@ namespace ZE
 			switch (shaderVariable.VarType)
 			{
 			case SHADER_VAR_TYPE_TEXTURE:
-				glActiveTexture(GL_TEXTURE0 + shaderVariable.texture_value.Texture_index);
 				shaderVariable.texture_value.Texture_data->unbind();
 				break;
 			}
@@ -381,7 +468,6 @@ namespace ZE
 		{
 			StringFunc::PrintToString(buffer, 25, "shadowMaps[%d]", i);
 			shaderChain->setTexture(buffer, _drawList->m_shadowMap[i], offset + i);
-			glActiveTexture(GL_TEXTURE0 + offset + i);
 			_drawList->m_shadowMap[i]->bind();
 		}
 	}
@@ -390,7 +476,6 @@ namespace ZE
 	{
 		for (UInt32 i = 0; i < _drawList->m_shadowMapSize; i++)
 		{
-			glActiveTexture(GL_TEXTURE0 + offset + i);
 			_drawList->m_shadowMap[i]->unbind();
 		}
 	}

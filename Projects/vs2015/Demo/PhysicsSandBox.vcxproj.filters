@@ -21,14 +21,14 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MainFunction\Main.cpp">
-      <Filter>MainFunction</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Demo\PhysicsSandBox\MainFunction\MainFunctions.cpp">
       <Filter>MainFunction</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Demo\PhysicsSandBox\Scene\ControlledComponent.cpp">
       <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Demo\PhysicsSandBox\MainFunction\Main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

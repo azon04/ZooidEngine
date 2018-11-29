@@ -25,7 +25,7 @@ namespace ZE
 		
 		if (!m_textMesh)
 		{
-			m_gameContext->getRenderer()->AcquireRenderThreadOwnership();
+			ScopedRenderThreadOwnership renderLock(m_gameContext->getRenderer());
 
 			Handle hTextMesh("TextMesh", sizeof(TextMesh));
 			m_textMesh = new(hTextMesh) TextMesh();
@@ -34,7 +34,6 @@ namespace ZE
 				m_font = FontManager::GetDefaultFont();
 			}
 			m_textMesh->init(m_font, m_text.const_str());
-			m_gameContext->getRenderer()->ReleaseRenderThreadOwnership();
 		}
 	}
 
@@ -44,9 +43,8 @@ namespace ZE
 
 		if (m_bDirty)
 		{
-			m_gameContext->getRenderer()->AcquireRenderThreadOwnership();
+			ScopedRenderThreadOwnership renderLock(m_gameContext->getRenderer());
 			m_textMesh->generateTextMesh(m_text.const_str(), m_drawSpace == DRAW_WORLD_SPACE);
-			m_gameContext->getRenderer()->ReleaseRenderThreadOwnership();
 			m_bDirty = false;
 		}
 

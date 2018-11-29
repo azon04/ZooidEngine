@@ -5,6 +5,7 @@
 
 // Inner engine includes
 #include "Utils/Array.h"
+#include "Math/Vector2.h"
 #include "Math/Vector3.h"
 #include "Math/Matrix4x4.h"
 #include "Utils/PrimitiveTypes.h"
@@ -27,6 +28,7 @@
 #define Z_SHADER_CHAIN_SCREEN_TEXT_SHADER_MSDF 13
 #define Z_SHADER_CHAIN_SHADOW_DEPTH 14
 #define Z_SHADER_cHAIN_SHADOW_DEPTH_SKINNED 15
+#define Z_SHADER_CHAIN_DRAW_SCREEN_QUAD 16
 
 namespace ZE 
 {
@@ -81,8 +83,14 @@ public:
 	// Unbind shader chain from render pipeline
 	virtual void unbind() = 0;
 
+	// set vec2
+	virtual void setVec2(const char* _constName, const Vector2& _value) = 0;
+
 	// set vec3
-	virtual void setVec3(const char* _constName, Vector3 _value) = 0;
+	virtual void setVec3(const char* _constName, const Vector3& _value) = 0;
+
+	// set vec4
+	virtual void setVec4(const char* _constName, const Vector4& _value) = 0;
 
 	// set float variable in shader chain
 	virtual void setFloat(const char* _constName, float _value) = 0;
