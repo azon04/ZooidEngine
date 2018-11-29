@@ -91,7 +91,7 @@ namespace ZE
 
 			shaderAction.setShaderMatVar("modelMat", Matrix4x4());
 			shaderAction.setConstantsBlockBuffer("shader_data", m_gameContext->getDrawList()->m_mainConstantBuffer);
-
+			
 			// Update Line data
 			m_lineBufferData->SetData(&s_instance->m_lineBuffers[0], sizeof(DebugPointStruct), s_instance->m_lineBuffers.size());
 			

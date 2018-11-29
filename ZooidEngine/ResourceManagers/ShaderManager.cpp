@@ -38,7 +38,10 @@ namespace ZE
 		s_instance->makeShaderChain("ZooidEngine/Shaders/DefaultGLSimple.vs", "ZooidEngine/Shaders/DefaultGLSimple.frag", nullptr, nullptr);
 
 		// Z_SHADER_CHAIN_3D_DEFAULT_COLOR_LINE
-		s_instance->makeShaderChain("ZooidEngine/Shaders/DefaultGLSimple.vs", "ZooidEngine/Shaders/DefaultGLSimpleColor.frag", nullptr, nullptr);
+		{
+			IShaderChain* shaderChain = s_instance->makeShaderChain("ZooidEngine/Shaders/DefaultGLSimple.vs", "ZooidEngine/Shaders/DefaultGLSimpleColor.frag", nullptr, nullptr);
+			shaderChain->m_topology = TOPOLOGY_LINE;
+		}
 
 		// Z_SHADER_CHAIN_3D_DEFAULT_LIT
 		s_instance->makeShaderChain("ZooidEngine/Shaders/DefaultGLSimpleLit.vs", "ZooidEngine/Shaders/DefaultGLSimpleLit.frag", nullptr, nullptr);

@@ -38,6 +38,8 @@
 
 #include "UI/UIManager.h"
 
+#include "Math/MathOps.h"
+
 // TODO for NVIDIA Optimus :  This enable the program to use NVIDIA instead of integrated Intel graphics
 #if WIN32 || WIN64
 extern "C"
@@ -46,6 +48,9 @@ extern "C"
 	_declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
 }
 #endif
+
+ZE::Float32 g_gameThreadTime;
+ZE::Float32 g_gpuDrawTime;
 
 namespace ZE 
 {
@@ -264,28 +269,32 @@ namespace ZE
 		// Draw Base Lines
 		DebugRenderer::DrawMatrixBasis(Matrix4x4());
 
-		// Test UI
-		ZE::UI::DrawTextInPos(0, ZE::UIVector2(0.0f, 0.0f), "Zooid Engine", ZE::UIVector4(1.0f, 1.0f, 1.0f, 1.0f));
-		
 		{
-			static ZE::UIRect panelRect( UIVector2{ 100,100 }, UIVector2{ 350, 375 } );
+			static ZE::UIRect panelRect( UIVector2{ 10,10 }, UIVector2{ 250, 100 } );
 
 			ZE::UIVector2 contentPos;
 
-			ZE::UI::DoDragablePanel(14, panelRect, "Text Sample...", 10, contentPos);
+			ZE::UI::DoDragablePanel(0, panelRect, "Performance Counter", 10, contentPos);
 
 			ZE::UIRect textRect;
 			textRect.m_pos = contentPos;
 			textRect.m_dimension = { 320, 100 };
 
-			ZE::UI::DrawMultiLineText(15, textRect, "Text Align Left.\nLorem Ipsum Dolor Sit Amet. Lorem Ipsum Dolor Sit Amet.\nLorem Ipsum Dolor Sit Amet. Anpan. Anpan. Anpan. Anpan. Anpan. Anpan.", ZE::UIVector4{ 1.0f, 1.0f, 1.0f, 1.0f });
+			// Write on Total Delta time
+			g_gameThreadTime = MathOps::FLerp(g_gameThreadTime, deltaTime, 0.01f);
 
-			textRect.m_pos.y += 120;
-			ZE::UI::DrawMultiLineText(15, textRect, "Text Align Center.\nLorem Ipsum Dolor Sit Amet. Lorem Ipsum Dolor Sit Amet.\nLorem Ipsum Dolor Sit Amet. Anpan. Anpan. Anpan. Anpan. Anpan. Anpan.", ZE::UIVector4{ 1.0f, 1.0f, 1.0f, 1.0f }, ZE::TEXT_CENTER);
+			char buffer[256];
 
-			textRect.m_pos.y += 120;
-			ZE::UI::DrawMultiLineText(15, textRect, "Text Align Right.\nLorem Ipsum Dolor Sit Amet. Lorem Ipsum Dolor Sit Amet.\nLorem Ipsum Dolor Sit Amet. Anpan. Anpan. Anpan. Anpan. Anpan. Anpan.", ZE::UIVector4{ 1.0f, 1.0f, 1.0f, 1.0f }, ZE::TEXT_RIGHT);
+			StringFunc::PrintToString(buffer, 256, "Global Time: %.2fms", g_gameThreadTime);
+			ZE::UI::DrawTextInPos(1, contentPos, buffer, UIVector4(1.0f));
+			
+			contentPos.y += UI::DefaultFont->calculateTextHeight(1.0f) + 2.0f;
+			StringFunc::PrintToString(buffer, 256, "GPU Draw Time: %.2fms", g_gpuDrawTime);
+			ZE::UI::DrawTextInPos(2, contentPos, buffer, UIVector4(1.0f));
 
+			contentPos.y += UI::DefaultFont->calculateTextHeight(1.0f) + 2.0f;
+			StringFunc::PrintToString(buffer, 256, "FPS: %.2f", 1000.0f / g_gameThreadTime);
+			ZE::UI::DrawTextInPos(3, contentPos, buffer, UIVector4(1.0f));
 		}
 
 		// Handle Event_GATHER_RENDER
@@ -337,10 +346,12 @@ namespace ZE
 		{
 			double deltaTime = _gameContext->m_renderThreadTimer.ResetAndGetDeltaMS();
 
-			//ZELOG(LOG_RENDERING, Log, "Render Delta Time : %.2f ms", deltaTime);
-
 			DrawJob(_gameContext);
 
+			deltaTime = _gameContext->m_renderThreadTimer.ResetAndGetDeltaMS();
+
+			g_gpuDrawTime = MathOps::FLerp(g_gpuDrawTime, deltaTime, 0.01f);
+			
 			g_drawReady = false;
 			while (!g_drawReady) g_drawThreadVariable.wait(lck);
 		}
