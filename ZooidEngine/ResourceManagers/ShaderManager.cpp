@@ -78,6 +78,10 @@ namespace ZE
 
 		// Z_SHADER_CHAIN_SHADOW_DEPTH_SKINNED
 		s_instance->makeShaderChain("ZooidEngine/Shaders/Shadows/DefaultSkinDepthShader.vs", "ZooidEngine/Shaders/Shadows/DefaultDepthShader.frag", nullptr, nullptr);
+
+		// Z_SHADER_CHAIN_DRAW_SCREEN_QUAD
+		s_instance->makeShaderChain("ZooidEngine/Shaders/Shader2D/ScreenQuad.vs", "ZooidEngine/Shaders/Shader2D/ScreenQuad.frag", nullptr, nullptr);
+
 	}
 
 	void ShaderManager::Destroy()

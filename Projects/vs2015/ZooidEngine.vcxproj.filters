@@ -480,6 +480,12 @@
     <ClInclude Include="..\..\ZooidEngine\UI\ZooidUI_Config.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\UI\UIInputComponent.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\UI\UIManager.h">
+      <Filter>UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ZooidEngine\MainFunction\Main.cpp">
@@ -771,6 +777,12 @@
       <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ZooidEngine\UI\ZooidUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\UI\UIInputComponent.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\UI\UIManager.cpp">
       <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>

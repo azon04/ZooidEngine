@@ -13,6 +13,7 @@
 #include "Renderer/IGPUBufferData.h"
 #include "Renderer/BufferData.h"
 #include "Renderer/BufferLayout.h"
+#include "Renderer/ShaderAction.h"
 
 #include "ResourceManagers/ShaderManager.h"
 #include "ResourceManagers/BufferManager.h"
@@ -66,9 +67,6 @@ namespace ZE
 		Handle m_hDrawBufferArray;
 		Handle m_hInstanceGPUBufferArray;
 		Handle m_hInstanceTextGPUBufferArray;
-		Handle m_hDynamicTexture;
-		Handle m_hFrameBuffer;
-		Handle m_hRenderBuffer;
 
 		Array<Handle> textureHandles;
 	};
@@ -81,44 +79,6 @@ namespace ZE
 		GameContext* gameContext = GetGameContext();
 
 		ScopedRenderThreadOwnership renderLock(gameContext->getRenderer());
-
-		// Setup Dynamic Texture
-		Handle hTexture("Texture", sizeof(Texture));
-		Texture* pCPUTexture = new(hTexture) Texture;
-		pCPUTexture->createEmpty(width, height, TEX_RGBA);
-		pCPUTexture->setGenerateMipmap(true);
-		pCPUTexture->setDataType(UNSIGNED_BYTE);
-		pCPUTexture->setWrapOnU(MIRRORED_REPEAT);
-		pCPUTexture->setWrapOnV(MIRRORED_REPEAT);
-		pCPUTexture->setMinFilter(LINEAR);
-		pCPUTexture->setMagFilter(LINEAR);
-
-		m_hDynamicTexture = gameContext->getRenderZooid()->CreateRenderTexture();
-		if (m_hDynamicTexture.isValid())
-		{
-			m_dynamicTexture = m_hDynamicTexture.getObject<IGPUTexture>();
-			m_dynamicTexture->fromTexture(pCPUTexture);
-		}
-
-		// Create RenderBuffer for Stencil and Depth
-		m_hRenderBuffer = gameContext->getRenderZooid()->CreateRenderBuffer();
-		if (m_hRenderBuffer.isValid())
-		{
-			m_renderBuffer = m_hRenderBuffer.getObject<IGPURenderBuffer>();
-			m_renderBuffer->create(DEPTH_STENCIL, width, height);
-		}
-
-		// Create Frame Buffer and Attach texture+renderbuffer to it
-		m_hFrameBuffer = gameContext->getRenderZooid()->CreateFrameBuffer();
-		if (m_hFrameBuffer.isValid())
-		{
-			m_frameBuffer = m_hFrameBuffer.getObject<IGPUFrameBuffer>();
-			m_frameBuffer->bind();
-			m_frameBuffer->addTextureAttachment(COLOR_ATTACHMENT, m_dynamicTexture);
-			m_frameBuffer->addRenderBufferAttachment(DEPTH_STENCIL_ATTACHMENT, m_renderBuffer);
-			m_frameBuffer->setupAttachments();
-			m_frameBuffer->unbind();
-		}
 
 		// Setup Shaders
 		m_drawShader = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/UI/BaseShapeShader.vs", "ZooidEngine/Shaders/UI/BaseShapeShader_Color.frag", nullptr, nullptr);
@@ -147,12 +107,14 @@ namespace ZE
 		instanceLayout->calculateBufferDataCount();
 
 		// Create buffer array for rect
-		static UIVertex rectArray[6] = { { UIVector2{ 0.0f, 0.0f }, 0.0f, UIVector2{ 0.0f, 0.0f }, UIVector4{ 1.0f, 1.0f, 1.0f, 1.0f } },
+		static UIVertex rectArray[6] = { 
 									{ UIVector2{ 1.0f, 0.0f }, 0.0f, UIVector2{ 1.0f, 0.0f }, UIVector4{ 1.0f, 1.0f, 1.0f, 1.0f } },
-									{ UIVector2{ 1.0f, 1.0f }, 0.0f, UIVector2{ 1.0f, 1.0f }, UIVector4{ 1.0f, 1.0f, 1.0f, 1.0f } },
 									{ UIVector2{ 0.0f, 0.0f }, 0.0f, UIVector2{ 0.0f, 0.0f }, UIVector4{ 1.0f, 1.0f, 1.0f, 1.0f } },
 									{ UIVector2{ 1.0f, 1.0f }, 0.0f, UIVector2{ 1.0f, 1.0f }, UIVector4{ 1.0f, 1.0f, 1.0f, 1.0f } },
-									{ UIVector2{ 0.0f, 1.0f }, 0.0f, UIVector2{ 0.0f, 1.0f }, UIVector4{ 1.0f, 1.0f, 1.0f, 1.0f } } };
+									{ UIVector2{ 1.0f, 1.0f }, 0.0f, UIVector2{ 1.0f, 1.0f }, UIVector4{ 1.0f, 1.0f, 1.0f, 1.0f } },
+									{ UIVector2{ 0.0f, 0.0f }, 0.0f, UIVector2{ 0.0f, 0.0f }, UIVector4{ 1.0f, 1.0f, 1.0f, 1.0f } },
+									{ UIVector2{ 0.0f, 1.0f }, 0.0f, UIVector2{ 0.0f, 1.0f }, UIVector4{ 1.0f, 1.0f, 1.0f, 1.0f } } 
+									};
 
 		Handle hRectBuffer("Rect Buffer", sizeof(BufferData));
 		BufferData* rectBuffer = new(hRectBuffer) BufferData(VERTEX_BUFFER);
@@ -228,33 +190,37 @@ namespace ZE
 		IRenderer* renderer = gameContext->getRenderer();
 
 		// Enable Depth Test
-		renderer->EnableFeature(RendererFeature::DEPTH_TEST);
-		// Enable Blend
-		renderer->EnableFeature(RendererFeature::BLEND);
+		renderer->DisableFeature(RendererFeature::DEPTH_TEST);
 		
-		m_frameBuffer->bind();
-		renderer->Clear(EClearBit::COLOR_BUFFER_BIT | EClearBit::DEPTH_BUFFER_BIT);
+		// Enable Blend
+		ShaderFeature shaderFeature;
+		shaderFeature.m_bFeatureEnabled = true;
+		shaderFeature.m_rendererFeature = RendererFeature::BLEND;
+		ShaderFeatureVar featureVar;
+		featureVar.Uint_value = ERendererBlendFactor::SRC_ALPHA;
+		ShaderFeatureVar featureVar2;
+		featureVar2.Uint_value = ERendererBlendFactor::ONE_MINUS_SRC_ALPHA;
+		shaderFeature.m_shaderFeatureVar.push_back(featureVar);
+		shaderFeature.m_shaderFeatureVar.push_back(featureVar2);
 
+		renderer->ProcessShaderFeature(shaderFeature);
+		
 		for (int i = 0; i < m_drawList->itemCount(); i++)
 		{
 			UIDrawItem* drawItem = m_drawList->getDrawItem(i);
 			processDrawItem(drawItem);
 		}
 
-		m_frameBuffer->unbind();
-
-		// Draw Frame Buffer to quad screen
-
 		// Reset Renderer Feature
+		renderer->DisableFeature(RendererFeature::BLEND);
+		renderer->EnableFeature(RendererFeature::DEPTH_TEST);
 		renderer->ResetFeature(RendererFeature::BLEND);
 		renderer->ResetFeature(RendererFeature::DEPTH_TEST);
 	}
 
 	void ZE_UIRenderer::Destroy()
 	{
-		m_hFrameBuffer.release();
-		m_hRenderBuffer.release();
-		m_hDynamicTexture.release();
+
 	}
 
 	bool ZE_UIRenderer::requestToClose()

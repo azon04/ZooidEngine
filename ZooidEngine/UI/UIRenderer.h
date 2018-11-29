@@ -6,7 +6,6 @@
 namespace ZE
 {
 	class UIDrawList;
-
 	class UIRenderer
 	{
 	public:

@@ -9,6 +9,10 @@
 #include "Renderer/BufferLayout.h"
 #include "Utils/Array.h"
 
+// Some Util Buffer Array
+#define BUFFER_ARRAY_QUAD_V3_TC2 0
+#define BUFFER_ARRAY_CUBE 0
+
 namespace ZE 
 {
 
@@ -63,6 +67,7 @@ private:
 	Array<IGPUBufferData*, true> m_constantGPUBuffer;
 
 	GameContext* m_gameContext;
+	
 };
 }
 #endif

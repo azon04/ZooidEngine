@@ -39,6 +39,7 @@ public:
 	virtual void Draw(DrawList* drawList, ShaderAction* shaderAction) override; 
 	virtual void DrawBufferArray(IShaderChain* shader, IGPUBufferArray* gpuBufferArray, UInt32 count, UInt32 offset = 0) override;
 	virtual void DrawBufferArrayInstanced(IShaderChain* shader, IGPUBufferArray* gpuBufferArray, UInt32 count, UInt32 offset, UInt32 instanceCount) override;
+	virtual void DrawTextureToScreen(IGPUTexture* texture, const Vector2& screenPos, const Vector2& screenDimension) override;
 
 	virtual bool IsClose() override;
 
@@ -52,6 +53,7 @@ public:
 	virtual void DisableFeature(UInt32 feature) override;
 	virtual bool IsFeatureEnabled(UInt32 feature) override;
 	virtual void ResetFeature(UInt32 feature) override;
+	virtual void ProcessShaderFeature(ShaderFeature& shaderFeature);
 
 	virtual float GetHeight() const { return HEIGHT; }
 	virtual float GetWidth() const { return WIDTH; }
@@ -70,7 +72,6 @@ private:
 	void DrawEx(DrawList* drawList, ShaderAction* shaderAction, bool bWithShadow);
 	void BindShadowMaps(DrawList* _drawList, IShaderChain* shaderChain, int offset);
 	void UnbindShadowMaps(DrawList* _drawList, IShaderChain* shaderChain, int offset);
-	void ProcessShaderFeature(ShaderFeature& shaderFeature);
 	void SortBlendShaderActions(const Vector3& cameraPosition, const Vector3& cameraDirection,  ShaderAction* inArray, UInt32* outIndexArray, UInt32 count);
 
 	GLFWwindow* m_window;
@@ -82,6 +83,10 @@ private:
 	GLenum HashFaceFrontOrder[2];
 	GLenum HashCullFace[3];
 	ThreadId m_currentThreadHasLock;
+
+	// Some Base Resource buffer
+	GLuint m_quadVBO;
+	GLuint m_quadVAO;
 };
 }
 #endif

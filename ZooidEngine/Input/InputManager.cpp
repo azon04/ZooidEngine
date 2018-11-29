@@ -9,30 +9,28 @@ namespace ZE
 
 	ZE::KeyboardMouseInput* InputManager::getKeyboardMouseInput()
 	{
-		for (int i = 0; i < m_components.length(); i++)
-		{
-			if (m_components[i]->getClassID() == KeyboardMouseInput::GetClassID())
-			{
-				return (KeyboardMouseInput*)m_components[i];
-			}
-		}
-
-		return nullptr;
+		return m_keyboardMouseInput;
 	}
 
 	void InputManager::setupComponent()
 	{
-		{
-			Handle handle("KeyboardMouseInput", sizeof(KeyboardMouseInput));
-			KeyboardMouseInput* pKMInput = new(handle) KeyboardMouseInput(m_gameContext);
-			pKMInput->setupComponent();
-			addChild(pKMInput);
-		}
+		Handle handle("KeyboardMouseInput", sizeof(KeyboardMouseInput));
+		m_keyboardMouseInput = new(handle) KeyboardMouseInput(m_gameContext);
+		m_keyboardMouseInput->setupComponent();
+		addChild(m_keyboardMouseInput);
 	}
 
 	bool InputManager::IsKeyDown(Short m_keyId)
 	{
 		return getKeyboardMouseInput()->IsKeyDown(m_keyId);
+	}
+
+	void InputManager::getMousePosition(Int32& mouseX, Int32& mouseY)
+	{
+		if (m_keyboardMouseInput)
+		{
+			m_keyboardMouseInput->getMousePosition(mouseX, mouseY);
+		}
 	}
 
 }

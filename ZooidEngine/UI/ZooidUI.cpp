@@ -1020,16 +1020,18 @@ namespace ZE
 
 	ZE::UIDrawItem* UIDrawList::getTextureInstanceDrawItem(UInt32 _index)
 	{
-		bool bHas = HashMapHas(m_textureToInstanceDrawItem, _index);
-		if (!bHas)
+		int idx;
+		HashMapHasAndAssign(m_textureToInstanceDrawItem, _index, -1, idx);
+		if (idx == -1)
 		{
 			UIDrawItem* draw = getNextDrawItem();
 			draw->m_textureHandle = _index;
 			draw->m_bUsingRectInstance = true;
 			m_textureToInstanceDrawItem[_index] = m_count - 1;
+			idx = m_count - 1;
 		}
 
-		return m_drawItems[m_textureToInstanceDrawItem[_index]];
+		return m_drawItems[idx];
 	}
 
 	void UIDrawList::reset()
@@ -1053,15 +1055,17 @@ namespace ZE
 
 	ZE::UIDrawItem* UIDrawList::getTextureDrawItem(UInt32 textureHandle)
 	{
-		bool bHas = HashMapHas(m_textureToDrawItemMap, textureHandle);
-		if (!bHas)
+		int idx;
+		HashMapHasAndAssign(m_textureToDrawItemMap, textureHandle, -1, idx);
+		if (idx == -1)
 		{
 			UIDrawItem* draw = getNextDrawItem();
 			draw->m_textureHandle = textureHandle;
 			m_textureToDrawItemMap[textureHandle] = m_count-1;
+			idx = m_count - 1;
 		}
 
-		return m_drawItems[m_textureToDrawItemMap[textureHandle]];
+		return m_drawItems[idx];
 	}
 
 	UIArray<ZE::UIVertex>& UIDrawItem::getVertices()
@@ -1229,7 +1233,8 @@ namespace ZE
 		Float32 result = 0;
 		while (c != '\0')
 		{
-			int charIndex = HashMapHas(m_charMap,c) ? m_charMap[c] : 0;
+			int charIndex;
+			HashMapHasAndAssign(m_charMap, c, 0, charIndex);
 			result += scale * m_charDesc[charIndex].Advance;
 			c = text[index++];
 		}
@@ -1258,7 +1263,8 @@ namespace ZE
 				cX = 0;
 			}
 
-			int charIndex = HashMapHas(m_charMap,c) ? m_charMap[c] : 0;
+			int charIndex;
+			HashMapHasAndAssign(m_charMap, c, 0, charIndex);
 			UIFontCharDesc& charDesc = m_charDesc[charIndex];
 
 			cX += charDesc.Advance * scale;

@@ -4,6 +4,8 @@
 #include "Enums.h"
 #include "Platform/Platform.h"
 
+#include "ResourceManagers/ShaderManager.h"
+
 #if defined(_WIN32) || defined(_WIN64)
 	#define GLFW_EXPOSE_NATIVE_WIN32
 #endif
@@ -260,6 +262,23 @@ namespace ZE
 			glDrawArraysInstanced(drawTopology, offset, count, instanceCount);
 		}
 		gpuBufferArray->unbind();
+	}
+
+	void GLRenderer::DrawTextureToScreen(IGPUTexture* texture, const Vector2& screenPos, const Vector2& screenDimension)
+	{
+		IShaderChain* shader = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_DRAW_SCREEN_QUAD);
+		IGPUBufferArray* quadVAO = BufferManager::getInstance()->getBufferArray(BUFFER_ARRAY_QUAD_V3_TC2);
+
+		shader->bind();
+		shader->setVec2("offsetPos", screenPos);
+		shader->setVec2("dimension", screenDimension);
+		shader->setTexture("InTexture", texture, 0);
+		texture->bind();
+
+		DrawBufferArray(shader, quadVAO, 6);
+
+		texture->unbind();
+		shader->unbind();
 	}
 
 	bool GLRenderer::IsClose()

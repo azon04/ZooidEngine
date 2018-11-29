@@ -41,27 +41,27 @@ namespace ZE
 
 		BufferLayoutManager::Init();
 
-		ScopedRenderThreadOwnership(_gameContext->getRenderer());
+		ScopedRenderThreadOwnership renderLock(_gameContext->getRenderer());
 
 		// Create sample vertex Color buffer
 		{
-			Handle handle("Data Triangle", sizeof(float) * 18);
-			handle.getObject();
-			float* vertices_color = new(handle) float[18]{
-				// Positions		// Colors			
-				0.5, -0.5f, 0.0f,	1.0f, 0.0f, 0.0f, // Bottom Right
-				-0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // Bottom Left
-				0.0f, 0.5f, 0.0f,	0.0f, 0.0f, 1.0f	// Top
+			float quadVertices[] =
+			{
+				-1.0f, -1.0f, 0.0f,		0.0f, 0.0f,
+				1.0f, -1.0f, 0.0f,		1.0f, 0.0f,
+				-1.0f, 1.0f, 0.0f,		0.0f, 1.0f,
+
+				1.0f, -1.0f, 0.0f,		1.0f, 0.0f,
+				1.0f, 1.0f, 0.0f,		1.0f, 1.0f,
+				-1.0f, 1.0f, 0.0f,		0.0f, 1.0f
 			};
 
 			Handle hBufferData("Buffer Data", sizeof(BufferData));
 			BufferData* bufferData = new(hBufferData) BufferData(EBufferType::VERTEX_BUFFER);
-			bufferData->SetData(vertices_color, 6 * sizeof(float), 3);
-			bufferData->setBufferLayout(BUFFER_LAYOUT_V3_C3);
+			bufferData->SetData(quadVertices, 5 * sizeof(float), 6);
+			bufferData->setBufferLayout(BUFFER_LAYOUT_V3_TC2);
 
 			getInstance()->createBufferArray(bufferData, nullptr, nullptr);
-
-			// #TODO do we really need BufferData to be saved?
 			hBufferData.release();
 		}
 

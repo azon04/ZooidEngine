@@ -36,7 +36,7 @@
 
 #include "scene/Light/LightComponent.h"
 
-#include "UI/ZooidUI.h"
+#include "UI/UIManager.h"
 
 // TODO for NVIDIA Optimus :  This enable the program to use NVIDIA instead of integrated Intel graphics
 #if WIN32 || WIN64
@@ -178,7 +178,7 @@ namespace ZE
 		_gameContext->m_cameraManager = CameraManager::GetInstance();
 		
 		ZEINFO("Initializing Zooid UI...");
-		UI::Init(_gameContext->getRenderer()->GetWidth(), _gameContext->getRenderer()->GetHeight());
+		UIManager::Init(_gameContext);
 
 		_gameContext->m_mainTimer.Reset();
 
@@ -198,7 +198,7 @@ namespace ZE
 		}
 #endif
 
-		UI::Destroy();
+		UIManager::Destroy();
 
 		CameraManager::Destroy();
 		
@@ -261,22 +261,33 @@ namespace ZE
 		while (g_drawReady) {}
 #endif
 
-		// Draw Debug Text
-		DebugRenderer::DrawTextScreen("Zooid Engine", Vector2(10.0f, 10.0f), Vector3(1.0f, 0.0f, 0.0f), 0.5f);
-		StringFunc::PrintToString(StringFunc::Buffer, STRING_FUNC_BUFFER_SIZE, "Delta Time: %.2f ms; FPS: %d", deltaTime, static_cast<int>(1000.0f / deltaTime));
-		DebugRenderer::DrawTextScreen(StringFunc::Buffer, Vector2(10.0f, _gameContext->getRenderer()->GetHeight() - 30.0f), Vector3(1.0f, 1.0f, 0.0f), 0.5f);
-
-		// Draw World Text
-		//Matrix4x4 mat;
-		//mat.translate(Vector3(0.0f, 0.1f, 0.0f));
-		//DebugRenderer::DrawTextWorld("Zooid Engine", mat);
-
 		// Draw Base Lines
 		DebugRenderer::DrawMatrixBasis(Matrix4x4());
 
 		// Test UI
 		ZE::UI::DrawTextInPos(0, ZE::UIVector2(0.0f, 0.0f), "Zooid Engine", ZE::UIVector4(1.0f, 1.0f, 1.0f, 1.0f));
 		
+		{
+			static ZE::UIRect panelRect( UIVector2{ 100,100 }, UIVector2{ 350, 375 } );
+
+			ZE::UIVector2 contentPos;
+
+			ZE::UI::DoDragablePanel(14, panelRect, "Text Sample...", 10, contentPos);
+
+			ZE::UIRect textRect;
+			textRect.m_pos = contentPos;
+			textRect.m_dimension = { 320, 100 };
+
+			ZE::UI::DrawMultiLineText(15, textRect, "Text Align Left.\nLorem Ipsum Dolor Sit Amet. Lorem Ipsum Dolor Sit Amet.\nLorem Ipsum Dolor Sit Amet. Anpan. Anpan. Anpan. Anpan. Anpan. Anpan.", ZE::UIVector4{ 1.0f, 1.0f, 1.0f, 1.0f });
+
+			textRect.m_pos.y += 120;
+			ZE::UI::DrawMultiLineText(15, textRect, "Text Align Center.\nLorem Ipsum Dolor Sit Amet. Lorem Ipsum Dolor Sit Amet.\nLorem Ipsum Dolor Sit Amet. Anpan. Anpan. Anpan. Anpan. Anpan. Anpan.", ZE::UIVector4{ 1.0f, 1.0f, 1.0f, 1.0f }, ZE::TEXT_CENTER);
+
+			textRect.m_pos.y += 120;
+			ZE::UI::DrawMultiLineText(15, textRect, "Text Align Right.\nLorem Ipsum Dolor Sit Amet. Lorem Ipsum Dolor Sit Amet.\nLorem Ipsum Dolor Sit Amet. Anpan. Anpan. Anpan. Anpan. Anpan. Anpan.", ZE::UIVector4{ 1.0f, 1.0f, 1.0f, 1.0f }, ZE::TEXT_RIGHT);
+
+		}
+
 		// Handle Event_GATHER_RENDER
 		{
 			Handle handleGatherRender("EventGatherRender", sizeof(Event_GATHER_RENDER));

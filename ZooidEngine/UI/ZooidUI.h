@@ -130,6 +130,11 @@ namespace ZE
 	class UIShape
 	{
 	public:
+		UIShape() {}
+		UIShape(const UIVector2& pos)
+			: m_pos(pos)
+		{ }
+
 		UIVector2 m_pos;
 
 		virtual bool isContain(const UIVector2& pos) const = 0;
@@ -138,6 +143,15 @@ namespace ZE
 	class UIRect : public UIShape
 	{
 	public:
+		UIRect() {}
+		UIRect(const UIVector2& pos, const UIVector2& dimension, Float32 roundness = 0.0f)
+			: UIShape(pos),
+			m_dimension(dimension),
+			m_roundness(roundness)
+		{
+
+		}
+
 		UIVector2 m_dimension;
 		Float32 m_roundness = 0.0f;
 

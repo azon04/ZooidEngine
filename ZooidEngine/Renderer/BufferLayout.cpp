@@ -46,7 +46,7 @@ namespace ZE
 			BufferLayout* vertexTexCoord = new(h) BufferLayout();
 			vertexTexCoord->m_layouts.reset(2);
 			vertexTexCoord->m_layouts.push_back({ 0, 3, EDataType::FLOAT, 5 * sizeof(float), 0, false });
-			vertexTexCoord->m_layouts.push_back({ 1, 3, EDataType::FLOAT, 5 * sizeof(float), 3, false });
+			vertexTexCoord->m_layouts.push_back({ 1, 2, EDataType::FLOAT, 5 * sizeof(float), 3, false });
 			vertexTexCoord->calculateBufferDataCount();
 
 			m_bufferLayout.push_back(vertexTexCoord);

@@ -3,7 +3,6 @@
 
 #include "Utils/PrimitiveTypes.h"
 
-#include "IRenderer.h"
 #include "IShader.h"
 #include "IGPUBufferArray.h"
 #include "IGPUTexture.h"

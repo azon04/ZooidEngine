@@ -8,6 +8,7 @@
 
 #include "Events/Events.h"
 
+#include "Renderer/IRenderer.h"
 #include "Renderer/ShaderAction.h"
 #include "ZEGameContext.h"
 #include "Renderer/DrawList.h"
