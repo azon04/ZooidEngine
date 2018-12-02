@@ -42,6 +42,7 @@ These are some features that I made for this version of the engine.
 * **ModelParser Tool** - import external 3D model format to internal model/mesh format.
 * **Basic Log Manager** - support grouping log, enabling or disabling certain group, and put log into file (currently too intrusive)
 * **Basic Physics** - Currently using PhysX 3.4 (put "Physx" with PhysX path in Environment Variable)
+* **UI** - UI using ZooidUI, the Immediate Mode GUI that I also manage.
 * **Skeletal Animation** - Basic Skeletal animation, including full-body animation, partial-body animation, animation blend and additive animation blend. The setting/animation blend can be setting using tree/hierarchical animation blending (setup using text file).
 * **Font Rendering** - The engine is now able to render font from font file, texture, generated SDF texture, and Multi-channel SDF texture.
 * **Font Texture Generation Tools** - generating font glyphs texture and descriptor file for the texture to read in the engine. The tools can generate SDF texture and Multi-channel SDF texture. The tools is used https://github.com/Chlumsky/msdfgen to help in SDF and MSDF generation. 
@@ -60,6 +61,7 @@ This list consists all libraries and code that help me implementing the engine.
 * **assimp** - https://github.com/assimp/assimp to export from outer mesh format to internal mesh format
 * **NVidia PhysX 3.4** - https://www.geforce.com/hardware/technology/physx
 * **MSDFGen** - https://github.com/Chlumsky/msdfgen
+* **ZooidUI** - I also manage this repository. https://github.com/azon04/ZooidUI
 
 ## Assets
 * **Mixamo** Animation assets using for the demo and testing are grabbed from https://www.mixamo.com/
