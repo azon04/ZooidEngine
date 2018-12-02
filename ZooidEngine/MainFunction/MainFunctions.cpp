@@ -344,13 +344,7 @@ namespace ZE
 
 		while (!_gameContext->getRenderer()->IsClose())
 		{
-			double deltaTime = _gameContext->m_renderThreadTimer.ResetAndGetDeltaMS();
-
 			DrawJob(_gameContext);
-
-			deltaTime = _gameContext->m_renderThreadTimer.ResetAndGetDeltaMS();
-
-			g_gpuDrawTime = MathOps::FLerp(g_gpuDrawTime, deltaTime, 0.01f);
 			
 			g_drawReady = false;
 			while (!g_drawReady) g_drawThreadVariable.wait(lck);
@@ -359,6 +353,8 @@ namespace ZE
 
 	void DrawJob(GameContext* _gameContext)
 	{
+		double deltaTime = _gameContext->m_renderThreadTimer.ResetAndGetDeltaMS();
+
 		IRenderer* renderer = _gameContext->getRenderer();
 		DrawList* drawList = _gameContext->getDrawList();
 
@@ -493,6 +489,9 @@ namespace ZE
 		_gameContext->getRenderer()->EndRender();
 
 		_gameContext->getDrawList()->Reset();
+
+		g_gpuDrawTime = MathOps::FLerp(g_gpuDrawTime, deltaTime, 0.01f);
+		deltaTime = _gameContext->m_renderThreadTimer.ResetAndGetDeltaMS();
 	}
 
 }

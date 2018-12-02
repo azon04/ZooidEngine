@@ -100,6 +100,9 @@ namespace ZE
 		// Get render texture or screen height
 		virtual float GetWidth() const = 0;
 
+		// Resize Window
+		virtual void Resize(UInt32 width, UInt32 height) = 0;
+
 	#if defined(_WIN32) || defined(_WIN64)
 		virtual HWND getWinWindow() = 0;
 	#endif

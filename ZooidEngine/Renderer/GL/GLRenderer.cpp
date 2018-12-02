@@ -15,6 +15,7 @@
 
 namespace ZE 
 {
+	GLRenderer* s_renderer;
 
 	GLRenderer::GLRenderer()
 	{
@@ -53,6 +54,16 @@ namespace ZE
 
 		HashFaceFrontOrder[EFaceFrontOrder::CCW] = GL_CCW;
 		HashFaceFrontOrder[EFaceFrontOrder::CW] = GL_CW;
+
+		m_width = WIDTH;
+		m_height = HEIGHT;
+
+		s_renderer = this;
+	}
+
+	void FrameBufferSizeCallback(GLFWwindow* window, int width, int height)
+	{
+		s_renderer->Resize((UInt32)width, (UInt32)height);
 	}
 
 	void GLRenderer::Setup()
@@ -61,7 +72,7 @@ namespace ZE
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-		glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+		//glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 		
 		m_window = glfwCreateWindow(WIDTH, HEIGHT, "ZooidEngine - Windows", nullptr, nullptr);
 		if (!m_window) 
@@ -91,6 +102,9 @@ namespace ZE
 		int width, height;
 		glfwGetFramebufferSize(m_window, &width, &height);
 
+		// Callback when window Frame Buffer resize
+		glfwSetFramebufferSizeCallback(m_window, FrameBufferSizeCallback);
+
 		// Enable Depth test
 		EnableFeature(RendererFeature::DEPTH_TEST);
 
@@ -105,7 +119,7 @@ namespace ZE
 
 	void GLRenderer::BeginRender()
 	{
-		glViewport(0, 0, WIDTH, HEIGHT);
+		glViewport(0, 0, m_width, m_height);
 	}
 
 	void GLRenderer::EndRender()
@@ -520,6 +534,12 @@ namespace ZE
 		{
 			DisableFeature(shaderFeature.m_rendererFeature);
 		}
+	}
+
+	void GLRenderer::Resize(UInt32 width, UInt32 height)
+	{
+		m_width = (Int32)width;
+		m_height = (Int32)height;
 	}
 
 	UInt32 quickSortBlendPartition(Float32* squareDist, UInt32* arr, Int32 lo, Int32 hi)

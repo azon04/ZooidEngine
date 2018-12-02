@@ -55,8 +55,10 @@ public:
 	virtual void ResetFeature(UInt32 feature) override;
 	virtual void ProcessShaderFeature(ShaderFeature& shaderFeature);
 
-	virtual float GetHeight() const { return HEIGHT; }
-	virtual float GetWidth() const { return WIDTH; }
+	virtual float GetHeight() const { return (float)m_height; }
+	virtual float GetWidth() const { return (float)m_width; }
+
+	virtual void Resize(UInt32 width, UInt32 height);
 
 #if defined(_WIN32) || defined(_WIN64)
 	virtual HWND getWinWindow() override
@@ -69,6 +71,7 @@ private:
 #endif
 
 private:
+
 	void DrawEx(DrawList* drawList, ShaderAction* shaderAction, bool bWithShadow);
 	void BindShadowMaps(DrawList* _drawList, IShaderChain* shaderChain, int offset);
 	void UnbindShadowMaps(DrawList* _drawList, IShaderChain* shaderChain, int offset);
@@ -87,6 +90,10 @@ private:
 	// Some Base Resource buffer
 	GLuint m_quadVBO;
 	GLuint m_quadVAO;
+
+	// Window Screen Dimension
+	Int32 m_width;
+	Int32 m_height;
 };
 }
 #endif
