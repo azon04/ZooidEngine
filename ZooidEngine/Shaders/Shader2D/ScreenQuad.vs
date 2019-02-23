@@ -3,7 +3,7 @@
 * Ahmad Fauzan
 ***/
 
-#version 330
+#version 430
 layout (location = 0) in vec3 Pos;
 layout (location = 1) in vec2 TexCoord;
 

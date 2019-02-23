@@ -1,15 +1,16 @@
 #ifndef __ZE_MATERIAL_H__
 #define __ZE_MATERIAL_H__
 
+#include "GameObjectModel/Object.h"
 #include "Utils/Array.h"
 #include "Utils/PrimitiveTypes.h"
-#include "Renderer/ShaderAction.h"
 #include "Math/Vector3.h"
 
 namespace ZE
 {
 	class IGPUTexture;
 	class GameContext;
+	class IShaderChain;
 
 	enum class TextureType : UInt8
 	{
@@ -38,10 +39,12 @@ namespace ZE
 		{
 		}
 
-		void Bind(ShaderAction& shaderAction);
+		void Bind(IShaderChain* shaderChain);
 
 		// Does material have transparency?
 		bool IsBlend() { return m_isBlend; }
+
+		UInt32 getTextureCount() { return m_textures.size(); }
 
 	protected:
 		Vector3 m_Ka;

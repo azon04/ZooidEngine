@@ -49,12 +49,13 @@ public:
 	// Get Buffer data count; number of data in the buffer array
 	FORCEINLINE Int32 getDataCount() const { return m_dataCount; }
 
-	FORCEINLINE bool isUsingIndexBuffer() const { return m_bUsingIndexBuffer; }
+	FORCEINLINE bool isUsingIndexBuffer() const { return m_indexBuffer != nullptr; }
 
+	FORCEINLINE IGPUBufferData* getIndexBuffer() { return m_indexBuffer; }
 protected:
 	
 	Array<IGPUBufferData*, true> m_buffers;
-	bool m_bUsingIndexBuffer;
+	IGPUBufferData* m_indexBuffer;
 	UInt32 m_dataCount;
 };
 }

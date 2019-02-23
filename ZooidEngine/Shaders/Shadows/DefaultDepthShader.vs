@@ -3,7 +3,7 @@
 * by: Ahmad Fauzan
 **/
 
-#version 330
+#version 430
 layout (location = 0) in vec3 Pos;
 
 uniform mat4 modelMat;

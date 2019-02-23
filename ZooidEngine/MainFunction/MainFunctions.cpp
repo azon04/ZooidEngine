@@ -40,6 +40,11 @@
 
 #include "Math/MathOps.h"
 
+#include "SceneRenderer/SceneRenderer.h"
+#include "SceneRenderer/RenderGatherer.h"
+#include "SceneRenderer/ShadowRenderer.h"
+#include "SceneRenderer/TextRenderer.h";
+
 // TODO for NVIDIA Optimus :  This enable the program to use NVIDIA instead of integrated Intel graphics
 #if WIN32 || WIN64
 extern "C"
@@ -268,6 +273,8 @@ namespace ZE
 
 		// Draw Base Lines
 		DebugRenderer::DrawMatrixBasis(Matrix4x4());
+		DebugRenderer::DrawTextWorld("Zooid Engine", Matrix4x4());
+		DebugRenderer::DrawTextScreen("Zooid Engine", Vector2(10, 10), Vector3(1.0f), 0.5f);
 
 		{
 			static ZE::UIRect panelRect( UIVector2{ 10,10 }, UIVector2{ 250, 100 } );
@@ -360,6 +367,8 @@ namespace ZE
 
 		ScopedRenderThreadOwnership renderLock(renderer);
 
+		ShadowDepthRenderer::Reset();
+
 		// For each Light render Shadows
 		for (UInt32 iShadowData = 0; iShadowData < drawList->m_lightShadowSize; iShadowData++)
 		{
@@ -368,86 +377,13 @@ namespace ZE
 			
 			if(!shadowMapData.dynamicShadowFrameBuffer) { continue; }
 
-			// TODO Set appropriate shader data
-			Matrix4x4 view;
-			Matrix4x4 proj;
-
-			if (light.Type == LightType::DIRECTIONAL_LIGHT)
-			{
-				MathOps::LookAt(view, light.getDirection() * -5.0f, Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
-				MathOps::CreateOrthoProjEx(proj, -5.0f, 5.0f, -5.0f, 5.0f, 0.1f, 10.0f);
-			}
-			else if (light.Type == LightType::SPOT_LIGHT)
-			{
-				MathOps::LookAt(view, light.getPosition(), light.getPosition() + light.getDirection(), Vector3(0.0f, 1.0f, 0.0f));
-				MathOps::CreatePerspectiveProjEx(proj, 1.0f,  2.0 * RadToDeg(acos(light.OuterCutOff)), 0.1f, 10.0f);
-			}
-			
-			light.setViewProjMatrix(view * proj);
-
-			drawList->m_shaderData.setViewMat(view);
-			drawList->m_shaderData.setProjectionMat(proj);
-			drawList->m_mainConstantBuffer->bindAndRefresh();
-
-			UInt32 shadowMapIndex = 0;
-
-			// Set Shader Chain for this light pass
-			for (UInt32 iDynObj = 0; iDynObj < drawList->m_staticShadowObjSize; iDynObj++)
-			{
-				ShaderAction& shaderAction = drawList->m_staticShadowObjList[iDynObj];
-				if (shaderAction.isSkin())
-				{
-					shaderAction.setShaderChain(shadowMapData.skinnedShaderChain);
-				}
-				else
-				{
-					shaderAction.setShaderChain(shadowMapData.normalShaderChain);
-				}
-
-				// TODO Set the var if any
-			}
-
-			if (!shadowMapData.staticShadowTexture)
-			{
-				for (UInt32 iDynObj = 0; iDynObj < drawList->m_dynamicShadowObjSize; iDynObj++)
-				{
-					ShaderAction& shaderAction = drawList->m_dynamicShadowObjList[iDynObj];
-					if (shaderAction.isSkin())
-					{
-						shaderAction.setShaderChain(shadowMapData.skinnedShaderChain);
-					}
-					else
-					{
-						shaderAction.setShaderChain(shadowMapData.normalShaderChain);
-					}
-
-					// TODO Set the var if any
-				}
-			}
-			else
-			{
-				drawList->m_shadowMap[drawList->m_shadowMapSize] = shadowMapData.staticShadowTexture;
-				light.shadowMapIndices[shadowMapIndex++] = drawList->m_shadowMapSize;
-				drawList->m_shadowMapSize++;
-			}
-			
-			drawList->m_shadowMap[drawList->m_shadowMapSize] = shadowMapData.dynamicShadowTexture;
-			light.shadowMapIndices[shadowMapIndex++] = drawList->m_shadowMapSize;
-			drawList->m_shadowMapSize++;
-
-			while (shadowMapIndex < 4)
-			{
-				light.shadowMapIndices[shadowMapIndex++] = -1;
-			}
-
-			// Process Shadow Render
-			shadowMapData.dynamicShadowFrameBuffer->bind(); // Bind Frame Buffer
-
-			renderer->ProcessShadowMapList(drawList, !shadowMapData.staticShadowTexture);
-
-			shadowMapData.dynamicShadowFrameBuffer->unbind(); // Unbind frame buffer
-
+			ShadowDepthRenderer::Setup(&shadowMapData, &light, drawList);
+			ShadowDepthRenderer::BeginRender();
+			ShadowDepthRenderer::Render(drawList->m_meshRenderGatherer.getRenderInfos(), drawList->m_meshRenderGatherer.getRenderCount(), false);
+			ShadowDepthRenderer::Render(drawList->m_skinMeshRenderGatherer.getRenderInfos(), drawList->m_skinMeshRenderGatherer.getRenderCount(), true);
+			ShadowDepthRenderer::EndRender();
 		}
+
 
 		renderer->BeginRender();
 
@@ -481,8 +417,13 @@ namespace ZE
 			}
 		}
 
-		_gameContext->getRenderer()->ProcessDrawList(_gameContext->getDrawList());
-
+		MeshSceneRenderer::Render(drawList->m_meshRenderGatherer.getRenderInfos(), drawList->m_meshRenderGatherer.getRenderCount());
+		SkinMeshSceneRenderer::Render(drawList->m_skinMeshRenderGatherer.getRenderInfos(), drawList->m_skinMeshRenderGatherer.getRenderCount());
+		TransculentSceneRenderer::Render(drawList->m_transculentRenderGatherer.getRenderInfos(), drawList->m_transculentRenderGatherer.getRenderCount());
+		TextSceneRenderer::Render(drawList->m_textSceneRenderGatherer.getRenderInfos(), drawList->m_textSceneRenderGatherer.getRenderCount());
+		
+		TextScreenRenderer::Render(drawList->m_textScreenRenderGatherer.getRenderInfos(), drawList->m_textScreenRenderGatherer.getRenderCount());
+		
 		// Inject UI Rendering
 		ZE::UI::ProcessDrawList();
 

@@ -10,6 +10,8 @@
 namespace ZE
 {
 	class FileReader;
+	class BufferData;
+	class IGPUBufferData;
 
 	struct SkeletonJoint
 	{
@@ -104,6 +106,11 @@ namespace ZE
 		// inBoneTransform: true if the matrices in bone transform
 		void setJointStateMatrices(Array<Matrix4x4>& matrices, bool inBoneTransform = true);
 
+		// Update buffer so we can use it for rendering
+		void updateBuffer();
+
+		IGPUBufferData* getGPUBufferData() { return m_gpuStateBuffer; }
+
 		FORCEINLINE Skeleton* getSkeleton() const { return m_skeleton; }
 
 	protected:
@@ -112,6 +119,9 @@ namespace ZE
 	protected:
 		Skeleton* m_skeleton;
 		Array<SkeletonJointState> m_skeletonJointStates;
+		Array<Matrix4x4, false> m_stateBufferData;
+		IGPUBufferData* m_gpuStateBuffer;
+		bool m_bDirty;
 	};
 }
 

@@ -56,6 +56,9 @@ namespace ZE
 		// Set if the buffer is static
 		void setStatic(bool _bStatic) { m_isStatic = _bStatic; }
 
+		// Set the stride of the buffer
+		void setStride(UInt32 stride) { m_stride = stride; }
+
 		bool isStatic() const { return m_isStatic; }
 	
 		// get data count
@@ -70,6 +73,9 @@ namespace ZE
 		// Get current CPU Buffer Data
 		FORCEINLINE BufferData* getBufferData() const { return m_BufferData; }
 
+		// Get the stride of the buffer
+		FORCEINLINE UInt32 getStride() const { return m_stride; }
+
 	protected:
 		EBufferType m_bufferType;
 		BufferData* m_BufferData;
@@ -78,6 +84,7 @@ namespace ZE
 
 		Int32 m_dataCount;
 		Int32 m_bindingIndex;
+		UInt32 m_stride;
 		BufferLayout* m_layout;
 
 	};

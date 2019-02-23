@@ -1,6 +1,11 @@
 #include "Skeleton.h"
 #include "FileSystem/FileReader.h"
 
+#include "ResourceManagers/BufferManager.h"
+
+#include "Renderer/IRenderer.h"
+#include "ZEGameContext.h"
+
 namespace ZE
 {
 	IMPLEMENT_CLASS_0(Skeleton)
@@ -203,6 +208,29 @@ namespace ZE
 				}
 			}
 		}
+
+		m_bDirty = true;
+	}
+
+	void SkeletonState::updateBuffer()
+	{
+		if (m_bDirty)
+		{
+			for (int i = 0; i < m_skeleton->getJointCount(); i++)
+			{
+				Matrix4x4& jointPallete = m_stateBufferData[i];
+				getJointMatrixPallete(i, jointPallete);
+			}
+
+			// #TODO probably send command to render thread
+			{
+				ScopedRenderThreadOwnership scope(gGameContext->getRenderer());
+
+				m_gpuStateBuffer->refresh();
+			}
+
+			m_bDirty = false;
+		}
 	}
 
 	void SkeletonState::setupState()
@@ -218,6 +246,12 @@ namespace ZE
 			jointState.BindPose = joint.BindPose;
 			m_skeletonJointStates.push_back(jointState);
 		}
+
+		m_stateBufferData.reset(m_skeleton->getJointCount());
+
+		m_gpuStateBuffer = BufferManager::getInstance()->createConstantBuffer(m_stateBufferData.data(), sizeof(Matrix4x4) * m_skeleton->getJointCount(), CONSTANT_BUFFER_SKELETON_DATA_INDEX);
+		
+		m_bDirty = true;
 	}
 
 }

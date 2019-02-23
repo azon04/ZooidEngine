@@ -74,7 +74,7 @@ namespace ZE
 
 	protected:
 		// List of the buffer layouts
-		Array<BufferLayout*, true> m_bufferLayout;
+		Array<BufferLayout*> m_bufferLayout;
 
 	private:
 		static BufferLayoutManager* m_instance;

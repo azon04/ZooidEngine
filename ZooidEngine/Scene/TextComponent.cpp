@@ -6,12 +6,16 @@
 #include "Math/MathOps.h"
 
 #include "Renderer/IRenderer.h"
+#include "Renderer/IGPUBufferArray.h"
+
 #include "Renderer/DrawList.h"
 
 #include "ResourceManagers/FontManager.h"
 #include "ResourceManagers/ShaderManager.h"
 #include "Resources/Font.h"
 #include "Resources/TextMesh.h"
+
+#include "SceneRenderer/RenderInfo/TextRenderInfo.h"
 
 namespace ZE
 {
@@ -52,7 +56,11 @@ namespace ZE
 		{
 			if (m_drawSpace == DRAW_SCREEN)
 			{
-				ShaderAction& shaderAction = m_gameContext->getDrawList()->getNextSecondPassShaderAction();
+				TextRenderInfo* textRenderInfo = m_gameContext->getDrawList()->m_textScreenRenderGatherer.nextRenderInfo();
+
+				textRenderInfo->m_gpuBufferArray = m_textMesh->getGPUBufferArray();
+				textRenderInfo->m_renderTopology = TOPOLOGY_TRIANGLE;
+
 				int shaderType = Z_SHADER_CHAIN_SCREEN_TEXT_SHADER;
 				switch (m_font->getFontRenderMethod())
 				{
@@ -66,18 +74,19 @@ namespace ZE
 				default:
 					break;
 				}
-				shaderAction.setShaderAndBuffer(ShaderManager::GetInstance()->getShaderChain(shaderType), m_textMesh->getGPUBufferArray());
-				shaderAction.setShaderFloatVar("screenHeight", m_gameContext->getRenderer()->GetHeight());
-				shaderAction.setShaderFloatVar("screenWidth", m_gameContext->getRenderer()->GetWidth());
-				shaderAction.setShaderMatVar("model", m_worldTransform);
 
-				shaderAction.setShaderTextureVar("fontTexture", m_font->getGPUTexture(), 0);
-				shaderAction.setShaderVec3Var("color", m_color);
-				EnableAndSetBlendFunc(shaderAction, ERendererBlendFactor::SRC_ALPHA, ERendererBlendFactor::ONE_MINUS_SRC_ALPHA);
+				textRenderInfo->m_shaderChain = ShaderManager::GetInstance()->getShaderChain(shaderType);
+				textRenderInfo->m_worldTransform = m_worldTransform;
+				textRenderInfo->m_color = m_color;
+				textRenderInfo->m_fontTexture = m_font->getGPUTexture();
+				textRenderInfo->drawCount = m_textMesh->getGPUBufferArray()->getDataCount();
 			}
 			else
 			{
-				ShaderAction& shaderAction = m_gameContext->getDrawList()->getNextSecondPassShaderAction();
+				TextRenderInfo* textRenderInfo = m_gameContext->getDrawList()->m_textSceneRenderGatherer.nextRenderInfo();
+
+				textRenderInfo->m_gpuBufferArray = m_textMesh->getGPUBufferArray();
+				textRenderInfo->m_renderTopology = TOPOLOGY_TRIANGLE;
 
 				int shaderType = Z_SHADER_CHAIN_WORLD_TEXT_SHADER;
 				switch (m_font->getFontRenderMethod())
@@ -93,13 +102,11 @@ namespace ZE
 					break;
 				}
 
-				shaderAction.setShaderAndBuffer(ShaderManager::GetInstance()->getShaderChain(shaderType), m_textMesh->getGPUBufferArray());
-				shaderAction.setShaderMatVar("modelMat", m_worldTransform);
-
-				shaderAction.setShaderTextureVar("fontTexture", m_font->getGPUTexture(), 0);
-				shaderAction.setShaderVec3Var("color", m_color);
-				EnableAndSetBlendFunc(shaderAction, ERendererBlendFactor::SRC_ALPHA, ERendererBlendFactor::ONE_MINUS_SRC_ALPHA);
-				shaderAction.addShaderFeature(FACE_CULING, false);
+				textRenderInfo->m_shaderChain = ShaderManager::GetInstance()->getShaderChain(shaderType);
+				textRenderInfo->m_worldTransform = m_worldTransform;
+				textRenderInfo->m_color = m_color;
+				textRenderInfo->m_fontTexture = m_font->getGPUTexture();
+				textRenderInfo->drawCount = m_textMesh->getGPUBufferArray()->getDataCount();
 			}
 		}
 	}

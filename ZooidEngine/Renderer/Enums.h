@@ -1,6 +1,8 @@
 #ifndef __ZE_RENDERER_ENUMS_H__
 #define __ZE_RENDERER_ENUMS_H__
 
+#include "Utils/PrimitiveTypes.h"
+
 namespace ZE
 {
 	enum EBufferType
@@ -82,7 +84,8 @@ namespace ZE
 	{
 		FRONT,
 		BACK,
-		FRONT_AND_BACK
+		FRONT_AND_BACK,
+		CULL_NONE
 	};
 
 	enum EFaceFrontOrder : UInt8
@@ -141,6 +144,25 @@ namespace ZE
 		COLOR_BUFFER_BIT = 1 << 1,
 		DEPTH_BUFFER_BIT = 1 << 2,
 		STENCIL_BUFFER_BIT = 1 << 3
+	};
+
+	enum ERenderFillMode
+	{
+		MODE_POINT,
+		MODE_LINE,
+		MODE_FILL
+	};
+
+	enum ERenderDepthStencilOps : UInt32
+	{
+		DS_OP_KEEP,
+		DS_OP_ZERO,
+		DS_OP_REPLACE,
+		DS_OP_INCR,
+		DS_OP_INCR_WRAP,
+		DS_OP_DECR,
+		DS_OP_DECR_WRAP,
+		DS_OP_INVERT
 	};
 }
 #endif // !__ZE_RENDERER_ENUMS_H__

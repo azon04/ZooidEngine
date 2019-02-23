@@ -3,8 +3,8 @@
 
 #include "Math/Vector2.h"
 #include "Utils/PrimitiveTypes.h"
-#include "ShaderAction.h"
 #include "Enums.h"
+#include "Structs.h"
 
 #if defined(_WIN32) || defined(_WIN64)
 #include <Windows.h>
@@ -13,7 +13,6 @@
 namespace ZE 
 {
 	struct ShaderData;
-	class ShaderAction;
 	class DrawList;
 	class IShaderChain;
 	class IGPUBufferArray;
@@ -43,26 +42,35 @@ namespace ZE
 		// if FrameBuffer is bound, then clear bit for that FrameBuffer, otherwise it will clear bits in Screen
 		virtual void Clear(UInt32 clearBits) = 0;
 
-		// Process Shadow Map
-		virtual void ProcessShadowMapList(DrawList* drawList, bool bWithStatic) = 0;
-
-		// Process Drawlist
-		virtual void ProcessDrawList(DrawList* drawList) = 0;
-
-		// Draw based on parameters in shaderAction
-		virtual void Draw(DrawList* drawList, ShaderAction* shaderAction) = 0;
-
 		// Draw GPUBufferArray Only
-		virtual void DrawBufferArray(IShaderChain* shader, IGPUBufferArray* gpuBufferArray, UInt32 count, UInt32 offset = 0) = 0;
+		virtual void DrawBufferArray(ERenderTopologyEnum primitiveTopology, IGPUBufferArray* gpuBufferArray, UInt32 count, UInt32 offset = 0) = 0;
 
 		// Draw GPUBufferArray Instance
-		virtual void DrawBufferArrayInstanced(IShaderChain* shader, IGPUBufferArray* gpuBufferArray, UInt32 count, UInt32 offset, UInt32 instanceCount) = 0;
+		virtual void DrawBufferArrayInstanced(ERenderTopologyEnum primitiveTopology, IGPUBufferArray* gpuBufferArray, UInt32 count, UInt32 offset, UInt32 instanceCount) = 0;
+
+		// Draw Indexed
+		virtual void DrawIndexed(ERenderTopologyEnum primitiveTopology, UInt32 indexStride, UInt32 count, void* indices) = 0;
+
+		// Draw Indexed Instance
+		virtual void DrawIndexedInstanced(ERenderTopologyEnum primitiveTopology, UInt32 indexStride, UInt32 count, void* indices, UInt32 instanceCount) = 0;
+
+		// Draw Array
+		virtual void DrawArray(ERenderTopologyEnum primitiveTopology, UInt32 offset, UInt32 count) = 0;
+
+		// Draw Array Instanced
+		virtual void DrawInstanced(ERenderTopologyEnum primitiveTopology, UInt32 offset, UInt32 count, UInt32 instanceCount) = 0;
 
 		// Utility Function to draw texture to screen
 		virtual void DrawTextureToScreen(IGPUTexture* texture, const Vector2& screenPos, const Vector2& screenDimension) = 0;
 
-		// Process Shader Action
-		virtual void ProcessShaderAction(DrawList* drawList, ShaderAction* shaderAction) = 0;
+		// Set Blend State
+		virtual void SetRenderBlendState(const RenderBlendState& renderBlendState) = 0;
+
+		// Set Depth Stencil State
+		virtual void SetRenderDepthStencilState(const RenderDepthStencilState& renderDepthStencilState) = 0;
+
+		// Set Render Rasterizer State
+		virtual void SetRenderRasterizerState(const RenderRasterizerState& renderRasterizerState) = 0;
 
 		// Poll Event : This is used to tell that renderer still active
 		virtual void PollEvent() = 0;
@@ -75,21 +83,6 @@ namespace ZE
 
 		// Multithread: check RenderThreadOwnership
 		virtual bool HasRenderThreadOwnership() = 0;
-
-		// Enable Renderer feature. See RendererFeature
-		virtual void EnableFeature(UInt32 feature) = 0;
-
-		// Disable Renderer Feature. See RendererFeature
-		virtual void DisableFeature(UInt32 feature) = 0;
-
-		// Reset feature to default. See RendererFeature
-		virtual void ResetFeature(UInt32 feature) = 0;
-
-		// Process ShaderFeature
-		virtual void ProcessShaderFeature(ShaderFeature& shaderFeature) = 0;
-
-		// Check if feature enabled. See RendererFeature
-		virtual bool IsFeatureEnabled(UInt32 feature) { return false; };
 	
 		// Is renderer closed
 		virtual bool IsClose() { return false; };

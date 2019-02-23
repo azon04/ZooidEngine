@@ -30,7 +30,7 @@ namespace ZE
 			m_dataCount = _indexBuffer->getDataCount();
 			m_buffers.push_back(_indexBuffer);
 		}
-		m_bUsingIndexBuffer = _indexBuffer != nullptr;
+		m_indexBuffer = _indexBuffer;
 
 
 		glBindVertexArray(0);
@@ -57,13 +57,15 @@ namespace ZE
 			m_buffers.push_back(vertexBuffer);
 		}
 
-		m_bUsingIndexBuffer = _indexBufferCount > 0;
+
 		for (int i = 0; i < _indexBufferCount; i++)
 		{
 			GLBufferData* indexBuffer = static_cast<GLBufferData*>(_indexBuffers[i]);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer->getBBO());
 			m_buffers.push_back(indexBuffer);
 		}
+
+		m_indexBuffer = _indexBufferCount > 0 ? m_buffers[0] : nullptr;
 
 		glBindVertexArray(0);
 	}
@@ -84,6 +86,11 @@ namespace ZE
 		GLBufferData* indexGLBuffer = static_cast<GLBufferData*>(_indexBuffer);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexGLBuffer->getBBO());
 		glBindVertexArray(0);
+
+		if (!m_indexBuffer)
+		{
+			m_indexBuffer = indexGLBuffer;
+		}
 	}
 
 	void GLBufferArray::AddComputeBuffer(IGPUBufferData* _computeBuffer)

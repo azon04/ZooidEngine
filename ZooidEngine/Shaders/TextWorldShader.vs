@@ -3,7 +3,7 @@
 * by: Ahmad Fauzan Umar
 ***/
 
-#version 330 core
+#version 430 core
 layout (location = 0) in vec4 PosTexCoord; // contain vec2 position and vec2 texture coordinate
 
 out vec2 vsTexCoord;

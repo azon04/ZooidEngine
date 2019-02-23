@@ -3,7 +3,7 @@
 * by Ahmad Fauzan
 ***/
 
-#version 330
+#version 430
 layout (location = 0) in vec3 Pos;
 layout (location = 1) in vec3 Noarmal; // This isn't used
 layout (location = 2) in vec2 TexCoord; // This isn't used

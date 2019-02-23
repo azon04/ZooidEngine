@@ -7,40 +7,20 @@ namespace ZE
 
 	void DrawList::Reset()
 	{
-
-		for (UInt32 i = 0; i < m_staticShadowObjSize; i++)
-		{
-			m_staticShadowObjList[i].reset();
-		}
-
-		for (UInt32 i = 0; i < m_dynamicShadowObjSize; i++)
-		{
-			m_dynamicShadowObjList[i].reset();
-		}
-
-		for (UInt32 i = 0; i < m_size; i++)
-		{
-			m_drawList[i].reset();
-		}
-
-		for (UInt32 i = 0; i < m_secondPassSize; i++)
-		{
-			m_secondPassDrawList[i].reset();
-		}
-
-		m_staticShadowObjSize = 0;
-		m_dynamicShadowObjSize = 0;
-		m_size = 0;
-		m_secondPassSize = 0;
 		m_lightShadowSize = 0;
-		m_shadowMapSize = 0;
+
+		m_meshRenderGatherer.reset();
+		m_skinMeshRenderGatherer.reset();
+		m_transculentRenderGatherer.reset();
+		m_textSceneRenderGatherer.reset();
+		m_textScreenRenderGatherer.reset();
 	}
 
 	void DrawList::Setup()
 	{
 		BufferManager* pBufferManager = BufferManager::getInstance();
-		m_mainConstantBuffer = pBufferManager->createConstantBuffer(&m_shaderData, sizeof(ShaderData));
-		m_lightConstantBuffer = pBufferManager->createConstantBuffer(&m_lightData, sizeof(LightData));
+		m_mainConstantBuffer = pBufferManager->createConstantBuffer(&m_shaderData, sizeof(ShaderData), CONSTANT_BUFFER_SHADER_DATA_INDEX);
+		m_lightConstantBuffer = pBufferManager->createConstantBuffer(&m_lightData, sizeof(LightData), CONSTANT_BUFFER_LIGHT_DATA_INDEX);
 	}
 
 }

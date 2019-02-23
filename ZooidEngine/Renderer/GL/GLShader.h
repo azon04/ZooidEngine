@@ -26,10 +26,7 @@ namespace ZE
 	class GLShaderChain : public IShaderChain
 	{
 	public:
-		GLShaderChain() : m_GLProgram(0)
-		{
-			m_topology = TOPOLOGY_TRIANGLE;
-		}
+		GLShaderChain() : m_GLProgram(0) {}
 
 		// IShaderChain Implementation
 		virtual void makeChain(IShader* vsShader, IShader* psShader, IShader* gsShader, IShader* csShader) override;

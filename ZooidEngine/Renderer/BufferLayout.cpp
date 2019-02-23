@@ -26,8 +26,6 @@ namespace ZE
 
 	void BufferLayoutManager::InitLayout()
 	{
-		m_bufferLayout.reset(6);
-
 		{
 			// Vertex : { Position, Color }
 			Handle h("Buffer Layout", sizeof(BufferLayout));

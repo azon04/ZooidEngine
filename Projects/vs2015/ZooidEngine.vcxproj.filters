@@ -106,6 +106,12 @@
     <Filter Include="UI">
       <UniqueIdentifier>{ba6769ac-c5c0-48e6-86b8-08b7a69c1f6d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SceneRenderer">
+      <UniqueIdentifier>{7d73edb3-b641-495a-8a3a-918853840f13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SceneRenderer\RenderInfo">
+      <UniqueIdentifier>{c98271fe-2dd0-4aa4-bdbd-7be809cc0bd9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ZooidEngine\ZEngine.h">
@@ -133,9 +139,6 @@
       <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ZooidEngine\Renderer\BufferData.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ZooidEngine\Renderer\ShaderAction.h">
       <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ZooidEngine\Renderer\BufferLayout.h">
@@ -486,6 +489,48 @@
     <ClInclude Include="..\..\ZooidEngine\UI\UIManager.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\Renderer\Structs.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\ForwardRenderPass.h">
+      <Filter>SceneRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderInfo.h">
+      <Filter>SceneRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderPass.h">
+      <Filter>SceneRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\SceneRenderer.h">
+      <Filter>SceneRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\SceneRenderFactory.h">
+      <Filter>SceneRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderInfo\MeshRenderInfo.h">
+      <Filter>SceneRenderer\RenderInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderInfo\SkinMeshRenderInfo.h">
+      <Filter>SceneRenderer\RenderInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderContext.h">
+      <Filter>SceneRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderGatherer.h">
+      <Filter>SceneRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\ShadowRenderer.h">
+      <Filter>SceneRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\TextRenderer.h">
+      <Filter>SceneRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\Common\SingletonClass.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderInfo\TextRenderInfo.h">
+      <Filter>SceneRenderer\RenderInfo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ZooidEngine\MainFunction\Main.cpp">
@@ -504,9 +549,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ZooidEngine\Renderer\DrawList.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ZooidEngine\Renderer\ShaderAction.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ZooidEngine\GameObjectModel\Object.cpp">
@@ -595,9 +637,6 @@
     </ClCompile>
     <ClCompile Include="..\..\ZooidEngine\Scene\DebugCamera.cpp">
       <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ZooidEngine\Renderer\ShaderData.cpp">
-      <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ZooidEngine\Memory\Handle.cpp">
       <Filter>MemoryManagement</Filter>
@@ -784,6 +823,30 @@
     </ClCompile>
     <ClCompile Include="..\..\ZooidEngine\UI\UIManager.cpp">
       <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\ForwardRenderPass.cpp">
+      <Filter>SceneRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\SceneRenderer.cpp">
+      <Filter>SceneRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\SceneRenderFactory.cpp">
+      <Filter>SceneRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderContext.cpp">
+      <Filter>SceneRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderGatherer.cpp">
+      <Filter>SceneRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\ShadowRenderer.cpp">
+      <Filter>SceneRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\TextRenderer.cpp">
+      <Filter>SceneRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\Renderer\ShaderData.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -3,7 +3,7 @@
 * by : Ahmad Fauzan
 ***/
 
-#version 330
+#version 430
 layout (location = 0) in vec3 Pos;
 layout (location = 1) in vec3 Normal;
 layout (location = 2) in vec2 TexCoord;
@@ -23,7 +23,10 @@ layout (std140) uniform shader_data
 
 const int MAX_BONES = 150;
 
-uniform mat4 boneMats[MAX_BONES];
+layout (std140) uniform bone_mats_block
+{ 
+	uniform mat4 boneMats[MAX_BONES];
+};
 
 void main()
 {

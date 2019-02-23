@@ -14,7 +14,7 @@ namespace ZE
 
 	enum PhysicsShape : UInt16
 	{
-		NONE,
+		PHYSICS_SHAPE_NONE,
 		BOX,
 		SPHERE,
 		CAPSULE,

@@ -149,7 +149,7 @@ namespace ZE
 
 		FORCEINLINE T* getPtr(int index)
 		{
-			(T*)((void*)((uintptr_t)m_handle.getObject() + (uintptr_t)(index * sizeof(T))));
+			return (T*)((void*)((uintptr_t)m_handle.getObject() + (uintptr_t)(index * sizeof(T))));
 		}
 
 		FORCEINLINE T* data() const 
@@ -175,6 +175,31 @@ namespace ZE
 			m_length++;
 
 			(*this)[m_length - 1] = item;
+		}
+
+		void* allocateItem()
+		{
+			if (m_length + 1 > m_capacity)
+			{
+				ZASSERT(resizable, "TRY TO RESIZE AN ARRAY BUT IT'S NOT RESIZABLE");
+				if (resizable && m_capacity == 0)
+				{
+					reset(1);
+				}
+				else
+				{
+					resize(m_capacity * 2);
+				}
+			}
+
+			m_length++;
+
+			return getPtr(m_length - 1);
+		}
+
+		T* addItem()
+		{
+			return (T*)allocateItem();
 		}
 
 		FORCEINLINE T& pop()

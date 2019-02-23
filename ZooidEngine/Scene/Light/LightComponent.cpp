@@ -7,6 +7,7 @@
 #include "Renderer/DrawList.h"
 #include "Renderer/RenderZooid.h"
 #include "Renderer/IGPUFrameBuffer.h"
+#include "Renderer/IGPUTexture.h"
 #include "Renderer/DebugRenderer.h"
 
 #include "Math/MathUtil.h"

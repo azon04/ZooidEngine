@@ -63,10 +63,7 @@ class IShaderChain
 	friend class ShaderManager;
 
 public:
-	IShaderChain()
-	{
-		m_topology = TOPOLOGY_TRIANGLE;
-	}
+	IShaderChain() {}
 	virtual ~IShaderChain();
 	
 	// make shader chain from vsShader, psShader, geometry shader, and compute shader
@@ -106,12 +103,9 @@ public:
 
 	// Bind constant buffer to shader chain
 	virtual void bindConstantBuffer(const char* _blockName, IGPUBufferData* _constantBuffer) = 0;
-	
-	FORCEINLINE ERenderTopologyEnum getRenderTopology() const { return m_topology; }
 
 protected:
 	BufferLayout* m_layout;
-	ERenderTopologyEnum m_topology;
 };
 };
 

@@ -174,15 +174,15 @@ namespace ZE
 		return GPUBuffer;
 	}
 
-	ZE::IGPUBufferData* BufferManager::createConstantBufferFromBuffer(BufferData* _bufferData)
+	ZE::IGPUBufferData* BufferManager::createConstantBufferFromBuffer(BufferData* _bufferData, UInt32 bindingIndex)
 	{
 		IGPUBufferData* bufferData = createGPUBufferFromBuffer(_bufferData, true);
-		bufferData->m_bindingIndex = m_constantGPUBuffer.length();
+		bufferData->m_bindingIndex = bindingIndex;
 		m_constantGPUBuffer.push_back(bufferData);
 		return bufferData;
 	}
 
-	ZE::IGPUBufferData* BufferManager::createConstantBuffer(void* data, size_t size)
+	ZE::IGPUBufferData* BufferManager::createConstantBuffer(void* data, size_t size, UInt32 bindingIndex)
 	{
 		Handle hBufferData("BasisBufferData", sizeof(BufferData));
 		BufferData* bufferData = new(hBufferData) BufferData(EBufferType::UNIFORM_BUFFER);
@@ -196,7 +196,7 @@ namespace ZE
 		{
 			ScopedRenderThreadOwnership renderLock(m_gameContext->getRenderer());
 
-			res = createConstantBufferFromBuffer(bufferData);
+			res = createConstantBufferFromBuffer(bufferData, bindingIndex);
 		}
 		return res;
 	}

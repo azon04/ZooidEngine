@@ -4,7 +4,7 @@
 * by: Ahmad Fauzan
 ***/
 
-#version 330
+#version 430
 
 struct Material
 {

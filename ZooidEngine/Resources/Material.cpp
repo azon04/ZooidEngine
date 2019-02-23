@@ -1,13 +1,16 @@
 #include "Material.h"
 #include "Utils/String.h"
 
+#include "Renderer/IShader.h"
+#include "Renderer/IGPUTexture.h"
+
 #include <stdio.h>
 
 namespace ZE
 {
 	IMPLEMENT_CLASS_0(Material);
 
-	void Material::Bind(ShaderAction& shaderAction)
+	void Material::Bind(IShaderChain* shaderChain)
 	{
 		int iDiffuse = 0;
 		int iSpecular = 0;
@@ -29,16 +32,17 @@ namespace ZE
 			default:
 				break;
 			}
-			shaderAction.setShaderTextureVar(varName.c_str(), matTexture.texture, i);
+			shaderChain->setTexture(varName.c_str(), matTexture.texture, i);
+			matTexture.texture->bind();
 		}
 
-		shaderAction.setShaderFloatVar("material.diffuseMapBound", iDiffuse > 0 ? 1.0f : 0.0f);
-		shaderAction.setShaderFloatVar("material.specularMapBound", iSpecular > 0 ? 1.0f : 0.0f);
+		shaderChain->setFloat("material.diffuseMapBound", iDiffuse > 0 ? 1.0f : 0.0f);
+		shaderChain->setFloat("material.specularMapBound", iSpecular > 0 ? 1.0f : 0.0f);
 
-		shaderAction.setShaderFloatVar("material.shininess", m_shininess);
-		shaderAction.setShaderVec3Var("material.Ka", m_Ka);
-		shaderAction.setShaderVec3Var("material.Kd", m_Kd);
-		shaderAction.setShaderVec3Var("material.Ks", m_Ks);
+		shaderChain->setFloat("material.shininess", m_shininess);
+		shaderChain->setVec3("material.Ka", m_Ka);
+		shaderChain->setVec3("material.Kd", m_Kd);
+		shaderChain->setVec3("material.Ks", m_Ks);
 	}
 
 }

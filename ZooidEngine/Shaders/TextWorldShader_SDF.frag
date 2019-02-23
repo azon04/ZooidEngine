@@ -3,7 +3,7 @@
 * by: Ahmad Fauzan Umar
 ***/
 
-#version 330 core
+#version 430 core
 
 out vec4 fColor;
 in vec2 vsTexCoord;

@@ -13,7 +13,6 @@
 #include "Renderer/IGPUBufferData.h"
 #include "Renderer/BufferData.h"
 #include "Renderer/BufferLayout.h"
-#include "Renderer/ShaderAction.h"
 
 #include "ResourceManagers/ShaderManager.h"
 #include "ResourceManagers/BufferManager.h"
@@ -189,21 +188,19 @@ namespace ZE
 		GameContext* gameContext = GetGameContext();
 		IRenderer* renderer = gameContext->getRenderer();
 
-		// Enable Depth Test
-		renderer->DisableFeature(RendererFeature::DEPTH_TEST);
+		// Disable Depth Test
+
+		renderer->SetRenderDepthStencilState(TRenderDepthStencilState< 
+			false,
+			false,
+			ERendererCompareFunc::ALWAYS,
+			ERendererCompareFunc::ALWAYS,
+			0,
+			0,
+			0>::GetStatic());
 		
 		// Enable Blend
-		ShaderFeature shaderFeature;
-		shaderFeature.m_bFeatureEnabled = true;
-		shaderFeature.m_rendererFeature = RendererFeature::BLEND;
-		ShaderFeatureVar featureVar;
-		featureVar.Uint_value = ERendererBlendFactor::SRC_ALPHA;
-		ShaderFeatureVar featureVar2;
-		featureVar2.Uint_value = ERendererBlendFactor::ONE_MINUS_SRC_ALPHA;
-		shaderFeature.m_shaderFeatureVar.push_back(featureVar);
-		shaderFeature.m_shaderFeatureVar.push_back(featureVar2);
-
-		renderer->ProcessShaderFeature(shaderFeature);
+		renderer->SetRenderBlendState(TRenderBlendState<true, ERendererBlendFactor::SRC_ALPHA, ERendererBlendFactor::ONE_MINUS_SRC_ALPHA, 0>::GetStatic());
 		
 		for (int i = 0; i < m_drawList->itemCount(); i++)
 		{
@@ -212,10 +209,8 @@ namespace ZE
 		}
 
 		// Reset Renderer Feature
-		renderer->DisableFeature(RendererFeature::BLEND);
-		renderer->EnableFeature(RendererFeature::DEPTH_TEST);
-		renderer->ResetFeature(RendererFeature::BLEND);
-		renderer->ResetFeature(RendererFeature::DEPTH_TEST);
+		renderer->SetRenderBlendState(DefaultRenderBlendState::GetStatic());
+		renderer->SetRenderDepthStencilState(DefaultDepthStencilState::GetStatic());
 	}
 
 	void ZE_UIRenderer::Destroy()
@@ -345,12 +340,12 @@ namespace ZE
 		if (isUsingRect)
 		{
 			// Draw Instance
-			mainRenderer->DrawBufferArrayInstanced(shader, bufferArray, 6, 0, drawItem->getInstances().size());
+			mainRenderer->DrawBufferArrayInstanced(ERenderTopologyEnum::TOPOLOGY_TRIANGLE, bufferArray, 6, 0, drawItem->getInstances().size());
 		}
 		else
 		{
 			// Draw Vertex
-			mainRenderer->DrawBufferArray(shader, bufferArray, drawItem->getVertices().length());
+			mainRenderer->DrawBufferArray(ERenderTopologyEnum::TOPOLOGY_TRIANGLE, bufferArray, drawItem->getVertices().length());
 		}
 
 		shader->unbind();

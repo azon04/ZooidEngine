@@ -9,7 +9,6 @@
 #include "Events/Events.h"
 
 #include "Renderer/IRenderer.h"
-#include "Renderer/ShaderAction.h"
 #include "ZEGameContext.h"
 #include "Renderer/DrawList.h"
 #include "ResourceManagers/ShaderManager.h"
@@ -84,14 +83,13 @@ namespace ZE
 	{
 		if (m_currentIndex > 0)
 		{
-			ShaderAction& shaderAction = m_gameContext->getDrawList()->getNextShaderAction();
+			MeshRenderInfo* renderInfo = m_gameContext->getDrawList()->m_meshRenderGatherer.nextRenderInfo();
+			renderInfo->m_shaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_3D_DEFAULT_COLOR_LINE);
+			renderInfo->m_gpuBufferArray = m_lineBufferArray;
+			renderInfo->m_renderTopology = ERenderTopologyEnum::TOPOLOGY_LINE;
+			renderInfo->drawCount = m_currentIndex;
+			renderInfo->m_worldTransform = Matrix4x4();
 
-			shaderAction.setShaderAndBuffer(ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_3D_DEFAULT_COLOR_LINE), m_lineBufferArray);
-			shaderAction.setVertexSize(m_currentIndex);
-
-			shaderAction.setShaderMatVar("modelMat", Matrix4x4());
-			shaderAction.setConstantsBlockBuffer("shader_data", m_gameContext->getDrawList()->m_mainConstantBuffer);
-			
 			// Update Line data
 			m_lineBufferData->SetData(&s_instance->m_lineBuffers[0], sizeof(DebugPointStruct), s_instance->m_lineBuffers.size());
 			
@@ -99,6 +97,7 @@ namespace ZE
 				ScopedRenderThreadOwnership renderLock(m_gameContext->getRenderer());
 				m_lineGPUBufferData->refresh();
 			}
+
 		}
 
 		while (m_currentTextIndex < m_textComponents.size())

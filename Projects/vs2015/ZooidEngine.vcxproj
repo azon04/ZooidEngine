@@ -182,6 +182,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClInclude Include="..\..\ZooidEngine\Animation\AnimationSM.h" />
     <ClInclude Include="..\..\ZooidEngine\Animation\Skeleton.h" />
     <ClInclude Include="..\..\ZooidEngine\Common\GlobalRegistry.h" />
+    <ClInclude Include="..\..\ZooidEngine\Common\SingletonClass.h" />
     <ClInclude Include="..\..\ZooidEngine\Events\EventDispatcher.h" />
     <ClInclude Include="..\..\ZooidEngine\Events\Events.h" />
     <ClInclude Include="..\..\ZooidEngine\Events\InputEvents.h" />
@@ -244,6 +245,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClInclude Include="..\..\ZooidEngine\Renderer\IGPUFrameBuffer.h" />
     <ClInclude Include="..\..\ZooidEngine\Renderer\IGPURenderBuffer.h" />
     <ClInclude Include="..\..\ZooidEngine\Renderer\RenderZooid.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\Structs.h" />
     <ClInclude Include="..\..\ZooidEngine\ResourceManagers\AnimationManager.h" />
     <ClInclude Include="..\..\ZooidEngine\ResourceManagers\BufferManager.h" />
     <ClInclude Include="..\..\ZooidEngine\Renderer\DrawList.h" />
@@ -252,7 +254,6 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClInclude Include="..\..\ZooidEngine\Renderer\IGPUTexture.h" />
     <ClInclude Include="..\..\ZooidEngine\Renderer\IRenderer.h" />
     <ClInclude Include="..\..\ZooidEngine\Renderer\IShader.h" />
-    <ClInclude Include="..\..\ZooidEngine\Renderer\ShaderAction.h" />
     <ClInclude Include="..\..\ZooidEngine\Renderer\ShaderData.h" />
     <ClInclude Include="..\..\ZooidEngine\ResourceManagers\FontManager.h" />
     <ClInclude Include="..\..\ZooidEngine\ResourceManagers\MaterialManager.h" />
@@ -267,6 +268,18 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClInclude Include="..\..\ZooidEngine\Resources\Mesh.h" />
     <ClInclude Include="..\..\ZooidEngine\Resources\TextMesh.h" />
     <ClInclude Include="..\..\ZooidEngine\Resources\Texture.h" />
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\ForwardRenderPass.h" />
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderContext.h" />
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderGatherer.h" />
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderInfo.h" />
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderInfo\MeshRenderInfo.h" />
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderInfo\SkinMeshRenderInfo.h" />
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderInfo\TextRenderInfo.h" />
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderPass.h" />
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\SceneRenderer.h" />
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\SceneRenderFactory.h" />
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\ShadowRenderer.h" />
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\TextRenderer.h" />
     <ClInclude Include="..\..\ZooidEngine\Scene\Actor.h" />
     <ClInclude Include="..\..\ZooidEngine\Scene\CameraComponent.h" />
     <ClInclude Include="..\..\ZooidEngine\Scene\CameraManager.h" />
@@ -357,6 +370,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClCompile Include="..\..\ZooidEngine\Renderer\IGPUFrameBuffer.cpp" />
     <ClCompile Include="..\..\ZooidEngine\Renderer\IGPURenderBuffer.cpp" />
     <ClCompile Include="..\..\ZooidEngine\Renderer\RenderZooid.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Renderer\ShaderData.cpp" />
     <ClCompile Include="..\..\ZooidEngine\ResourceManagers\AnimationManager.cpp" />
     <ClCompile Include="..\..\ZooidEngine\ResourceManagers\BufferManager.cpp" />
     <ClCompile Include="..\..\ZooidEngine\Renderer\DrawList.cpp" />
@@ -364,8 +378,6 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClCompile Include="..\..\ZooidEngine\Renderer\IGPUBufferData.cpp" />
     <ClCompile Include="..\..\ZooidEngine\Renderer\IGPUTexture.cpp" />
     <ClCompile Include="..\..\ZooidEngine\Renderer\IShader.cpp" />
-    <ClCompile Include="..\..\ZooidEngine\Renderer\ShaderAction.cpp" />
-    <ClCompile Include="..\..\ZooidEngine\Renderer\ShaderData.cpp" />
     <ClCompile Include="..\..\ZooidEngine\ResourceManagers\FontManager.cpp" />
     <ClCompile Include="..\..\ZooidEngine\ResourceManagers\MaterialManager.cpp" />
     <ClCompile Include="..\..\ZooidEngine\ResourceManagers\MeshManager.cpp" />
@@ -378,6 +390,13 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClCompile Include="..\..\ZooidEngine\Resources\Mesh.cpp" />
     <ClCompile Include="..\..\ZooidEngine\Resources\TextMesh.cpp" />
     <ClCompile Include="..\..\ZooidEngine\Resources\Texture.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\ForwardRenderPass.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderContext.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderGatherer.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\SceneRenderer.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\SceneRenderFactory.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\ShadowRenderer.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\TextRenderer.cpp" />
     <ClCompile Include="..\..\ZooidEngine\Scene\Actor.cpp" />
     <ClCompile Include="..\..\ZooidEngine\Scene\CameraComponent.cpp" />
     <ClCompile Include="..\..\ZooidEngine\Scene\CameraManager.cpp" />
