@@ -372,6 +372,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClCompile Include="..\..\ZooidEngine\Renderer\GL\GLTexture.cpp" />
     <ClCompile Include="..\..\ZooidEngine\Renderer\IGPUFrameBuffer.cpp" />
     <ClCompile Include="..\..\ZooidEngine\Renderer\IGPURenderBuffer.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Renderer\IGPUStates.cpp" />
     <ClCompile Include="..\..\ZooidEngine\Renderer\RenderZooid.cpp" />
     <ClCompile Include="..\..\ZooidEngine\Renderer\ShaderData.cpp" />
     <ClCompile Include="..\..\ZooidEngine\ResourceManagers\AnimationManager.cpp" />

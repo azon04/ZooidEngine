@@ -32,6 +32,7 @@
 
 #include "Renderer/DebugRenderer.h"
 #include "Renderer/IGPUFrameBuffer.h"
+#include "Renderer/IGPUStates.h"
 #include "Renderer/ShaderData.h"
 
 #include "scene/Light/LightComponent.h"
@@ -208,6 +209,7 @@ namespace ZE
 		}
 #endif
 
+		IGPUState::ClearGPUStates();
 		UIManager::Destroy();
 
 		CameraManager::Destroy();

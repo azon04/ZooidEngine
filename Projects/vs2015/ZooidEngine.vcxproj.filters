@@ -857,6 +857,9 @@
     <ClCompile Include="..\..\ZooidEngine\Renderer\GL\GLStates.cpp">
       <Filter>Renderer\GL</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\Renderer\IGPUStates.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\ZooidEngine\Shaders\TestGLVertexShader.vs">

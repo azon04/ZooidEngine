@@ -4,11 +4,26 @@
 #include "Structs.h"
 #include "ZEGameContext.h"
 #include "RenderZooid.h"
+#include "Utils/Array.h"
 
 namespace ZE
 {
+	class IGPUState
+	{
+	public:
+		~IGPUState() { release(); }
+		virtual void release() { }
+
+		static void ClearGPUStates();
+
+		static void AddGPUState(IGPUState* state);
+
+	protected:
+		static Array<IGPUState*> s_gpuStateCollections;
+	};
+
 	#define CREATE_GPU_STATE_CLASS(GPUClassName, StateStructName) \
-		class GPUClassName \
+		class GPUClassName : public IGPUState \
 		{  \
 		public: \
 			virtual void setup(const StateStructName& state) = 0; \
@@ -39,6 +54,7 @@ namespace ZE
 			if (!s_gpuState)
 			{
 				s_gpuState = gGameContext->getRenderZooid()->CreateRasterizerState(GetStatic()).getObject<IGPURasterizerState>();
+				IGPUState::AddGPUState(s_gpuState);
 			}
 
 			return s_gpuState;
@@ -88,6 +104,7 @@ namespace ZE
 			if (!s_gpuState)
 			{
 				s_gpuState = gGameContext->getRenderZooid()->CreateDepthStencilState(GetStatic()).getObject<IGPUDepthStencilState>();
+				IGPUState::AddGPUState(s_gpuState);
 			}
 
 			return s_gpuState;
@@ -131,6 +148,7 @@ namespace ZE
 			if (!s_gpuState)
 			{
 				s_gpuState = gGameContext->getRenderZooid()->CreateBlendState(GetStatic()).getObject<IGPUBlendState>();
+				IGPUState::AddGPUState(s_gpuState);
 			}
 
 			return s_gpuState;
