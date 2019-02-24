@@ -14,13 +14,13 @@
 #include "Renderer/IGPUBufferArray.h"
 #include "Renderer/IGPUTexture.h"
 #include "Renderer/IShader.h"
+#include "Renderer/IGPUStates.h"
 
 namespace ZE
 {
 
 	void ShadowDepthRenderer::setupLightData(LightStruct* lightData, DrawList* drawList)
 	{
-		// TODO Set appropriate shader data
 		Matrix4x4 view;
 		Matrix4x4 proj;
 
@@ -80,6 +80,12 @@ namespace ZE
 
 		m_currentFrameBuffer->bind();
 		gGameContext->getRenderer()->Clear(EClearBit::DEPTH_BUFFER_BIT);
+
+		// Set Face Culling Front face to fix peter panning
+		gGameContext->getRenderer()->SetRenderRasterizerState(TRenderRasterizerState<
+			EFaceFrontOrder::CCW,
+			ECullFace::FRONT,
+			ERenderFillMode::MODE_FILL>::GetGPUState());
 	}
 
 	void ShadowDepthRenderer::render(RenderInfo* renderInfos, UInt32 renderInfoCount)
@@ -113,12 +119,6 @@ namespace ZE
 				currentMesh.m_skinJointData->bind();
 				shaderChain->bindConstantBuffer("bone_mats_block", currentMesh.m_skinJointData);
 
-				// Set Face Culling Front face to fix peter panning
-				gGameContext->getRenderer()->SetRenderRasterizerState(TRenderRasterizerState<
-					EFaceFrontOrder::CCW,
-					ECullFace::FRONT,
-					ERenderFillMode::MODE_FILL>::GetStatic());
-
 				currentMesh.m_gpuBufferArray->bind();
 
 				gGameContext->getRenderer()->DrawArray(currentMesh.m_renderTopology, 0, currentMesh.drawCount);
@@ -143,12 +143,6 @@ namespace ZE
 				gGameContext->getDrawList()->m_mainConstantBuffer->bindAndRefresh();
 				shaderChain->bindConstantBuffer("shader_data", gGameContext->getDrawList()->m_mainConstantBuffer);
 
-				// Set Face Culling Front face to fix peter panning
-				gGameContext->getRenderer()->SetRenderRasterizerState(TRenderRasterizerState<
-					EFaceFrontOrder::CCW,
-					ECullFace::FRONT,
-					ERenderFillMode::MODE_FILL>::GetStatic());
-
 				currentMesh.m_gpuBufferArray->bind();
 
 				gGameContext->getRenderer()->DrawArray(currentMesh.m_renderTopology, 0, currentMesh.drawCount);
@@ -163,6 +157,8 @@ namespace ZE
 	{
 		if (!m_currentFrameBuffer) { return; }
 		m_currentFrameBuffer->unbind();
+
+		gGameContext->getRenderer()->SetRenderRasterizerState(DefaultRasterizerState::GetGPUState());
 	}
 
 	void ShadowDepthRenderer::Setup(LightShadowMapData* shadowMapData, LightStruct* lightData, DrawList* drawList)

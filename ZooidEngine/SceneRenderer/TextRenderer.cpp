@@ -7,6 +7,7 @@
 #include "Renderer/IGPUBufferData.h"
 #include "Renderer/IGPUTexture.h"
 #include "Renderer/IGPUBufferArray.h"
+#include "Renderer/IGPUStates.h"
 #include "ZEGameContext.h"
 
 namespace ZE
@@ -16,8 +17,8 @@ namespace ZE
 	{
 		gGameContext->getRenderer()->SetRenderRasterizerState(TRenderRasterizerState<EFaceFrontOrder::CCW,
 			ECullFace::CULL_NONE,
-			ERenderFillMode::MODE_FILL>::GetStatic());
-		gGameContext->getRenderer()->SetRenderBlendState(TRenderBlendState<true, ERendererBlendFactor::SRC_ALPHA, ERendererBlendFactor::ONE_MINUS_SRC_ALPHA, 0>::GetStatic());
+			ERenderFillMode::MODE_FILL>::GetGPUState());
+		gGameContext->getRenderer()->SetRenderBlendState(TRenderBlendState<true, ERendererBlendFactor::SRC_ALPHA, ERendererBlendFactor::ONE_MINUS_SRC_ALPHA, 0>::GetGPUState());
 	}
 
 	void TextSceneRenderer::render(RenderInfo* renderInfos, UInt32 renderInfoCount)
@@ -57,8 +58,8 @@ namespace ZE
 
 	void TextSceneRenderer::endRender()
 	{
-		gGameContext->getRenderer()->SetRenderBlendState(DefaultRenderBlendState::GetStatic());
-		gGameContext->getRenderer()->SetRenderRasterizerState(DefaultRasterizerState::GetStatic());
+		gGameContext->getRenderer()->SetRenderBlendState(DefaultRenderBlendState::GetGPUState());
+		gGameContext->getRenderer()->SetRenderRasterizerState(DefaultRasterizerState::GetGPUState());
 	}
 
 	void TextSceneRenderer::Render(RenderInfo* renderInfos, UInt32 renderInfoCount)
@@ -73,7 +74,7 @@ namespace ZE
 
 	void TextScreenRenderer::beginRender()
 	{
-		gGameContext->getRenderer()->SetRenderBlendState(TRenderBlendState<true, ERendererBlendFactor::SRC_ALPHA, ERendererBlendFactor::ONE_MINUS_SRC_ALPHA, 0>::GetStatic());
+		gGameContext->getRenderer()->SetRenderBlendState(TRenderBlendState<true, ERendererBlendFactor::SRC_ALPHA, ERendererBlendFactor::ONE_MINUS_SRC_ALPHA, 0>::GetGPUState());
 	}
 
 	void TextScreenRenderer::render(RenderInfo* renderInfos, UInt32 renderInfoCount)
@@ -107,7 +108,7 @@ namespace ZE
 
 	void TextScreenRenderer::endRender()
 	{
-		gGameContext->getRenderer()->SetRenderBlendState(DefaultRenderBlendState::GetStatic());
+		gGameContext->getRenderer()->SetRenderBlendState(DefaultRenderBlendState::GetGPUState());
 	}
 
 	void TextScreenRenderer::Render(RenderInfo* renderInfos, UInt32 renderInfoCount)

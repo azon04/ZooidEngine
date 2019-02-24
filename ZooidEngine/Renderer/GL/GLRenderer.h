@@ -40,9 +40,9 @@ public:
 	virtual void DrawInstanced(ERenderTopologyEnum primitiveTopology, UInt32 offset, UInt32 count, UInt32 instanceCount) override;
 	virtual void DrawTextureToScreen(IGPUTexture* texture, const Vector2& screenPos, const Vector2& screenDimension) override;
 
-	virtual void SetRenderBlendState(const RenderBlendState& renderBlendState) override;
-	virtual void SetRenderDepthStencilState(const RenderDepthStencilState& renderDepthStencilState) override;
-	virtual void SetRenderRasterizerState(const RenderRasterizerState& renderRasterizerState) override;
+	virtual void SetRenderBlendState(IGPUBlendState* renderBlendState) override;
+	virtual void SetRenderDepthStencilState(IGPUDepthStencilState* renderDepthStencilState) override;
+	virtual void SetRenderRasterizerState(IGPURasterizerState* renderRasterizerState) override;
 
 	virtual bool IsClose() override;
 

@@ -4,6 +4,7 @@
 #include "Zooid/BaseZooid.h"
 #include "Utils/Macros.h"
 #include "Memory/Handle.h"
+#include "Structs.h"
 
 namespace ZE
 {
@@ -23,6 +24,9 @@ namespace ZE
 		virtual Handle CreateShaderChain() = 0;
 		virtual Handle CreateRenderBuffer() = 0;
 		virtual Handle CreateFrameBuffer() = 0;
+		virtual Handle CreateBlendState(const RenderBlendState& renderBlendState) = 0;
+		virtual Handle CreateDepthStencilState(const RenderDepthStencilState& renderDepthStencilState) = 0;
+		virtual Handle CreateRasterizerState(const RenderRasterizerState& renderRasterizerState) = 0;
 
 		FORCEINLINE IRenderer* GetRenderer() const { return m_renderer; }
 

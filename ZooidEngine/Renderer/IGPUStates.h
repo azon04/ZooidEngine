@@ -1,0 +1,153 @@
+#ifndef __ZE_GPU_STATES_H__
+#define __ZE_GPU_STATES_H__
+
+#include "Structs.h"
+#include "ZEGameContext.h"
+#include "RenderZooid.h"
+
+namespace ZE
+{
+	#define CREATE_GPU_STATE_CLASS(GPUClassName, StateStructName) \
+		class GPUClassName \
+		{  \
+		public: \
+			virtual void setup(const StateStructName& state) = 0; \
+		};
+
+	CREATE_GPU_STATE_CLASS(IGPUBlendState, RenderBlendState)
+	CREATE_GPU_STATE_CLASS(IGPUDepthStencilState, RenderDepthStencilState)
+	CREATE_GPU_STATE_CLASS(IGPURasterizerState, RenderRasterizerState)
+	
+	template<EFaceFrontOrder frontFace, ECullFace cullMode, ERenderFillMode fillMode>
+	class TRenderRasterizerState
+	{
+	public:
+		static RenderRasterizerState& GetStatic()
+		{
+			static RenderRasterizerState rasterizerState
+			{
+				frontFace,
+				cullMode,
+				fillMode
+			};
+
+			return rasterizerState;
+		}
+
+		static IGPURasterizerState* GetGPUState()
+		{
+			if (!s_gpuState)
+			{
+				s_gpuState = gGameContext->getRenderZooid()->CreateRasterizerState(GetStatic()).getObject<IGPURasterizerState>();
+			}
+
+			return s_gpuState;
+		};
+
+	private:
+		static IGPURasterizerState* s_gpuState;
+	};
+
+	template<EFaceFrontOrder frontFace, ECullFace cullMode, ERenderFillMode fillMode>
+	IGPURasterizerState* ZE::TRenderRasterizerState<frontFace, cullMode, fillMode>::s_gpuState = nullptr;
+
+	template<bool depthEnabled,
+		bool stencilEnabled,
+		ERendererCompareFunc depthTestFunc,
+		ERendererCompareFunc stencilTestFunc,
+		UInt32 stencilRefMask,
+		UInt32 stencilMask,
+		UInt32 stencilWriteMask,
+		ERenderDepthStencilOps stencilFail = DS_OP_KEEP,
+		ERenderDepthStencilOps depthFail = DS_OP_KEEP,
+		ERenderDepthStencilOps depthStencilPass = DS_OP_REPLACE>
+		class TRenderDepthStencilState
+	{
+	public:
+		static RenderDepthStencilState& GetStatic()
+		{
+			static RenderDepthStencilState depthStencilState
+			{
+				depthEnabled,
+				stencilEnabled,
+				depthTestFunc,
+				stencilTestFunc,
+				stencilRefMask,
+				stencilMask,
+				stencilWriteMask,
+				stencilFail,
+				depthFail,
+				depthStencilPass
+			};
+
+			return depthStencilState;
+		}
+
+		static IGPUDepthStencilState* GetGPUState()
+		{
+			if (!s_gpuState)
+			{
+				s_gpuState = gGameContext->getRenderZooid()->CreateDepthStencilState(GetStatic()).getObject<IGPUDepthStencilState>();
+			}
+
+			return s_gpuState;
+		};
+
+	private:
+		static IGPUDepthStencilState* s_gpuState;
+	};
+
+	template<bool depthEnabled,
+		bool stencilEnabled,
+		ERendererCompareFunc depthTestFunc,
+		ERendererCompareFunc stencilTestFunc,
+		UInt32 stencilRefMask,
+		UInt32 stencilMask,
+		UInt32 stencilWriteMask,
+		ERenderDepthStencilOps stencilFail /*= DS_OP_KEEP*/,
+		ERenderDepthStencilOps depthFail /*= DS_OP_KEEP*/,
+		ERenderDepthStencilOps depthStencilPass /*= DS_OP_REPLACE*/>
+	IGPUDepthStencilState* ZE::TRenderDepthStencilState<depthEnabled, stencilEnabled, depthTestFunc, stencilTestFunc, stencilRefMask, stencilMask, stencilWriteMask, stencilFail, depthFail, depthStencilPass>::s_gpuState = nullptr;
+
+	template<bool blendEnabled, ERendererBlendFactor sourceBlendFactor = ERendererBlendFactor::ONE, ERendererBlendFactor destBlendFactor = ERendererBlendFactor::ONE, UInt32 AlphaRef = 0 >
+	class TRenderBlendState
+	{
+	public:
+		static RenderBlendState& GetStatic()
+		{
+			static RenderBlendState blendState
+			{
+				blendEnabled,
+				sourceBlendFactor,
+				destBlendFactor,
+				AlphaRef
+			};
+
+			return blendState;
+		}
+
+		static IGPUBlendState* GetGPUState()
+		{
+			if (!s_gpuState)
+			{
+				s_gpuState = gGameContext->getRenderZooid()->CreateBlendState(GetStatic()).getObject<IGPUBlendState>();
+			}
+
+			return s_gpuState;
+		};
+
+	private:
+		static IGPUBlendState* s_gpuState;
+
+	};
+
+	template<bool blendEnabled, ERendererBlendFactor sourceBlendFactor /*= ERendererBlendFactor::ONE*/, ERendererBlendFactor destBlendFactor /*= ERendererBlendFactor::ONE*/, UInt32 AlphaRef /*= 0 */>
+	IGPUBlendState* ZE::TRenderBlendState<blendEnabled, sourceBlendFactor, destBlendFactor, AlphaRef>::s_gpuState = nullptr;
+
+	// Default States
+	typedef TRenderRasterizerState<EFaceFrontOrder::CCW, ECullFace::BACK, ERenderFillMode::MODE_FILL> DefaultRasterizerState;
+	typedef TRenderDepthStencilState<true, false, ERendererCompareFunc::LESS, ERendererCompareFunc::ALWAYS, 1, 0x00, 0xFF> DefaultDepthStencilState;
+	typedef TRenderBlendState<false> DefaultRenderBlendState;
+};
+
+#endif // !__ZE_GPU_STATES_H__

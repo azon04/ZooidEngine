@@ -531,6 +531,12 @@
     <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderInfo\TextRenderInfo.h">
       <Filter>SceneRenderer\RenderInfo</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\Renderer\IGPUStates.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\Renderer\GL\GLStates.h">
+      <Filter>Renderer\GL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ZooidEngine\MainFunction\Main.cpp">
@@ -847,6 +853,9 @@
     </ClCompile>
     <ClCompile Include="..\..\ZooidEngine\Renderer\ShaderData.cpp">
       <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\Renderer\GL\GLStates.cpp">
+      <Filter>Renderer\GL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

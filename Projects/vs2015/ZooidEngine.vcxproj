@@ -241,9 +241,11 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClInclude Include="..\..\ZooidEngine\Renderer\GL\GLRenderer.h" />
     <ClInclude Include="..\..\ZooidEngine\Renderer\GL\GLRenderZooid.h" />
     <ClInclude Include="..\..\ZooidEngine\Renderer\GL\GLShader.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\GL\GLStates.h" />
     <ClInclude Include="..\..\ZooidEngine\Renderer\GL\GLTexture.h" />
     <ClInclude Include="..\..\ZooidEngine\Renderer\IGPUFrameBuffer.h" />
     <ClInclude Include="..\..\ZooidEngine\Renderer\IGPURenderBuffer.h" />
+    <ClInclude Include="..\..\ZooidEngine\Renderer\IGPUStates.h" />
     <ClInclude Include="..\..\ZooidEngine\Renderer\RenderZooid.h" />
     <ClInclude Include="..\..\ZooidEngine\Renderer\Structs.h" />
     <ClInclude Include="..\..\ZooidEngine\ResourceManagers\AnimationManager.h" />
@@ -366,6 +368,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClCompile Include="..\..\ZooidEngine\Renderer\GL\GLRenderer.cpp" />
     <ClCompile Include="..\..\ZooidEngine\Renderer\GL\GLRenderZooid.cpp" />
     <ClCompile Include="..\..\ZooidEngine\Renderer\GL\GLShader.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\Renderer\GL\GLStates.cpp" />
     <ClCompile Include="..\..\ZooidEngine\Renderer\GL\GLTexture.cpp" />
     <ClCompile Include="..\..\ZooidEngine\Renderer\IGPUFrameBuffer.cpp" />
     <ClCompile Include="..\..\ZooidEngine\Renderer\IGPURenderBuffer.cpp" />

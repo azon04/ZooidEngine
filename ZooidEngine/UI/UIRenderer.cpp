@@ -13,6 +13,7 @@
 #include "Renderer/IGPUBufferData.h"
 #include "Renderer/BufferData.h"
 #include "Renderer/BufferLayout.h"
+#include "Renderer/IGPUStates.h"
 
 #include "ResourceManagers/ShaderManager.h"
 #include "ResourceManagers/BufferManager.h"
@@ -197,10 +198,10 @@ namespace ZE
 			ERendererCompareFunc::ALWAYS,
 			0,
 			0,
-			0>::GetStatic());
+			0>::GetGPUState());
 		
 		// Enable Blend
-		renderer->SetRenderBlendState(TRenderBlendState<true, ERendererBlendFactor::SRC_ALPHA, ERendererBlendFactor::ONE_MINUS_SRC_ALPHA, 0>::GetStatic());
+		renderer->SetRenderBlendState(TRenderBlendState<true, ERendererBlendFactor::SRC_ALPHA, ERendererBlendFactor::ONE_MINUS_SRC_ALPHA, 0>::GetGPUState());
 		
 		for (int i = 0; i < m_drawList->itemCount(); i++)
 		{
@@ -209,8 +210,8 @@ namespace ZE
 		}
 
 		// Reset Renderer Feature
-		renderer->SetRenderBlendState(DefaultRenderBlendState::GetStatic());
-		renderer->SetRenderDepthStencilState(DefaultDepthStencilState::GetStatic());
+		renderer->SetRenderBlendState(DefaultRenderBlendState::GetGPUState());
+		renderer->SetRenderDepthStencilState(DefaultDepthStencilState::GetGPUState());
 	}
 
 	void ZE_UIRenderer::Destroy()

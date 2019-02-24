@@ -19,6 +19,9 @@ namespace ZE
 		virtual Handle CreateShaderChain() override;
 		virtual Handle CreateRenderBuffer() override;
 		virtual Handle CreateFrameBuffer() override;
+		virtual Handle CreateBlendState(const RenderBlendState& renderBlendState) override;
+		virtual Handle CreateDepthStencilState(const RenderDepthStencilState& renderDepthStencilState) override;
+		virtual Handle CreateRasterizerState(const RenderRasterizerState& renderRasterizerState) override;
 
 		virtual void Init() override;
 		virtual void Destroy() override;

@@ -6,6 +6,8 @@
 
 #include "Renderer/IGPUTexture.h"
 
+#include "GLStates.h"
+
 #include "ResourceManagers/ShaderManager.h"
 
 #if defined(_WIN32) || defined(_WIN64)
@@ -25,127 +27,6 @@ namespace ZE
 		m_height = HEIGHT;
 
 		s_renderer = this;
-	}
-
-	GLenum getCullFace(ECullFace cullFace)
-	{
-		switch (cullFace)
-		{
-		case ZE::FRONT:
-			return GL_FRONT;
-		case ZE::BACK:
-			return GL_BACK;
-		case ZE::FRONT_AND_BACK:
-			return GL_FRONT_AND_BACK;
-		case ZE::CULL_NONE:
-			return 0;
-		default:
-			return 0;
-		}
-	}
-
-	GLenum getFaceFrontOrder(EFaceFrontOrder faceOrder)
-	{
-		switch (faceOrder)
-		{
-		case ZE::CCW:
-			return GL_CCW;
-		case ZE::CW:
-			return GL_CW;
-		default:
-			ZASSERT(false, "Face Front Order not found!");
-			return GL_CCW;
-		}
-	}
-
-	GLenum getStencilOp(ERenderDepthStencilOps stencilOp)
-	{
-		switch (stencilOp)
-		{
-		case ZE::DS_OP_KEEP:
-			return GL_KEEP;
-		case ZE::DS_OP_ZERO:
-			return GL_ZERO;
-		case ZE::DS_OP_REPLACE:
-			return GL_REPLACE;
-		case ZE::DS_OP_INCR:
-			return GL_INCR;
-		case ZE::DS_OP_INCR_WRAP:
-			return GL_INCR_WRAP;
-		case ZE::DS_OP_DECR:
-			return GL_DECR;
-		case ZE::DS_OP_DECR_WRAP:
-			return GL_DECR_WRAP;
-		case ZE::DS_OP_INVERT:
-			return GL_INVERT;
-		default:
-			ZASSERT(false, "Depth Stencil Ops not found");
-			return GL_KEEP;
-		}
-	}
-
-	GLenum getBlendFactor(ERendererBlendFactor blendFactor)
-	{
-		switch (blendFactor)
-		{
-		case ZE::ZERO:
-			return GL_ZERO;
-		case ZE::ONE:
-			return GL_ONE;
-		case ZE::SRC_COLOR:
-			return GL_SRC_COLOR;
-		case ZE::ONE_MINUS_SRC_COLOR:
-			return GL_ONE_MINUS_SRC_COLOR;
-		case ZE::DST_COLOR:
-			return GL_DST_COLOR;
-		case ZE::ONE_MINUS_DST_COLOR:
-			return GL_ONE_MINUS_DST_COLOR;
-		case ZE::SRC_ALPHA:
-			return GL_SRC_ALPHA;
-		case ZE::ONE_MINUS_SRC_ALPHA:
-			return GL_ONE_MINUS_SRC_ALPHA;
-		case ZE::DST_ALPHA:
-			return GL_DST_ALPHA;
-		case ZE::ONE_MINUS_DST_ALPHA:
-			return GL_ONE_MINUS_DST_ALPHA;
-		case ZE::CONSTANT_COLOR:
-			return GL_CONSTANT_COLOR;
-		case ZE::ONE_MINUS_CONSTANT_COLOR:
-			return GL_ONE_MINUS_CONSTANT_COLOR;
-		case ZE::CONSTANT_ALPHA:
-			return GL_CONSTANT_ALPHA;
-		case ZE::ONE_MINUS_CONSTANT_ALPHA:
-			return GL_ONE_MINUS_CONSTANT_ALPHA;
-		default:
-			ZASSERT(false, "Blend Factor not found!");
-			return 0;
-		}
-	}
-
-	GLenum getCompareFunc(ERendererCompareFunc compareFunc)
-	{
-		switch (compareFunc)
-		{
-		case ZE::NEVER:
-			return GL_NEVER;
-		case ZE::LESS:
-			return GL_LESS;
-		case ZE::LEQUAL:
-			return GL_EQUAL;
-		case ZE::GREATER:
-			return GL_GREATER;
-		case ZE::GEQUAL:
-			return GL_EQUAL;
-		case ZE::EQUAL:
-			return GL_EQUAL;
-		case ZE::NOTEQUAL:
-			return GL_NOTEQUAL;
-		case ZE::ALWAYS:
-			return GL_ALWAYS;
-		default:
-			ZASSERT(false, "Compare function not found!");
-			return GL_ALWAYS;
-		}
 	}
 
 	GLenum getRealFeature(RendererFeature feature)
@@ -211,10 +92,10 @@ namespace ZE
 		glfwSetFramebufferSizeCallback(m_window, FrameBufferSizeCallback);
 
 		// Enable Depth test
-		SetRenderDepthStencilState(DefaultDepthStencilState::GetStatic());		
+		SetRenderDepthStencilState(DefaultDepthStencilState::GetGPUState());		
 
 		// Enable Face Culling
-		SetRenderRasterizerState(DefaultRasterizerState::GetStatic());
+		SetRenderRasterizerState(DefaultRasterizerState::GetGPUState());
 	}
 
 	void GLRenderer::BeginRender()
@@ -331,27 +212,27 @@ namespace ZE
 		shader->unbind();
 	}
 
-	void GLRenderer::SetRenderBlendState(const RenderBlendState& renderBlendState)
+	void GLRenderer::SetRenderBlendState(IGPUBlendState* renderBlendState)
 	{
-		if (renderBlendState.BlendEnabled)
+		GLBlendState* state = static_cast<GLBlendState*>(renderBlendState);
+		if (state->m_blendEnabled)
 		{
 			glEnable(GL_BLEND);
+
+			glBlendFunc(state->m_sourceBlendFactor, state->m_destBlendFactor);
+			glBlendColor(state->m_alphaRef, state->m_alphaRef, state->m_alphaRef, state->m_alphaRef);
 		}
 		else
 		{
 			glDisable(GL_BLEND);
 		}
-
-
-		if (renderBlendState.BlendEnabled)
-		{
-			glBlendFunc(getBlendFactor(renderBlendState.SourceBlendFactor), getBlendFactor(renderBlendState.DestBlendFactor));
-		}
 	}
 
-	void GLRenderer::SetRenderDepthStencilState(const RenderDepthStencilState& renderDepthStencilState)
+	void GLRenderer::SetRenderDepthStencilState(IGPUDepthStencilState* renderDepthStencilState)
 	{
-		if (renderDepthStencilState.DepthEnabled)
+		GLDepthStencilState* state = static_cast<GLDepthStencilState*>(renderDepthStencilState);
+
+		if (state->m_depthEnabled)
 		{
 			glEnable(GL_DEPTH_TEST);
 		}
@@ -360,9 +241,9 @@ namespace ZE
 			glDisable(GL_DEPTH_TEST);
 		}
 
-		glDepthFunc(getCompareFunc(renderDepthStencilState.DepthTestFunc));
+		glDepthFunc(state->m_depthTestFunc);
 
-		if (renderDepthStencilState.StencilEnabled)
+		if (state->m_stencilEnabled)
 		{
 			glEnable(GL_STENCIL_TEST);
 		}
@@ -371,27 +252,30 @@ namespace ZE
 			glDisable(GL_STENCIL_TEST);
 		}
 
-		glStencilFunc(getCompareFunc(renderDepthStencilState.StencilTestFunc), renderDepthStencilState.StencilRefMask, renderDepthStencilState.StencilMask);
-		glStencilMask(renderDepthStencilState.StencilWriteMask);
+		glStencilFunc(state->m_stencilTestFunc, state->m_stencilRefMask, state->m_stencilMask);
+		glStencilMask(state->m_stencilWriteMask);
 
-		glStencilOp(getStencilOp(renderDepthStencilState.StencilFailOp), 
-			getStencilOp(renderDepthStencilState.DepthFailOp), 
-			getStencilOp(renderDepthStencilState.DepthStencilPassOp));
+		glStencilOp(state->m_stencilFailOp, 
+			state->m_depthFailOp, 
+			state->m_depthStencilPassOp);
 	}
 
-	void GLRenderer::SetRenderRasterizerState(const RenderRasterizerState& renderRasterizerState)
+	void GLRenderer::SetRenderRasterizerState(IGPURasterizerState* renderRasterizerState)
 	{
-		glFrontFace(getFaceFrontOrder(renderRasterizerState.Front));
+		GLRasterizerState* state = static_cast<GLRasterizerState*>(renderRasterizerState);
+		glFrontFace(state->m_front);
 
-		if (renderRasterizerState.CullMode == CULL_NONE)
+		if (state->m_cullMode == 0)
 		{
 			glDisable(GL_CULL_FACE);
 		}
 		else
 		{
 			glEnable(GL_CULL_FACE);
-			glCullFace(getCullFace(renderRasterizerState.CullMode));
+			glCullFace(state->m_cullMode);
 		}
+
+		glPolygonMode(GL_FRONT_AND_BACK, state->m_fillMode);
 	}
 
 	bool GLRenderer::IsClose()

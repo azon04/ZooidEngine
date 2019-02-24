@@ -9,6 +9,7 @@
 #include "Resources/Mesh.h"
 #include "Resources/Material.h"
 #include "Renderer/DrawList.h"
+#include "Renderer/IGPUStates.h"
 #include "ShadowRenderer.h"
 
 namespace ZE
@@ -45,13 +46,13 @@ namespace ZE
 			{
 				gGameContext->getRenderer()->SetRenderRasterizerState(TRenderRasterizerState<EFaceFrontOrder::CCW,
 					ECullFace::CULL_NONE,
-					ERenderFillMode::MODE_FILL>::GetStatic());
+					ERenderFillMode::MODE_FILL>::GetGPUState());
 			}
 			else
 			{
 				gGameContext->getRenderer()->SetRenderRasterizerState(TRenderRasterizerState<EFaceFrontOrder::CCW,
 					ECullFace::BACK,
-					ERenderFillMode::MODE_FILL>::GetStatic());
+					ERenderFillMode::MODE_FILL>::GetGPUState());
 			}
 
 			currentMesh.m_gpuBufferArray->bind();
@@ -84,7 +85,10 @@ namespace ZE
 
 	void TransculentSceneRenderer::beginRender()
 	{
-
+		gGameContext->getRenderer()->SetRenderBlendState(TRenderBlendState<true,
+			ERendererBlendFactor::SRC_ALPHA,
+			ERendererBlendFactor::ONE_MINUS_SRC_ALPHA,
+			0>::GetGPUState());
 	}
 
 	void TransculentSceneRenderer::render(RenderInfo* renderInfos, UInt32 renderInfoCount)
@@ -117,19 +121,14 @@ namespace ZE
 			{
 				gGameContext->getRenderer()->SetRenderRasterizerState(TRenderRasterizerState<EFaceFrontOrder::CCW,
 					ECullFace::CULL_NONE,
-					ERenderFillMode::MODE_FILL>::GetStatic());
+					ERenderFillMode::MODE_FILL>::GetGPUState());
 			}
 			else
 			{
 				gGameContext->getRenderer()->SetRenderRasterizerState(TRenderRasterizerState<EFaceFrontOrder::CCW,
 					ECullFace::BACK,
-					ERenderFillMode::MODE_FILL>::GetStatic());
+					ERenderFillMode::MODE_FILL>::GetGPUState());
 			}
-
-			gGameContext->getRenderer()->SetRenderBlendState(TRenderBlendState<true,
-				ERendererBlendFactor::SRC_ALPHA,
-				ERendererBlendFactor::ONE_MINUS_SRC_ALPHA,
-				0>::GetStatic());
 
 			currentMesh.m_gpuBufferArray->bind();
 
@@ -146,10 +145,7 @@ namespace ZE
 
 	void TransculentSceneRenderer::endRender()
 	{
-		gGameContext->getRenderer()->SetRenderBlendState(TRenderBlendState<false,
-			ERendererBlendFactor::SRC_ALPHA,
-			ERendererBlendFactor::ONE_MINUS_SRC_ALPHA,
-			0>::GetStatic());
+		gGameContext->getRenderer()->SetRenderBlendState(DefaultRenderBlendState::GetGPUState());
 	}
 
 	void TransculentSceneRenderer::Render(RenderInfo* renderInfos, UInt32 renderInfoCount)
@@ -252,13 +248,13 @@ namespace ZE
 			{
 				gGameContext->getRenderer()->SetRenderRasterizerState(TRenderRasterizerState<EFaceFrontOrder::CCW,
 					ECullFace::CULL_NONE,
-					ERenderFillMode::MODE_FILL>::GetStatic());
+					ERenderFillMode::MODE_FILL>::GetGPUState());
 			}
 			else
 			{
 				gGameContext->getRenderer()->SetRenderRasterizerState(TRenderRasterizerState<EFaceFrontOrder::CCW,
 					ECullFace::BACK,
-					ERenderFillMode::MODE_FILL>::GetStatic());
+					ERenderFillMode::MODE_FILL>::GetGPUState());
 			}
 
 			currentMesh.m_gpuBufferArray->bind();

@@ -7,6 +7,7 @@
 #include "GLShader.h"
 #include "GLRenderBuffer.h"
 #include "GLFrameBuffer.h"
+#include "GLStates.h"
 
 #include "Memory/Handle.h"
 
@@ -61,6 +62,30 @@ namespace ZE
 		GLFrameBuffer* pFrameBuffer = new(frameBufferHandle) GLFrameBuffer();
 		pFrameBuffer->create();
 		return frameBufferHandle;
+	}
+
+	ZE::Handle GLRenderZooid::CreateBlendState(const RenderBlendState& renderBlendState)
+	{
+		Handle hBlendState("GL Blend State", sizeof(GLBlendState));
+		GLBlendState* pBlendState = new(hBlendState) GLBlendState;
+		pBlendState->setup(renderBlendState);
+		return hBlendState;
+	}
+
+	ZE::Handle GLRenderZooid::CreateDepthStencilState(const RenderDepthStencilState& renderDepthStencilState)
+	{
+		Handle hDepthStencilState("GL DepthStencil State", sizeof(GLDepthStencilState));
+		GLDepthStencilState* pDepthStencilState = new(hDepthStencilState) GLDepthStencilState;
+		pDepthStencilState->setup(renderDepthStencilState);
+		return hDepthStencilState;
+	}
+
+	ZE::Handle GLRenderZooid::CreateRasterizerState(const RenderRasterizerState& renderRasterizerState)
+	{
+		Handle hRasterizerState("GL Rasterizer State", sizeof(GLRasterizerState));
+		GLRasterizerState* pRasterizerState = new(hRasterizerState) GLRasterizerState;
+		pRasterizerState->setup(renderRasterizerState);
+		return hRasterizerState;
 	}
 
 	void GLRenderZooid::Init()

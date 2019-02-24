@@ -17,6 +17,9 @@ namespace ZE
 	class IShaderChain;
 	class IGPUBufferArray;
 	class IGPUTexture;
+	class IGPUDepthStencilState;
+	class IGPUBlendState;
+	class IGPURasterizerState;
 
 	class IRenderer {
 	public:
@@ -64,13 +67,13 @@ namespace ZE
 		virtual void DrawTextureToScreen(IGPUTexture* texture, const Vector2& screenPos, const Vector2& screenDimension) = 0;
 
 		// Set Blend State
-		virtual void SetRenderBlendState(const RenderBlendState& renderBlendState) = 0;
+		virtual void SetRenderBlendState(IGPUBlendState* renderBlendState) = 0;
 
 		// Set Depth Stencil State
-		virtual void SetRenderDepthStencilState(const RenderDepthStencilState& renderDepthStencilState) = 0;
+		virtual void SetRenderDepthStencilState(IGPUDepthStencilState* renderDepthStencilState) = 0;
 
 		// Set Render Rasterizer State
-		virtual void SetRenderRasterizerState(const RenderRasterizerState& renderRasterizerState) = 0;
+		virtual void SetRenderRasterizerState(IGPURasterizerState* renderRasterizerState) = 0;
 
 		// Poll Event : This is used to tell that renderer still active
 		virtual void PollEvent() = 0;
