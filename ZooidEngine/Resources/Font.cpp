@@ -213,7 +213,7 @@ namespace ZE
 		// #TODO this should be handled by TextureManager ???
 		Handle hTexture("Font Texture", sizeof(Texture));
 		Texture* pTexture = new(hTexture) Texture;
-		pTexture->loadFromBuffer(pTAtlas, texSize, texSize, 1);
+		pTexture->loadFromBuffer(pTAtlas, texSize, texSize, 1, 1);
 
 		{
 			ScopedRenderThreadOwnership renderLock(gameContext->getRenderer());

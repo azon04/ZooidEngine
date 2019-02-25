@@ -45,6 +45,7 @@
 #include "SceneRenderer/RenderGatherer.h"
 #include "SceneRenderer/ShadowRenderer.h"
 #include "SceneRenderer/TextRenderer.h";
+#include "SceneRenderer/SkyboxRenderer.h";
 
 // TODO for NVIDIA Optimus :  This enable the program to use NVIDIA instead of integrated Intel graphics
 #if WIN32 || WIN64
@@ -422,8 +423,9 @@ namespace ZE
 		MeshSceneRenderer::Render(drawList->m_meshRenderGatherer.getRenderInfos(), drawList->m_meshRenderGatherer.getRenderCount());
 		SkinMeshSceneRenderer::Render(drawList->m_skinMeshRenderGatherer.getRenderInfos(), drawList->m_skinMeshRenderGatherer.getRenderCount());
 		TransculentSceneRenderer::Render(drawList->m_transculentRenderGatherer.getRenderInfos(), drawList->m_transculentRenderGatherer.getRenderCount());
+		SkyBoxRenderer::Render(drawList->m_skyboxRenderGatherer.getRenderInfos(), drawList->m_skyboxRenderGatherer.getRenderCount());
 		TextSceneRenderer::Render(drawList->m_textSceneRenderGatherer.getRenderInfos(), drawList->m_textSceneRenderGatherer.getRenderCount());
-		
+
 		TextScreenRenderer::Render(drawList->m_textScreenRenderGatherer.getRenderInfos(), drawList->m_textScreenRenderGatherer.getRenderCount());
 		
 		// Inject UI Rendering

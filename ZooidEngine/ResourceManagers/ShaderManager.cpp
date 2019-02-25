@@ -82,6 +82,8 @@ namespace ZE
 		// Z_SHADER_CHAIN_DRAW_SCREEN_QUAD
 		s_instance->makeShaderChain("ZooidEngine/Shaders/Shader2D/ScreenQuad.vs", "ZooidEngine/Shaders/Shader2D/ScreenQuad.frag", nullptr, nullptr);
 
+		// Z_SHADER_CHAIN_SKYBOX
+		s_instance->makeShaderChain("ZooidEngine/Shaders/Skybox.vs", "ZooidEngine/Shaders/Skybox.frag", nullptr, nullptr);
 	}
 
 	void ShaderManager::Destroy()

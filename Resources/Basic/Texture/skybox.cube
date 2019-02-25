@@ -1,0 +1,8 @@
+Texture_Cubemap
+6
+RIGHT Basic/Texture/Skybox/right.jpg
+LEFT Basic/Texture/Skybox/left.jpg
+TOP Basic/Texture/Skybox/top.jpg
+BOTTOM Basic/Texture/Skybox/bottom.jpg
+BACK Basic/Texture/Skybox/back.jpg
+FRONT Basic/Texture/Skybox/front.jpg

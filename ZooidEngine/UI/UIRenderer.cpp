@@ -194,6 +194,7 @@ namespace ZE
 		renderer->SetRenderDepthStencilState(TRenderDepthStencilState< 
 			false,
 			false,
+			true,
 			ERendererCompareFunc::ALWAYS,
 			ERendererCompareFunc::ALWAYS,
 			0,
@@ -235,7 +236,7 @@ namespace ZE
 		
 		Handle hTexture("Texture", sizeof(Texture));
 		Texture* texture = new(hTexture) Texture;
-		texture->loadFromBuffer(pAddress, width, height, channelCount);
+		texture->loadFromBuffer(pAddress, width, height, 1, channelCount);
 
 		ScopedRenderThreadOwnership renderLock(gameContext->getRenderer());
 		Handle hGPUTexture = gameContext->getRenderZooid()->CreateRenderTexture();

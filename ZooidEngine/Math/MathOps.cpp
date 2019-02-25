@@ -35,6 +35,7 @@ namespace ZE
 
 		_result.m_data[2][3] = -1;
 		_result.m_data[0][3] = _result.m_data[1][3] = _result.m_data[3][3] = 0.0f;
+
 	}
 
 	void MathOps::CreateOrthoProj(Matrix4x4& _result, Float32 _right, Float32 _top, Float32 _near, Float32 _far)

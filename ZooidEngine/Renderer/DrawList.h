@@ -56,6 +56,7 @@ namespace ZE
 		MeshRenderGatherer m_meshRenderGatherer;
 		SkinMeshRenderGatherer m_skinMeshRenderGatherer;
 		TransculentRenderGatherer m_transculentRenderGatherer;
+		SkyboxRenderGatherer m_skyboxRenderGatherer;
 		TextRenderGatherer m_textSceneRenderGatherer;
 		TextRenderGatherer m_textScreenRenderGatherer;
 	};

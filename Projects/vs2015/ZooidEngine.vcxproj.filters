@@ -537,6 +537,15 @@
     <ClInclude Include="..\..\ZooidEngine\Renderer\GL\GLStates.h">
       <Filter>Renderer\GL</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\Scene\Skybox.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderInfo\SkyboxRenderInfo.h">
+      <Filter>SceneRenderer\RenderInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\SkyboxRenderer.h">
+      <Filter>SceneRenderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ZooidEngine\MainFunction\Main.cpp">
@@ -859,6 +868,12 @@
     </ClCompile>
     <ClCompile Include="..\..\ZooidEngine\Renderer\IGPUStates.cpp">
       <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\Scene\Skybox.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\SkyboxRenderer.cpp">
+      <Filter>SceneRenderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -6,6 +6,7 @@
 #include "GameObjectModel/Object.h"
 #include "Renderer/Enums.h"
 #include "Math/Vector4.h"
+#include "Utils/Array.h"
 
 namespace ZE
 {
@@ -19,25 +20,33 @@ namespace ZE
 			m_wrapN(MIRRORED_REPEAT),
 			m_minFilter(LINEAR_MIPMAP_LINEAR),
 			m_magFilter(LINEAR),
-			m_bGenerateMipMap(true)
+			m_bGenerateMipMap(true),
+			m_face(1),
+			m_depth(1)
 		{}
 
 		// load texture from file
 		static Handle loadTexture(const char* filePath);
 
 		// load texture from memory buffer
-		void loadFromBuffer(void* buffer, UInt32 _width, UInt32 _height, UInt32 _channelCount);
+		void loadFromBuffer(void* firstBuffer, UInt32 _width, UInt32 _height, UInt32 _depth, UInt32 _channelCount, UInt32 faces = 1);
+
+		// Add buffer to texture faces
+		void addBufferToTexture(void* buffer, UInt32 faceIndex);
 
 		// create empty texture
-		void createEmpty(UInt32 _width, UInt32 _height, ETextureFormat _format);
+		void createEmpty(UInt32 _width, UInt32 _height, UInt32 _depth, ETextureFormat _format, UInt32 _faces=1);
 
 		// Get pointer to image
-		FORCEINLINE UChar* getImage() const { return m_image; }
+		FORCEINLINE UChar* getImage(UInt32 faceIndex = 0) const { return m_images[faceIndex]; }
 
 		FORCEINLINE UInt32 getWidth() const { return m_width; }
 		FORCEINLINE UInt32 getHeight() const { return m_height; }
+		FORCEINLINE UInt32 getDepth() const { return m_depth; }
 		
 		FORCEINLINE UInt32 getChannel() const { return m_channel; }
+
+		FORCEINLINE UInt32 getNumberOfFaces() const { return m_face; }
 
 		void release();
 
@@ -79,9 +88,11 @@ namespace ZE
 		FORCEINLINE bool isGenerateMipMap() const { return m_bGenerateMipMap; }
 
 	protected:
-		UChar* m_image;
+		Array<UChar*> m_images;
 		UInt32 m_width;
 		UInt32 m_height;
+		UInt32 m_depth;
+		UInt32 m_face;
 		UInt32 m_channel;
 		Vector4 m_borderColor; // in RGBA
 

@@ -15,6 +15,8 @@ namespace ZE
 		bool m_depthEnabled;
 		bool m_stencilEnabled;
 
+		bool m_enableDepthMask;
+
 		GLenum m_depthTestFunc;
 		GLenum m_stencilTestFunc;
 

@@ -21,6 +21,7 @@ namespace ZE
 		bool DepthEnabled;
 		bool StencilEnabled;
 
+		bool EnableDepthMask;
 		ERendererCompareFunc DepthTestFunc;
 		ERendererCompareFunc StencilTestFunc;
 

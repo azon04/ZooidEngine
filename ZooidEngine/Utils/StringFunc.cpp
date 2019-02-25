@@ -50,6 +50,32 @@ int StringFunc::Compare(const char* string1, const char* string2)
 #endif
 }
 
+int StringFunc::CompareCount(const char* string1, const char* string2, int count)
+{
+	return strncmp(string1, string2, count);
+}
+
+int StringFunc::FindLast(const char* string1, const char* string2)
+{
+	int len2 = Length(string2);
+	int len1 = Length(string1);
+
+	if (len2 > len1)
+	{
+		return -1;
+	}
+
+	for (int i = len1 - len2; i >= 0; i--)
+	{
+		if (CompareCount(string1 + i, string2, len2) == 0)
+		{
+			return i;
+		}
+	}
+
+	return -1;
+}
+
 void StringFunc::Concat(const char* string1, const char* string2, char* res)
 {
 	sprintf(res, "%s%s", string1, string2);

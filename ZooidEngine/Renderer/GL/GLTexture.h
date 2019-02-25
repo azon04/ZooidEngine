@@ -11,7 +11,7 @@ namespace ZE
 	class GLTexture : public IGPUTexture
 	{
 	public:
-		GLTexture() : m_textureBuffer(0) {}
+		GLTexture() : m_textureBuffer(0), m_bCube(false) {}
 
 		// IGPUTexture implementation
 		virtual void fromTexture(Texture* texture) override;
@@ -21,8 +21,10 @@ namespace ZE
 		virtual void unbind() override;
 
 		GLuint getTextureBuffer() const { return m_textureBuffer; }
+
 	private:
 		GLuint m_textureBuffer;
+		bool m_bCube;
 	};
 }
 #endif

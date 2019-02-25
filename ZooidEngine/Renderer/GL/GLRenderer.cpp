@@ -258,6 +258,8 @@ namespace ZE
 		glStencilOp(state->m_stencilFailOp, 
 			state->m_depthFailOp, 
 			state->m_depthStencilPassOp);
+
+		glDepthMask(state->m_enableDepthMask ? GL_TRUE : GL_FALSE);
 	}
 
 	void GLRenderer::SetRenderRasterizerState(IGPURasterizerState* renderRasterizerState)

@@ -7,6 +7,7 @@
 #include "Scene/Light/LightComponent.h"
 #include "Scene/RenderComponent.h"
 #include "Scene/CameraComponent.h"
+#include "Scene/Skybox.h"
 #include "Collision/BoxComponent.h"
 #include "Collision/SphereComponent.h"
 #include "Collision/CapsuleComponent.h"
@@ -68,6 +69,12 @@ namespace ZE
 		{
 			Handle h("Component", sizeof(CapsuleComponent));
 			new(h) CapsuleComponent(m_gameContext);
+			return h;
+		}
+		else if (StringFunc::Compare(componentTypeName, Skybox::GetClassName()) == 0)
+		{
+			Handle h("Skybox", sizeof(Skybox));
+			new(h) Skybox(m_gameContext);
 			return h;
 		}
 		else
@@ -277,6 +284,17 @@ namespace ZE
 				pAnimSM->readAnimStateDef(GetResourcePath(buff).c_str());
 
 				pComp->addChild(pAnimSM);
+			}
+			else if (StringFunc::Compare(buff, "Texture") == 0)
+			{
+				// Read Texture file
+				fileReader->readNextString(buff);
+
+				if (pComp->getClassID() == Skybox::GetClassID())
+				{
+					Skybox* pSkyBox = static_cast<Skybox*>(pComp);
+					pSkyBox->loadFromPath(GetResourcePath(buff).c_str());
+				}
 			}
 
 			fileReader->readNextString(buff);

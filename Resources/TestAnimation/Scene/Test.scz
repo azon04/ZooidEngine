@@ -1,6 +1,10 @@
 SceneName TestMap
 FileVersion 1.0
-ComponentCount 10
+ComponentCount 11
+Skybox SkyBox1
+BEGIN
+Texture Basic/Texture/skybox.cube
+END
 LightComponent DirLight
 BEGIN
 LightType 0

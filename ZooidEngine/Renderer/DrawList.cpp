@@ -12,6 +12,7 @@ namespace ZE
 		m_meshRenderGatherer.reset();
 		m_skinMeshRenderGatherer.reset();
 		m_transculentRenderGatherer.reset();
+		m_skyboxRenderGatherer.reset();
 		m_textSceneRenderGatherer.reset();
 		m_textScreenRenderGatherer.reset();
 	}

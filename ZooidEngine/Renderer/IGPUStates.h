@@ -69,6 +69,7 @@ namespace ZE
 
 	template<bool depthEnabled,
 		bool stencilEnabled,
+		bool enableDepthMask,
 		ERendererCompareFunc depthTestFunc,
 		ERendererCompareFunc stencilTestFunc,
 		UInt32 stencilRefMask,
@@ -86,6 +87,7 @@ namespace ZE
 			{
 				depthEnabled,
 				stencilEnabled,
+				enableDepthMask,
 				depthTestFunc,
 				stencilTestFunc,
 				stencilRefMask,
@@ -116,6 +118,7 @@ namespace ZE
 
 	template<bool depthEnabled,
 		bool stencilEnabled,
+		bool enableDepthMask,
 		ERendererCompareFunc depthTestFunc,
 		ERendererCompareFunc stencilTestFunc,
 		UInt32 stencilRefMask,
@@ -124,7 +127,7 @@ namespace ZE
 		ERenderDepthStencilOps stencilFail /*= DS_OP_KEEP*/,
 		ERenderDepthStencilOps depthFail /*= DS_OP_KEEP*/,
 		ERenderDepthStencilOps depthStencilPass /*= DS_OP_REPLACE*/>
-	IGPUDepthStencilState* ZE::TRenderDepthStencilState<depthEnabled, stencilEnabled, depthTestFunc, stencilTestFunc, stencilRefMask, stencilMask, stencilWriteMask, stencilFail, depthFail, depthStencilPass>::s_gpuState = nullptr;
+	IGPUDepthStencilState* ZE::TRenderDepthStencilState<depthEnabled, stencilEnabled, enableDepthMask, depthTestFunc, stencilTestFunc, stencilRefMask, stencilMask, stencilWriteMask, stencilFail, depthFail, depthStencilPass>::s_gpuState = nullptr;
 
 	template<bool blendEnabled, ERendererBlendFactor sourceBlendFactor = ERendererBlendFactor::ONE, ERendererBlendFactor destBlendFactor = ERendererBlendFactor::ONE, UInt32 AlphaRef = 0 >
 	class TRenderBlendState
@@ -164,7 +167,7 @@ namespace ZE
 
 	// Default States
 	typedef TRenderRasterizerState<EFaceFrontOrder::CCW, ECullFace::BACK, ERenderFillMode::MODE_FILL> DefaultRasterizerState;
-	typedef TRenderDepthStencilState<true, false, ERendererCompareFunc::LESS, ERendererCompareFunc::ALWAYS, 1, 0x00, 0xFF> DefaultDepthStencilState;
+	typedef TRenderDepthStencilState<true, false, true, ERendererCompareFunc::LESS, ERendererCompareFunc::ALWAYS, 1, 0x00, 0xFF> DefaultDepthStencilState;
 	typedef TRenderBlendState<false> DefaultRenderBlendState;
 };
 

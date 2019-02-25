@@ -168,7 +168,7 @@ namespace ZE
 		// Setup Dynamic Texture
 		Handle hTexture( "Texture", sizeof(Texture));
 		Texture* pCPUTexture = new(hTexture) Texture();
-		pCPUTexture->createEmpty(m_shadowMapWidth, m_shadowMapHeight, TEX_DEPTH);
+		pCPUTexture->createEmpty(m_shadowMapWidth, m_shadowMapHeight, 1, TEX_DEPTH);
 		pCPUTexture->setGenerateMipmap(false);
 		pCPUTexture->setDataType(FLOAT);
 		pCPUTexture->setWrapOnU(CLAMP_TO_BORDER);

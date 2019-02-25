@@ -10,27 +10,45 @@ namespace ZE
 		IGPUTexture::fromTexture(texture);
 
 		GLenum imageFormat = getGLTextureFormat(texture->getTextureFormat());
+		
+		GLenum imageType = GL_TEXTURE_2D;
+		
+		m_bCube = texture->getNumberOfFaces() == 6;
+		if (m_bCube)
+		{
+			imageType = GL_TEXTURE_CUBE_MAP;
+		}
 
 		glGenTextures(1, &m_textureBuffer);
 
-		glBindTexture(GL_TEXTURE_2D, m_textureBuffer);
+		glBindTexture(imageType, m_textureBuffer);
 
 		// Wrap functions
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, getTextureWrap(texture->getWrapU()));
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, getTextureWrap(texture->getWrapV()));
+		glTexParameteri(imageType, GL_TEXTURE_WRAP_S, getTextureWrap(texture->getWrapU()));
+		glTexParameteri(imageType, GL_TEXTURE_WRAP_T, getTextureWrap(texture->getWrapV()));
 		// Set filtering and mipmaping function
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, getTextureFilter(texture->getMinFilter()));
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, getTextureFilter(texture->getMagFilter()));
+		glTexParameteri(imageType, GL_TEXTURE_MIN_FILTER, getTextureFilter(texture->getMinFilter()));
+		glTexParameteri(imageType, GL_TEXTURE_MAG_FILTER, getTextureFilter(texture->getMagFilter()));
 
-		// #TODO handle multisampling if needed
-		glTexImage2D(GL_TEXTURE_2D, 0, imageFormat, m_textureRes->getWidth(), m_textureRes->getHeight(), 0, imageFormat, getGLDataType(texture->getDataType()), m_textureRes->getImage());
-
-		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, texture->getBorderColor().m_data);
+		if (m_bCube)
+		{
+			for (int i = 0; i < 6; i++)
+			{
+				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, imageFormat, m_textureRes->getWidth(), m_textureRes->getHeight(), 0, imageFormat, getGLDataType(texture->getDataType()), m_textureRes->getImage(i));
+			}
+		}
+		else
+		{
+			// #TODO handle multisampling if needed
+			glTexImage2D(imageType, 0, imageFormat, m_textureRes->getWidth(), m_textureRes->getHeight(), 0, imageFormat, getGLDataType(texture->getDataType()), m_textureRes->getImage());
+		}
+		
+		glTexParameterfv(imageType, GL_TEXTURE_BORDER_COLOR, texture->getBorderColor().m_data);
 
 		if(texture->isGenerateMipMap())
-			glGenerateMipmap(GL_TEXTURE_2D);
+			glGenerateMipmap(imageType);
 
-		glBindTexture(GL_TEXTURE_2D, 0);
+		glBindTexture(imageType, 0);
 		// #TODO Should we release the memory of the image when the image already loading to GPU?
 	}
 
@@ -47,12 +65,26 @@ namespace ZE
 	{
 		if (m_textureBuffer != 0)
 		{
-			glBindTexture(GL_TEXTURE_2D, m_textureBuffer);
+			GLenum imageType = GL_TEXTURE_2D;
+
+			if (m_bCube)
+			{
+				imageType = GL_TEXTURE_CUBE_MAP;
+			}
+
+			glBindTexture(imageType, m_textureBuffer);
 		}
 	}
 
 	void GLTexture::unbind()
 	{
-		glBindTexture(GL_TEXTURE_2D, 0);
+		GLenum imageType = GL_TEXTURE_2D;
+
+		if (m_bCube)
+		{
+			imageType = GL_TEXTURE_CUBE_MAP;
+		}
+
+		glBindTexture(imageType, 0);
 	}
 }

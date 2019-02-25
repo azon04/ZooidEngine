@@ -7,6 +7,8 @@ namespace ZE
 		m_textureRes = texture;
 		m_width = texture->getWidth();
 		m_height = texture->getHeight();
+		m_face = texture->getNumberOfFaces();
+		m_depth = texture->getDepth();
 	}
 
 	void IGPUTexture::release()

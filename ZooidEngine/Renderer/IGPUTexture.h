@@ -36,6 +36,8 @@ namespace ZE
 		Texture* m_textureRes;
 		UInt32 m_width;
 		UInt32 m_height;
+		UInt32 m_depth;
+		UInt32 m_face;
 	};
 }
 #endif

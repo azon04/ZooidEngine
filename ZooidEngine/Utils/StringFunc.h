@@ -17,6 +17,10 @@ namespace StringFunc {
 	// Compare two string (char*), return 0 if the same
 	int Compare(const char* string1, const char* string2);
 
+	int CompareCount(const char* string1, const char* string2, int count);
+
+	int FindLast(const char* string1, const char* string2);
+
 	void Concat(const char* string1, const char* string2, char* res);
 
 	void PrintToString(char* string, int stringSize, const char* formatText, ...);

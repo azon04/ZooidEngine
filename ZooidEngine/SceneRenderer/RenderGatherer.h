@@ -5,6 +5,7 @@
 #include "RenderInfo/MeshRenderInfo.h"
 #include "RenderInfo/SkinMeshRenderInfo.h"
 #include "RenderInfo/TextRenderInfo.h"
+#include "RenderInfo/SkyboxRenderInfo.h"
 
 #include "Utils/Array.h"
 
@@ -58,6 +59,7 @@ namespace ZE
 	typedef RenderGatherer<SkinMeshRenderInfo> SkinMeshRenderGatherer;
 	typedef RenderGatherer<MeshRenderInfo> TransculentRenderGatherer;
 	typedef RenderGatherer<TextRenderInfo> TextRenderGatherer;
+	typedef RenderGatherer<SkyboxRenderInfo> SkyboxRenderGatherer;
 }
 
 #endif

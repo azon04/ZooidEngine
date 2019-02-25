@@ -43,11 +43,11 @@ namespace ZE
 		case ZE::LESS:
 			return GL_LESS;
 		case ZE::LEQUAL:
-			return GL_EQUAL;
+			return GL_LEQUAL;
 		case ZE::GREATER:
 			return GL_GREATER;
 		case ZE::GEQUAL:
-			return GL_EQUAL;
+			return GL_GEQUAL;
 		case ZE::EQUAL:
 			return GL_EQUAL;
 		case ZE::NOTEQUAL:
@@ -145,6 +145,7 @@ namespace ZE
 		m_depthEnabled = state.DepthEnabled;
 		m_stencilEnabled = state.StencilEnabled;
 		
+		m_enableDepthMask = state.EnableDepthMask;
 		m_depthTestFunc = getCompareFunc(state.DepthTestFunc);
 		m_stencilTestFunc = getCompareFunc(state.StencilTestFunc);
 		

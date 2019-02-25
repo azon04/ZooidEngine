@@ -105,6 +105,18 @@ namespace ZE
 
 			m_bufferLayout.push_back(normalTexCoordLayout);
 		}
+
+		{
+			// Vertex : { Vector3 }
+
+			Handle h("Buffer Layout", sizeof(BufferLayout));
+			BufferLayout* positionLayout = new(h) BufferLayout();
+			positionLayout->m_layouts.reset(1);
+			positionLayout->m_layouts.push_back({ 0, 3, EDataType::FLOAT, 3 * sizeof(float), 0, false });
+			positionLayout->calculateBufferDataCount();
+
+			m_bufferLayout.push_back(positionLayout);
+		}
 	}
 
 	void BufferLayoutManager::DestroyLayout()
