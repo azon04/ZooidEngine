@@ -48,21 +48,10 @@ namespace ZE
 				return;
 			}
 			
-#define USE_OBB_TEST 1
-
-#if USE_OBB_TEST
 			if (testResult == FUSTRUM_INTERSECT)
 			{
 				testResult = m_gameContext->getDrawList()->m_viewFustrum.testOB(m_mesh->getOBBoundingBox(m_worldTransform));
 			}
-#else
-			AxisAlignedBox ABBox = m_mesh->getAABBoundingBox(m_worldTransform);
-
-			if (testResult == FUSTRUM_INTERSECT)
-			{
-				testResult = m_gameContext->getDrawList()->m_viewFustrum.testAAB(ABBox);
-			}
-#endif
 
 			if (testResult == FUSTRUM_OUTSIDE)
 			{
@@ -78,11 +67,7 @@ namespace ZE
 				}
 				else
 				{
-#if USE_OBB_TEST
 					DebugRenderer::DrawDebugBox(m_mesh->getLocalBoxExtend(), m_mesh->getLocalBoxCenter(), m_worldTransform);
-#else
-					DebugRenderer::DrawDebugBox((ABBox.m_max - ABBox.m_min) * 0.5f, (ABBox.m_max + ABBox.m_min) * 0.5f, Matrix4x4());
-#endif
 				}
 			}
 

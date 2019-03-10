@@ -6,6 +6,8 @@
 #include "Math/Plane.h"
 #include "Math/Shapes.h"
 
+#define USE_FUSTRUM_POINT 0
+
 namespace ZE
 {
 	enum EFustrumTestResult : UInt8
@@ -17,6 +19,7 @@ namespace ZE
 
 	class ViewFustrum
 	{
+#if USE_FUSTRUM_POINT
 		enum EFustrumPoint : UInt8
 		{
 			FP_NTL = 0,
@@ -28,7 +31,7 @@ namespace ZE
 			FP_FBR,
 			FP_FBL
 		};
-
+#endif
 		enum EFustrumPlane : UInt8
 		{
 			FPLANE_NEAR = 0,
@@ -53,12 +56,15 @@ namespace ZE
 		EFustrumTestResult testOB(OrientedBox& oBox);
 
 	protected:
-		
+
+#if USE_FUSTRUM_POINT
 		Vector3 m_fustrumPoints[8];
-		Plane m_fustrumPlane[6];
 		Vector3 m_nearCenter;
 		Vector3 m_farCenter;
+#endif
 
+		Plane m_fustrumPlane[6];
+		
 		Float32 m_ratio;
 		Float32 m_fov;
 		Float32 m_nearDist;

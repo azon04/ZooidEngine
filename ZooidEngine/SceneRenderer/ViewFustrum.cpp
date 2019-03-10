@@ -23,13 +23,41 @@ namespace ZE
 
 	void ViewFustrum::setCameraVars(Vector3& position, Vector3& direction, Vector3& up, Vector3& right)
 	{
-		m_nearCenter = position + direction * m_nearDist;
-		m_farCenter = position + direction * m_farDist;
-
 		Float32 wNear = 2 * tanf(m_fov * 0.5f) * m_nearDist;
 		Float32 hNear = wNear * (1.0f / m_ratio);
+
+#if !USE_FUSTRUM_POINT
+		Vector3 nearCenter = position + direction * m_nearDist;
+		Vector3 farCenter = position + direction * m_farDist;
+
+		m_fustrumPlane[FPLANE_NEAR].fromNormalPosition(direction, nearCenter);
+		m_fustrumPlane[FPLANE_FAR].fromNormalPosition(-1.0f * direction, farCenter);
+
+		Vector3 leftBottomVector = (nearCenter + -0.5f * hNear * up + -0.5f * wNear * right) - position;
+		Vector3 rightTopVector = (nearCenter + 0.5f * hNear * up + 0.5f * wNear * right) - position;
+		Vector3 normalVector;
+
+		normalVector = right.crossProduct(leftBottomVector);
+		normalVector.normalize();
+		m_fustrumPlane[FPLANE_BOTTOM].fromNormalPosition(normalVector, position);
+
+		normalVector = rightTopVector.crossProduct(right);
+		normalVector.normalize();
+		m_fustrumPlane[FPLANE_TOP].fromNormalPosition(normalVector, position);
+
+		normalVector = leftBottomVector.crossProduct(up);
+		normalVector.normalize();
+		m_fustrumPlane[FPLANE_LEFT].fromNormalPosition(normalVector, position);
+
+		normalVector = up.crossProduct(rightTopVector);
+		normalVector.normalize();
+		m_fustrumPlane[FPLANE_RIGHT].fromNormalPosition(normalVector, position);
+#else
 		Float32 wFar = 2 * tanf(m_fov * 0.5f) * m_farDist;
-		Float32 hFar = wFar * ( 1.0f / m_ratio );
+		Float32 hFar = wFar * (1.0f / m_ratio);
+
+		m_nearCenter = position + direction * m_nearDist;
+		m_farCenter = position + direction * m_farDist;
 
 		m_fustrumPoints[FP_NTL] = m_nearCenter + 0.5f * hNear * up + -0.5f * wNear * right;
 		m_fustrumPoints[FP_NTR] = m_nearCenter + 0.5f * hNear * up + 0.5f * wNear * right;
@@ -49,6 +77,7 @@ namespace ZE
 
 		m_fustrumPlane[FPLANE_LEFT].fromPositions(m_fustrumPoints[FP_FBL], m_fustrumPoints[FP_FTL], m_fustrumPoints[FP_NBL]);
 		m_fustrumPlane[FPLANE_RIGHT].fromPositions(m_fustrumPoints[FP_FBR], m_fustrumPoints[FP_NBR], m_fustrumPoints[FP_FTR]);
+#endif
 	}
 
 	ZE::EFustrumTestResult ViewFustrum::testPoint(Vector3& point)
@@ -130,19 +159,30 @@ namespace ZE
 	{
 		EFustrumTestResult result = FUSTRUM_INSIDE;
 
+		Vector3 u, v, n;
+		u = oBox.m_transform.getU();
+		v = oBox.m_transform.getV();
+		n = oBox.m_transform.getN();
+
+		Vector3 scaleVector = oBox.m_transform.extractScale();
+		u = u / scaleVector.getX();
+		v = v / scaleVector.getY();
+		n = n / scaleVector.getZ();
+
 		Vector3 center = (oBox.m_max + oBox.m_min) * 0.5f;
 		center = oBox.m_transform.mult(center);
 
 		Vector3 halfBox = (oBox.m_max - oBox.m_min) * 0.5f;
+		halfBox = halfBox * scaleVector;
 
 		for (int i = 0; i < 6; i++)
 		{
 			float distance = m_fustrumPlane[i].distanceFromPlane(center);
 			if (distance < 0.0f)
 			{
-				float r = abs(halfBox.getX() * m_fustrumPlane->m_normal.dotProduct(oBox.m_transform.getU())) +
-					abs(halfBox.getY() * m_fustrumPlane->m_normal.dotProduct(oBox.m_transform.getV())) +
-					abs(halfBox.getZ() * m_fustrumPlane->m_normal.dotProduct(oBox.m_transform.getN()));
+				float r = abs(halfBox.getX() * m_fustrumPlane[i].m_normal.dotProduct(u)) +
+					abs(halfBox.getY() * m_fustrumPlane[i].m_normal.dotProduct(v)) +
+					abs(halfBox.getZ() * m_fustrumPlane[i].m_normal.dotProduct(n));
 
 				if (-distance > r)
 				{
