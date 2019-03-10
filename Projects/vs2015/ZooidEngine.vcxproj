@@ -207,7 +207,9 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClInclude Include="..\..\ZooidEngine\Math\MathUtil.h" />
     <ClInclude Include="..\..\ZooidEngine\Math\Matrix3x3.h" />
     <ClInclude Include="..\..\ZooidEngine\Math\Matrix4x4.h" />
+    <ClInclude Include="..\..\ZooidEngine\Math\Plane.h" />
     <ClInclude Include="..\..\ZooidEngine\Math\Quaternion.h" />
+    <ClInclude Include="..\..\ZooidEngine\Math\Shapes.h" />
     <ClInclude Include="..\..\ZooidEngine\Math\SSEHelper.h" />
     <ClInclude Include="..\..\ZooidEngine\Math\Vector2.h" />
     <ClInclude Include="..\..\ZooidEngine\Math\Vector3.h" />
@@ -284,6 +286,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClInclude Include="..\..\ZooidEngine\SceneRenderer\ShadowRenderer.h" />
     <ClInclude Include="..\..\ZooidEngine\SceneRenderer\SkyboxRenderer.h" />
     <ClInclude Include="..\..\ZooidEngine\SceneRenderer\TextRenderer.h" />
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\ViewFustrum.h" />
     <ClInclude Include="..\..\ZooidEngine\Scene\Actor.h" />
     <ClInclude Include="..\..\ZooidEngine\Scene\CameraComponent.h" />
     <ClInclude Include="..\..\ZooidEngine\Scene\CameraManager.h" />
@@ -310,6 +313,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClInclude Include="..\..\ZooidEngine\UnitTest\VectorTest.h" />
     <ClInclude Include="..\..\ZooidEngine\Utils\Array.h" />
     <ClInclude Include="..\..\ZooidEngine\Utils\Debug.h" />
+    <ClInclude Include="..\..\ZooidEngine\Utils\DebugOptions.h" />
     <ClInclude Include="..\..\ZooidEngine\Utils\HashMap.h" />
     <ClInclude Include="..\..\ZooidEngine\Utils\Macros.h" />
     <ClInclude Include="..\..\ZooidEngine\Utils\PrimitiveTypes.h" />
@@ -405,6 +409,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
     <ClCompile Include="..\..\ZooidEngine\SceneRenderer\ShadowRenderer.cpp" />
     <ClCompile Include="..\..\ZooidEngine\SceneRenderer\SkyboxRenderer.cpp" />
     <ClCompile Include="..\..\ZooidEngine\SceneRenderer\TextRenderer.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\ViewFustrum.cpp" />
     <ClCompile Include="..\..\ZooidEngine\Scene\Actor.cpp" />
     <ClCompile Include="..\..\ZooidEngine\Scene\CameraComponent.cpp" />
     <ClCompile Include="..\..\ZooidEngine\Scene\CameraManager.cpp" />

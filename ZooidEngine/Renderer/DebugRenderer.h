@@ -48,6 +48,12 @@ namespace ZE
 		// Draw Text in World Space (Static call)
 		static void DrawTextWorld(const char* text, Matrix4x4& _transform);
 
+		// Draw Debug Sphere (Static call)
+		static void DrawDebugSphere(const Vector3& position, Float32 radius);
+
+		// Draw Debug Box (Static call)
+		static void DrawDebugBox(const Vector3& extend, const Vector3& posOffset, Matrix4x4& tranform);
+
 		virtual void setupComponent() override;
 
 		// Handle Gather render event
@@ -66,15 +72,36 @@ namespace ZE
 		// Draw Text on World
 		void drawWorldText(const char* text, Matrix4x4& _transform);
 
+		// Draw Debug Sphere
+		void drawDebugSphere(Matrix4x4& _transform);
+
+		// Draw Debug Cube
+		void drawDebugCube(Matrix4x4& _transform);
+
+		// Setup sphere
+		void setupSphere();
+
+		// Setup Cube
+		void setupCube();
+
 	private:
 		static DebugRenderer* s_instance;
+		
 		BufferData* m_lineBufferData;
 		IGPUBufferData* m_lineGPUBufferData;
 		IGPUBufferArray* m_lineBufferArray;
+
 		Array<DebugPointStruct> m_lineBuffers;
-		Int32 m_currentIndex;
 		Array<TextComponent*> m_textComponents;
+		
+		Int32 m_currentIndex;
 		Int32 m_currentTextIndex;
+
+		IGPUBufferArray* m_sphereGPUBufferArrray;
+		Array<Matrix4x4> m_debugSphereTransforms;
+
+		IGPUBufferArray* m_cubeGPUBufferArray;
+		Array<Matrix4x4> m_debugCubeTransforms;
 	};
 }
 #endif

@@ -546,6 +546,18 @@
     <ClInclude Include="..\..\ZooidEngine\SceneRenderer\SkyboxRenderer.h">
       <Filter>SceneRenderer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\ViewFustrum.h">
+      <Filter>SceneRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\Math\Plane.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\Math\Shapes.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\Utils\DebugOptions.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ZooidEngine\MainFunction\Main.cpp">
@@ -873,6 +885,9 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ZooidEngine\SceneRenderer\SkyboxRenderer.cpp">
+      <Filter>SceneRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\ViewFustrum.cpp">
       <Filter>SceneRenderer</Filter>
     </ClCompile>
   </ItemGroup>

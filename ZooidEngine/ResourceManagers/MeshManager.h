@@ -27,7 +27,9 @@ namespace ZE
 		static MeshManager* s_instance;
 
 		void loadPhysicsBodySetup(FileReader* fileReader, Mesh* pMesh);
+		void loadBuffers(FileReader* fileReader, Mesh* pMesh);
 
+		int getBufferLayoutByString(const char* stringType);
 	};
 }
 #endif

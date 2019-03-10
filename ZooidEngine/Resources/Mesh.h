@@ -3,6 +3,7 @@
 
 #include "GameObjectModel/Object.h"
 #include "Memory/Handle.h"
+#include "Math/Shapes.h"
 
 namespace ZE
 {
@@ -30,6 +31,16 @@ namespace ZE
 		FORCEINLINE Material* getMaterial() { return m_material; }
 		FORCEINLINE Handle getPhysicsBodySetup() { return m_hPhysicsBodySetup; }
 
+		Sphere getBoundingSphere(const Matrix4x4& transform);
+		AxisAlignedBox getAABBoundingBox(const Matrix4x4& transform);
+		OrientedBox getOBBoundingBox(const Matrix4x4& transform);
+
+		Vector3 getLocalBoxMin() { return m_boxMin; }
+		Vector3 getLocalBoxMax() { return m_boxMax; }
+		Vector3 getLocalBoxCenter() { return (m_boxMax + m_boxMin) * 0.5f; }
+		Vector3 getLocalBoxExtend() { return (m_boxMax - m_boxMin) * 0.5f; }
+		Vector3 getLocalCenterOffset() { return m_centerOffset; }
+
 	protected:
 		IGPUBufferData* m_vertexBuffer;
 		IGPUBufferData* m_indexBuffer;
@@ -37,6 +48,12 @@ namespace ZE
 		Material* m_material;
 		Handle m_hPhysicsBodySetup;
 		Handle m_hSkeleton;
+		
+		// For Culling
+		Float32 m_radius;
+		Vector3 m_boxMin;
+		Vector3 m_boxMax;
+		Vector3 m_centerOffset;
 
 		bool m_doubleSided;
 	};

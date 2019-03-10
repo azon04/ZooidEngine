@@ -156,7 +156,7 @@ public:
 		return resultMat;
 	}
 
-	FORCEINLINE Vector3 mult(const Vector3& _v) 
+	FORCEINLINE Vector3 mult(const Vector3& _v) const
 	{
 		Vector3 resultVector;
 		Matrix4x4::FastVecMul(_v, *this, resultVector);
@@ -185,7 +185,7 @@ public:
 		scale(_vScale);
 	}
 
-	Vector3 extractScale()
+	Vector3 extractScale() const
 	{
 		Vector3 scaleVector;
 		scaleVector.setX(getU().length());
@@ -206,6 +206,16 @@ public:
 		}
 	}
 	
+	// From Scale and position
+	void fromScaleAndPosition(ZE::Float32 scaleX, ZE::Float32 scaleY, ZE::Float32 scaleZ, const Vector3& pos)
+	{
+		setPos(pos);
+		m_data[0][0] = scaleX;
+		m_data[1][1] = scaleY;
+		m_data[2][2] = scaleZ;
+		m_data[3][3] = 1.0f;
+	}
+
 	// Matrix -> Quaternions conversion
 	void fromQuaternion(const Quaternion& _q) 
 	{

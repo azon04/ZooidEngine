@@ -24,7 +24,7 @@ namespace ZE
 
 class GameContext;
 
-class BufferManager : public ResourceManager
+class BufferManager
 {
 	DEFINE_CLASS(BufferManager)
 
@@ -55,14 +55,7 @@ public:
 
 	Handle createBufferArray(IGPUBufferData* _vertexBuffer, IGPUBufferData* _indexBuffer, IGPUBufferData* _buffer);
 
-	// ResourceManager override
-	virtual Handle loadResource_Internal(const char* resourceFilePath) override;
-	virtual void preUnloadResource(Resource* _resource) override;
-
 	IGPUBufferArray* getBufferArray(UInt32 index) { return m_GPUBufferArrays[index]; }
-	
-private:
-	int getBufferLayoutByString(const char* stringType);
 
 private:
 	static BufferManager* m_instance;

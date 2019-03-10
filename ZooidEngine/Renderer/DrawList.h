@@ -5,6 +5,7 @@
 #include "Math/Vector3.h"
 #include "ShaderData.h"
 #include "SceneRenderer/RenderGatherer.h"
+#include "SceneRenderer/ViewFustrum.h"
 
 namespace ZE 
 {
@@ -59,6 +60,10 @@ namespace ZE
 		SkyboxRenderGatherer m_skyboxRenderGatherer;
 		TextRenderGatherer m_textSceneRenderGatherer;
 		TextRenderGatherer m_textScreenRenderGatherer;
+
+		// View Fustrum
+		ViewFustrum m_viewFustrum;
+		Matrix4x4 m_projectionMat;
 	};
 
 };

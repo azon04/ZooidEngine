@@ -44,6 +44,9 @@ namespace ZE
 		s_instance->m_currentIndex = 0;
 		s_instance->m_currentTextIndex = 0;
 
+		s_instance->setupSphere();
+		s_instance->setupCube();
+
 		s_instance->setupComponent();
 	}
 
@@ -70,6 +73,24 @@ namespace ZE
 	void DebugRenderer::DrawTextWorld(const char* text, Matrix4x4& _transform)
 	{
 		s_instance->drawWorldText(text, _transform);
+	}
+
+	void DebugRenderer::DrawDebugSphere(const Vector3& position, Float32 radius)
+	{
+		Matrix4x4 mat;
+		mat.fromScaleAndPosition(radius, radius, radius, position);
+		s_instance->m_debugSphereTransforms.push_back(mat);
+	}
+
+	void DebugRenderer::DrawDebugBox(const Vector3& extend, const Vector3& centerOffset, Matrix4x4& tranform)
+	{
+		Matrix4x4 matExtend;
+		matExtend.setScale(extend);
+		matExtend.setPos(centerOffset);
+
+		matExtend = matExtend * tranform;
+
+		s_instance->drawDebugCube(matExtend);
 	}
 
 	void DebugRenderer::setupComponent()
@@ -108,6 +129,30 @@ namespace ZE
 		// Reset
 		m_currentIndex = 0;
 		m_currentTextIndex = 0;
+
+		for (int i = 0; i < m_debugSphereTransforms.size(); i++)
+		{
+			MeshRenderInfo* renderInfo = m_gameContext->getDrawList()->m_meshRenderGatherer.nextRenderInfo();
+			renderInfo->m_shaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_3D_DEFAULT_COLOR_LINE);
+			renderInfo->m_gpuBufferArray = m_sphereGPUBufferArrray;
+			renderInfo->m_renderTopology = ERenderTopologyEnum::TOPOLOGY_LINE;
+			renderInfo->drawCount = m_sphereGPUBufferArrray->getDataCount();
+			renderInfo->m_worldTransform = m_debugSphereTransforms[i];
+		}
+
+
+		for (int i = 0; i < m_debugCubeTransforms.size(); i++)
+		{
+			MeshRenderInfo* renderInfo = m_gameContext->getDrawList()->m_meshRenderGatherer.nextRenderInfo();
+			renderInfo->m_shaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_3D_DEFAULT_COLOR_LINE);
+			renderInfo->m_gpuBufferArray = m_cubeGPUBufferArray;
+			renderInfo->m_renderTopology = ERenderTopologyEnum::TOPOLOGY_LINE;
+			renderInfo->drawCount = m_cubeGPUBufferArray->getDataCount();
+			renderInfo->m_worldTransform = m_debugCubeTransforms[i];
+		}
+
+		m_debugSphereTransforms.clear();
+		m_debugCubeTransforms.clear();
 	}
 
 	void DebugRenderer::drawMatrixBasis(Matrix4x4& mat)
@@ -172,6 +217,159 @@ namespace ZE
 		textComponent->setColor(Vector3(1.0f, 1.0f, 1.0f));
 		textComponent->setWorldTransform(_transform);
 		textComponent->setDrawSpace(DRAW_WORLD_SPACE);
+	}
+
+	void DebugRenderer::drawDebugSphere(Matrix4x4& _transform)
+	{
+		m_debugSphereTransforms.push_back(_transform);
+	}
+
+	void DebugRenderer::drawDebugCube(Matrix4x4& _transform)
+	{
+		m_debugCubeTransforms.push_back(_transform);
+	}
+
+	void DebugRenderer::setupSphere()
+	{
+		Array<DebugPointStruct> points;
+
+		Float32 countPerRing = 16;
+		Float32 angleStep = DegToRad(360.0f / countPerRing);
+
+		// Draw Point On XY Plane
+		Float32 pointAngle = 0.0f;
+		DebugPointStruct prevPoint;
+		prevPoint.Point.m_x = cosf(pointAngle);
+		prevPoint.Point.m_y = sinf(pointAngle);
+		prevPoint.Point.m_z = 0.0f;
+		prevPoint.Color = Vector3(1.0f, 0.0f, 0.0f);
+
+		for (int i = 1; i <= countPerRing + 1; i++)
+		{
+			DebugPointStruct point;
+			point.Point.m_x = cosf(pointAngle);
+			point.Point.m_y = sinf(pointAngle);
+			point.Point.m_z = 0.0f;
+			point.Color = Vector3(1.0f, 0.0f, 0.0f);
+
+			points.push_back(prevPoint);
+			points.push_back(point);
+
+			prevPoint = point;
+
+			pointAngle += angleStep;
+		}
+
+		// Draw On YZ plane
+		pointAngle = 0.0f;
+
+		prevPoint.Point.m_y = cosf(pointAngle);
+		prevPoint.Point.m_z = sinf(pointAngle);
+		prevPoint.Point.m_x = 0.0f;
+		prevPoint.Color = Vector3(1.0f, 0.0f, 0.0f);
+
+		for (int i = 1; i <= countPerRing + 1; i++)
+		{
+			DebugPointStruct point;
+			point.Point.m_y = cosf(pointAngle);
+			point.Point.m_z = sinf(pointAngle);
+			point.Point.m_x = 0.0f;
+			point.Color = Vector3(1.0f, 0.0f, 0.0f);
+
+			points.push_back(prevPoint);
+			points.push_back(point);
+
+			prevPoint = point;
+
+			pointAngle += angleStep;
+		}
+
+		// Draw On ZX plane
+		pointAngle = 0.0f;
+
+		prevPoint.Point.m_z = cosf(pointAngle);
+		prevPoint.Point.m_x = sinf(pointAngle);
+		prevPoint.Point.m_y = 0.0f;
+		prevPoint.Color = Vector3(1.0f, 0.0f, 0.0f);
+
+		for (int i = 0; i <= countPerRing + 1; i++)
+		{
+			DebugPointStruct point;
+			point.Point.m_z = cosf(pointAngle);
+			point.Point.m_x = sinf(pointAngle);
+			point.Point.m_y = 0.0f;
+			point.Color = Vector3(1.0f, 0.0f, 0.0f);
+			
+			points.push_back(prevPoint);
+			points.push_back(point);
+
+			prevPoint = point;
+
+			pointAngle += angleStep;
+		}
+
+		{
+			BufferData sphereData(VERTEX_BUFFER);
+			sphereData.SetData(points.data(), sizeof(DebugPointStruct), points.size());
+			sphereData.setBufferLayout(BUFFER_LAYOUT_V3_C3);
+
+			ScopedRenderThreadOwnership renderOwnership(gGameContext->getRenderer());
+			IGPUBufferData* vertexBuffer = BufferManager::getInstance()->createGPUBufferFromBuffer(&sphereData);
+			m_sphereGPUBufferArrray = BufferManager::getInstance()->createBufferArray(vertexBuffer, nullptr, nullptr).getObject<IGPUBufferArray>();
+		}
+	}
+
+	void DebugRenderer::setupCube()
+	{
+		Array<DebugPointStruct> points;
+		
+		Vector3 color(0.0f, 0.0f, 1.0f);
+
+		points.push_back({ Vector3(1.0f, 1.0f, 1.0f), color });
+		points.push_back({ Vector3(1.0f, 1.0f, -1.0f), color });
+
+		points.push_back({ Vector3(1.0f, -1.0f, 1.0f), color });
+		points.push_back({ Vector3(1.0f, -1.0f, -1.0f), color });
+
+		points.push_back({ Vector3(-1.0f, 1.0f, 1.0f), color });
+		points.push_back({ Vector3(-1.0f, 1.0f, -1.0f), color });
+
+		points.push_back({ Vector3(-1.0f, -1.0f, 1.0f), color });
+		points.push_back({ Vector3(-1.0f, -1.0f, -1.0f), color });
+
+		points.push_back({ Vector3(1.0f, -1.0f, 1.0f), color });
+		points.push_back({ Vector3(-1.0f, -1.0f, 1.0f), color });
+
+		points.push_back({ Vector3(1.0f, 1.0f, 1.0f), color });
+		points.push_back({ Vector3(-1.0f, 1.0f, 1.0f), color });
+
+		points.push_back({ Vector3(1.0f, -1.0f, -1.0f), color });
+		points.push_back({ Vector3(-1.0f, -1.0f, -1.0f), color });
+
+		points.push_back({ Vector3(1.0f, 1.0f, -1.0f), color });
+		points.push_back({ Vector3(-1.0f, 1.0f, -1.0f), color });
+
+		points.push_back({ Vector3(1.0f, 1.0f, 1.0f), color });
+		points.push_back({ Vector3(1.0f, -1.0f, 1.0f), color });
+
+		points.push_back({ Vector3(1.0f, 1.0f, -1.0f), color });
+		points.push_back({ Vector3(1.0f, -1.0f, -1.0f), color });
+
+		points.push_back({ Vector3(-1.0f, 1.0f, 1.0f), color });
+		points.push_back({ Vector3(-1.0f, -1.0f, 1.0f), color });
+
+		points.push_back({ Vector3(-1.0f, 1.0f, -1.0f), color });
+		points.push_back({ Vector3(-1.0f, -1.0f, -1.0f), color });
+
+		{
+			BufferData cubeData(VERTEX_BUFFER);
+			cubeData.SetData(points.data(), sizeof(DebugPointStruct), points.size());
+			cubeData.setBufferLayout(BUFFER_LAYOUT_V3_C3);
+
+			ScopedRenderThreadOwnership renderOwnership(gGameContext->getRenderer());
+			IGPUBufferData* vertexBuffer = BufferManager::getInstance()->createGPUBufferFromBuffer(&cubeData);
+			m_cubeGPUBufferArray = BufferManager::getInstance()->createBufferArray(vertexBuffer, nullptr, nullptr).getObject<IGPUBufferArray>();
+		}
 	}
 
 	ZE::DebugRenderer* DebugRenderer::s_instance = nullptr;

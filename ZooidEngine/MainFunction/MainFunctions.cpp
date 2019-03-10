@@ -47,6 +47,8 @@
 #include "SceneRenderer/TextRenderer.h";
 #include "SceneRenderer/SkyboxRenderer.h";
 
+#include "Utils/DebugOptions.h"
+
 // TODO for NVIDIA Optimus :  This enable the program to use NVIDIA instead of integrated Intel graphics
 #if WIN32 || WIN64
 extern "C"
@@ -307,8 +309,26 @@ namespace ZE
 			ZE::UI::DrawTextInPos(3, contentPos, buffer, UIVector4(1.0f));
 		}
 
+		// Debug Options Menu
+		{
+			static ZE::UIRect panelRect(UIVector2{ gGameContext->getRenderer()->GetWidth() - 300,10 }, UIVector2{ 250, 100 });
+
+			ZE::UIVector2 contentPos;
+
+			ZE::UI::DoDragablePanel(4, panelRect, "Debug Options", 10, contentPos);
+
+			gDebugOptions.DebugDrawOptions.bDrawCullShapes = ZE::UI::DoCheckBox(5, contentPos, "DebugDraw:CullShape", gDebugOptions.DebugDrawOptions.bDrawCullShapes);
+			contentPos.y += 25.0f;
+			gDebugOptions.DebugDrawOptions.bDrawPhysicsShapes = ZE::UI::DoCheckBox(6, contentPos, "DebugDraw:PhysicsShape", gDebugOptions.DebugDrawOptions.bDrawPhysicsShapes);
+		}
+
 		// Handle Event_GATHER_RENDER
 		{
+			// Set ViewFustrum before gathering the render target
+			CameraComponent* currentCamera = CameraManager::GetInstance()->getCurrentCamera();
+			
+			_gameContext->getDrawList()->m_viewFustrum.setCameraVars(currentCamera->getWorldPosition(), currentCamera->getForwardVector() * -1.0f, currentCamera->getUpVector(), currentCamera->getRightVector());
+
 			Handle handleGatherRender("EventGatherRender", sizeof(Event_GATHER_RENDER));
 			Event_GATHER_RENDER* pEvent = new(handleGatherRender) Event_GATHER_RENDER();
 			_gameContext->getEventDispatcher()->handleEvent(pEvent);
@@ -394,7 +414,6 @@ namespace ZE
 
 		{
 			Matrix4x4 viewMat;
-			Matrix4x4 projectionMat;
 
 			ZE::CameraComponent* currentCamera = _gameContext->getCameraManager()->getCurrentCamera();
 			if (currentCamera)
@@ -404,18 +423,7 @@ namespace ZE
 				_gameContext->getDrawList()->m_shaderData.setViewMat(viewMat);
 				_gameContext->getDrawList()->m_cameraPosition = currentCamera->getWorldPosition();
 				_gameContext->getDrawList()->m_cameraDirection = currentCamera->getForwardVector();
-
-				ZE::IRenderer* renderer = _gameContext->getRenderer();
-				if (currentCamera->m_bUsingOrthoProjection)
-				{
-					MathOps::CreateOrthoProj(projectionMat, currentCamera->m_orthoWidth / 2.0f, (renderer->GetHeight() / renderer->GetWidth()) * currentCamera->m_orthoWidth * 0.5f, currentCamera->m_near, currentCamera->m_far);
-				}
-				else
-				{
-					ZE::MathOps::CreatePerspectiveProjEx(projectionMat, renderer->GetWidth() / renderer->GetHeight(), 45.0f, currentCamera->m_near, currentCamera->m_far);
-				}
-				_gameContext->getDrawList()->m_shaderData.setProjectionMat(projectionMat);
-
+				_gameContext->getDrawList()->m_shaderData.setProjectionMat(_gameContext->getDrawList()->m_projectionMat);
 				_gameContext->getDrawList()->m_lightData.setViewPos(currentCamera->getWorldPosition());
 			}
 		}

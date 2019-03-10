@@ -18,6 +18,7 @@ namespace ZE
 		static void Destroy();
 		static CameraManager* GetInstance();
 
+		void setCurrentCamara(CameraComponent* cameraComponent);
 		CameraComponent* getCurrentCamera() const { return m_currentCamera; }
 
 	public:
