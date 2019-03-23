@@ -21,7 +21,7 @@ namespace StringFunc {
 
 	int FindLast(const char* string1, const char* string2);
 
-	void Concat(const char* string1, const char* string2, char* res);
+	void Concat(const char* string1, const char* string2, char* res, size_t resSize);
 
 	void PrintToString(char* string, int stringSize, const char* formatText, ...);
 

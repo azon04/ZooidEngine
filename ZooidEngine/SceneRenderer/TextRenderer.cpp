@@ -8,6 +8,7 @@
 #include "Renderer/IGPUTexture.h"
 #include "Renderer/IGPUBufferArray.h"
 #include "Renderer/IGPUStates.h"
+#include "ResourceManagers/BufferManager.h"
 #include "ZEGameContext.h"
 
 namespace ZE
@@ -28,19 +29,23 @@ namespace ZE
 		{
 			TextRenderInfo& currentInfo = textRenderInfos[i];
 
-			ZASSERT(currentInfo.m_shaderChain);
-			ZASSERT(currentInfo.m_gpuBufferArray);
+			ZCHECK(currentInfo.m_shaderChain);
+			ZCHECK(currentInfo.m_gpuBufferArray);
 
 			currentInfo.m_shaderChain->bind();
-			currentInfo.m_shaderChain->setMat("modelMat", currentInfo.m_worldTransform);
 
-			// Bind Shader data
+			// Bind Frame data
 			gGameContext->getDrawList()->m_mainConstantBuffer->bindAndRefresh();
-			currentInfo.m_shaderChain->bindConstantBuffer("shader_data", gGameContext->getDrawList()->m_mainConstantBuffer);
+			currentInfo.m_shaderChain->bindConstantBuffer("frame_data", gGameContext->getDrawList()->m_mainConstantBuffer);
 
 			// Bind light_data
 			gGameContext->getDrawList()->m_lightConstantBuffer->bindAndRefresh();
 			currentInfo.m_shaderChain->bindConstantBuffer("light_data", gGameContext->getDrawList()->m_lightConstantBuffer);
+
+			// Create and bind draw data
+			IGPUBufferData* drawBufferData = BufferManager::getInstance()->getOrCreateDrawBuffer(currentInfo.m_worldTransform.m_data, sizeof(Matrix4x4));
+			drawBufferData->bind();
+			currentInfo.m_shaderChain->bindConstantBuffer("draw_data", drawBufferData);
 
 			if (currentInfo.m_fontTexture)
 			{
@@ -84,8 +89,8 @@ namespace ZE
 		{
 			TextRenderInfo& currentInfo = textRenderInfos[i];
 
-			ZASSERT(currentInfo.m_shaderChain);
-			ZASSERT(currentInfo.m_gpuBufferArray);
+			ZCHECK(currentInfo.m_shaderChain);
+			ZCHECK(currentInfo.m_gpuBufferArray);
 
 			currentInfo.m_shaderChain->bind();
 			currentInfo.m_shaderChain->setMat("model", currentInfo.m_worldTransform);

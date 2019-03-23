@@ -53,6 +53,9 @@ namespace ZE
 		// Bind and refresh
 		virtual void bindAndRefresh() = 0;
 
+		// Write data to the buffer
+		virtual void writeData(void* data, size_t size, size_t offset) = 0;
+
 		// Set if the buffer is static
 		void setStatic(bool _bStatic) { m_isStatic = _bStatic; }
 

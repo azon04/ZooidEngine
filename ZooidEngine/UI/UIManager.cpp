@@ -21,7 +21,7 @@ namespace ZE
 
 	void UIManager::Init(GameContext* _gameContext)
 	{
-		ZE::UI::Init(_gameContext->getRenderer()->GetWidth(), _gameContext->getRenderer()->GetHeight());
+		ZE::UI::Init((ZE::Int32)_gameContext->getRenderer()->GetWidth(), (ZE::Int32)_gameContext->getRenderer()->GetHeight());
 		
 		Handle hInputComponent("Input Component", sizeof(UIInputComponent));
 		UIInputComponent* inputComponent = new(hInputComponent) UIInputComponent(_gameContext);

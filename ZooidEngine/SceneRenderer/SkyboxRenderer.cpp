@@ -27,15 +27,15 @@ namespace ZE
 		{
 			SkyboxRenderInfo& currentInfo = skyboxInfos[i];
 
-			ZASSERT(currentInfo.m_shaderChain);
-			ZASSERT(currentInfo.m_gpuBufferArray);
-			ZASSERT(currentInfo.m_cubeTexture);
+			ZCHECK(currentInfo.m_shaderChain);
+			ZCHECK(currentInfo.m_gpuBufferArray);
+			ZCHECK(currentInfo.m_cubeTexture);
 
 			currentInfo.m_shaderChain->bind();
 
-			// Bind shader_data
+			// Bind frame_data
 			gGameContext->getDrawList()->m_mainConstantBuffer->bindAndRefresh();
-			currentInfo.m_shaderChain->bindConstantBuffer("shader_data", gGameContext->getDrawList()->m_mainConstantBuffer);
+			currentInfo.m_shaderChain->bindConstantBuffer("frame_data", gGameContext->getDrawList()->m_mainConstantBuffer);
 
 			currentInfo.m_shaderChain->setTexture("skybox", currentInfo.m_cubeTexture, 0);
 			currentInfo.m_cubeTexture->bind();

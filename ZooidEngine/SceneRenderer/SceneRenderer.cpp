@@ -10,6 +10,7 @@
 #include "Resources/Material.h"
 #include "Renderer/DrawList.h"
 #include "Renderer/IGPUStates.h"
+#include "ResourceManagers/BufferManager.h"
 #include "ShadowRenderer.h"
 
 namespace ZE
@@ -31,15 +32,19 @@ namespace ZE
 			ZASSERT(currentMesh.m_gpuBufferArray);
 
 			currentMesh.m_shaderChain->bind();
-			currentMesh.m_shaderChain->setMat("modelMat", currentMesh.m_worldTransform);
 			
-			// Bind shader_data
+			// Bind frame_data
 			gGameContext->getDrawList()->m_mainConstantBuffer->bindAndRefresh();
-			currentMesh.m_shaderChain->bindConstantBuffer("shader_data", gGameContext->getDrawList()->m_mainConstantBuffer);
+			currentMesh.m_shaderChain->bindConstantBuffer("frame_data", gGameContext->getDrawList()->m_mainConstantBuffer);
 
 			// Bind light_data
 			gGameContext->getDrawList()->m_lightConstantBuffer->bindAndRefresh();
 			currentMesh.m_shaderChain->bindConstantBuffer("light_data", gGameContext->getDrawList()->m_lightConstantBuffer);
+
+			// Create and bind draw data
+			IGPUBufferData* drawBufferData = BufferManager::getInstance()->getOrCreateDrawBuffer(currentMesh.m_worldTransform.m_data, sizeof(Matrix4x4));
+			drawBufferData->bind();
+			currentMesh.m_shaderChain->bindConstantBuffer("draw_data", drawBufferData);
 
 			// Set Face Culling for double sided
 			if (currentMesh.m_isDoubleSided)
@@ -106,15 +111,19 @@ namespace ZE
 			ZASSERT(currentMesh.m_gpuBufferArray);
 
 			currentMesh.m_shaderChain->bind();
-			currentMesh.m_shaderChain->setMat("modelMat", currentMesh.m_worldTransform);
 
-			// Bind shader_data
+			// Bind frame_data
 			gGameContext->getDrawList()->m_mainConstantBuffer->bindAndRefresh();
-			currentMesh.m_shaderChain->bindConstantBuffer("shader_data", gGameContext->getDrawList()->m_mainConstantBuffer);
+			currentMesh.m_shaderChain->bindConstantBuffer("frame_data", gGameContext->getDrawList()->m_mainConstantBuffer);
 
 			// Bind light_data
 			gGameContext->getDrawList()->m_lightConstantBuffer->bindAndRefresh();
 			currentMesh.m_shaderChain->bindConstantBuffer("light_data", gGameContext->getDrawList()->m_lightConstantBuffer);
+
+			// Create and bind draw data
+			IGPUBufferData* drawBufferData = BufferManager::getInstance()->getOrCreateDrawBuffer(currentMesh.m_worldTransform.m_data, sizeof(Matrix4x4));
+			drawBufferData->bind();
+			currentMesh.m_shaderChain->bindConstantBuffer("draw_data", drawBufferData);
 
 			// Set Face Culling for double sided
 			if (currentMesh.m_isDoubleSided)
@@ -229,11 +238,10 @@ namespace ZE
 			ZASSERT(currentMesh.m_gpuBufferArray);
 
 			currentMesh.m_shaderChain->bind();
-			currentMesh.m_shaderChain->setMat("modelMat", currentMesh.m_worldTransform);
 
-			// Bind shader_data
+			// Bind frame_data
 			gGameContext->getDrawList()->m_mainConstantBuffer->bindAndRefresh();
-			currentMesh.m_shaderChain->bindConstantBuffer("shader_data", gGameContext->getDrawList()->m_mainConstantBuffer);
+			currentMesh.m_shaderChain->bindConstantBuffer("frame_data", gGameContext->getDrawList()->m_mainConstantBuffer);
 
 			// Bind light_data
 			gGameContext->getDrawList()->m_lightConstantBuffer->bindAndRefresh();
@@ -242,6 +250,11 @@ namespace ZE
 			// Bind bone_data
 			currentMesh.m_skinJointData->bind();
 			currentMesh.m_shaderChain->bindConstantBuffer("bone_mats_block", currentMesh.m_skinJointData);
+
+			// Create and bind draw data
+			IGPUBufferData* drawBufferData = BufferManager::getInstance()->getOrCreateDrawBuffer(currentMesh.m_worldTransform.m_data, sizeof(Matrix4x4));
+			drawBufferData->bind();
+			currentMesh.m_shaderChain->bindConstantBuffer("draw_data", drawBufferData);
 
 			// Set Face Culling for double sided
 			if (currentMesh.m_isDoubleSided)

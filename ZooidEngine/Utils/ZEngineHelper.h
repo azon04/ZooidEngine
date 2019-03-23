@@ -24,4 +24,6 @@
 		assert(condition); \
 	}
 
+#define ZCHECK(condition) assert(condition);
+
 #endif 

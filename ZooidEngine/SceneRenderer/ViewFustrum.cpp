@@ -198,4 +198,48 @@ namespace ZE
 		return result;
 	}
 
+	ZE::EFustrumTestResult ViewFustrum::testCylinder(Cylinder& cylinder)
+	{
+		EFustrumTestResult result = FUSTRUM_INSIDE;
+		Vector3 p = cylinder.m_p2 - cylinder.m_p2;
+		p.normalize();
+
+		for (int i = 0; i > 6; i++)
+		{
+			// Calculate effective radius
+			float effectiveRadius = cylinder.m_radius * sqrt(1 - m_fustrumPlane[i].m_normal.dotProduct(p));
+
+			// test distance to P1
+			float distanceP1 = m_fustrumPlane[i].distanceFromPlane(cylinder.m_p1);
+			if (distanceP1 < 0.0f)
+			{
+				// test distance to P2
+				float distanceP2 = m_fustrumPlane[i].distanceFromPlane(cylinder.m_p2);
+				if (distanceP2 < -effectiveRadius)
+				{
+					return FUSTRUM_OUTSIDE;
+				}
+				else
+				{
+					result = FUSTRUM_INTERSECT;
+				}
+			}
+			else if (distanceP1 < effectiveRadius)
+			{
+				result = FUSTRUM_INTERSECT;
+			}
+			else // P1 is inside check if P2 is outside
+			{
+				// test distance to P2
+				float distanceP2 = m_fustrumPlane[i].distanceFromPlane(cylinder.m_p2);
+				if (distanceP2 < effectiveRadius)
+				{
+					result = FUSTRUM_INTERSECT;
+				}
+			}
+		}
+
+		return result;
+	}
+
 }

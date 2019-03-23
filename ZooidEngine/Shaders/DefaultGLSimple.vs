@@ -11,11 +11,17 @@ layout (location = 2) in vec2 TexCoord;
 out vec4 vsColor;
 out vec2 vsTexCoord;
 
-uniform mat4 modelMat;
-layout (std140) uniform shader_data
+// Per frame data
+layout (std140) uniform frame_data
 {
 	mat4 viewMat;
 	mat4 projectionMat;
+};
+
+// Per draw data
+layout (std140) uniform draw_data
+{
+	mat4 modelMat;
 };
 
 void main()

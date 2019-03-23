@@ -44,7 +44,7 @@ namespace ZE
 
 		UInt32 m_lightShadowSize;
 
-		ShaderData m_shaderData;
+		ShaderData m_shaderFrameData;
 		IGPUBufferData* m_mainConstantBuffer;
 
 		LightData m_lightData;

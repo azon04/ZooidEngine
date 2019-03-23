@@ -17,6 +17,8 @@ namespace ZE
 	
 	ThreadId getThreadId();
 
+	void ThreadSleep(int millisecond);
+
 	const ThreadId MAIN_THREAD_ID = ZE::getThreadId();
 };
 

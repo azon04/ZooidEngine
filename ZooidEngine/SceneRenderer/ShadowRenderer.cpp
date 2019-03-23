@@ -15,6 +15,7 @@
 #include "Renderer/IGPUTexture.h"
 #include "Renderer/IShader.h"
 #include "Renderer/IGPUStates.h"
+#include "ResourceManagers/BufferManager.h"
 
 namespace ZE
 {
@@ -37,8 +38,8 @@ namespace ZE
 
 		lightData->setViewProjMatrix(view * proj);
 
-		drawList->m_shaderData.setViewMat(view);
-		drawList->m_shaderData.setProjectionMat(proj);
+		drawList->m_shaderFrameData.setViewMat(view);
+		drawList->m_shaderFrameData.setProjectionMat(proj);
 		drawList->m_mainConstantBuffer->refresh();
 
 		m_currentLight = lightData;
@@ -96,9 +97,15 @@ namespace ZE
 
 		shaderChain->bind();
 
+		// Bind shader_data
+		gGameContext->getDrawList()->m_mainConstantBuffer->bindAndRefresh();
+		shaderChain->bindConstantBuffer("frame_data", gGameContext->getDrawList()->m_mainConstantBuffer);
+
 		if (m_bRenderSkinMesh)
 		{
 			SkinMeshRenderInfo* meshRenderInfos = static_cast<SkinMeshRenderInfo*>(renderInfos);
+
+			//ZELOG(LOG_ENGINE, Log, "Shadow Count: %d", renderInfoCount);
 
 			for (UInt32 index = 0; index < renderInfoCount; index++)
 			{
@@ -106,18 +113,16 @@ namespace ZE
 
 				if (!currentMesh.m_castShadow) { continue; }
 
-				ZASSERT(currentMesh.m_shaderChain);
-				ZASSERT(currentMesh.m_gpuBufferArray);
-
-				shaderChain->setMat("modelMat", currentMesh.m_worldTransform);
-
-				// Bind shader_data
-				gGameContext->getDrawList()->m_mainConstantBuffer->bindAndRefresh();
-				shaderChain->bindConstantBuffer("shader_data", gGameContext->getDrawList()->m_mainConstantBuffer);
-
+				ZCHECK(currentMesh.m_gpuBufferArray);
+				
 				// Bind bone_data
 				currentMesh.m_skinJointData->bind();
 				shaderChain->bindConstantBuffer("bone_mats_block", currentMesh.m_skinJointData);
+				
+				// Create and bind draw data
+				IGPUBufferData* drawBufferData = BufferManager::getInstance()->getOrCreateDrawBuffer(currentMesh.m_worldTransform.m_data, sizeof(Matrix4x4));
+				drawBufferData->bind();
+				shaderChain->bindConstantBuffer("draw_data", drawBufferData);
 
 				currentMesh.m_gpuBufferArray->bind();
 
@@ -134,14 +139,12 @@ namespace ZE
 
 				if (!currentMesh.m_castShadow) { continue; }
 
-				ZASSERT(currentMesh.m_shaderChain);
-				ZASSERT(currentMesh.m_gpuBufferArray);
+				ZCHECK(currentMesh.m_gpuBufferArray);
 
-				shaderChain->setMat("modelMat", currentMesh.m_worldTransform);
-
-				// Bind shader_data
-				gGameContext->getDrawList()->m_mainConstantBuffer->bindAndRefresh();
-				shaderChain->bindConstantBuffer("shader_data", gGameContext->getDrawList()->m_mainConstantBuffer);
+				// Create and bind draw data
+				IGPUBufferData* drawBufferData = BufferManager::getInstance()->getOrCreateDrawBuffer(currentMesh.m_worldTransform.m_data, sizeof(Matrix4x4));
+				drawBufferData->bind();
+				shaderChain->bindConstantBuffer("draw_data", drawBufferData);
 
 				currentMesh.m_gpuBufferArray->bind();
 

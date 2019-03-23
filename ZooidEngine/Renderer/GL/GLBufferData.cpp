@@ -187,4 +187,32 @@ namespace ZE
 		}
 	}
 
+	void GLBufferData::writeData(void* data, size_t size, size_t offset)
+	{
+		if (m_bufferType == VERTEX_BUFFER)
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, m_BBO);
+			if (!m_isStatic)
+			{
+				glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
+			}
+		}
+		else if (m_bufferType == INDEX_BUFFER)
+		{
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_BBO);
+			if (!m_isStatic)
+			{
+				glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, size, data);
+			}
+		}
+		else if (m_bufferType == UNIFORM_BUFFER)
+		{
+			glBindBufferBase(GL_UNIFORM_BUFFER, m_bindingIndex, m_BBO);
+			if (!m_isStatic)
+			{
+				glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data);
+			}
+		}
+	}
+
 }

@@ -235,6 +235,7 @@ namespace ZE
 
 	void MainThreadJob(GameContext* _gameContext)
 	{
+		//ZELOG(LOG_ENGINE, Log , "Test %d", 1);
 		double deltaTime = _gameContext->m_mainTimer.ResetAndGetDeltaMS();
 		float deltaSeconds = static_cast<Float32>(deltaTime * 0.001f);
 
@@ -273,7 +274,10 @@ namespace ZE
 		}
 
 #if ZE_RENDER_MULTITHREAD
-		while (g_drawReady) {}
+		while (g_drawReady) 
+		{
+			ZE::ThreadSleep(0);
+		}
 #endif
 
 		// Draw Base Lines
@@ -351,6 +355,7 @@ namespace ZE
 #if ZE_RENDER_MULTITHREAD
 		UniqueLock lck(g_drawMutex);
 		g_drawReady = true;
+		//ZELOG(LOG_ENGINE, Log, "gDrawReady in Main2 %d", g_drawReady);
 		g_drawThreadVariable.notify_all();
 
 		// Oddly needed. This will let the main thread know that the window is still active
@@ -377,6 +382,7 @@ namespace ZE
 			DrawJob(_gameContext);
 			
 			g_drawReady = false;
+			//ZELOG(LOG_ENGINE, Log, "gDrawReady in Draw %d", g_drawReady);
 			while (!g_drawReady) g_drawThreadVariable.wait(lck);
 		}
 	}
@@ -390,6 +396,7 @@ namespace ZE
 
 		ScopedRenderThreadOwnership renderLock(renderer);
 
+		BufferManager::getInstance()->setupForNextFrame();
 		ShadowDepthRenderer::Reset();
 
 		// For each Light render Shadows
@@ -420,10 +427,10 @@ namespace ZE
 			{
 				currentCamera->getViewMatrix(viewMat);
 
-				_gameContext->getDrawList()->m_shaderData.setViewMat(viewMat);
+				_gameContext->getDrawList()->m_shaderFrameData.setViewMat(viewMat);
 				_gameContext->getDrawList()->m_cameraPosition = currentCamera->getWorldPosition();
 				_gameContext->getDrawList()->m_cameraDirection = currentCamera->getForwardVector();
-				_gameContext->getDrawList()->m_shaderData.setProjectionMat(_gameContext->getDrawList()->m_projectionMat);
+				_gameContext->getDrawList()->m_shaderFrameData.setProjectionMat(_gameContext->getDrawList()->m_projectionMat);
 				_gameContext->getDrawList()->m_lightData.setViewPos(currentCamera->getWorldPosition());
 			}
 		}

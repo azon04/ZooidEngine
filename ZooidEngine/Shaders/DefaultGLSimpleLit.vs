@@ -12,11 +12,15 @@ out vec2 vsTexCoord;
 out vec3 vsNormal;
 out vec3 vsFragPos;
 
-uniform mat4 modelMat;
-layout (std140) uniform shader_data
+layout (std140) uniform frame_data
 {
 	mat4 viewMat;
 	mat4 projectionMat;
+};
+
+layout (std140) uniform draw_data
+{
+	uniform mat4 modelMat;
 };
 
 void main()

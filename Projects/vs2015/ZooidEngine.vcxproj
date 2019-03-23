@@ -62,7 +62,7 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\PropertySheets\ZooidEngineDebug-x86-Engine.props" />
+    <Import Project="..\PropertySheets\ZooidEngineRelease-x86-Engine.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -91,7 +91,6 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;Z_RENDER_OPENGL;Z_PHYSICS_PHYSX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\Dependencies\glew-2.0.0\include;$(SolutionDir)..\..\Dependencies\glfw\include;$(SolutionDir)..\..\Dependencies\freetype-2.9.1\include;$(Physx)\..\PxShared\include;$(Physx)\Include;.;E:\Projects\Game\ZEngine\ZooidEngine</AdditionalIncludeDirectories>
       <PreprocessToFile>false</PreprocessToFile>
@@ -150,14 +149,29 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CONSOLE;Z_RENDER_OPENGL;Z_PHYSICS_PHYSX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\Dependencies\glew-2.0.0\include;$(SolutionDir)..\..\Dependencies\glfw\include;$(SolutionDir)..\..\Dependencies\freetype-2.9.1\include;$(Physx)\..\PxShared\include;$(Physx)\Include;.;E:\Projects\Game\ZEngine\ZooidEngine</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>XCOPY "$(SolutionDir)..\..\Dependencies\glew-2.0.0\bin\Release\Win32\*.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(SolutionDir)..\..\Dependencies\Builds\assimp\Debug\x86-vs140\*.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(SolutionDir)..\..\Dependencies\Builds\assimp\Debug\x86-vs140\*.pdb" "$(TargetDir)" /D /K /Y
+XCOPY "$(SolutionDir)..\..\Dependencies\freetype-2.9.1\win32\lib-vc2015\release\*.dll" "$(TargetDir)" /D /Y
+XCOPY "$(SolutionDir)..\..\Dependencies\freetype-2.9.1\win32\lib-vc2015\release\*.pdb" "$(TargetDir)" /D /Y
+XCOPY "$(PhysX)\Bin\vc14win32\*_x86.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(PhysX)\Bin\vc14win32\nvToolsExt32_1.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(PhysX)\Bin\vc14win32\PhysXDevice.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(PhysX)\Bin\vc14win32\*_x86.pdb" "$(TargetDir)" /D /K /Y
+XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*_x86.DLL" "$(TargetDir)" /D /K /Y
+XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*_x86.pdb" "$(TargetDir)" /D /K /Y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -173,7 +187,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*DEBUG_x86.pdb" "$(TargetDir)" /D /K /
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

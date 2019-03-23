@@ -38,4 +38,14 @@ public:
 	ZE::Float32 m_radius;
 };
 
+class Cylinder : public Shape
+{
+public:
+	Cylinder() {}
+
+public:
+	Vector3 m_p1, m_p2;
+	ZE::Float32 m_radius;
+};
+
 #endif

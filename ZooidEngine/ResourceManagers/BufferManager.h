@@ -17,7 +17,7 @@
 #define CONSTANT_BUFFER_SHADER_DATA_INDEX 0
 #define CONSTANT_BUFFER_LIGHT_DATA_INDEX 1
 #define CONSTANT_BUFFER_SKELETON_DATA_INDEX 2
-
+#define CONSTANT_BUFFER_DRAW_DATA_INDEX 3
 
 namespace ZE 
 {
@@ -50,6 +50,12 @@ public:
 	// Create constant buffer using pointer of data and its size
 	IGPUBufferData* createConstantBuffer(void* data, size_t size, UInt32 bindingIndex);
 
+	// Create draw constant buffer
+	IGPUBufferData* getOrCreateDrawBuffer(void* data, size_t size);
+
+	// Set the draw buffers for the next frame
+	void setupForNextFrame();
+
 	// Create buffer array from vertex buffer, index buffer, and gpu buffer
 	Handle createBufferArray(BufferData* _vertexBuffer, BufferData* _indexBuffer, BufferData* _gpuBuffer);
 
@@ -64,6 +70,8 @@ private:
 	Array<IGPUBufferData*, true> m_GPUBuffers;
 	Array<IGPUBufferArray*, true> m_GPUBufferArrays;
 	Array<IGPUBufferData*, true> m_constantGPUBuffer;
+	Array<IGPUBufferData*, true> m_shaderDrawBuffers;
+	UInt32 m_currentDrawBuffer;
 
 	GameContext* m_gameContext;
 	

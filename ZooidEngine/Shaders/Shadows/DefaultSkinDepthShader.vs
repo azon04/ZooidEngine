@@ -8,14 +8,18 @@ layout (location = 0) in vec3 Pos;
 layout (location = 3) in ivec4 BoneIDs;
 layout (location = 4) in vec4 BoneWeights;
 
-uniform mat4 modelMat;
-layout (std140) uniform shader_data
+layout (std140) uniform frame_data
 {
 	mat4 viewMat;
 	mat4 projectionMat;
 };
 
 const int MAX_BONES = 150;
+
+layout (std140) uniform draw_data
+{
+	mat4 modelMat;
+};
 
 layout (std140) uniform bone_mats_block
 { 

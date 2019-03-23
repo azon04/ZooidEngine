@@ -76,9 +76,9 @@ int StringFunc::FindLast(const char* string1, const char* string2)
 	return -1;
 }
 
-void StringFunc::Concat(const char* string1, const char* string2, char* res)
+void StringFunc::Concat(const char* string1, const char* string2, char* res,size_t resSize)
 {
-	sprintf(res, "%s%s", string1, string2);
+	sprintf_s(res, resSize, "%s%s", string1, string2);
 }
 
 void StringFunc::PrintToString(char* string, int stringSize, const char* formatText, ...)

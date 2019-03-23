@@ -16,7 +16,7 @@ namespace ZE
 
 	BufferManager* BufferManager::m_instance = NULL;
 
-	BufferManager::BufferManager(GameContext* _gameContext) : m_gameContext(_gameContext)
+	BufferManager::BufferManager(GameContext* _gameContext) : m_gameContext(_gameContext), m_currentDrawBuffer(0)
 	{
 	}
 
@@ -203,6 +203,31 @@ namespace ZE
 			res = createConstantBufferFromBuffer(bufferData, bindingIndex);
 		}
 		return res;
+	}
+
+	ZE::IGPUBufferData* BufferManager::getOrCreateDrawBuffer(void* data, size_t size)
+	{
+		IGPUBufferData* result = nullptr;
+		if (m_currentDrawBuffer >= m_shaderDrawBuffers.size())
+		{
+			result = createConstantBuffer(data, size, CONSTANT_BUFFER_DRAW_DATA_INDEX);
+			m_shaderDrawBuffers.push_back(result);
+		}
+		else
+		{
+			result = m_shaderDrawBuffers[m_currentDrawBuffer];
+			BufferData buffData(UNIFORM_BUFFER);
+			buffData.SetData(data, size);
+			result->FromBufferData(&buffData);
+		}
+
+		m_currentDrawBuffer++;
+		return result;
+	}
+
+	void BufferManager::setupForNextFrame()
+	{
+		m_currentDrawBuffer = 0;
 	}
 
 	Handle BufferManager::createBufferArray(BufferData* _vertexBuffer, BufferData* _indexBuffer, BufferData* _gpuBuffer)

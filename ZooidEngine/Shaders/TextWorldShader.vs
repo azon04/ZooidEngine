@@ -8,11 +8,15 @@ layout (location = 0) in vec4 PosTexCoord; // contain vec2 position and vec2 tex
 
 out vec2 vsTexCoord;
 
-uniform mat4 modelMat;
-layout (std140) uniform shader_data
+layout (std140) uniform frame_data
 {
 	mat4 viewMat;
 	mat4 projectionMat;
+};
+
+layout (std140) uniform draw_data
+{
+	mat4 modelMat;
 };
 
 void main()

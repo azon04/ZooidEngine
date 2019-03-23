@@ -9,7 +9,7 @@ layout (location = 0) in vec3 aPos;
 
 out vec3 TexCoords;
 
-layout (std140) uniform shader_data
+layout (std140) uniform frame_data
 {
 	mat4 viewMat;
 	mat4 projectionMat;

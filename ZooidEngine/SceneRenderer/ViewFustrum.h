@@ -54,6 +54,7 @@ namespace ZE
 		EFustrumTestResult testSphere(Sphere& sphere);
 		EFustrumTestResult testAAB(AxisAlignedBox& aaBox);
 		EFustrumTestResult testOB(OrientedBox& oBox);
+		EFustrumTestResult testCylinder(Cylinder& cylinder);
 
 	protected:
 

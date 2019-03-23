@@ -14,18 +14,22 @@ out vec2 vsTexCoord;
 out vec3 vsNormal;
 out vec3 vsFragPos;
 
-uniform mat4 modelMat;
-layout (std140) uniform shader_data
+const int MAX_BONES = 150;
+
+layout (std140) uniform frame_data
 {
 	mat4 viewMat;
 	mat4 projectionMat;
 };
 
-const int MAX_BONES = 150;
+layout (std140) uniform draw_data
+{
+	mat4 modelMat;
+};
 
 layout (std140) uniform bone_mats_block
 { 
-	uniform mat4 boneMats[MAX_BONES];
+	mat4 boneMats[MAX_BONES];
 };
 
 void main()
