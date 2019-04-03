@@ -117,6 +117,74 @@ namespace ZE
 
 			m_bufferLayout.push_back(positionLayout);
 		}
+
+		{
+			// Vertex : { Postion, Normal, TexCoord, Tangent }
+
+			Handle h("Buffer Layout", sizeof(BufferLayout));
+			BufferLayout* normalTangentTexCoordLayout = new(h) BufferLayout();
+			normalTangentTexCoordLayout->m_layouts.reset(4);
+			normalTangentTexCoordLayout->m_layouts.push_back({ 0, 3, EDataType::FLOAT, 11 * sizeof(float), 0, false });
+			normalTangentTexCoordLayout->m_layouts.push_back({ 1, 3, EDataType::FLOAT, 11 * sizeof(float), 3, false });
+			normalTangentTexCoordLayout->m_layouts.push_back({ 2, 2, EDataType::FLOAT, 11 * sizeof(float), 6, false });
+			normalTangentTexCoordLayout->m_layouts.push_back({ 3, 3, EDataType::FLOAT, 11 * sizeof(float), 8, false });
+			normalTangentTexCoordLayout->calculateBufferDataCount();
+
+			m_bufferLayout.push_back(normalTangentTexCoordLayout);
+		}
+
+		{
+			// Vertex : { Postion, Normal, TexCoord, BoneIDs, BoneWeights, Tangent }
+
+			Handle h("Buffer Layout", sizeof(BufferLayout));
+			BufferLayout* normalTexCoordLayout = new(h) BufferLayout();
+			normalTexCoordLayout->m_layouts.reset(6);
+			UInt32 stride = 15 * sizeof(float) + 4 * sizeof(Int32);
+			normalTexCoordLayout->m_layouts.push_back({ 0, 3, EDataType::FLOAT, stride, 0, false });
+			normalTexCoordLayout->m_layouts.push_back({ 1, 3, EDataType::FLOAT, stride, 3, false });
+			normalTexCoordLayout->m_layouts.push_back({ 2, 2, EDataType::FLOAT, stride, 6, false });
+			normalTexCoordLayout->m_layouts.push_back({ 3, 4, EDataType::INTEGER, stride, 8, false });
+			normalTexCoordLayout->m_layouts.push_back({ 4, 4, EDataType::FLOAT, stride, 12, false });
+			normalTexCoordLayout->m_layouts.push_back({ 5, 3, EDataType::FLOAT, stride, 16, false });
+			normalTexCoordLayout->calculateBufferDataCount();
+
+			m_bufferLayout.push_back(normalTexCoordLayout);
+		}
+
+		{
+			// Vertex : { Postion, Normal, TexCoord, Tangent, Bitangent }
+
+			Handle h("Buffer Layout", sizeof(BufferLayout));
+			BufferLayout* normalTangentTexCoordLayout = new(h) BufferLayout();
+			normalTangentTexCoordLayout->m_layouts.reset(5);
+			normalTangentTexCoordLayout->m_layouts.push_back({ 0, 3, EDataType::FLOAT, 14 * sizeof(float), 0, false });
+			normalTangentTexCoordLayout->m_layouts.push_back({ 1, 3, EDataType::FLOAT, 14 * sizeof(float), 3, false });
+			normalTangentTexCoordLayout->m_layouts.push_back({ 2, 2, EDataType::FLOAT, 14 * sizeof(float), 6, false });
+			normalTangentTexCoordLayout->m_layouts.push_back({ 3, 3, EDataType::FLOAT, 14 * sizeof(float), 8, false });
+			normalTangentTexCoordLayout->m_layouts.push_back({ 4, 3, EDataType::FLOAT, 14 * sizeof(float), 11, false });
+			normalTangentTexCoordLayout->calculateBufferDataCount();
+
+			m_bufferLayout.push_back(normalTangentTexCoordLayout);
+		}
+
+		{
+			// Vertex : { Postion, Normal, TexCoord, BoneIDs, BoneWeights, Tangent, Bitangent }
+
+			Handle h("Buffer Layout", sizeof(BufferLayout));
+			BufferLayout* normalTexCoordLayout = new(h) BufferLayout();
+			normalTexCoordLayout->m_layouts.reset(7);
+			UInt32 stride = 18 * sizeof(float) + 4 * sizeof(Int32);
+			normalTexCoordLayout->m_layouts.push_back({ 0, 3, EDataType::FLOAT, stride, 0, false });
+			normalTexCoordLayout->m_layouts.push_back({ 1, 3, EDataType::FLOAT, stride, 3, false });
+			normalTexCoordLayout->m_layouts.push_back({ 2, 2, EDataType::FLOAT, stride, 6, false });
+			normalTexCoordLayout->m_layouts.push_back({ 3, 4, EDataType::INTEGER, stride, 8, false });
+			normalTexCoordLayout->m_layouts.push_back({ 4, 4, EDataType::FLOAT, stride, 12, false });
+			normalTexCoordLayout->m_layouts.push_back({ 5, 3, EDataType::FLOAT, stride, 16, false });
+			normalTexCoordLayout->m_layouts.push_back({ 6, 3, EDataType::FLOAT, stride, 19, false });
+			normalTexCoordLayout->calculateBufferDataCount();
+
+			m_bufferLayout.push_back(normalTexCoordLayout);
+		}
 	}
 
 	void BufferLayoutManager::DestroyLayout()

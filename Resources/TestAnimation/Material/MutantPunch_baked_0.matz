@@ -3,4 +3,4 @@ Kd 1 1 1
 Ks 0.2 0.2 0.2
 shininess 6.15385
 diffuse TestAnimation\Texture\Mutant_diffuse.png
-normals TestAnimation\Texture\Mutant_normal.png
+normal TestAnimation\Texture\Mutant_normal.png

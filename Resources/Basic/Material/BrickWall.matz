@@ -1,0 +1,3 @@
+diffuse Basic/Texture/brickwall.jpg
+normal Basic/Texture/brickwall_normal.jpg
+shininess 32.0

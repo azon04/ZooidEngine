@@ -28,6 +28,9 @@ namespace ZE
 		void handleMouseDragEvent(Event* _event);
 
 	protected:
+		void processInput();
+
+	protected:
 		Vector3 m_velocity;
 		Vector3 m_rotation;
 	};

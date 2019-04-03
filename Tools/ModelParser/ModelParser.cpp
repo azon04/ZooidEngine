@@ -20,7 +20,7 @@ namespace ZETools
 	{
 		std::cout << "Load file " << filePath << "..." << std::endl;
 
-		const aiScene* scene = m_importer.ReadFile(filePath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_LimitBoneWeights | aiProcess_GenNormals);
+		const aiScene* scene = m_importer.ReadFile(filePath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_LimitBoneWeights | aiProcess_GenNormals | aiProcess_CalcTangentSpace);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
@@ -115,20 +115,77 @@ namespace ZETools
 					stream.open(getFullPath(outputDir, vertexFilePath), std::ofstream::out);
 					if (stream.is_open())
 					{
-						if (mesh.hasBones)
+						if (mesh.hasNormal)
 						{
-							stream << "BUFFER_LAYOUT_V3_N3_TC2_SKIN\n";
+							if (mesh.hasBones)
+							{
+								if (m_settings.mesh.bSaveTangentSpace)
+								{
+									if (m_settings.mesh.bSaveBitangent)
+									{
+										stream << "BUFFER_LAYOUT_V3_N3_T3_B3_TC2_SKIN\n";
+									}
+									else
+									{
+										stream << "BUFFER_LAYOUT_V3_N3_T3_TC2_SKIN\n";
+									}
+								}
+								else
+								{
+									stream << "BUFFER_LAYOUT_V3_N3_TC2_SKIN\n";
+								}
+							}
+							else
+							{
+								if (m_settings.mesh.bSaveTangentSpace)
+								{
+									if (m_settings.mesh.bSaveBitangent)
+									{
+										stream << "BUFFER_LAYOUT_V3_N3_T3_B3_TC2\n";
+									}
+									else
+									{
+										stream << "BUFFER_LAYOUT_V3_N3_T3_TC2\n";
+									}
+								}
+								else
+								{
+									stream << "BUFFER_LAYOUT_V3_N3_TC2\n";
+								}
+							}
 						}
 						else
 						{
-							stream << "BUFFER_LAYOUT_V3_N3_TC2\n";
+							if (mesh.hasBones)
+							{
+								stream << "BUFFER_LAYOUT_V3_TC2_SKIN\n";
+							}
+							else
+							{
+								stream << "BUFFER_LAYOUT_V3_TC2\n";
+							}
 						}
+
 						stream << mesh.vertices.size() << "\n";
 						for (unsigned int vi = 0; vi < mesh.vertices.size(); vi++)
 						{
 							stream << mesh.vertices[vi].Position[0] << " " << mesh.vertices[vi].Position[1] << " " << mesh.vertices[vi].Position[2] << "\t";
-							stream << mesh.vertices[vi].Normal[0] << " " << mesh.vertices[vi].Normal[1] << " " << mesh.vertices[vi].Normal[2] << "\t";
+							if (mesh.hasNormal)
+							{
+								stream << mesh.vertices[vi].Normal[0] << " " << mesh.vertices[vi].Normal[1] << " " << mesh.vertices[vi].Normal[2] << "\t";
+							}
+
 							stream << mesh.vertices[vi].TexCoords[0] << " " << mesh.vertices[vi].TexCoords[1] << "\t";
+
+							if (mesh.hasNormal && m_settings.mesh.bSaveTangentSpace)
+							{
+								stream << mesh.vertices[vi].Tangent[0] << " " << mesh.vertices[vi].Tangent[1] << " " << mesh.vertices[vi].Tangent[2] << "\t";
+								if (m_settings.mesh.bSaveBitangent)
+								{
+									stream << mesh.vertices[vi].Bitangent[0] << " " << mesh.vertices[vi].Bitangent[1] << " " << mesh.vertices[vi].Bitangent[2] << "\t";
+								}
+							}
+
 							if (mesh.hasBones)
 							{
 								std::vector<VertexBoneWeight> verticeWeights;
@@ -210,7 +267,7 @@ namespace ZETools
 								stream << "diffuse ";
 								break;
 							case NORMAL_TEXTURE:
-								stream << "normals ";
+								stream << "normal ";
 								break;
 							case SPECULAR_TEXTURE:
 								stream << "specular ";
@@ -489,7 +546,10 @@ namespace ZETools
 			Mesh outMesh;
 
 			outMesh.name = mesh->mName.C_Str();
+
 			bool hasNormal = mesh->mNormals != NULL;
+
+			outMesh.hasNormal = hasNormal;
 
 			for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 			{
@@ -497,14 +557,26 @@ namespace ZETools
 				pos.Position[0] = mesh->mVertices[i].x;
 				pos.Position[1] = mesh->mVertices[i].y;
 				pos.Position[2] = mesh->mVertices[i].z;
+				
 				if (hasNormal)
 				{
 					pos.Normal[0] = mesh->mNormals[i].x;
 					pos.Normal[1] = mesh->mNormals[i].y;
 					pos.Normal[2] = mesh->mNormals[i].z;
+
+					pos.Tangent[0] = mesh->mTangents[i].x;
+					pos.Tangent[1] = mesh->mTangents[i].y;
+					pos.Tangent[2] = mesh->mTangents[i].z;
+
+					pos.Bitangent[0] = mesh->mBitangents[i].x;
+					pos.Bitangent[1] = mesh->mBitangents[i].y;
+					pos.Bitangent[2] = mesh->mBitangents[i].z;
 				}
+
 				pos.TexCoords[0] = 0.0f;
 				pos.TexCoords[1] = 0.0f;
+
+				pos.bHasTextureCoord = mesh->mTextureCoords[0] != NULL;
 
 				if (mesh->mTextureCoords[0])
 				{

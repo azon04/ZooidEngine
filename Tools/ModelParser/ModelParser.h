@@ -21,6 +21,10 @@ namespace ZETools
 		float Position[3];
 		float Normal[3];
 		float TexCoords[2];
+		float Tangent[3];
+		float Bitangent[3];
+
+		bool bHasTextureCoord;
 	};
 
 	struct VertexBoneWeight
@@ -59,6 +63,7 @@ namespace ZETools
 		std::string name;
 		std::vector<Vertex> vertices;
 		bool hasBones = false;
+		bool hasNormal = false;
 		std::map<int, std::vector<VertexBoneWeight>> vertexBoneWeightMap;
 		std::vector<unsigned int> indices;
 		Material material;
@@ -107,6 +112,12 @@ namespace ZETools
 			bool bRemoveNonBone = true;
 			bool bCreateAdditive = false;
 		} animation;
+
+		struct MeshSettings
+		{
+			bool bSaveTangentSpace = true;
+			bool bSaveBitangent = false;
+		} mesh;
 
 		bool bParseMesh = true;
 		bool bParseAnimation = true;

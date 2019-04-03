@@ -75,6 +75,10 @@ namespace ZE
 			{
 				SkinMeshRenderInfo* skinMeshRenderInfo = m_gameContext->getDrawList()->m_skinMeshRenderGatherer.nextRenderInfo();
 				SceneRenderFactory::InitializeRenderInfoForMesh(skinMeshRenderInfo, m_mesh);
+				if (m_material)
+				{
+					skinMeshRenderInfo->m_material = m_material;
+				}
 				skinMeshRenderInfo->m_worldTransform = m_worldTransform;
 				skinMeshRenderInfo->m_castShadow = m_bCastShadow;
 
@@ -94,7 +98,8 @@ namespace ZE
 			else
 			{
 				MeshRenderInfo* meshRenderInfo = nullptr;
-				if (m_mesh->getMaterial()->IsBlend())
+				Material* mat = m_material ? m_material : m_mesh->getMaterial();
+				if (mat->IsBlend())
 				{
 					meshRenderInfo = m_gameContext->getDrawList()->m_transculentRenderGatherer.nextRenderInfo();
 				}
@@ -103,6 +108,7 @@ namespace ZE
 					meshRenderInfo = m_gameContext->getDrawList()->m_meshRenderGatherer.nextRenderInfo();
 				}
 				SceneRenderFactory::InitializeRenderInfoForMesh(meshRenderInfo, m_mesh);
+				meshRenderInfo->m_material = mat;
 				meshRenderInfo->m_worldTransform = m_worldTransform;
 				meshRenderInfo->m_castShadow = m_bCastShadow;
 			}
@@ -148,6 +154,11 @@ namespace ZE
 	void RenderComponent::setPhysicsEnabled(bool _bEnabled)
 	{
 		m_physicsEnabled = _bEnabled;
+	}
+
+	void RenderComponent::setMaterial(Material* material)
+	{
+		m_material = material;
 	}
 
 	void RenderComponent::handlePhysicsUpdateTransform(Event* pEvent)

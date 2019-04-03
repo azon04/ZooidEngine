@@ -76,6 +76,18 @@ namespace ZE
 					pMaterial->m_textures.push_back(texture);
 				}
 			}
+			else if (StringFunc::Compare(tokenBuffer, "normal") == 0)
+			{
+				reader.readNextString(tokenBuffer);
+				Handle hTexture = TextureManager::GetInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
+				if (hTexture.isValid())
+				{
+					MaterialTexture texture;
+					texture.texture = hTexture.getObject<IGPUTexture>();
+					texture.type = TextureType::NORMAL;
+					pMaterial->m_textures.push_back(texture);
+				}
+			}
 			else if (StringFunc::Compare(tokenBuffer, "shininess") == 0)
 			{
 				pMaterial->m_shininess = reader.readNextFloat();

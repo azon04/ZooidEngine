@@ -9,10 +9,13 @@ layout (location = 1) in vec3 Normal;
 layout (location = 2) in vec2 TexCoord;
 layout (location = 3) in ivec4 BoneIDs;
 layout (location = 4) in vec4 BoneWeights;
+layout (location = 5) in vec3 Tangent;
 
 out vec2 vsTexCoord;
 out vec3 vsNormal;
 out vec3 vsFragPos;
+out vec3 vsTangent;
+out vec3 vsBitangent;
 
 const int MAX_BONES = 150;
 
@@ -40,7 +43,10 @@ void main()
 	boneTransform += boneMats[BoneIDs[3]] * BoneWeights[3];
 
 	gl_Position = (projectionMat * viewMat * modelMat) * boneTransform * vec4(Pos, 1.0f);
-	vsNormal = mat3(transpose(inverse(modelMat * boneTransform))) * Normal;
+	mat3 modelInvTrans = mat3(transpose(inverse(modelMat * boneTransform)));
+	vsNormal = modelInvTrans  * Normal;
+	vsTangent = modelInvTrans * Tangent;
+	vsBitangent = cross(vsNormal, vsTangent);
 	vsFragPos = vec3( modelMat * boneTransform * vec4( Pos, 1.0f ) );
 	vsTexCoord = TexCoord;
 }

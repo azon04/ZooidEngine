@@ -35,6 +35,16 @@ namespace ZE
 		Float32 BoneWeights[4];
 	};
 
+	struct MeshSkinDataWithTangent
+	{
+		Float32 Position[3];
+		Float32 Normal[3];
+		Float32 TexCoord[2];
+		Int32 BoneIDs[4];
+		Float32 BoneWeights[4];
+		Float32 Tangent[3];
+	};
+
 	MeshManager* MeshManager::s_instance = nullptr;
 
 	void MeshManager::Init()
@@ -223,6 +233,82 @@ namespace ZE
 
 			pVertexBuffer->SetData(pData, sizeof(MeshSkinData), numVertex);
 		}
+		else if (bufferLayoutType == BUFFER_LAYOUT_V3_N3_T3_TC2_SKIN)
+		{
+			dataHandle = Handle("Data", sizeof(MeshSkinDataWithTangent) * numVertex);
+			MeshSkinDataWithTangent* pData = new(dataHandle) MeshSkinDataWithTangent[numVertex];
+
+			Vector3 minVertex(9999.9f);
+			Vector3 maxVertex(-9999.9f);
+			Vector3 centerVertex(0.0f);
+
+			for (int i = 0; i < numVertex; i++)
+			{
+				pData[i].Position[0] = fileReader->readNextFloat();
+				pData[i].Position[1] = fileReader->readNextFloat();
+				pData[i].Position[2] = fileReader->readNextFloat();
+				pData[i].Normal[0] = fileReader->readNextFloat();
+				pData[i].Normal[1] = fileReader->readNextFloat();
+				pData[i].Normal[2] = fileReader->readNextFloat();
+
+				pData[i].TexCoord[0] = fileReader->readNextFloat();
+				pData[i].TexCoord[1] = fileReader->readNextFloat();
+
+				pData[i].Tangent[0] = fileReader->readNextFloat();
+				pData[i].Tangent[1] = fileReader->readNextFloat();
+				pData[i].Tangent[2] = fileReader->readNextFloat();
+
+				pData[i].BoneIDs[0] = fileReader->readNextInt();
+				pData[i].BoneIDs[1] = fileReader->readNextInt();
+				pData[i].BoneIDs[2] = fileReader->readNextInt();
+				pData[i].BoneIDs[3] = fileReader->readNextInt();
+				pData[i].BoneWeights[0] = fileReader->readNextFloat();
+				pData[i].BoneWeights[1] = fileReader->readNextFloat();
+				pData[i].BoneWeights[2] = fileReader->readNextFloat();
+				pData[i].BoneWeights[3] = fileReader->readNextFloat();
+
+				if (minVertex.m_x > pData[i].Position[0])
+				{
+					minVertex.m_x = pData[i].Position[0];
+				}
+
+				if (minVertex.m_y > pData[i].Position[1])
+				{
+					minVertex.m_y = pData[i].Position[1];
+				}
+
+				if (minVertex.m_z > pData[i].Position[2])
+				{
+					minVertex.m_z = pData[i].Position[2];
+				}
+
+				if (maxVertex.m_x < pData[i].Position[0])
+				{
+					maxVertex.m_x = pData[i].Position[0];
+				}
+
+				if (maxVertex.m_y < pData[i].Position[1])
+				{
+					maxVertex.m_y = pData[i].Position[1];
+				}
+
+				if (maxVertex.m_z < pData[i].Position[2])
+				{
+					maxVertex.m_z = pData[i].Position[2];
+				}
+
+				centerVertex = centerVertex + Vector3(pData[i].Position);
+			}
+
+			centerVertex = centerVertex / (Float32)numVertex;
+			pMesh->m_boxMin = minVertex;
+			pMesh->m_boxMax = maxVertex;
+			pMesh->m_centerOffset = centerVertex;
+			Vector3 centerToMax = maxVertex - centerVertex;
+			pMesh->m_radius = centerToMax.length();
+
+			pVertexBuffer->SetData(pData, sizeof(MeshSkinDataWithTangent), numVertex);
+		}
 		else
 		{
 			int dataPerVertex = 6;
@@ -233,6 +319,9 @@ namespace ZE
 				break;
 			case BUFFER_LAYOUT_V3_N3_TC2:
 				dataPerVertex = 8;
+				break;
+			case BUFFER_LAYOUT_V3_N3_T3_TC2:
+				dataPerVertex = 11;
 				break;
 			case BUFFER_LAYOUT_V3_N3_TC2_SKIN:
 				dataPerVertex = 16;
@@ -353,6 +442,10 @@ namespace ZE
 		COMPARE_RETURN(stringType, BUFFER_LAYOUT_V3_C3);
 		COMPARE_RETURN(stringType, BUFFER_LAYOUT_V3_N3_TC2);
 		COMPARE_RETURN(stringType, BUFFER_LAYOUT_V3_N3_TC2_SKIN);
+		COMPARE_RETURN(stringType, BUFFER_LAYOUT_V3_N3_T3_TC2);
+		COMPARE_RETURN(stringType, BUFFER_LAYOUT_V3_N3_T3_TC2_SKIN);
+		COMPARE_RETURN(stringType, BUFFER_LAYOUT_V3_N3_T3_B3_TC2);
+		COMPARE_RETURN(stringType, BUFFER_LAYOUT_V3_N3_T3_B3_TC2_SKIN);
 		return -1;
 	}
 

@@ -14,7 +14,10 @@
 #include "Animation/AnimationComponent.h"
 #include "Animation/AnimationSM.h"
 
+#include "Resources/Material.h"
+
 #include "ResourceManagers/AnimationManager.h"
+#include "ResourceManagers/MaterialManager.h"
 
 #include "Utils/StringFunc.h"
 
@@ -170,6 +173,16 @@ namespace ZE
 				if (RenderComponent* pRendComp = (RenderComponent*) pComp)
 				{
 					pRendComp->loadMeshFromFile(GetResourcePath(buff).c_str());
+				}
+			}
+			else if (StringFunc::Compare(buff, "Material") == 0)
+			{
+				// Read material
+				fileReader->readNextString(buff);
+				if (RenderComponent* pRendComp = (RenderComponent*)pComp)
+				{
+					Handle hMaterial = MaterialManager::GetInstance()->loadResource(GetResourcePath(buff).c_str());
+					pRendComp->setMaterial(hMaterial.getObject<Material>());
 				}
 			}
 			else if (StringFunc::Compare(buff, "LightType") == 0)

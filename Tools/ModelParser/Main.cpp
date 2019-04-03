@@ -28,6 +28,8 @@ int main(int argc, char* argv[])
 		cout << "--noAnimation" << endl;
 		cout << "--skeletonPath path \t path is relative path of skeleton from out directory" << endl;
 		cout << "--reference path \t path is FBX or raw assets path to use as reference (for making additive animation)" << endl;
+		cout << "--omitTangentSpace \t option to not save tangent space " << endl;
+		cout << "--withBitangent \t option to also save bitangent of the mesh" << endl;
 		return 0;
 	}
 
@@ -92,6 +94,14 @@ int main(int argc, char* argv[])
 		{
 			referencePath = argv[++index];
 			settings.animation.bCreateAdditive = true;
+		}
+		else if (strcmp(argv[index], "--omitTangentSpace") == 0)
+		{
+			settings.mesh.bSaveTangentSpace = false;
+		}
+		else if (strcmp(argv[index], "withBitangent") == 0)
+		{
+			settings.mesh.bSaveBitangent = true;
 		}
 		
 		index++;

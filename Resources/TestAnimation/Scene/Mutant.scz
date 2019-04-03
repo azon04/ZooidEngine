@@ -1,0 +1,18 @@
+SceneName Mutant
+FileVersion 1.0
+ComponentCount 2
+RenderComponent Mutant_1
+BEGIN
+Animation TestAnimation/Animation/MutantPunch_baked_Take001.animz 1 0.1
+Mesh TestAnimation/Mesh/MutantPunch_baked_0.meshz
+S 0.01 0.01 0.01
+T 0.0 0.0 -7.0
+END
+RenderComponent Mutant_2
+BEGIN
+Animation TestAnimation/Animation/MutantPunch_baked_Take001.animz 1 0.1
+Mesh TestAnimation/Mesh/MutantPunch_baked_0.meshz
+Material TestAnimation/Material/MutantPunch_baked_no_normal.matz
+S 0.01 0.01 0.01
+T 1.5 0.0 -7.0
+END

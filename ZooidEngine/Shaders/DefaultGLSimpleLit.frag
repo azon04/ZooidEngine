@@ -10,9 +10,11 @@ struct Material
 {
 	sampler2D diffuseMap;
 	sampler2D specularMap;
+	sampler2D normalMap;
 
 	float diffuseMapBound;
 	float specularMapBound;
+	float normalMapBound;
 
 	float shininess;
 
@@ -64,6 +66,8 @@ out vec4 fColor;
 in vec2 vsTexCoord;
 in vec3 vsNormal;
 in vec3 vsFragPos;
+in vec3 vsTangent;
+in vec3 vsBitangent;
 
 uniform Material material;
 
@@ -74,11 +78,12 @@ vec3 CalcPointLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir);
 vec3 CalcSpotLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir);
 float CalcShadow(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir, int shadowMapIndex);
 float CalcShadowPCF(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir, int shadowMapIndex);
+vec3 CalculateNormal();
 
 void main()
 {
 	// properties
-	vec3 norm = normalize(vsNormal);
+	vec3 norm = CalculateNormal();
 	vec3 viewDir = normalize(viewPos - vsFragPos);
 
 	vec3 result = vec3(0.0, 0.0, 0.0);
@@ -164,6 +169,17 @@ vec3 CalculateDiffuseColor()
 vec3 CalculateSpecularColor()
 {
 	return mix(vec3(1.0, 1.0, 1.0), vec3(texture(material.specularMap, vsTexCoord)), material.specularMapBound);
+}
+
+vec3 CalculateNormal()
+{
+	vec3 normal = mix(normalize(vsNormal), normalize(texture(material.normalMap, vsTexCoord).rgb * 2.0 - 1.0), material.normalMapBound );
+	if(material.normalMapBound == 1.0)
+	{
+		mat3 TBN = mat3(normalize(vsTangent), normalize(vsBitangent), normalize(normal));
+		normal = normalize(TBN * normal);
+	}
+	return normal;
 }
 
 vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir)

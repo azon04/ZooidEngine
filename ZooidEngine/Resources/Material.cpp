@@ -14,6 +14,7 @@ namespace ZE
 	{
 		int iDiffuse = 0;
 		int iSpecular = 0;
+		int iNormal = 0;
 		for (int i = 0; i < m_textures.length(); ++i)
 		{
 			MaterialTexture& matTexture = m_textures[i];
@@ -29,6 +30,10 @@ namespace ZE
 				varName += "specularMap";
 				iSpecular++;
 				break;
+			case TextureType::NORMAL:
+				varName += "normalMap";
+				iNormal++;
+				break;
 			default:
 				break;
 			}
@@ -38,6 +43,7 @@ namespace ZE
 
 		shaderChain->setFloat("material.diffuseMapBound", iDiffuse > 0 ? 1.0f : 0.0f);
 		shaderChain->setFloat("material.specularMapBound", iSpecular > 0 ? 1.0f : 0.0f);
+		shaderChain->setFloat("material.normalMapBound", iNormal > 0 ? 1.0f : 0.0f);
 
 		shaderChain->setFloat("material.shininess", m_shininess);
 		shaderChain->setVec3("material.Ka", m_Ka);

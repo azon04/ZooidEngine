@@ -5,6 +5,7 @@ LightComponent DirLight
 BEGIN
 LightType 0
 R 150.0 0.0 0.0
+T 0.0 3.0 3.0
 END
 RenderComponent Floor
 BEGIN
@@ -13,7 +14,7 @@ S 20.0 1.0 20.0
 END
 RenderComponent Crate_1
 BEGIN
-Mesh PhysicsSandBox/Mesh/Crate.meshz
+Mesh PhysicsSandBox/Mesh/BrickWall.meshz
 S 1.0 1.0 1.0
 R 0.0 0.0 0.0
 T 0.0 0.5 0.0
@@ -21,7 +22,7 @@ Physics true
 END
 RenderComponent Crate_2
 BEGIN
-Mesh PhysicsSandBox/Mesh/Crate.meshz
+Mesh PhysicsSandBox/Mesh/BrickWall.meshz
 S 1.0 1.0 1.0
 R 0.0 0.0 0.0
 T 0.0 5.0 0.0
@@ -29,7 +30,7 @@ Physics true
 END
 RenderComponent Crate_3
 BEGIN
-Mesh PhysicsSandBox/mesh/Crate.meshz
+Mesh PhysicsSandBox/mesh/BrickWall.meshz
 S 1.0 1.0 1.0
 R 0.0 0.0 0.0
 T 0.0 1.5 0.0
@@ -37,7 +38,7 @@ Physics true
 END
 RenderComponent Crate_4
 BEGIN
-Mesh PhysicsSandBox/mesh/Crate.meshz
+Mesh PhysicsSandBox/mesh/BrickWall.meshz
 S 1.0 1.0 1.0
 R 0.0 0.0 0.0
 T 1.0 0.5 0.0
@@ -45,7 +46,7 @@ Physics true
 END
 RenderComponent Crate_5
 BEGIN
-Mesh PhysicsSandBox/mesh/Crate.meshz
+Mesh PhysicsSandBox/mesh/BrickWall.meshz
 S 1.0 1.0 1.0
 R 0.0 0.0 0.0
 T -1.0 0.5 0.0
@@ -53,7 +54,7 @@ Physics true
 END
 RenderComponent Crate_6
 BEGIN
-Mesh PhysicsSandBox/mesh/Crate.meshz
+Mesh PhysicsSandBox/mesh/BrickWall.meshz
 S 1.0 1.0 1.0
 R 0.0 0.0 0.0
 T 1.0 0.5 -1.5

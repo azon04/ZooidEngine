@@ -1,3 +1,3 @@
-vbuff TestAnimation\VertexBuffer\MutantPunch_baked_0.vbuff
-mat TestAnimation\Material\MutantPunch_baked_0.matz
+vbuff TestAnimation\VertexBuffer\MutantPunch_Baked_0.vbuff
+mat TestAnimation\Material\MutantPunch_Baked_0.matz
 skeleton TestAnimation\Skeleton\MutantPunch_baked_skel.skelz

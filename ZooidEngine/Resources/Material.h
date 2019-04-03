@@ -15,7 +15,8 @@ namespace ZE
 	enum class TextureType : UInt8
 	{
 		DIFFUSE = 1,
-		SPECULAR = 2
+		SPECULAR = 2,
+		NORMAL = 3
 	};
 
 	struct MaterialTexture

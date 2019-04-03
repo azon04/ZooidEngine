@@ -7,6 +7,7 @@
 namespace ZE 
 {	
 	class Mesh;
+	class Material;
 	class Event;
 
 	class RenderComponent : public SceneComponent , public IPhysicsBodyHolder
@@ -16,7 +17,7 @@ namespace ZE
 
 	public:
 		RenderComponent(GameContext* gameContext) : SceneComponent(gameContext), 
-			m_mesh(nullptr), m_bHighlight(false), 
+			m_mesh(nullptr), m_material(nullptr), m_bHighlight(false), 
 			m_bStatic(true), m_bTriggerOnly(false),
 			m_bEnableGravity(true), m_physicsEnabled(true),
 			m_bCastShadow(true)
@@ -39,6 +40,8 @@ namespace ZE
 		void setStatic(bool _bStatic);
 
 		void setPhysicsEnabled(bool _bEnabled);
+
+		void setMaterial(Material* material);
 		
 		// Physics: handle physics update transform event
 		void handlePhysicsUpdateTransform(Event* pEvent);
@@ -54,6 +57,7 @@ namespace ZE
 
 	protected:
 		Mesh* m_mesh;
+		Material* m_material;
 		bool m_bHighlight;
 
 		// Physics Data
