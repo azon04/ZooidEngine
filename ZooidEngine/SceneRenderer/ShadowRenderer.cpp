@@ -27,8 +27,116 @@ namespace ZE
 
 		if (lightData->Type == LightType::DIRECTIONAL_LIGHT)
 		{
-			MathOps::LookAt(view, lightData->getDirection() * -5.0f, Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
-			MathOps::CreateOrthoProjEx(proj, -5.0f, 5.0f, -5.0f, 5.0f, 0.1f, 10.0f);
+			Vector3 zAxis = lightData->getDirection();
+			Vector3 xAxis = zAxis ^ Vector3(0.0f, 1.0f, 0.0f);
+			if (xAxis.lengthSquare() == 0.0f)
+			{
+				xAxis = zAxis ^ Vector3(0.0f, 0.0f, 1.0f);
+			}
+
+			Vector3 yAxis = xAxis ^ zAxis;
+
+			zAxis = zAxis * -1.0f;
+
+			view.setU(xAxis);
+			view.setV(yAxis);
+			view.setN(zAxis);
+
+			view = view.transpose();
+
+			Float32 mostRight = 0.0f;
+			Float32 mostLeft = 0.0f;
+			Float32 mostTop = 0.0f;
+			Float32 mostBottom = 0.0f;
+			Float32 mostNear = 0.0f;
+			Float32 mostFar = 0.0f;
+
+			ViewFustrum& mainFustrum = drawList->m_viewFustrum;
+
+			for (UInt32 i = 0; i < 8; i++)
+			{
+				Vector3 fustrumPoint = mainFustrum.getFustrumPoint((EFustrumPoint)(i));
+				
+				float right = xAxis | fustrumPoint;
+				float top = yAxis | fustrumPoint;
+				float nearD = zAxis | fustrumPoint;
+
+				if (i == 0)
+				{
+					mostRight = mostLeft = right;
+					mostTop = mostBottom = top;
+					mostNear = mostFar = nearD;
+				}
+				else
+				{
+					if (mostRight < right) { mostRight = right; }
+					if (mostLeft > right) { mostLeft = right; }
+					if (mostTop < top) { mostTop = top; }
+					if (mostBottom > top) { mostBottom = top; }
+					if (mostNear < nearD) { mostNear = nearD; }
+					if (mostFar > nearD) { mostFar = nearD; }
+				}
+			}
+
+			// Test Object bounding; make the light fustrum smaller
+			{
+				float obMostRight = 0.0f;
+				float obMostLeft = 0.0f;
+				float obMostTop = 0.0f;
+				float obMostBottom = 0.0f;
+				float obMostNear = 0.0f;
+
+				Vector3 vertices[2] = { drawList->m_objectsBounding.m_min, drawList->m_objectsBounding.m_max };
+				for (int i = 0; i < 2; i++)
+				{
+					for (int j = 0; j < 2; j++)
+					{
+						for (int k = 0; k < 2; k++)
+						{
+							Vector3 vertex(vertices[i].m_x, vertices[j].m_y, vertices[k].m_z);
+
+							float right = xAxis | vertex;
+							float top = yAxis | vertex;
+							float nearD = zAxis | vertex;
+
+							if (i == 0 && j == 0 && k == 0)
+							{
+								obMostRight = obMostLeft = right;
+								obMostTop = obMostBottom = top;
+							}
+							else
+							{
+								if (obMostRight < right) { obMostRight = right; }
+								if (obMostLeft > right) { obMostLeft = right; }
+								if (obMostTop < top) { obMostTop = top; }
+								if (obMostBottom > top) { obMostBottom = top; }
+								if (obMostNear < nearD) { obMostNear = nearD; }
+							}
+						}
+					}
+				}
+
+				if (mostTop > obMostTop) { mostTop = obMostTop; }
+				if (mostBottom < obMostBottom) { mostBottom = obMostBottom; }
+				if (mostRight > obMostRight) { mostRight = obMostRight; }
+				if (mostLeft < obMostLeft) { mostLeft = obMostLeft; }
+				if (mostNear < obMostNear) { mostNear = obMostNear; }
+			}
+
+			Vector3 deltaPos((mostRight + mostLeft) * 0.5f, (mostTop + mostBottom) * 0.5f, mostNear);
+
+			mostRight -= deltaPos.getX();
+			mostLeft -= deltaPos.getX();
+			mostTop -= deltaPos.getY();
+			mostBottom -= deltaPos.getY();
+
+			Vector3 newPos;
+			newPos = xAxis * deltaPos.getX();
+			newPos = newPos + yAxis * deltaPos.getY();
+			newPos = newPos + zAxis * deltaPos.getZ();
+			view.setPos(Vector3(xAxis | newPos * -1.0f, yAxis | newPos * -1.0f, zAxis | newPos * -1.0f));
+
+			MathOps::CreateOrthoProjEx(proj, mostBottom, mostTop, mostLeft, mostRight, 0.0f, mostNear - mostFar);
 		}
 		else if (lightData->Type == LightType::SPOT_LIGHT)
 		{

@@ -25,6 +25,8 @@ namespace ZE
 	{
 		Float32 wNear = 2 * tanf(m_fov * 0.5f) * m_nearDist;
 		Float32 hNear = wNear * (1.0f / m_ratio);
+		Float32 wFar = 2 * tanf(m_fov * 0.5f) * m_farDist;
+		Float32 hFar = wFar * (1.0f / m_ratio);
 
 #if !USE_FUSTRUM_POINT
 		Vector3 nearCenter = position + direction * m_nearDist;
@@ -52,9 +54,17 @@ namespace ZE
 		normalVector = up.crossProduct(rightTopVector);
 		normalVector.normalize();
 		m_fustrumPlane[FPLANE_RIGHT].fromNormalPosition(normalVector, position);
+
+		m_fustrumPoints[FP_NTL] = nearCenter + 0.5f * hNear * up + -0.5f * wNear * right;
+		m_fustrumPoints[FP_NTR] = nearCenter + 0.5f * hNear * up + 0.5f * wNear * right;
+		m_fustrumPoints[FP_NBR] = nearCenter + -0.5f * hNear * up + 0.5f * wNear * right;
+		m_fustrumPoints[FP_NBL] = nearCenter + -0.5f * hNear * up + -0.5f * wNear * right;
+
+		m_fustrumPoints[FP_FTL] = farCenter + 0.5f * hFar * up + -0.5f * wFar * right;
+		m_fustrumPoints[FP_FTR] = farCenter + 0.5f * hFar * up + 0.5f * wFar * right;
+		m_fustrumPoints[FP_FBR] = farCenter + -0.5f * hFar * up + 0.5f * wFar * right;
+		m_fustrumPoints[FP_FBL] = farCenter + -0.5f * hFar * up + -0.5f * wFar * right;
 #else
-		Float32 wFar = 2 * tanf(m_fov * 0.5f) * m_farDist;
-		Float32 hFar = wFar * (1.0f / m_ratio);
 
 		m_nearCenter = position + direction * m_nearDist;
 		m_farCenter = position + direction * m_farDist;
@@ -95,13 +105,13 @@ namespace ZE
 		return result;
 	}
 
-	ZE::EFustrumTestResult ViewFustrum::testSphere(Sphere& sphere)
+	ZE::EFustrumTestResult ViewFustrum::testSphere(Sphere& sphere, Float32 _offset)
 	{
 		EFustrumTestResult result = FUSTRUM_INSIDE;
 
 		for (int i = 0; i < 6; i++)
 		{
-			Float32 distance = m_fustrumPlane[i].distanceFromPlane(sphere.m_pos);
+			Float32 distance = m_fustrumPlane[i].distanceFromPlane(sphere.m_pos) + _offset;
 			if ( -distance > sphere.m_radius )
 			{
 				return FUSTRUM_OUTSIDE;
@@ -115,7 +125,7 @@ namespace ZE
 		return result;
 	}
 
-	ZE::EFustrumTestResult ViewFustrum::testAAB(AxisAlignedBox& aaBox)
+	ZE::EFustrumTestResult ViewFustrum::testAAB(AxisAlignedBox& aaBox, Float32 _offset)
 	{
 		EFustrumTestResult result = FUSTRUM_INSIDE;
 
@@ -142,11 +152,11 @@ namespace ZE
 				negV.m_z = aaBox.m_min.m_z;
 			}
 
-			if (m_fustrumPlane[i].distanceFromPlane(posV) < 0.0f)
+			if (m_fustrumPlane[i].distanceFromPlane(posV) + _offset < 0.0f)
 			{
 				return FUSTRUM_OUTSIDE;
 			}
-			else if (m_fustrumPlane[i].distanceFromPlane(negV) < 0.0f)
+			else if (m_fustrumPlane[i].distanceFromPlane(negV) + _offset < 0.0f)
 			{
 				result = FUSTRUM_INTERSECT;
 			}
@@ -155,7 +165,7 @@ namespace ZE
 		return result;
 	}
 
-	ZE::EFustrumTestResult ViewFustrum::testOB(OrientedBox& oBox)
+	ZE::EFustrumTestResult ViewFustrum::testOB(OrientedBox& oBox, Float32 _offset)
 	{
 		EFustrumTestResult result = FUSTRUM_INSIDE;
 
@@ -177,7 +187,7 @@ namespace ZE
 
 		for (int i = 0; i < 6; i++)
 		{
-			float distance = m_fustrumPlane[i].distanceFromPlane(center);
+			float distance = m_fustrumPlane[i].distanceFromPlane(center) + _offset;
 			if (distance < 0.0f)
 			{
 				float r = abs(halfBox.getX() * m_fustrumPlane[i].m_normal.dotProduct(u)) +

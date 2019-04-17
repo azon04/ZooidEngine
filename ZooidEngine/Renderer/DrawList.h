@@ -3,6 +3,7 @@
 
 #include "Utils/PrimitiveTypes.h"
 #include "Math/Vector3.h"
+#include "Math/Shapes.h"
 #include "ShaderData.h"
 #include "SceneRenderer/RenderGatherer.h"
 #include "SceneRenderer/ViewFustrum.h"
@@ -64,6 +65,9 @@ namespace ZE
 		// View Fustrum
 		ViewFustrum m_viewFustrum;
 		Matrix4x4 m_projectionMat;
+
+		// Objects Bounding Volume
+		AxisAlignedBox m_objectsBounding;
 	};
 
 };

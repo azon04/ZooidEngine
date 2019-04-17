@@ -331,7 +331,10 @@ namespace ZE
 			// Set ViewFustrum before gathering the render target
 			CameraComponent* currentCamera = CameraManager::GetInstance()->getCurrentCamera();
 			
-			_gameContext->getDrawList()->m_viewFustrum.setCameraVars(currentCamera->getWorldPosition(), currentCamera->getForwardVector() * -1.0f, currentCamera->getUpVector(), currentCamera->getRightVector());
+			DrawList* drawList = _gameContext->getDrawList();
+			drawList->m_viewFustrum.setCameraVars(currentCamera->getWorldPosition(), currentCamera->getForwardVector() * -1.0f, currentCamera->getUpVector(), currentCamera->getRightVector());
+			drawList->m_objectsBounding.m_max = Vector3(-99999.9f);
+			drawList->m_objectsBounding.m_min = Vector3(99999.9f);
 
 			Handle handleGatherRender("EventGatherRender", sizeof(Event_GATHER_RENDER));
 			Event_GATHER_RENDER* pEvent = new(handleGatherRender) Event_GATHER_RENDER();

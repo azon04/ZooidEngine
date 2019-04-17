@@ -71,7 +71,7 @@ in vec3 vsBitangent;
 
 uniform Material material;
 
-const float shadowBias = 0.002;
+const float shadowBias = 0.00005;
 
 vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir);
@@ -142,6 +142,7 @@ float CalcShadowPCF(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir, int shad
 	float currentDepth = projCoords.z;
 
 	// Calculate bias to prevent Shadow Acne
+	float bias = max(0.0001 * (1.0 - dot(normal, lightDir)), shadowBias);
 	float shadow = 0.0;
 	vec2 texelSize = 1.0 / textureSize( shadowMaps[shadowMapIndex], 0 );
 	for(int x = -1; x <= 1; ++x)
@@ -149,7 +150,7 @@ float CalcShadowPCF(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir, int shad
 		for(int y = -1; y <= 1; ++y)
 		{
 			float closestDepth = texture(shadowMaps[shadowMapIndex], projCoords.xy + vec2(x, y) * texelSize).r;
-			shadow += currentDepth > closestDepth ? 1.0 : 0.0;
+			shadow += currentDepth - bias > closestDepth ? 1.0 : 0.0;
 		}
 	}
 	shadow /= 9.0;

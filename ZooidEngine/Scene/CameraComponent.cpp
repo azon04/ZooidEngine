@@ -12,7 +12,7 @@ namespace ZE
 	CameraComponent::CameraComponent(GameContext* gameContext)
 		: SceneComponent(gameContext), m_bUsingOrthoProjection(false)
 	{
-		m_far = 1000.0f;
+		m_far = 100.0f;
 		m_near = 0.1f;
 
 		m_orthoWidth = 5.0f;

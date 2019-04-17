@@ -154,6 +154,12 @@ namespace ZE
 		m_dynamicShadowTexture = nullptr;
 		m_dynamicShadowFrameBuffer = nullptr;
 
+		if (m_lightType == DIRECTIONAL_LIGHT)
+		{
+			m_shadowMapWidth *= 2;
+			m_shadowMapHeight *= 2;
+		}
+
 		if (m_staticShadowFile.length() > 0)
 		{
 			Handle hTexture = TextureManager::GetInstance()->loadResource(m_staticShadowFile.const_str());
@@ -172,9 +178,9 @@ namespace ZE
 		pCPUTexture->setGenerateMipmap(false);
 		pCPUTexture->setDataType(FLOAT);
 		pCPUTexture->setWrapOnU(CLAMP_TO_BORDER);
-		pCPUTexture->setWrapOnV(CLAMP_TO_EDGE);
-		pCPUTexture->setMinFilter(NEAREST);
-		pCPUTexture->setMagFilter(NEAREST);
+		pCPUTexture->setWrapOnV(CLAMP_TO_BORDER);
+		pCPUTexture->setMinFilter(LINEAR);
+		pCPUTexture->setMagFilter(LINEAR);
 		pCPUTexture->setBorderColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
 		Handle hGPUTexture = m_gameContext->getRenderZooid()->CreateRenderTexture();

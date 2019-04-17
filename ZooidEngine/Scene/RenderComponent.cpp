@@ -41,8 +41,11 @@ namespace ZE
 	{
 		if (m_mesh)
 		{
+			DrawList* drawList = m_gameContext->getDrawList();
+			Float32 fustrumOffset = m_bCastShadow ? 1.0f : 0.0f;
+
 			Sphere boundingSphere = m_mesh->getBoundingSphere(m_worldTransform);
-			EFustrumTestResult testResult = m_gameContext->getDrawList()->m_viewFustrum.testSphere(boundingSphere);
+			EFustrumTestResult testResult = m_gameContext->getDrawList()->m_viewFustrum.testSphere(boundingSphere, fustrumOffset);
 			if (testResult == FUSTRUM_OUTSIDE)
 			{
 				return;
@@ -50,7 +53,7 @@ namespace ZE
 			
 			if (testResult == FUSTRUM_INTERSECT)
 			{
-				testResult = m_gameContext->getDrawList()->m_viewFustrum.testOB(m_mesh->getOBBoundingBox(m_worldTransform));
+				testResult = m_gameContext->getDrawList()->m_viewFustrum.testOB(m_mesh->getOBBoundingBox(m_worldTransform), fustrumOffset);
 			}
 
 			if (testResult == FUSTRUM_OUTSIDE)
@@ -71,6 +74,41 @@ namespace ZE
 				}
 			}
 
+			// Calculate total Bounding Box
+			{
+				AxisAlignedBox objectBounding = m_mesh->getAABBoundingBox(m_worldTransform);
+
+				if (drawList->m_objectsBounding.m_min.m_x > objectBounding.m_min.m_x)
+				{
+					drawList->m_objectsBounding.m_min.m_x = objectBounding.m_min.m_x;
+				}
+
+				if (drawList->m_objectsBounding.m_min.m_y > objectBounding.m_min.m_y)
+				{
+					drawList->m_objectsBounding.m_min.m_y = objectBounding.m_min.m_y;
+				}
+
+				if (drawList->m_objectsBounding.m_min.m_z > objectBounding.m_min.m_z)
+				{
+					drawList->m_objectsBounding.m_min.m_z = objectBounding.m_min.m_z;
+				}
+
+				if (drawList->m_objectsBounding.m_max.m_x < objectBounding.m_max.m_x)
+				{
+					drawList->m_objectsBounding.m_max.m_x = objectBounding.m_max.m_x;
+				}
+
+				if (drawList->m_objectsBounding.m_max.m_y < objectBounding.m_max.m_y)
+				{
+					drawList->m_objectsBounding.m_max.m_y = objectBounding.m_max.m_y;
+				}
+
+				if (drawList->m_objectsBounding.m_max.m_z < objectBounding.m_max.m_z)
+				{
+					drawList->m_objectsBounding.m_max.m_z = objectBounding.m_max.m_z;
+				}
+			}
+			
 			if (m_mesh->hasSkeleton())
 			{
 				SkinMeshRenderInfo* skinMeshRenderInfo = m_gameContext->getDrawList()->m_skinMeshRenderGatherer.nextRenderInfo();
