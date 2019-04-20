@@ -344,6 +344,7 @@ namespace ZE
 
 		// Handle Event_GATHER_LIGHT
 		_gameContext->getDrawList()->m_lightData.NumLight = 0;
+		_gameContext->getDrawList()->m_lightData.NumCascade = 0;
 		{
 			ZE::Handle handleGatherLight("EventGatherLight", sizeof(ZE::Event_GATHER_LIGHT));
 			ZE::Event_GATHER_LIGHT* eventGatherLight = new(handleGatherLight) Event_GATHER_LIGHT();

@@ -61,6 +61,7 @@ out vec4 fColor;
 in vec2 vsTexCoord;
 in vec3 vsNormal;
 in vec3 vsFragPos;
+in float vsCamDepth;
 
 uniform Material material;
 

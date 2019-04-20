@@ -5,6 +5,7 @@
 #include "Math/Matrix4x4.h"
 
 #define MAX_NUMBER_OF_LIGHT 8
+#define MAX_SHADOW_MAP 16
 
 namespace ZE
 {
@@ -15,6 +16,17 @@ namespace ZE
 
 		void setViewMat(Matrix4x4& _viewMat4);
 		void setProjectionMat(Matrix4x4& _projectionMat4);
+	};
+
+	struct CascadeShadowData
+	{
+		Float32 lightViewProj[4][4];
+
+		Float32 cascadeDistance;
+		Int32 shadowMapIndex;
+		Float32 padding[2];
+
+		void setViewProjMatrix(Matrix4x4& _viewProj);
 	};
 
 	struct LightStruct
@@ -42,6 +54,7 @@ namespace ZE
 
 		Float32 lightViewProj[4][4];
 		Int32 shadowMapIndices[4];
+		Int32 cascadeShadowIndices[4];
 
 		void setPosition(Vector3& _position);
 		void setDirection(Vector3& _direction);
@@ -49,6 +62,7 @@ namespace ZE
 		void setDiffuse(Vector3& _diffuse);
 		void setSpecular(Vector3& _specular);
 		void setViewProjMatrix(Matrix4x4& _viewProj);
+		void reset();
 
 		Vector3 getDirection();
 		Vector3 getPosition();
@@ -61,7 +75,11 @@ namespace ZE
 		Float32 ViewPos[3];
 		UInt32 NumLight;
 
+		Float32 padding[3];
+		UInt32 NumCascade;
+
 		LightStruct lights[MAX_NUMBER_OF_LIGHT];
+		CascadeShadowData cascadeShadowData[MAX_SHADOW_MAP];
 
 		void setViewPos(Vector3& _viewPos);
 	};

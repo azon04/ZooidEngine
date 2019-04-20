@@ -3,6 +3,7 @@
 
 #include "Utils/PrimitiveTypes.h"
 #include "Math/Vector3.h"
+#include "Math/Matrix4x4.h"
 #include "Math/Shapes.h"
 #include "ShaderData.h"
 #include "SceneRenderer/RenderGatherer.h"
@@ -16,11 +17,14 @@ namespace ZE
 	struct LightShadowMapData
 	{
 		UInt32 lightIndex;
+		Int32 cascadeIndex;
 		IGPUTexture* staticShadowTexture;
 		IGPUTexture* dynamicShadowTexture;
 		IGPUFrameBuffer* dynamicShadowFrameBuffer;
 		IShaderChain* normalShaderChain;
 		IShaderChain* skinnedShaderChain;
+		Matrix4x4 view;
+		Matrix4x4 projection;
 	};
 
 	class DrawList 

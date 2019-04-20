@@ -4,10 +4,13 @@
 #include "Scene/SceneComponent.h"
 #include "Math/Vector3.h"
 
+#define MAX_LIGHT_SHADOW_MAPS 4
+
 namespace ZE
 {
 	class IGPUTexture;
 	class IGPUFrameBuffer;
+	class ViewFustrum;
 
 	enum LightType : Int32
 	{
@@ -46,7 +49,11 @@ namespace ZE
 
 		// Set Shadow map height
 		void setShadowMapHeight(UInt32 _height);
-		
+
+		IGPUFrameBuffer* getOrCreateShadowFrameBuffer(UInt32 _index);
+
+		IGPUTexture* getDynamicShadowMap(UInt32 _index) const { return m_dynamicShadowTextures[_index]; };
+
 		LightType m_lightType;
 
 		Vector3 m_ambient;
@@ -64,15 +71,20 @@ namespace ZE
 
 	protected:
 		void setupLight();
+		void calculateCascadeLightFustrum(Matrix4x4& view, Matrix4x4& projection, ViewFustrum* camFustrum, Float32 cascadeDistStart, Float32 cascadeDistEnd, Vector3 objBoundMin, Vector3 objBoundMax);
+		void setupShadowMapsDirectional(UInt32 lightIndex);
+		void setupShadowMapsSpotLight(UInt32 lightIndex);
+		void setupShadowMapsPointLight(UInt32 lightIndex);
 
 	protected:
 		bool m_bStatic;
 		bool m_bGenerateShadow;
 
 		IGPUTexture* m_staticShadowTexture;
-		IGPUTexture* m_dynamicShadowTexture;
-		IGPUFrameBuffer* m_dynamicShadowFrameBuffer;
 		
+		IGPUTexture* m_dynamicShadowTextures[MAX_LIGHT_SHADOW_MAPS];
+		IGPUFrameBuffer* m_dynamicShadowFrameBuffers[MAX_LIGHT_SHADOW_MAPS];
+
 		UInt32 m_shadowMapWidth;
 		UInt32 m_shadowMapHeight;
 

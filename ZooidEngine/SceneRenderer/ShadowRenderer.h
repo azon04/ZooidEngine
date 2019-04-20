@@ -17,7 +17,6 @@ namespace ZE
 	{
 	public:
 
-		virtual void setupLightData(LightStruct* lightData, DrawList* drawList);
 		virtual void setupShadowMapData(LightShadowMapData* shadowMapData);
 		virtual void reset();
 		

@@ -26,6 +26,15 @@ struct Material
 #define MAX_NUM_LIGHTS 8
 #define MAX_SHADOW_MAP 16
 
+struct CascadeShadowData
+{
+	mat4 viewProj;
+
+	float cascadedDistance;
+	int shadowMapIndex;
+	vec2 padding;
+};
+
 struct Light {
 
 	int type; // 0 = directional Light, 1 = Point Light, 2 = Spot Light
@@ -49,6 +58,7 @@ struct Light {
 	mat4 viewProj;
 
 	ivec4 shadowMapIndices;
+	ivec4 cascadeShadowIndices;
 };
 
 layout (std140) uniform light_data
@@ -56,7 +66,11 @@ layout (std140) uniform light_data
 	vec3 viewPos;
 	int numLight;
 
+	vec2 padding;
+	int numCascade;
+	
 	Light lights[MAX_NUM_LIGHTS];
+	CascadeShadowData cascadeShadowData[MAX_SHADOW_MAP];
 };
 
 uniform sampler2D shadowMaps[MAX_SHADOW_MAP];
@@ -68,6 +82,7 @@ in vec3 vsNormal;
 in vec3 vsFragPos;
 in vec3 vsTangent;
 in vec3 vsBitangent;
+in float vsCamDepth;
 
 uniform Material material;
 
@@ -201,12 +216,20 @@ vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir)
 	
 	// Calculate shadow
 	float shadow = 0.0;
-	for(int i=0; i < 4; i++)
+	int i = 0;
+	while(light.shadowMapIndices[i++] != -1)
 	{
-		if(light.shadowMapIndices[i] != -1)
-		{
-			shadow = max(shadow, CalcShadowPCF(light.viewProj * vec4(vsFragPos, 1.0), normal, lightDir, light.shadowMapIndices[i]));
-		}
+		shadow = max( shadow, CalcShadowPCF(light.viewProj * vec4(vsFragPos, 1.0), normal, lightDir, light.shadowMapIndices[i]));
+	}
+
+	const int cascadeCount = 4;
+	if(light.cascadeShadowIndices[0] != -1)
+	{
+		int index = light.cascadeShadowIndices[0];
+		ivec4 comparison = ivec4(vsCamDepth <= cascadeShadowData[index].cascadedDistance, vsCamDepth <= cascadeShadowData[index+1].cascadedDistance,
+								vsCamDepth <= cascadeShadowData[index+2].cascadedDistance, vsCamDepth <= cascadeShadowData[index+3].cascadedDistance);
+		int cascadeIndex = index + min(cascadeCount - (comparison.x + comparison.y + comparison.z + comparison.w), cascadeCount-1);
+		shadow = max( shadow, CalcShadowPCF(cascadeShadowData[cascadeIndex].viewProj * vec4(vsFragPos, 1.0), normal, lightDir, cascadeShadowData[cascadeIndex].shadowMapIndex));
 	}
 
 	return ambient + (1.0 - shadow) * (diffuse + specular);

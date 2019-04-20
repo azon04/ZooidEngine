@@ -45,6 +45,15 @@ namespace ZE
 		MemoryHelper::Copy(_viewProj.m_data, lightViewProj, sizeof(lightViewProj));
 	}
 
+	void LightStruct::reset()
+	{
+		for (UInt32 i = 0; i < 4; i++)
+		{
+			shadowMapIndices[i] = -1;
+			cascadeShadowIndices[i] = -1;
+		}
+	}
+
 	Vector3 LightStruct::getDirection()
 	{
 		return Vector3(Direction);
@@ -58,6 +67,11 @@ namespace ZE
 	void LightData::setViewPos(Vector3& _viewPos)
 	{
 		MemoryHelper::Copy(&_viewPos.m_data[0], ViewPos, sizeof(Float32) * 3);
+	}
+
+	void CascadeShadowData::setViewProjMatrix(Matrix4x4& _viewProj)
+	{
+		MemoryHelper::Copy(_viewProj.m_data, lightViewProj, sizeof(lightViewProj));
 	}
 
 }

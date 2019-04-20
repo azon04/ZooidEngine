@@ -15,6 +15,7 @@ out vec3 vsNormal;
 out vec3 vsFragPos;
 out vec3 vsTangent;
 out vec3 vsBitangent;
+out float vsCamDepth;
 
 layout (std140) uniform frame_data
 {
@@ -36,4 +37,5 @@ void main()
 	vsBitangent = cross(vsNormal, vsTangent);
 	vsFragPos = vec3( modelMat * vec4( Pos, 1.0f ) );
 	vsTexCoord = TexCoord;
+	vsCamDepth = vec3( viewMat * vec4( vsFragPos, 1.0f) ).z * -1.0f;
 }
