@@ -28,8 +28,8 @@ namespace ZE
 		{
 			MeshRenderInfo& currentMesh = meshRenderInfos[index];
 
-			ZASSERT(currentMesh.m_shaderChain);
-			ZASSERT(currentMesh.m_gpuBufferArray);
+			ZCHECK(currentMesh.m_shaderChain);
+			ZCHECK(currentMesh.m_gpuBufferArray);
 
 			currentMesh.m_shaderChain->bind();
 			
@@ -107,8 +107,8 @@ namespace ZE
 			UInt32 index = sortIndices[i];
 			MeshRenderInfo& currentMesh = meshInfos[index];
 
-			ZASSERT(currentMesh.m_shaderChain);
-			ZASSERT(currentMesh.m_gpuBufferArray);
+			ZCHECK(currentMesh.m_shaderChain);
+			ZCHECK(currentMesh.m_gpuBufferArray);
 
 			currentMesh.m_shaderChain->bind();
 
@@ -169,7 +169,7 @@ namespace ZE
 	{
 		Float32 pivot = squareDist[arr[hi]];
 		Int32 i = lo - 1;
-		for (Int32 j = lo; j < hi; j++)
+		for (UInt32 j = lo; j < hi; j++)
 		{
 			if (squareDist[arr[j]] > pivot)
 			{
@@ -234,8 +234,8 @@ namespace ZE
 		{
 			SkinMeshRenderInfo& currentMesh = meshRenderInfos[index];
 
-			ZASSERT(currentMesh.m_shaderChain);
-			ZASSERT(currentMesh.m_gpuBufferArray);
+			ZCHECK(currentMesh.m_shaderChain);
+			ZCHECK(currentMesh.m_gpuBufferArray);
 
 			currentMesh.m_shaderChain->bind();
 

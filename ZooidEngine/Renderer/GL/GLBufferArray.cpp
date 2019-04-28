@@ -45,7 +45,7 @@ namespace ZE
 
 		m_vertexLayoutSize = 0;
 		m_buffers.clear();
-		for (int i = 0; i < _vertexBufferCount; i++)
+		for (UInt32 i = 0; i < _vertexBufferCount; i++)
 		{
 			GLBufferData* vertexBuffer = static_cast<GLBufferData*>(_vertexBuffers[i]);
 			glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer->getBBO());
@@ -58,7 +58,7 @@ namespace ZE
 		}
 
 
-		for (int i = 0; i < _indexBufferCount; i++)
+		for (UInt32 i = 0; i < _indexBufferCount; i++)
 		{
 			GLBufferData* indexBuffer = static_cast<GLBufferData*>(_indexBuffers[i]);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer->getBBO());

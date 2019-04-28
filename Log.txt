@@ -2,10 +2,10 @@ ZooidEngine: [LOG_ENGINE] Log: CPU Processor: Intel(R) Core(TM) i7-6700HQ CPU @ 
 ZooidEngine: [LOG_ENGINE] Log: CPU Speed: 2592 MHz 
 ZooidEngine: [LOG_ENGINE] Log: RAM Detected 
 ZooidEngine: [LOG_ENGINE] Log: Total Physical RAM: 15.866943 GB 
-ZooidEngine: [LOG_ENGINE] Log: Available Physical RAM: 7.674221 GB 
+ZooidEngine: [LOG_ENGINE] Log: Available Physical RAM: 2.747356 GB 
 ZooidEngine: [LOG_ENGINE] Log: Total Virtual Memory: 1.999878 GB 
-ZooidEngine: [LOG_ENGINE] Log: Avail Virtual Memory: 1.924740 GB 
-ZooidEngine: [LOG_ENGINE] Log: Total Available Disk in E: 3.288612 GB 
+ZooidEngine: [LOG_ENGINE] Log: Avail Virtual Memory: 1.924709 GB 
+ZooidEngine: [LOG_ENGINE] Log: Total Available Disk in E: 2.487827 GB 
 ZooidEngine: [LOG_MEMORY] Log: Total Mem Size : 6143240 bytes ~ 5.858650 MB 
 ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 3072 bytes with 341 blocks on index 10 
 ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 4608 bytes with 227 blocks replacing block on index 10 

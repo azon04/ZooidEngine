@@ -137,8 +137,8 @@ namespace ZE
 			Handle handle("RootComponent", sizeof(SceneComponent));
 			_gameContext->m_rootComponent = new (handle) SceneComponent(_gameContext);
 			_gameContext->getEventDispatcher()->addChild(_gameContext->m_rootComponent);
-			_gameContext->m_rootComponent->setObjectName("Root Component");
 			_gameContext->m_rootComponent->setupComponent();
+			_gameContext->m_rootComponent->setObjectName("Root Component");
 		}
 
 		// Init Font Manager
@@ -152,7 +152,7 @@ namespace ZE
 			ZEINFO("Initializing Debug Renderer...");
 			DebugRenderer::Init(_gameContext);
 			_gameContext->m_debugRenderer = DebugRenderer::GetInstance();
-			_gameContext->m_mainEventDispatcher->addChild(_gameContext->m_debugRenderer);
+			_gameContext->m_rootComponent->addChild(_gameContext->m_debugRenderer);
 		}
 
 		// Create SceneManager
@@ -282,8 +282,8 @@ namespace ZE
 
 		// Draw Base Lines
 		DebugRenderer::DrawMatrixBasis(Matrix4x4());
-		DebugRenderer::DrawTextWorld("Zooid Engine", Matrix4x4());
-		DebugRenderer::DrawTextScreen("Zooid Engine", Vector2(10, 10), Vector3(1.0f), 0.5f);
+		//DebugRenderer::DrawTextWorld("Zooid Engine", Matrix4x4());
+		//DebugRenderer::DrawTextScreen("Zooid Engine", Vector2(10, 10), Vector3(1.0f), 0.5f);
 
 		{
 			static ZE::UIRect panelRect( UIVector2{ 10,10 }, UIVector2{ 250, 100 } );
@@ -297,7 +297,7 @@ namespace ZE
 			textRect.m_dimension = { 320, 100 };
 
 			// Write on Total Delta time
-			g_gameThreadTime = MathOps::FLerp(g_gameThreadTime, deltaTime, 0.01f);
+			g_gameThreadTime = MathOps::FLerp(g_gameThreadTime, (Float32)deltaTime, 0.01f);
 
 			char buffer[256];
 
@@ -454,7 +454,7 @@ namespace ZE
 
 		_gameContext->getDrawList()->Reset();
 
-		g_gpuDrawTime = MathOps::FLerp(g_gpuDrawTime, deltaTime, 0.01f);
+		g_gpuDrawTime = MathOps::FLerp(g_gpuDrawTime, (Float32)deltaTime, 0.01f);
 		deltaTime = _gameContext->m_renderThreadTimer.ResetAndGetDeltaMS();
 	}
 

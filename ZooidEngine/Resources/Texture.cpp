@@ -81,7 +81,7 @@ namespace ZE
 		m_images.clear();
 		m_images.push_back((UChar*)firstBuffer);
 
-		for (int i = 1; i < _faces; i++)
+		for (UInt32 i = 1; i < _faces; i++)
 		{
 			m_images.push_back(nullptr);
 		}
@@ -112,7 +112,7 @@ namespace ZE
 	void Texture::addBufferToTexture(void* buffer, UInt32 faceIndex)
 	{
 		ZASSERT(faceIndex < m_face, "Face Index is invalid");
-		ZASSERT(buffer);
+		ZCHECK(buffer);
 
 		m_images[faceIndex] = (UChar*)buffer;
 	}

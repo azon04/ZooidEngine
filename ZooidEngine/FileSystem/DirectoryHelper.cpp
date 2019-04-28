@@ -7,21 +7,21 @@ namespace ZE
 	ZE::String GetPackageAssetPath(const char* packageName, const char* assetType, const char* assetName)
 	{
 		String path(1024);
-		sprintf(path.c_str(), "%s/%s/%s/%s", PACKAGE_ROOT_PATH, packageName, assetType, assetName);
+		sprintf_s(path.c_str(), 1024, "%s/%s/%s/%s", PACKAGE_ROOT_PATH, packageName, assetType, assetName);
 		return path;
 	}
 
 	ZE::String GetEngineAssetPath(const char* assetType, const char* assetName)
 	{
 		String path(1024);
-		sprintf(path.c_str(), "%s/%s/%s", "ZooidEngine", assetType, assetName);
+		sprintf_s(path.c_str(), 1024, "%s/%s/%s", "ZooidEngine", assetType, assetName);
 		return path;
 	}
 
 	ZE::String GetResourcePath(const char* resourcePath)
 	{
 		String path(1024);
-		sprintf(path.c_str(), "%s/%s", PACKAGE_ROOT_PATH, resourcePath);
+		sprintf_s(path.c_str(), 1024, "%s/%s", PACKAGE_ROOT_PATH, resourcePath);
 		return path;
 	}
 

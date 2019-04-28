@@ -171,7 +171,7 @@ namespace ZE
 	{
 		ShadowDepthRenderer* renderer = getInstance();
 		char buffer[25];
-		for (UInt32 i = 0; i < renderer->m_shadowTextures.size(); i++)
+		for (Int32 i = 0; i < renderer->m_shadowTextures.size(); i++)
 		{
 			StringFunc::PrintToString(buffer, 25, "shadowMaps[%d]", i);
 			shaderChain->setTexture(buffer, renderer->m_shadowTextures[i], textureIndexOffset + i);

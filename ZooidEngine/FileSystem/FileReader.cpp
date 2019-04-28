@@ -12,9 +12,9 @@ namespace ZE
 	void FileReader::open(const char* filePath)
 	{
 		m_path = filePath;
-		m_fileHandle = fopen(filePath, "r");
+		errno_t err = fopen_s(&m_fileHandle, filePath, "r");
 
-		if (m_fileHandle == nullptr)
+		if (err != 0)
 		{
 			ZEINFO("Can't find file : %s ", filePath);
 		}
@@ -41,7 +41,7 @@ namespace ZE
 
 	void FileReader::readNextString(void* buffer)
 	{
-		fscanf(m_fileHandle, "%s", buffer);
+		fscanf(m_fileHandle, "%s", (char*)buffer);
 	}
 
 	int FileReader::readNextInt()

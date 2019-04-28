@@ -23,7 +23,7 @@ namespace ZE
 	void SkyBoxRenderer::render(RenderInfo* renderInfos, UInt32 renderInfoCount)
 	{
 		SkyboxRenderInfo* skyboxInfos = static_cast<SkyboxRenderInfo*>(renderInfos);
-		for (int i = 0; i < renderInfoCount; i++)
+		for (UInt32 i = 0; i < renderInfoCount; i++)
 		{
 			SkyboxRenderInfo& currentInfo = skyboxInfos[i];
 

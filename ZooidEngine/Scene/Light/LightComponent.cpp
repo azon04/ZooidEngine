@@ -202,7 +202,8 @@ namespace ZE
 	}
 
 	// view: before transpose
-	void LightComponent::calculateCascadeLightFustrum(Matrix4x4& view, Matrix4x4& projection, ViewFustrum* camFustrum, Float32 cascadeDistStart, Float32 cascadeDistEnd, Vector3 objBoundMin, Vector3 objBoundMax)
+	void LightComponent::calculateCascadeLightFustrum(Matrix4x4& view, Matrix4x4& projection, ViewFustrum* camFustrum, Float32 cascadeDistStart, Float32 cascadeDistEnd, 
+		Float32 obMostRight, Float32 obMostLeft, Float32 obMostTop, Float32 obMostBottom, Float32 obMostNear)
 	{
 		Vector3 xAxis = view.getU();
 		Vector3 yAxis = view.getV();
@@ -249,16 +250,64 @@ namespace ZE
 			}
 		}
 
-		// Test Object bounding; make the light fustrum smaller
-#if 1
-		{
-			float obMostRight = 0.0f;
-			float obMostLeft = 0.0f;
-			float obMostTop = 0.0f;
-			float obMostBottom = 0.0f;
-			float obMostNear = 0.0f;
+		if (mostTop > obMostTop) { mostTop = obMostTop; }
+		if (mostBottom < obMostBottom) { mostBottom = obMostBottom; }
+		if (mostRight > obMostRight) { mostRight = obMostRight; }
+		if (mostLeft < obMostLeft) { mostLeft = obMostLeft; }
+		if (mostNear < obMostNear) { mostNear = obMostNear; }
 
-			Vector3 vertices[2] = { objBoundMin, objBoundMax };
+		Vector3 deltaPos((mostRight + mostLeft) * 0.5f, (mostTop + mostBottom) * 0.5f, mostNear);
+
+		mostRight -= deltaPos.getX();
+		mostLeft -= deltaPos.getX();
+		mostTop -= deltaPos.getY();
+		mostBottom -= deltaPos.getY();
+
+		Vector3 newPos;
+		newPos = xAxis * deltaPos.getX();
+		newPos = newPos + yAxis * deltaPos.getY();
+		newPos = newPos + zAxis * deltaPos.getZ();
+		view.setPos(Vector3(xAxis | newPos * -1.0f, yAxis | newPos * -1.0f, zAxis | newPos * -1.0f));
+
+		MathOps::CreateOrthoProjEx(projection, mostBottom, mostTop, mostLeft, mostRight, 0.0f, mostNear - mostFar);
+	}
+
+	void LightComponent::setupShadowMapsDirectional(UInt32 lightIndex)
+	{
+		LightStruct& lightData = m_gameContext->getDrawList()->m_lightData.lights[lightIndex];
+		DrawList* drawList = m_gameContext->getDrawList();
+
+		Int32 numberOfCascade = 4;
+		Float32 cascadedDistances[4] = { 0.1f, 0.25f, 0.5f, 1.0f };
+
+		// TODO Determine how many cascade we need based on light and cam angle
+
+		Matrix4x4 view, projection;
+
+		Vector3 zAxis = lightData.getDirection();
+		Vector3 xAxis = zAxis ^ Vector3(0.0f, 1.0f, 0.0f);
+		if (xAxis.lengthSquare() == 0.0f)
+		{
+			xAxis = zAxis ^ Vector3(0.0f, 0.0f, 1.0f);
+		}
+
+		Vector3 yAxis = xAxis ^ zAxis;
+
+		zAxis = zAxis * -1.0f;
+
+		view.setU(xAxis);
+		view.setV(yAxis);
+		view.setN(zAxis);
+
+		// Test Object bounding; make the light fustrum smaller
+		float obMostRight = 0.0f;
+		float obMostLeft = 0.0f;
+		float obMostTop = 0.0f;
+		float obMostBottom = 0.0f;
+		float obMostNear = 0.0f;
+
+		{
+			Vector3 vertices[2] = { drawList->m_objectsBounding.m_min,  drawList->m_objectsBounding.m_max };
 			for (int i = 0; i < 2; i++)
 			{
 				for (int j = 0; j < 2; j++)
@@ -287,61 +336,11 @@ namespace ZE
 					}
 				}
 			}
-
-			if (mostTop > obMostTop) { mostTop = obMostTop; }
-			if (mostBottom < obMostBottom) { mostBottom = obMostBottom; }
-			if (mostRight > obMostRight) { mostRight = obMostRight; }
-			if (mostLeft < obMostLeft) { mostLeft = obMostLeft; }
-			if (mostNear < obMostNear) { mostNear = obMostNear; }
 		}
-#endif
-
-		Vector3 deltaPos((mostRight + mostLeft) * 0.5f, (mostTop + mostBottom) * 0.5f, mostNear);
-
-		mostRight -= deltaPos.getX();
-		mostLeft -= deltaPos.getX();
-		mostTop -= deltaPos.getY();
-		mostBottom -= deltaPos.getY();
-
-		Vector3 newPos;
-		newPos = xAxis * deltaPos.getX();
-		newPos = newPos + yAxis * deltaPos.getY();
-		newPos = newPos + zAxis * deltaPos.getZ();
-		view.setPos(Vector3(xAxis | newPos * -1.0f, yAxis | newPos * -1.0f, zAxis | newPos * -1.0f));
-
-		MathOps::CreateOrthoProjEx(projection, mostBottom, mostTop, mostLeft, mostRight, 0.0f, mostNear - mostFar);
-	}
-
-	void LightComponent::setupShadowMapsDirectional(UInt32 lightIndex)
-	{
-		LightStruct& lightData = m_gameContext->getDrawList()->m_lightData.lights[lightIndex];
-		DrawList* drawList = m_gameContext->getDrawList();
-
-		Int32 numberOfCascade = 4;
-		Float32 cascadedDistances[4] = { 0.1f, 0.25f, 0.5f, 1.0f };
-
-		// Determine how many cascade we need based on light and cam angle
-
-		Matrix4x4 view, projection;
-
-		Vector3 zAxis = lightData.getDirection();
-		Vector3 xAxis = zAxis ^ Vector3(0.0f, 1.0f, 0.0f);
-		if (xAxis.lengthSquare() == 0.0f)
-		{
-			xAxis = zAxis ^ Vector3(0.0f, 0.0f, 1.0f);
-		}
-
-		Vector3 yAxis = xAxis ^ zAxis;
-
-		zAxis = zAxis * -1.0f;
-
-		view.setU(xAxis);
-		view.setV(yAxis);
-		view.setN(zAxis);
 
 		if (numberOfCascade == 1) // No cascade at all
 		{
-			calculateCascadeLightFustrum(view, projection, &(drawList->m_viewFustrum), 0.1f, 0.25f, drawList->m_objectsBounding.m_min, drawList->m_objectsBounding.m_max);
+			calculateCascadeLightFustrum(view, projection, &(drawList->m_viewFustrum), 0.1f, 0.25f, obMostRight, obMostLeft, obMostTop, obMostBottom, obMostNear);
 			
 			lightData.setViewProjMatrix( view*projection );
 
@@ -369,6 +368,7 @@ namespace ZE
 				shadowMapData.normalShaderChain = nullptr;
 				shadowMapData.skinnedShaderChain = nullptr;
 			}
+			
 
 			float currentCascadeStart = 0.0f;
 			float cameraRange = CameraManager::GetInstance()->getCurrentCamera()->m_far - CameraManager::GetInstance()->getCurrentCamera()->m_near;
@@ -379,7 +379,8 @@ namespace ZE
 				int cascadeIndex = m_gameContext->getDrawList()->m_lightData.NumCascade++;
 				CascadeShadowData& cascadeData = m_gameContext->getDrawList()->m_lightData.cascadeShadowData[cascadeIndex];
 				
-				calculateCascadeLightFustrum(localView, projection, &(drawList->m_viewFustrum), currentCascadeStart, cascadedDistances[i], drawList->m_objectsBounding.m_min, drawList->m_objectsBounding.m_max);
+				calculateCascadeLightFustrum(localView, projection, &(drawList->m_viewFustrum), currentCascadeStart, cascadedDistances[i], 
+					obMostRight, obMostLeft, obMostTop, obMostBottom, obMostNear);
 
 				cascadeData.setViewProjMatrix(localView * projection);
 				cascadeData.cascadeDistance = cascadedDistances[i] * cameraRange;
@@ -408,7 +409,7 @@ namespace ZE
 		Matrix4x4 view, projection;
 
 		MathOps::LookAt(view, lightData.getPosition(), lightData.getPosition() + lightData.getDirection(), Vector3(0.0f, 1.0f, 0.0f));
-		MathOps::CreatePerspectiveProjEx(projection, 1.0f, 2.0 * RadToDeg(acos(lightData.OuterCutOff)), 0.1f, 10.0f);
+		MathOps::CreatePerspectiveProjEx(projection, 1.0f, 2.0f * RadToDeg(acosf(lightData.OuterCutOff)), 0.1f, 10.0f);
 
 		lightData.setViewProjMatrix(view * projection);
 

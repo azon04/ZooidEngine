@@ -12,9 +12,9 @@ namespace ZE {
 	void FileWriter::open(const char* filePath)
 	{
 		StringFunc::WriteTo(m_path, filePath, 32);
-		m_fileHandle = fopen(filePath, "w");
+		errno_t err = fopen_s(&m_fileHandle, filePath, "w");
 
-		if (m_fileHandle == nullptr)
+		if (err != 0)
 		{
 			ZEINFO("Can't open file to write : %s ", filePath);
 		}

@@ -21,7 +21,7 @@ void ZE::MemoryHelper::CopyTexture(void* destTexMemory, Int32 destWidth, Int32 d
 {
 	void* pDest =  (void*)(reinterpret_cast<uintptr_t>(destTexMemory) + (itemSize * destWidth * targetY) + (targetX * itemSize));
 	void* pSource = srcTexMemory;
-	for (UInt32 i = 0; i < srcHeight; i++)
+	for (Int32 i = 0; i < srcHeight; i++)
 	{
 		Copy(pSource, pDest, itemSize * srcWidth);
 		pDest = (void*)(reinterpret_cast<uintptr_t>(pDest) + (itemSize * destWidth));

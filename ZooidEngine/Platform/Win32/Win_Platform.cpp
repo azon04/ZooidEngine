@@ -175,7 +175,7 @@ bool CheckMemory(const DWORDLONG physicalRAMNeeded, const DWORDLONG virtualRAMNe
 		return false;
 	}
 
-	// Make sure we have contigous memory before hand
+	// Make sure we have contiguous memory before hand
 	if (virtualRAMNeeded > 0)
 	{
 		char *buff = new char[virtualRAMNeeded];

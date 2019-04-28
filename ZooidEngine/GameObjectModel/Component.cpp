@@ -10,7 +10,7 @@ namespace ZE
 	{
 		if (!m_eventMap.hasKey(classId))
 		{
-			m_eventMap.put(classId, Array<Component*, true>());
+			m_eventMap.put(classId, Array<Component*, true>(2));
 		}
 
 		if (!m_eventMap[classId].contains(child))
@@ -73,6 +73,7 @@ namespace ZE
 	void Component::handleEvent(Event* event)
 	{
 		// To do check delegates
+		int classId = event->getClassID();
 		Array<EventDelegate, true>& delegates = m_delegateMap[event->getClassID()];
 		for (int i = 0; i < delegates.length(); i++)
 		{
