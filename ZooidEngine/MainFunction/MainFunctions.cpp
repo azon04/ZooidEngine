@@ -44,10 +44,14 @@
 #include "SceneRenderer/SceneRenderer.h"
 #include "SceneRenderer/RenderGatherer.h"
 #include "SceneRenderer/ShadowRenderer.h"
-#include "SceneRenderer/TextRenderer.h";
-#include "SceneRenderer/SkyboxRenderer.h";
+#include "SceneRenderer/TextRenderer.h"
+#include "SceneRenderer/SkyboxRenderer.h"
+#include "SceneRenderer/ForwardRenderPass.h"
+#include "SceneRenderer/RenderGraph/BaseDeferredRenderGraph.h"
 
 #include "Utils/DebugOptions.h"
+
+#define DEFERRED_RENDERING 1
 
 // TODO for NVIDIA Optimus :  This enable the program to use NVIDIA instead of integrated Intel graphics
 #if WIN32 || WIN64
@@ -194,6 +198,10 @@ namespace ZE
 		ZEINFO("Initializing Zooid UI...");
 		UIManager::Init(_gameContext);
 
+#if TEST_DEFERRED_RENDERING
+		BaseDeferredRenderGraph::GetInstance()->init(_gameContext);
+#endif
+
 		_gameContext->m_mainTimer.Reset();
 
 #if ZE_RENDER_MULTITHREAD
@@ -210,6 +218,10 @@ namespace ZE
 		{
 			_gameContext->m_drawThread->join();
 		}
+#endif
+
+#if TEST_DEFERRED_RENDERING
+		BaseDeferredRenderGraph::GetInstance()->release(_gameContext);
 #endif
 
 		IGPUState::ClearGPUStates();
@@ -401,52 +413,21 @@ namespace ZE
 		ScopedRenderThreadOwnership renderLock(renderer);
 
 		BufferManager::getInstance()->setupForNextFrame();
+
 		ShadowDepthRenderer::Reset();
-
-		// For each Light render Shadows
-		for (UInt32 iShadowData = 0; iShadowData < drawList->m_lightShadowSize; iShadowData++)
-		{
-			LightShadowMapData& shadowMapData = drawList->m_lightShadowMapData[iShadowData];
-			LightStruct& light = drawList->m_lightData.lights[shadowMapData.lightIndex];
-			
-			if(!shadowMapData.dynamicShadowFrameBuffer) { continue; }
-
-			ShadowDepthRenderer::Setup(&shadowMapData, &light, drawList);
-			ShadowDepthRenderer::BeginRender();
-			ShadowDepthRenderer::Render(drawList->m_meshRenderGatherer.getRenderInfos(), drawList->m_meshRenderGatherer.getRenderCount(), false);
-			ShadowDepthRenderer::Render(drawList->m_skinMeshRenderGatherer.getRenderInfos(), drawList->m_skinMeshRenderGatherer.getRenderCount(), true);
-			ShadowDepthRenderer::EndRender();
-		}
-
 
 		renderer->BeginRender();
 
 		renderer->ClearScreen();
-
-		{
-			Matrix4x4 viewMat;
-
-			ZE::CameraComponent* currentCamera = _gameContext->getCameraManager()->getCurrentCamera();
-			if (currentCamera)
-			{
-				currentCamera->getViewMatrix(viewMat);
-
-				_gameContext->getDrawList()->m_shaderFrameData.setViewMat(viewMat);
-				_gameContext->getDrawList()->m_cameraPosition = currentCamera->getWorldPosition();
-				_gameContext->getDrawList()->m_cameraDirection = currentCamera->getForwardVector();
-				_gameContext->getDrawList()->m_shaderFrameData.setProjectionMat(_gameContext->getDrawList()->m_projectionMat);
-				_gameContext->getDrawList()->m_lightData.setViewPos(currentCamera->getWorldPosition());
-			}
-		}
-
-		MeshSceneRenderer::Render(drawList->m_meshRenderGatherer.getRenderInfos(), drawList->m_meshRenderGatherer.getRenderCount());
-		SkinMeshSceneRenderer::Render(drawList->m_skinMeshRenderGatherer.getRenderInfos(), drawList->m_skinMeshRenderGatherer.getRenderCount());
-		TransculentSceneRenderer::Render(drawList->m_transculentRenderGatherer.getRenderInfos(), drawList->m_transculentRenderGatherer.getRenderCount());
-		SkyBoxRenderer::Render(drawList->m_skyboxRenderGatherer.getRenderInfos(), drawList->m_skyboxRenderGatherer.getRenderCount());
-		TextSceneRenderer::Render(drawList->m_textSceneRenderGatherer.getRenderInfos(), drawList->m_textSceneRenderGatherer.getRenderCount());
-
-		TextScreenRenderer::Render(drawList->m_textScreenRenderGatherer.getRenderInfos(), drawList->m_textScreenRenderGatherer.getRenderCount());
 		
+#if TEST_DEFERRED_RENDERING
+		BaseDeferredRenderGraph::GetInstance()->begin(_gameContext);
+		BaseDeferredRenderGraph::GetInstance()->execute(_gameContext);
+		BaseDeferredRenderGraph::GetInstance()->end(_gameContext);
+#else
+		ForwardRenderPass::ExecutePass(_gameContext);
+#endif
+
 		// Inject UI Rendering
 		ZE::UI::ProcessDrawList();
 
@@ -454,8 +435,8 @@ namespace ZE
 
 		_gameContext->getDrawList()->Reset();
 
-		g_gpuDrawTime = MathOps::FLerp(g_gpuDrawTime, (Float32)deltaTime, 0.01f);
 		deltaTime = _gameContext->m_renderThreadTimer.ResetAndGetDeltaMS();
+		g_gpuDrawTime = MathOps::FLerp(g_gpuDrawTime, (Float32)deltaTime, 0.01f);
 	}
 
 }

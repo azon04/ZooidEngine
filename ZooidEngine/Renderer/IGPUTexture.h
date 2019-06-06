@@ -17,6 +17,9 @@ namespace ZE
 		// From CPU Texture
 		virtual void fromTexture(Texture* texture);
 
+		// Create using TextureCreateDesc
+		virtual void create(const TextureCreateDesc& createDesc) = 0;
+
 		// Release GPU Texture
 		virtual void release();
 

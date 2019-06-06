@@ -2,6 +2,7 @@
 #define _Z_GL_FRAMEBUFFER__
 
 #include "Renderer/IGPUFrameBuffer.h"
+#include "Utils/Array.h"
 
 #include <GL/glew.h>
 
@@ -23,12 +24,15 @@ namespace ZE
 		virtual void bind() override;
 		virtual void unbind() override;
 
+		GLuint getFBO() const { return m_fbo; }
+
 	private:
 		// GL Frame buffer object
 		GLuint m_fbo;
 		bool m_bColorAttached;
 		UInt32 m_width;
 		UInt32 m_height;
+		Array<GLenum> m_drawBuffers;
 	};
 }
 #endif

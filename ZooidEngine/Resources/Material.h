@@ -36,7 +36,8 @@ namespace ZE
 			: m_Ka(1.0f, 1.0f, 1.0f),
 			m_Kd(1.0f, 1.0f, 1.0f),
 			m_Ks(1.0f, 1.0f, 1.0f),
-			m_isBlend(false)
+			m_isBlend(false),
+			m_shininess(0.0f)
 		{
 		}
 

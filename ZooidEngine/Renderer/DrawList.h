@@ -66,6 +66,9 @@ namespace ZE
 		TextRenderGatherer m_textSceneRenderGatherer;
 		TextRenderGatherer m_textScreenRenderGatherer;
 
+		// #TODO this will be available for debug only
+		MeshRenderGatherer m_debugMeshRenderGatherer;
+
 		// View Fustrum
 		ViewFustrum m_viewFustrum;
 		Matrix4x4 m_projectionMat;

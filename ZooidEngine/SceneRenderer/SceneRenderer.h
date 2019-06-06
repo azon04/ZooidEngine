@@ -9,6 +9,7 @@ namespace ZE
 {
 	class RenderInfo;
 	class MeshRenderInfo;
+	class IShaderChain;
 
 	class ISceneRenderer
 	{
@@ -22,7 +23,19 @@ namespace ZE
 
 	};
 
-	class MeshSceneRenderer : public ISceneRenderer, public Singleton<MeshSceneRenderer>
+	class BaseSceneRenderer : public ISceneRenderer
+	{
+	public:
+
+		BaseSceneRenderer() : m_overrideShaderChain(nullptr) {}
+
+		void setOverrideShaderChain(IShaderChain* overrideShaderChain) { m_overrideShaderChain = overrideShaderChain; }
+
+	protected:
+		IShaderChain* m_overrideShaderChain;
+	};
+
+	class MeshSceneRenderer : public BaseSceneRenderer, public Singleton<MeshSceneRenderer>
 	{
 	public:
 
@@ -30,10 +43,10 @@ namespace ZE
 		virtual void render(RenderInfo* renderInfos, UInt32 renderInfoCount) override;
 		virtual void endRender() override;
 
-		static void Render(RenderInfo* renderInfos, UInt32 renderInfoCount);
+		static void Render(RenderInfo* renderInfos, UInt32 renderInfoCount, IShaderChain* shaderOverride = nullptr);
 	};
 
-	class TransculentSceneRenderer : public ISceneRenderer, public Singleton<TransculentSceneRenderer>
+	class TransculentSceneRenderer : public BaseSceneRenderer, public Singleton<TransculentSceneRenderer>
 	{
 	public:
 
@@ -47,7 +60,7 @@ namespace ZE
 		void sortBlendInfos(MeshRenderInfo* renderInfos, UInt32 renderInfoCount, Array<UInt32>& result);
 	};
 
-	class SkinMeshSceneRenderer : public  ISceneRenderer, public Singleton<SkinMeshSceneRenderer>
+	class SkinMeshSceneRenderer : public BaseSceneRenderer, public Singleton<SkinMeshSceneRenderer>
 	{
 	public:
 
@@ -55,7 +68,7 @@ namespace ZE
 		virtual void render(RenderInfo* renderInfos, UInt32 renderInfoCount) override;
 		virtual void endRender() override;
 
-		static void Render(RenderInfo* renderInfos, UInt32 renderInfoCount);
+		static void Render(RenderInfo* renderInfos, UInt32 renderInfoCount, IShaderChain* shaderOverride = nullptr);
 
 	};
 };

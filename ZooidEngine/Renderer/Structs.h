@@ -42,6 +42,14 @@ namespace ZE
 		ERenderFillMode FillMode;
 	};
 
+	struct TextureFormatStruct
+	{
+		ETextureFormat TextureFormat;
+		ETextureFormat BaseFormat;
+	};
+
+	extern TextureFormatStruct TextureFormats[ETextureFormat::TEX_MAX];
+
 }
 
 #endif

@@ -34,7 +34,7 @@ namespace ZE
 			currentInfo.m_shaderChain->bind();
 
 			// Bind frame_data
-			gGameContext->getDrawList()->m_mainConstantBuffer->bindAndRefresh();
+			gGameContext->getDrawList()->m_mainConstantBuffer->bind();
 			currentInfo.m_shaderChain->bindConstantBuffer("frame_data", gGameContext->getDrawList()->m_mainConstantBuffer);
 
 			currentInfo.m_shaderChain->setTexture("skybox", currentInfo.m_cubeTexture, 0);

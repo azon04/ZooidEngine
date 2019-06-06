@@ -23,28 +23,42 @@ namespace ZE
 	void MeshSceneRenderer::render(RenderInfo* renderInfos, UInt32 renderInfoCount)
 	{
 		MeshRenderInfo* meshRenderInfos = static_cast<MeshRenderInfo*>(renderInfos);
+		
+		IShaderChain* shader = m_overrideShaderChain;
+
+		if (shader)
+		{
+			shader->bind();
+		}
 
 		for (UInt32 index = 0; index < renderInfoCount; index++)
 		{
 			MeshRenderInfo& currentMesh = meshRenderInfos[index];
 
-			ZCHECK(currentMesh.m_shaderChain);
 			ZCHECK(currentMesh.m_gpuBufferArray);
 
-			currentMesh.m_shaderChain->bind();
-			
+			bool bShaderNeedReset = false;
+			if (!shader)
+			{
+				bShaderNeedReset = true;
+				shader = currentMesh.m_shaderChain;
+				shader->bind();
+			}
+
+			ZCHECK(shader);
+
 			// Bind frame_data
-			gGameContext->getDrawList()->m_mainConstantBuffer->bindAndRefresh();
-			currentMesh.m_shaderChain->bindConstantBuffer("frame_data", gGameContext->getDrawList()->m_mainConstantBuffer);
+			gGameContext->getDrawList()->m_mainConstantBuffer->bind();
+			shader->bindConstantBuffer("frame_data", gGameContext->getDrawList()->m_mainConstantBuffer);
 
 			// Bind light_data
-			gGameContext->getDrawList()->m_lightConstantBuffer->bindAndRefresh();
-			currentMesh.m_shaderChain->bindConstantBuffer("light_data", gGameContext->getDrawList()->m_lightConstantBuffer);
+			gGameContext->getDrawList()->m_lightConstantBuffer->bind();
+			shader->bindConstantBuffer("light_data", gGameContext->getDrawList()->m_lightConstantBuffer);
 
 			// Create and bind draw data
 			IGPUBufferData* drawBufferData = BufferManager::getInstance()->getOrCreateDrawBuffer(currentMesh.m_worldTransform.m_data, sizeof(Matrix4x4));
 			drawBufferData->bind();
-			currentMesh.m_shaderChain->bindConstantBuffer("draw_data", drawBufferData);
+			shader->bindConstantBuffer("draw_data", drawBufferData);
 
 			// Set Face Culling for double sided
 			if (currentMesh.m_isDoubleSided)
@@ -64,12 +78,23 @@ namespace ZE
 
 			if (currentMesh.m_material) 
 			{
-				currentMesh.m_material->Bind(currentMesh.m_shaderChain);
+				currentMesh.m_material->Bind(shader);
 			}
 
-			ShadowDepthRenderer::BindShadowTextures(gGameContext->getDrawList(), currentMesh.m_shaderChain, currentMesh.m_material ? currentMesh.m_material->getTextureCount() : 0);
+			ShadowDepthRenderer::BindShadowTextures(gGameContext->getDrawList(), shader, currentMesh.m_material ? currentMesh.m_material->getTextureCount() : 0);
 
 			gGameContext->getRenderer()->DrawArray(currentMesh.m_renderTopology, 0, currentMesh.drawCount);
+
+			if (bShaderNeedReset)
+			{
+				shader->unbind();
+				shader = nullptr;
+			}
+		}
+
+		if (shader)
+		{
+			shader->unbind();
 		}
 	}
 
@@ -78,13 +103,12 @@ namespace ZE
 
 	}
 
-	void MeshSceneRenderer::Render(RenderInfo* renderInfos, UInt32 renderInfoCount)
+	void MeshSceneRenderer::Render(RenderInfo* renderInfos, UInt32 renderInfoCount, IShaderChain* shaderOverride)
 	{
 		MeshSceneRenderer* renderer = GetInstance();
+		renderer->setOverrideShaderChain(shaderOverride);
 		renderer->beginRender();
-
 		renderer->render(renderInfos, renderInfoCount);
-
 		renderer->endRender();
 	}
 
@@ -113,11 +137,11 @@ namespace ZE
 			currentMesh.m_shaderChain->bind();
 
 			// Bind frame_data
-			gGameContext->getDrawList()->m_mainConstantBuffer->bindAndRefresh();
+			gGameContext->getDrawList()->m_mainConstantBuffer->bind();
 			currentMesh.m_shaderChain->bindConstantBuffer("frame_data", gGameContext->getDrawList()->m_mainConstantBuffer);
 
 			// Bind light_data
-			gGameContext->getDrawList()->m_lightConstantBuffer->bindAndRefresh();
+			gGameContext->getDrawList()->m_lightConstantBuffer->bind();
 			currentMesh.m_shaderChain->bindConstantBuffer("light_data", gGameContext->getDrawList()->m_lightConstantBuffer);
 
 			// Create and bind draw data
@@ -229,32 +253,45 @@ namespace ZE
 	void SkinMeshSceneRenderer::render(RenderInfo* renderInfos, UInt32 renderInfoCount)
 	{
 		SkinMeshRenderInfo* meshRenderInfos = static_cast<SkinMeshRenderInfo*>(renderInfos);
+		
+		IShaderChain* shader = m_overrideShaderChain;
+		if (shader)
+		{
+			shader->bind();
+		}
 
 		for (UInt32 index = 0; index < renderInfoCount; index++)
 		{
 			SkinMeshRenderInfo& currentMesh = meshRenderInfos[index];
 
-			ZCHECK(currentMesh.m_shaderChain);
 			ZCHECK(currentMesh.m_gpuBufferArray);
 
-			currentMesh.m_shaderChain->bind();
+			bool bShaderNeedReset = false;
+			if (!shader)
+			{
+				bShaderNeedReset = true;
+				shader = currentMesh.m_shaderChain;
+				shader->bind();
+			}
+
+			ZCHECK(shader);
 
 			// Bind frame_data
-			gGameContext->getDrawList()->m_mainConstantBuffer->bindAndRefresh();
-			currentMesh.m_shaderChain->bindConstantBuffer("frame_data", gGameContext->getDrawList()->m_mainConstantBuffer);
+			gGameContext->getDrawList()->m_mainConstantBuffer->bind();
+			shader->bindConstantBuffer("frame_data", gGameContext->getDrawList()->m_mainConstantBuffer);
 
 			// Bind light_data
-			gGameContext->getDrawList()->m_lightConstantBuffer->bindAndRefresh();
-			currentMesh.m_shaderChain->bindConstantBuffer("light_data", gGameContext->getDrawList()->m_lightConstantBuffer);
+			gGameContext->getDrawList()->m_lightConstantBuffer->bind();
+			shader->bindConstantBuffer("light_data", gGameContext->getDrawList()->m_lightConstantBuffer);
 
 			// Bind bone_data
 			currentMesh.m_skinJointData->bind();
-			currentMesh.m_shaderChain->bindConstantBuffer("bone_mats_block", currentMesh.m_skinJointData);
+			shader->bindConstantBuffer("bone_mats_block", currentMesh.m_skinJointData);
 
 			// Create and bind draw data
 			IGPUBufferData* drawBufferData = BufferManager::getInstance()->getOrCreateDrawBuffer(currentMesh.m_worldTransform.m_data, sizeof(Matrix4x4));
 			drawBufferData->bind();
-			currentMesh.m_shaderChain->bindConstantBuffer("draw_data", drawBufferData);
+			shader->bindConstantBuffer("draw_data", drawBufferData);
 
 			// Set Face Culling for double sided
 			if (currentMesh.m_isDoubleSided)
@@ -274,12 +311,23 @@ namespace ZE
 
 			if (currentMesh.m_material)
 			{
-				currentMesh.m_material->Bind(currentMesh.m_shaderChain);
+				currentMesh.m_material->Bind(shader);
 			}
 
-			ShadowDepthRenderer::BindShadowTextures(gGameContext->getDrawList(), currentMesh.m_shaderChain, currentMesh.m_material ? currentMesh.m_material->getTextureCount() : 0);
+			ShadowDepthRenderer::BindShadowTextures(gGameContext->getDrawList(), shader, currentMesh.m_material ? currentMesh.m_material->getTextureCount() : 0);
 
 			gGameContext->getRenderer()->DrawArray(currentMesh.m_renderTopology, 0, currentMesh.drawCount);
+
+			if (bShaderNeedReset)
+			{
+				shader->unbind();
+				shader = nullptr;
+			}
+		}
+
+		if (shader)
+		{
+			shader->unbind();
 		}
 	}
 
@@ -288,13 +336,12 @@ namespace ZE
 
 	}
 
-	void SkinMeshSceneRenderer::Render(RenderInfo* renderInfos, UInt32 renderInfoCount)
+	void SkinMeshSceneRenderer::Render(RenderInfo* renderInfos, UInt32 renderInfoCount, IShaderChain* shaderOverride)
 	{
 		SkinMeshSceneRenderer* renderer = GetInstance();
+		renderer->setOverrideShaderChain(shaderOverride);
 		renderer->beginRender();
-
 		renderer->render(renderInfos, renderInfoCount);
-
 		renderer->endRender();
 	}
 }

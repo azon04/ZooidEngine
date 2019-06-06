@@ -8,6 +8,8 @@
 
 #include "GLStates.h"
 
+#include "GLFrameBuffer.h"
+
 #include "ResourceManagers/ShaderManager.h"
 
 #if defined(_WIN32) || defined(_WIN64)
@@ -125,7 +127,12 @@ namespace ZE
 	void GLRenderer::Clear(UInt32 clearBits)
 	{
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		glClear(getClearBitMask(clearBits));
+		glClear(getRenderBitMask(clearBits));
+	}
+
+	void GLRenderer::ResetViewport()
+	{
+		glViewport(0, 0, m_width, m_height);
 	}
 
 	GLenum translateTopology(ERenderTopologyEnum topology)
@@ -211,6 +218,14 @@ namespace ZE
 
 		texture->unbind();
 		shader->unbind();
+	}
+
+	void GLRenderer::CopyFrameBuffer(IGPUFrameBuffer* frameBufferFrom, IGPUFrameBuffer* frameBufferTo, Int32 srcX0, Int32 srcY0, Int32 srcX1, Int32 srcY1, Int32 dstX0, Int32 dstY0, Int32 dstX1, Int32 dstY1, UInt32 mask, ETextureFilter filter)
+	{
+		GLFrameBuffer* realFrameBufferFrom = static_cast<GLFrameBuffer*>(frameBufferFrom);
+		GLFrameBuffer* realFrameBufferTo = static_cast<GLFrameBuffer*>(frameBufferTo);
+
+		glBlitNamedFramebuffer(realFrameBufferFrom->getFBO(), realFrameBufferTo->getFBO(), srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, getRenderBitMask(mask), getTextureFilter(filter));
 	}
 
 	void GLRenderer::SetRenderBlendState(IGPUBlendState* renderBlendState)

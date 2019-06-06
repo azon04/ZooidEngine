@@ -112,6 +112,12 @@
     <Filter Include="SceneRenderer\RenderInfo">
       <UniqueIdentifier>{c98271fe-2dd0-4aa4-bdbd-7be809cc0bd9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SceneRenderer\RenderGraph">
+      <UniqueIdentifier>{5e75b8b7-f1ca-4273-aeb7-cd5962eca135}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SceneRenderer\RenderPass">
+      <UniqueIdentifier>{366f5c22-1503-4704-885f-8734baed131f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ZooidEngine\ZEngine.h">
@@ -558,6 +564,30 @@
     <ClInclude Include="..\..\ZooidEngine\Utils\DebugOptions.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderGraph.h">
+      <Filter>SceneRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderPass\GBufferRenderPass.h">
+      <Filter>SceneRenderer\RenderPass</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderPass\LightRenderPass.h">
+      <Filter>SceneRenderer\RenderPass</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderPass\PostProcessRenderPass.h">
+      <Filter>SceneRenderer\RenderPass</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderPass\ShadowDepthRenderPass.h">
+      <Filter>SceneRenderer\RenderPass</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderGraph\BaseDeferredRenderGraph.h">
+      <Filter>SceneRenderer\RenderGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderPass\ScreenRenderPass.h">
+      <Filter>SceneRenderer\RenderPass</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderPass\DebugRenderPass.h">
+      <Filter>SceneRenderer\RenderPass</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ZooidEngine\MainFunction\Main.cpp">
@@ -889,6 +919,30 @@
     </ClCompile>
     <ClCompile Include="..\..\ZooidEngine\SceneRenderer\ViewFustrum.cpp">
       <Filter>SceneRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderPass\GBufferRenderPass.cpp">
+      <Filter>SceneRenderer\RenderPass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderPass\LightRenderPass.cpp">
+      <Filter>SceneRenderer\RenderPass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderPass\PostProcessRenderPass.cpp">
+      <Filter>SceneRenderer\RenderPass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderPass\ShadowDepthRenderPass.cpp">
+      <Filter>SceneRenderer\RenderPass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\Renderer\Structs.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderGraph\BaseDeferredRenderGraph.cpp">
+      <Filter>SceneRenderer\RenderGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderPass\ScreenRenderPass.cpp">
+      <Filter>SceneRenderer\RenderPass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderPass\DebugRenderPass.cpp">
+      <Filter>SceneRenderer\RenderPass</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

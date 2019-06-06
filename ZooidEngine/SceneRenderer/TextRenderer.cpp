@@ -35,11 +35,11 @@ namespace ZE
 			currentInfo.m_shaderChain->bind();
 
 			// Bind Frame data
-			gGameContext->getDrawList()->m_mainConstantBuffer->bindAndRefresh();
+			gGameContext->getDrawList()->m_mainConstantBuffer->bind();
 			currentInfo.m_shaderChain->bindConstantBuffer("frame_data", gGameContext->getDrawList()->m_mainConstantBuffer);
 
 			// Bind light_data
-			gGameContext->getDrawList()->m_lightConstantBuffer->bindAndRefresh();
+			gGameContext->getDrawList()->m_lightConstantBuffer->bind();
 			currentInfo.m_shaderChain->bindConstantBuffer("light_data", gGameContext->getDrawList()->m_lightConstantBuffer);
 
 			// Create and bind draw data

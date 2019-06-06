@@ -50,6 +50,7 @@ namespace ZE
 
 		while (!reader.eof())
 		{
+			tokenBuffer[0] = '\0';
 			reader.readNextString(tokenBuffer);
 
 			if (StringFunc::Compare(tokenBuffer, "diffuse") == 0)

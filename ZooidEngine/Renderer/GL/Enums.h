@@ -43,7 +43,7 @@ namespace ZE
 		case ZE::COLOR_sRGB_ALPHA:
 			return GL_SRGB8_ALPHA8;
 		case ZE::DEPTH_ONLY:
-			return GL_DEPTH_COMPONENT32F;
+			return GL_DEPTH_COMPONENT32F; // Possibly change a little less size
 		case ZE::DEPTH_STENCIL:
 			return GL_DEPTH24_STENCIL8;
 		case ZE::STENCIL_ONLY:
@@ -124,28 +124,42 @@ namespace ZE
 			return GL_RGBA;
 		case ZE::TEX_DEPTH:
 			return GL_DEPTH_COMPONENT;
-		case ZE::TEXT_DEPTH_STENCIL:
+		case ZE::TEX_DEPTH_STENCIL:
 			return GL_DEPTH_STENCIL;
+		case ZE::TEX_R8:
+			return GL_R8;
+		case ZE::TEX_R16:
+			return GL_R16;
+		case ZE::TEX_R16F:
+			return GL_R16F;
+		case ZE::TEX_RG8:
+			return GL_RG8;
+		case ZE::TEX_RG16:
+			return GL_RG16;
+		case ZE::TEX_RGB16F:
+			return GL_RGB16F;
+		case ZE::TEX_RGBA16F:
+			return GL_RGBA16F;
 		case ZE::TEX_NONE:
 		default:
 			return GL_NONE;
 		}
 	}
 
-	FORCEINLINE GLenum getClearBitMask(UInt32 masks)
+	FORCEINLINE GLenum getRenderBitMask(UInt32 masks)
 	{
 		GLenum result = 0;
-		if (masks & EClearBit::COLOR_BUFFER_BIT)
+		if (masks & ERenderBufferBit::COLOR_BUFFER_BIT)
 		{
 			result |= GL_COLOR_BUFFER_BIT;
 		}
 
-		if (masks & EClearBit::DEPTH_BUFFER_BIT)
+		if (masks & ERenderBufferBit::DEPTH_BUFFER_BIT)
 		{
 			result |= GL_DEPTH_BUFFER_BIT;
 		}
 
-		if (masks & EClearBit::STENCIL_BUFFER_BIT)
+		if (masks & ERenderBufferBit::STENCIL_BUFFER_BIT)
 		{
 			result |= GL_STENCIL_BUFFER_BIT;
 		}

@@ -14,6 +14,7 @@ namespace ZE
 		GLTexture() : m_textureBuffer(0), m_bCube(false) {}
 
 		// IGPUTexture implementation
+		virtual void create(const TextureCreateDesc& createDesc) override;
 		virtual void fromTexture(Texture* texture) override;
 		virtual void release() override;
 

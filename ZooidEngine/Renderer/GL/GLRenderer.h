@@ -9,8 +9,8 @@
 #include "Platform/Thread.h"
 #include "Utils/HashMap.h"
 
-#define WIDTH 1280
-#define HEIGHT 720
+#define WIDTH 1600
+#define HEIGHT 900
 
 namespace ZE 
 {
@@ -32,6 +32,7 @@ public:
 	virtual void Clean() override;
 	virtual void ClearScreen() override;
 	virtual void Clear(UInt32 clearBits) override;
+	virtual void ResetViewport() override;
 	virtual void DrawBufferArray(ERenderTopologyEnum primitiveTopology, IGPUBufferArray* gpuBufferArray, UInt32 count, UInt32 offset = 0) override;
 	virtual void DrawBufferArrayInstanced(ERenderTopologyEnum primitiveTopology, IGPUBufferArray* gpuBufferArray, UInt32 count, UInt32 offset, UInt32 instanceCount) override;
 	virtual void DrawIndexed(ERenderTopologyEnum primitiveTopology, UInt32 offset, UInt32 count, void* indices) override;
@@ -39,6 +40,7 @@ public:
 	virtual void DrawArray(ERenderTopologyEnum primitiveTopology, UInt32 offset, UInt32 count) override;
 	virtual void DrawInstanced(ERenderTopologyEnum primitiveTopology, UInt32 offset, UInt32 count, UInt32 instanceCount) override;
 	virtual void DrawTextureToScreen(IGPUTexture* texture, const Vector2& screenPos, const Vector2& screenDimension) override;
+	virtual void CopyFrameBuffer(IGPUFrameBuffer* frameBufferFrom, IGPUFrameBuffer* frameBufferTo, Int32 srcX0, Int32 srcY0, Int32 srcX1, Int32 srcY1, Int32 dstX0, Int32 dstY0, Int32 dstX1, Int32 dstY1, UInt32 mask, ETextureFilter filter) override;
 
 	virtual void SetRenderBlendState(IGPUBlendState* renderBlendState) override;
 	virtual void SetRenderDepthStencilState(IGPUDepthStencilState* renderDepthStencilState) override;

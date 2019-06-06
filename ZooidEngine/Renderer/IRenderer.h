@@ -20,6 +20,7 @@ namespace ZE
 	class IGPUDepthStencilState;
 	class IGPUBlendState;
 	class IGPURasterizerState;
+	class IGPUFrameBuffer;
 
 	class IRenderer {
 	public:
@@ -75,6 +76,9 @@ namespace ZE
 		// Set Render Rasterizer State
 		virtual void SetRenderRasterizerState(IGPURasterizerState* renderRasterizerState) = 0;
 
+		// Copy Frame Buffer to another Frame Buffer
+		virtual void CopyFrameBuffer(IGPUFrameBuffer* frameBufferFrom, IGPUFrameBuffer* frameBufferTo, Int32 srcX0, Int32 srcY0, Int32 srcX1, Int32 srcY1, Int32 dstX0, Int32 dstY0, Int32 dstX1, Int32 dstY1, UInt32 mask, ETextureFilter filter) = 0;
+
 		// Poll Event : This is used to tell that renderer still active
 		virtual void PollEvent() = 0;
 
@@ -95,6 +99,9 @@ namespace ZE
 
 		// Get render texture or screen height
 		virtual float GetWidth() const = 0;
+
+		// Reset viewport
+		virtual void ResetViewport() = 0;
 
 		// Resize Window
 		virtual void Resize(UInt32 width, UInt32 height) = 0;

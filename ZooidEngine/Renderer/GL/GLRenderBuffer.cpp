@@ -14,7 +14,7 @@ namespace ZE
 	{
 		if (m_rbo == 0)
 		{
-			glGenRenderbuffers(0, &m_rbo);
+			glGenRenderbuffers(1, &m_rbo);
 			glBindRenderbuffer(GL_RENDERBUFFER, m_rbo);
 			glRenderbufferStorage(GL_RENDERBUFFER, getGLStorageFormat(format), width, height);
 			glBindRenderbuffer(GL_RENDERBUFFER, 0);

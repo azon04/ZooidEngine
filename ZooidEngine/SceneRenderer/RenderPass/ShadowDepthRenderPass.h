@@ -1,13 +1,15 @@
-#ifndef __ZE_FORWARD_RENDER_PASS_H__
-#define __ZE_FORWARD_RENDER_PASS_H__
+#ifndef __ZE_SHADOW_DEPTH_PASS_H__
+#define __ZE_SHADOW_DEPTH_PASS_H__
 
-#include "RenderPass.h"
+#include "SceneRenderer/RenderPass.h"
+#include "Common/SingletonClass.h"
 
 namespace ZE
 {
-	class ForwardRenderPass : public RenderPass
+	class ShadowDepthRenderPass : public RenderPass, public Singleton<ShadowDepthRenderPass>
 	{
 	public:
+		ShadowDepthRenderPass();
 
 		virtual void prepare(GameContext* _gameContext) override;
 		virtual void release(GameContext* _gameContext) override;
@@ -17,8 +19,6 @@ namespace ZE
 
 		virtual bool execute_CPU(GameContext* _gameContext) override;
 		virtual bool execute_GPU(GameContext* _gameContext) override;
-
-		static bool ExecutePass(GameContext* _gameContext);
 	};
 }
 #endif

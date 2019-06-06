@@ -104,7 +104,7 @@ namespace ZE
 	{
 		if (m_currentIndex > 0)
 		{
-			MeshRenderInfo* renderInfo = m_gameContext->getDrawList()->m_meshRenderGatherer.nextRenderInfo();
+			MeshRenderInfo* renderInfo = m_gameContext->getDrawList()->m_debugMeshRenderGatherer.nextRenderInfo();
 			renderInfo->m_shaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_3D_DEFAULT_COLOR_LINE);
 			renderInfo->m_gpuBufferArray = m_lineBufferArray;
 			renderInfo->m_renderTopology = ERenderTopologyEnum::TOPOLOGY_LINE;
@@ -132,7 +132,7 @@ namespace ZE
 
 		for (int i = 0; i < m_debugSphereTransforms.size(); i++)
 		{
-			MeshRenderInfo* renderInfo = m_gameContext->getDrawList()->m_meshRenderGatherer.nextRenderInfo();
+			MeshRenderInfo* renderInfo = m_gameContext->getDrawList()->m_debugMeshRenderGatherer.nextRenderInfo();
 			renderInfo->m_shaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_3D_DEFAULT_COLOR_LINE);
 			renderInfo->m_gpuBufferArray = m_sphereGPUBufferArrray;
 			renderInfo->m_renderTopology = ERenderTopologyEnum::TOPOLOGY_LINE;
@@ -143,7 +143,7 @@ namespace ZE
 
 		for (int i = 0; i < m_debugCubeTransforms.size(); i++)
 		{
-			MeshRenderInfo* renderInfo = m_gameContext->getDrawList()->m_meshRenderGatherer.nextRenderInfo();
+			MeshRenderInfo* renderInfo = m_gameContext->getDrawList()->m_debugMeshRenderGatherer.nextRenderInfo();
 			renderInfo->m_shaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_3D_DEFAULT_COLOR_LINE);
 			renderInfo->m_gpuBufferArray = m_cubeGPUBufferArray;
 			renderInfo->m_renderTopology = ERenderTopologyEnum::TOPOLOGY_LINE;

@@ -4,6 +4,7 @@
 #include "Utils/Array.h"
 #include "FileSystem/FileReader.h"
 #include "FileSystem/DirectoryHelper.h"
+#include "Renderer/Structs.h"
 
 namespace ZE
 {
@@ -45,9 +46,9 @@ namespace ZE
 				}
 				else
 				{
-					ZASSERT(texture->m_width == width, "Width for cubemap for all textures should be the same");
-					ZASSERT(texture->m_height == height, "Height for cubemap for all textures should be the same");
-					ZASSERT(texture->m_channel == channel, "Channel for cubemap for all textures should be the same");
+					ZASSERT(texture->getWidth() == width, "Width for cubemap for all textures should be the same");
+					ZASSERT(texture->getHeight() == height, "Height for cubemap for all textures should be the same");
+					ZASSERT(texture->getChannel() == channel, "Channel for cubemap for all textures should be the same");
 
 					texture->addBufferToTexture(image, i);
 				}
@@ -86,32 +87,32 @@ namespace ZE
 			m_images.push_back(nullptr);
 		}
 
-		m_width = _width;
-		m_height = _height;
-		m_depth = _depth;
-		m_channel = _channel;
-		m_face = _faces;
+		m_textureDesc.Width = _width;
+		m_textureDesc.Height = _height;
+		m_textureDesc.Depth = _depth;
+		m_textureDesc.Channel = _channel;
+		m_textureDesc.FaceCount = _faces;
 
-		switch (m_channel)
+		switch (_channel)
 		{
 		case 1:
-			m_format = TEX_RED;
+			m_textureDesc.TextureFormat = TEX_RED;
 			break;
 		case 2:
-			m_format = TEX_RED_GREEN;
+			m_textureDesc.TextureFormat = TEX_RED_GREEN;
 			break;
 		case 3:
-			m_format = TEX_RGB;
+			m_textureDesc.TextureFormat = TEX_RGB;
 			break;
 		case 4:
-			m_format = TEX_RGBA;
+			m_textureDesc.TextureFormat = TEX_RGBA;
 			break;
 		}
 	}
 
 	void Texture::addBufferToTexture(void* buffer, UInt32 faceIndex)
 	{
-		ZASSERT(faceIndex < m_face, "Face Index is invalid");
+		ZASSERT(faceIndex < m_textureDesc.FaceCount, "Face Index is invalid");
 		ZCHECK(buffer);
 
 		m_images[faceIndex] = (UChar*)buffer;
@@ -119,13 +120,13 @@ namespace ZE
 
 	void Texture::createEmpty(UInt32 _width, UInt32 _height, UInt32 _depth, ETextureFormat _format, UInt32 _faces)
 	{
-		m_width = _width;
-		m_height = _height;
-		m_format = _format;
-		m_depth = _depth;
-		m_face = _faces;
-		m_images.reset(m_face);
-		for (UInt32 i = 0; i < m_face; i++)
+		m_textureDesc.Width = _width;
+		m_textureDesc.Height = _height;
+		m_textureDesc.TextureFormat = _format;
+		m_textureDesc.Depth = _depth;
+		m_textureDesc.FaceCount = _faces;
+		m_images.reset(_faces);
+		for (UInt32 i = 0; i < _faces; i++)
 		{
 			m_images.push_back(nullptr);
 		}
@@ -136,7 +137,7 @@ namespace ZE
 		// #TODO texture raw data is not part of Memory management since it's loaded using stbi, convert it later.
 		if (m_images.size())
 		{
-			for (UInt32 i = 0; i < m_face; i++)
+			for (UInt32 i = 0; i < m_textureDesc.FaceCount; i++)
 			{
 				free(m_images[i]);
 				m_images[i] = nullptr;

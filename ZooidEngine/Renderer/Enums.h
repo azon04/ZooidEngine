@@ -137,10 +137,18 @@ namespace ZE
 		TEX_RGB = 3,
 		TEX_RGBA = 4,
 		TEX_DEPTH = 5,
-		TEXT_DEPTH_STENCIL = 6
+		TEX_DEPTH_STENCIL = 6,
+		TEX_R8,
+		TEX_R16,
+		TEX_R16F,
+		TEX_RG8,
+		TEX_RG16,
+		TEX_RGB16F,
+		TEX_RGBA16F,
+		TEX_MAX
 	};
 
-	enum EClearBit : UInt32
+	enum ERenderBufferBit : UInt32
 	{
 		COLOR_BUFFER_BIT = 1 << 1,
 		DEPTH_BUFFER_BIT = 1 << 2,

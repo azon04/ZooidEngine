@@ -31,9 +31,10 @@ namespace ZE
 		m_width = pRealTexture->getWidth();
 		m_height = pRealTexture->getHeight();
 
-		if (_glAttachType >= GL_COLOR_ATTACHMENT0 && _glAttachType <= GL_COLOR_ATTACHMENT0 + GL_MAX_COLOR_ATTACHMENTS - 1)
+		if (attachType == COLOR_ATTACHMENT)
 		{
 			m_bColorAttached = true;
+			m_drawBuffers.push_back(_glAttachType);
 		}
 	}
 
@@ -44,9 +45,10 @@ namespace ZE
 		GLRenderBuffer* pRealRenderBuffer = (GLRenderBuffer*)renderBuffer;
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, _glAttachType, GL_RENDERBUFFER, pRealRenderBuffer->getRenderBufferObject());
 
-		if (_glAttachType >= GL_COLOR_ATTACHMENT0 && _glAttachType <= GL_COLOR_ATTACHMENT0 + GL_MAX_COLOR_ATTACHMENTS - 1)
+		if (attachType == COLOR_ATTACHMENT)
 		{
 			m_bColorAttached = true;
+			m_drawBuffers.push_back(_glAttachType);
 		}
 	}
 
@@ -57,9 +59,12 @@ namespace ZE
 			glDrawBuffer(GL_NONE);
 			glReadBuffer(GL_NONE);
 		}
+		else if( m_drawBuffers.length() > 1)
+		{
+			glDrawBuffers(m_drawBuffers.length(), m_drawBuffers.data());
+		}
 
 		ZASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is not complete. Try to attach all necessasy attachments.");
-
 	}
 
 	void GLFrameBuffer::release()

@@ -56,9 +56,9 @@ namespace ZE
 
 		if (!m_currentFrameBuffer) { return; }
 
-		gGameContext->getDrawList()->m_shaderFrameData.setViewMat(shadowMapData->view);
-		gGameContext->getDrawList()->m_shaderFrameData.setProjectionMat(shadowMapData->projection);
-		gGameContext->getDrawList()->m_mainConstantBuffer->refresh();
+		m_shaderData.setViewMat(shadowMapData->view);
+		m_shaderData.setProjectionMat(shadowMapData->projection);
+		m_shaderConstantBuffer->refresh();
 	}
 
 	void ShadowDepthRenderer::reset()
@@ -71,7 +71,7 @@ namespace ZE
 		if (!m_currentFrameBuffer) { return; }
 
 		m_currentFrameBuffer->bind();
-		gGameContext->getRenderer()->Clear(EClearBit::DEPTH_BUFFER_BIT);
+		gGameContext->getRenderer()->Clear(ERenderBufferBit::DEPTH_BUFFER_BIT);
 
 		// Set Face Culling Front face to fix peter panning
 		gGameContext->getRenderer()->SetRenderRasterizerState(TRenderRasterizerState<
@@ -89,8 +89,8 @@ namespace ZE
 		shaderChain->bind();
 
 		// Bind shader_data
-		gGameContext->getDrawList()->m_mainConstantBuffer->bindAndRefresh();
-		shaderChain->bindConstantBuffer("frame_data", gGameContext->getDrawList()->m_mainConstantBuffer);
+		m_shaderConstantBuffer->bind();
+		shaderChain->bindConstantBuffer("frame_data", m_shaderConstantBuffer);
 
 		if (m_bRenderSkinMesh)
 		{
@@ -185,6 +185,8 @@ namespace ZE
 		{
 			Handle hShadowRenderer("ShadowDepthRenderer", sizeof(ShadowDepthRenderer));
 			s_shadowRenderer = new(hShadowRenderer) ShadowDepthRenderer;
+
+			s_shadowRenderer->m_shaderConstantBuffer = BufferManager::getInstance()->createConstantBuffer(&(s_shadowRenderer->m_shaderData), sizeof(ShaderData), CONSTANT_BUFFER_SHADER_DATA_INDEX);
 		}
 
 		return s_shadowRenderer;

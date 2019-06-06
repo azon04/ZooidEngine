@@ -3,6 +3,7 @@
 
 #include "SceneRenderer.h"
 #include "Utils/Array.h"
+#include "Renderer/ShaderData.h"
 
 namespace ZE
 {
@@ -12,6 +13,7 @@ namespace ZE
 	class IGPUFrameBuffer;
 	class IShaderChain;
 	class IGPUTexture;
+	class IGPUBufferData;
 
 	class ShadowDepthRenderer : public ISceneRenderer
 	{
@@ -42,6 +44,10 @@ namespace ZE
 		Array<IGPUTexture*> m_shadowTextures;
 
 		LightStruct* m_currentLight;
+
+		ShaderData m_shaderData;
+		IGPUBufferData* m_shaderConstantBuffer;
+
 	private:
 		static ShadowDepthRenderer* s_shadowRenderer;
 	};
