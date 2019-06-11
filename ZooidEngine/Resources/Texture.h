@@ -92,6 +92,9 @@ namespace ZE
 		// Set Border Color in RGBA
 		void setBorderColor(const Vector4& _color) { m_textureDesc.BorderColor = _color; }
 
+		// Set Texture Format
+		void setTextureFormat(ETextureFormat textureFormat) { m_textureDesc.TextureFormat = textureFormat; }
+
 		// Getter
 		FORCEINLINE ETextureWrap getWrapU() const { return m_textureDesc.WrapU; }
 		FORCEINLINE ETextureWrap getWrapV() const { return m_textureDesc.WrapV; }

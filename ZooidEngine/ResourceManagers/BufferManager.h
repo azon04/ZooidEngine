@@ -24,7 +24,7 @@ namespace ZE
 
 class GameContext;
 
-class BufferManager
+class BufferManager : public Object
 {
 	DEFINE_CLASS(BufferManager)
 

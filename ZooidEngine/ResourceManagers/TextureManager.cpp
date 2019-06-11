@@ -38,12 +38,30 @@ namespace ZE
 		s_instance->unloadResources();
 	}
 
-	ZE::Handle TextureManager::loadResource_Internal(const char* resourceFilePath)
+	ZE::Handle TextureManager::loadResource_Internal(const char* resourceFilePath, ResourceCreateSettings* settings)
 	{
 		Handle hGPUTexture(sizeof(IGPUTexture));
 		Handle hCPUTexture = Texture::loadTexture(resourceFilePath);
 		if (hCPUTexture.isValid())
 		{
+			Texture* pTexture = hCPUTexture.getObject<Texture>();
+
+			if (TextureResourceCreateSettings* resourceSettings = (TextureResourceCreateSettings*)settings)
+			{
+				if (resourceSettings->bGammaCorrectedImage)
+				{
+					switch (pTexture->getChannel())
+					{
+					case 3:
+						pTexture->setTextureFormat(TEX_sRGB);
+						break;
+					case 4:
+						pTexture->setTextureFormat(TEX_sRGBA);
+						break;
+					}
+				}
+			}
+			
 			ScopedRenderThreadOwnership renderThreadOwnership(m_gameContext->getRenderer());
 
 			hGPUTexture = m_gameContext->getRenderZooid()->CreateRenderTexture();

@@ -27,7 +27,7 @@ namespace ZE
 		return s_instance;
 	}
 
-	ZE::Handle SkeletonManager::loadResource_Internal(const char* resourceFilePath)
+	ZE::Handle SkeletonManager::loadResource_Internal(const char* resourceFilePath, ResourceCreateSettings* settings)
 	{
 		Handle hSkel("Skeleton", sizeof(Skeleton));
 		Skeleton* pSkel = new(hSkel) Skeleton;

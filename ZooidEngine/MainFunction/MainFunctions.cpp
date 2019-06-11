@@ -47,11 +47,16 @@
 #include "SceneRenderer/TextRenderer.h"
 #include "SceneRenderer/SkyboxRenderer.h"
 #include "SceneRenderer/ForwardRenderPass.h"
-#include "SceneRenderer/RenderGraph/BaseDeferredRenderGraph.h"
 
 #include "Utils/DebugOptions.h"
 
 #define DEFERRED_RENDERING 1
+
+#if DEFERRED_RENDERING
+#include "SceneRenderer/RenderGraph/BaseDeferredRenderGraph.h"
+#else
+#include "SceneRenderer/RenderGraph/BaseForwardRenderGraph.h"
+#endif
 
 // TODO for NVIDIA Optimus :  This enable the program to use NVIDIA instead of integrated Intel graphics
 #if WIN32 || WIN64
@@ -198,8 +203,10 @@ namespace ZE
 		ZEINFO("Initializing Zooid UI...");
 		UIManager::Init(_gameContext);
 
-#if TEST_DEFERRED_RENDERING
+#if DEFERRED_RENDERING
 		BaseDeferredRenderGraph::GetInstance()->init(_gameContext);
+#else
+		BaseForwardRenderGraph::GetInstance()->init(_gameContext);
 #endif
 
 		_gameContext->m_mainTimer.Reset();
@@ -420,12 +427,14 @@ namespace ZE
 
 		renderer->ClearScreen();
 		
-#if TEST_DEFERRED_RENDERING
+#if DEFERRED_RENDERING
 		BaseDeferredRenderGraph::GetInstance()->begin(_gameContext);
 		BaseDeferredRenderGraph::GetInstance()->execute(_gameContext);
 		BaseDeferredRenderGraph::GetInstance()->end(_gameContext);
 #else
-		ForwardRenderPass::ExecutePass(_gameContext);
+		BaseForwardRenderGraph::GetInstance()->begin(_gameContext);
+		BaseForwardRenderGraph::GetInstance()->execute(_gameContext);
+		BaseForwardRenderGraph::GetInstance()->end(_gameContext);
 #endif
 
 		// Inject UI Rendering

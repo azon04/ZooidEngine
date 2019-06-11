@@ -7,6 +7,11 @@ namespace ZE
 {
 	class GameContext;
 
+	struct TextureResourceCreateSettings : public ResourceCreateSettings
+	{
+		bool bGammaCorrectedImage = false;
+	};
+
 	class TextureManager : public ResourceManager
 	{
 		DEFINE_CLASS(TextureManager)
@@ -18,7 +23,7 @@ namespace ZE
 
 	protected:
 		// ResourceManager Implementation
-		virtual Handle loadResource_Internal(const char* resourceFilePath);
+		virtual Handle loadResource_Internal(const char* resourceFilePath, ResourceCreateSettings* setttings);
 		virtual void preUnloadResource(Resource* _resource);
 
 	protected:

@@ -35,7 +35,7 @@ void ZE::LightRenderPass::prepare(GameContext* _gameContext)
 		textureCreateDesc.Height = _gameContext->getRenderer()->GetHeight();
 		textureCreateDesc.MinFilter = NEAREST;
 		textureCreateDesc.MagFilter = NEAREST;
-		textureCreateDesc.TextureFormat = TEX_RGB;
+		textureCreateDesc.TextureFormat = TEX_RGB16F;
 		textureCreateDesc.DataType = UNSIGNED_BYTE;
 		textureCreateDesc.bGenerateMipMap = false;
 

@@ -19,7 +19,7 @@ namespace ZE
 
 	protected:
 		// Resource Manager implementation
-		virtual Handle loadResource_Internal(const char* resourceFilePath) override;
+		virtual Handle loadResource_Internal(const char* resourceFilePath, ResourceCreateSettings* settings) override;
 		virtual void preUnloadResource(Resource* _resource) override;
 
 	private:

@@ -24,7 +24,7 @@ namespace ZE
 		}
 	}
 
-	Handle AnimationManager::loadResource_Internal(const char* resourceFilePath)
+	Handle AnimationManager::loadResource_Internal(const char* resourceFilePath, ResourceCreateSettings* settings)
 	{
 		Handle handle;
 		FileReader fileReader;

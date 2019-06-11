@@ -31,6 +31,7 @@ namespace ZE
 	{
 		RenderPass::begin(_gameContext);
 		_gameContext->getRenderer()->ResetViewport();
+		_gameContext->getRenderer()->ClearScreen();
 	}
 
 	void ScreenRenderPass::end(GameContext* _gameContext)
@@ -55,6 +56,9 @@ namespace ZE
 
 		m_shaderChain->setTexture("finalTexture", finalTexture, 0);
 		finalTexture->bind();
+
+		m_shaderChain->setInt("hdrToneMap", 1);
+		m_shaderChain->setFloat("exposure", 1.0f);
 
 		_gameContext->getRenderer()->DrawBufferArray(TOPOLOGY_TRIANGLE, quadVBO, 6);
 		

@@ -2,12 +2,20 @@
 #define __ZE_FORWARD_RENDER_PASS_H__
 
 #include "RenderPass.h"
+#include "Common/SingletonClass.h"
 
 namespace ZE
 {
-	class ForwardRenderPass : public RenderPass
+	class IGPUTexture;
+	class IGPUFrameBuffer;
+	class IGPURenderBuffer;
+
+	class ForwardRenderPass : public RenderPass, public Singleton<ForwardRenderPass>
 	{
 	public:
+
+		ForwardRenderPass() : m_resultFrameBuffer(nullptr), m_resultTexture(nullptr), m_depthRenderBuffer(nullptr)
+		{}
 
 		virtual void prepare(GameContext* _gameContext) override;
 		virtual void release(GameContext* _gameContext) override;
@@ -18,7 +26,10 @@ namespace ZE
 		virtual bool execute_CPU(GameContext* _gameContext) override;
 		virtual bool execute_GPU(GameContext* _gameContext) override;
 
-		static bool ExecutePass(GameContext* _gameContext);
+	protected:
+		IGPUTexture* m_resultTexture;
+		IGPUFrameBuffer* m_resultFrameBuffer;
+		IGPURenderBuffer* m_depthRenderBuffer;
 	};
 }
 #endif

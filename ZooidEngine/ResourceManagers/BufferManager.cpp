@@ -12,7 +12,7 @@
 namespace ZE 
 {
 
-	IMPLEMENT_CLASS_1(BufferManager, ResourceManager)
+	IMPLEMENT_CLASS_0(BufferManager)
 
 	BufferManager* BufferManager::m_instance = NULL;
 

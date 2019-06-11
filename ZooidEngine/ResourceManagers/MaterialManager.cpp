@@ -33,7 +33,7 @@ namespace ZE
 		s_instance = nullptr;
 	}
 
-	ZE::Handle MaterialManager::loadResource_Internal(const char* resourceFilePath)
+	ZE::Handle MaterialManager::loadResource_Internal(const char* resourceFilePath, ResourceCreateSettings* settings)
 	{
 		Handle hMaterial("Material", sizeof(Material));
 
@@ -56,7 +56,9 @@ namespace ZE
 			if (StringFunc::Compare(tokenBuffer, "diffuse") == 0)
 			{
 				reader.readNextString(tokenBuffer);
-				Handle hTexture = TextureManager::GetInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
+				TextureResourceCreateSettings settings;
+				settings.bGammaCorrectedImage = true;
+				Handle hTexture = TextureManager::GetInstance()->loadResource(GetResourcePath(tokenBuffer).c_str(), &settings);
 				if (hTexture.isValid())
 				{
 					MaterialTexture texture;

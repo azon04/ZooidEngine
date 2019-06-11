@@ -126,6 +126,10 @@ namespace ZE
 			return GL_DEPTH_COMPONENT;
 		case ZE::TEX_DEPTH_STENCIL:
 			return GL_DEPTH_STENCIL;
+		case ZE::TEX_sRGB:
+			return GL_SRGB;
+		case ZE::TEX_sRGBA:
+			return GL_SRGB_ALPHA;
 		case ZE::TEX_R8:
 			return GL_R8;
 		case ZE::TEX_R16:

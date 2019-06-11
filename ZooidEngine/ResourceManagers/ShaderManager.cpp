@@ -99,7 +99,7 @@ namespace ZE
 		}
 	}
 
-	ZE::Handle ShaderManager::loadResource_Internal(const char* resourceFilePath)
+	ZE::Handle ShaderManager::loadResource_Internal(const char* resourceFilePath, ResourceCreateSettings* settings)
 	{
 		ScopedRenderThreadOwnership renderLock(m_gameContext->getRenderer());
 		

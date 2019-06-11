@@ -27,7 +27,7 @@ namespace ZE
 		m_lightType(DIRECTIONAL_LIGHT),
 		m_diffuse(1.0f, 1.0f, 1.0f),
 		m_specular(0.5f, 0.5f, 0.5f),
-		m_ambient(0.25f, 0.25f, 0.25f),
+		m_ambient(0.1f, 0.1f, 0.1f),
 		m_attConstant(1.0f),
 		m_attLinear(0.07f),
 		m_attQuadratic(0.017f),

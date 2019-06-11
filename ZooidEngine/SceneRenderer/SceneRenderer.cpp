@@ -26,6 +26,12 @@ namespace ZE
 		
 		IShaderChain* shader = m_overrideShaderChain;
 
+		bool bPrevDoubleSided = false;
+
+		gGameContext->getRenderer()->SetRenderRasterizerState(TRenderRasterizerState<EFaceFrontOrder::CCW,
+			ECullFace::BACK,
+			ERenderFillMode::MODE_FILL>::GetGPUState());
+
 		if (shader)
 		{
 			shader->bind();
@@ -61,17 +67,19 @@ namespace ZE
 			shader->bindConstantBuffer("draw_data", drawBufferData);
 
 			// Set Face Culling for double sided
-			if (currentMesh.m_isDoubleSided)
+			if (currentMesh.m_isDoubleSided && !bPrevDoubleSided)
 			{
 				gGameContext->getRenderer()->SetRenderRasterizerState(TRenderRasterizerState<EFaceFrontOrder::CCW,
 					ECullFace::CULL_NONE,
 					ERenderFillMode::MODE_FILL>::GetGPUState());
+				bPrevDoubleSided = true;
 			}
-			else
+			else if(!currentMesh.m_isDoubleSided && bPrevDoubleSided)
 			{
 				gGameContext->getRenderer()->SetRenderRasterizerState(TRenderRasterizerState<EFaceFrontOrder::CCW,
 					ECullFace::BACK,
 					ERenderFillMode::MODE_FILL>::GetGPUState());
+				bPrevDoubleSided = false;
 			}
 
 			currentMesh.m_gpuBufferArray->bind();
@@ -254,6 +262,12 @@ namespace ZE
 	{
 		SkinMeshRenderInfo* meshRenderInfos = static_cast<SkinMeshRenderInfo*>(renderInfos);
 		
+		bool bPrevDoubleSided = false;
+
+		gGameContext->getRenderer()->SetRenderRasterizerState(TRenderRasterizerState<EFaceFrontOrder::CCW,
+			ECullFace::BACK,
+			ERenderFillMode::MODE_FILL>::GetGPUState());
+
 		IShaderChain* shader = m_overrideShaderChain;
 		if (shader)
 		{
@@ -294,17 +308,19 @@ namespace ZE
 			shader->bindConstantBuffer("draw_data", drawBufferData);
 
 			// Set Face Culling for double sided
-			if (currentMesh.m_isDoubleSided)
+			if (currentMesh.m_isDoubleSided && !bPrevDoubleSided)
 			{
 				gGameContext->getRenderer()->SetRenderRasterizerState(TRenderRasterizerState<EFaceFrontOrder::CCW,
 					ECullFace::CULL_NONE,
 					ERenderFillMode::MODE_FILL>::GetGPUState());
+				bPrevDoubleSided = true;
 			}
-			else
+			else if(!currentMesh.m_isDoubleSided && bPrevDoubleSided)
 			{
 				gGameContext->getRenderer()->SetRenderRasterizerState(TRenderRasterizerState<EFaceFrontOrder::CCW,
 					ECullFace::BACK,
 					ERenderFillMode::MODE_FILL>::GetGPUState());
+				bPrevDoubleSided = false;
 			}
 
 			currentMesh.m_gpuBufferArray->bind();

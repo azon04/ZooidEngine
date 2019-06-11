@@ -25,6 +25,12 @@ namespace ZE
 		Array<EventDelegate, true> m_loadedDelegates;
 	};
 
+	// struct that can pass to ResourceManager to let the ResourceManager now assets settings upon loading
+	struct ResourceCreateSettings
+	{
+
+	};
+
 	class ResourceManager : public Object
 	{
 		DEFINE_CLASS(ResourceManager)
@@ -36,13 +42,13 @@ namespace ZE
 		{}
 
 		// Load Resource Sync
-		Handle loadResource(const char* resourceFilePath);
+		Handle loadResource(const char* resourceFilePath, ResourceCreateSettings* settings = nullptr);
 
 		//Load Resource Sync and get the result
 		template<class T>
-		T* loadResource(const char* resourceFilePath)
+		T* loadResource(const char* resourceFilePath, ResourceCreateSettings* settings = nullptr)
 		{
-			Handle h = loadResource(resourceFilePath);
+			Handle h = loadResource(resourceFilePath, settings);
 			return h.getObject<T>();
 		}
 
@@ -74,7 +80,7 @@ namespace ZE
 		
 	protected:
 		// This must override in the child class to provide memory handle to actual resource pointer
-		virtual Handle loadResource_Internal(const char* resourceFilePath) = 0;
+		virtual Handle loadResource_Internal(const char* resourceFilePath, ResourceCreateSettings* options = nullptr) = 0;
 
 		// Pre unload the resource. Do everything to clear the assets
 		virtual void preUnloadResource(Resource* _resource) = 0;

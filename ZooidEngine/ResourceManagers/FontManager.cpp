@@ -32,7 +32,7 @@ namespace ZE
 		return s_instance->getResource<Font>(defaultFontPath);
 	}
 
-	ZE::Handle FontManager::loadResource_Internal(const char* resourceFilePath)
+	ZE::Handle FontManager::loadResource_Internal(const char* resourceFilePath, ResourceCreateSettings* settings)
 	{
 		return Font::LoadFont(resourceFilePath, m_gameContext);
 	}

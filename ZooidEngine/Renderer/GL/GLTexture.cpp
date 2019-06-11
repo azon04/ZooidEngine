@@ -50,6 +50,9 @@ namespace ZE
 			glGenerateMipmap(imageType);
 
 		glBindTexture(imageType, 0);
+
+		m_width = createDesc.Width;
+		m_height = createDesc.Height;
 		// #TODO Should we release the memory of the image when the image already loading to GPU?
 	}
 
@@ -99,6 +102,9 @@ namespace ZE
 			glGenerateMipmap(imageType);
 
 		glBindTexture(imageType, 0);
+
+		m_width = m_textureRes->getWidth();
+		m_height = m_textureRes->getHeight();
 		// #TODO Should we release the memory of the image when the image already loading to GPU?
 	}
 

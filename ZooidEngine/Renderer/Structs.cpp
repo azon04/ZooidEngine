@@ -11,6 +11,8 @@ namespace ZE
 		{ ETextureFormat::TEX_RGBA,				ETextureFormat::TEX_RGBA },
 		{ ETextureFormat::TEX_DEPTH,			ETextureFormat::TEX_DEPTH },
 		{ ETextureFormat::TEX_DEPTH_STENCIL,	ETextureFormat::TEX_DEPTH_STENCIL },
+		{ ETextureFormat::TEX_sRGB,				ETextureFormat::TEX_RGB },
+		{ ETextureFormat::TEX_sRGBA,			ETextureFormat::TEX_RGBA },
 		{ ETextureFormat::TEX_R8,				ETextureFormat::TEX_RED },
 		{ ETextureFormat::TEX_R16,				ETextureFormat::TEX_RED },
 		{ ETextureFormat::TEX_R16F,				ETextureFormat::TEX_RED },

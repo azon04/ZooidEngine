@@ -449,7 +449,7 @@ namespace ZE
 		return -1;
 	}
 
-	ZE::Handle MeshManager::loadResource_Internal(const char* resourceFilePath)
+	ZE::Handle MeshManager::loadResource_Internal(const char* resourceFilePath, ResourceCreateSettings* settings)
 	{
 		Handle meshHandle("Mesh Handle", sizeof(Mesh));
 		Mesh* pMesh;

@@ -138,6 +138,8 @@ namespace ZE
 		TEX_RGBA = 4,
 		TEX_DEPTH = 5,
 		TEX_DEPTH_STENCIL = 6,
+		TEX_sRGB,
+		TEX_sRGBA,
 		TEX_R8,
 		TEX_R16,
 		TEX_R16F,

@@ -7,7 +7,7 @@ namespace ZE
 
 	IMPLEMENT_CLASS_0(ResourceManager)
 
-	Handle ResourceManager::loadResource(const char* resourceFilePath)
+	Handle ResourceManager::loadResource(const char* resourceFilePath, ResourceCreateSettings* settings)
 	{
 		if (m_resourceMap.hasKey(resourceFilePath))
 		{
@@ -15,7 +15,7 @@ namespace ZE
 			resource.m_refCount++;
 			if (!resource.IsLoaded())
 			{
-				resource.m_hActual = loadResource_Internal(resourceFilePath);
+				resource.m_hActual = loadResource_Internal(resourceFilePath, settings);
 			}
 			return resource.m_hActual;
 		}
@@ -23,7 +23,7 @@ namespace ZE
 		{
 			Resource resource;
 			resource.m_refCount = 1;
-			resource.m_hActual = loadResource_Internal(resourceFilePath);
+			resource.m_hActual = loadResource_Internal(resourceFilePath, settings);
 			m_resourceMap.put(resourceFilePath, resource);
 			return resource.m_hActual;
 		}
