@@ -430,6 +430,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*_x86.pdb" "$(TargetDir)" /D /K /Y</Co
     <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderGatherer.cpp" />
     <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderGraph\BaseDeferredRenderGraph.cpp" />
     <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderGraph\BaseForwardRenderGraph.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderPass.cpp" />
     <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderPass\DebugRenderPass.cpp" />
     <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderPass\GBufferRenderPass.cpp" />
     <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderPass\LightRenderPass.cpp" />

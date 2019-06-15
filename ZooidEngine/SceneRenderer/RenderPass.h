@@ -15,15 +15,8 @@ namespace ZE
 		virtual void prepare(GameContext* _gameContext) = 0;
 		virtual void release(GameContext* _gameContext) = 0;
 
-		virtual void begin(GameContext* _gameContext)
-		{
-			m_textureBufferInputs.clear();
-			m_textureBufferOutputs.clear();
-			m_frameBufferInputs.clear();
-			m_frameBufferOuputs.clear();
-		}
-
-		virtual void end(GameContext* _gameContext) = 0;
+		virtual void begin(GameContext* _gameContext);
+		virtual void end(GameContext* _gameContext);
 
 		void addInputTextureBuffer(IGPUTexture* textureBuffer) { m_textureBufferInputs.push_back(textureBuffer); }
 		void addOutputTextureBuffer(IGPUTexture* textureBuffer) { m_textureBufferOutputs.push_back(textureBuffer); }
@@ -44,6 +37,8 @@ namespace ZE
 		{
 			return execute_CPU(_gameContext) && execute_GPU(_gameContext);
 		}
+
+		virtual const char* getRenderPassName() const = 0;
 
 	protected:
 		Array<IGPUTexture*> m_textureBufferInputs;

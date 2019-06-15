@@ -92,6 +92,7 @@ namespace ZE
 
 	void ForwardRenderPass::end(GameContext* _gameContext)
 	{
+		RenderPass::end(_gameContext);
 		addOutputTextureBuffer(m_resultTexture);
 		addOutputFrameBuffer(m_resultFrameBuffer);
 	}

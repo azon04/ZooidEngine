@@ -20,6 +20,8 @@ namespace ZE
 
 		virtual bool execute_CPU(GameContext* _gameContext) override;
 		virtual bool execute_GPU(GameContext* _gameContext) override;
+
+		const char* getRenderPassName() const { return "DebugRenderPass"; }
 	};
 }
 #endif

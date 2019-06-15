@@ -111,6 +111,16 @@ namespace ZE
 		glfwSwapBuffers(m_window);
 	}
 
+	void GLRenderer::BeginFrame()
+	{
+		currentDebugId = 0;
+	}
+
+	void GLRenderer::EndFrame()
+	{
+
+	}
+
 	void GLRenderer::Clean()
 	{
 		glfwTerminate();
@@ -226,6 +236,16 @@ namespace ZE
 		GLFrameBuffer* realFrameBufferTo = static_cast<GLFrameBuffer*>(frameBufferTo);
 
 		glBlitNamedFramebuffer(realFrameBufferFrom->getFBO(), realFrameBufferTo->getFBO(), srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, getRenderBitMask(mask), getTextureFilter(filter));
+	}
+
+	void GLRenderer::PushDebugGroup(const char* groupName)
+	{
+		glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, currentDebugId++, -1, groupName);
+	}
+
+	void GLRenderer::PopDebugGroup()
+	{
+		glPopDebugGroup();
 	}
 
 	void GLRenderer::SetRenderBlendState(IGPUBlendState* renderBlendState)

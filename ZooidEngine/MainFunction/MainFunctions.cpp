@@ -371,7 +371,6 @@ namespace ZE
 			handleGatherLight.release();
 		}
 
-
 		// UI End Frame
 		ZE::UI::EndFrame();
 
@@ -417,6 +416,9 @@ namespace ZE
 		IRenderer* renderer = _gameContext->getRenderer();
 		DrawList* drawList = _gameContext->getDrawList();
 
+		// Main Renderer BeginFrame
+		renderer->BeginFrame();
+
 		ScopedRenderThreadOwnership renderLock(renderer);
 
 		BufferManager::getInstance()->setupForNextFrame();
@@ -438,11 +440,17 @@ namespace ZE
 #endif
 
 		// Inject UI Rendering
-		ZE::UI::ProcessDrawList();
+		{
+			ScopeRenderDebug scopeRenderDebug(renderer, "ZooidUI");
+			ZE::UI::ProcessDrawList();
+		}
 
-		_gameContext->getRenderer()->EndRender();
+		renderer->EndRender();
 
-		_gameContext->getDrawList()->Reset();
+		// Main Renderer End Frame
+		renderer->EndFrame();
+
+		drawList->Reset();
 
 		deltaTime = _gameContext->m_renderThreadTimer.ResetAndGetDeltaMS();
 		g_gpuDrawTime = MathOps::FLerp(g_gpuDrawTime, (Float32)deltaTime, 0.01f);

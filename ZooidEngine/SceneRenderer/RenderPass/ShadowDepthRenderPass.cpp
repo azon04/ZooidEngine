@@ -30,6 +30,8 @@ namespace ZE
 
 	void ShadowDepthRenderPass::end(GameContext* _gameContext)
 	{
+		RenderPass::end(_gameContext);
+
 		// Refresh light constant buffer after generate the shadow maps
 		_gameContext->getDrawList()->m_lightConstantBuffer->refresh();
 

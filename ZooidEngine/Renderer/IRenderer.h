@@ -36,6 +36,12 @@ namespace ZE
 		// End render
 		virtual void EndRender() = 0;
 
+		// Begin Frame
+		virtual void BeginFrame() = 0;
+
+		// End Frame
+		virtual void EndFrame() = 0;
+
 		// Clean renderer
 		virtual void Clean() = 0;
 
@@ -106,6 +112,12 @@ namespace ZE
 		// Resize Window
 		virtual void Resize(UInt32 width, UInt32 height) = 0;
 
+		// Push Debug Group
+		virtual void PushDebugGroup(const char* groupName) = 0;
+
+		// Pop Debug Group
+		virtual void PopDebugGroup() = 0;
+
 	#if defined(_WIN32) || defined(_WIN64)
 		virtual HWND getWinWindow() = 0;
 	#endif
@@ -136,6 +148,25 @@ namespace ZE
 
 	protected:
 		bool m_hasLock;
+		IRenderer* m_renderer;
+	};
+
+	// Helper to scope Push/Pop Debug Group
+	class ScopeRenderDebug
+	{
+	public:
+		ScopeRenderDebug(IRenderer* renderer, const char* groupName)
+			: m_renderer(renderer)
+		{
+			m_renderer->PushDebugGroup(groupName);
+		}
+
+		~ScopeRenderDebug()
+		{
+			m_renderer->PopDebugGroup();
+		}
+
+	protected:
 		IRenderer* m_renderer;
 	};
 }

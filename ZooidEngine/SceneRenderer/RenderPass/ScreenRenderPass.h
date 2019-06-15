@@ -17,10 +17,11 @@ namespace ZE
 		virtual void release(GameContext* _gameContext) override;
 
 		virtual void begin(GameContext* _gameContext) override;
-		virtual void end(GameContext* _gameContext) override;
 
 		virtual bool execute_CPU(GameContext* _gameContext) override;
 		virtual bool execute_GPU(GameContext* _gameContext) override;
+
+		const char* getRenderPassName() const { return "ScreenRenderPass"; }
 
 	private:
 

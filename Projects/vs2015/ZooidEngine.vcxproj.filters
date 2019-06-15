@@ -950,6 +950,9 @@
     <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderGraph\BaseForwardRenderGraph.cpp">
       <Filter>SceneRenderer\RenderGraph</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderPass.cpp">
+      <Filter>SceneRenderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\ZooidEngine\Shaders\TestGLVertexShader.vs">

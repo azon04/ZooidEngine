@@ -130,6 +130,7 @@ namespace ZE
 
 	void GBufferRenderPass::end(GameContext* _gameContext)
 	{
+		RenderPass::end(_gameContext);
 		// Add to outputs
 		addOutputTextureBuffer(m_positionTexture);
 		addOutputTextureBuffer(m_normalTexture);

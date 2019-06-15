@@ -34,11 +34,6 @@ namespace ZE
 		_gameContext->getRenderer()->ClearScreen();
 	}
 
-	void ScreenRenderPass::end(GameContext* _gameContext)
-	{
-
-	}
-
 	bool ScreenRenderPass::execute_CPU(GameContext* _gameContext)
 	{
 		return true;

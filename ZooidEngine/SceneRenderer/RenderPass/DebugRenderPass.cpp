@@ -32,6 +32,7 @@ namespace ZE
 
 	void DebugRenderPass::end(GameContext* _gameContext)
 	{
+		RenderPass::end(_gameContext);
 		if (m_frameBufferInputs.length() > 0)
 		{
 			addOutputFrameBuffer(m_frameBufferInputs[0]);

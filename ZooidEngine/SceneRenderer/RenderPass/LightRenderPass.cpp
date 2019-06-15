@@ -84,6 +84,7 @@ void ZE::LightRenderPass::begin(GameContext* _gameContext)
 
 void ZE::LightRenderPass::end(GameContext* _gameContext)
 {
+	RenderPass::end(_gameContext);
 	ZCHECK(m_resultFrameBuffer);
 	m_resultFrameBuffer->unbind();
 	addOutputTextureBuffer(m_resultPassTexture);
