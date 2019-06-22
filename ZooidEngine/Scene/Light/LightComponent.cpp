@@ -22,15 +22,16 @@ namespace ZE
 {
 	IMPLEMENT_CLASS_1(LightComponent, SceneComponent)
 
-	LightComponent::LightComponent(GameContext* gameContext) : 
-		SceneComponent(gameContext), 
+		LightComponent::LightComponent(GameContext* gameContext) :
+		SceneComponent(gameContext),
 		m_lightType(DIRECTIONAL_LIGHT),
 		m_diffuse(1.0f, 1.0f, 1.0f),
 		m_specular(0.5f, 0.5f, 0.5f),
 		m_ambient(0.1f, 0.1f, 0.1f),
+		m_attDistance(7.0f),
 		m_attConstant(1.0f),
 		m_attLinear(0.07f),
-		m_attQuadratic(0.017f),
+		m_attQuadratic(0.0017f),
 		m_bGenerateShadow(true),
 		m_innerRadius(DegToRad(17.0f)),
 		m_outerRadius(DegToRad(20.0f)),
@@ -250,18 +251,24 @@ namespace ZE
 			}
 		}
 
-		if (mostTop > obMostTop) { mostTop = obMostTop; }
-		if (mostBottom < obMostBottom) { mostBottom = obMostBottom; }
-		if (mostRight > obMostRight) { mostRight = obMostRight; }
-		if (mostLeft < obMostLeft) { mostLeft = obMostLeft; }
-		if (mostNear < obMostNear) { mostNear = obMostNear; }
+// 		if (mostTop > obMostTop) { mostTop = obMostTop; }
+// 		if (mostBottom < obMostBottom) { mostBottom = obMostBottom; }
+// 		if (mostRight > obMostRight) { mostRight = obMostRight; }
+// 		if (mostLeft < obMostLeft) { mostLeft = obMostLeft; }
+ 		if (mostNear < obMostNear) { mostNear = obMostNear; }
+
+		// Add a little bit buffer size to the depth texture to prevent some shadow hiccup/anomaly
+		mostRight += 1.0f;
+		mostLeft -= 1.0f;
+		mostTop += 1.0f;
+		mostBottom -= 1.0f;
 
 		Vector3 deltaPos((mostRight + mostLeft) * 0.5f, (mostTop + mostBottom) * 0.5f, mostNear);
 
-		mostRight -= deltaPos.getX();
-		mostLeft -= deltaPos.getX();
-		mostTop -= deltaPos.getY();
-		mostBottom -= deltaPos.getY();
+ 		mostRight -= deltaPos.getX();
+ 		mostLeft -= deltaPos.getX();
+ 		mostTop -= deltaPos.getY();
+ 		mostBottom -= deltaPos.getY();
 
 		Vector3 newPos;
 		newPos = xAxis * deltaPos.getX();
@@ -338,25 +345,26 @@ namespace ZE
 			}
 		}
 
-		if (numberOfCascade == 1) // No cascade at all
-		{
-			calculateCascadeLightFustrum(view, projection, &(drawList->m_viewFustrum), 0.1f, 0.25f, obMostRight, obMostLeft, obMostTop, obMostBottom, obMostNear);
-			
-			lightData.setViewProjMatrix( view*projection );
-
-			// Setup Shadow Map Data
-			LightShadowMapData& shadowMapData = m_gameContext->getDrawList()->getNextLightShadowMapData();
-			shadowMapData.dynamicShadowFrameBuffer = getOrCreateShadowFrameBuffer(0);
-			shadowMapData.dynamicShadowTexture = getDynamicShadowMap(0);
-			shadowMapData.staticShadowTexture = m_staticShadowTexture;
-			shadowMapData.lightIndex = lightIndex;
-			shadowMapData.cascadeIndex = -1;
-			shadowMapData.normalShaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_SHADOW_DEPTH);
-			shadowMapData.skinnedShaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_cHAIN_SHADOW_DEPTH_SKINNED);
-			shadowMapData.view = view;
-			shadowMapData.projection = projection;
-		}
-		else
+// 		if (numberOfCascade == 1) // No cascade at all
+// 		{
+// 			calculateCascadeLightFustrum(view, projection, &(drawList->m_viewFustrum), 0.1f, 1.0f, obMostRight, obMostLeft, obMostTop, obMostBottom, obMostNear);
+// 			
+// 			lightData.setViewProjMatrix( view*projection );
+// 
+// 			// Setup Shadow Map Data
+// 			LightShadowMapData& shadowMapData = m_gameContext->getDrawList()->getNextLightShadowMapData();
+// 			shadowMapData.dynamicShadowFrameBuffer = getOrCreateShadowFrameBuffer(0);
+// 			shadowMapData.dynamicShadowTexture = getDynamicShadowMap(0);
+// 			shadowMapData.staticShadowTexture = m_staticShadowTexture;
+// 			shadowMapData.lightIndex = lightIndex;
+// 			shadowMapData.cascadeIndex = -1;
+// 			shadowMapData.normalShaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_SHADOW_DEPTH);
+// 			shadowMapData.skinnedShaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_cHAIN_SHADOW_DEPTH_SKINNED);
+// 			shadowMapData.view = view;
+// 			shadowMapData.projection = projection;
+// 
+// 		}
+// 		else
 		{
 			{
 				LightShadowMapData& shadowMapData = m_gameContext->getDrawList()->getNextLightShadowMapData();
@@ -371,7 +379,7 @@ namespace ZE
 			
 
 			float currentCascadeStart = 0.0f;
-			float cameraRange = CameraManager::GetInstance()->getCurrentCamera()->m_far - CameraManager::GetInstance()->getCurrentCamera()->m_near;
+			float cameraRange = CameraManager::GetInstance()->getCurrentCamera()->m_far;// -CameraManager::GetInstance()->getCurrentCamera()->m_near;
 
 			for (int i = 0; i < numberOfCascade; i++)
 			{
@@ -382,7 +390,6 @@ namespace ZE
 				calculateCascadeLightFustrum(localView, projection, &(drawList->m_viewFustrum), currentCascadeStart, cascadedDistances[i], 
 					obMostRight, obMostLeft, obMostTop, obMostBottom, obMostNear);
 
-				cascadeData.setViewProjMatrix(localView * projection);
 				cascadeData.cascadeDistance = cascadedDistances[i] * cameraRange;
 				currentCascadeStart = cascadedDistances[i] - 0.025f;
 				
@@ -411,8 +418,6 @@ namespace ZE
 		MathOps::LookAt(view, lightData.getPosition(), lightData.getPosition() + lightData.getDirection(), Vector3(0.0f, 1.0f, 0.0f));
 		MathOps::CreatePerspectiveProjEx(projection, 1.0f, 2.0f * RadToDeg(acosf(lightData.OuterCutOff)), 0.1f, 10.0f);
 
-		lightData.setViewProjMatrix(view * projection);
-
 		// Setup Shadow Map Data
 		LightShadowMapData& shadowMapData = m_gameContext->getDrawList()->getNextLightShadowMapData();
 		shadowMapData.dynamicShadowFrameBuffer = getOrCreateShadowFrameBuffer(0);
@@ -428,7 +433,36 @@ namespace ZE
 
 	void LightComponent::setupShadowMapsPointLight(UInt32 lightIndex)
 	{
+		LightStruct& lightData = m_gameContext->getDrawList()->m_lightData.lights[lightIndex];
 
+		static Vector3 directions[6] = {
+			Vector3(0.0, 1.0f, 0.0f),
+			Vector3(0.0f, -1.0f, 0.0f),
+			Vector3(0.0f, 0.0f, 1.0f),
+			Vector3(0.0f, 0.0f, -1.0f),
+			Vector3(1.0f, 0.0f, 0.0f),
+			Vector3(-1.0f, 0.0f, 0.0f)
+		};
+
+		for(UInt32 i = 0; i < 6; i++)
+		{
+			Matrix4x4 view, projection;
+
+			MathOps::LookAt(view, lightData.getPosition(), lightData.getPosition() + directions[i], Vector3(0.0f, 1.0f, 0.0f));
+			MathOps::CreatePerspectiveProjEx(projection, 1.0f, RadToDeg(45.0f), 0.01f, m_attDistance);
+
+			// Setup Shadow Map Data
+			LightShadowMapData& shadowMapData = m_gameContext->getDrawList()->getNextLightShadowMapData();
+			shadowMapData.dynamicShadowFrameBuffer = getOrCreateShadowFrameBuffer(i);
+			shadowMapData.dynamicShadowTexture = getDynamicShadowMap(i);
+			shadowMapData.staticShadowTexture = nullptr;
+			shadowMapData.lightIndex = lightIndex;
+			shadowMapData.cascadeIndex = -1;
+			shadowMapData.normalShaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_SHADOW_DEPTH);
+			shadowMapData.skinnedShaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_cHAIN_SHADOW_DEPTH_SKINNED);
+			shadowMapData.view = view;
+			shadowMapData.projection = projection;
+		}
 	}
 
 }

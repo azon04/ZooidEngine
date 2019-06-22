@@ -17,11 +17,14 @@ uniform sampler2D gAmbient;
 
 struct CascadeShadowData
 {
-	mat4 viewProj;
-
 	float cascadedDistance;
 	int shadowMapIndex;
 	vec2 padding;
+};
+
+struct ShadowData
+{
+	mat4 viewProj;
 };
 
 struct Light
@@ -44,9 +47,8 @@ struct Light
 	vec3 diffuse;
 	vec3 specular;
 
-	mat4 viewProj;
-
 	ivec4 shadowMapIndices;
+	ivec4 shadowMapIndicesExt;
 	ivec4 cascadeShadowIndices;
 };
 
@@ -60,6 +62,7 @@ layout (std140) uniform light_data
 	
 	Light lights[MAX_NUM_LIGHTS];
 	CascadeShadowData cascadeShadowData[MAX_SHADOW_MAP];
+	ShadowData shadowData[MAX_SHADOW_MAP];
 };
 
 uniform sampler2D shadowMaps[MAX_SHADOW_MAP];
@@ -129,19 +132,19 @@ vec3 CalcDirLight(Light light, vec3 normal, vec3 fragPos, float depth, vec3 view
 	int i = 0;
 	while(light.shadowMapIndices[i++] != -1)
 	{
-		shadow = max( shadow, CalcShadowPCF(light.viewProj * vec4(fragPos, 1.0), normal, lightDir, light.shadowMapIndices[i]));
+		int shadowIndex = light.shadowMapIndices[i];
+		shadow = max( shadow, CalcShadowPCF(shadowData[shadowIndex].viewProj * vec4(fragPos, 1.0), normal, lightDir, light.shadowMapIndices[i]));
 	}
-
-    float vsCamDepth = depth;
 
 	const int cascadeCount = 4;
 	if(light.cascadeShadowIndices[0] != -1)
 	{
 		int index = light.cascadeShadowIndices[0];
-		ivec4 comparison = ivec4(vsCamDepth <= cascadeShadowData[index].cascadedDistance, vsCamDepth <= cascadeShadowData[index+1].cascadedDistance,
-								vsCamDepth <= cascadeShadowData[index+2].cascadedDistance, vsCamDepth <= cascadeShadowData[index+3].cascadedDistance);
+		ivec4 comparison = ivec4(depth <= cascadeShadowData[index].cascadedDistance, depth <= cascadeShadowData[index+1].cascadedDistance,
+								depth <= cascadeShadowData[index+2].cascadedDistance, depth <= cascadeShadowData[index+3].cascadedDistance);
 		int cascadeIndex = index + min(cascadeCount - (comparison.x + comparison.y + comparison.z + comparison.w), cascadeCount-1);
-		shadow = max( shadow, CalcShadowPCF(cascadeShadowData[cascadeIndex].viewProj * vec4(fragPos, 1.0), normal, lightDir, cascadeShadowData[cascadeIndex].shadowMapIndex));
+		int shadowIndex = cascadeShadowData[cascadeIndex].shadowMapIndex;
+		shadow = max( shadow, CalcShadowPCF(shadowData[shadowIndex].viewProj * vec4(fragPos, 1.0), normal, lightDir, shadowIndex));
 	}
 
 	return ambient + (1.0 - shadow) * (diffuse + specular);
@@ -154,7 +157,7 @@ vec3 CalcPointLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir, vec3 a
 	float diff = max( dot(normal, lightDir), 0.0);
 	// specular shading
 	vec3 reflectDir = reflect(-lightDir, normal);
-	float spec = pow( max( dot( viewDir, reflectDir ), 0.0), specPower );
+	float spec = specPower > 0 ? pow( max( dot( viewDir, reflectDir ), 0.0), specPower ) : 0;
 	// attenuation
 	float distance = length(light.position - fragPos);
 	float attenuation = 1.0 / (light.att_constant + light.att_linear * distance + light.att_quadratic * distance * distance);
@@ -172,7 +175,14 @@ vec3 CalcPointLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir, vec3 a
 	{
 		if(light.shadowMapIndices[i] != -1)
 		{
-			shadow = max(shadow, CalcShadowPCF(light.viewProj * vec4(fragPos, 1.0), normal, lightDir, light.shadowMapIndices[i]));
+			int shadowIndex = light.shadowMapIndices[i];
+			shadow = max(shadow, CalcShadowPCF(shadowData[shadowIndex].viewProj * vec4(fragPos, 1.0), normal, lightDir, shadowIndex));
+		}
+
+		if(light.shadowMapIndicesExt[i] != -1)
+		{
+			int shadowIndex = light.shadowMapIndicesExt[i];
+			shadow = max(shadow, CalcShadowPCF(shadowData[shadowIndex].viewProj * vec4(fragPos, 1.0), normal, lightDir, shadowIndex));
 		}
 	}
 
@@ -208,7 +218,8 @@ vec3 CalcSpotLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir, vec3 al
 	{
 		if(light.shadowMapIndices[i] != -1)
 		{
-			shadow = max(shadow, CalcShadowPCF(light.viewProj * vec4(fragPos, 1.0), normal, lightDir, light.shadowMapIndices[i]));
+			int shadowIndex = light.shadowMapIndices[i];
+			shadow = max(shadow, CalcShadowPCF(shadowData[shadowIndex].viewProj * vec4(fragPos, 1.0), normal, lightDir, shadowIndex));
 		}
 	}
 

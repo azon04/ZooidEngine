@@ -22,6 +22,7 @@ namespace ZE
 	void ShadowDepthRenderer::setupShadowMapData(LightShadowMapData* shadowMapData)
 	{
 		CascadeShadowData* casecadeData = nullptr;
+		LightData& globalLightData = gGameContext->getDrawList()->m_lightData;
 		if (shadowMapData->cascadeIndex >= 0)
 		{
 			casecadeData = &(gGameContext->getDrawList()->m_lightData.cascadeShadowData[shadowMapData->cascadeIndex]);
@@ -37,20 +38,24 @@ namespace ZE
 
 		if (shadowMapData->staticShadowTexture)
 		{
-			m_currentLight->shadowMapIndices[shadowTextureIndex++] = m_shadowTextures.size();
+			UInt32 index = m_shadowTextures.size();
+			m_currentLight->shadowMapIndices[shadowTextureIndex++] = index;
+			globalLightData.shadowData[index].setViewProjMatrix(shadowMapData->view * shadowMapData->projection);
 			m_shadowTextures.push_back(shadowMapData->staticShadowTexture);
 		}
 
 		if (shadowMapData->dynamicShadowTexture)
 		{
+			UInt32 index = m_shadowTextures.size();
 			if (casecadeData)
 			{
-				casecadeData->shadowMapIndex = m_shadowTextures.size();
+				casecadeData->shadowMapIndex = index;
 			}
 			else
 			{
-				m_currentLight->shadowMapIndices[shadowTextureIndex++] = m_shadowTextures.size();
+				m_currentLight->shadowMapIndices[shadowTextureIndex++] = index;
 			}
+			globalLightData.shadowData[index].setViewProjMatrix(shadowMapData->view * shadowMapData->projection);
 			m_shadowTextures.push_back(shadowMapData->dynamicShadowTexture);
 		}
 

@@ -4,7 +4,7 @@
 #include "Scene/SceneComponent.h"
 #include "Math/Vector3.h"
 
-#define MAX_LIGHT_SHADOW_MAPS 4
+#define MAX_LIGHT_SHADOW_MAPS 6
 
 namespace ZE
 {
@@ -61,6 +61,7 @@ namespace ZE
 		Vector3 m_specular;
 
 		// Attenuation
+		Float32 m_attDistance;
 		Float32 m_attConstant;
 		Float32 m_attLinear;
 		Float32 m_attQuadratic;

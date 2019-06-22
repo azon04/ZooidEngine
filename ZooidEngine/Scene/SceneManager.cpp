@@ -194,6 +194,42 @@ namespace ZE
 					pLightComp->m_lightType = (LightType)lightType;
 				}
 			}
+			else if (StringFunc::Compare(buff, "Att_Distance") == 0)
+			{
+				// Read the constant term for Attenuation Equation
+				float val = fileReader->readNextFloat();
+				if (LightComponent* pLightComp = (LightComponent*)pComp)
+				{
+					pLightComp->m_attDistance = val;
+				}
+			}
+			else if (StringFunc::Compare(buff, "Att_Constant") == 0)
+			{
+				// Read the constant term for Attenuation Equation
+				float val = fileReader->readNextFloat();
+				if (LightComponent* pLightComp = (LightComponent*)pComp)
+				{
+					pLightComp->m_attConstant = val;
+				}
+			}
+			else if (StringFunc::Compare(buff, "Att_Linear") == 0)
+			{
+				// Read the linear term for Attenuation Equation
+				float val = fileReader->readNextFloat();
+				if (LightComponent* pLightComp = (LightComponent*)pComp)
+				{
+					pLightComp->m_attLinear = val;
+				}
+			}
+			else if (StringFunc::Compare(buff, "Att_Quadratic") == 0)
+			{
+				// Read the quadratic term for Attenuation Equation
+				float val = fileReader->readNextFloat();
+				if (LightComponent* pLightComp = (LightComponent*)pComp)
+				{
+					pLightComp->m_attQuadratic = val;
+				}
+			}
 			else if (StringFunc::Compare(buff, "Children") == 0)
 			{
 				// Read Children of this comp

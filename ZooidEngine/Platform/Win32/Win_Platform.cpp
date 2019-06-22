@@ -99,7 +99,7 @@ namespace ZE
 				return false;
 			}
 
-			StringFunc::WriteTo(buff, m_args.paramArgs[index], StringFunc::Length(m_args.paramArgs[index]));
+			StringFunc::WriteTo(buff, m_args.paramArgs[index], StringFunc::Length(m_args.paramArgs[index])+1);
 			
 			return true;
 		}

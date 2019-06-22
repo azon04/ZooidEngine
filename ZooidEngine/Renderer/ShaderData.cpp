@@ -40,16 +40,15 @@ namespace ZE
 		MemoryHelper::Copy(&_specular.m_data[0], Specular, sizeof(Float32) * 3);
 	}
 
-	void LightStruct::setViewProjMatrix(Matrix4x4& _viewProj)
-	{
-		MemoryHelper::Copy(_viewProj.m_data, lightViewProj, sizeof(lightViewProj));
-	}
-
 	void LightStruct::reset()
 	{
-		for (UInt32 i = 0; i < 4; i++)
+		for (UInt32 i = 0; i < 8; i++)
 		{
 			shadowMapIndices[i] = -1;
+		}
+
+		for (UInt32 i = 0; i < 4; i++)
+		{
 			cascadeShadowIndices[i] = -1;
 		}
 	}
@@ -69,7 +68,7 @@ namespace ZE
 		MemoryHelper::Copy(&_viewPos.m_data[0], ViewPos, sizeof(Float32) * 3);
 	}
 
-	void CascadeShadowData::setViewProjMatrix(Matrix4x4& _viewProj)
+	void ShadowData::setViewProjMatrix(Matrix4x4& _viewProj)
 	{
 		MemoryHelper::Copy(_viewProj.m_data, lightViewProj, sizeof(lightViewProj));
 	}

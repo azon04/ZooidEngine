@@ -2,17 +2,13 @@ ZooidEngine: [LOG_ENGINE] Log: CPU Processor: Intel(R) Core(TM) i7-6700HQ CPU @ 
 ZooidEngine: [LOG_ENGINE] Log: CPU Speed: 2592 MHz 
 ZooidEngine: [LOG_ENGINE] Log: RAM Detected 
 ZooidEngine: [LOG_ENGINE] Log: Total Physical RAM: 15.866943 GB 
-ZooidEngine: [LOG_ENGINE] Log: Available Physical RAM: 6.702118 GB 
+ZooidEngine: [LOG_ENGINE] Log: Available Physical RAM: 2.982452 GB 
 ZooidEngine: [LOG_ENGINE] Log: Total Virtual Memory: 1.999878 GB 
-ZooidEngine: [LOG_ENGINE] Log: Avail Virtual Memory: 1.768513 GB 
-ZooidEngine: [LOG_ENGINE] Log: Total Available Disk in E: 3.409527 GB 
+ZooidEngine: [LOG_ENGINE] Log: Avail Virtual Memory: 1.924690 GB 
+ZooidEngine: [LOG_ENGINE] Log: Total Available Disk in E: 2.871841 GB 
 ZooidEngine: [LOG_MEMORY] Log: Total Mem Size : 6143240 bytes ~ 5.858650 MB 
 ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 3072 bytes with 341 blocks on index 10 
 ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 4608 bytes with 227 blocks replacing block on index 10 
 ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 8192 bytes with 128 blocks on index 11 
 ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 16384 bytes with 64 blocks on index 12 
-ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 6620160 bytes with 1 blocks replacing block on index 11 
-ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 413760 bytes with 2 blocks on index 13 
-ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 2560 bytes with 409 blocks replacing block on index 11 
-ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 2568876 bytes with 1 blocks replacing block on index 13 
-ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 135204 bytes with 7 blocks on index 14 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 8565 bytes with 122 blocks replacing block on index 11 

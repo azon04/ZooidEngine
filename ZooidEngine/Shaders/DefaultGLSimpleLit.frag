@@ -28,11 +28,14 @@ struct Material
 
 struct CascadeShadowData
 {
-	mat4 viewProj;
-
 	float cascadedDistance;
 	int shadowMapIndex;
 	vec2 padding;
+};
+
+struct ShadowData
+{
+	mat4 viewProj;
 };
 
 struct Light {
@@ -55,9 +58,8 @@ struct Light {
 	vec3 diffuse;
 	vec3 specular;
 
-	mat4 viewProj;
-
 	ivec4 shadowMapIndices;
+	ivec4 shadowMapIndicesExt;
 	ivec4 cascadeShadowIndices;
 };
 
@@ -71,6 +73,7 @@ layout (std140) uniform light_data
 	
 	Light lights[MAX_NUM_LIGHTS];
 	CascadeShadowData cascadeShadowData[MAX_SHADOW_MAP];
+	ShadowData shadowData[MAX_SHADOW_MAP];
 };
 
 uniform sampler2D shadowMaps[MAX_SHADOW_MAP];
@@ -94,6 +97,7 @@ vec3 CalcSpotLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir);
 float CalcShadow(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir, int shadowMapIndex);
 float CalcShadowPCF(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir, int shadowMapIndex);
 vec3 CalculateNormal();
+float CalcPointAttenuation(Light light, float distance);
 
 void main()
 {
@@ -160,15 +164,15 @@ float CalcShadowPCF(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir, int shad
 	float bias = max(0.0001 * (1.0 - dot(normal, lightDir)), shadowBias);
 	float shadow = 0.0;
 	vec2 texelSize = 1.0 / textureSize( shadowMaps[shadowMapIndex], 0 );
-	for(int x = -1; x <= 1; ++x)
+	for(int x = -2; x <= 2; ++x)
 	{
-		for(int y = -1; y <= 1; ++y)
+		for(int y = -2; y <= 2; ++y)
 		{
 			float closestDepth = texture(shadowMaps[shadowMapIndex], projCoords.xy + vec2(x, y) * texelSize).r;
 			shadow += currentDepth - bias > closestDepth ? 1.0 : 0.0;
 		}
 	}
-	shadow /= 9.0;
+	shadow /= 25.0;
 
 	// Set shadow to 0 if the pos outside the light view frustrum
 	if(projCoords.z > 1.0)
@@ -219,7 +223,8 @@ vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir)
 	int i = 0;
 	while(light.shadowMapIndices[i++] != -1)
 	{
-		shadow = max( shadow, CalcShadowPCF(light.viewProj * vec4(vsFragPos, 1.0), normal, lightDir, light.shadowMapIndices[i]));
+		int shadowIndex = light.shadowMapIndices[i];
+		shadow = max( shadow, CalcShadowPCF(shadowData[shadowIndex].viewProj * vec4(vsFragPos, 1.0), normal, lightDir, light.shadowMapIndices[i]));
 	}
 
 	const int cascadeCount = 4;
@@ -229,7 +234,8 @@ vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir)
 		ivec4 comparison = ivec4(vsCamDepth <= cascadeShadowData[index].cascadedDistance, vsCamDepth <= cascadeShadowData[index+1].cascadedDistance,
 								vsCamDepth <= cascadeShadowData[index+2].cascadedDistance, vsCamDepth <= cascadeShadowData[index+3].cascadedDistance);
 		int cascadeIndex = index + min(cascadeCount - (comparison.x + comparison.y + comparison.z + comparison.w), cascadeCount-1);
-		shadow = max( shadow, CalcShadowPCF(cascadeShadowData[cascadeIndex].viewProj * vec4(vsFragPos, 1.0), normal, lightDir, cascadeShadowData[cascadeIndex].shadowMapIndex));
+		int shadowIndex = cascadeShadowData[cascadeIndex].shadowMapIndex;
+		shadow = max( shadow, CalcShadowPCF(shadowData[shadowIndex].viewProj * vec4(vsFragPos, 1.0), normal, lightDir, shadowIndex));
 	}
 
 	return ambient + (1.0 - shadow) * (diffuse + specular);
@@ -242,10 +248,10 @@ vec3 CalcPointLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir)
 	float diff = max( dot(normal, lightDir), 0.0);
 	// specular shading
 	vec3 reflectDir = reflect(-lightDir, normal);
-	float spec = pow( max( dot( viewDir, reflectDir ), 0.0), material.shininess );
+	float spec = material.shininess > 0.0 ? pow( max( dot( viewDir, reflectDir ), 0.0), material.shininess ) : 0;
 	// attenuation
 	float distance = length(light.position - fragPos);
-	float attenuation = 1.0 / (light.att_constant + light.att_linear * distance + light.att_quadratic * distance * distance);
+	float attenuation = CalcPointAttenuation(light, distance);
 	// combine results
 	vec3 ambient = light.ambient * material.Ka * CalculateDiffuseColor();
 	vec3 diffuse = light.diffuse * diff * material.Kd * CalculateDiffuseColor();
@@ -254,7 +260,30 @@ vec3 CalcPointLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir)
 	diffuse *= attenuation;
 	specular *= attenuation;
 
-	return (ambient + diffuse + specular);
+	// Calculate shadow
+	float shadow = 0.0;
+	for(int i=0; i < 4; i++)
+	{
+		if(light.shadowMapIndices[i] != -1)
+		{
+			int shadowIndex = light.shadowMapIndices[i];
+			shadow = max(shadow, CalcShadowPCF(shadowData[shadowIndex].viewProj * vec4(vsFragPos, 1.0), normal, lightDir, shadowIndex));
+		}
+
+		if(light.shadowMapIndicesExt[i] != -1)
+		{
+			int shadowIndex = light.shadowMapIndicesExt[i];
+			shadow = max(shadow, CalcShadowPCF(shadowData[shadowIndex].viewProj * vec4(vsFragPos, 1.0), normal, lightDir, shadowIndex));
+		}
+	}
+
+	return ambient + (1 - shadow) * (diffuse + specular);
+}
+
+float CalcPointAttenuation(Light light, float distance)
+{
+	// The falloff function can be replaced to be more game-friendly rendering
+	return 1.0 / (light.att_constant + light.att_linear * distance + light.att_quadratic * distance * distance);
 }
 
 vec3 CalcSpotLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir)
@@ -286,7 +315,8 @@ vec3 CalcSpotLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir)
 	{
 		if(light.shadowMapIndices[i] != -1)
 		{
-			shadow = max(shadow, CalcShadowPCF(light.viewProj * vec4(vsFragPos, 1.0), normal, lightDir, light.shadowMapIndices[i]));
+			int shadowIndex = light.shadowMapIndices[i];
+			shadow = max(shadow, CalcShadowPCF(shadowData[shadowIndex].viewProj * vec4(vsFragPos, 1.0), normal, lightDir, shadowIndex));
 		}
 	}
 

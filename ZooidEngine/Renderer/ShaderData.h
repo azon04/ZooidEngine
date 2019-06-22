@@ -20,11 +20,14 @@ namespace ZE
 
 	struct CascadeShadowData
 	{
-		Float32 lightViewProj[4][4];
-
 		Float32 cascadeDistance;
 		Int32 shadowMapIndex;
 		Float32 padding[2];
+	};
+
+	struct ShadowData
+	{
+		Float32 lightViewProj[4][4];
 
 		void setViewProjMatrix(Matrix4x4& _viewProj);
 	};
@@ -52,8 +55,7 @@ namespace ZE
 		Float32 Diffuse[4];
 		Float32 Specular[4];
 
-		Float32 lightViewProj[4][4];
-		Int32 shadowMapIndices[4];
+		Int32 shadowMapIndices[8];
 		Int32 cascadeShadowIndices[4];
 
 		void setPosition(Vector3& _position);
@@ -61,7 +63,6 @@ namespace ZE
 		void setAmbient(Vector3& _ambient);
 		void setDiffuse(Vector3& _diffuse);
 		void setSpecular(Vector3& _specular);
-		void setViewProjMatrix(Matrix4x4& _viewProj);
 		void reset();
 
 		Vector3 getDirection();
@@ -80,6 +81,7 @@ namespace ZE
 
 		LightStruct lights[MAX_NUMBER_OF_LIGHT];
 		CascadeShadowData cascadeShadowData[MAX_SHADOW_MAP];
+		ShadowData shadowData[MAX_SHADOW_MAP];
 
 		void setViewPos(Vector3& _viewPos);
 	};
