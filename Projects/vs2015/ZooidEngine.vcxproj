@@ -304,6 +304,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*_x86.pdb" "$(TargetDir)" /D /K /Y</Co
     <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderPass\PostProcessRenderPass.h" />
     <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderPass\ScreenRenderPass.h" />
     <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderPass\ShadowDepthRenderPass.h" />
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderPass\SSAORenderPass.h" />
     <ClInclude Include="..\..\ZooidEngine\SceneRenderer\SceneRenderer.h" />
     <ClInclude Include="..\..\ZooidEngine\SceneRenderer\SceneRenderFactory.h" />
     <ClInclude Include="..\..\ZooidEngine\SceneRenderer\ShadowRenderer.h" />
@@ -437,6 +438,7 @@ XCOPY "$(PhysX)\..\PxShared\bin\vc14win32\*_x86.pdb" "$(TargetDir)" /D /K /Y</Co
     <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderPass\PostProcessRenderPass.cpp" />
     <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderPass\ScreenRenderPass.cpp" />
     <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderPass\ShadowDepthRenderPass.cpp" />
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderPass\SSAORenderPass.cpp" />
     <ClCompile Include="..\..\ZooidEngine\SceneRenderer\SceneRenderer.cpp" />
     <ClCompile Include="..\..\ZooidEngine\SceneRenderer\SceneRenderFactory.cpp" />
     <ClCompile Include="..\..\ZooidEngine\SceneRenderer\ShadowRenderer.cpp" />

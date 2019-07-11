@@ -251,10 +251,10 @@ namespace ZE
 			}
 		}
 
-// 		if (mostTop > obMostTop) { mostTop = obMostTop; }
-// 		if (mostBottom < obMostBottom) { mostBottom = obMostBottom; }
-// 		if (mostRight > obMostRight) { mostRight = obMostRight; }
-// 		if (mostLeft < obMostLeft) { mostLeft = obMostLeft; }
+ 		if (mostTop > obMostTop) { mostTop = obMostTop; }
+ 		if (mostBottom < obMostBottom) { mostBottom = obMostBottom; }
+ 		if (mostRight > obMostRight) { mostRight = obMostRight; }
+ 		if (mostLeft < obMostLeft) { mostLeft = obMostLeft; }
  		if (mostNear < obMostNear) { mostNear = obMostNear; }
 
 		// Add a little bit buffer size to the depth texture to prevent some shadow hiccup/anomaly
@@ -285,7 +285,7 @@ namespace ZE
 		DrawList* drawList = m_gameContext->getDrawList();
 
 		Int32 numberOfCascade = 4;
-		Float32 cascadedDistances[4] = { 0.1f, 0.25f, 0.5f, 1.0f };
+		Float32 cascadedDistances[4] = { 0.025f, 0.05f, 0.25f, 1.0f };
 
 		// TODO Determine how many cascade we need based on light and cam angle
 
@@ -391,7 +391,7 @@ namespace ZE
 					obMostRight, obMostLeft, obMostTop, obMostBottom, obMostNear);
 
 				cascadeData.cascadeDistance = cascadedDistances[i] * cameraRange;
-				currentCascadeStart = cascadedDistances[i] - 0.025f;
+				currentCascadeStart = cascadedDistances[i] - 0.0025f;
 				
 				// Setup Shadow Map Data
 				LightShadowMapData& shadowMapData = m_gameContext->getDrawList()->getNextLightShadowMapData();

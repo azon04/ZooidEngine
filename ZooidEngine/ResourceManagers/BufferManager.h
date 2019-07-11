@@ -48,7 +48,7 @@ public:
 	IGPUBufferData* createConstantBufferFromBuffer(BufferData* _bufferData, UInt32 bindingIndex);
 
 	// Create constant buffer using pointer of data and its size
-	IGPUBufferData* createConstantBuffer(void* data, size_t size, UInt32 bindingIndex);
+	IGPUBufferData* createConstantBuffer(void* data, size_t size, UInt32 bindingIndex, bool bStaticBuffer = false);
 
 	// Create draw constant buffer
 	IGPUBufferData* getOrCreateDrawBuffer(void* data, size_t size);

@@ -38,6 +38,8 @@ namespace ZE
 			textureCreateDesc.Height = _gameContext->getRenderer()->GetHeight();
 			textureCreateDesc.MinFilter = NEAREST;
 			textureCreateDesc.MagFilter = NEAREST;
+			textureCreateDesc.WrapU = CLAMP_TO_EDGE;
+			textureCreateDesc.WrapV = CLAMP_TO_EDGE;
 			textureCreateDesc.TextureFormat = TEX_RGBA16F;
 			textureCreateDesc.DataType = FLOAT;
 			textureCreateDesc.bGenerateMipMap = false;

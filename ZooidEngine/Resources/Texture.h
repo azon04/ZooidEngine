@@ -33,6 +33,7 @@ namespace ZE
 		bool bGenerateMipMap = true;
 
 		Vector4 BorderColor;
+		void* InitialData = nullptr;
 	};
 
 	class Texture : public Object
@@ -48,6 +49,9 @@ namespace ZE
 
 		// load texture from memory buffer
 		void loadFromBuffer(void* firstBuffer, UInt32 _width, UInt32 _height, UInt32 _depth, UInt32 _channelCount, UInt32 faces = 1);
+
+		// load texture from memory buffer
+		void loadFromBufferExt(void* firstBuffer, UInt32 _width, UInt32 _height, UInt32 _depth, UInt32 _channelCount, ETextureFormat textureFormat, UInt32 faces = 1);
 
 		// Add buffer to texture faces
 		void addBufferToTexture(void* buffer, UInt32 faceIndex);

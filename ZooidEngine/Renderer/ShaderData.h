@@ -13,6 +13,7 @@ namespace ZE
 	{
 		Float32 ViewMat[4][4];
 		Float32 ProjectionMat[4][4];
+		Float32 InvViewMat[4][4];
 
 		void setViewMat(Matrix4x4& _viewMat4);
 		void setProjectionMat(Matrix4x4& _projectionMat4);

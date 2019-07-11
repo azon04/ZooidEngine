@@ -35,10 +35,12 @@ namespace ZE
 		Int32 resultSize = file.readToBuffer(bufferHandle.getObject(), file.size());
 		char* shaderText = bufferHandle.getObject<char>();
 		shaderText[resultSize] = '\0';
+		file.close();
 
 		m_shaderType = _shaderType;
 		
 		loadShaderFromBuffer(shaderText, resultSize);
+
 
 		bufferHandle.release();
 

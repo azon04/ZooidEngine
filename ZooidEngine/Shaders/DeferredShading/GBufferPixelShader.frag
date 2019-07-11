@@ -4,8 +4,8 @@
 ***/
 
 #version 430
-layout (location=0) out vec4 gPosition;
-layout (location=1) out vec3 gNormal;
+layout (location=0) out vec4 gPosition; // in View-Space
+layout (location=1) out vec3 gNormal; // In View-Space
 layout (location=2) out vec3 gAlbedo;
 layout (location=3) out vec4 gSpecColor;
 layout (location=4) out vec3 gAmbient;
@@ -44,7 +44,7 @@ vec3 calculateNormal()
     vec3 normal = mix(normalize(fs_in.Normal), normalize(texture(material.normalMap, fs_in.TexCoord).rgb * 2.0 - 1.0), material.normalMapBound );
 	if(material.normalMapBound == 1.0)
 	{
-		mat3 TBN = mat3(normalize(fs_in.Tangent), normalize(fs_in.Bitangent), normalize(normal));
+		mat3 TBN = mat3(normalize(fs_in.Tangent), normalize(fs_in.Bitangent), normalize(fs_in.Normal));
 		normal = normalize(TBN * normal);
 	}
 	return normal;

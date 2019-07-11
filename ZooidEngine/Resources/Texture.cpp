@@ -110,6 +110,25 @@ namespace ZE
 		}
 	}
 
+	void Texture::loadFromBufferExt(void* firstBuffer, UInt32 _width, UInt32 _height, UInt32 _depth, UInt32 _channelCount, ETextureFormat _textureFormat, UInt32 faces /*= 1*/)
+	{
+		m_images.reset(faces);
+		m_images.clear();
+		m_images.push_back((UChar*)firstBuffer);
+
+		for (UInt32 i = 1; i < faces; i++)
+		{
+			m_images.push_back(nullptr);
+		}
+
+		m_textureDesc.Width = _width;
+		m_textureDesc.Height = _height;
+		m_textureDesc.Depth = _depth;
+		m_textureDesc.Channel = _channelCount;
+		m_textureDesc.FaceCount = faces;
+		m_textureDesc.TextureFormat = _textureFormat;
+	}
+
 	void Texture::addBufferToTexture(void* buffer, UInt32 faceIndex)
 	{
 		ZASSERT(faceIndex < m_textureDesc.FaceCount, "Face Index is invalid");

@@ -186,12 +186,12 @@ namespace ZE
 		return bufferData;
 	}
 
-	ZE::IGPUBufferData* BufferManager::createConstantBuffer(void* data, size_t size, UInt32 bindingIndex)
+	ZE::IGPUBufferData* BufferManager::createConstantBuffer(void* data, size_t size, UInt32 bindingIndex, bool bStaticBuffer)
 	{
 		Handle hBufferData("BasisBufferData", sizeof(BufferData));
 		BufferData* bufferData = new(hBufferData) BufferData(EBufferType::UNIFORM_BUFFER);
 		bufferData->SetData(data, size);
-		bufferData->setStaticBuffer(false);
+		bufferData->setStaticBuffer(bStaticBuffer);
 
 		// Buffer Data need to be saved since the data will be changed eventually
 		m_buffers.push_back(bufferData);

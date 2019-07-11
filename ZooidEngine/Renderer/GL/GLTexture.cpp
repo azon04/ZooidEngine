@@ -41,7 +41,7 @@ namespace ZE
 		else
 		{
 			// #TODO handle multisampling if needed
-			glTexImage2D(imageType, 0, imageFormat, createDesc.Width, createDesc.Height, 0, baseFormat, getGLDataType(createDesc.DataType), NULL);
+			glTexImage2D(imageType, 0, imageFormat, createDesc.Width, createDesc.Height, 0, baseFormat, getGLDataType(createDesc.DataType), createDesc.InitialData);
 		}
 
 		glTexParameterfv(imageType, GL_TEXTURE_BORDER_COLOR, createDesc.BorderColor.m_data);

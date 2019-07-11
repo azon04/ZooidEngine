@@ -45,4 +45,9 @@ namespace ZE
 		return plat->getArgCount();
 	}
 
+	ZE::Float32 Platform::RandUnit()
+	{
+		return GetPlatform()->randUnitFloat();
+	}
+
 }

@@ -106,13 +106,17 @@ bool ZE::LightRenderPass::execute_GPU(GameContext* _gameContext)
 	_gameContext->getDrawList()->m_lightConstantBuffer->bind();
 	m_shaderChain->bindConstantBuffer("light_data", _gameContext->getDrawList()->m_lightConstantBuffer);
 
+	_gameContext->getDrawList()->m_mainConstantBuffer->bind();
+	m_shaderChain->bindConstantBuffer("frame_data", _gameContext->getDrawList()->m_mainConstantBuffer);
+
 	// Bind Textures
-	ZCHECK(m_textureBufferInputs.length() == 5);
+	ZCHECK(m_textureBufferInputs.length() == 6);
 	IGPUTexture* positionTexture = m_textureBufferInputs[0];
 	IGPUTexture* normalTexture = m_textureBufferInputs[1];
 	IGPUTexture* albedoTexture = m_textureBufferInputs[2];
 	IGPUTexture* specTexture = m_textureBufferInputs[3];
 	IGPUTexture* ambientTexture = m_textureBufferInputs[4];
+	IGPUTexture* ssaoTexture = m_textureBufferInputs[5];
 
 	m_shaderChain->setTexture("gPosition", positionTexture, 0);
 	positionTexture->bind();
@@ -129,7 +133,10 @@ bool ZE::LightRenderPass::execute_GPU(GameContext* _gameContext)
 	m_shaderChain->setTexture("gAmbient", ambientTexture, 4);
 	ambientTexture->bind();
 
-	ShadowDepthRenderer::BindShadowTextures(_gameContext->getDrawList(), m_shaderChain, 5);
+	m_shaderChain->setTexture("gSSAO", ssaoTexture, 5);
+	ssaoTexture->bind();
+
+	ShadowDepthRenderer::BindShadowTextures(_gameContext->getDrawList(), m_shaderChain, 6);
 
 	_gameContext->getRenderer()->DrawBufferArray(TOPOLOGY_TRIANGLE, quadVBO, 6);
 

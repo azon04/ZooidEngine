@@ -79,10 +79,10 @@ namespace ZE
 		gGameContext->getRenderer()->Clear(ERenderBufferBit::DEPTH_BUFFER_BIT);
 
 		// Set Face Culling Front face to fix peter panning
-		gGameContext->getRenderer()->SetRenderRasterizerState(TRenderRasterizerState<
-			EFaceFrontOrder::CCW,
-			ECullFace::FRONT,
-			ERenderFillMode::MODE_FILL>::GetGPUState());
+// 		gGameContext->getRenderer()->SetRenderRasterizerState(TRenderRasterizerState<
+// 			EFaceFrontOrder::CCW,
+// 			ECullFace::FRONT,
+// 			ERenderFillMode::MODE_FILL>::GetGPUState());
 	}
 
 	void ShadowDepthRenderer::render(RenderInfo* renderInfos, UInt32 renderInfoCount)

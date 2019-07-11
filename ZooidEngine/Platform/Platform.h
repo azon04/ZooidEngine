@@ -2,6 +2,7 @@
 #define __ZE_PLATFORM_H__
 
 #include "Utils/Macros.h"
+#include "Utils/PrimitiveTypes.h"
 
 #if defined(ZE_PLATFORM_WINDOWS)
 #include "Win32/Win_Platform.h"
@@ -23,6 +24,7 @@ namespace ZE
 		virtual PlatformArgs* getArgs() = 0;
 		virtual bool getArgByIndex(int index, char* buff) = 0;
 		virtual int getArgCount() = 0;
+		virtual float randUnitFloat() = 0;
 
 		// #TODO implement this on specific platform
 		static Platform* GetPlatform();
@@ -36,6 +38,9 @@ namespace ZE
 		static int GetExitErrorCode();
 		static bool GetArgByIndex(int index, char* buff);
 		static int GetArgCount();
+		
+		// Some Platform Utils
+		static Float32 RandUnit(); // Random [0..1]
 	};
 }
 #endif

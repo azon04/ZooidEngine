@@ -591,6 +591,9 @@
     <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderGraph\BaseForwardRenderGraph.h">
       <Filter>SceneRenderer\RenderGraph</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderPass\SSAORenderPass.h">
+      <Filter>SceneRenderer\RenderPass</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ZooidEngine\MainFunction\Main.cpp">
@@ -952,6 +955,9 @@
     </ClCompile>
     <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderPass.cpp">
       <Filter>SceneRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderPass\SSAORenderPass.cpp">
+      <Filter>SceneRenderer\RenderPass</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

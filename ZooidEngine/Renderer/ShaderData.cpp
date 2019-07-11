@@ -8,6 +8,7 @@ namespace ZE
 	void ShaderData::setViewMat(Matrix4x4& _viewMat4)
 	{
 		MemoryHelper::Copy(&_viewMat4.m_data[0][0], ViewMat, sizeof(Float32) * 16);
+		MemoryHelper::Copy(&_viewMat4.inverse().m_data[0][0], InvViewMat, sizeof(Float32) * 16);
 	}
 
 	void ShaderData::setProjectionMat(Matrix4x4& _projectionMat4)

@@ -2,6 +2,7 @@
 
 #include <windows.h>
 #include <direct.h>
+#include <stdlib.h>
 
 #include "Logging/LogManager.h"
 #include "Utils/ZEngineHelper.h"
@@ -107,6 +108,11 @@ namespace ZE
 		virtual int getArgCount()
 		{
 			return m_args.paramCount;
+		}
+
+		virtual Float32 randUnitFloat()
+		{
+			return rand() / float(RAND_MAX);
 		}
 	};
 
