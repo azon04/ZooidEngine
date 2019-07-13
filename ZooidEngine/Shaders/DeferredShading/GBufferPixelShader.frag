@@ -4,7 +4,7 @@
 ***/
 
 #version 430
-layout (location=0) out vec4 gPosition; // in View-Space
+layout (location=0) out vec3 gPosition; // in View-Space
 layout (location=1) out vec3 gNormal; // In View-Space
 layout (location=2) out vec3 gAlbedo;
 layout (location=3) out vec4 gSpecColor;
@@ -33,21 +33,26 @@ in VS_OUT
     vec3 Normal;
     vec3 FragPos;
     vec3 Tangent;
-    vec3 Bitangent;
-	float depth;
 } fs_in;
 
 uniform Material material;
 
 vec3 calculateNormal()
 {
-    vec3 normal = mix(normalize(fs_in.Normal), normalize(texture(material.normalMap, fs_in.TexCoord).rgb * 2.0 - 1.0), material.normalMapBound );
+	vec3 N = normalize(fs_in.Normal);
+    
 	if(material.normalMapBound == 1.0)
 	{
-		mat3 TBN = mat3(normalize(fs_in.Tangent), normalize(fs_in.Bitangent), normalize(fs_in.Normal));
-		normal = normalize(TBN * normal);
+		vec3 normal = texture(material.normalMap, fs_in.TexCoord).rgb * 2.0 - 1.0;
+		vec3 T = normalize(fs_in.Tangent - dot(fs_in.Tangent, N) * N); // reorthogonalize T
+		vec3 B = cross(N, T);
+		mat3 TBN = mat3(T, B, N);
+		return normalize(TBN * normal);
 	}
-	return normal;
+	else
+	{
+		return N;
+	}
 }
 
 vec3 calculateAlbedo()
@@ -62,7 +67,7 @@ vec3 calculateSpec()
 
 void main()
 {
-    gPosition = vec4(fs_in.FragPos, fs_in.depth);
+    gPosition = fs_in.FragPos;
     gNormal = calculateNormal();
     gAlbedo = calculateAlbedo();
     gSpecColor = vec4(calculateSpec(), material.shininess);

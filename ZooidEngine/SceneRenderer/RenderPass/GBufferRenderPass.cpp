@@ -40,11 +40,11 @@ namespace ZE
 			textureCreateDesc.MagFilter = NEAREST;
 			textureCreateDesc.WrapU = CLAMP_TO_EDGE;
 			textureCreateDesc.WrapV = CLAMP_TO_EDGE;
-			textureCreateDesc.TextureFormat = TEX_RGBA16F;
 			textureCreateDesc.DataType = FLOAT;
 			textureCreateDesc.bGenerateMipMap = false;
 
 			// Position Texture Buffer
+			textureCreateDesc.TextureFormat = TEX_RGB16F;
 			Handle textureHandle = _gameContext->getRenderZooid()->CreateRenderTexture();
 			if (textureHandle.isValid())
 			{
@@ -53,6 +53,7 @@ namespace ZE
 			}
 
 			// Normal Texture Buffer
+			textureCreateDesc.TextureFormat = TEX_RGB16F;
 			textureHandle = _gameContext->getRenderZooid()->CreateRenderTexture();
 			if (textureHandle.isValid())
 			{
@@ -61,6 +62,7 @@ namespace ZE
 			}
 
 			// Spec Texture Buffer
+			textureCreateDesc.TextureFormat = TEX_RGBA16F;
 			textureHandle = _gameContext->getRenderZooid()->CreateRenderTexture();
 			if (textureHandle.isValid())
 			{
@@ -69,6 +71,8 @@ namespace ZE
 			}
 
 			// Ambient Texture Buffer
+			textureCreateDesc.TextureFormat = TEX_RGB;
+			textureCreateDesc.DataType = UNSIGNED_BYTE;
 			textureHandle = _gameContext->getRenderZooid()->CreateRenderTexture();
 			if (textureHandle.isValid())
 			{
@@ -77,6 +81,7 @@ namespace ZE
 			}
 
 			// Albedo Texture Buffer
+			textureCreateDesc.TextureFormat = TEX_RGB;
 			textureCreateDesc.DataType = UNSIGNED_BYTE;
 			textureHandle = _gameContext->getRenderZooid()->CreateRenderTexture();
 			if (textureHandle.isValid())
@@ -84,8 +89,6 @@ namespace ZE
 				m_albedoTexture = textureHandle.getObject<IGPUTexture>();
 				m_albedoTexture->create(textureCreateDesc);
 			}
-
-			
 
 			Handle depthRenderBuffer = _gameContext->getRenderZooid()->CreateRenderBuffer();
 			if (depthRenderBuffer.isValid())

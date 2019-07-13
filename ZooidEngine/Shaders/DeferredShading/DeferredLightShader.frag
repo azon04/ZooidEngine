@@ -91,7 +91,7 @@ void main()
 {
 	vec3 norm = normalize(mat3(invViewMat) * texture(gNormal, fs_in.TexCoord).xyz); // To World Space
     vec3 fragPos = (invViewMat * vec4(texture(gPosition, fs_in.TexCoord).xyz, 1.0)).xyz; // To World Space
-    float depth = texture(gPosition, fs_in.TexCoord).w;
+    float depth = texture(gPosition, fs_in.TexCoord).z * -1.0; // Since the gPosition in View Space, let's get the z value of that for camera depth
 	vec3 viewDir = normalize(viewPos - fragPos);
     vec3 albedo = texture(gAlbedo, fs_in.TexCoord).rgb;
     vec3 ambient = texture(gAmbient, fs_in.TexCoord).rgb;

@@ -16,8 +16,6 @@ out VS_OUT
     vec3 Normal;
     vec3 FragPos;
     vec3 Tangent;
-    vec3 Bitangent;
-	float depth;
 } vs_out;
 
 layout (std140) uniform frame_data
@@ -38,9 +36,7 @@ void main()
 	mat3 inverseTransposeModel = mat3(transpose(inverse(viewMat * modelMat)));
 	vs_out.Normal = inverseTransposeModel * Normal;
 	vs_out.Tangent = inverseTransposeModel * Tangent;
-	vs_out.Bitangent = cross(vs_out.Normal, vs_out.Tangent);
 	vs_out.FragPos = vec3( viewMat * modelMat * vec4( Pos, 1.0f ) );
 	vs_out.TexCoord = TexCoord;
-	vs_out.depth = vs_out.FragPos.z * -1.0f;
 	gl_Position = targetPos;
 }
