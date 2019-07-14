@@ -10,7 +10,7 @@ namespace ZE
 {
 	class IGPUTexture;
 	class IGPUFrameBuffer;
-	class ViewFustrum;
+	class ViewFrustum;
 
 	enum LightType : Int32
 	{
@@ -72,7 +72,7 @@ namespace ZE
 
 	protected:
 		void setupLight();
-		void calculateCascadeLightFustrum(Matrix4x4& view, Matrix4x4& projection, ViewFustrum* camFustrum, Float32 cascadeDistStart, Float32 cascadeDistEnd, 
+		void calculateCascadeLightFustrum(Matrix4x4& view, Matrix4x4& projection, ViewFrustum* camFustrum, Float32 cascadeDistStart, Float32 cascadeDistEnd, 
 			Float32 obMostRight, Float32 obMostLeft, Float32 obMostTop, Float32 obMostBottom, Float32 obMostNear );
 		void setupShadowMapsDirectional(UInt32 lightIndex);
 		void setupShadowMapsSpotLight(UInt32 lightIndex);

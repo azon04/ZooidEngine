@@ -45,18 +45,18 @@ namespace ZE
 			Float32 fustrumOffset = m_bCastShadow ? 1.0f : 0.0f;
 
 			Sphere boundingSphere = m_mesh->getBoundingSphere(m_worldTransform);
-			EFustrumTestResult testResult = m_gameContext->getDrawList()->m_viewFustrum.testSphere(boundingSphere, fustrumOffset);
-			if (testResult == FUSTRUM_OUTSIDE)
+			EFrustumTestResult testResult = m_gameContext->getDrawList()->m_viewFustrum.testSphere(boundingSphere, fustrumOffset);
+			if (testResult == FRUSTUM_OUTSIDE)
 			{
 				return;
 			}
 			
-			if (testResult == FUSTRUM_INTERSECT)
+			if (testResult == FRUSTUM_INTERSECT)
 			{
 				testResult = m_gameContext->getDrawList()->m_viewFustrum.testOB(m_mesh->getOBBoundingBox(m_worldTransform), fustrumOffset);
 			}
 
-			if (testResult == FUSTRUM_OUTSIDE)
+			if (testResult == FRUSTUM_OUTSIDE)
 			{
 				return;
 			}
@@ -64,7 +64,7 @@ namespace ZE
 			// Draw debug culling
 			if (gDebugOptions.DebugDrawOptions.bDrawCullShapes)
 			{
-				if (testResult == FUSTRUM_INSIDE)
+				if (testResult == FRUSTUM_INSIDE)
 				{
 					DebugRenderer::DrawDebugSphere(boundingSphere.m_pos, boundingSphere.m_radius);
 				}

@@ -7,7 +7,7 @@
 #include "Math/Shapes.h"
 #include "ShaderData.h"
 #include "SceneRenderer/RenderGatherer.h"
-#include "SceneRenderer/ViewFustrum.h"
+#include "SceneRenderer/ViewFrustum.h"
 
 namespace ZE 
 {
@@ -70,7 +70,7 @@ namespace ZE
 		MeshRenderGatherer m_debugMeshRenderGatherer;
 
 		// View Fustrum
-		ViewFustrum m_viewFustrum;
+		ViewFrustum m_viewFustrum;
 		Matrix4x4 m_projectionMat;
 
 		// Objects Bounding Volume

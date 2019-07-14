@@ -203,7 +203,7 @@ namespace ZE
 	}
 
 	// view: before transpose
-	void LightComponent::calculateCascadeLightFustrum(Matrix4x4& view, Matrix4x4& projection, ViewFustrum* camFustrum, Float32 cascadeDistStart, Float32 cascadeDistEnd, 
+	void LightComponent::calculateCascadeLightFustrum(Matrix4x4& view, Matrix4x4& projection, ViewFrustum* camFustrum, Float32 cascadeDistStart, Float32 cascadeDistEnd, 
 		Float32 obMostRight, Float32 obMostLeft, Float32 obMostTop, Float32 obMostBottom, Float32 obMostNear)
 	{
 		Vector3 xAxis = view.getU();
@@ -216,17 +216,17 @@ namespace ZE
 
 		Vector3 fustrumPoints[8];
 
-		fustrumPoints[FP_NTL] = camFustrum->getFustrumPoint(FP_NTL) + (cascadeDistStart * (camFustrum->getFustrumPoint(FP_FTL) - camFustrum->getFustrumPoint(FP_NTL)));
-		fustrumPoints[FP_FTL] = camFustrum->getFustrumPoint(FP_NTL) + (cascadeDistEnd * (camFustrum->getFustrumPoint(FP_FTL) - camFustrum->getFustrumPoint(FP_NTL)));
+		fustrumPoints[FP_NTL] = camFustrum->getFrustumPoint(FP_NTL) + (cascadeDistStart * (camFustrum->getFrustumPoint(FP_FTL) - camFustrum->getFrustumPoint(FP_NTL)));
+		fustrumPoints[FP_FTL] = camFustrum->getFrustumPoint(FP_NTL) + (cascadeDistEnd * (camFustrum->getFrustumPoint(FP_FTL) - camFustrum->getFrustumPoint(FP_NTL)));
 
-		fustrumPoints[FP_NTR] = camFustrum->getFustrumPoint(FP_NTR) + (cascadeDistStart * (camFustrum->getFustrumPoint(FP_FTR) - camFustrum->getFustrumPoint(FP_NTR)));
-		fustrumPoints[FP_FTR] = camFustrum->getFustrumPoint(FP_NTR) + (cascadeDistEnd * (camFustrum->getFustrumPoint(FP_FTR) - camFustrum->getFustrumPoint(FP_NTR)));
+		fustrumPoints[FP_NTR] = camFustrum->getFrustumPoint(FP_NTR) + (cascadeDistStart * (camFustrum->getFrustumPoint(FP_FTR) - camFustrum->getFrustumPoint(FP_NTR)));
+		fustrumPoints[FP_FTR] = camFustrum->getFrustumPoint(FP_NTR) + (cascadeDistEnd * (camFustrum->getFrustumPoint(FP_FTR) - camFustrum->getFrustumPoint(FP_NTR)));
 
-		fustrumPoints[FP_NBR] = camFustrum->getFustrumPoint(FP_NBR) + (cascadeDistStart * (camFustrum->getFustrumPoint(FP_FBR) - camFustrum->getFustrumPoint(FP_NBR)));
-		fustrumPoints[FP_FBR] = camFustrum->getFustrumPoint(FP_NBR) + (cascadeDistEnd * (camFustrum->getFustrumPoint(FP_FBR) - camFustrum->getFustrumPoint(FP_NBR)));
+		fustrumPoints[FP_NBR] = camFustrum->getFrustumPoint(FP_NBR) + (cascadeDistStart * (camFustrum->getFrustumPoint(FP_FBR) - camFustrum->getFrustumPoint(FP_NBR)));
+		fustrumPoints[FP_FBR] = camFustrum->getFrustumPoint(FP_NBR) + (cascadeDistEnd * (camFustrum->getFrustumPoint(FP_FBR) - camFustrum->getFrustumPoint(FP_NBR)));
 
-		fustrumPoints[FP_NBL] = camFustrum->getFustrumPoint(FP_NBL) + (cascadeDistStart * (camFustrum->getFustrumPoint(FP_FBL) - camFustrum->getFustrumPoint(FP_NBL)));
-		fustrumPoints[FP_FBL] = camFustrum->getFustrumPoint(FP_NBL) + (cascadeDistEnd * (camFustrum->getFustrumPoint(FP_FBL) - camFustrum->getFustrumPoint(FP_NBL)));
+		fustrumPoints[FP_NBL] = camFustrum->getFrustumPoint(FP_NBL) + (cascadeDistStart * (camFustrum->getFrustumPoint(FP_FBL) - camFustrum->getFrustumPoint(FP_NBL)));
+		fustrumPoints[FP_FBL] = camFustrum->getFrustumPoint(FP_NBL) + (cascadeDistEnd * (camFustrum->getFrustumPoint(FP_FBL) - camFustrum->getFrustumPoint(FP_NBL)));
 
 		for (int i = 0; i < 8; i++)
 		{

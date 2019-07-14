@@ -552,9 +552,6 @@
     <ClInclude Include="..\..\ZooidEngine\SceneRenderer\SkyboxRenderer.h">
       <Filter>SceneRenderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\ViewFustrum.h">
-      <Filter>SceneRenderer</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\ZooidEngine\Math\Plane.h">
       <Filter>Math</Filter>
     </ClInclude>
@@ -593,6 +590,9 @@
     </ClInclude>
     <ClInclude Include="..\..\ZooidEngine\SceneRenderer\RenderPass\SSAORenderPass.h">
       <Filter>SceneRenderer\RenderPass</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZooidEngine\SceneRenderer\ViewFrustum.h">
+      <Filter>SceneRenderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -923,9 +923,6 @@
     <ClCompile Include="..\..\ZooidEngine\SceneRenderer\SkyboxRenderer.cpp">
       <Filter>SceneRenderer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\ViewFustrum.cpp">
-      <Filter>SceneRenderer</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderPass\GBufferRenderPass.cpp">
       <Filter>SceneRenderer\RenderPass</Filter>
     </ClCompile>
@@ -958,6 +955,9 @@
     </ClCompile>
     <ClCompile Include="..\..\ZooidEngine\SceneRenderer\RenderPass\SSAORenderPass.cpp">
       <Filter>SceneRenderer\RenderPass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZooidEngine\SceneRenderer\ViewFrustum.cpp">
+      <Filter>SceneRenderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
