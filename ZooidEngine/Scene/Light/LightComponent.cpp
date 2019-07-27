@@ -18,6 +18,8 @@
 #include "Scene/CameraManager.h"
 #include "Scene/CameraComponent.h"
 
+#include "Utils/DebugOptions.h"
+
 namespace ZE
 {
 	IMPLEMENT_CLASS_1(LightComponent, SceneComponent)
@@ -61,6 +63,50 @@ namespace ZE
 
 	void LightComponent::handleGatherLight(Event* event)
 	{
+		// Light Culling
+		if (m_lightType != ZE::DIRECTIONAL_LIGHT)
+		{
+			// Check Point Light
+			if (m_lightType == ZE::POINT_LIGHT)
+			{
+				Vector3 pos = m_worldTransform.getPos();
+				AxisAlignedBox box(pos - Vector3(m_attDistance), pos + Vector3(m_attDistance));
+				//Sphere sphere(pos, m_attDistance);
+
+				EFrustumTestResult testResult = m_gameContext->getDrawList()->m_viewFustrum.testAAB(box);
+				//EFrustumTestResult testResult = m_gameContext->getDrawList()->m_viewFustrum.testSphere(sphere);
+				if (testResult == FRUSTUM_OUTSIDE)
+				{
+					return; // ignore this light if outside
+				}
+
+				// Draw debug culling
+				if (gDebugOptions.DebugDrawOptions.bDrawCullShapes)
+				{
+					DebugRenderer::DrawDebugBox(Vector3(m_attDistance), pos, Matrix4x4());
+				}
+			}
+			else if (m_lightType == SPOT_LIGHT)
+			{
+				Vector3 top = m_worldTransform.getPos();
+				Vector3 bottom = top + m_attDistance * m_worldTransform.getN();
+				float radius = m_attDistance * tan(m_outerRadius);
+				
+				Cone cone(top, bottom, radius); // Use Cylinder
+				EFrustumTestResult testResult = m_gameContext->getDrawList()->m_viewFustrum.testCone(cone);
+				if (testResult == FRUSTUM_OUTSIDE)
+				{
+					return; // ignore this light if outside
+				}
+
+				// Draw debug culling
+				if (gDebugOptions.DebugDrawOptions.bDrawCullShapes)
+				{
+					DebugRenderer::DrawDebugCone(Vector3(), m_attDistance, radius, Matrix4x4(m_worldTransform.getV(), m_worldTransform.getN(), m_worldTransform.getU(), top));
+				}
+			}
+		}
+
 		LightData& lightData = m_gameContext->getDrawList()->m_lightData;
 		Int32 index = lightData.NumLight++;
 		LightStruct& light = lightData.lights[index];

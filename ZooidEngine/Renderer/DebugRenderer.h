@@ -54,6 +54,9 @@ namespace ZE
 		// Draw Debug Box (Static call)
 		static void DrawDebugBox(const Vector3& extend, const Vector3& posOffset, Matrix4x4& tranform);
 
+		// Draw Debug Cone (Static call)
+		static void DrawDebugCone(const Vector3& top, float distance, float radius, Matrix4x4& transform);
+
 		virtual void setupComponent() override;
 
 		// Handle Gather render event
@@ -78,11 +81,17 @@ namespace ZE
 		// Draw Debug Cube
 		void drawDebugCube(Matrix4x4& _transform);
 
+		// Draw Debug Cone
+		void drawDebugCone(Matrix4x4& _transform);
+
 		// Setup sphere
 		void setupSphere();
 
 		// Setup Cube
 		void setupCube();
+
+		// Setup Cone
+		void setupCone();
 
 	private:
 		static DebugRenderer* s_instance;
@@ -102,6 +111,9 @@ namespace ZE
 
 		IGPUBufferArray* m_cubeGPUBufferArray;
 		Array<Matrix4x4> m_debugCubeTransforms;
+
+		IGPUBufferArray* m_coneGPUBufferArray;
+		Array<Matrix4x4> m_debugConeTransforms;
 	};
 }
 #endif

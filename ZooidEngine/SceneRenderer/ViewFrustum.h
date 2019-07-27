@@ -53,6 +53,7 @@ namespace ZE
 		EFrustumTestResult testAAB(AxisAlignedBox& aaBox, Float32 _offset = 0.0f);
 		EFrustumTestResult testOB(OrientedBox& oBox, Float32 _offset = 0.0f);
 		EFrustumTestResult testCylinder(Cylinder& cylinder);
+		EFrustumTestResult testCone(Cone& cone);
 
 	protected:
 		Plane m_frustumPlanes[6];

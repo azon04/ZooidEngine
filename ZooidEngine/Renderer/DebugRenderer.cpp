@@ -46,6 +46,7 @@ namespace ZE
 
 		s_instance->setupSphere();
 		s_instance->setupCube();
+		s_instance->setupCone();
 
 		s_instance->setupComponent();
 	}
@@ -91,6 +92,17 @@ namespace ZE
 		matExtend = matExtend * tranform;
 
 		s_instance->drawDebugCube(matExtend);
+	}
+
+	void DebugRenderer::DrawDebugCone(const Vector3& top, float distance, float radius, Matrix4x4& transform)
+	{
+		Matrix4x4 mat;
+		mat.setScale(Vector3(radius, distance, radius));
+		mat.setPos(top);
+
+		mat = mat * transform;
+
+		s_instance->drawDebugCone(mat);
 	}
 
 	void DebugRenderer::setupComponent()
@@ -151,6 +163,17 @@ namespace ZE
 			renderInfo->m_worldTransform = m_debugCubeTransforms[i];
 		}
 
+		for (int i = 0; i < m_debugConeTransforms.size(); i++)
+		{
+			MeshRenderInfo* renderInfo = m_gameContext->getDrawList()->m_debugMeshRenderGatherer.nextRenderInfo();
+			renderInfo->m_shaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_3D_DEFAULT_COLOR_LINE);
+			renderInfo->m_gpuBufferArray = m_coneGPUBufferArray;
+			renderInfo->m_renderTopology = ERenderTopologyEnum::TOPOLOGY_LINE;
+			renderInfo->drawCount = m_coneGPUBufferArray->getDataCount();
+			renderInfo->m_worldTransform = m_debugConeTransforms[i];
+		}
+
+		m_debugConeTransforms.clear();
 		m_debugSphereTransforms.clear();
 		m_debugCubeTransforms.clear();
 	}
@@ -227,6 +250,11 @@ namespace ZE
 	void DebugRenderer::drawDebugCube(Matrix4x4& _transform)
 	{
 		m_debugCubeTransforms.push_back(_transform);
+	}
+
+	void DebugRenderer::drawDebugCone(Matrix4x4& _transform)
+	{
+		m_debugConeTransforms.push_back(_transform);
 	}
 
 	void DebugRenderer::setupSphere()
@@ -369,6 +397,63 @@ namespace ZE
 			ScopedRenderThreadOwnership renderOwnership(gGameContext->getRenderer());
 			IGPUBufferData* vertexBuffer = BufferManager::getInstance()->createGPUBufferFromBuffer(&cubeData);
 			m_cubeGPUBufferArray = BufferManager::getInstance()->createBufferArray(vertexBuffer, nullptr, nullptr).getObject<IGPUBufferArray>();
+		}
+	}
+
+	void DebugRenderer::setupCone()
+	{
+		Array<DebugPointStruct> points;
+
+		Vector3 color(1.0f, 0.0f, 1.0f);
+
+		// four lines on top
+		points.push_back({ Vector3(0.0f, 0.0f, 0.0f), color });
+		points.push_back({ Vector3(0.0f, 1.0f, 1.0f), color });
+
+		points.push_back({ Vector3(0.0f, 0.0f, 0.0f), color });
+		points.push_back({ Vector3(0.0f, 1.0f, -1.0f), color });
+
+		points.push_back({ Vector3(0.0f, 0.0f, 0.0f), color });
+		points.push_back({ Vector3(1.0f, 1.0f, 0.0f), color });
+
+		points.push_back({ Vector3(0.0f, 0.0f, 0.0f), color });
+		points.push_back({ Vector3(-1.0f, 1.0f, 0.0f), color });
+
+		Float32 countPerRing = 16;
+		Float32 angleStep = DegToRad(360.0f / countPerRing);
+
+		Float32 pointAngle = 0.0f;
+		DebugPointStruct prevPoint;
+
+		prevPoint.Point.m_z = cosf(pointAngle);
+		prevPoint.Point.m_x = sinf(pointAngle);
+		prevPoint.Point.m_y = 1.0f;
+		prevPoint.Color = color;
+
+		for (int i = 0; i <= countPerRing + 1; i++)
+		{
+			DebugPointStruct point;
+			point.Point.m_z = cosf(pointAngle);
+			point.Point.m_x = sinf(pointAngle);
+			point.Point.m_y = 1.0f;
+			point.Color = color;
+
+			points.push_back(prevPoint);
+			points.push_back(point);
+
+			prevPoint = point;
+
+			pointAngle += angleStep;
+		}
+
+		{
+			BufferData cubeData(VERTEX_BUFFER);
+			cubeData.SetData(points.data(), sizeof(DebugPointStruct), points.size());
+			cubeData.setBufferLayout(BUFFER_LAYOUT_V3_C3);
+
+			ScopedRenderThreadOwnership renderOwnership(gGameContext->getRenderer());
+			IGPUBufferData* vertexBuffer = BufferManager::getInstance()->createGPUBufferFromBuffer(&cubeData);
+			m_coneGPUBufferArray = BufferManager::getInstance()->createBufferArray(vertexBuffer, nullptr, nullptr).getObject<IGPUBufferArray>();
 		}
 	}
 

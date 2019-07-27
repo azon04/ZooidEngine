@@ -214,10 +214,11 @@ namespace ZE
 		Vector3 p = cylinder.m_p2 - cylinder.m_p2;
 		p.normalize();
 
-		for (int i = 0; i > 6; i++)
+		for (int i = 0; i < 6; i++)
 		{
 			// Calculate effective radius
-			float effectiveRadius = cylinder.m_radius * sqrt(1 - m_frustumPlanes[i].m_normal.dotProduct(p));
+			float cosTheta = m_frustumPlanes[i].m_normal.dotProduct(p);
+			float effectiveRadius = cylinder.m_radius * sqrt(1.0f - cosTheta * cosTheta);
 
 			// test distance to P1
 			float distanceP1 = m_frustumPlanes[i].distanceFromPlane(cylinder.m_p1);
@@ -243,6 +244,52 @@ namespace ZE
 				// test distance to P2
 				float distanceP2 = m_frustumPlanes[i].distanceFromPlane(cylinder.m_p2);
 				if (distanceP2 < effectiveRadius)
+				{
+					result = FRUSTUM_INTERSECT;
+				}
+			}
+		}
+
+		return result;
+	}
+
+	ZE::EFrustumTestResult Frustum::testCone(Cone& cone)
+	{
+		EFrustumTestResult result = FRUSTUM_INSIDE;
+
+		Vector3 p = cone.m_top - cone.m_bottom;
+		p.normalize();
+
+		for (int i = 0; i < 6; i++)
+		{
+			// Calculate effective radius
+			float cosTheta = m_frustumPlanes[i].m_normal.dotProduct(p);
+			float effectiveRadius = cone.m_radius * sqrt(1.0f - cosTheta * cosTheta);
+
+			// test distance to bottom
+			float distanceBottom = m_frustumPlanes[i].distanceFromPlane(cone.m_bottom);
+			if (distanceBottom < 0.0f)
+			{
+				// test top
+				float distanceTop = m_frustumPlanes[i].distanceFromPlane(cone.m_top);
+				if (distanceTop > 0.0f)
+				{
+					result = FRUSTUM_INTERSECT;
+				}
+				else
+				{
+					return FRUSTUM_OUTSIDE;
+				}
+			}
+			else if (distanceBottom < effectiveRadius)
+			{
+				result = FRUSTUM_INTERSECT;
+			}
+			else // Bottom is inside check if top is outside
+			{
+				// test top
+				float distanceTop = m_frustumPlanes[i].distanceFromPlane(cone.m_top);
+				if (distanceTop < 0.0f)
 				{
 					result = FRUSTUM_INTERSECT;
 				}
