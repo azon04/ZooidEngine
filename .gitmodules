@@ -4,3 +4,6 @@
 [submodule "Dependencies/msdfgen"]
 	path = Dependencies/msdfgen
 	url = https://github.com/Chlumsky/msdfgen.git
+[submodule "Dependencies/premake"]
+	path = Dependencies/premake
+	url = https://github.com/premake/premake-core.git
