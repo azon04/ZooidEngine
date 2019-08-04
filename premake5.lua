@@ -2,7 +2,7 @@
 
 -- some const
 
-project_dir = "./Projects_Test"
+project_dir = "./Projects"
 
 -- Actions
 newaction {
@@ -63,6 +63,18 @@ project "ZooidEngine"
         defines { "NDEBUG" }
         optimize "On"
     
+    filter "action:vs2015"
+        postbuildcommands {
+            "{COPY} \"" .. path.getabsolute("./Dependencies/freetype-2.9.1/win32/lib-vs2015/debug/*.dll") .. "\" %{cfg.targetdir}",
+            "{COPY} \"" .. path.getabsolute("./Dependencies/freetype-2.9.1/win32/lib-vs2015/debug/*.pdb") .. "\" %{cfg.targetdir}"
+        }
+
+    filter "action:vs2017"
+        postbuildcommands {
+            "{COPY} \"" .. path.getabsolute("./Dependencies/freetype-2.9.1/win32/lib-vs2017/debug/*.dll") .. "\" %{cfg.targetdir}",
+            "{COPY} \"" .. path.getabsolute("./Dependencies/freetype-2.9.1/win32/lib-vs2017/debug/*.pdb") .. "\" %{cfg.targetdir}"
+        }
+    
     -- basic configuration block for OpenGL
     configuration "with-opengl"
         
@@ -78,8 +90,6 @@ project "ZooidEngine"
         postbuildcommands {
             "{COPY} \"" .. path.getabsolute("./Dependencies/glew-2.0.0/bin/Release/Win32/*.DLL") .. "\" %{cfg.targetdir}",
             "{COPY} \"" .. path.getabsolute("./Dependencies/glew-2.0.0/bin/Release/Win32/*.DLL") .. "\" %{cfg.targetdir}",
-            "{COPY} \"" .. path.getabsolute("./Dependencies/freetype-2.9.1/win32/lib-vc2015/debug/*.dll") .. "\" %{cfg.targetdir}",
-            "{COPY} \"" .. path.getabsolute("./Dependencies/freetype-2.9.1/win32/lib-vc2015/debug/*.pdb") .. "\" %{cfg.targetdir}",
         }
 
     -- basic configuration block for PhysX
@@ -91,13 +101,23 @@ project "ZooidEngine"
         }
 
         defines { "Z_PHYSICS_PHYSX" }
-
+    
+    filter { "options:with-physX","action:vs2015" }
         postbuildcommands {
             "{COPY} \"$(PhysX)/Bin/vc14win32/*DEBUG_x86.DLL\" %{cfg.targetdir}",
             "{COPY} \"$(PhysX)/Bin/vc14win32/nvToolsExt32_1.DLL\" %{cfg.targetdir}",
             "{COPY} \"$(PhysX)/Bin/vc14win32/PhysXDevice32.DLL\" %{cfg.targetdir}",
             "{COPY} \"$(PhysX)/../PxShared/bin/vc14win32/*DEBUG_x86.DLL\" %{cfg.targetdir}",
             "{COPY} \"$(PhysX)/../PxShared/bin/vc14win32/*DEBUG_x86.pdb\" %{cfg.targetdir}",
+        }
+    
+    filter { "options:with-physX","action:vs2017" }
+        postbuildcommands {
+            "{COPY} \"$(PhysX)/Bin/vc15win32/*DEBUG_x86.DLL\" %{cfg.targetdir}",
+            "{COPY} \"$(PhysX)/Bin/vc15win32/nvToolsExt32_1.DLL\" %{cfg.targetdir}",
+            "{COPY} \"$(PhysX)/Bin/vc15win32/PhysXDevice32.DLL\" %{cfg.targetdir}",
+            "{COPY} \"$(PhysX)/../PxShared/bin/vc15win32/*DEBUG_x86.DLL\" %{cfg.targetdir}",
+            "{COPY} \"$(PhysX)/../PxShared/bin/vc15win32/*DEBUG_x86.pdb\" %{cfg.targetdir}",
         }
 
 group "Demo"
@@ -125,21 +145,23 @@ function setup_game_project()
 
     dependson { "ZooidEngine" }
 
-    configuration "*"
-        links { 
-            "ZooidEngine",
-            "freetype"
-        }
+    configuration "*" 
+        links { "ZooidEngine", "freetype" }
 
+    filter "action:vs2015"
         libdirs {
-            "./Dependencies/freetype-2.9.1/win32/lib-vc2015/debug"
+            "./Dependencies/freetype-2.9.1/win32/lib-vs2015/debug"
+        }
+    
+    filter "action:vs2017"
+        libdirs {
+            "./Dependencies/freetype-2.9.1/win32/lib-vs2017/debug"
         }
 
     -- basic configuration block for OpenGL
     configuration "with-opengl"
         libdirs {
-            "./Dependencies/glew-2.0.0/lib/Release/Win32",
-            "./Dependencies/glfw/Debug/lib-vc2015"
+            "./Dependencies/glew-2.0.0/lib/Release/Win32"
         }
 
         links {
@@ -147,14 +169,19 @@ function setup_game_project()
             "glfw3",
             "opengl32"
         }
-
-    -- basic configuration block for PhysX
-    configuration "with-physX"
+    
+    filter { "options:with-opengl","action:vs2015" }
         libdirs {
-            "$(Physx)/Lib/vc14win32",
-            "$(Physx)/../PxShared/lib/vc14win32"
+            "./Dependencies/glfw/Debug/lib-vc2015"
         }
 
+    filter { "options:with-opengl","action:vs2017" }
+        libdirs {
+            "./Dependencies/glfw/Debug/lib-vc2017"
+        }
+    
+    -- basic configuration block for PhysX
+    configuration "with-physX"
         links {
             "LowLevelAABBDEBUG",
             "LowLevelClothDEBUG",
@@ -174,6 +201,19 @@ function setup_game_project()
             "PxPvdSDKDEBUG_x86",
             "PxTaskDEBUG_x86"
         }
+
+    filter { "options:with-physX","action:vs2015" }
+        libdirs {
+            "$(Physx)/Lib/vc14win32",
+            "$(Physx)/../PxShared/lib/vc14win32"
+        }
+
+    filter { "options:with-physX","action:vs2017" }
+        libdirs {
+            "$(Physx)/Lib/vc15win32",
+            "$(Physx)/../PxShared/lib/vc15win32"
+        }
+
 end
 -- END
 
@@ -310,11 +350,31 @@ project "ModelParser"
         defines { "NDEBUG" }
         optimize "On"
 
-    configuration "*"
+    filter "action:vs2015"
         libdirs {
             "Dependencies/Builds/assimp/Debug/x86-vs140"
         }
 
         links {
             "assimp-vc140-mt"
+        }
+
+        postbuildcommands {
+            "{COPY} \"" .. path.getabsolute("./Dependencies/Builds/assimp/Debug/x86-vs140/*.dll") .. "\" %{cfg.targetdir}",
+            "{COPY} \"" .. path.getabsolute("./Dependencies/Builds/assimp/Debug/x86-vs140/*.pdb") .. "\" %{cfg.targetdir}"
+        }
+        
+    
+    filter "action:vs2017"
+        libdirs {
+            "Dependencies/Builds/assimp/Debug/x86-vs141"
+        }
+
+        links {
+            "assimp-vc141-mt"
+        }
+
+        postbuildcommands {
+            "{COPY} \"" .. path.getabsolute("./Dependencies/Builds/assimp/Debug/x86-vs141/*.dll") .. "\" %{cfg.targetdir}",
+            "{COPY} \"" .. path.getabsolute("./Dependencies/Builds/assimp/Debug/x86-vs141/*.pdb") .. "\" %{cfg.targetdir}"
         }
