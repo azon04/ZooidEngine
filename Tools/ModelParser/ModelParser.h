@@ -64,6 +64,7 @@ namespace ZETools
 		std::vector<Vertex> vertices;
 		bool hasBones = false;
 		bool hasNormal = false;
+		bool hasTangent = false;
 		std::map<int, std::vector<VertexBoneWeight>> vertexBoneWeightMap;
 		std::vector<unsigned int> indices;
 		Material material;

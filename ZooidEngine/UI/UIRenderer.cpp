@@ -202,7 +202,7 @@ namespace ZE
 			0>::GetGPUState());
 		
 		// Enable Blend
-		renderer->SetRenderBlendState(TRenderBlendState<true, ERendererBlendFactor::SRC_ALPHA, ERendererBlendFactor::ONE_MINUS_SRC_ALPHA, 0>::GetGPUState());
+		renderer->SetRenderBlendState(TRenderBlendState<true, ERendererBlendFactor::SRC_ALPHA, ERendererBlendFactor::ONE_MINUS_SRC_ALPHA>::GetGPUState());
 		
 		for (int i = 0; i < m_drawList->itemCount(); i++)
 		{

@@ -268,7 +268,11 @@ namespace ZE
 
 			// test distance to bottom
 			float distanceBottom = m_frustumPlanes[i].distanceFromPlane(cone.m_bottom);
-			if (distanceBottom < 0.0f)
+			if (abs(distanceBottom) < effectiveRadius)
+			{
+				result = FRUSTUM_INTERSECT;
+			}
+			else if (distanceBottom < 0.0f)
 			{
 				// test top
 				float distanceTop = m_frustumPlanes[i].distanceFromPlane(cone.m_top);
@@ -280,10 +284,6 @@ namespace ZE
 				{
 					return FRUSTUM_OUTSIDE;
 				}
-			}
-			else if (distanceBottom < effectiveRadius)
-			{
-				result = FRUSTUM_INTERSECT;
 			}
 			else // Bottom is inside check if top is outside
 			{

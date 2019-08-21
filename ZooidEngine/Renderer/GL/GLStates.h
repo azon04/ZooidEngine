@@ -48,8 +48,7 @@ namespace ZE
 
 		GLenum m_sourceBlendFactor;
 		GLenum m_destBlendFactor;
-
-		UInt32 m_alphaRef;
+		GLenum m_blendMode;
 	};
 }
 

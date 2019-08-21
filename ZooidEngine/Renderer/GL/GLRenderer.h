@@ -48,6 +48,7 @@ public:
 	virtual void PopDebugGroup() override;
 
 	virtual void SetRenderBlendState(IGPUBlendState* renderBlendState) override;
+	virtual void SetBlendColorRef(Float32 red, Float32 green, Float32 blue, Float32 alpha) override;
 	virtual void SetRenderDepthStencilState(IGPUDepthStencilState* renderDepthStencilState) override;
 	virtual void SetRenderRasterizerState(IGPURasterizerState* renderRasterizerState) override;
 

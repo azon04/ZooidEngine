@@ -7,11 +7,15 @@
 #include "Renderer/IGPUBufferData.h"
 #include "Renderer/IGPUBufferArray.h"
 #include "Renderer/BufferLayout.h"
+#include "Math/Vector3.h"
 #include "Utils/Array.h"
 
 // Some Util Buffer Array
 #define BUFFER_ARRAY_QUAD_V3_TC2 0
-#define BUFFER_ARRAY_CUBE 0
+#define BUFFER_ARRAY_CUBE 1
+#define BUFFER_ARRAY_BASIS 2
+#define BUFFER_ARRAY_SPHERE 3
+#define BUFFER_ARRAY_CONE 4
 
 // Constant Buffers Binding Locations
 #define CONSTANT_BUFFER_SHADER_DATA_INDEX 0
@@ -40,6 +44,9 @@ public:
 
 	// Destroy manager
 	static void Destroy();
+
+	// Util function to subdivide
+	static void Subdivide(const Vector3& v1, const Vector3& v2, const Vector3& v3, Int32 Level, Array<Vector3>& dest);
 
 	// Create GPU buffer from BufferData object
 	IGPUBufferData* createGPUBufferFromBuffer(BufferData* _bufferData, bool _manualManage = false);

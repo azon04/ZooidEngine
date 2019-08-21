@@ -1,0 +1,1 @@
+Binaries\premake5.exe vs2017 --with-opengl --with-physX

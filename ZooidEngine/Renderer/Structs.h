@@ -12,8 +12,7 @@ namespace ZE
 
 		ERendererBlendFactor SourceBlendFactor;
 		ERendererBlendFactor DestBlendFactor;
-
-		UInt32 AlphaRef;
+		ERendererBlendMode BlendMode;
 	};
 
 	struct RenderDepthStencilState

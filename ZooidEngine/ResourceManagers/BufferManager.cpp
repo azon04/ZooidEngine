@@ -143,8 +143,74 @@ namespace ZE
 			// #TODO do we really need BufferData to be saved?
 			hBufferData.release();
 		}
-	}
 
+		// Create Sphere
+		{
+			const int maxLevel = 4;
+			Array<Vector3> sphereVertices;
+			Subdivide(Vector3(0.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(1.0f, 0.0f, 0.0f), maxLevel, sphereVertices);
+			Subdivide(Vector3(0.0f, 1.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f), maxLevel, sphereVertices);
+			Subdivide(Vector3(0.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f), Vector3(-1.0f, 0.0f, 0.0f), maxLevel, sphereVertices);
+			Subdivide(Vector3(0.0f, 1.0f, 0.0f), Vector3(-1.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), maxLevel, sphereVertices);
+
+
+			Subdivide(Vector3(0.0f, -1.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), maxLevel, sphereVertices);
+			Subdivide(Vector3(0.0f, -1.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(-1.0f, 0.0f, 0.0f), maxLevel, sphereVertices);
+			Subdivide(Vector3(0.0f, -1.0f, 0.0f), Vector3(-1.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f), maxLevel, sphereVertices);
+			Subdivide(Vector3(0.0f, -1.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f), Vector3(1.0f, 0.0f, 0.0f), maxLevel, sphereVertices);
+
+			Handle hBufferData("SphereBufferData", sizeof(BufferData));
+			BufferData* bufferData = new(hBufferData) BufferData(EBufferType::VERTEX_BUFFER);
+			bufferData->SetData(sphereVertices.data(), 3 * sizeof(float), sphereVertices.size());
+			bufferData->setBufferLayout(BUFFER_LAYOUT_V3);
+
+			getInstance()->createBufferArray(bufferData, nullptr, nullptr);
+
+			hBufferData.release();
+		}
+
+		// Create Cone
+		{
+			Array<Vector3> coneVertices;
+
+			Vector3 top(0.0f);
+			Vector3 bottom(0.0f, -1.0f, 0.0f);
+
+			Float32 countPerRing = 32.0f;
+			Float32 angleStep = DegToRad(360.0f / countPerRing);
+
+			Float32 pointAngle = 0.0f;
+
+			Vector3 prevPos(1.0f, -1.0f, 0.0f);
+
+			pointAngle += angleStep;
+			for (int i = 0; i < countPerRing; i++)
+			{
+				Vector3 curPos(cosf(pointAngle), -1.0f, sinf(pointAngle));
+
+				coneVertices.push_back(top);
+				coneVertices.push_back(curPos);
+				coneVertices.push_back(prevPos);
+
+				coneVertices.push_back(bottom);
+				coneVertices.push_back(prevPos);
+				coneVertices.push_back(curPos);
+
+				prevPos = curPos;
+				pointAngle += angleStep;
+			}
+
+			Handle hBufferData("ConeBufferData", sizeof(BufferData));
+			BufferData* bufferData = new(hBufferData) BufferData(EBufferType::VERTEX_BUFFER);
+			bufferData->SetData(coneVertices.data(), 3 * sizeof(float), coneVertices.size());
+			bufferData->setBufferLayout(BUFFER_LAYOUT_V3);
+
+			getInstance()->createBufferArray(bufferData, nullptr, nullptr);
+
+			hBufferData.release();
+		}
+	}
+	
 	void BufferManager::Destroy()
 	{
 		BufferManager* bufferManager = getInstance();
@@ -161,6 +227,31 @@ namespace ZE
 		}
 
 		bufferManager->m_GPUBuffers.clear();
+	}
+
+	void BufferManager::Subdivide(const Vector3& v0, const Vector3& v1, const Vector3& v2, Int32 Level, Array<Vector3>& dest)
+	{
+		if (Level)
+		{
+			Vector3 v3 = (v0 + v1);
+			Vector3 v4 = (v0 + v2);
+			Vector3 v5 = (v1 + v2);
+
+			v3.normalize();
+			v4.normalize();
+			v5.normalize();
+
+			Subdivide(v0, v3, v4, Level - 1, dest);
+			Subdivide(v3, v5, v4, Level - 1, dest);
+			Subdivide(v3, v1, v5, Level - 1, dest);
+			Subdivide(v4, v5, v2, Level - 1, dest);
+		}
+		else
+		{
+			dest.push_back(v0);
+			dest.push_back(v1);
+			dest.push_back(v2);
+		}
 	}
 
 	ZE::IGPUBufferData* BufferManager::createGPUBufferFromBuffer(BufferData* _bufferData, bool _manualManage)

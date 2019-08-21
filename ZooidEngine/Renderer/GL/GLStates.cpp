@@ -123,6 +123,27 @@ namespace ZE
 			return 0;
 		}
 	}
+
+
+	GLenum getBlendMode(ERendererBlendMode blendMode)
+	{
+		switch (blendMode)
+		{
+		case ZE::BLEND_MODE_ADD:
+			return GL_FUNC_ADD;
+		case ZE::BLEND_MODE_SUBSTRACT:
+			return GL_FUNC_SUBTRACT;
+		case ZE::BLEND_MODE_REVERSE_SUBSTRACT:
+			return GL_FUNC_REVERSE_SUBTRACT;
+		case ZE::BLEND_MODE_MIN:
+			return GL_MIN;
+		case ZE::BLEND_MODE_MAX:
+			return GL_MAX;
+		default:
+			break;
+		}
+		return GL_NONE;
+	}
 	
 	GLenum getFillMode(ERenderFillMode fillMode)
 	{
@@ -170,7 +191,7 @@ namespace ZE
 		m_blendEnabled = state.BlendEnabled;
 		m_sourceBlendFactor = getBlendFactor(state.SourceBlendFactor);
 		m_destBlendFactor = getBlendFactor(state.DestBlendFactor);
-		m_alphaRef = state.AlphaRef;
+		m_blendMode = getBlendMode(state.BlendMode);
 	}
 }
 

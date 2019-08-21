@@ -184,6 +184,19 @@ namespace ZE
 		}
 	}
 
+	void ShadowDepthRenderer::BindShadowTexturesIndexed(DrawList* _drawList, IShaderChain* shaderChain, UInt32 textureIndexOffset, Array<Int32>& TextureIds)
+	{
+		ShadowDepthRenderer* renderer = getInstance();
+		char buffer[25];
+		for (Int32 i = 0; i < TextureIds.size(); i++)
+		{
+			Int32 idx = TextureIds[i];
+			StringFunc::PrintToString(buffer, 25, "shadowMaps[%d]", i);
+			shaderChain->setTexture(buffer, renderer->m_shadowTextures[idx], textureIndexOffset + i);
+			renderer->m_shadowTextures[idx]->bind();
+		}
+	}
+
 	ZE::ShadowDepthRenderer* ShadowDepthRenderer::getInstance()
 	{
 		if (!s_shadowRenderer)

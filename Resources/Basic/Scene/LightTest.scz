@@ -6,8 +6,8 @@ BEGIN
 LightType 1
 Att_Distance 7.0
 Att_Constant 1.0
-Att_Linear 1.0
-Att_Quadratic 1.0
+Att_Linear 0.7
+Att_Quadratic 1.8
 T 0.0 0.5 0.0
 END
 RenderComponent Floor

@@ -29,6 +29,7 @@ namespace ZE
 		static void Setup(LightShadowMapData* shadowMapData, LightStruct* lightData, DrawList* drawList);
 		static void Render(RenderInfo* renderInfos, UInt32 renderInfoCount, bool bSkinMesh);
 		static void BindShadowTextures(DrawList* _drawList, IShaderChain* shaderChain, UInt32 textureIndexOffset);
+		static void BindShadowTexturesIndexed(DrawList* _drawList, IShaderChain* shaderChain, UInt32 textureIndexOffset, Array<Int32>& TextureIds);
 		static void BeginRender() { getInstance()->beginRender(); }
 		static void EndRender() { getInstance()->endRender(); }
 		static void Reset() { getInstance()->reset(); }

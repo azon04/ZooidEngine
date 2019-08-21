@@ -17,6 +17,7 @@ namespace ZE
 		{ ETextureFormat::TEX_R16,				ETextureFormat::TEX_RED },
 		{ ETextureFormat::TEX_R16F,				ETextureFormat::TEX_RED },
 		{ ETextureFormat::TEX_RG8,				ETextureFormat::TEX_RED_GREEN },
+		{ ETextureFormat::TEX_RGBA8,			ETextureFormat::TEX_RGBA },
 		{ ETextureFormat::TEX_RG16,				ETextureFormat::TEX_RED_GREEN },
 		{ ETextureFormat::TEX_RGB16F,			ETextureFormat::TEX_RGB },
 		{ ETextureFormat::TEX_RGBA16F,			ETextureFormat::TEX_RGBA }

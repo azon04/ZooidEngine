@@ -124,8 +124,7 @@ namespace ZE
 	{
 		gGameContext->getRenderer()->SetRenderBlendState(TRenderBlendState<true,
 			ERendererBlendFactor::SRC_ALPHA,
-			ERendererBlendFactor::ONE_MINUS_SRC_ALPHA,
-			0>::GetGPUState());
+			ERendererBlendFactor::ONE_MINUS_SRC_ALPHA>::GetGPUState());
 	}
 
 	void TransculentSceneRenderer::render(RenderInfo* renderInfos, UInt32 renderInfoCount)

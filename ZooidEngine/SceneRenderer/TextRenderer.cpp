@@ -19,7 +19,7 @@ namespace ZE
 		gGameContext->getRenderer()->SetRenderRasterizerState(TRenderRasterizerState<EFaceFrontOrder::CCW,
 			ECullFace::CULL_NONE,
 			ERenderFillMode::MODE_FILL>::GetGPUState());
-		gGameContext->getRenderer()->SetRenderBlendState(TRenderBlendState<true, ERendererBlendFactor::SRC_ALPHA, ERendererBlendFactor::ONE_MINUS_SRC_ALPHA, 0>::GetGPUState());
+		gGameContext->getRenderer()->SetRenderBlendState(TRenderBlendState<true, ERendererBlendFactor::SRC_ALPHA, ERendererBlendFactor::ONE_MINUS_SRC_ALPHA>::GetGPUState());
 	}
 
 	void TextSceneRenderer::render(RenderInfo* renderInfos, UInt32 renderInfoCount)
@@ -79,7 +79,7 @@ namespace ZE
 
 	void TextScreenRenderer::beginRender()
 	{
-		gGameContext->getRenderer()->SetRenderBlendState(TRenderBlendState<true, ERendererBlendFactor::SRC_ALPHA, ERendererBlendFactor::ONE_MINUS_SRC_ALPHA, 0>::GetGPUState());
+		gGameContext->getRenderer()->SetRenderBlendState(TRenderBlendState<true, ERendererBlendFactor::SRC_ALPHA, ERendererBlendFactor::ONE_MINUS_SRC_ALPHA>::GetGPUState());
 	}
 
 	void TextScreenRenderer::render(RenderInfo* renderInfos, UInt32 renderInfoCount)

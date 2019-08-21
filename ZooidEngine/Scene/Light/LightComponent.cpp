@@ -24,7 +24,7 @@ namespace ZE
 {
 	IMPLEMENT_CLASS_1(LightComponent, SceneComponent)
 
-		LightComponent::LightComponent(GameContext* gameContext) :
+	LightComponent::LightComponent(GameContext* gameContext) :
 		SceneComponent(gameContext),
 		m_lightType(DIRECTIONAL_LIGHT),
 		m_diffuse(1.0f, 1.0f, 1.0f),
@@ -32,8 +32,8 @@ namespace ZE
 		m_ambient(0.1f, 0.1f, 0.1f),
 		m_attDistance(7.0f),
 		m_attConstant(1.0f),
-		m_attLinear(0.07f),
-		m_attQuadratic(0.0017f),
+		m_attLinear(0.7f),
+		m_attQuadratic(1.8f),
 		m_bGenerateShadow(true),
 		m_innerRadius(DegToRad(17.0f)),
 		m_outerRadius(DegToRad(20.0f)),
@@ -92,7 +92,7 @@ namespace ZE
 				Vector3 bottom = top + m_attDistance * m_worldTransform.getN();
 				float radius = m_attDistance * tan(m_outerRadius);
 				
-				Cone cone(top, bottom, radius); // Use Cylinder
+				Cone cone(top, bottom, radius);
 				EFrustumTestResult testResult = m_gameContext->getDrawList()->m_viewFustrum.testCone(cone);
 				if (testResult == FRUSTUM_OUTSIDE)
 				{
@@ -128,6 +128,7 @@ namespace ZE
 			light.Att_constant = m_attConstant;
 			light.Att_linear = m_attLinear;
 			light.Att_quadratic = m_attQuadratic;
+			light.Att_distance = m_attDistance;
 			if (m_bGenerateShadow) { setupShadowMapsPointLight(index); }
 			break;
 		case ZE::SPOT_LIGHT:
@@ -138,6 +139,7 @@ namespace ZE
 			light.Att_quadratic = m_attQuadratic;
 			light.CutOff = cos(m_innerRadius);
 			light.OuterCutOff = cos(m_outerRadius);
+			light.Att_distance = m_attDistance;
 			if (m_bGenerateShadow) { setupShadowMapsSpotLight(index); }
 			break;
 		default:

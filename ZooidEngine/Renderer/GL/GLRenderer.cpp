@@ -256,12 +256,17 @@ namespace ZE
 			glEnable(GL_BLEND);
 
 			glBlendFunc(state->m_sourceBlendFactor, state->m_destBlendFactor);
-			glBlendColor(state->m_alphaRef, state->m_alphaRef, state->m_alphaRef, state->m_alphaRef);
+			glBlendEquation(state->m_blendMode);
 		}
 		else
 		{
 			glDisable(GL_BLEND);
 		}
+	}
+
+	void GLRenderer::SetBlendColorRef(Float32 red, Float32 green, Float32 blue, Float32 alpha)
+	{
+		glBlendColor(red, green, blue, alpha);
 	}
 
 	void GLRenderer::SetRenderDepthStencilState(IGPUDepthStencilState* renderDepthStencilState)

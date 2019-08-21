@@ -45,9 +45,10 @@ namespace ZE
 		Float32 Att_constant;
 		Float32 Att_linear;
 		Float32 Att_quadratic;
+		Float32 Att_distance;
 
 		// padding
-		Float32 Padding[2];
+		Float32 Padding;
 
 		Float32 Position[4];
 		Float32 Direction[4];

@@ -10,6 +10,7 @@ newaction {
     description = "clean up project files",
     execute = function()
         os.rmdir(project_dir)
+        os.rmdir("./ZooidEngine.sln")
     end
 }
 
@@ -25,7 +26,7 @@ newoption {
 }
 
 workspace "ZooidEngine"
-    location (project_dir .. "/" .. _ACTION)
+    location ("./")
     configurations { "Debug", "Release" }
 
 project "ZooidEngine"
@@ -45,7 +46,9 @@ project "ZooidEngine"
 
     files { "ZooidEngine/**.h", 
             "ZooidEngine/**.cpp",
-            "ZooidEngine/**.c"
+            "ZooidEngine/**.c",
+            "ZooidEngine/Shaders/**.vs",
+            "ZooidEngine/Shaders/**.frag"
         }
     
     -- exclude this file since it will be added on Platform specific

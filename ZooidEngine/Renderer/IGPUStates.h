@@ -129,7 +129,11 @@ namespace ZE
 		ERenderDepthStencilOps depthStencilPass /*= DS_OP_REPLACE*/>
 	IGPUDepthStencilState* ZE::TRenderDepthStencilState<depthEnabled, stencilEnabled, enableDepthMask, depthTestFunc, stencilTestFunc, stencilRefMask, stencilMask, stencilWriteMask, stencilFail, depthFail, depthStencilPass>::s_gpuState = nullptr;
 
-	template<bool blendEnabled, ERendererBlendFactor sourceBlendFactor = ERendererBlendFactor::ONE, ERendererBlendFactor destBlendFactor = ERendererBlendFactor::ONE, UInt32 AlphaRef = 0 >
+	template<bool blendEnabled, 
+		ERendererBlendFactor sourceBlendFactor = ERendererBlendFactor::ONE, 
+		ERendererBlendFactor destBlendFactor = ERendererBlendFactor::ONE, 
+		ERendererBlendMode blendMode = ERendererBlendMode::BLEND_MODE_ADD 
+	>
 	class TRenderBlendState
 	{
 	public:
@@ -140,7 +144,7 @@ namespace ZE
 				blendEnabled,
 				sourceBlendFactor,
 				destBlendFactor,
-				AlphaRef
+				blendMode
 			};
 
 			return blendState;
@@ -162,8 +166,8 @@ namespace ZE
 
 	};
 
-	template<bool blendEnabled, ERendererBlendFactor sourceBlendFactor /*= ERendererBlendFactor::ONE*/, ERendererBlendFactor destBlendFactor /*= ERendererBlendFactor::ONE*/, UInt32 AlphaRef /*= 0 */>
-	IGPUBlendState* ZE::TRenderBlendState<blendEnabled, sourceBlendFactor, destBlendFactor, AlphaRef>::s_gpuState = nullptr;
+	template<bool blendEnabled, ERendererBlendFactor sourceBlendFactor /*= ERendererBlendFactor::ONE*/, ERendererBlendFactor destBlendFactor /*= ERendererBlendFactor::ONE*/, ERendererBlendMode blendMode>
+	IGPUBlendState* ZE::TRenderBlendState<blendEnabled, sourceBlendFactor, destBlendFactor, blendMode>::s_gpuState = nullptr;
 
 	// Default States
 	typedef TRenderRasterizerState<EFaceFrontOrder::CCW, ECullFace::BACK, ERenderFillMode::MODE_FILL> DefaultRasterizerState;

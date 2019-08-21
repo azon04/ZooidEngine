@@ -76,6 +76,9 @@ namespace ZE
 		// Set Blend State
 		virtual void SetRenderBlendState(IGPUBlendState* renderBlendState) = 0;
 
+		// Set Blend Color Constant
+		virtual void SetBlendColorRef(Float32 red, Float32 green, Float32 blue, Float32 alpha) = 0;
+
 		// Set Depth Stencil State
 		virtual void SetRenderDepthStencilState(IGPUDepthStencilState* renderDepthStencilState) = 0;
 

@@ -3,6 +3,13 @@
 
 #include "SceneRenderer/RenderPass.h"
 #include "Common/SingletonClass.h"
+#include "Renderer/ShaderData.h"
+
+#define RENDER_LIGHT_PASS_NAIVE 0
+#define RENDER_LIGHT_PASS_LIGHT_INDEXED 1 // #TODO WIP
+#define RENDER_LIGHT_PASS_PER_TYPE 2
+
+#define RENDER_LIGHT_PASS_ALG RENDER_LIGHT_PASS_PER_TYPE
 
 namespace ZE
 {
@@ -10,6 +17,20 @@ namespace ZE
 	class IGPUTexture;
 	class IGPUFrameBuffer;
 	class IGPURenderBuffer;
+	class IGPUBufferArray;
+	class IRenderer;
+
+#if RENDER_LIGHT_PASS_ALG == RENDER_LIGHT_PASS_PER_TYPE
+	struct LightSampleData
+	{
+		Vector3 viewPos;
+		Float32 padding;
+
+		LightStruct light;
+		CascadeShadowData cascadeShadowData[4];
+		ShadowData shadowData[8];
+	};
+#endif
 
 	class LightRenderPass : public RenderPass, public Singleton<LightRenderPass>
 	{
@@ -28,6 +49,11 @@ namespace ZE
 
 		const char* getRenderPassName() const { return "LightRenderPasss"; }
 
+	private:
+#if RENDER_LIGHT_PASS_ALG == RENDER_LIGHT_PASS_LIGHT_INDEXED
+		void drawLightVolume(Int32 lightIndex, IRenderer* renderer, GameContext* gameContex);
+#endif
+
 	protected:
 		// Default Shader Chain
 		IShaderChain* m_shaderChain;
@@ -36,6 +62,25 @@ namespace ZE
 		IGPUTexture* m_resultPassTexture;
 		IGPURenderBuffer* m_depthRenderBuffer;
 		IGPUFrameBuffer* m_resultFrameBuffer;
+
+		// Light Volume Shapes
+		IGPUBufferArray* m_sphereBufferArray;
+		IGPUBufferArray* m_coneBufferArray;
+
+#if RENDER_LIGHT_PASS_ALG == RENDER_LIGHT_PASS_LIGHT_INDEXED
+		IShaderChain* m_lightIndexedVolumeShader;
+
+		IGPUTexture* m_lightVolumeIndexTexture;
+		IGPUFrameBuffer* m_lightVolumeFrameBuffer;
+#elif RENDER_LIGHT_PASS_ALG == RENDER_LIGHT_PASS_PER_TYPE
+		// Shader Per Light
+		IShaderChain* m_directionalShader;
+		IShaderChain* m_spotLightShader;
+		IShaderChain* m_pointLightShader;
+
+		LightSampleData m_lightSampleData;
+		IGPUBufferData* m_lightSampleGPUBuffer;
+#endif
 	};
 }
 #endif

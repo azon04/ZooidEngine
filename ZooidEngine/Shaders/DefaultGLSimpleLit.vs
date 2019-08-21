@@ -1,5 +1,5 @@
 /***
-* Default 3D Vertex Shader for OPENGL support Lit fragment shader
+* Default 3D Vertex Shader for OPENGL support Lit vertex shader
 * by : Ahmad Fauzan
 ***/
 

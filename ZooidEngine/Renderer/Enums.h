@@ -80,6 +80,15 @@ namespace ZE
 		ONE_MINUS_CONSTANT_ALPHA
 	};
 
+	enum ERendererBlendMode : UInt32
+	{
+		BLEND_MODE_ADD,
+		BLEND_MODE_SUBSTRACT,
+		BLEND_MODE_REVERSE_SUBSTRACT,
+		BLEND_MODE_MIN,
+		BLEND_MODE_MAX
+	};
+
 	enum ECullFace : UInt8
 	{
 		FRONT,
@@ -144,6 +153,7 @@ namespace ZE
 		TEX_R16,
 		TEX_R16F,
 		TEX_RG8,
+		TEX_RGBA8,
 		TEX_RG16,
 		TEX_RGB16F,
 		TEX_RGBA16F,

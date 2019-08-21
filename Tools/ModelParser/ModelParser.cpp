@@ -119,7 +119,7 @@ namespace ZETools
 						{
 							if (mesh.hasBones)
 							{
-								if (m_settings.mesh.bSaveTangentSpace)
+								if (m_settings.mesh.bSaveTangentSpace && mesh.hasTangent)
 								{
 									if (m_settings.mesh.bSaveBitangent)
 									{
@@ -137,7 +137,7 @@ namespace ZETools
 							}
 							else
 							{
-								if (m_settings.mesh.bSaveTangentSpace)
+								if (m_settings.mesh.bSaveTangentSpace && mesh.hasTangent)
 								{
 									if (m_settings.mesh.bSaveBitangent)
 									{
@@ -548,8 +548,10 @@ namespace ZETools
 			outMesh.name = mesh->mName.C_Str();
 
 			bool hasNormal = mesh->mNormals != NULL;
+			bool hasTangent = mesh->mTangents != NULL;
 
 			outMesh.hasNormal = hasNormal;
+			outMesh.hasTangent = hasTangent;
 
 			for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 			{
@@ -564,13 +566,16 @@ namespace ZETools
 					pos.Normal[1] = mesh->mNormals[i].y;
 					pos.Normal[2] = mesh->mNormals[i].z;
 
-					pos.Tangent[0] = mesh->mTangents[i].x;
-					pos.Tangent[1] = mesh->mTangents[i].y;
-					pos.Tangent[2] = mesh->mTangents[i].z;
+					if (hasTangent)
+					{
+						pos.Tangent[0] = mesh->mTangents[i].x;
+						pos.Tangent[1] = mesh->mTangents[i].y;
+						pos.Tangent[2] = mesh->mTangents[i].z;
 
-					pos.Bitangent[0] = mesh->mBitangents[i].x;
-					pos.Bitangent[1] = mesh->mBitangents[i].y;
-					pos.Bitangent[2] = mesh->mBitangents[i].z;
+						pos.Bitangent[0] = mesh->mBitangents[i].x;
+						pos.Bitangent[1] = mesh->mBitangents[i].y;
+						pos.Bitangent[2] = mesh->mBitangents[i].z;
+					}
 				}
 
 				pos.TexCoords[0] = 0.0f;
