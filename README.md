@@ -53,6 +53,7 @@ These are some features that I made for this version of the engine.
 * **Font Texture Generation Tools** - generating font glyphs texture and descriptor file for the texture to read in the engine. The tools can generate SDF texture and Multi-channel SDF texture. The tools is used https://github.com/Chlumsky/msdfgen to help in SDF and MSDF generation. 
 * **Demo: Scene Viewer** - Basic viewer to load and view a scene file (.scz file).
 * **Demo: Animation Demo** - basic demo how animation set up and played. See "Resources/TestAnimation" for the assets used in the demo.
+* **Premake5** - Now the project files can be generated using premake. In the project dir, call "Binaries/premake5 vs2017" to generate VS 2017 solution file.
 * **Misc**
   * High resolution timer with C++11 or basic timer if not using C++11.
 
@@ -67,6 +68,7 @@ This list consists all libraries and code that help me implementing the engine.
 * **NVidia PhysX 3.4** - https://www.geforce.com/hardware/technology/physx
 * **MSDFGen** - https://github.com/Chlumsky/msdfgen
 * **ZooidUI** - I also manage this repository. https://github.com/azon04/ZooidUI
+* **Premake5** - https://github.com/premake/premake-core
 
 ## Assets
 * **Mixamo** Animation assets used for the demo and testing are grabbed from https://www.mixamo.com/
