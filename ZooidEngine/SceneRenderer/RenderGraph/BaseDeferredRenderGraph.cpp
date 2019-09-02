@@ -6,6 +6,7 @@
 #include "SceneRenderer/RenderPass/ScreenRenderPass.h"
 #include "SceneRenderer/RenderPass/DebugRenderPass.h"
 #include "SceneRenderer/RenderPass/SSAORenderPass.h"
+#include "SceneRenderer/RenderPass/TransculentRenderPass.h"
 
 #include "Renderer/IGPUBufferData.h"
 #include "Renderer/DrawList.h"
@@ -21,6 +22,7 @@ namespace ZE
 		GBufferRenderPass::GetInstance()->prepare(_gameContext);
 		LightRenderPass::GetInstance()->prepare(_gameContext);
 		ShadowDepthRenderPass::GetInstance()->prepare(_gameContext);
+		TransculentRenderPass::GetInstance()->prepare(_gameContext);
 		ScreenRenderPass::GetInstance()->prepare(_gameContext);
 		DebugRenderPass::GetInstance()->prepare(_gameContext);
 		SSAORenderPass::GetInstance()->prepare(_gameContext);
@@ -31,6 +33,7 @@ namespace ZE
 		GBufferRenderPass::GetInstance()->release(_gameContext);
 		LightRenderPass::GetInstance()->release(_gameContext);
 		ShadowDepthRenderPass::GetInstance()->release(_gameContext);
+		TransculentRenderPass::GetInstance()->release(_gameContext);
 		ScreenRenderPass::GetInstance()->release(_gameContext);
 		DebugRenderPass::GetInstance()->release(_gameContext);
 		SSAORenderPass::GetInstance()->release(_gameContext);
@@ -84,8 +87,13 @@ namespace ZE
 		LightRenderPass::GetInstance()->Execute(_gameContext);
 		LightRenderPass::GetInstance()->end(_gameContext);
 
+		TransculentRenderPass::GetInstance()->begin(_gameContext);
+		TransculentRenderPass::GetInstance()->addInputFrameBuffer(LightRenderPass::GetInstance()->getFrameBufferOutput(0));
+		TransculentRenderPass::GetInstance()->Execute(_gameContext);
+		TransculentRenderPass::GetInstance()->end(_gameContext);
+
 		DebugRenderPass::GetInstance()->begin(_gameContext);
-		DebugRenderPass::GetInstance()->addInputFrameBuffer(LightRenderPass::GetInstance()->getFrameBufferOutput(0));
+		DebugRenderPass::GetInstance()->addInputFrameBuffer(TransculentRenderPass::GetInstance()->getFrameBufferOutput(0));
 		DebugRenderPass::GetInstance()->Execute(_gameContext);
 		DebugRenderPass::GetInstance()->end(_gameContext);
 

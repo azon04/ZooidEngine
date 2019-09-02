@@ -21,6 +21,18 @@ struct Material
 #define MAX_NUM_LIGHTS 8
 #define MAX_SHADOW_MAP 16
 
+struct CascadeShadowData
+{
+	float cascadedDistance;
+	int shadowMapIndex;
+	vec2 padding;
+};
+
+struct ShadowData
+{
+	mat4 viewProj;
+};
+
 struct Light {
 
 	int type; // 0 = directional Light, 1 = Point Light, 2 = Spot Light
@@ -44,6 +56,8 @@ struct Light {
 	mat4 viewProj;
 
 	ivec4 shadowMapIndices;
+	ivec4 shadowMapIndicesExt;
+	ivec4 cascadeShadowIndices;
 };
 
 layout (std140) uniform light_data
@@ -51,7 +65,12 @@ layout (std140) uniform light_data
 	vec3 viewPos;
 	int numLight;
 
+	vec2 padding;
+	int numCascade;
+	
 	Light lights[MAX_NUM_LIGHTS];
+	CascadeShadowData cascadeShadowData[MAX_SHADOW_MAP];
+	ShadowData shadowData[MAX_SHADOW_MAP];
 };
 
 uniform sampler2D shadowMaps[MAX_SHADOW_MAP];
@@ -134,7 +153,6 @@ vec3 CalcPointLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir)
 	ambient *= attenuation;
 	diffuse *= attenuation;
 	specular *= attenuation;
-
 	return (ambient + diffuse + specular);
 }
 

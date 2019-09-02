@@ -5,8 +5,9 @@
 #include "Common/SingletonClass.h"
 #include "Renderer/ShaderData.h"
 
+// #TODO Make this can be setting using configuration file in the future
 #define RENDER_LIGHT_PASS_NAIVE 0
-#define RENDER_LIGHT_PASS_LIGHT_INDEXED 1 // #TODO WIP
+#define RENDER_LIGHT_PASS_LIGHT_INDEXED 1 // #TODO WIP Light Indexed Pass
 #define RENDER_LIGHT_PASS_PER_TYPE 2
 
 #define RENDER_LIGHT_PASS_ALG RENDER_LIGHT_PASS_PER_TYPE
