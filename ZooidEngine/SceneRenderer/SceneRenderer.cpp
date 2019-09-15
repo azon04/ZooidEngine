@@ -91,7 +91,14 @@ namespace ZE
 
 			ShadowDepthRenderer::BindShadowTextures(gGameContext->getDrawList(), shader, currentMesh.m_material ? currentMesh.m_material->getTextureCount() : 0);
 
-			gGameContext->getRenderer()->DrawArray(currentMesh.m_renderTopology, 0, currentMesh.drawCount);
+			if (currentMesh.m_gpuBufferArray->isUsingIndexBuffer())
+			{
+				gGameContext->getRenderer()->DrawIndexed(currentMesh.m_renderTopology, 4, currentMesh.drawCount, nullptr);
+			}
+			else
+			{
+				gGameContext->getRenderer()->DrawArray(currentMesh.m_renderTopology, 0, currentMesh.drawCount);
+			}
 
 			if (bShaderNeedReset)
 			{
@@ -179,7 +186,15 @@ namespace ZE
 
 			ShadowDepthRenderer::BindShadowTextures(gGameContext->getDrawList(), currentMesh.m_shaderChain, currentMesh.m_material ? currentMesh.m_material->getTextureCount() : 0);
 
-			gGameContext->getRenderer()->DrawArray(currentMesh.m_renderTopology, 0, currentMesh.drawCount);
+
+			if (currentMesh.m_gpuBufferArray->isUsingIndexBuffer())
+			{
+				gGameContext->getRenderer()->DrawIndexed(currentMesh.m_renderTopology, 4, currentMesh.drawCount, nullptr);
+			}
+			else
+			{
+				gGameContext->getRenderer()->DrawArray(currentMesh.m_renderTopology, 0, currentMesh.drawCount);
+			}
 		}
 	}
 
@@ -331,7 +346,15 @@ namespace ZE
 
 			ShadowDepthRenderer::BindShadowTextures(gGameContext->getDrawList(), shader, currentMesh.m_material ? currentMesh.m_material->getTextureCount() : 0);
 
-			gGameContext->getRenderer()->DrawArray(currentMesh.m_renderTopology, 0, currentMesh.drawCount);
+
+			if (currentMesh.m_gpuBufferArray->isUsingIndexBuffer())
+			{
+				gGameContext->getRenderer()->DrawIndexed(currentMesh.m_renderTopology, 4, currentMesh.drawCount, nullptr);
+			}
+			else
+			{
+				gGameContext->getRenderer()->DrawArray(currentMesh.m_renderTopology, 0, currentMesh.drawCount);
+			}
 
 			if (bShaderNeedReset)
 			{

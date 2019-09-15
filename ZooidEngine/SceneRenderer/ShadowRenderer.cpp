@@ -122,7 +122,14 @@ namespace ZE
 
 				currentMesh.m_gpuBufferArray->bind();
 
-				gGameContext->getRenderer()->DrawArray(currentMesh.m_renderTopology, 0, currentMesh.drawCount);
+				if (currentMesh.m_gpuBufferArray->isUsingIndexBuffer())
+				{
+					gGameContext->getRenderer()->DrawIndexed(currentMesh.m_renderTopology, 4, currentMesh.drawCount, nullptr);
+				}
+				else
+				{
+					gGameContext->getRenderer()->DrawArray(currentMesh.m_renderTopology, 0, currentMesh.drawCount);
+				}
 			}
 		}
 		else
@@ -144,7 +151,14 @@ namespace ZE
 
 				currentMesh.m_gpuBufferArray->bind();
 
-				gGameContext->getRenderer()->DrawArray(currentMesh.m_renderTopology, 0, currentMesh.drawCount);
+				if (currentMesh.m_gpuBufferArray->isUsingIndexBuffer())
+				{
+					gGameContext->getRenderer()->DrawIndexed(currentMesh.m_renderTopology, 4, currentMesh.drawCount, nullptr);
+				}
+				else
+				{
+					gGameContext->getRenderer()->DrawArray(currentMesh.m_renderTopology, 0, currentMesh.drawCount);
+				}
 			}
 		}
 

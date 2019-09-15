@@ -2,13 +2,143 @@ ZooidEngine: [LOG_ENGINE] Log: CPU Processor: Intel(R) Core(TM) i9-9900K CPU @ 3
 ZooidEngine: [LOG_ENGINE] Log: CPU Speed: 3600 MHz 
 ZooidEngine: [LOG_ENGINE] Log: RAM Detected 
 ZooidEngine: [LOG_ENGINE] Log: Total Physical RAM: 15.908588 GB 
-ZooidEngine: [LOG_ENGINE] Log: Available Physical RAM: 0.877312 GB 
+ZooidEngine: [LOG_ENGINE] Log: Available Physical RAM: 4.069290 GB 
 ZooidEngine: [LOG_ENGINE] Log: Total Virtual Memory: 1.999878 GB 
-ZooidEngine: [LOG_ENGINE] Log: Avail Virtual Memory: 1.923153 GB 
-ZooidEngine: [LOG_ENGINE] Log: Total Available Disk in D: 0.084583 GB 
+ZooidEngine: [LOG_ENGINE] Log: Avail Virtual Memory: 1.923111 GB 
+ZooidEngine: [LOG_ENGINE] Log: Total Available Disk in D: 1.720081 GB 
 ZooidEngine: [LOG_MEMORY] Log: Total Mem Size : 6143240 bytes ~ 5.858650 MB 
 ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 3072 bytes with 341 blocks on index 10 
 ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 4608 bytes with 227 blocks replacing block on index 10 
 ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 8192 bytes with 128 blocks on index 11 
 ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 16384 bytes with 64 blocks on index 12 
 ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 9109 bytes with 114 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 369160 bytes with 2 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 41624 bytes with 25 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 194876 bytes with 5 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 11088 bytes with 94 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 24640 bytes with 42 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 206800 bytes with 5 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 16192 bytes with 64 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 258016 bytes with 4 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 48928 bytes with 21 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 23144 bytes with 45 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 35024 bytes with 29 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 14168 bytes with 73 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 5120 bytes with 204 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 24640 bytes with 42 blocks on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 25168 bytes with 41 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 30448 bytes with 34 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 166320 bytes with 6 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 107536 bytes with 9 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 18432 bytes with 56 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 29040 bytes with 36 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 107536 bytes with 9 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 29040 bytes with 36 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 107536 bytes with 9 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 29040 bytes with 36 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 107536 bytes with 9 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 29040 bytes with 36 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 107536 bytes with 9 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 29040 bytes with 36 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 107536 bytes with 9 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 29040 bytes with 36 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 107536 bytes with 9 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 29040 bytes with 36 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 107536 bytes with 9 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 29040 bytes with 36 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 107536 bytes with 9 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 29040 bytes with 36 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 107536 bytes with 9 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 29040 bytes with 36 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 107536 bytes with 9 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 29040 bytes with 36 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 107536 bytes with 9 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 20480 bytes with 51 blocks replacing block on index 13 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 36864 bytes with 28 blocks on index 14 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 29040 bytes with 36 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 5632 bytes with 186 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 20064 bytes with 52 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 41184 bytes with 25 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 20064 bytes with 52 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 41184 bytes with 25 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 20064 bytes with 52 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 41184 bytes with 25 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 20064 bytes with 52 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 41184 bytes with 25 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 20064 bytes with 52 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 41184 bytes with 25 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 20064 bytes with 52 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 41184 bytes with 25 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 20064 bytes with 52 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 573232 bytes with 1 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 71160 bytes with 14 blocks on index 15 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 193952 bytes with 5 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 387200 bytes with 2 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 389136 bytes with 2 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 484704 bytes with 2 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 41184 bytes with 25 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 16896 bytes with 62 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 41184 bytes with 25 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 16896 bytes with 62 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 41184 bytes with 25 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 16896 bytes with 62 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 41184 bytes with 25 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 16896 bytes with 62 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 41184 bytes with 25 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 16896 bytes with 62 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 41184 bytes with 25 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 16896 bytes with 62 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 41184 bytes with 25 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 16896 bytes with 62 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 41184 bytes with 25 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 16896 bytes with 62 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 41184 bytes with 25 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 16896 bytes with 62 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 41184 bytes with 25 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 16896 bytes with 62 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 41184 bytes with 25 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 428296 bytes with 2 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 144716 bytes with 7 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 49104 bytes with 21 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 109824 bytes with 9 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 23848 bytes with 43 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 144716 bytes with 7 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 49104 bytes with 21 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 109824 bytes with 9 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 23848 bytes with 43 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 144716 bytes with 7 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 49104 bytes with 21 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 109824 bytes with 9 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 23848 bytes with 43 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 144716 bytes with 7 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 49104 bytes with 21 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 109824 bytes with 9 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 23848 bytes with 43 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 41624 bytes with 25 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 194876 bytes with 5 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 41624 bytes with 25 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 194876 bytes with 5 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 41624 bytes with 25 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 194876 bytes with 5 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 35200 bytes with 29 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 194876 bytes with 5 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 35200 bytes with 29 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 194876 bytes with 5 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 35200 bytes with 29 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 194876 bytes with 5 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 35200 bytes with 29 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 194876 bytes with 5 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 203104 bytes with 5 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 45056 bytes with 23 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 1235520 bytes with 1 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 167856 bytes with 6 blocks replacing block on index 15 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 7168 bytes with 146 blocks replacing block on index 11 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 40 bytes with 512 blocks replacing block on index 15 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 2048 bytes with 512 blocks on index 16 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 14336 bytes with 73 blocks on index 17 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 28672 bytes with 36 blocks on index 18 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 44 bytes with 512 blocks on index 19 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 1024 bytes with 512 blocks on index 20 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 44 bytes with 512 blocks replacing block on index 20 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 1024 bytes with 512 blocks on index 21 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 8192 bytes with 128 blocks replacing block on index 21 
