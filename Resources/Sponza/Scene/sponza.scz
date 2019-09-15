@@ -1,0 +1,1974 @@
+SceneName sponza
+FileVersion 1.0
+ComponentCount 394
+LightComponent DirLight
+BEGIN
+LightType 0
+R 160.0 0.0 0.0
+T 0.0 3.0 3.0
+END
+RenderComponent sponza_00_0
+BEGIN
+Mesh Sponza/Mesh/sponza_00_0.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_01_1
+BEGIN
+Mesh Sponza/Mesh/sponza_01_1.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent vase_round_2
+BEGIN
+Mesh Sponza/Mesh/vase_round_2.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_03_3
+BEGIN
+Mesh Sponza/Mesh/sponza_03_3.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_05_4
+BEGIN
+Mesh Sponza/Mesh/sponza_05_4.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_06_5
+BEGIN
+Mesh Sponza/Mesh/sponza_06_5.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_07_6
+BEGIN
+Mesh Sponza/Mesh/sponza_07_6.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_08_7
+BEGIN
+Mesh Sponza/Mesh/sponza_08_7.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_09_8
+BEGIN
+Mesh Sponza/Mesh/sponza_09_8.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_10_9
+BEGIN
+Mesh Sponza/Mesh/sponza_10_9.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_11_10
+BEGIN
+Mesh Sponza/Mesh/sponza_11_10.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_12_11
+BEGIN
+Mesh Sponza/Mesh/sponza_12_11.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_13_12
+BEGIN
+Mesh Sponza/Mesh/sponza_13_12.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_14_13
+BEGIN
+Mesh Sponza/Mesh/sponza_14_13.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_15_14
+BEGIN
+Mesh Sponza/Mesh/sponza_15_14.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_16_15
+BEGIN
+Mesh Sponza/Mesh/sponza_16_15.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_17_16
+BEGIN
+Mesh Sponza/Mesh/sponza_17_16.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_18_17
+BEGIN
+Mesh Sponza/Mesh/sponza_18_17.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_19_18
+BEGIN
+Mesh Sponza/Mesh/sponza_19_18.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_20_19
+BEGIN
+Mesh Sponza/Mesh/sponza_20_19.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_21_20
+BEGIN
+Mesh Sponza/Mesh/sponza_21_20.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_22_21
+BEGIN
+Mesh Sponza/Mesh/sponza_22_21.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_23_22
+BEGIN
+Mesh Sponza/Mesh/sponza_23_22.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_24_23
+BEGIN
+Mesh Sponza/Mesh/sponza_24_23.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_25_24
+BEGIN
+Mesh Sponza/Mesh/sponza_25_24.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_26_25
+BEGIN
+Mesh Sponza/Mesh/sponza_26_25.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_27_26
+BEGIN
+Mesh Sponza/Mesh/sponza_27_26.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_28_27
+BEGIN
+Mesh Sponza/Mesh/sponza_28_27.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_29_28
+BEGIN
+Mesh Sponza/Mesh/sponza_29_28.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_30_29
+BEGIN
+Mesh Sponza/Mesh/sponza_30_29.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_31_30
+BEGIN
+Mesh Sponza/Mesh/sponza_31_30.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_32_31
+BEGIN
+Mesh Sponza/Mesh/sponza_32_31.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_33_32
+BEGIN
+Mesh Sponza/Mesh/sponza_33_32.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_34_33
+BEGIN
+Mesh Sponza/Mesh/sponza_34_33.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_35_34
+BEGIN
+Mesh Sponza/Mesh/sponza_35_34.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_36_35
+BEGIN
+Mesh Sponza/Mesh/sponza_36_35.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_37_36
+BEGIN
+Mesh Sponza/Mesh/sponza_37_36.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_38_37
+BEGIN
+Mesh Sponza/Mesh/sponza_38_37.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_39_38
+BEGIN
+Mesh Sponza/Mesh/sponza_39_38.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_40_39
+BEGIN
+Mesh Sponza/Mesh/sponza_40_39.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_41_40
+BEGIN
+Mesh Sponza/Mesh/sponza_41_40.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_42_41
+BEGIN
+Mesh Sponza/Mesh/sponza_42_41.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_43_42
+BEGIN
+Mesh Sponza/Mesh/sponza_43_42.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_44_43
+BEGIN
+Mesh Sponza/Mesh/sponza_44_43.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_45_44
+BEGIN
+Mesh Sponza/Mesh/sponza_45_44.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_46_45
+BEGIN
+Mesh Sponza/Mesh/sponza_46_45.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_47_46
+BEGIN
+Mesh Sponza/Mesh/sponza_47_46.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_48_47
+BEGIN
+Mesh Sponza/Mesh/sponza_48_47.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_49_48
+BEGIN
+Mesh Sponza/Mesh/sponza_49_48.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_50_49
+BEGIN
+Mesh Sponza/Mesh/sponza_50_49.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_51_50
+BEGIN
+Mesh Sponza/Mesh/sponza_51_50.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_52_51
+BEGIN
+Mesh Sponza/Mesh/sponza_52_51.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_53_52
+BEGIN
+Mesh Sponza/Mesh/sponza_53_52.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_54_53
+BEGIN
+Mesh Sponza/Mesh/sponza_54_53.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_55_54
+BEGIN
+Mesh Sponza/Mesh/sponza_55_54.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_56_55
+BEGIN
+Mesh Sponza/Mesh/sponza_56_55.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_57_56
+BEGIN
+Mesh Sponza/Mesh/sponza_57_56.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_58_57
+BEGIN
+Mesh Sponza/Mesh/sponza_58_57.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_59_58
+BEGIN
+Mesh Sponza/Mesh/sponza_59_58.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_60_59
+BEGIN
+Mesh Sponza/Mesh/sponza_60_59.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_61_60
+BEGIN
+Mesh Sponza/Mesh/sponza_61_60.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_62_61
+BEGIN
+Mesh Sponza/Mesh/sponza_62_61.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_63_62
+BEGIN
+Mesh Sponza/Mesh/sponza_63_62.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_64_63
+BEGIN
+Mesh Sponza/Mesh/sponza_64_63.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_65_64
+BEGIN
+Mesh Sponza/Mesh/sponza_65_64.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_66_65
+BEGIN
+Mesh Sponza/Mesh/sponza_66_65.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_67_66
+BEGIN
+Mesh Sponza/Mesh/sponza_67_66.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_68_67
+BEGIN
+Mesh Sponza/Mesh/sponza_68_67.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_69_68
+BEGIN
+Mesh Sponza/Mesh/sponza_69_68.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_70_69
+BEGIN
+Mesh Sponza/Mesh/sponza_70_69.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_71_70
+BEGIN
+Mesh Sponza/Mesh/sponza_71_70.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent bricks_71
+BEGIN
+Mesh Sponza/Mesh/bricks_71.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_72_72
+BEGIN
+Mesh Sponza/Mesh/sponza_72_72.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent bricks_73
+BEGIN
+Mesh Sponza/Mesh/bricks_73.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_73_74
+BEGIN
+Mesh Sponza/Mesh/sponza_73_74.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_74_75
+BEGIN
+Mesh Sponza/Mesh/sponza_74_75.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_75_76
+BEGIN
+Mesh Sponza/Mesh/sponza_75_76.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_76_77
+BEGIN
+Mesh Sponza/Mesh/sponza_76_77.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_77_78
+BEGIN
+Mesh Sponza/Mesh/sponza_77_78.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_78_79
+BEGIN
+Mesh Sponza/Mesh/sponza_78_79.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_79_80
+BEGIN
+Mesh Sponza/Mesh/sponza_79_80.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_80_81
+BEGIN
+Mesh Sponza/Mesh/sponza_80_81.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_81_82
+BEGIN
+Mesh Sponza/Mesh/sponza_81_82.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_82_83
+BEGIN
+Mesh Sponza/Mesh/sponza_82_83.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_83_84
+BEGIN
+Mesh Sponza/Mesh/sponza_83_84.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_84_85
+BEGIN
+Mesh Sponza/Mesh/sponza_84_85.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_85_86
+BEGIN
+Mesh Sponza/Mesh/sponza_85_86.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_86_87
+BEGIN
+Mesh Sponza/Mesh/sponza_86_87.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_87_88
+BEGIN
+Mesh Sponza/Mesh/sponza_87_88.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_88_89
+BEGIN
+Mesh Sponza/Mesh/sponza_88_89.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_89_90
+BEGIN
+Mesh Sponza/Mesh/sponza_89_90.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_90_91
+BEGIN
+Mesh Sponza/Mesh/sponza_90_91.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_91_92
+BEGIN
+Mesh Sponza/Mesh/sponza_91_92.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_92_93
+BEGIN
+Mesh Sponza/Mesh/sponza_92_93.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_93_94
+BEGIN
+Mesh Sponza/Mesh/sponza_93_94.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_94_95
+BEGIN
+Mesh Sponza/Mesh/sponza_94_95.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_95_96
+BEGIN
+Mesh Sponza/Mesh/sponza_95_96.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_96_97
+BEGIN
+Mesh Sponza/Mesh/sponza_96_97.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_97_98
+BEGIN
+Mesh Sponza/Mesh/sponza_97_98.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_98_99
+BEGIN
+Mesh Sponza/Mesh/sponza_98_99.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_99_100
+BEGIN
+Mesh Sponza/Mesh/sponza_99_100.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_100_101
+BEGIN
+Mesh Sponza/Mesh/sponza_100_101.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_101_102
+BEGIN
+Mesh Sponza/Mesh/sponza_101_102.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_102_103
+BEGIN
+Mesh Sponza/Mesh/sponza_102_103.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_103_104
+BEGIN
+Mesh Sponza/Mesh/sponza_103_104.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_104_105
+BEGIN
+Mesh Sponza/Mesh/sponza_104_105.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_105_106
+BEGIN
+Mesh Sponza/Mesh/sponza_105_106.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_106_107
+BEGIN
+Mesh Sponza/Mesh/sponza_106_107.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_107_108
+BEGIN
+Mesh Sponza/Mesh/sponza_107_108.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_108_109
+BEGIN
+Mesh Sponza/Mesh/sponza_108_109.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_109_110
+BEGIN
+Mesh Sponza/Mesh/sponza_109_110.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_110_111
+BEGIN
+Mesh Sponza/Mesh/sponza_110_111.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_111_112
+BEGIN
+Mesh Sponza/Mesh/sponza_111_112.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_112_113
+BEGIN
+Mesh Sponza/Mesh/sponza_112_113.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_113_114
+BEGIN
+Mesh Sponza/Mesh/sponza_113_114.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_114_115
+BEGIN
+Mesh Sponza/Mesh/sponza_114_115.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_115_116
+BEGIN
+Mesh Sponza/Mesh/sponza_115_116.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_116_117
+BEGIN
+Mesh Sponza/Mesh/sponza_116_117.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_117_118
+BEGIN
+Mesh Sponza/Mesh/sponza_117_118.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_118_119
+BEGIN
+Mesh Sponza/Mesh/sponza_118_119.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_119_120
+BEGIN
+Mesh Sponza/Mesh/sponza_119_120.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_120_121
+BEGIN
+Mesh Sponza/Mesh/sponza_120_121.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_121_122
+BEGIN
+Mesh Sponza/Mesh/sponza_121_122.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_122_123
+BEGIN
+Mesh Sponza/Mesh/sponza_122_123.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_123_124
+BEGIN
+Mesh Sponza/Mesh/sponza_123_124.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_124_125
+BEGIN
+Mesh Sponza/Mesh/sponza_124_125.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_125_126
+BEGIN
+Mesh Sponza/Mesh/sponza_125_126.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_126_127
+BEGIN
+Mesh Sponza/Mesh/sponza_126_127.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_127_128
+BEGIN
+Mesh Sponza/Mesh/sponza_127_128.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_128_129
+BEGIN
+Mesh Sponza/Mesh/sponza_128_129.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_129_130
+BEGIN
+Mesh Sponza/Mesh/sponza_129_130.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_130_131
+BEGIN
+Mesh Sponza/Mesh/sponza_130_131.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_131_132
+BEGIN
+Mesh Sponza/Mesh/sponza_131_132.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_132_133
+BEGIN
+Mesh Sponza/Mesh/sponza_132_133.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_133_134
+BEGIN
+Mesh Sponza/Mesh/sponza_133_134.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_134_135
+BEGIN
+Mesh Sponza/Mesh/sponza_134_135.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_135_136
+BEGIN
+Mesh Sponza/Mesh/sponza_135_136.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_136_137
+BEGIN
+Mesh Sponza/Mesh/sponza_136_137.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_137_138
+BEGIN
+Mesh Sponza/Mesh/sponza_137_138.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_138_139
+BEGIN
+Mesh Sponza/Mesh/sponza_138_139.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_139_140
+BEGIN
+Mesh Sponza/Mesh/sponza_139_140.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_140_141
+BEGIN
+Mesh Sponza/Mesh/sponza_140_141.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_141_142
+BEGIN
+Mesh Sponza/Mesh/sponza_141_142.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_142_143
+BEGIN
+Mesh Sponza/Mesh/sponza_142_143.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_143_144
+BEGIN
+Mesh Sponza/Mesh/sponza_143_144.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_144_145
+BEGIN
+Mesh Sponza/Mesh/sponza_144_145.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_145_146
+BEGIN
+Mesh Sponza/Mesh/sponza_145_146.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_146_147
+BEGIN
+Mesh Sponza/Mesh/sponza_146_147.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_147_148
+BEGIN
+Mesh Sponza/Mesh/sponza_147_148.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_148_149
+BEGIN
+Mesh Sponza/Mesh/sponza_148_149.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_149_150
+BEGIN
+Mesh Sponza/Mesh/sponza_149_150.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_150_151
+BEGIN
+Mesh Sponza/Mesh/sponza_150_151.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_151_152
+BEGIN
+Mesh Sponza/Mesh/sponza_151_152.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_152_153
+BEGIN
+Mesh Sponza/Mesh/sponza_152_153.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_153_154
+BEGIN
+Mesh Sponza/Mesh/sponza_153_154.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_154_155
+BEGIN
+Mesh Sponza/Mesh/sponza_154_155.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_155_156
+BEGIN
+Mesh Sponza/Mesh/sponza_155_156.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_156_157
+BEGIN
+Mesh Sponza/Mesh/sponza_156_157.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_157_158
+BEGIN
+Mesh Sponza/Mesh/sponza_157_158.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_158_159
+BEGIN
+Mesh Sponza/Mesh/sponza_158_159.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_159_160
+BEGIN
+Mesh Sponza/Mesh/sponza_159_160.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_160_161
+BEGIN
+Mesh Sponza/Mesh/sponza_160_161.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_161_162
+BEGIN
+Mesh Sponza/Mesh/sponza_161_162.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_162_163
+BEGIN
+Mesh Sponza/Mesh/sponza_162_163.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_163_164
+BEGIN
+Mesh Sponza/Mesh/sponza_163_164.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_164_165
+BEGIN
+Mesh Sponza/Mesh/sponza_164_165.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_165_166
+BEGIN
+Mesh Sponza/Mesh/sponza_165_166.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_166_167
+BEGIN
+Mesh Sponza/Mesh/sponza_166_167.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_167_168
+BEGIN
+Mesh Sponza/Mesh/sponza_167_168.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_168_169
+BEGIN
+Mesh Sponza/Mesh/sponza_168_169.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_169_170
+BEGIN
+Mesh Sponza/Mesh/sponza_169_170.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_170_171
+BEGIN
+Mesh Sponza/Mesh/sponza_170_171.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_171_172
+BEGIN
+Mesh Sponza/Mesh/sponza_171_172.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_172_173
+BEGIN
+Mesh Sponza/Mesh/sponza_172_173.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_173_174
+BEGIN
+Mesh Sponza/Mesh/sponza_173_174.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_174_175
+BEGIN
+Mesh Sponza/Mesh/sponza_174_175.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_175_176
+BEGIN
+Mesh Sponza/Mesh/sponza_175_176.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_176_177
+BEGIN
+Mesh Sponza/Mesh/sponza_176_177.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_177_178
+BEGIN
+Mesh Sponza/Mesh/sponza_177_178.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_178_179
+BEGIN
+Mesh Sponza/Mesh/sponza_178_179.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_179_180
+BEGIN
+Mesh Sponza/Mesh/sponza_179_180.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_180_181
+BEGIN
+Mesh Sponza/Mesh/sponza_180_181.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_181_182
+BEGIN
+Mesh Sponza/Mesh/sponza_181_182.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_182_183
+BEGIN
+Mesh Sponza/Mesh/sponza_182_183.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_183_184
+BEGIN
+Mesh Sponza/Mesh/sponza_183_184.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_184_185
+BEGIN
+Mesh Sponza/Mesh/sponza_184_185.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_185_186
+BEGIN
+Mesh Sponza/Mesh/sponza_185_186.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_186_187
+BEGIN
+Mesh Sponza/Mesh/sponza_186_187.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_187_188
+BEGIN
+Mesh Sponza/Mesh/sponza_187_188.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_188_189
+BEGIN
+Mesh Sponza/Mesh/sponza_188_189.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_189_190
+BEGIN
+Mesh Sponza/Mesh/sponza_189_190.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_190_191
+BEGIN
+Mesh Sponza/Mesh/sponza_190_191.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_191_192
+BEGIN
+Mesh Sponza/Mesh/sponza_191_192.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_192_193
+BEGIN
+Mesh Sponza/Mesh/sponza_192_193.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_193_194
+BEGIN
+Mesh Sponza/Mesh/sponza_193_194.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_194_195
+BEGIN
+Mesh Sponza/Mesh/sponza_194_195.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_195_196
+BEGIN
+Mesh Sponza/Mesh/sponza_195_196.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_196_197
+BEGIN
+Mesh Sponza/Mesh/sponza_196_197.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_197_198
+BEGIN
+Mesh Sponza/Mesh/sponza_197_198.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_198_199
+BEGIN
+Mesh Sponza/Mesh/sponza_198_199.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_199_200
+BEGIN
+Mesh Sponza/Mesh/sponza_199_200.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_200_201
+BEGIN
+Mesh Sponza/Mesh/sponza_200_201.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_201_202
+BEGIN
+Mesh Sponza/Mesh/sponza_201_202.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_202_203
+BEGIN
+Mesh Sponza/Mesh/sponza_202_203.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_203_204
+BEGIN
+Mesh Sponza/Mesh/sponza_203_204.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_204_205
+BEGIN
+Mesh Sponza/Mesh/sponza_204_205.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_205_206
+BEGIN
+Mesh Sponza/Mesh/sponza_205_206.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_206_207
+BEGIN
+Mesh Sponza/Mesh/sponza_206_207.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_207_208
+BEGIN
+Mesh Sponza/Mesh/sponza_207_208.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_208_209
+BEGIN
+Mesh Sponza/Mesh/sponza_208_209.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_209_210
+BEGIN
+Mesh Sponza/Mesh/sponza_209_210.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_210_211
+BEGIN
+Mesh Sponza/Mesh/sponza_210_211.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_211_212
+BEGIN
+Mesh Sponza/Mesh/sponza_211_212.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_212_213
+BEGIN
+Mesh Sponza/Mesh/sponza_212_213.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_213_214
+BEGIN
+Mesh Sponza/Mesh/sponza_213_214.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_214_215
+BEGIN
+Mesh Sponza/Mesh/sponza_214_215.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_215_216
+BEGIN
+Mesh Sponza/Mesh/sponza_215_216.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_216_217
+BEGIN
+Mesh Sponza/Mesh/sponza_216_217.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_217_218
+BEGIN
+Mesh Sponza/Mesh/sponza_217_218.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_218_219
+BEGIN
+Mesh Sponza/Mesh/sponza_218_219.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_219_220
+BEGIN
+Mesh Sponza/Mesh/sponza_219_220.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_220_221
+BEGIN
+Mesh Sponza/Mesh/sponza_220_221.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_221_222
+BEGIN
+Mesh Sponza/Mesh/sponza_221_222.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_222_223
+BEGIN
+Mesh Sponza/Mesh/sponza_222_223.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_223_224
+BEGIN
+Mesh Sponza/Mesh/sponza_223_224.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_224_225
+BEGIN
+Mesh Sponza/Mesh/sponza_224_225.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_225_226
+BEGIN
+Mesh Sponza/Mesh/sponza_225_226.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_226_227
+BEGIN
+Mesh Sponza/Mesh/sponza_226_227.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_227_228
+BEGIN
+Mesh Sponza/Mesh/sponza_227_228.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_228_229
+BEGIN
+Mesh Sponza/Mesh/sponza_228_229.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_229_230
+BEGIN
+Mesh Sponza/Mesh/sponza_229_230.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_230_231
+BEGIN
+Mesh Sponza/Mesh/sponza_230_231.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_231_232
+BEGIN
+Mesh Sponza/Mesh/sponza_231_232.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_232_233
+BEGIN
+Mesh Sponza/Mesh/sponza_232_233.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_233_234
+BEGIN
+Mesh Sponza/Mesh/sponza_233_234.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_234_235
+BEGIN
+Mesh Sponza/Mesh/sponza_234_235.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_235_236
+BEGIN
+Mesh Sponza/Mesh/sponza_235_236.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_236_237
+BEGIN
+Mesh Sponza/Mesh/sponza_236_237.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_237_238
+BEGIN
+Mesh Sponza/Mesh/sponza_237_238.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_238_239
+BEGIN
+Mesh Sponza/Mesh/sponza_238_239.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_239_240
+BEGIN
+Mesh Sponza/Mesh/sponza_239_240.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_240_241
+BEGIN
+Mesh Sponza/Mesh/sponza_240_241.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_241_242
+BEGIN
+Mesh Sponza/Mesh/sponza_241_242.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_242_243
+BEGIN
+Mesh Sponza/Mesh/sponza_242_243.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_243_244
+BEGIN
+Mesh Sponza/Mesh/sponza_243_244.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_244_245
+BEGIN
+Mesh Sponza/Mesh/sponza_244_245.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_245_246
+BEGIN
+Mesh Sponza/Mesh/sponza_245_246.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_246_247
+BEGIN
+Mesh Sponza/Mesh/sponza_246_247.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_247_248
+BEGIN
+Mesh Sponza/Mesh/sponza_247_248.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_248_249
+BEGIN
+Mesh Sponza/Mesh/sponza_248_249.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_249_250
+BEGIN
+Mesh Sponza/Mesh/sponza_249_250.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_250_251
+BEGIN
+Mesh Sponza/Mesh/sponza_250_251.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_251_252
+BEGIN
+Mesh Sponza/Mesh/sponza_251_252.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_252_253
+BEGIN
+Mesh Sponza/Mesh/sponza_252_253.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_253_254
+BEGIN
+Mesh Sponza/Mesh/sponza_253_254.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_254_255
+BEGIN
+Mesh Sponza/Mesh/sponza_254_255.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_255_256
+BEGIN
+Mesh Sponza/Mesh/sponza_255_256.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_256_257
+BEGIN
+Mesh Sponza/Mesh/sponza_256_257.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_257_258
+BEGIN
+Mesh Sponza/Mesh/sponza_257_258.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_258_259
+BEGIN
+Mesh Sponza/Mesh/sponza_258_259.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_259_260
+BEGIN
+Mesh Sponza/Mesh/sponza_259_260.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_260_261
+BEGIN
+Mesh Sponza/Mesh/sponza_260_261.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_261_262
+BEGIN
+Mesh Sponza/Mesh/sponza_261_262.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_262_263
+BEGIN
+Mesh Sponza/Mesh/sponza_262_263.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_263_264
+BEGIN
+Mesh Sponza/Mesh/sponza_263_264.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_264_265
+BEGIN
+Mesh Sponza/Mesh/sponza_264_265.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_265_266
+BEGIN
+Mesh Sponza/Mesh/sponza_265_266.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_266_267
+BEGIN
+Mesh Sponza/Mesh/sponza_266_267.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_267_268
+BEGIN
+Mesh Sponza/Mesh/sponza_267_268.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_268_269
+BEGIN
+Mesh Sponza/Mesh/sponza_268_269.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_269_270
+BEGIN
+Mesh Sponza/Mesh/sponza_269_270.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_270_271
+BEGIN
+Mesh Sponza/Mesh/sponza_270_271.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_271_272
+BEGIN
+Mesh Sponza/Mesh/sponza_271_272.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_272_273
+BEGIN
+Mesh Sponza/Mesh/sponza_272_273.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_273_274
+BEGIN
+Mesh Sponza/Mesh/sponza_273_274.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_274_275
+BEGIN
+Mesh Sponza/Mesh/sponza_274_275.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_275_276
+BEGIN
+Mesh Sponza/Mesh/sponza_275_276.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_276_277
+BEGIN
+Mesh Sponza/Mesh/sponza_276_277.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_277_278
+BEGIN
+Mesh Sponza/Mesh/sponza_277_278.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_278_279
+BEGIN
+Mesh Sponza/Mesh/sponza_278_279.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_279_280
+BEGIN
+Mesh Sponza/Mesh/sponza_279_280.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_280_281
+BEGIN
+Mesh Sponza/Mesh/sponza_280_281.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_281_282
+BEGIN
+Mesh Sponza/Mesh/sponza_281_282.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_282_283
+BEGIN
+Mesh Sponza/Mesh/sponza_282_283.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_283_284
+BEGIN
+Mesh Sponza/Mesh/sponza_283_284.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_284_285
+BEGIN
+Mesh Sponza/Mesh/sponza_284_285.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_285_286
+BEGIN
+Mesh Sponza/Mesh/sponza_285_286.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_286_287
+BEGIN
+Mesh Sponza/Mesh/sponza_286_287.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_287_288
+BEGIN
+Mesh Sponza/Mesh/sponza_287_288.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_288_289
+BEGIN
+Mesh Sponza/Mesh/sponza_288_289.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_289_290
+BEGIN
+Mesh Sponza/Mesh/sponza_289_290.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_290_291
+BEGIN
+Mesh Sponza/Mesh/sponza_290_291.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_291_292
+BEGIN
+Mesh Sponza/Mesh/sponza_291_292.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_292_293
+BEGIN
+Mesh Sponza/Mesh/sponza_292_293.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_293_294
+BEGIN
+Mesh Sponza/Mesh/sponza_293_294.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_294_295
+BEGIN
+Mesh Sponza/Mesh/sponza_294_295.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_295_296
+BEGIN
+Mesh Sponza/Mesh/sponza_295_296.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_296_297
+BEGIN
+Mesh Sponza/Mesh/sponza_296_297.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_297_298
+BEGIN
+Mesh Sponza/Mesh/sponza_297_298.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_298_299
+BEGIN
+Mesh Sponza/Mesh/sponza_298_299.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_299_300
+BEGIN
+Mesh Sponza/Mesh/sponza_299_300.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_300_301
+BEGIN
+Mesh Sponza/Mesh/sponza_300_301.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_301_302
+BEGIN
+Mesh Sponza/Mesh/sponza_301_302.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_302_303
+BEGIN
+Mesh Sponza/Mesh/sponza_302_303.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_303_304
+BEGIN
+Mesh Sponza/Mesh/sponza_303_304.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_304_305
+BEGIN
+Mesh Sponza/Mesh/sponza_304_305.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_305_306
+BEGIN
+Mesh Sponza/Mesh/sponza_305_306.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_306_307
+BEGIN
+Mesh Sponza/Mesh/sponza_306_307.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_307_308
+BEGIN
+Mesh Sponza/Mesh/sponza_307_308.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_308_309
+BEGIN
+Mesh Sponza/Mesh/sponza_308_309.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_309_310
+BEGIN
+Mesh Sponza/Mesh/sponza_309_310.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_310_311
+BEGIN
+Mesh Sponza/Mesh/sponza_310_311.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_311_312
+BEGIN
+Mesh Sponza/Mesh/sponza_311_312.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_312_313
+BEGIN
+Mesh Sponza/Mesh/sponza_312_313.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_313_314
+BEGIN
+Mesh Sponza/Mesh/sponza_313_314.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_314_315
+BEGIN
+Mesh Sponza/Mesh/sponza_314_315.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_315_316
+BEGIN
+Mesh Sponza/Mesh/sponza_315_316.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_316_317
+BEGIN
+Mesh Sponza/Mesh/sponza_316_317.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_317_318
+BEGIN
+Mesh Sponza/Mesh/sponza_317_318.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_318_319
+BEGIN
+Mesh Sponza/Mesh/sponza_318_319.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_319_320
+BEGIN
+Mesh Sponza/Mesh/sponza_319_320.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_320_321
+BEGIN
+Mesh Sponza/Mesh/sponza_320_321.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_321_322
+BEGIN
+Mesh Sponza/Mesh/sponza_321_322.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_322_323
+BEGIN
+Mesh Sponza/Mesh/sponza_322_323.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_323_324
+BEGIN
+Mesh Sponza/Mesh/sponza_323_324.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_324_325
+BEGIN
+Mesh Sponza/Mesh/sponza_324_325.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_325_326
+BEGIN
+Mesh Sponza/Mesh/sponza_325_326.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_326_327
+BEGIN
+Mesh Sponza/Mesh/sponza_326_327.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_327_328
+BEGIN
+Mesh Sponza/Mesh/sponza_327_328.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_328_329
+BEGIN
+Mesh Sponza/Mesh/sponza_328_329.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_329_330
+BEGIN
+Mesh Sponza/Mesh/sponza_329_330.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_330_331
+BEGIN
+Mesh Sponza/Mesh/sponza_330_331.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_331_332
+BEGIN
+Mesh Sponza/Mesh/sponza_331_332.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_332_333
+BEGIN
+Mesh Sponza/Mesh/sponza_332_333.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_333_334
+BEGIN
+Mesh Sponza/Mesh/sponza_333_334.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_334_335
+BEGIN
+Mesh Sponza/Mesh/sponza_334_335.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_335_336
+BEGIN
+Mesh Sponza/Mesh/sponza_335_336.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_336_337
+BEGIN
+Mesh Sponza/Mesh/sponza_336_337.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_337_338
+BEGIN
+Mesh Sponza/Mesh/sponza_337_338.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_338_339
+BEGIN
+Mesh Sponza/Mesh/sponza_338_339.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_339_340
+BEGIN
+Mesh Sponza/Mesh/sponza_339_340.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_340_341
+BEGIN
+Mesh Sponza/Mesh/sponza_340_341.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_341_342
+BEGIN
+Mesh Sponza/Mesh/sponza_341_342.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_342_343
+BEGIN
+Mesh Sponza/Mesh/sponza_342_343.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_343_344
+BEGIN
+Mesh Sponza/Mesh/sponza_343_344.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_344_345
+BEGIN
+Mesh Sponza/Mesh/sponza_344_345.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_345_346
+BEGIN
+Mesh Sponza/Mesh/sponza_345_346.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_346_347
+BEGIN
+Mesh Sponza/Mesh/sponza_346_347.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_347_348
+BEGIN
+Mesh Sponza/Mesh/sponza_347_348.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_348_349
+BEGIN
+Mesh Sponza/Mesh/sponza_348_349.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_349_350
+BEGIN
+Mesh Sponza/Mesh/sponza_349_350.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_350_351
+BEGIN
+Mesh Sponza/Mesh/sponza_350_351.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_351_352
+BEGIN
+Mesh Sponza/Mesh/sponza_351_352.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_352_353
+BEGIN
+Mesh Sponza/Mesh/sponza_352_353.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_353_354
+BEGIN
+Mesh Sponza/Mesh/sponza_353_354.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_354_355
+BEGIN
+Mesh Sponza/Mesh/sponza_354_355.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_355_356
+BEGIN
+Mesh Sponza/Mesh/sponza_355_356.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_356_357
+BEGIN
+Mesh Sponza/Mesh/sponza_356_357.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_357_358
+BEGIN
+Mesh Sponza/Mesh/sponza_357_358.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_358_359
+BEGIN
+Mesh Sponza/Mesh/sponza_358_359.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_359_360
+BEGIN
+Mesh Sponza/Mesh/sponza_359_360.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_360_361
+BEGIN
+Mesh Sponza/Mesh/sponza_360_361.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_361_362
+BEGIN
+Mesh Sponza/Mesh/sponza_361_362.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_362_363
+BEGIN
+Mesh Sponza/Mesh/sponza_362_363.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_363_364
+BEGIN
+Mesh Sponza/Mesh/sponza_363_364.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_364_365
+BEGIN
+Mesh Sponza/Mesh/sponza_364_365.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_365_366
+BEGIN
+Mesh Sponza/Mesh/sponza_365_366.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_366_367
+BEGIN
+Mesh Sponza/Mesh/sponza_366_367.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent vase_round_368
+BEGIN
+Mesh Sponza/Mesh/vase_round_368.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_367_369
+BEGIN
+Mesh Sponza/Mesh/sponza_367_369.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent vase_round_370
+BEGIN
+Mesh Sponza/Mesh/vase_round_370.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_368_371
+BEGIN
+Mesh Sponza/Mesh/sponza_368_371.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent vase_round_372
+BEGIN
+Mesh Sponza/Mesh/vase_round_372.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_369_373
+BEGIN
+Mesh Sponza/Mesh/sponza_369_373.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent vase_round_374
+BEGIN
+Mesh Sponza/Mesh/vase_round_374.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_370_375
+BEGIN
+Mesh Sponza/Mesh/sponza_370_375.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent vase_round_376
+BEGIN
+Mesh Sponza/Mesh/vase_round_376.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_371_377
+BEGIN
+Mesh Sponza/Mesh/sponza_371_377.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent vase_round_378
+BEGIN
+Mesh Sponza/Mesh/vase_round_378.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_372_379
+BEGIN
+Mesh Sponza/Mesh/sponza_372_379.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent vase_round_380
+BEGIN
+Mesh Sponza/Mesh/vase_round_380.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_373_381
+BEGIN
+Mesh Sponza/Mesh/sponza_373_381.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_374_382
+BEGIN
+Mesh Sponza/Mesh/sponza_374_382.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_375_383
+BEGIN
+Mesh Sponza/Mesh/sponza_375_383.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_376_384
+BEGIN
+Mesh Sponza/Mesh/sponza_376_384.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_377_385
+BEGIN
+Mesh Sponza/Mesh/sponza_377_385.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent Material__298_386
+BEGIN
+Mesh Sponza/Mesh/Material__298_386.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_378_387
+BEGIN
+Mesh Sponza/Mesh/sponza_378_387.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent Material__298_388
+BEGIN
+Mesh Sponza/Mesh/Material__298_388.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_379_389
+BEGIN
+Mesh Sponza/Mesh/sponza_379_389.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_380_390
+BEGIN
+Mesh Sponza/Mesh/sponza_380_390.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_381_391
+BEGIN
+Mesh Sponza/Mesh/sponza_381_391.meshz
+S 0.01 0.01 0.01
+END
+RenderComponent sponza_382_392
+BEGIN
+Mesh Sponza/Mesh/sponza_382_392.meshz
+S 0.01 0.01 0.01
+END
