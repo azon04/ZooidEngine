@@ -40,7 +40,8 @@ namespace ZETools
 		DIFFUSE_TEXTURE,
 		SPECULAR_TEXTURE,
 		NORMAL_TEXTURE,
-		BUMP_TEXTURE
+		BUMP_TEXTURE,
+		MASK_TEXTURE
 	};
 
 	struct Texture
@@ -51,6 +52,7 @@ namespace ZETools
 
 	struct Material
 	{
+		std::string name;
 		float Ka[3];
 		float Kd[3];
 		float Ks[3];
@@ -118,8 +120,15 @@ namespace ZETools
 		{
 			bool bSaveTangentSpace = true;
 			bool bSaveBitangent = false;
+			float meshScale = 1.0f;
 		} mesh;
 
+		struct SceneSettings
+		{
+			float sceneScale = 1.0f;
+		} scene;
+
+		bool bMakeScene = false;
 		bool bParseMesh = true;
 		bool bParseAnimation = true;
 		bool bParseSkeleton = true;

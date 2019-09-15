@@ -27,6 +27,8 @@ namespace ZETools
 			return false;
 		}
 
+		std::replace(filePath.begin(), filePath.end(), Dir::platformSeparator(), Dir::separator());
+
 		m_assetDir = filePath.substr(0, filePath.find_last_of(Dir::separator()));
 		m_fileName = filePath.substr(filePath.find_last_of(Dir::separator()) + 1);
 		
@@ -62,6 +64,7 @@ namespace ZETools
 		std::string meshPath = Dir::CombinePath(packagePath, "Mesh");
 		std::string skelPath = Dir::CombinePath(packagePath, "Skeleton");
 		std::string animPath = Dir::CombinePath(packagePath, "Animation");
+		std::string scenePath = Dir::CombinePath(packagePath, "Scene");
 
 		Dir::CreateDirectory(getFullPath(outputDir, vertexBufferPath));
 		Dir::CreateDirectory(getFullPath(outputDir, texturePath));
@@ -69,6 +72,7 @@ namespace ZETools
 		Dir::CreateDirectory(getFullPath(outputDir, meshPath));
 		Dir::CreateDirectory(getFullPath(outputDir, skelPath));
 		Dir::CreateDirectory(getFullPath(outputDir, animPath));
+		Dir::CreateDirectory(getFullPath(outputDir, scenePath));
 
 		std::cout << "Saving to [" << packagePath << "]... " << std::endl;
 
@@ -103,9 +107,9 @@ namespace ZETools
 			{
 				Mesh& mesh = m_meshes[i];
 
-				std::string meshFileName = mesh.name.length() > 0 ? mesh.name : m_fileName + "_" + std::to_string(i);
+				std::string meshFileName = (mesh.name.length() > 0 ? mesh.name : m_fileName) + "_" + std::to_string(i);
 				std::string vertexFilePath = Dir::CombinePath(vertexBufferPath, meshFileName + ".vbuff");
-				std::string matFilePath = Dir::CombinePath(materialPath, meshFileName + ".matz");
+				std::string matFilePath = Dir::CombinePath(materialPath, mesh.material.name + ".matz");
 				std::string meshFilePath = Dir::CombinePath(meshPath, meshFileName + ".meshz");
 
 				// Export vbuff and indices buffer to file
@@ -275,23 +279,36 @@ namespace ZETools
 							case BUMP_TEXTURE:
 								stream << "bump ";
 								break;
+							case MASK_TEXTURE:
+								stream << "mask ";
 							default:
 								stream << "map ";
 								break;
 							}
 
-							stream << Dir::CombinePath(texturePath, texture.path) << std::endl;
+							std::string textureOutputPath = Dir::CombinePath(texturePath, texture.path);
+							stream << textureOutputPath << std::endl;
 
 							// Copy Files
 							std::ifstream source(Dir::CombinePath(m_assetDir, texture.path), std::ofstream::binary);
 							if (source.is_open())
 							{
-								std::ofstream dest(getFullPath(outputDir, Dir::CombinePath(texturePath, texture.path)), std::ofstream::binary);
+								if (!Dir::IsExist(getFullPath(outputDir, textureOutputPath)))
+								{
+									// Create directory if needed
+									int separatorIndex = textureOutputPath.find_last_of(Dir::separator());
+									if (separatorIndex != std::string::npos)
+									{
+										Dir::CreateDirectory(getFullPath(outputDir, textureOutputPath.substr(0, separatorIndex)));
+									}
 
-								dest << source.rdbuf();
+									std::ofstream dest(getFullPath(outputDir, textureOutputPath), std::ofstream::binary);
 
+									dest << source.rdbuf();
+
+									dest.close();
+								}
 								source.close();
-								dest.close();
 							}
 							else
 							{
@@ -444,6 +461,38 @@ namespace ZETools
 				stream.close();
 			}
 		}
+
+		// Save To Scene
+		if (m_settings.bMakeScene && m_meshes.size() > 0)
+		{
+			std::string sceneFilePath = Dir::CombinePath(scenePath, m_fileName + ".scz");
+			std::cout << "Creating Scene file [" << scenePath << "]" << std::endl;
+
+			std::ofstream stream;
+			stream.open(getFullPath(outputDir, sceneFilePath), std::ofstream::out);
+			if (stream.is_open())
+			{
+				// Set some file definition
+				stream << "SceneName " << m_fileName << "\n";
+				stream << "FileVersion 1.0\n";
+				stream << "ComponentCount " << m_meshes.size() << "\n";
+				for (unsigned int i = 0; i < m_meshes.size(); i++)
+				{
+					Mesh& mesh = m_meshes[i];
+
+					std::string meshFileName = (mesh.name.length() > 0 ? mesh.name : m_fileName) + "_" + std::to_string(i);
+					stream << "RenderComponent " << meshFileName << "\n";
+					stream << "BEGIN\n";
+					stream << "Mesh " << packagePath << "/Mesh/" << meshFileName << ".meshz\n";
+					if (m_settings.scene.sceneScale != 1.0f)
+					{
+						stream << "S " << m_settings.scene.sceneScale << " " << m_settings.scene.sceneScale << " " << m_settings.scene.sceneScale << "\n";
+					}
+					stream << "END\n";
+				}
+				stream.close();
+			}
+		}
 	}
 
 	void ModelParser::saveAnimationKey(AnimationKey& animKey, std::ofstream& stream)
@@ -556,9 +605,9 @@ namespace ZETools
 			for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 			{
 				Vertex pos;
-				pos.Position[0] = mesh->mVertices[i].x;
-				pos.Position[1] = mesh->mVertices[i].y;
-				pos.Position[2] = mesh->mVertices[i].z;
+				pos.Position[0] = mesh->mVertices[i].x * m_settings.mesh.meshScale;
+				pos.Position[1] = mesh->mVertices[i].y * m_settings.mesh.meshScale;
+				pos.Position[2] = mesh->mVertices[i].z * m_settings.mesh.meshScale;
 				
 				if (hasNormal)
 				{
@@ -625,14 +674,17 @@ namespace ZETools
 			{
 				Material outMat;
 				aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-
+				
+				aiString MatName;
 				aiColor3D MatKa;
 				aiColor3D MatKd;
 				aiColor3D MatKs;
 				ai_real shininess;
+
 				material->Get(AI_MATKEY_COLOR_AMBIENT, MatKa);
 				material->Get(AI_MATKEY_COLOR_DIFFUSE, MatKd);
 				material->Get(AI_MATKEY_COLOR_SPECULAR, MatKs);
+				material->Get(AI_MATKEY_NAME, MatName);
 
 				material->Get(AI_MATKEY_SHININESS, shininess);
 
@@ -649,6 +701,7 @@ namespace ZETools
 				outMat.Ks[2] = MatKs.b;
 
 				outMat.shininess = shininess;
+				outMat.name = MatName.C_Str();
 
 				for (aiTextureType type = aiTextureType_NONE; type < aiTextureType_UNKNOWN; )
 				{
@@ -868,6 +921,10 @@ namespace ZETools
 			Texture texture;
 			texture.path = str.C_Str();
 			texture.type = getTextureType(type);
+
+			// process path separator
+			std::replace(texture.path.begin(), texture.path.end(), Dir::platformSeparator(), Dir::separator());
+
 			res.push_back(texture);
 		}
 		return res;
@@ -891,14 +948,12 @@ namespace ZETools
 			break;
 		case aiTextureType_HEIGHT:
 			return BUMP_TEXTURE;
-			break;
 		case aiTextureType_NORMALS:
 			return NORMAL_TEXTURE;
-			break;
 		case aiTextureType_SHININESS:
 			break;
 		case aiTextureType_OPACITY:
-			break;
+			return MASK_TEXTURE;
 		case aiTextureType_DISPLACEMENT:
 			break;
 		case aiTextureType_LIGHTMAP:

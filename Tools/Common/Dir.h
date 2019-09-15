@@ -13,10 +13,15 @@ namespace ZETools
 
 		inline char separator()
 		{
+			return '/';
+		}
+
+		inline char platformSeparator()
+		{
 #if defined(_WIN32) || defined(_WIN64)
 			return '\\';
 #else
-			return '/'
+			return '/';
 #endif
 		}
 

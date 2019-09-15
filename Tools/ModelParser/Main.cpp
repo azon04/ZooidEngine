@@ -24,12 +24,15 @@ int main(int argc, char* argv[])
 		cout << "-p | --package path \t package name, package that assets will be saved to. It will outDir/packageName" << endl;
 		cout << "--omitAnimChannel [S|Q|T] \t omit animation channel, S: Scale, Q: Quaternion, T: Translation. e.g omit translation and Scale would use ST " << endl;
 		cout << "--recalculateAnimQuat \t this option will make Quaternion in animation data saved only 3 values (the fourth will be calculated on runtime)  " << endl;
+		cout << "--meshScale scale \t Scale all the meshes inside this model by the scale factor." << endl;
 		cout << "--noMesh" << endl;
 		cout << "--noAnimation" << endl;
 		cout << "--skeletonPath path \t path is relative path of skeleton from out directory" << endl;
 		cout << "--reference path \t path is FBX or raw assets path to use as reference (for making additive animation)" << endl;
 		cout << "--omitTangentSpace \t option to not save tangent space " << endl;
 		cout << "--withBitangent \t option to also save bitangent of the mesh" << endl;
+		cout << "--saveScene \t option to save the mesh file into scene file too (work best if you have multiple meshes in mesh file)" << endl;
+		cout << "--sceneCale scale \t This option will scale the mesh in the scene definition, not scale the actual model" << endl;
 		return 0;
 	}
 
@@ -77,6 +80,11 @@ int main(int argc, char* argv[])
 		{
 			settings.animation.bRecalculateQuatRuntime = true;
 		}
+		else if (strcmp(argv[index], "--meshScale") == 0)
+		{
+			char* scaleStr = argv[++index];
+			settings.mesh.meshScale = atof(scaleStr);
+		}
 		else if (strcmp(argv[index], "--noMesh") == 0)
 		{
 			settings.bParseMesh = false;
@@ -99,9 +107,18 @@ int main(int argc, char* argv[])
 		{
 			settings.mesh.bSaveTangentSpace = false;
 		}
-		else if (strcmp(argv[index], "withBitangent") == 0)
+		else if (strcmp(argv[index], "--withBitangent") == 0)
 		{
 			settings.mesh.bSaveBitangent = true;
+		}
+		else if (strcmp(argv[index], "--saveScene") == 0)
+		{
+			settings.bMakeScene = true;
+		}
+		else if (strcmp(argv[index], "--sceneScale") == 0)
+		{
+			char* scaleStr = argv[++index];
+			settings.scene.sceneScale = atof(scaleStr);
 		}
 		
 		index++;
