@@ -262,6 +262,11 @@ namespace ZETools
 						stream << "Ks " << mat.Ks[0] << " " << mat.Ks[1] << " " << mat.Ks[2] << std::endl;
 						stream << "shininess " << mat.shininess << std::endl;
 
+						if (mat.bDoubleSided)
+						{
+							stream << "double_sided" << std::endl;
+						}
+
 						for (unsigned int j = 0; j < mat.textures.size(); j++)
 						{
 							Texture& texture = mat.textures[j];
@@ -281,6 +286,7 @@ namespace ZETools
 								break;
 							case MASK_TEXTURE:
 								stream << "mask ";
+								break;
 							default:
 								stream << "map ";
 								break;
@@ -680,12 +686,13 @@ namespace ZETools
 				aiColor3D MatKd;
 				aiColor3D MatKs;
 				ai_real shininess;
+				int doubleSided = 0;
 
 				material->Get(AI_MATKEY_COLOR_AMBIENT, MatKa);
 				material->Get(AI_MATKEY_COLOR_DIFFUSE, MatKd);
 				material->Get(AI_MATKEY_COLOR_SPECULAR, MatKs);
 				material->Get(AI_MATKEY_NAME, MatName);
-
+				AI_SUCCESS == material->Get(AI_MATKEY_TWOSIDED, doubleSided);
 				material->Get(AI_MATKEY_SHININESS, shininess);
 
 				outMat.Ka[0] = MatKa.r;
@@ -699,6 +706,8 @@ namespace ZETools
 				outMat.Ks[0] = MatKs.r;
 				outMat.Ks[1] = MatKs.g;
 				outMat.Ks[2] = MatKs.b;
+
+				outMat.bDoubleSided = doubleSided > 0;
 
 				outMat.shininess = shininess;
 				outMat.name = MatName.C_Str();

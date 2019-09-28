@@ -67,14 +67,14 @@ namespace ZE
 			shader->bindConstantBuffer("draw_data", drawBufferData);
 
 			// Set Face Culling for double sided
-			if (currentMesh.m_isDoubleSided && !bPrevDoubleSided)
+			if ((currentMesh.m_isDoubleSided || (currentMesh.m_material && currentMesh.m_material->IsDoubleSided())) && !bPrevDoubleSided)
 			{
 				gGameContext->getRenderer()->SetRenderRasterizerState(TRenderRasterizerState<EFaceFrontOrder::CCW,
 					ECullFace::CULL_NONE,
 					ERenderFillMode::MODE_FILL>::GetGPUState());
 				bPrevDoubleSided = true;
 			}
-			else if(!currentMesh.m_isDoubleSided && bPrevDoubleSided)
+			else if(!(currentMesh.m_isDoubleSided || (currentMesh.m_material && currentMesh.m_material->IsDoubleSided())) && bPrevDoubleSided)
 			{
 				gGameContext->getRenderer()->SetRenderRasterizerState(TRenderRasterizerState<EFaceFrontOrder::CCW,
 					ECullFace::BACK,

@@ -57,6 +57,7 @@ namespace ZETools
 		float Kd[3];
 		float Ks[3];
 		float shininess;
+		bool bDoubleSided;
 		std::vector<Texture> textures;
 	};
 

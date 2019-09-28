@@ -2,7 +2,8 @@ Ka 0.588 0.588 0.588
 Kd 0.588 0.588 0.588
 Ks 0 0 0
 shininess 10
+double_sided
 diffuse Sponza/Texture/textures/sponza_thorn_diff.png
 map Sponza/Texture/textures/sponza_thorn_diff.png
 bump Sponza/Texture/textures/sponza_thorn_bump.png
-mask map Sponza/Texture/textures/sponza_thorn_mask.png
+mask Sponza/Texture/textures/sponza_thorn_mask.png

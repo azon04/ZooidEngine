@@ -15,10 +15,12 @@ struct Material
 	sampler2D diffuseMap;
 	sampler2D specularMap;
 	sampler2D normalMap;
+	sampler2D maskMap;
 
 	float diffuseMapBound;
 	float specularMapBound;
 	float normalMapBound;
+	bool maskMapBound;
 
 	float shininess;
 
@@ -36,6 +38,15 @@ in VS_OUT
 } fs_in;
 
 uniform Material material;
+
+float getMask()
+{
+	if(material.maskMapBound)
+	{
+		return texture(material.maskMap, fs_in.TexCoord).r;
+	}
+	return 1.0;
+}
 
 vec3 calculateNormal()
 {
@@ -67,6 +78,10 @@ vec3 calculateSpec()
 
 void main()
 {
+	if(getMask() < 0.1)
+	{
+		discard;
+	}
     gPosition = fs_in.FragPos;
     gNormal = calculateNormal();
     gAlbedo = calculateAlbedo();
