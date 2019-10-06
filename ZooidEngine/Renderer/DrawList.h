@@ -21,10 +21,15 @@ namespace ZE
 		IGPUTexture* staticShadowTexture;
 		IGPUTexture* dynamicShadowTexture;
 		IGPUFrameBuffer* dynamicShadowFrameBuffer;
-		IShaderChain* normalShaderChain;
-		IShaderChain* skinnedShaderChain;
+
 		Matrix4x4 view;
 		Matrix4x4 projection;
+
+		Frustum lightFrustum;
+
+		// Mesh list to render at this shadow depth generation
+		MeshRenderGatherer meshRenderGatherer;
+		SkinMeshRenderGatherer skinMeshRenderGatherer;
 	};
 
 	class DrawList 
@@ -72,6 +77,7 @@ namespace ZE
 		// View Fustrum
 		ViewFrustum m_viewFustrum;
 		Matrix4x4 m_projectionMat;
+		Matrix4x4 m_viewMat;
 
 		// Objects Bounding Volume
 		AxisAlignedBox m_objectsBounding;

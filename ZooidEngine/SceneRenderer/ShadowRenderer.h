@@ -19,6 +19,8 @@ namespace ZE
 	{
 	public:
 
+		ShadowDepthRenderer();
+
 		virtual void setupShadowMapData(LightShadowMapData* shadowMapData);
 		virtual void reset();
 		

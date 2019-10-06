@@ -35,6 +35,8 @@ namespace ZE
 		setupMesh();
 
 		addEventDelegate(Event_GATHER_RENDER, &RenderComponent::handleGatherRender);
+		addEventDelegate(Event_GATHER_BOUND, &RenderComponent::handleGatherRenderBound);
+		addEventDelegate(Event_GATHER_SHADOW_LIST, &RenderComponent::handleGatherShadowRender);
 	}
 
 	void RenderComponent::handleGatherRender(Event* pEvent)
@@ -42,10 +44,9 @@ namespace ZE
 		if (m_mesh)
 		{
 			DrawList* drawList = m_gameContext->getDrawList();
-			Float32 fustrumOffset = m_bCastShadow ? 1.0f : 0.0f;
 
 			Sphere boundingSphere = m_mesh->getBoundingSphere(m_worldTransform);
-			EFrustumTestResult testResult = m_gameContext->getDrawList()->m_viewFustrum.testSphere(boundingSphere, fustrumOffset);
+			EFrustumTestResult testResult = m_gameContext->getDrawList()->m_viewFustrum.testSphere(boundingSphere);
 			if (testResult == FRUSTUM_OUTSIDE)
 			{
 				return;
@@ -53,7 +54,7 @@ namespace ZE
 			
 			if (testResult == FRUSTUM_INTERSECT)
 			{
-				testResult = m_gameContext->getDrawList()->m_viewFustrum.testOB(m_mesh->getOBBoundingBox(m_worldTransform), fustrumOffset);
+				testResult = m_gameContext->getDrawList()->m_viewFustrum.testOB(m_mesh->getOBBoundingBox(m_worldTransform));
 			}
 
 			if (testResult == FRUSTUM_OUTSIDE)
@@ -71,41 +72,6 @@ namespace ZE
 				else
 				{
 					DebugRenderer::DrawDebugBox(m_mesh->getLocalBoxExtend(), m_mesh->getLocalBoxCenter(), m_worldTransform);
-				}
-			}
-
-			// Calculate total Bounding Box
-			{
-				AxisAlignedBox objectBounding = m_mesh->getAABBoundingBox(m_worldTransform);
-
-				if (drawList->m_objectsBounding.m_min.m_x > objectBounding.m_min.m_x)
-				{
-					drawList->m_objectsBounding.m_min.m_x = objectBounding.m_min.m_x;
-				}
-
-				if (drawList->m_objectsBounding.m_min.m_y > objectBounding.m_min.m_y)
-				{
-					drawList->m_objectsBounding.m_min.m_y = objectBounding.m_min.m_y;
-				}
-
-				if (drawList->m_objectsBounding.m_min.m_z > objectBounding.m_min.m_z)
-				{
-					drawList->m_objectsBounding.m_min.m_z = objectBounding.m_min.m_z;
-				}
-
-				if (drawList->m_objectsBounding.m_max.m_x < objectBounding.m_max.m_x)
-				{
-					drawList->m_objectsBounding.m_max.m_x = objectBounding.m_max.m_x;
-				}
-
-				if (drawList->m_objectsBounding.m_max.m_y < objectBounding.m_max.m_y)
-				{
-					drawList->m_objectsBounding.m_max.m_y = objectBounding.m_max.m_y;
-				}
-
-				if (drawList->m_objectsBounding.m_max.m_z < objectBounding.m_max.m_z)
-				{
-					drawList->m_objectsBounding.m_max.m_z = objectBounding.m_max.m_z;
 				}
 			}
 			
@@ -167,6 +133,91 @@ namespace ZE
 
 				EnableAndSetStencilFunc(highlightAction, NOTEQUAL, 1, 0xFF, 0x00);
 			}*/
+		}
+	}
+
+	void RenderComponent::handleGatherRenderBound(Event* pEvent)
+	{
+		// Calculate total Bounding Box
+		if(m_mesh)
+		{
+			DrawList* drawList = m_gameContext->getDrawList();
+
+			AxisAlignedBox objectBounding = m_mesh->getAABBoundingBox(m_worldTransform);
+
+			if (drawList->m_objectsBounding.m_min.m_x > objectBounding.m_min.m_x)
+			{
+				drawList->m_objectsBounding.m_min.m_x = objectBounding.m_min.m_x;
+			}
+
+			if (drawList->m_objectsBounding.m_min.m_y > objectBounding.m_min.m_y)
+			{
+				drawList->m_objectsBounding.m_min.m_y = objectBounding.m_min.m_y;
+			}
+
+			if (drawList->m_objectsBounding.m_min.m_z > objectBounding.m_min.m_z)
+			{
+				drawList->m_objectsBounding.m_min.m_z = objectBounding.m_min.m_z;
+			}
+
+			if (drawList->m_objectsBounding.m_max.m_x < objectBounding.m_max.m_x)
+			{
+				drawList->m_objectsBounding.m_max.m_x = objectBounding.m_max.m_x;
+			}
+
+			if (drawList->m_objectsBounding.m_max.m_y < objectBounding.m_max.m_y)
+			{
+				drawList->m_objectsBounding.m_max.m_y = objectBounding.m_max.m_y;
+			}
+
+			if (drawList->m_objectsBounding.m_max.m_z < objectBounding.m_max.m_z)
+			{
+				drawList->m_objectsBounding.m_max.m_z = objectBounding.m_max.m_z;
+			}
+		}
+	}
+
+	void RenderComponent::handleGatherShadowRender(Event* pEvent)
+	{
+		if (m_mesh && m_bCastShadow)
+		{
+			Event_GATHER_SHADOW_LIST* pRealEvent = static_cast<Event_GATHER_SHADOW_LIST*>(pEvent);
+
+			DrawList* drawList = m_gameContext->getDrawList();
+
+			LightShadowMapData& shadowMapData = drawList->m_lightShadowMapData[pRealEvent->m_shadowDataIndex];
+
+			Sphere boundingSphere = m_mesh->getBoundingSphere(m_worldTransform);
+			EFrustumTestResult testResult = shadowMapData.lightFrustum.testSphere(boundingSphere);
+			if (testResult == FRUSTUM_OUTSIDE)
+			{
+				return;
+			}
+
+			if (m_mesh->hasSkeleton())
+			{
+				SkinMeshRenderInfo* skinMeshRenderInfo = shadowMapData.skinMeshRenderGatherer.nextRenderInfo();
+				SceneRenderFactory::InitializeRenderInfoForMesh(skinMeshRenderInfo, m_mesh);
+				if (m_material)
+				{
+					skinMeshRenderInfo->m_material = m_material;
+				}
+				skinMeshRenderInfo->m_worldTransform = m_worldTransform;
+
+				SkeletonState* pSkeletonState = m_hSkeletonState.getObject<SkeletonState>();
+				pSkeletonState->updateBuffer();
+				skinMeshRenderInfo->m_skinJointData = pSkeletonState->getGPUBufferData();
+			}
+			else
+			{
+				MeshRenderInfo* meshRenderInfo = shadowMapData.meshRenderGatherer.nextRenderInfo();
+				SceneRenderFactory::InitializeRenderInfoForMesh(meshRenderInfo, m_mesh);
+				if (m_material)
+				{
+					meshRenderInfo->m_material = m_material;
+				}
+				meshRenderInfo->m_worldTransform = m_worldTransform;
+			}
 		}
 	}
 

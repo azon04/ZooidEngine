@@ -55,6 +55,7 @@ namespace ZE {
 			Event_MOUSE_DRAG::RegClass();
 		Event_GATHER_LIGHT::RegClass();
 		Event_GATHER_RENDER::RegClass();
+		Event_GATHER_BOUND::RegClass();
 		Event_RESOURCE_LOADED::RegClass();
 
 		Event_Physics_BASE::RegClass();

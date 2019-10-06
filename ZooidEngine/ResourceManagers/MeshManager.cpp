@@ -168,8 +168,8 @@ namespace ZE
 			dataHandle = Handle("Data", sizeof(MeshSkinData) * numVertex);
 			MeshSkinData* pData = new(dataHandle) MeshSkinData[numVertex];
 
-			Vector3 minVertex(9999.9f);
-			Vector3 maxVertex(-9999.9f);
+			Vector3 minVertex(999999.9f);
+			Vector3 maxVertex(-999999.9f);
 			Vector3 centerVertex(0.0f);
 
 			for (int i = 0; i < numVertex; i++)
@@ -224,7 +224,7 @@ namespace ZE
 				centerVertex = centerVertex + Vector3(pData[i].Position);
 			}
 
-			centerVertex = centerVertex / (Float32)numVertex;
+			centerVertex = (minVertex + maxVertex) * 0.5f;
 			pMesh->m_boxMin = minVertex;
 			pMesh->m_boxMax = maxVertex;
 			pMesh->m_centerOffset = centerVertex;
@@ -296,11 +296,9 @@ namespace ZE
 				{
 					maxVertex.m_z = pData[i].Position[2];
 				}
-
-				centerVertex = centerVertex + Vector3(pData[i].Position);
 			}
 
-			centerVertex = centerVertex / (Float32)numVertex;
+			centerVertex = (minVertex + maxVertex) * 0.5f;
 			pMesh->m_boxMin = minVertex;
 			pMesh->m_boxMax = maxVertex;
 			pMesh->m_centerOffset = centerVertex;
@@ -335,8 +333,8 @@ namespace ZE
 			dataHandle = Handle("Data", sizeof(Float32) * totalSize);
 			Float32* pData = new(dataHandle) Float32[totalSize];
 
-			Vector3 minVertex(9999.9f);
-			Vector3 maxVertex(-9999.9f);
+			Vector3 minVertex(999999.9f);
+			Vector3 maxVertex(-999999.9f);
 			Vector3 centerVertex(0.0f);
 
 			for (int i = 0; i < totalSize; ++i)
@@ -345,7 +343,6 @@ namespace ZE
 
 				if (i % dataPerVertex == 0)
 				{
-					centerVertex.m_x += pData[i];
 					if (minVertex.m_x > pData[i])
 					{
 						minVertex.m_x = pData[i];
@@ -358,7 +355,6 @@ namespace ZE
 				}
 				else if (i % dataPerVertex == 1)
 				{
-					centerVertex.m_y += pData[i];
 					if (minVertex.m_y > pData[i])
 					{
 						minVertex.m_y = pData[i];
@@ -371,7 +367,6 @@ namespace ZE
 				}
 				else if (i % dataPerVertex == 2)
 				{
-					centerVertex.m_z += pData[i];
 					if (minVertex.m_z > pData[i])
 					{
 						minVertex.m_z = pData[i];
@@ -384,7 +379,7 @@ namespace ZE
 				}
 			}
 
-			centerVertex = centerVertex / (Float32)numVertex;
+			centerVertex = (minVertex + maxVertex) * 0.5f;
 			pMesh->m_boxMin = minVertex;
 			pMesh->m_boxMax = maxVertex;
 			pMesh->m_centerOffset = centerVertex;

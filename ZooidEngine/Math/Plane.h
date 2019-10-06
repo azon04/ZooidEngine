@@ -49,6 +49,15 @@ public:
 		return m_normal.dotProduct(point) - m_distance;
 	}
 
+	// Normalize the normal and calculate the new distance based 
+	void normalize()
+	{
+		float mag = m_normal.length();
+
+		m_normal = m_normal / mag;
+		m_distance /= mag;
+	}
+
 public:
 	Vector3 m_normal;
 	ZE::Float32 m_distance; // Distance plane from origin

@@ -304,8 +304,82 @@ namespace ZE
 		//DebugRenderer::DrawTextWorld("Zooid Engine", Matrix4x4());
 		//DebugRenderer::DrawTextScreen("Zooid Engine", Vector2(10, 10), Vector3(1.0f), 0.5f);
 
+		// Debug Options Menu
 		{
-			static ZE::UIRect panelRect( UIVector2{ 10,10 }, UIVector2{ 250, 100 } );
+			static ZE::UIRect panelRect(UIVector2{ gGameContext->getRenderer()->GetWidth() - 300,10 }, UIVector2{ 250, 100 });
+
+			ZE::UIVector2 contentPos;
+
+			ZE::UI::DoDragablePanel(10, panelRect, "Debug Options", 10, contentPos);
+
+			gDebugOptions.DebugDrawOptions.bDrawCullShapes = ZE::UI::DoCheckBox(5, contentPos, "DebugDraw:CullShape", gDebugOptions.DebugDrawOptions.bDrawCullShapes);
+			contentPos.y += 25.0f;
+			gDebugOptions.DebugDrawOptions.bDrawPhysicsShapes = ZE::UI::DoCheckBox(6, contentPos, "DebugDraw:PhysicsShape", gDebugOptions.DebugDrawOptions.bDrawPhysicsShapes);
+		}
+
+		DrawList* drawList = _gameContext->getDrawList();
+
+		// Set up data for this frame
+		{
+			// Set ViewFustrum before gathering the render target
+			CameraComponent* currentCamera = CameraManager::GetInstance()->getCurrentCamera();
+
+			// Compute View Matrix and View Frustum
+			drawList->m_viewFustrum.setCameraVars(currentCamera->getWorldPosition(), currentCamera->getForwardVector() * -1.0f, currentCamera->getUpVector(), currentCamera->getRightVector());
+			currentCamera->getViewMatrix(drawList->m_viewMat);
+			drawList->m_viewFustrum.constructFromMVPMatrix(drawList->m_viewMat * drawList->m_projectionMat);
+
+			drawList->m_objectsBounding.m_max = Vector3(-99999.9f);
+			drawList->m_objectsBounding.m_min = Vector3(99999.9f);
+
+			_gameContext->getDrawList()->m_lightData.NumLight = 0;
+			_gameContext->getDrawList()->m_lightData.NumCascade = 0;
+		}
+
+		// Handle Event_GATHER_BOUND
+		{
+			Handle handleGatherBound("EventGatherBound", sizeof(Event_GATHER_BOUND));
+			Event_GATHER_BOUND* pEvent = new(handleGatherBound) Event_GATHER_BOUND;
+			_gameContext->getEventDispatcher()->handleEvent(pEvent);
+			handleGatherBound.release();
+		}
+
+		// Handle Event_GATHER_RENDER
+		{
+			Handle handleGatherRender("EventGatherRender", sizeof(Event_GATHER_RENDER));
+			Event_GATHER_RENDER* pEvent = new(handleGatherRender) Event_GATHER_RENDER();
+			_gameContext->getEventDispatcher()->handleEvent(pEvent);
+			handleGatherRender.release();
+		}
+
+		// Handle Event_GATHER_LIGHT
+		{
+			Handle handleGatherLight("EventGatherLight", sizeof(ZE::Event_GATHER_LIGHT));
+			Event_GATHER_LIGHT* eventGatherLight = new(handleGatherLight) Event_GATHER_LIGHT();
+			_gameContext->getEventDispatcher()->handleEvent(eventGatherLight);
+			handleGatherLight.release();
+		}
+
+		// Handle Event_GATHER_SHADOW_LIST
+		{
+			Handle handleGatherShadowList("EventGatherShadowList", sizeof(Event_GATHER_SHADOW_LIST));
+			Event_GATHER_SHADOW_LIST* eventGatherShadow = new(handleGatherShadowList) Event_GATHER_SHADOW_LIST;
+			for (UInt32 i = 0; i < drawList->m_lightShadowSize; i++)
+			{
+				LightShadowMapData& shadowMapData = drawList->m_lightShadowMapData[i];
+				shadowMapData.meshRenderGatherer.reset();
+				shadowMapData.skinMeshRenderGatherer.reset();
+				if (shadowMapData.dynamicShadowFrameBuffer)
+				{
+					eventGatherShadow->m_shadowDataIndex = i;
+					_gameContext->getEventDispatcher()->handleEvent(eventGatherShadow);
+				}
+			}
+			handleGatherShadowList.release();
+		}
+
+		{
+			static ZE::UIRect panelRect(UIVector2{ 10,10 }, UIVector2{ 250, 150 });
 
 			ZE::UIVector2 contentPos;
 
@@ -322,7 +396,7 @@ namespace ZE
 
 			StringFunc::PrintToString(buffer, 256, "Global Time: %.2fms", g_gameThreadTime);
 			ZE::UI::DrawTextInPos(1, contentPos, buffer, UIVector4(1.0f));
-			
+
 			contentPos.y += UI::DefaultFont->calculateTextHeight(1.0f) + 2.0f;
 			StringFunc::PrintToString(buffer, 256, "GPU Draw Time: %.2fms", g_gpuDrawTime);
 			ZE::UI::DrawTextInPos(2, contentPos, buffer, UIVector4(1.0f));
@@ -330,45 +404,11 @@ namespace ZE
 			contentPos.y += UI::DefaultFont->calculateTextHeight(1.0f) + 2.0f;
 			StringFunc::PrintToString(buffer, 256, "FPS: %.2f", 1000.0f / g_gameThreadTime);
 			ZE::UI::DrawTextInPos(3, contentPos, buffer, UIVector4(1.0f));
-		}
 
-		// Debug Options Menu
-		{
-			static ZE::UIRect panelRect(UIVector2{ gGameContext->getRenderer()->GetWidth() - 300,10 }, UIVector2{ 250, 100 });
-
-			ZE::UIVector2 contentPos;
-
-			ZE::UI::DoDragablePanel(4, panelRect, "Debug Options", 10, contentPos);
-
-			gDebugOptions.DebugDrawOptions.bDrawCullShapes = ZE::UI::DoCheckBox(5, contentPos, "DebugDraw:CullShape", gDebugOptions.DebugDrawOptions.bDrawCullShapes);
-			contentPos.y += 25.0f;
-			gDebugOptions.DebugDrawOptions.bDrawPhysicsShapes = ZE::UI::DoCheckBox(6, contentPos, "DebugDraw:PhysicsShape", gDebugOptions.DebugDrawOptions.bDrawPhysicsShapes);
-		}
-
-		// Handle Event_GATHER_RENDER
-		{
-			// Set ViewFustrum before gathering the render target
-			CameraComponent* currentCamera = CameraManager::GetInstance()->getCurrentCamera();
-			
+			contentPos.y += UI::DefaultFont->calculateTextHeight(1.0f) + 2.0f;
 			DrawList* drawList = _gameContext->getDrawList();
-			drawList->m_viewFustrum.setCameraVars(currentCamera->getWorldPosition(), currentCamera->getForwardVector() * -1.0f, currentCamera->getUpVector(), currentCamera->getRightVector());
-			drawList->m_objectsBounding.m_max = Vector3(-99999.9f);
-			drawList->m_objectsBounding.m_min = Vector3(99999.9f);
-
-			Handle handleGatherRender("EventGatherRender", sizeof(Event_GATHER_RENDER));
-			Event_GATHER_RENDER* pEvent = new(handleGatherRender) Event_GATHER_RENDER();
-			_gameContext->getEventDispatcher()->handleEvent(pEvent);
-			handleGatherRender.release();
-		}
-
-		// Handle Event_GATHER_LIGHT
-		_gameContext->getDrawList()->m_lightData.NumLight = 0;
-		_gameContext->getDrawList()->m_lightData.NumCascade = 0;
-		{
-			ZE::Handle handleGatherLight("EventGatherLight", sizeof(ZE::Event_GATHER_LIGHT));
-			ZE::Event_GATHER_LIGHT* eventGatherLight = new(handleGatherLight) Event_GATHER_LIGHT();
-			_gameContext->getEventDispatcher()->handleEvent(eventGatherLight);
-			handleGatherLight.release();
+			StringFunc::PrintToString(buffer, 256, "Num Meshes To Draw: %d", drawList->m_meshRenderGatherer.getRenderCount() + drawList->m_skinMeshRenderGatherer.getRenderCount());
+			ZE::UI::DrawTextInPos(4, contentPos, buffer, UIVector4(1.0f));
 		}
 
 		// UI End Frame

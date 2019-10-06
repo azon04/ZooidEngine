@@ -2,7 +2,7 @@
 #define __ZE_MEMORY_MANAGER_H__
 
 #define NPOOL 10
-#define ADDITIONAL_MAX_POOL 20
+#define ADDITIONAL_MAX_POOL 30
 #define ALLIGNMENT 16
 
 #include "Platform/Thread.h"

@@ -78,15 +78,6 @@ namespace ZE
 		m_frustumPoints[FP_FTR] = m_farCenter + 0.5f * hFar * up + 0.5f * wFar * right;
 		m_frustumPoints[FP_FBR] = m_farCenter + -0.5f * hFar * up + 0.5f * wFar * right;
 		m_frustumPoints[FP_FBL] = m_farCenter + -0.5f * hFar * up + -0.5f * wFar * right;
-
-		m_frustumPlanes[FPLANE_NEAR].fromNormalPosition(direction, m_nearCenter);
-		m_frustumPlanes[FPLANE_FAR].fromNormalPosition(-1.0f * direction, m_farCenter);
-
-		m_frustumPlanes[FPLANE_BOTTOM].fromPositions(m_frustumPoints[FP_NBL], m_frustumPoints[FP_NBR], m_frustumPoints[FP_FBL]);
-		m_frustumPlanes[FPLANE_TOP].fromPositions(m_frustumPoints[FP_NTL], m_frustumPoints[FP_FTL], m_frustumPoints[FP_NTR]);
-
-		m_frustumPlanes[FPLANE_LEFT].fromPositions(m_frustumPoints[FP_FBL], m_frustumPoints[FP_FTL], m_frustumPoints[FP_NBL]);
-		m_frustumPlanes[FPLANE_RIGHT].fromPositions(m_frustumPoints[FP_FBR], m_frustumPoints[FP_NBR], m_frustumPoints[FP_FTR]);
 #endif
 	}
 
@@ -309,49 +300,50 @@ namespace ZE
 
 	}
 
-	void Frustum::setMVPMatrix(Matrix4x4& mvpMatrix)
+	void Frustum::constructFromMVPMatrix(Matrix4x4& mvpMatrix)
 	{
+		// Distance multipled by -1.0 because we have the depth view flpped. (#TODO This might be a problem in the future)
 		// Left plane
-		m_frustumPlanes[FPLANE_LEFT].m_normal.m_x = mvpMatrix.m_data[1][4] + mvpMatrix.m_data[1][1];
-		m_frustumPlanes[FPLANE_LEFT].m_normal.m_y = mvpMatrix.m_data[2][4] + mvpMatrix.m_data[2][1];
-		m_frustumPlanes[FPLANE_LEFT].m_normal.m_z = mvpMatrix.m_data[3][4] + mvpMatrix.m_data[3][1];
-		m_frustumPlanes[FPLANE_LEFT].m_normal.normalize();
-		m_frustumPlanes[FPLANE_LEFT].m_distance = mvpMatrix.m_data[4][4] + mvpMatrix.m_data[4][1];
+		m_frustumPlanes[FPLANE_LEFT].m_normal.m_x = mvpMatrix.m_data[0][3] + mvpMatrix.m_data[0][0];
+		m_frustumPlanes[FPLANE_LEFT].m_normal.m_y = mvpMatrix.m_data[1][3] + mvpMatrix.m_data[1][0];
+		m_frustumPlanes[FPLANE_LEFT].m_normal.m_z = mvpMatrix.m_data[2][3] + mvpMatrix.m_data[2][0];
+		m_frustumPlanes[FPLANE_LEFT].m_distance = (mvpMatrix.m_data[3][3] + mvpMatrix.m_data[3][0]) * -1.0f;
+		m_frustumPlanes[FPLANE_LEFT].normalize();
 
 		// Right plane
-		m_frustumPlanes[FPLANE_RIGHT].m_normal.m_x = mvpMatrix.m_data[1][4] - mvpMatrix.m_data[1][1];
-		m_frustumPlanes[FPLANE_RIGHT].m_normal.m_y = mvpMatrix.m_data[2][4] - mvpMatrix.m_data[2][1];
-		m_frustumPlanes[FPLANE_RIGHT].m_normal.m_z = mvpMatrix.m_data[3][4] - mvpMatrix.m_data[3][1];
-		m_frustumPlanes[FPLANE_RIGHT].m_normal.normalize();
-		m_frustumPlanes[FPLANE_RIGHT].m_distance = mvpMatrix.m_data[4][4] - mvpMatrix.m_data[4][1];
+		m_frustumPlanes[FPLANE_RIGHT].m_normal.m_x = mvpMatrix.m_data[0][3] - mvpMatrix.m_data[0][0];
+		m_frustumPlanes[FPLANE_RIGHT].m_normal.m_y = mvpMatrix.m_data[1][3] - mvpMatrix.m_data[1][0];
+		m_frustumPlanes[FPLANE_RIGHT].m_normal.m_z = mvpMatrix.m_data[2][3] - mvpMatrix.m_data[2][0];
+		m_frustumPlanes[FPLANE_RIGHT].m_distance = (mvpMatrix.m_data[3][3] - mvpMatrix.m_data[3][0]) * -1.0f;
+		m_frustumPlanes[FPLANE_RIGHT].normalize();
 
 		// Bottom plane
-		m_frustumPlanes[FPLANE_BOTTOM].m_normal.m_x = mvpMatrix.m_data[1][4] + mvpMatrix.m_data[1][2];
-		m_frustumPlanes[FPLANE_BOTTOM].m_normal.m_y = mvpMatrix.m_data[2][4] + mvpMatrix.m_data[2][2];
-		m_frustumPlanes[FPLANE_BOTTOM].m_normal.m_z = mvpMatrix.m_data[3][4] + mvpMatrix.m_data[3][2];
-		m_frustumPlanes[FPLANE_BOTTOM].m_normal.normalize();
-		m_frustumPlanes[FPLANE_BOTTOM].m_distance = mvpMatrix.m_data[4][4] + mvpMatrix.m_data[4][2];
+		m_frustumPlanes[FPLANE_BOTTOM].m_normal.m_x = mvpMatrix.m_data[0][3] + mvpMatrix.m_data[0][1];
+		m_frustumPlanes[FPLANE_BOTTOM].m_normal.m_y = mvpMatrix.m_data[1][3] + mvpMatrix.m_data[1][1];
+		m_frustumPlanes[FPLANE_BOTTOM].m_normal.m_z = mvpMatrix.m_data[2][3] + mvpMatrix.m_data[2][1];
+		m_frustumPlanes[FPLANE_BOTTOM].m_distance = (mvpMatrix.m_data[3][3] + mvpMatrix.m_data[3][1]) * -1.0f;
+		m_frustumPlanes[FPLANE_BOTTOM].normalize();
 
 		// Top Plane
-		m_frustumPlanes[FPLANE_TOP].m_normal.m_x = mvpMatrix.m_data[1][4] - mvpMatrix.m_data[1][2];
-		m_frustumPlanes[FPLANE_TOP].m_normal.m_y = mvpMatrix.m_data[2][4] - mvpMatrix.m_data[2][2];
-		m_frustumPlanes[FPLANE_TOP].m_normal.m_z = mvpMatrix.m_data[3][4] - mvpMatrix.m_data[3][2];
-		m_frustumPlanes[FPLANE_TOP].m_normal.normalize();
-		m_frustumPlanes[FPLANE_TOP].m_distance = mvpMatrix.m_data[4][4] - mvpMatrix.m_data[4][2];
+		m_frustumPlanes[FPLANE_TOP].m_normal.m_x = mvpMatrix.m_data[0][3] - mvpMatrix.m_data[0][1];
+		m_frustumPlanes[FPLANE_TOP].m_normal.m_y = mvpMatrix.m_data[1][3] - mvpMatrix.m_data[1][1];
+		m_frustumPlanes[FPLANE_TOP].m_normal.m_z = mvpMatrix.m_data[2][3] - mvpMatrix.m_data[2][1];
+		m_frustumPlanes[FPLANE_TOP].m_distance = (mvpMatrix.m_data[3][3] - mvpMatrix.m_data[3][1]) * -1.0f;
+		m_frustumPlanes[FPLANE_TOP].normalize();
 
 		// Near Plane
-		m_frustumPlanes[FPLANE_NEAR].m_normal.m_x = mvpMatrix.m_data[1][4] + mvpMatrix.m_data[1][3];
-		m_frustumPlanes[FPLANE_NEAR].m_normal.m_y = mvpMatrix.m_data[2][4] + mvpMatrix.m_data[2][3];
-		m_frustumPlanes[FPLANE_NEAR].m_normal.m_z = mvpMatrix.m_data[3][4] + mvpMatrix.m_data[3][3];
-		m_frustumPlanes[FPLANE_NEAR].m_normal.normalize();
-		m_frustumPlanes[FPLANE_NEAR].m_distance = mvpMatrix.m_data[4][4] + mvpMatrix.m_data[4][3];
+		m_frustumPlanes[FPLANE_NEAR].m_normal.m_x = mvpMatrix.m_data[0][3] + mvpMatrix.m_data[0][2];
+		m_frustumPlanes[FPLANE_NEAR].m_normal.m_y = mvpMatrix.m_data[1][3] + mvpMatrix.m_data[1][2];
+		m_frustumPlanes[FPLANE_NEAR].m_normal.m_z = mvpMatrix.m_data[2][3] + mvpMatrix.m_data[2][2];
+		m_frustumPlanes[FPLANE_NEAR].m_distance = (mvpMatrix.m_data[3][3] + mvpMatrix.m_data[3][2]) * -1.0f;
+		m_frustumPlanes[FPLANE_NEAR].normalize();
 
 		// Far Plane
-		m_frustumPlanes[FPLANE_FAR].m_normal.m_x = mvpMatrix.m_data[1][4] - mvpMatrix.m_data[1][3];
-		m_frustumPlanes[FPLANE_FAR].m_normal.m_y = mvpMatrix.m_data[2][4] - mvpMatrix.m_data[2][3];
-		m_frustumPlanes[FPLANE_FAR].m_normal.m_z = mvpMatrix.m_data[3][4] - mvpMatrix.m_data[3][3];
-		m_frustumPlanes[FPLANE_FAR].m_normal.normalize();
-		m_frustumPlanes[FPLANE_FAR].m_distance = mvpMatrix.m_data[4][4] - mvpMatrix.m_data[4][3];
+		m_frustumPlanes[FPLANE_FAR].m_normal.m_x = mvpMatrix.m_data[0][3] - mvpMatrix.m_data[0][2];
+		m_frustumPlanes[FPLANE_FAR].m_normal.m_y = mvpMatrix.m_data[1][3] - mvpMatrix.m_data[1][2];
+		m_frustumPlanes[FPLANE_FAR].m_normal.m_z = mvpMatrix.m_data[2][3] - mvpMatrix.m_data[2][2];
+		m_frustumPlanes[FPLANE_FAR].m_distance = (mvpMatrix.m_data[3][3] - mvpMatrix.m_data[3][2]) * -1.0f;
+		m_frustumPlanes[FPLANE_FAR].normalize();
 
 	}
 

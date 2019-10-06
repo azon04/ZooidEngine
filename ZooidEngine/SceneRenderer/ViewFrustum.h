@@ -46,7 +46,7 @@ namespace ZE
 		Frustum();
 		~Frustum();
 
-		void setMVPMatrix(Matrix4x4& mvpMatrix);
+		void constructFromMVPMatrix(Matrix4x4& mvpMatrix);
 
 		EFrustumTestResult testPoint(Vector3& point);
 		EFrustumTestResult testSphere(Sphere& sphere, Float32 _offset = 0.0f);

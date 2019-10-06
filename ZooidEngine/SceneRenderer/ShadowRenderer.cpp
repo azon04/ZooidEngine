@@ -16,9 +16,17 @@
 #include "Renderer/IShader.h"
 #include "Renderer/IGPUStates.h"
 #include "ResourceManagers/BufferManager.h"
+#include "ResourceManagers/ShaderManager.h"
 
 namespace ZE
 {
+
+	ShadowDepthRenderer::ShadowDepthRenderer()
+	{
+		m_shaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_SHADOW_DEPTH);
+		m_skinnedShaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_cHAIN_SHADOW_DEPTH_SKINNED);
+	}
+
 	void ShadowDepthRenderer::setupShadowMapData(LightShadowMapData* shadowMapData)
 	{
 		CascadeShadowData* casecadeData = nullptr;
@@ -28,8 +36,6 @@ namespace ZE
 			casecadeData = &(gGameContext->getDrawList()->m_lightData.cascadeShadowData[shadowMapData->cascadeIndex]);
 		}
 
-		m_shaderChain = shadowMapData->normalShaderChain;
-		m_skinnedShaderChain = shadowMapData->skinnedShaderChain;
 		m_currentFrameBuffer = shadowMapData->dynamicShadowFrameBuffer;
 
 		UInt32 shadowTextureIndex = 0;

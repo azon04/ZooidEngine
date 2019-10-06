@@ -30,6 +30,12 @@ namespace ZE
 		// Handle Gather event
 		void handleGatherRender(Event* pEvent);
 
+		// Handle Gather render bound
+		void handleGatherRenderBound(Event* pEvent);
+
+		// Handle Gather Shadow List
+		void handleGatherShadowRender(Event* pEvent);
+
 		// Load mesh from File
 		void loadMeshFromFile(const char* filePath);
 

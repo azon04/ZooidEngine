@@ -2,12 +2,13 @@
 
 #include "Utils/Array.h"
 
-namespace ZE {
-	
+namespace ZE 
+{
 	IMPLEMENT_CLASS_0(Event);
 	IMPLEMENT_CLASS_1(Event_UPDATE, Event);
+	IMPLEMENT_CLASS_1(Event_GATHER_BOUND, Event);
+	IMPLEMENT_CLASS_1(Event_GATHER_SHADOW_LIST, Event);
 	IMPLEMENT_CLASS_1(Event_GATHER_LIGHT, Event);
 	IMPLEMENT_CLASS_1(Event_GATHER_RENDER, Event);
 	IMPLEMENT_CLASS_1(Event_RESOURCE_LOADED, Event);
-
 }

@@ -46,6 +46,25 @@ namespace ZE {
 		virtual ~Event_GATHER_LIGHT() {}
 	};
 
+	class Event_GATHER_BOUND : public Event
+	{
+		DEFINE_CLASS(Event_GATHER_BOUND);
+
+	public:
+		Event_GATHER_BOUND() {}
+	};
+
+	class Event_GATHER_SHADOW_LIST : public Event
+	{
+		DEFINE_CLASS(Event_GATHER_SHADOW_LIST);
+
+	public:
+		Event_GATHER_SHADOW_LIST() {}
+
+		// Light Index
+		Int32 m_shadowDataIndex = -1;
+	};
+
 	class Event_GATHER_RENDER : public Event
 	{
 		DEFINE_CLASS(Event_GATHER_RENDER);

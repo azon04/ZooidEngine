@@ -37,8 +37,8 @@ namespace ZE
 		m_bGenerateShadow(true),
 		m_innerRadius(DegToRad(17.0f)),
 		m_outerRadius(DegToRad(20.0f)),
-		m_shadowMapWidth(1024),
-		m_shadowMapHeight(1024)
+		m_shadowMapWidth(2048),
+		m_shadowMapHeight(2048)
 	{
 		for (UInt32 i = 0; i < MAX_LIGHT_SHADOW_MAPS; i++)
 		{
@@ -252,17 +252,16 @@ namespace ZE
 
 	// view: before transpose
 	void LightComponent::calculateCascadeLightFustrum(Matrix4x4& view, Matrix4x4& projection, ViewFrustum* camFustrum, Float32 cascadeDistStart, Float32 cascadeDistEnd, 
-		Float32 obMostRight, Float32 obMostLeft, Float32 obMostTop, Float32 obMostBottom, Float32 obMostNear)
+		Float32 obMostRight, Float32 obMostLeft, Float32 obMostTop, Float32 obMostBottom, Float32 obMostNear, Float32 obMostFar)
 	{
 		Vector3 xAxis = view.getU();
 		Vector3 yAxis = view.getV();
 		Vector3 zAxis = view.getN();
+		Vector3 newPos;
+		Float32 mostRight, mostLeft, mostTop, mostBottom, mostNear, mostFar;
+		Vector3 fustrumPoints[8];
 
 		view = view.transpose();
-
-		Float32 mostRight, mostLeft, mostTop, mostBottom, mostNear, mostFar;
-
-		Vector3 fustrumPoints[8];
 
 		fustrumPoints[FP_NTL] = camFustrum->getFrustumPoint(FP_NTL) + (cascadeDistStart * (camFustrum->getFrustumPoint(FP_FTL) - camFustrum->getFrustumPoint(FP_NTL)));
 		fustrumPoints[FP_FTL] = camFustrum->getFrustumPoint(FP_NTL) + (cascadeDistEnd * (camFustrum->getFrustumPoint(FP_FTL) - camFustrum->getFrustumPoint(FP_NTL)));
@@ -281,7 +280,7 @@ namespace ZE
 			float right = xAxis | fustrumPoints[i];
 			float top = yAxis | fustrumPoints[i];
 			float nearD = zAxis | fustrumPoints[i];
-
+			newPos = newPos + fustrumPoints[i];
 			if (i == 0)
 			{
 				mostRight = mostLeft = right;
@@ -299,32 +298,27 @@ namespace ZE
 			}
 		}
 
- 		if (mostTop > obMostTop) { mostTop = obMostTop; }
- 		if (mostBottom < obMostBottom) { mostBottom = obMostBottom; }
- 		if (mostRight > obMostRight) { mostRight = obMostRight; }
- 		if (mostLeft < obMostLeft) { mostLeft = obMostLeft; }
- 		if (mostNear < obMostNear) { mostNear = obMostNear; }
+		newPos = newPos / 8.0f;
+
+//  		if (mostTop > obMostTop) { mostTop = obMostTop; }
+//  		if (mostBottom < obMostBottom) { mostBottom = obMostBottom; }
+//  		if (mostRight > obMostRight) { mostRight = obMostRight; }
+//  		if (mostLeft < obMostLeft) { mostLeft = obMostLeft; }
+		if (mostNear < obMostNear) { mostNear = obMostNear; }
+		if (mostFar > obMostFar) { mostFar = obMostFar; }
 
 		// Add a little bit buffer size to the depth texture to prevent some shadow hiccup/anomaly
-		mostRight += 1.0f;
-		mostLeft -= 1.0f;
-		mostTop += 1.0f;
-		mostBottom -= 1.0f;
+// 		mostRight += 1.0f;
+// 		mostLeft -= 1.0f;
+// 		mostTop += 1.0f;
+// 		mostBottom -= 1.0f;
 
-		Vector3 deltaPos((mostRight + mostLeft) * 0.5f, (mostTop + mostBottom) * 0.5f, mostNear);
+		Vector3 dimension((mostRight - mostLeft), (mostTop - mostBottom), (mostNear - mostFar) * 2.0f);
 
- 		mostRight -= deltaPos.getX();
- 		mostLeft -= deltaPos.getX();
- 		mostTop -= deltaPos.getY();
- 		mostBottom -= deltaPos.getY();
-
-		Vector3 newPos;
-		newPos = xAxis * deltaPos.getX();
-		newPos = newPos + yAxis * deltaPos.getY();
-		newPos = newPos + zAxis * deltaPos.getZ();
+		newPos = newPos + zAxis * dimension.getZ() * 0.5f;
 		view.setPos(Vector3(xAxis | newPos * -1.0f, yAxis | newPos * -1.0f, zAxis | newPos * -1.0f));
 
-		MathOps::CreateOrthoProjEx(projection, mostBottom, mostTop, mostLeft, mostRight, 0.0f, mostNear - mostFar);
+		MathOps::CreateOrthoProj(projection, dimension.getX(), dimension.getY(), 0.0f, dimension.getZ());
 	}
 
 	void LightComponent::setupShadowMapsDirectional(UInt32 lightIndex)
@@ -333,7 +327,7 @@ namespace ZE
 		DrawList* drawList = m_gameContext->getDrawList();
 
 		Int32 numberOfCascade = 4;
-		Float32 cascadedDistances[4] = { 0.025f, 0.05f, 0.25f, 1.0f };
+		Float32 cascadedDistances[4] = { 0.1f, 0.25f, 0.45f, 1.0f };
 
 		// TODO Determine how many cascade we need based on light and cam angle
 
@@ -360,6 +354,7 @@ namespace ZE
 		float obMostTop = 0.0f;
 		float obMostBottom = 0.0f;
 		float obMostNear = 0.0f;
+		float obMostFar = 0.0f;
 
 		{
 			Vector3 vertices[2] = { drawList->m_objectsBounding.m_min,  drawList->m_objectsBounding.m_max };
@@ -379,6 +374,7 @@ namespace ZE
 						{
 							obMostRight = obMostLeft = right;
 							obMostTop = obMostBottom = top;
+							obMostNear = obMostFar = nearD;
 						}
 						else
 						{
@@ -387,6 +383,7 @@ namespace ZE
 							if (obMostTop < top) { obMostTop = top; }
 							if (obMostBottom > top) { obMostBottom = top; }
 							if (obMostNear < nearD) { obMostNear = nearD; }
+							if (obMostFar > nearD) { obMostFar = nearD; }
 						}
 					}
 				}
@@ -421,8 +418,6 @@ namespace ZE
 				shadowMapData.staticShadowTexture = m_staticShadowTexture;
 				shadowMapData.lightIndex = lightIndex;
 				shadowMapData.cascadeIndex = -1;
-				shadowMapData.normalShaderChain = nullptr;
-				shadowMapData.skinnedShaderChain = nullptr;
 			}
 			
 
@@ -436,7 +431,7 @@ namespace ZE
 				CascadeShadowData& cascadeData = m_gameContext->getDrawList()->m_lightData.cascadeShadowData[cascadeIndex];
 				
 				calculateCascadeLightFustrum(localView, projection, &(drawList->m_viewFustrum), currentCascadeStart, cascadedDistances[i], 
-					obMostRight, obMostLeft, obMostTop, obMostBottom, obMostNear);
+					obMostRight, obMostLeft, obMostTop, obMostBottom, obMostNear, obMostFar);
 
 				cascadeData.cascadeDistance = cascadedDistances[i] * cameraRange;
 				currentCascadeStart = cascadedDistances[i] - 0.0025f;
@@ -448,10 +443,9 @@ namespace ZE
 				shadowMapData.staticShadowTexture = nullptr;
 				shadowMapData.lightIndex = lightIndex;
 				shadowMapData.cascadeIndex = cascadeIndex;
-				shadowMapData.normalShaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_SHADOW_DEPTH);
-				shadowMapData.skinnedShaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_cHAIN_SHADOW_DEPTH_SKINNED);
 				shadowMapData.view = localView;
 				shadowMapData.projection = projection;
+				shadowMapData.lightFrustum.constructFromMVPMatrix(localView * projection);
 
 				lightData.cascadeShadowIndices[i] = cascadeIndex;
 			}
@@ -473,10 +467,9 @@ namespace ZE
 		shadowMapData.staticShadowTexture = m_staticShadowTexture;
 		shadowMapData.lightIndex = lightIndex;
 		shadowMapData.cascadeIndex = -1;
-		shadowMapData.normalShaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_SHADOW_DEPTH);
-		shadowMapData.skinnedShaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_cHAIN_SHADOW_DEPTH_SKINNED);
 		shadowMapData.view = view;
 		shadowMapData.projection = projection;
+		shadowMapData.lightFrustum.constructFromMVPMatrix(view * projection);
 	}
 
 	void LightComponent::setupShadowMapsPointLight(UInt32 lightIndex)
@@ -506,10 +499,9 @@ namespace ZE
 			shadowMapData.staticShadowTexture = nullptr;
 			shadowMapData.lightIndex = lightIndex;
 			shadowMapData.cascadeIndex = -1;
-			shadowMapData.normalShaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_SHADOW_DEPTH);
-			shadowMapData.skinnedShaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_cHAIN_SHADOW_DEPTH_SKINNED);
 			shadowMapData.view = view;
 			shadowMapData.projection = projection;
+			shadowMapData.lightFrustum.constructFromMVPMatrix(view * projection);
 		}
 	}
 

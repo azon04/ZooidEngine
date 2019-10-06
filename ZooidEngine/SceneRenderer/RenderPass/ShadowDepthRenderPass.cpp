@@ -57,8 +57,8 @@ namespace ZE
 
 			ShadowDepthRenderer::Setup(&shadowMapData, &light, drawList);
 			ShadowDepthRenderer::BeginRender();
-			ShadowDepthRenderer::Render(drawList->m_meshRenderGatherer.getRenderInfos(), drawList->m_meshRenderGatherer.getRenderCount(), false);
-			ShadowDepthRenderer::Render(drawList->m_skinMeshRenderGatherer.getRenderInfos(), drawList->m_skinMeshRenderGatherer.getRenderCount(), true);
+			ShadowDepthRenderer::Render(shadowMapData.meshRenderGatherer.getRenderInfos(), shadowMapData.meshRenderGatherer.getRenderCount(), false);
+			ShadowDepthRenderer::Render(shadowMapData.skinMeshRenderGatherer.getRenderInfos(), shadowMapData.skinMeshRenderGatherer.getRenderCount(), true);
 			ShadowDepthRenderer::EndRender();
 		}
 

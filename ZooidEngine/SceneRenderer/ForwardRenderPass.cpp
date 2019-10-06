@@ -79,9 +79,7 @@ namespace ZE
 		ZE::CameraComponent* currentCamera = _gameContext->getCameraManager()->getCurrentCamera();
 		if (currentCamera)
 		{
-			currentCamera->getViewMatrix(viewMat);
-
-			_gameContext->getDrawList()->m_shaderFrameData.setViewMat(viewMat);
+			_gameContext->getDrawList()->m_shaderFrameData.setViewMat(_gameContext->getDrawList()->m_viewMat);
 			_gameContext->getDrawList()->m_cameraPosition = currentCamera->getWorldPosition();
 			_gameContext->getDrawList()->m_cameraDirection = currentCamera->getForwardVector();
 			_gameContext->getDrawList()->m_shaderFrameData.setProjectionMat(_gameContext->getDrawList()->m_projectionMat);

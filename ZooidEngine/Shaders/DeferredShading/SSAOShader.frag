@@ -14,7 +14,7 @@ uniform sampler2D noiseTexture;
 const int kernelSize = 32;
 const float radius = 0.5;
 const float bias = 0.025;
-const float power = 5.0;
+const float power = 2.0;
 
 layout (std140) uniform frame_data
 {
