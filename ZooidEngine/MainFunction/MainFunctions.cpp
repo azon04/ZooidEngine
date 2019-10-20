@@ -305,16 +305,11 @@ namespace ZE
 		//DebugRenderer::DrawTextScreen("Zooid Engine", Vector2(10, 10), Vector3(1.0f), 0.5f);
 
 		// Debug Options Menu
+		if (ZE::UI::BeginPanel("Debug Options", UIRect(UIVector2{ gGameContext->getRenderer()->GetWidth() - 300,10 }, UIVector2{ 250, 100 })))
 		{
-			static ZE::UIRect panelRect(UIVector2{ gGameContext->getRenderer()->GetWidth() - 300,10 }, UIVector2{ 250, 100 });
-
-			ZE::UIVector2 contentPos;
-
-			ZE::UI::DoDragablePanel(10, panelRect, "Debug Options", 10, contentPos);
-
-			gDebugOptions.DebugDrawOptions.bDrawCullShapes = ZE::UI::DoCheckBox(5, contentPos, "DebugDraw:CullShape", gDebugOptions.DebugDrawOptions.bDrawCullShapes);
-			contentPos.y += 25.0f;
-			gDebugOptions.DebugDrawOptions.bDrawPhysicsShapes = ZE::UI::DoCheckBox(6, contentPos, "DebugDraw:PhysicsShape", gDebugOptions.DebugDrawOptions.bDrawPhysicsShapes);
+			gDebugOptions.DebugDrawOptions.bDrawCullShapes = ZE::UI::DoCheckBox("DebugDraw:CullShape", gDebugOptions.DebugDrawOptions.bDrawCullShapes);
+			gDebugOptions.DebugDrawOptions.bDrawPhysicsShapes = ZE::UI::DoCheckBox("DebugDraw:PhysicsShape", gDebugOptions.DebugDrawOptions.bDrawPhysicsShapes);
+			ZE::UI::EndPanel();
 		}
 
 		DrawList* drawList = _gameContext->getDrawList();
@@ -378,37 +373,27 @@ namespace ZE
 			handleGatherShadowList.release();
 		}
 
+		// Write on Total Delta time
+		g_gameThreadTime = MathOps::FLerp(g_gameThreadTime, (Float32)deltaTime, 0.01f);
+
+		if (ZE::UI::BeginPanel("Performance", UIRect(UIVector2{ 10,10 }, UIVector2{ 250, 150 })))
 		{
-			static ZE::UIRect panelRect(UIVector2{ 10,10 }, UIVector2{ 250, 150 });
-
-			ZE::UIVector2 contentPos;
-
-			ZE::UI::DoDragablePanel(0, panelRect, "Performance Counter", 10, contentPos);
-
-			ZE::UIRect textRect;
-			textRect.m_pos = contentPos;
-			textRect.m_dimension = { 320, 100 };
-
-			// Write on Total Delta time
-			g_gameThreadTime = MathOps::FLerp(g_gameThreadTime, (Float32)deltaTime, 0.01f);
-
 			char buffer[256];
 
 			StringFunc::PrintToString(buffer, 256, "Global Time: %.2fms", g_gameThreadTime);
-			ZE::UI::DrawTextInPos(1, contentPos, buffer, UIVector4(1.0f));
+			ZE::UI::DoText(buffer);
 
-			contentPos.y += UI::DefaultFont->calculateTextHeight(1.0f) + 2.0f;
 			StringFunc::PrintToString(buffer, 256, "GPU Draw Time: %.2fms", g_gpuDrawTime);
-			ZE::UI::DrawTextInPos(2, contentPos, buffer, UIVector4(1.0f));
+			ZE::UI::DoText(buffer);
 
-			contentPos.y += UI::DefaultFont->calculateTextHeight(1.0f) + 2.0f;
 			StringFunc::PrintToString(buffer, 256, "FPS: %.2f", 1000.0f / g_gameThreadTime);
-			ZE::UI::DrawTextInPos(3, contentPos, buffer, UIVector4(1.0f));
+			ZE::UI::DoText(buffer);
 
-			contentPos.y += UI::DefaultFont->calculateTextHeight(1.0f) + 2.0f;
 			DrawList* drawList = _gameContext->getDrawList();
 			StringFunc::PrintToString(buffer, 256, "Num Meshes To Draw: %d", drawList->m_meshRenderGatherer.getRenderCount() + drawList->m_skinMeshRenderGatherer.getRenderCount());
-			ZE::UI::DrawTextInPos(4, contentPos, buffer, UIVector4(1.0f));
+			ZE::UI::DoText(buffer);
+
+			ZE::UI::EndPanel();
 		}
 
 		// UI End Frame

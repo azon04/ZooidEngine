@@ -38,6 +38,7 @@ namespace ZE
 		virtual UInt32 createRendererTexture(void* pAddress, UInt32 width, UInt32 height, UInt32 channelCount);
 		virtual void destroyTexture(UInt32 textureHandle);
 		virtual void destroyTextures();
+		virtual void resizeWindow(int width, int height);
 		//
 
 	protected:
@@ -283,6 +284,11 @@ namespace ZE
 		}
 
 		textureHandles.clear();
+	}
+
+	void ZE_UIRenderer::resizeWindow(int width, int height)
+	{
+		// Do Nothing
 	}
 
 	void ZE_UIRenderer::processDrawItem(UIDrawItem* drawItem)

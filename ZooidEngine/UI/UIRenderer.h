@@ -6,6 +6,7 @@
 namespace ZE
 {
 	class UIDrawList;
+
 	class UIRenderer
 	{
 	public:
@@ -20,6 +21,7 @@ namespace ZE
 		virtual UInt32 createRendererTexture(void* pAddress, UInt32 width, UInt32 height, UInt32 channelCount) = 0;
 		virtual void destroyTexture(UInt32 textureHandle) = 0;
 		virtual void destroyTextures() = 0;
+		virtual void resizeWindow(int width, int height) = 0;
 		void setDrawList(UIDrawList* _drawList) { m_drawList = _drawList; }
 
 	protected:

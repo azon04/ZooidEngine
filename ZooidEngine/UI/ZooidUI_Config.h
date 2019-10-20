@@ -14,6 +14,9 @@
 // HasMap type that use in this code. Change to other type if needed
 #define UIHashMap ZE::HashMap
 
+// Stack Type that use in this code
+#define UIStack ZE::Array
+
 // HashMap Find
 #define HashMapHas(hashmap, key) hashmap.hasKey(key)
 
@@ -46,6 +49,20 @@
 
 // Assets: Default Font File (Relative to Resource Folder)
 #define DEFAULT_FONT_PATH "Font/OpenSans-Regular.ttf"
+
+// Keys: Special Keys Define
+#define ZOOID_KEY_BACKSPACE	8
+#define ZOOID_KEY_ENTER 13
+#define ZOOID_KEY_DELETE 127
+#define ZOOID_KEY_ARROW_LEFT 11
+#define ZOOID_KEY_ARROW_RIGHT 12
+#define ZOOID_KEY_ARROW_UP 13
+#define ZOOID_KEY_ARROW_DOWN 14
+#define ZOOID_KEY_HOME 2
+#define ZOOID_KEY_END 3
+
+// Text Input: Length of temp text input (use as temp buffer)
+#define TEXT_TEMP_LENGTH 246
 
 // Data Types: Change Data Types if needed
 namespace ZE

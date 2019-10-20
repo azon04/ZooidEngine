@@ -91,7 +91,7 @@ namespace ZE
 			{
 				return *this;
 			}
-			reset(otherArray.capacity());
+			if (otherArray.capacity() > 0) { reset(otherArray.capacity()); }
 			m_length = otherArray.length();
 
 			for (int i = 0; i < m_length; ++i)
@@ -157,6 +157,16 @@ namespace ZE
 			return (T*) m_handle.getObjectConst();
 		}
 
+		FORCEINLINE T& back() const
+		{
+			return get(m_length - 1);
+		}
+
+		FORCEINLINE T& back()
+		{
+			return get(m_length-1);
+		}
+
 		void push_back(const T& item)
 		{
 			if (m_length + 1 > m_capacity)
@@ -175,6 +185,11 @@ namespace ZE
 			m_length++;
 
 			(*this)[m_length - 1] = item;
+		}
+
+		void pop_back()
+		{
+			m_length--;
 		}
 
 		void* allocateItem()
