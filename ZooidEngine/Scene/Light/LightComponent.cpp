@@ -257,7 +257,6 @@ namespace ZE
 		Vector3 xAxis = view.getU();
 		Vector3 yAxis = view.getV();
 		Vector3 zAxis = view.getN();
-		Vector3 newPos;
 		Float32 mostRight, mostLeft, mostTop, mostBottom, mostNear, mostFar;
 		Vector3 fustrumPoints[8];
 
@@ -280,7 +279,6 @@ namespace ZE
 			float right = xAxis | fustrumPoints[i];
 			float top = yAxis | fustrumPoints[i];
 			float nearD = zAxis | fustrumPoints[i];
-			newPos = newPos + fustrumPoints[i];
 			if (i == 0)
 			{
 				mostRight = mostLeft = right;
@@ -298,8 +296,6 @@ namespace ZE
 			}
 		}
 
-		newPos = newPos / 8.0f;
-
 //  		if (mostTop > obMostTop) { mostTop = obMostTop; }
 //  		if (mostBottom < obMostBottom) { mostBottom = obMostBottom; }
 //  		if (mostRight > obMostRight) { mostRight = obMostRight; }
@@ -313,9 +309,12 @@ namespace ZE
 // 		mostTop += 1.0f;
 // 		mostBottom -= 1.0f;
 
-		Vector3 dimension((mostRight - mostLeft), (mostTop - mostBottom), (mostNear - mostFar) * 2.0f);
+		Vector3 newPos;
+		Vector3 dimension((mostRight - mostLeft), (mostTop - mostBottom), (mostNear - mostFar));
 
-		newPos = newPos + zAxis * dimension.getZ() * 0.5f;
+		newPos = newPos + xAxis * (mostLeft + dimension.getX() * 0.5f);
+		newPos = newPos + yAxis * (mostBottom + dimension.getY() * 0.5f);
+		newPos = newPos + zAxis * mostNear;
 		view.setPos(Vector3(xAxis | newPos * -1.0f, yAxis | newPos * -1.0f, zAxis | newPos * -1.0f));
 
 		MathOps::CreateOrthoProj(projection, dimension.getX(), dimension.getY(), 0.0f, dimension.getZ());
@@ -326,8 +325,11 @@ namespace ZE
 		LightStruct& lightData = m_gameContext->getDrawList()->m_lightData.lights[lightIndex];
 		DrawList* drawList = m_gameContext->getDrawList();
 
-		Int32 numberOfCascade = 4;
-		Float32 cascadedDistances[4] = { 0.1f, 0.25f, 0.45f, 1.0f };
+		CameraComponent* currentCamera = CameraManager::GetInstance()->getCurrentCamera();
+		Float32 farDistance = currentCamera->m_far - currentCamera->m_near;
+		const Int32 numberOfCascade = 4;
+		// #TODO these distances should be able to set somewhere (per level maybe)
+		Float32 cascadedDistances[4] = { 5.0f / farDistance, 15.0f / farDistance, 50.0f / farDistance, 1.0f };
 
 		// TODO Determine how many cascade we need based on light and cam angle
 
@@ -339,6 +341,8 @@ namespace ZE
 		{
 			xAxis = zAxis ^ Vector3(0.0f, 0.0f, 1.0f);
 		}
+
+		xAxis.normalize();
 
 		Vector3 yAxis = xAxis ^ zAxis;
 
