@@ -30,6 +30,15 @@ namespace ZE
 		// Set filtering and mipmaping function
 		glTexParameteri(imageType, GL_TEXTURE_MIN_FILTER, getTextureFilter(createDesc.MinFilter));
 		glTexParameteri(imageType, GL_TEXTURE_MAG_FILTER, getTextureFilter(createDesc.MagFilter));
+		
+		if ((createDesc.MagFilter == ANISOTROPIC || createDesc.MinFilter == ANISOTROPIC) && ((ZE_GL_VERSION_MAJOR >= 4 && ZE_GL_VERSION_MINOR >= 6) || GLEW_EXT_texture_filter_anisotropic))
+		{
+			float hardwardMaxAniso = 8.0f;
+			glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &hardwardMaxAniso);
+
+			float maxAniso = hardwardMaxAniso < createDesc.MaxAniso ? hardwardMaxAniso : (float)createDesc.MaxAniso;
+			glTexParameterf(imageType, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAniso);
+		}
 
 		if (m_bCube)
 		{
@@ -80,8 +89,23 @@ namespace ZE
 		glTexParameteri(imageType, GL_TEXTURE_WRAP_S, getTextureWrap(texture->getWrapU()));
 		glTexParameteri(imageType, GL_TEXTURE_WRAP_T, getTextureWrap(texture->getWrapV()));
 		// Set filtering and mipmaping function
-		glTexParameteri(imageType, GL_TEXTURE_MIN_FILTER, getTextureFilter(texture->getMinFilter()));
 		glTexParameteri(imageType, GL_TEXTURE_MAG_FILTER, getTextureFilter(texture->getMagFilter()));
+		glTexParameteri(imageType, GL_TEXTURE_MIN_FILTER, getTextureFilter(texture->getMinFilter()));
+		
+		// Check if we need to use Anisotropic
+		if ((texture->getMagFilter() == ANISOTROPIC || texture->getMinFilter() == ANISOTROPIC) 
+#if !(ZE_GL_VERSION_MAJOR >= 4 && ZE_GL_VERSION_MINOR >= 6)
+			&& (GLEW_EXT_texture_filter_anisotropic)
+#endif
+			)
+		{
+			float hardwardMaxAniso = 8.0f;
+			glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &hardwardMaxAniso);
+
+			float maxAniso = hardwardMaxAniso < texture->getMaxAniso() ? hardwardMaxAniso : (float)texture->getMaxAniso();
+			glTexParameterf(imageType, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAniso);
+		}
+
 
 		if (m_bCube)
 		{

@@ -7,7 +7,7 @@
 #if defined(ZE_PLATFORM_WINDOWS)
 #include "Win32/Win_Platform.h"
 #else
-#error No Platform Implementation for this platform
+#error "No Platform Implementation for this platform""
 #endif
 
 namespace ZE

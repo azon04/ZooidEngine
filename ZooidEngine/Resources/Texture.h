@@ -27,8 +27,10 @@ namespace ZE
 		ETextureWrap WrapN = MIRRORED_REPEAT;
 
 		ETextureFilter MinFilter = LINEAR_MIPMAP_LINEAR;
-		ETextureFilter MagFilter = LINEAR;
+		ETextureFilter MagFilter = ANISOTROPIC;
 		
+		Int32 MaxAniso = 16;
+
 		EDataType DataType = UNSIGNED_BYTE;
 		bool bGenerateMipMap = true;
 
@@ -109,6 +111,7 @@ namespace ZE
 		FORCEINLINE ETextureFilter getMagFilter() const { return m_textureDesc.MagFilter; }
 		FORCEINLINE EDataType getDataType() const { return m_textureDesc.DataType; }
 		FORCEINLINE Vector4 getBorderColor() const { return m_textureDesc.BorderColor; }
+		FORCEINLINE Int32 getMaxAniso() const { return m_textureDesc.MaxAniso; }
 
 		FORCEINLINE bool isGenerateMipMap() const { return m_textureDesc.bGenerateMipMap; }
 

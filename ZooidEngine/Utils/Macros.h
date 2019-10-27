@@ -4,7 +4,7 @@
 // This is macros helper
 
 #if defined(WIN32) || defined(WIN64)
-#define ZE_PLATFORM_WINDOWS
+#define ZE_PLATFORM_WINDOWS 1
 #else
 #define ZE_PLATFORM_UNKNOWN
 #endif

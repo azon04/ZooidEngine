@@ -2,10 +2,10 @@ ZooidEngine: [LOG_ENGINE] Log: CPU Processor: Intel(R) Core(TM) i9-9900K CPU @ 3
 ZooidEngine: [LOG_ENGINE] Log: CPU Speed: 3600 MHz 
 ZooidEngine: [LOG_ENGINE] Log: RAM Detected 
 ZooidEngine: [LOG_ENGINE] Log: Total Physical RAM: 15.908588 GB 
-ZooidEngine: [LOG_ENGINE] Log: Available Physical RAM: 1.370663 GB 
+ZooidEngine: [LOG_ENGINE] Log: Available Physical RAM: 5.425690 GB 
 ZooidEngine: [LOG_ENGINE] Log: Total Virtual Memory: 1.999878 GB 
 ZooidEngine: [LOG_ENGINE] Log: Avail Virtual Memory: 1.923027 GB 
-ZooidEngine: [LOG_ENGINE] Log: Total Available Disk in D: 2.612514 GB 
+ZooidEngine: [LOG_ENGINE] Log: Total Available Disk in D: 2.777550 GB 
 ZooidEngine: [LOG_MEMORY] Log: Total Mem Size : 6143240 bytes ~ 5.858650 MB 
 ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 3072 bytes with 341 blocks on index 10 
 ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 4608 bytes with 227 blocks replacing block on index 10 
@@ -142,6 +142,8 @@ ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 384 bytes with
 ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 448 bytes with 512 blocks on index 21 
 ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 896 bytes with 512 blocks on index 22 
 ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 1792 bytes with 512 blocks replacing block on index 21 
-ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 2048 bytes with 512 blocks on index 23 
-ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 3584 bytes with 292 blocks on index 24 
-ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 7168 bytes with 146 blocks on index 25 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 3584 bytes with 292 blocks on index 23 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 7168 bytes with 146 blocks on index 24 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 14336 bytes with 73 blocks replacing block on index 23 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 28672 bytes with 36 blocks replacing block on index 24 
+ZooidEngine: [LOG_MEMORY] Log: Created Additional Memory Pool for 57344 bytes with 18 blocks on index 25 

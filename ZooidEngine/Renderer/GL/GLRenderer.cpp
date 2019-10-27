@@ -57,8 +57,8 @@ namespace ZE
 	void GLRenderer::Setup()
 	{
 		glfwInit();
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, ZE_GL_VERSION_MAJOR);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, ZE_GL_VERSION_MINOR);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		//glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 		
@@ -188,7 +188,7 @@ namespace ZE
 	void GLRenderer::DrawIndexed(ERenderTopologyEnum primitiveTopology, UInt32 indexStride, UInt32 count, void* indices)
 	{
 		GLenum drawTopology = translateTopology(primitiveTopology);
-
+		
 		glDrawElements(drawTopology, count, indexStride == 4 ? GL_UNSIGNED_INT : GL_UNSIGNED_SHORT, indices);
 	}
 

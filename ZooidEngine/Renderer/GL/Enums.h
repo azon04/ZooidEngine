@@ -5,7 +5,7 @@
 #include "Utils/PrimitiveTypes.h"
 #include "Utils/Macros.h"
 
-#include <GL/glew.h>
+#include "GLRenderer.h"
 
 namespace ZE
 {
@@ -101,6 +101,7 @@ namespace ZE
 			return GL_LINEAR_MIPMAP_NEAREST;
 		case NEAREST_MIPMAP_LINEAR:
 			return GL_NEAREST_MIPMAP_LINEAR;
+		case ANISOTROPIC:
 		case LINEAR:
 			return GL_LINEAR;
 		case LINEAR_MIPMAP_LINEAR:
