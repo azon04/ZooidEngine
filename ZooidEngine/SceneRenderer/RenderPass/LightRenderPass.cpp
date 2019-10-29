@@ -56,12 +56,17 @@ void ZE::LightRenderPass::prepare(GameContext* _gameContext)
 			m_resultPassTexture->create(textureCreateDesc);
 		}
 
-		// Depth Render Buffer
-		Handle depthRenderBuffer = _gameContext->getRenderZooid()->CreateRenderBuffer();
-		if (depthRenderBuffer.isValid())
+		// Depth Texture Buffer
+		textureCreateDesc.MinFilter = LINEAR;
+		textureCreateDesc.MagFilter = LINEAR;
+		textureCreateDesc.TextureFormat = TEX_DEPTH;
+		textureCreateDesc.DataType = FLOAT;
+		textureCreateDesc.bGenerateMipMap = false;
+		Handle depthTextureBuffer = _gameContext->getRenderZooid()->CreateRenderTexture();
+		if (depthTextureBuffer.isValid())
 		{
-			m_depthRenderBuffer = depthRenderBuffer.getObject<IGPURenderBuffer>();
-			m_depthRenderBuffer->create(DEPTH_ONLY, textureCreateDesc.Width, textureCreateDesc.Height);
+			m_depthTexture = depthTextureBuffer.getObject<IGPUTexture>();
+			m_depthTexture->create(textureCreateDesc);
 		}
 
 		// Create Frame Buffer
@@ -71,7 +76,7 @@ void ZE::LightRenderPass::prepare(GameContext* _gameContext)
 			m_resultFrameBuffer = fbHandle.getObject<IGPUFrameBuffer>();
 			m_resultFrameBuffer->bind();
 			m_resultFrameBuffer->addTextureAttachment(COLOR_ATTACHMENT, m_resultPassTexture);
-			m_resultFrameBuffer->addRenderBufferAttachment(DEPTH_ATTACHMENT, m_depthRenderBuffer);
+			m_resultFrameBuffer->addTextureAttachment(DEPTH_ATTACHMENT, m_depthTexture);
 			m_resultFrameBuffer->setupAttachments();
 			m_resultFrameBuffer->unbind();
 		}
@@ -96,7 +101,7 @@ void ZE::LightRenderPass::prepare(GameContext* _gameContext)
 			m_lightVolumeFrameBuffer = lightFbHandle.getObject<IGPUFrameBuffer>();
 			m_lightVolumeFrameBuffer->bind();
 			m_lightVolumeFrameBuffer->addTextureAttachment(COLOR_ATTACHMENT, m_lightVolumeIndexTexture);
-			m_lightVolumeFrameBuffer->addRenderBufferAttachment(DEPTH_ATTACHMENT, m_depthRenderBuffer);
+			m_lightVolumeFrameBuffer->addRenderBufferAttachment(DEPTH_ATTACHMENT, m_depthTexture);
 			m_lightVolumeFrameBuffer->setupAttachments();
 			m_lightVolumeFrameBuffer->unbind();
 		}

@@ -15,6 +15,7 @@
 #include "Renderer/IGPUTexture.h"
 #include "Renderer/IShader.h"
 #include "Renderer/IGPUStates.h"
+#include "Resources/Material.h"
 #include "ResourceManagers/BufferManager.h"
 #include "ResourceManagers/ShaderManager.h"
 
@@ -23,8 +24,8 @@ namespace ZE
 
 	ShadowDepthRenderer::ShadowDepthRenderer()
 	{
-		m_shaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_SHADOW_DEPTH);
-		m_skinnedShaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_cHAIN_SHADOW_DEPTH_SKINNED);
+		m_shaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_DEPTH_ONLY);
+		m_skinnedShaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_DEPTH_ONLY_SKINNED);
 	}
 
 	void ShadowDepthRenderer::setupShadowMapData(LightShadowMapData* shadowMapData)
@@ -128,6 +129,11 @@ namespace ZE
 
 				currentMesh.m_gpuBufferArray->bind();
 
+				if (currentMesh.m_material)
+				{
+					currentMesh.m_material->Bind(shaderChain);
+				}
+
 				if (currentMesh.m_gpuBufferArray->isUsingIndexBuffer())
 				{
 					gGameContext->getRenderer()->DrawIndexed(currentMesh.m_renderTopology, 4, currentMesh.drawCount, nullptr);
@@ -156,6 +162,11 @@ namespace ZE
 				shaderChain->bindConstantBuffer("draw_data", drawBufferData);
 
 				currentMesh.m_gpuBufferArray->bind();
+
+				if (currentMesh.m_material)
+				{
+					currentMesh.m_material->Bind(shaderChain);
+				}
 
 				if (currentMesh.m_gpuBufferArray->isUsingIndexBuffer())
 				{

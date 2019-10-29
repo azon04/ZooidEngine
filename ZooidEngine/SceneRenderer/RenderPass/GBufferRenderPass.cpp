@@ -6,6 +6,7 @@
 #include "Renderer/IGPUTexture.h"
 #include "Renderer/IGPURenderBuffer.h"
 #include "Renderer/IGPUFrameBuffer.h"
+#include "Renderer/IGPUStates.h"
 #include "Renderer/DrawList.h"
 #include "SceneRenderer/SceneRenderer.h"
 #include "SceneRenderer/RenderGatherer.h"
@@ -156,14 +157,32 @@ namespace ZE
 	bool GBufferRenderPass::execute_GPU(GameContext* _gameContext)
 	{
 		DrawList* drawList = _gameContext->getDrawList();
-
 		_gameContext->getRenderer()->ResetViewport();
-		_gameContext->getRenderer()->ClearScreen();
+
+		if (m_textureBufferInputs.size() > 0)
+		{
+			IGPUTexture* depthTexture = m_textureBufferInputs[0];
+
+			// Attach depth texture to frame buffer
+			m_frameBuffer->addTextureAttachment(DEPTH_ATTACHMENT, depthTexture);
+
+			_gameContext->getRenderer()->SetRenderDepthStencilState(TRenderDepthStencilState<true, false, false, ERendererCompareFunc::LEQUAL, ERendererCompareFunc::ALWAYS, 0, 0, 0>::GetGPUState());
+			_gameContext->getRenderer()->Clear(ERenderBufferBit::COLOR_BUFFER_BIT | ERenderBufferBit::STENCIL_BUFFER_BIT);
+		}
+		else
+		{
+			_gameContext->getRenderer()->ClearScreen();
+		}
+
 
 		MeshSceneRenderer::Render(drawList->m_meshRenderGatherer.getRenderInfos(), drawList->m_meshRenderGatherer.getRenderCount(), m_shaderChain);
 		SkinMeshSceneRenderer::Render(drawList->m_skinMeshRenderGatherer.getRenderInfos(), drawList->m_skinMeshRenderGatherer.getRenderCount(), m_shaderSkinChain);
 		//TransculentSceneRenderer::Render(drawList->m_transculentRenderGatherer.getRenderInfos(), drawList->m_transculentRenderGatherer.getRenderCount(), m_shaderChain);
 
+		if (m_textureBufferInputs.size() > 0)
+		{
+			_gameContext->getRenderer()->SetRenderDepthStencilState(DefaultDepthStencilState::GetGPUState());
+		}
 		return true;
 	}
 

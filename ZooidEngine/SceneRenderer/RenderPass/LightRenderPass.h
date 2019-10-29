@@ -61,7 +61,7 @@ namespace ZE
 
 		// Textures and FrameBuffers
 		IGPUTexture* m_resultPassTexture;
-		IGPURenderBuffer* m_depthRenderBuffer;
+		IGPUTexture* m_depthTexture;
 		IGPUFrameBuffer* m_resultFrameBuffer;
 
 		// Light Volume Shapes

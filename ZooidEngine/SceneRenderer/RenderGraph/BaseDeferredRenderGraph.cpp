@@ -7,6 +7,7 @@
 #include "SceneRenderer/RenderPass/DebugRenderPass.h"
 #include "SceneRenderer/RenderPass/SSAORenderPass.h"
 #include "SceneRenderer/RenderPass/TransculentRenderPass.h"
+#include "SceneRenderer/RenderPass/DepthRenderPass.h"
 
 #include "Renderer/IGPUBufferData.h"
 #include "Renderer/DrawList.h"
@@ -19,6 +20,7 @@ namespace ZE
 
 	void BaseDeferredRenderGraph::init(GameContext* _gameContext)
 	{
+		DepthRenderPass::GetInstance()->prepare(_gameContext);
 		GBufferRenderPass::GetInstance()->prepare(_gameContext);
 		LightRenderPass::GetInstance()->prepare(_gameContext);
 		ShadowDepthRenderPass::GetInstance()->prepare(_gameContext);
@@ -30,6 +32,7 @@ namespace ZE
 
 	void BaseDeferredRenderGraph::release(GameContext* _gameContext)
 	{
+		DepthRenderPass::GetInstance()->release(_gameContext);
 		GBufferRenderPass::GetInstance()->release(_gameContext);
 		LightRenderPass::GetInstance()->release(_gameContext);
 		ShadowDepthRenderPass::GetInstance()->release(_gameContext);
@@ -57,7 +60,12 @@ namespace ZE
 
 	bool BaseDeferredRenderGraph::execute(GameContext* _gameContext)
 	{
+		DepthRenderPass::GetInstance()->begin(_gameContext);
+		DepthRenderPass::GetInstance()->Execute(_gameContext);
+		DepthRenderPass::GetInstance()->end(_gameContext);
+
 		GBufferRenderPass::GetInstance()->begin(_gameContext);
+		GBufferRenderPass::GetInstance()->addInputTextureBuffer(DepthRenderPass::GetInstance()->getTextureOutput(0));
 		GBufferRenderPass::GetInstance()->Execute(_gameContext);
 		GBufferRenderPass::GetInstance()->end(_gameContext);
 

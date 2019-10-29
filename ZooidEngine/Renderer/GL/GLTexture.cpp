@@ -31,7 +31,11 @@ namespace ZE
 		glTexParameteri(imageType, GL_TEXTURE_MIN_FILTER, getTextureFilter(createDesc.MinFilter));
 		glTexParameteri(imageType, GL_TEXTURE_MAG_FILTER, getTextureFilter(createDesc.MagFilter));
 		
-		if ((createDesc.MagFilter == ANISOTROPIC || createDesc.MinFilter == ANISOTROPIC) && ((ZE_GL_VERSION_MAJOR >= 4 && ZE_GL_VERSION_MINOR >= 6) || GLEW_EXT_texture_filter_anisotropic))
+		if ((createDesc.MagFilter == ANISOTROPIC || createDesc.MinFilter == ANISOTROPIC) 
+#if !(ZE_GL_VERSION_MAJOR >= 4 && ZE_GL_VERSION_MINOR >= 6)
+			&& (GLEW_EXT_texture_filter_anisotropic)
+#endif
+			)
 		{
 			float hardwardMaxAniso = 8.0f;
 			glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &hardwardMaxAniso);

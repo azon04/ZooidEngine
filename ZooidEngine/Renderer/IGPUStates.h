@@ -78,7 +78,7 @@ namespace ZE
 		ERenderDepthStencilOps stencilFail = DS_OP_KEEP,
 		ERenderDepthStencilOps depthFail = DS_OP_KEEP,
 		ERenderDepthStencilOps depthStencilPass = DS_OP_REPLACE>
-		class TRenderDepthStencilState
+	class TRenderDepthStencilState
 	{
 	public:
 		static RenderDepthStencilState& GetStatic()
