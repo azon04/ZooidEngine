@@ -296,18 +296,8 @@ namespace ZE
 			}
 		}
 
-//  		if (mostTop > obMostTop) { mostTop = obMostTop; }
-//  		if (mostBottom < obMostBottom) { mostBottom = obMostBottom; }
-//  		if (mostRight > obMostRight) { mostRight = obMostRight; }
-//  		if (mostLeft < obMostLeft) { mostLeft = obMostLeft; }
 		if (mostNear < obMostNear) { mostNear = obMostNear; }
 		if (mostFar > obMostFar) { mostFar = obMostFar; }
-
-		// Add a little bit buffer size to the depth texture to prevent some shadow hiccup/anomaly
-// 		mostRight += 1.0f;
-// 		mostLeft -= 1.0f;
-// 		mostTop += 1.0f;
-// 		mostBottom -= 1.0f;
 
 		Vector3 newPos;
 		Vector3 dimension((mostRight - mostLeft), (mostTop - mostBottom), (mostNear - mostFar));
@@ -317,7 +307,7 @@ namespace ZE
 		newPos = newPos + zAxis * mostNear;
 		view.setPos(Vector3(xAxis | newPos * -1.0f, yAxis | newPos * -1.0f, zAxis | newPos * -1.0f));
 
-		MathOps::CreateOrthoProj(projection, dimension.getX(), dimension.getY(), 0.0f, dimension.getZ());
+		MathOps::CreateOrthoProj(projection, dimension.getX() * 0.5f, dimension.getY() * 0.5f, 0.0f, dimension.getZ());
 	}
 
 	void LightComponent::setupShadowMapsDirectional(UInt32 lightIndex)
