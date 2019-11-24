@@ -16,7 +16,8 @@ namespace ZE
 		RenderInfo() :
 			m_vertexShader(nullptr),
 			m_pixelShader(nullptr),
-			m_shaderChain(nullptr)
+			m_shaderChain(nullptr),
+			m_bCulled(false)
 		{
 			
 		}
@@ -28,6 +29,9 @@ namespace ZE
 		ERenderTopologyEnum m_renderTopology;
 		UInt32 drawCount;
 		Matrix4x4 m_worldTransform;
+		Vector3 m_boxExtent;
+		Vector3 m_boxLocalPos;
+		bool m_bCulled;
 	};
 };
 

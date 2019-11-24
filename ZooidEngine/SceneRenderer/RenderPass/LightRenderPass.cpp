@@ -40,8 +40,8 @@ void ZE::LightRenderPass::prepare(GameContext* _gameContext)
 	if (!m_resultFrameBuffer)
 	{
 		TextureCreateDesc textureCreateDesc;
-		textureCreateDesc.Width = _gameContext->getRenderer()->GetWidth();
-		textureCreateDesc.Height = _gameContext->getRenderer()->GetHeight();
+		textureCreateDesc.Width = (UInt32)_gameContext->getRenderer()->GetWidth();
+		textureCreateDesc.Height = (UInt32)_gameContext->getRenderer()->GetHeight();
 		textureCreateDesc.MinFilter = NEAREST;
 		textureCreateDesc.MagFilter = NEAREST;
 		textureCreateDesc.TextureFormat = TEX_RGB16F;
@@ -146,8 +146,8 @@ bool ZE::LightRenderPass::execute_GPU(GameContext* _gameContext)
 	IGPUFrameBuffer* inputFrameBuffer = m_frameBufferInputs[0];
 	ZCHECK(inputFrameBuffer);
 
-	Int32 width = _gameContext->getRenderer()->GetWidth();
-	Int32 height = _gameContext->getRenderer()->GetHeight();
+	Int32 width = (Int32)_gameContext->getRenderer()->GetWidth();
+	Int32 height = (Int32)_gameContext->getRenderer()->GetHeight();
 
 	// Bind Textures
 	ZCHECK(m_textureBufferInputs.length() == 6);
@@ -168,7 +168,6 @@ bool ZE::LightRenderPass::execute_GPU(GameContext* _gameContext)
 
 	// Copy Depth Buffer First
 	_gameContext->getRenderer()->CopyFrameBuffer(inputFrameBuffer, m_resultFrameBuffer, 0, 0, width, height, 0, 0, width, height, ERenderBufferBit::DEPTH_BUFFER_BIT, ETextureFilter::NEAREST);
-
 	// Set Blend State
 	renderer->SetRenderBlendState(TRenderBlendState<true, ERendererBlendFactor::ONE, ERendererBlendFactor::ONE>::GetGPUState());
 
@@ -178,7 +177,7 @@ bool ZE::LightRenderPass::execute_GPU(GameContext* _gameContext)
 	m_lightSampleData.viewPos = drawList->m_lightData.ViewPos;
 
 	// For each map do render light scene
-	for (Int32 lightIndex = 0; lightIndex < drawList->m_lightData.NumLight; lightIndex++)
+	for (UInt32 lightIndex = 0; lightIndex < drawList->m_lightData.NumLight; lightIndex++)
 	{
 		LightStruct& light = drawList->m_lightData.lights[lightIndex];
 		m_lightSampleData.light = light;

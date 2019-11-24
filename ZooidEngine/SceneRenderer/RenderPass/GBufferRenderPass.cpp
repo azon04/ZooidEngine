@@ -35,8 +35,8 @@ namespace ZE
 		if (!m_frameBuffer)
 		{
 			TextureCreateDesc textureCreateDesc;
-			textureCreateDesc.Width = _gameContext->getRenderer()->GetWidth();
-			textureCreateDesc.Height = _gameContext->getRenderer()->GetHeight();
+			textureCreateDesc.Width = (UInt32)_gameContext->getRenderer()->GetWidth();
+			textureCreateDesc.Height = (UInt32)_gameContext->getRenderer()->GetHeight();
 			textureCreateDesc.MinFilter = NEAREST;
 			textureCreateDesc.MagFilter = NEAREST;
 			textureCreateDesc.WrapU = CLAMP_TO_EDGE;

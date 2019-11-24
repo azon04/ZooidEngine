@@ -23,7 +23,7 @@ namespace ZE
 	LogManager::LogManager()
 		: m_logMask(0xFFFFFFFF)
 	{
-		//DisableLogGroup(LOG_MEMORY);
+		DisableLogGroup(LOG_MEMORY);
 		// #TODO Need to improve Logging file (too intrusive)
 		m_logWriter = FileWriter("Log.txt");
 	}

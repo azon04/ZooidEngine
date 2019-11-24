@@ -173,5 +173,19 @@ namespace ZE
 
 		return result;
 	}
+
+	FORCEINLINE GLenum getRenderQuery(ERenderQueryType type)
+	{
+		switch (type)
+		{
+		case RQ_ANY_SAMPLES_PASSED:
+			return GL_ANY_SAMPLES_PASSED;
+		case RQ_SAMPLES_PASS:
+			return GL_SAMPLES_PASSED;
+		case RQ_TIME_ELAPSED:
+			return GL_TIME_ELAPSED;
+		}
+		return 0;
+	}
 }
 #endif

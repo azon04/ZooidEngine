@@ -85,6 +85,8 @@ namespace ZE
 				}
 				skinMeshRenderInfo->m_worldTransform = m_worldTransform;
 				skinMeshRenderInfo->m_castShadow = m_bCastShadow;
+				skinMeshRenderInfo->m_boxExtent = m_mesh->getLocalBoxExtend();
+				skinMeshRenderInfo->m_boxLocalPos = m_mesh->getLocalBoxCenter();
 
 				SkeletonState* pSkeletonState = m_hSkeletonState.getObject<SkeletonState>();
 				pSkeletonState->updateBuffer();
@@ -115,6 +117,8 @@ namespace ZE
 				meshRenderInfo->m_material = mat;
 				meshRenderInfo->m_worldTransform = m_worldTransform;
 				meshRenderInfo->m_castShadow = m_bCastShadow;
+				meshRenderInfo->m_boxExtent = m_mesh->getLocalBoxExtend();
+				meshRenderInfo->m_boxLocalPos = m_mesh->getLocalBoxCenter();
 			}
 
 			/*if (m_bHighlight)

@@ -86,8 +86,8 @@ namespace ZE
 				m_noiseTexture->create(textureDesc);
 			}
 
-			textureDesc.Width = _gameContext->getRenderer()->GetWidth();
-			textureDesc.Height = _gameContext->getRenderer()->GetHeight();
+			textureDesc.Width = (UInt32)_gameContext->getRenderer()->GetWidth();
+			textureDesc.Height = (UInt32)_gameContext->getRenderer()->GetHeight();
 			textureDesc.TextureFormat = TEX_R16F;
 			textureDesc.MinFilter = NEAREST;
 			textureDesc.MagFilter = NEAREST;

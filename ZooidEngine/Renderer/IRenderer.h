@@ -85,6 +85,9 @@ namespace ZE
 		// Set Render Rasterizer State
 		virtual void SetRenderRasterizerState(IGPURasterizerState* renderRasterizerState) = 0;
 
+		// Set Color Mask
+		virtual void MaskColor(bool redMask, bool greenMask, bool blueMask, bool alphaMask) = 0;
+
 		// Copy Frame Buffer to another Frame Buffer
 		virtual void CopyFrameBuffer(IGPUFrameBuffer* frameBufferFrom, IGPUFrameBuffer* frameBufferTo, Int32 srcX0, Int32 srcY0, Int32 srcX1, Int32 srcY1, Int32 dstX0, Int32 dstY0, Int32 dstX1, Int32 dstY1, UInt32 mask, ETextureFilter filter) = 0;
 
@@ -120,6 +123,27 @@ namespace ZE
 
 		// Pop Debug Group
 		virtual void PopDebugGroup() = 0;
+
+		// Flush all commands
+		virtual void FlushCommands() = 0;
+
+		// This will stall the CPU until all commands executed
+		virtual void FinishCommands() = 0;
+
+		// Query Operations
+
+		// Begin Query: Return Query Id
+		virtual UInt32 BeginQuery(ERenderQueryType type) = 0;
+
+		// Check if query result is available
+		virtual bool CheckQueryAvailable(UInt32 queryId) = 0;
+
+		// Return the query result
+		virtual void RetreiveQueryResult(ERenderQueryType type, UInt32 queryId, UInt32* result) = 0;
+
+		// End Query
+		virtual void EndQuery(ERenderQueryType type, UInt32 queryId) = 0;
+
 
 	#if defined(_WIN32) || defined(_WIN64)
 		virtual HWND getWinWindow() = 0;

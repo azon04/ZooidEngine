@@ -53,6 +53,7 @@ public:
 	virtual void SetBlendColorRef(Float32 red, Float32 green, Float32 blue, Float32 alpha) override;
 	virtual void SetRenderDepthStencilState(IGPUDepthStencilState* renderDepthStencilState) override;
 	virtual void SetRenderRasterizerState(IGPURasterizerState* renderRasterizerState) override;
+	virtual void MaskColor(bool redMask, bool greenMask, bool blueMask, bool alphaMask) override;
 
 	virtual bool IsClose() override;
 
@@ -66,6 +67,18 @@ public:
 	virtual float GetWidth() const { return (float)m_width; }
 
 	virtual void Resize(UInt32 width, UInt32 height);
+
+	// Flush all commands
+	virtual void FlushCommands();
+
+	// This will stall the CPU until all commands executed
+	virtual void FinishCommands();
+
+	virtual UInt32 BeginQuery(ERenderQueryType type) override;
+	virtual bool CheckQueryAvailable(UInt32 queryId) override;
+	virtual void RetreiveQueryResult(ERenderQueryType type, UInt32 queryId, UInt32* result) override;
+	virtual void EndQuery(ERenderQueryType type, UInt32 queryId) override;
+
 
 #if defined(_WIN32) || defined(_WIN64)
 	virtual HWND getWinWindow() override
@@ -89,6 +102,9 @@ private:
 	Int32 m_height;
 
 	UInt32 currentDebugId;
+	UInt32 currentQueryId;
+
+	Array<GLuint> m_queryIds;
 };
 }
 #endif

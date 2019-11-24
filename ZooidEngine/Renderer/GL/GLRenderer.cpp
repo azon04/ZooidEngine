@@ -114,6 +114,7 @@ namespace ZE
 	void GLRenderer::BeginFrame()
 	{
 		currentDebugId = 0;
+		currentQueryId = 0;
 	}
 
 	void GLRenderer::EndFrame()
@@ -123,6 +124,11 @@ namespace ZE
 
 	void GLRenderer::Clean()
 	{
+		if (m_queryIds.size() > 0)
+		{
+			glDeleteQueries(m_queryIds.size(), m_queryIds.data());
+			m_queryIds.clear();
+		}
 		glfwTerminate();
 	}
 
@@ -358,6 +364,54 @@ namespace ZE
 	{
 		m_width = (Int32)width;
 		m_height = (Int32)height;
+	}
+
+	void GLRenderer::FlushCommands()
+	{
+		glFlush();
+	}
+
+	void GLRenderer::FinishCommands()
+	{
+		glFinish();
+	}
+
+	ZE::UInt32 GLRenderer::BeginQuery(ERenderQueryType type)
+	{
+		while (currentQueryId >= m_queryIds.size())
+		{
+			GLuint newId;
+			glGenQueries(1, &newId);
+			m_queryIds.push_back(newId);
+		}
+
+		glBeginQuery(getRenderQuery(type), m_queryIds[currentQueryId++]);
+		
+		return currentQueryId;
+	}
+
+	bool GLRenderer::CheckQueryAvailable(UInt32 queryId)
+	{
+		GLuint isAvailable = GL_FALSE;
+		glGetQueryObjectuiv(m_queryIds[queryId-1], GL_QUERY_RESULT_AVAILABLE, &isAvailable);
+		return isAvailable;
+	}
+
+	void GLRenderer::RetreiveQueryResult(ERenderQueryType type, UInt32 queryId, UInt32* result)
+	{
+		GLuint val;
+		glGetQueryObjectuiv(m_queryIds[queryId-1], GL_QUERY_RESULT, &val);
+		*result = val;
+	}
+
+	void GLRenderer::EndQuery(ERenderQueryType type, UInt32 queryId)
+	{
+		glEndQuery(getRenderQuery(type));
+	}
+
+	void GLRenderer::MaskColor(bool redMask, bool greenMask, bool blueMask, bool alphaMask)
+	{
+		glColorMask(redMask ? GL_TRUE : GL_FALSE, greenMask ? GL_TRUE : GL_FALSE, blueMask ? GL_TRUE : GL_FALSE, alphaMask ? GL_TRUE : GL_FALSE);
 	}
 
 }

@@ -186,6 +186,13 @@ namespace ZE
 		DS_OP_DECR_WRAP,
 		DS_OP_INVERT
 	};
+
+	enum ERenderQueryType : UInt8
+	{
+		RQ_SAMPLES_PASS,
+		RQ_ANY_SAMPLES_PASSED,
+		RQ_TIME_ELAPSED
+	};
 }
 #endif // !__ZE_RENDERER_ENUMS_H__
 

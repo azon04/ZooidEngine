@@ -41,6 +41,9 @@ namespace ZE
 		{
 			MeshRenderInfo& currentMesh = meshRenderInfos[index];
 
+			// If this mesh is being culled
+			if (currentMesh.m_bCulled) { continue; }
+
 			ZCHECK(currentMesh.m_gpuBufferArray);
 
 			bool bShaderNeedReset = false;
@@ -291,6 +294,9 @@ namespace ZE
 		for (UInt32 index = 0; index < renderInfoCount; index++)
 		{
 			SkinMeshRenderInfo& currentMesh = meshRenderInfos[index];
+
+			// If this mesh is being culled
+			if (currentMesh.m_bCulled) { continue; }
 
 			ZCHECK(currentMesh.m_gpuBufferArray);
 
