@@ -16,6 +16,8 @@
 
 namespace ZE
 {
+	bool g_bDoSceneOcclusion = true;
+
 	DepthRenderPass::DepthRenderPass()
 	{
 		m_shaderChain = nullptr;
@@ -109,8 +111,11 @@ namespace ZE
 		MeshSceneRenderer::Render(drawList->m_meshRenderGatherer.getRenderInfos(), drawList->m_meshRenderGatherer.getRenderCount(), m_shaderChain);
 		SkinMeshSceneRenderer::Render(drawList->m_skinMeshRenderGatherer.getRenderInfos(), drawList->m_skinMeshRenderGatherer.getRenderCount(), m_skinnedShaderChain);
 
-		doOcclusionSceneQueries(drawList->m_meshRenderGatherer.getRenderInfos(), drawList->m_meshRenderGatherer.getRenderCount());
-		doOcclusionSceneQueries(drawList->m_skinMeshRenderGatherer.getRenderInfos(), drawList->m_skinMeshRenderGatherer.getRenderCount(), true);
+		if (g_bDoSceneOcclusion)
+		{
+			doOcclusionSceneQueries(drawList->m_meshRenderGatherer.getRenderInfos(), drawList->m_meshRenderGatherer.getRenderCount());
+			doOcclusionSceneQueries(drawList->m_skinMeshRenderGatherer.getRenderInfos(), drawList->m_skinMeshRenderGatherer.getRenderCount(), true);
+		}
 
 		return true;
 	}
@@ -135,27 +140,40 @@ namespace ZE
 
 		// Set Depth State
 		gGameContext->getRenderer()->SetRenderDepthStencilState(TRenderDepthStencilState<true, false, false, ERendererCompareFunc::LEQUAL, ERendererCompareFunc::ALWAYS, 0, 0, 0>::GetGPUState());
+		gGameContext->getRenderer()->SetRenderRasterizerState(TRenderRasterizerState<EFaceFrontOrder::CCW, ECullFace::CULL_NONE, ERenderFillMode::MODE_FILL>::GetGPUState());
 
+		Matrix4x4 transform;
+		Matrix4x4 worldTransform;
+		Vector3 extent;
+		Vector3 pos;
+		
 		for (UInt32 index = 0; index < renderInfoCount; index++)
 		{
-			Matrix4x4 transform;
-
 			if (bUsingSkeleton)
 			{
 				SkinMeshRenderInfo& skinMesh = skinMeshRenderInfos[index];
 
-				transform.setScale(skinMesh.m_boxExtent * 2.0f);
-				transform.setPos(skinMesh.m_boxLocalPos);
-				transform = transform * skinMesh.m_worldTransform;
+				extent = skinMesh.m_boxExtent;
+				pos = skinMesh.m_boxLocalPos;
+				worldTransform = skinMesh.m_worldTransform;
 			}
 			else
 			{
 				MeshRenderInfo& currentMesh = meshRenderInfos[index];
 
-				transform.setScale(currentMesh.m_boxExtent * 2.0f);
-				transform.setPos(currentMesh.m_boxLocalPos);
-				transform = transform * currentMesh.m_worldTransform;
+				extent = currentMesh.m_boxExtent;
+				pos = currentMesh.m_boxLocalPos;
+				worldTransform = currentMesh.m_worldTransform;
 			}
+
+			// check if scale has any zero
+			if (extent.m_x == 0.0f) { extent.m_x = 0.001f; }
+			if (extent.m_y == 0.0f) { extent.m_y = 0.001f; }
+			if (extent.m_z == 0.0f) { extent.m_z = 0.001f; }
+
+			transform.setScale(extent * 2.0f);
+			transform.setPos(pos);
+			transform = transform * worldTransform;
 
 			// Bind frame_data
 			gGameContext->getDrawList()->m_mainConstantBuffer->bind();
@@ -171,6 +189,7 @@ namespace ZE
 			renderQueries[index].EndQuery();
 		}
 		
+		gGameContext->getRenderer()->SetRenderRasterizerState(DefaultRasterizerState::GetGPUState());
 		gGameContext->getRenderer()->SetRenderDepthStencilState(DefaultDepthStencilState::GetGPUState());
 
 		cubeArray->unbind();
@@ -178,6 +197,7 @@ namespace ZE
 
 		// Flush Command to get the query results
 		gGameContext->getRenderer()->FlushCommands();
+		gGameContext->getRenderer()->FinishCommands();
 
 		for (UInt32 index = 0; index < renderInfoCount; index++)
 		{

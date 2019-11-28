@@ -2,7 +2,7 @@ ZooidEngine: [LOG_ENGINE] Log: CPU Processor: Intel(R) Core(TM) i9-9900K CPU @ 3
 ZooidEngine: [LOG_ENGINE] Log: CPU Speed: 3600 MHz 
 ZooidEngine: [LOG_ENGINE] Log: RAM Detected 
 ZooidEngine: [LOG_ENGINE] Log: Total Physical RAM: 15.908588 GB 
-ZooidEngine: [LOG_ENGINE] Log: Available Physical RAM: 3.582500 GB 
+ZooidEngine: [LOG_ENGINE] Log: Available Physical RAM: 1.464317 GB 
 ZooidEngine: [LOG_ENGINE] Log: Total Virtual Memory: 1.999878 GB 
-ZooidEngine: [LOG_ENGINE] Log: Avail Virtual Memory: 1.738884 GB 
-ZooidEngine: [LOG_ENGINE] Log: Total Available Disk in D: 2.904118 GB 
+ZooidEngine: [LOG_ENGINE] Log: Avail Virtual Memory: 1.923008 GB 
+ZooidEngine: [LOG_ENGINE] Log: Total Available Disk in D: 2.848618 GB 

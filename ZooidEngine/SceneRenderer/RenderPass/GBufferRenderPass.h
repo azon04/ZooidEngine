@@ -39,7 +39,7 @@ namespace ZE
 		IGPUTexture* m_albedoTexture;
 		IGPUTexture* m_ambientTexture;
 		IGPUTexture* m_specTexture;
-		IGPURenderBuffer* m_depthRenderBuffer;
+		IGPUTexture* m_renderDepthTexture;
 		IGPUFrameBuffer* m_frameBuffer;
 
 	};

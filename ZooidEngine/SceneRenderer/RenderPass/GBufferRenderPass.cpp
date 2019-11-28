@@ -91,11 +91,17 @@ namespace ZE
 				m_albedoTexture->create(textureCreateDesc);
 			}
 
-			Handle depthRenderBuffer = _gameContext->getRenderZooid()->CreateRenderBuffer();
+			// Depth Texture Buffer
+			textureCreateDesc.MinFilter = LINEAR;
+			textureCreateDesc.MagFilter = LINEAR;
+			textureCreateDesc.TextureFormat = TEX_DEPTH;
+			textureCreateDesc.DataType = FLOAT;
+			textureCreateDesc.bGenerateMipMap = false;
+			Handle depthRenderBuffer = _gameContext->getRenderZooid()->CreateRenderTexture();
 			if (depthRenderBuffer.isValid())
 			{
-				m_depthRenderBuffer = depthRenderBuffer.getObject<IGPURenderBuffer>();
-				m_depthRenderBuffer->create(DEPTH_ONLY, textureCreateDesc.Width, textureCreateDesc.Height);
+				m_renderDepthTexture = depthRenderBuffer.getObject<IGPUTexture>();
+				m_renderDepthTexture->create(textureCreateDesc);
 			}
 
 			// Create Frame Buffer
@@ -109,7 +115,7 @@ namespace ZE
 				m_frameBuffer->addTextureAttachment(COLOR_ATTACHMENT, m_albedoTexture, 2);
 				m_frameBuffer->addTextureAttachment(COLOR_ATTACHMENT, m_specTexture, 3);
 				m_frameBuffer->addTextureAttachment(COLOR_ATTACHMENT, m_ambientTexture, 4);
-				m_frameBuffer->addRenderBufferAttachment(DEPTH_ATTACHMENT, m_depthRenderBuffer);
+				m_frameBuffer->addTextureAttachment(DEPTH_ATTACHMENT, m_renderDepthTexture);
 				m_frameBuffer->setupAttachments();
 				m_frameBuffer->unbind();
 			}
@@ -124,7 +130,7 @@ namespace ZE
 		if (m_normalTexture) { m_normalTexture->release(); m_normalTexture = nullptr; }
 		if (m_albedoTexture) { m_albedoTexture->release(); m_albedoTexture = nullptr; }
 		if (m_specTexture) { m_specTexture->release(); m_specTexture = nullptr; }
-		if (m_depthRenderBuffer) { m_depthRenderBuffer->release(); m_depthRenderBuffer = nullptr; }
+		if (m_renderDepthTexture) { m_renderDepthTexture->release(); m_renderDepthTexture = nullptr; }
 	}
 
 	void GBufferRenderPass::begin(GameContext* _gameContext)
