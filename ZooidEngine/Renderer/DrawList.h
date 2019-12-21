@@ -24,8 +24,10 @@ namespace ZE
 
 		Matrix4x4 view;
 		Matrix4x4 projection;
+		Matrix4x4 cullingBoxTransform;
 
 		Frustum lightFrustum;
+		bool bCull; // Whether we should cull this shadow map or no.
 
 		// Mesh list to render at this shadow depth generation
 		MeshRenderGatherer meshRenderGatherer;
