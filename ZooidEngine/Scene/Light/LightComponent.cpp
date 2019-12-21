@@ -252,7 +252,7 @@ namespace ZE
 
 	// view: before transpose
 	void LightComponent::calculateCascadeLightFustrum(Matrix4x4& view, Matrix4x4& projection, ViewFrustum* camFustrum, Float32 cascadeDistStart, Float32 cascadeDistEnd, 
-		Float32 obMostRight, Float32 obMostLeft, Float32 obMostTop, Float32 obMostBottom, Float32 obMostNear, Float32 obMostFar)
+		Float32 obMostRight, Float32 obMostLeft, Float32 obMostTop, Float32 obMostBottom, Float32 obMostNear, Float32 obMostFar, Matrix4x4& cullingBoxTransform)
 	{
 		Vector3 xAxis = view.getU();
 		Vector3 yAxis = view.getV();
@@ -300,12 +300,19 @@ namespace ZE
 		if (mostFar > obMostFar) { mostFar = obMostFar; }
 
 		Vector3 newPos;
+		Vector3 centerPos;
 		Vector3 dimension((mostRight - mostLeft), (mostTop - mostBottom), (mostNear - mostFar));
 
 		newPos = newPos + xAxis * (mostLeft + dimension.getX() * 0.5f);
 		newPos = newPos + yAxis * (mostBottom + dimension.getY() * 0.5f);
+		centerPos = newPos;
 		newPos = newPos + zAxis * mostNear;
+		centerPos = centerPos + zAxis * (mostFar + dimension.getZ() * 0.5f);
 		view.setPos(Vector3(xAxis | newPos * -1.0f, yAxis | newPos * -1.0f, zAxis | newPos * -1.0f));
+
+		cullingBoxTransform = m_worldTransform;
+		cullingBoxTransform.setPos(centerPos);
+		cullingBoxTransform.setScale(dimension);
 
 		MathOps::CreateOrthoProj(projection, dimension.getX() * 0.5f, dimension.getY() * 0.5f, 0.0f, dimension.getZ());
 	}
@@ -405,6 +412,7 @@ namespace ZE
 // 		}
 // 		else
 		{
+			if(m_staticShadowTexture)
 			{
 				LightShadowMapData& shadowMapData = m_gameContext->getDrawList()->getNextLightShadowMapData();
 				shadowMapData.dynamicShadowFrameBuffer = nullptr;
@@ -412,6 +420,7 @@ namespace ZE
 				shadowMapData.staticShadowTexture = m_staticShadowTexture;
 				shadowMapData.lightIndex = lightIndex;
 				shadowMapData.cascadeIndex = -1;
+				// #TODO Dont cull this
 			}
 			
 
@@ -421,11 +430,12 @@ namespace ZE
 			for (int i = 0; i < numberOfCascade; i++)
 			{
 				Matrix4x4 localView = view;
+				Matrix4x4 cullingBoxTransform;
 				int cascadeIndex = m_gameContext->getDrawList()->m_lightData.NumCascade++;
 				CascadeShadowData& cascadeData = m_gameContext->getDrawList()->m_lightData.cascadeShadowData[cascadeIndex];
 				
 				calculateCascadeLightFustrum(localView, projection, &(drawList->m_viewFustrum), currentCascadeStart, cascadedDistances[i], 
-					obMostRight, obMostLeft, obMostTop, obMostBottom, obMostNear, obMostFar);
+					obMostRight, obMostLeft, obMostTop, obMostBottom, obMostNear, obMostFar, cullingBoxTransform);
 
 				cascadeData.cascadeDistance = cascadedDistances[i] * cameraRange;
 				currentCascadeStart = cascadedDistances[i] - 0.0025f;
@@ -440,6 +450,8 @@ namespace ZE
 				shadowMapData.view = localView;
 				shadowMapData.projection = projection;
 				shadowMapData.lightFrustum.constructFromMVPMatrix(localView * projection);
+				shadowMapData.bCull = false;
+				shadowMapData.cullingBoxTransform = cullingBoxTransform;
 
 				lightData.cascadeShadowIndices[i] = cascadeIndex;
 			}
@@ -464,6 +476,13 @@ namespace ZE
 		shadowMapData.view = view;
 		shadowMapData.projection = projection;
 		shadowMapData.lightFrustum.constructFromMVPMatrix(view * projection);
+		shadowMapData.bCull = false;
+		
+		Matrix4x4 cullingBoxTransform = m_worldTransform;
+		cullingBoxTransform.setPos(cullingBoxTransform.getPos() + cullingBoxTransform.getN() * (m_attDistance * 0.5));
+		cullingBoxTransform.scale(Vector3(m_attDistance));
+
+		shadowMapData.cullingBoxTransform = cullingBoxTransform;
 	}
 
 	void LightComponent::setupShadowMapsPointLight(UInt32 lightIndex)
@@ -496,6 +515,12 @@ namespace ZE
 			shadowMapData.view = view;
 			shadowMapData.projection = projection;
 			shadowMapData.lightFrustum.constructFromMVPMatrix(view * projection);
+			shadowMapData.bCull = false;
+
+			Matrix4x4 cullingBoxTransform = m_worldTransform;
+			cullingBoxTransform.scale(Vector3(m_attDistance * 2.0f));
+
+			shadowMapData.cullingBoxTransform = cullingBoxTransform;
 		}
 	}
 

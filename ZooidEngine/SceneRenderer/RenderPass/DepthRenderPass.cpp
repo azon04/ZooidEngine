@@ -17,6 +17,7 @@
 namespace ZE
 {
 	bool g_bDoSceneOcclusion = true;
+	bool g_bDoShadowOcclusion = true;
 
 	DepthRenderPass::DepthRenderPass()
 	{
@@ -115,6 +116,11 @@ namespace ZE
 		{
 			doOcclusionSceneQueries(drawList->m_meshRenderGatherer.getRenderInfos(), drawList->m_meshRenderGatherer.getRenderCount());
 			doOcclusionSceneQueries(drawList->m_skinMeshRenderGatherer.getRenderInfos(), drawList->m_skinMeshRenderGatherer.getRenderCount(), true);
+			
+			if (g_bDoShadowOcclusion)
+			{
+				doShadowOcclusionQueries();
+			}
 		}
 
 		return true;
@@ -205,6 +211,75 @@ namespace ZE
 			if (renderQueries[index].IsResultAvailable())
 			{
 				currentMesh.m_bCulled = !renderQueries[index].GetBoolResult();
+			}
+		}
+
+		gGameContext->getRenderer()->PopDebugGroup();
+	}
+
+	void DepthRenderPass::doShadowOcclusionQueries()
+	{
+		gGameContext->getRenderer()->PushDebugGroup("ShadowOcclusionQueries");
+
+		DrawList* drawList = gGameContext->getDrawList();
+		const int shadowMapCount = drawList->m_lightShadowSize;
+
+		// Make Render Queries
+		Array<RenderQuery> renderQueries(shadowMapCount);
+
+		// Get the cube buffer
+		IGPUBufferArray* cubeArray = BufferManager::getInstance()->getBufferArray(BUFFER_ARRAY_CUBE);
+
+		m_shaderChain->bind();
+		cubeArray->bind();
+
+		// Set Depth State
+		gGameContext->getRenderer()->SetRenderDepthStencilState(TRenderDepthStencilState<true, false, false, ERendererCompareFunc::LEQUAL, ERendererCompareFunc::ALWAYS, 0, 0, 0>::GetGPUState());
+		gGameContext->getRenderer()->SetRenderRasterizerState(TRenderRasterizerState<EFaceFrontOrder::CCW, ECullFace::CULL_NONE, ERenderFillMode::MODE_FILL>::GetGPUState());
+
+		Matrix4x4 transform;
+		Matrix4x4 worldTransform;
+		Vector3 extent;
+		Vector3 pos;
+
+		for (UInt32 index = 0; index < shadowMapCount; index++)
+		{
+			if (drawList->m_lightShadowMapData[index].cascadeIndex == 0) { continue; } // first cascade index always visible, no need to do this
+
+			transform = drawList->m_lightShadowMapData[index].cullingBoxTransform;
+
+			// Bind frame_data
+			gGameContext->getDrawList()->m_mainConstantBuffer->bind();
+			m_shaderChain->bindConstantBuffer("frame_data", gGameContext->getDrawList()->m_mainConstantBuffer);
+
+			// Create and bind draw data
+			IGPUBufferData* drawBufferData = BufferManager::getInstance()->getOrCreateDrawBuffer(transform.m_data, sizeof(Matrix4x4));
+			drawBufferData->bind();
+			m_shaderChain->bindConstantBuffer("draw_data", drawBufferData);
+
+			renderQueries[index].BeginQuery(gGameContext->getRenderer(), RQ_ANY_SAMPLES_PASSED);
+			gGameContext->getRenderer()->DrawArray(ERenderTopologyEnum::TOPOLOGY_TRIANGLE, 0, 36);
+			renderQueries[index].EndQuery();
+		}
+
+		gGameContext->getRenderer()->SetRenderRasterizerState(DefaultRasterizerState::GetGPUState());
+		gGameContext->getRenderer()->SetRenderDepthStencilState(DefaultDepthStencilState::GetGPUState());
+
+		cubeArray->unbind();
+		m_shaderChain->unbind();
+
+		// Flush Command to get the query results
+		gGameContext->getRenderer()->FlushCommands();
+		gGameContext->getRenderer()->FinishCommands();
+
+		for (UInt32 index = 0; index < shadowMapCount; index++)
+		{
+			LightShadowMapData& lightMapData = drawList->m_lightShadowMapData[index];
+			if (lightMapData.cascadeIndex == 0) { continue; } // first cascade index always visible, no need to do this
+
+			if (renderQueries[index].IsResultAvailable())
+			{
+				lightMapData.bCull = !renderQueries[index].GetBoolResult();
 			}
 		}
 

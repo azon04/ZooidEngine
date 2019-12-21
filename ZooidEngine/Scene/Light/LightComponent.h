@@ -73,7 +73,7 @@ namespace ZE
 	protected:
 		void setupLight();
 		void calculateCascadeLightFustrum(Matrix4x4& view, Matrix4x4& projection, ViewFrustum* camFustrum, Float32 cascadeDistStart, Float32 cascadeDistEnd, 
-			Float32 obMostRight, Float32 obMostLeft, Float32 obMostTop, Float32 obMostBottom, Float32 obMostNear, Float32 obMostFar);
+			Float32 obMostRight, Float32 obMostLeft, Float32 obMostTop, Float32 obMostBottom, Float32 obMostNear, Float32 obMostFar, Matrix4x4& cullingBoxTransform);
 		void setupShadowMapsDirectional(UInt32 lightIndex);
 		void setupShadowMapsSpotLight(UInt32 lightIndex);
 		void setupShadowMapsPointLight(UInt32 lightIndex);

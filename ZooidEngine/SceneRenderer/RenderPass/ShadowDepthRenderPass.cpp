@@ -51,9 +51,13 @@ namespace ZE
 		for (UInt32 iShadowData = 0; iShadowData < drawList->m_lightShadowSize; iShadowData++)
 		{
 			LightShadowMapData& shadowMapData = drawList->m_lightShadowMapData[iShadowData];
+
+			// Should we cull shadows
+			if (shadowMapData.bCull) { continue; }
+			
 			LightStruct& light = drawList->m_lightData.lights[shadowMapData.lightIndex];
 
-			if (!shadowMapData.dynamicShadowFrameBuffer) { continue; }
+			if (!shadowMapData.dynamicShadowFrameBuffer || shadowMapData.bCull) { continue; }
 
 			ShadowDepthRenderer::Setup(&shadowMapData, &light, drawList);
 			ShadowDepthRenderer::BeginRender();

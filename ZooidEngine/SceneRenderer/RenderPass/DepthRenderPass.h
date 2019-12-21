@@ -28,6 +28,7 @@ namespace ZE
 		const char* getRenderPassName() const { return "DepthRenderPass"; }
 
 		void doOcclusionSceneQueries(RenderInfo* renderInfos, UInt32 renderInfoCount, bool bUsingSkeleton = false);
+		void doShadowOcclusionQueries();
 
 	protected:
 
