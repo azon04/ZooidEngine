@@ -16,8 +16,8 @@
 
 namespace ZE
 {
-	bool g_bDoSceneOcclusion = true;
-	bool g_bDoShadowOcclusion = true;
+	bool g_bDoSceneOcclusion = false;
+	bool g_bDoShadowOcclusion = false;
 
 	DepthRenderPass::DepthRenderPass()
 	{

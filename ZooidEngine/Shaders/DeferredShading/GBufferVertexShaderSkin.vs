@@ -45,11 +45,10 @@ void main()
 	boneTransform += boneMats[BoneIDs[2]] * BoneWeights[2];
 	boneTransform += boneMats[BoneIDs[3]] * BoneWeights[3];
 
-	vec4 targetPos = (projectionMat * viewMat * modelMat) * boneTransform * vec4(Pos, 1.0f);
+	gl_Position = (projectionMat * viewMat * modelMat) * boneTransform * vec4(Pos, 1.0f);
 	mat3 inverseTransposeModel = mat3(transpose(inverse(viewMat * modelMat * boneTransform)));
 	vs_out.Normal = inverseTransposeModel * Normal;
 	vs_out.Tangent = inverseTransposeModel * Tangent;
 	vs_out.FragPos = vec3( viewMat * modelMat * boneTransform * vec4( Pos, 1.0f ) );
 	vs_out.TexCoord = TexCoord;
-	gl_Position = targetPos;
 }

@@ -518,7 +518,7 @@ namespace ZE
 			shadowMapData.bCull = false;
 
 			Matrix4x4 cullingBoxTransform = m_worldTransform;
-			cullingBoxTransform.scale(Vector3(m_attDistance * 2.0f));
+			cullingBoxTransform.scale(Vector3(m_attDistance));
 
 			shadowMapData.cullingBoxTransform = cullingBoxTransform;
 		}

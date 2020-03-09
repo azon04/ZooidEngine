@@ -78,7 +78,7 @@ namespace ZE
 		ShadowDepthRenderPass::GetInstance()->Execute(_gameContext);
 		ShadowDepthRenderPass::GetInstance()->end(_gameContext);
 
-		ZCHECK(GBufferRenderPass::GetInstance()->getTextureOuputCount() == 5);
+		//ZCHECK(GBufferRenderPass::GetInstance()->getTextureOuputCount() == 5);
 
 		// SSAO
 		SSAORenderPass::GetInstance()->begin(_gameContext);
@@ -94,6 +94,9 @@ namespace ZE
 		LightRenderPass::GetInstance()->addInputTextureBuffer(GBufferRenderPass::GetInstance()->getTextureOutput(3));
 		LightRenderPass::GetInstance()->addInputTextureBuffer(GBufferRenderPass::GetInstance()->getTextureOutput(4));
 		LightRenderPass::GetInstance()->addInputTextureBuffer(SSAORenderPass::GetInstance()->getTextureOutput(0));
+#if ENABLE_PBR_TESTING
+		LightRenderPass::GetInstance()->addInputTextureBuffer(GBufferRenderPass::GetInstance()->getTextureOutput(5));
+#endif
 		LightRenderPass::GetInstance()->addInputFrameBuffer(GBufferRenderPass::GetInstance()->getFrameBufferOutput(0));
 		LightRenderPass::GetInstance()->Execute(_gameContext);
 		LightRenderPass::GetInstance()->end(_gameContext);

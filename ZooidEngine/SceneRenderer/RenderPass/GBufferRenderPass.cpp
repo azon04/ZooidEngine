@@ -27,8 +27,13 @@ namespace ZE
 		// Load shader for this pass
 		if (!m_shaderChain)
 		{
+#if ENABLE_PBR_TESTING
+			m_shaderChain = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/GBufferVertexShader.vs", "ZooidEngine/Shaders/DeferredShading/PBR/GBufferPixelShader.frag", nullptr, nullptr);
+			m_shaderSkinChain = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/GBufferVertexShaderSkin.vs", "ZooidEngine/Shaders/DeferredShading/PBR/GBufferPixelShader.frag", nullptr, nullptr);
+#else
 			m_shaderChain = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/GBufferVertexShader.vs", "ZooidEngine/Shaders/DeferredShading/GBufferPixelShader.frag", nullptr, nullptr);
 			m_shaderSkinChain = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/GBufferVertexShaderSkin.vs", "ZooidEngine/Shaders/DeferredShading/GBufferPixelShader.frag", nullptr, nullptr);
+#endif
 		}
 
 		// Create Frame Buffers
@@ -70,6 +75,16 @@ namespace ZE
 				m_specTexture = textureHandle.getObject<IGPUTexture>();
 				m_specTexture->create(textureCreateDesc);
 			}
+
+#if ENABLE_PBR_TESTING
+			textureCreateDesc.TextureFormat = TEX_RGBA16F;
+			textureHandle = _gameContext->getRenderZooid()->CreateRenderTexture();
+			if (textureHandle.isValid())
+			{
+				m_tMRF = textureHandle.getObject<IGPUTexture>();
+				m_tMRF->create(textureCreateDesc);
+			}
+#endif
 
 			// Ambient Texture Buffer
 			textureCreateDesc.TextureFormat = TEX_RGB;
@@ -115,6 +130,9 @@ namespace ZE
 				m_frameBuffer->addTextureAttachment(COLOR_ATTACHMENT, m_albedoTexture, 2);
 				m_frameBuffer->addTextureAttachment(COLOR_ATTACHMENT, m_specTexture, 3);
 				m_frameBuffer->addTextureAttachment(COLOR_ATTACHMENT, m_ambientTexture, 4);
+#if ENABLE_PBR_TESTING
+				m_frameBuffer->addTextureAttachment(COLOR_ATTACHMENT, m_tMRF, 5);
+#endif
 				m_frameBuffer->addTextureAttachment(DEPTH_ATTACHMENT, m_renderDepthTexture);
 				m_frameBuffer->setupAttachments();
 				m_frameBuffer->unbind();
@@ -131,6 +149,9 @@ namespace ZE
 		if (m_albedoTexture) { m_albedoTexture->release(); m_albedoTexture = nullptr; }
 		if (m_specTexture) { m_specTexture->release(); m_specTexture = nullptr; }
 		if (m_renderDepthTexture) { m_renderDepthTexture->release(); m_renderDepthTexture = nullptr; }
+#if ENABLE_PBR_TESTING
+		if (m_tMRF) { m_tMRF->release(); m_tMRF = nullptr; }
+#endif
 	}
 
 	void GBufferRenderPass::begin(GameContext* _gameContext)
@@ -149,6 +170,9 @@ namespace ZE
 		addOutputTextureBuffer(m_albedoTexture);
 		addOutputTextureBuffer(m_specTexture);
 		addOutputTextureBuffer(m_ambientTexture);
+#if ENABLE_PBR_TESTING
+		addOutputTextureBuffer(m_tMRF);
+#endif
 		addOutputFrameBuffer(m_frameBuffer);
 
 		ZCHECK(m_frameBuffer);

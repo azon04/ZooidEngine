@@ -12,6 +12,7 @@
 #include "Renderer/DrawList.h"
 #include "SceneRenderer/ShadowRenderer.h"
 #include "SceneRenderer/SkyboxRenderer.h"
+#include "GBufferRenderPass.h"
 #include "ZEGameContext.h"
 
 ZE::LightRenderPass::LightRenderPass()
@@ -30,9 +31,15 @@ void ZE::LightRenderPass::prepare(GameContext* _gameContext)
 #if RENDER_LIGHT_PASS_ALG == RENDER_LIGHT_PASS_LIGHT_INDEXED
 		m_lightIndexedVolumeShader = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/LightIndexedVolumeShader.vs", "ZooidEngine/Shaders/DeferredShading/LightIndexedVolumeShader.frag", nullptr, nullptr);
 #elif RENDER_LIGHT_PASS_ALG == RENDER_LIGHT_PASS_PER_TYPE
+#if ENABLE_PBR_TESTING
+		m_directionalShader = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Directional.vs", "ZooidEngine/Shaders/DeferredShading/PBR/DeferredLightShader_Directional.frag", nullptr, nullptr);
+		m_spotLightShader = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Spot.vs", "ZooidEngine/Shaders/DeferredShading/PBR/DeferredLightShader_Spot.frag", nullptr, nullptr);
+		m_pointLightShader = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Point.vs", "ZooidEngine/Shaders/DeferredShading/PBR/DeferredLightShader_Point.frag", nullptr, nullptr);
+#else
 		m_directionalShader = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Directional.vs", "ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Directional.frag", nullptr, nullptr);
 		m_spotLightShader = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Spot.vs", "ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Spot.frag", nullptr, nullptr);
 		m_pointLightShader = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Point.vs", "ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Point.frag", nullptr, nullptr);
+#endif
 #endif
 	}
 
@@ -150,13 +157,17 @@ bool ZE::LightRenderPass::execute_GPU(GameContext* _gameContext)
 	Int32 height = (Int32)_gameContext->getRenderer()->GetHeight();
 
 	// Bind Textures
-	ZCHECK(m_textureBufferInputs.length() == 6);
+	//ZCHECK(m_textureBufferInputs.length() == 7);
 	IGPUTexture* positionTexture = m_textureBufferInputs[0];
 	IGPUTexture* normalTexture = m_textureBufferInputs[1];
 	IGPUTexture* albedoTexture = m_textureBufferInputs[2];
 	IGPUTexture* specTexture = m_textureBufferInputs[3];
 	IGPUTexture* ambientTexture = m_textureBufferInputs[4];
 	IGPUTexture* ssaoTexture = m_textureBufferInputs[5];
+
+#if ENABLE_PBR_TESTING
+	IGPUTexture* mrfTexture = m_textureBufferInputs[6];
+#endif
 
 #if RENDER_LIGHT_PASS_ALG == RENDER_LIGHT_PASS_PER_TYPE
 	// Deferred Shading with Light Type
@@ -288,8 +299,16 @@ bool ZE::LightRenderPass::execute_GPU(GameContext* _gameContext)
 		shader->setTexture("gAlbedo", albedoTexture, 2);
 		albedoTexture->bind();
 
+#if ENABLE_PBR_TESTING
 		shader->setTexture("gSpec", specTexture, 3);
 		specTexture->bind();
+
+		shader->setTexture("gMetalRough", mrfTexture, 3);
+		mrfTexture->bind();
+#else
+		shader->setTexture("gSpec", specTexture, 3);
+		specTexture->bind();
+#endif
 
 		shader->setTexture("gAmbient", ambientTexture, 4);
 		ambientTexture->bind();
@@ -297,7 +316,9 @@ bool ZE::LightRenderPass::execute_GPU(GameContext* _gameContext)
 		shader->setTexture("gSSAO", ssaoTexture, 5);
 		ssaoTexture->bind();
 
-		ShadowDepthRenderer::BindShadowTexturesIndexed(_gameContext->getDrawList(), shader, 6, shadowIndices);
+		const Int32 shadowStartIndex = 6;
+
+		ShadowDepthRenderer::BindShadowTexturesIndexed(_gameContext->getDrawList(), shader, shadowStartIndex, shadowIndices);
 
 		_gameContext->getRenderer()->DrawBufferArray(TOPOLOGY_TRIANGLE, bufferArray, bufferArray->getDataCount());
 

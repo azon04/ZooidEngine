@@ -1,6 +1,8 @@
 #include "ShaderManager.h"
 
 #include "ZEGameContext.h"
+#include "Logging/LogManager.h"
+#include "Utils/ZEngineHelper.h"
 #include "Renderer/RenderZooid.h"
 #include "Renderer/IRenderer.h"
 
@@ -101,6 +103,8 @@ namespace ZE
 
 	ZE::Handle ShaderManager::loadResource_Internal(const char* resourceFilePath, ResourceCreateSettings* settings)
 	{
+		ZELOG(LOG_RENDERING, Log, "Loading shader \"%s\"", resourceFilePath);
+
 		ScopedRenderThreadOwnership renderLock(m_gameContext->getRenderer());
 		
 		Handle hShader = m_gameContext->getRenderZooid()->CreateShader();

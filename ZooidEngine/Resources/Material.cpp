@@ -52,6 +52,12 @@ namespace ZE
 		shaderChain->setInt("material.maskMapBound", iMask > 0);
 
 		shaderChain->setFloat("material.shininess", m_shininess);
+		
+		// Set PBR material variables
+		shaderChain->setFloat("material.metalic", m_metalic);
+		shaderChain->setFloat("material.roughness", m_roughness);
+		shaderChain->setFloat("material.reflectivity", m_reflectivity);
+
 		shaderChain->setVec3("material.Ka", m_Ka);
 		shaderChain->setVec3("material.Kd", m_Kd);
 		shaderChain->setVec3("material.Ks", m_Ks);

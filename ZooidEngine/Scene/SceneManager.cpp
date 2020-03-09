@@ -14,6 +14,9 @@
 #include "Animation/AnimationComponent.h"
 #include "Animation/AnimationSM.h"
 
+#include "Logging/LogManager.h"
+#include "Utils/ZEngineHelper.h"
+
 #include "Resources/Material.h"
 
 #include "ResourceManagers/AnimationManager.h"
@@ -109,6 +112,9 @@ namespace ZE
 		// Read component count
 		fileReader.readNextString(buff);
 		Int32 compCount = fileReader.readNextInt();
+
+		ZELOG(LOG_GAME, Log, "Load scene \"%s\" with %d components", filePath, compCount);
+
 		for (Int32 i = 0; i < compCount; i++)
 		{
 			loadSceneComponentToComp(&fileReader, parent);
@@ -126,6 +132,8 @@ namespace ZE
 		// #TODO component name
 		fileReader->readNextString(buff);
 		pComp->setObjectName(String(buff));
+
+		ZELOG(LOG_GAME, Log, "Read component in scene with name \"%s\"", buff);
 
 		m_componentMap.put(buff, compHandle);
 

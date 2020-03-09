@@ -33,11 +33,14 @@ namespace ZE
 		friend class MaterialManager;
 	public:
 
-		Material() 
-			: m_Ka(1.0f, 1.0f, 1.0f),
+		Material()
+			: m_Ka(0.05f, 0.05f, 0.05f),
 			m_Kd(1.0f, 1.0f, 1.0f),
 			m_Ks(1.0f, 1.0f, 1.0f),
 			m_shininess(0.0f),
+			m_metalic(0.0f),
+			m_roughness(0.5f),
+			m_reflectivity(0.04f),
 			m_isBlend(false),
 			m_bDoubleSided(false)
 		{
@@ -59,6 +62,12 @@ namespace ZE
 		Vector3 m_Ks;
 		Array<MaterialTexture, true> m_textures;
 		Float32 m_shininess;
+
+		// PBR variables
+		Float32 m_metalic;
+		Float32 m_roughness;
+		Float32 m_reflectivity;
+
 		bool m_isBlend;
 		bool m_bDoubleSided;
 

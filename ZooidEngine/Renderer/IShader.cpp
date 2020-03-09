@@ -41,7 +41,6 @@ namespace ZE
 		
 		loadShaderFromBuffer(shaderText, resultSize);
 
-
 		bufferHandle.release();
 
 	}
