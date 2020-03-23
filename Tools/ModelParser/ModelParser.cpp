@@ -20,7 +20,7 @@ namespace ZETools
 	{
 		std::cout << "Load file " << filePath << "..." << std::endl;
 
-		const aiScene* scene = m_importer.ReadFile(filePath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_LimitBoneWeights | aiProcess_GenNormals | aiProcess_CalcTangentSpace);
+		const aiScene* scene = m_importer.ReadFile(filePath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_LimitBoneWeights | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
@@ -181,7 +181,7 @@ namespace ZETools
 
 							stream << mesh.vertices[vi].TexCoords[0] << " " << mesh.vertices[vi].TexCoords[1] << "\t";
 
-							if (mesh.hasNormal && m_settings.mesh.bSaveTangentSpace)
+							if (mesh.hasTangent && m_settings.mesh.bSaveTangentSpace)
 							{
 								stream << mesh.vertices[vi].Tangent[0] << " " << mesh.vertices[vi].Tangent[1] << " " << mesh.vertices[vi].Tangent[2] << "\t";
 								if (m_settings.mesh.bSaveBitangent)

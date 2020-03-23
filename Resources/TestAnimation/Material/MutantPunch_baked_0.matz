@@ -1,6 +1,7 @@
 Ka 0.2 0.2 0.2
 Kd 1 1 1
-Ks 0.2 0.2 0.2
-shininess 6.15385
+Ks 0.5 0.5 0.5
+metalic 0.0
+shininess 1
 diffuse TestAnimation\Texture\Mutant_diffuse.png
 normal TestAnimation\Texture\Mutant_normal.png
