@@ -1,2 +1,5 @@
-diffuse Basic/Texture/wall.jpg
+Ks 0.2 0.2 0.2
+metalic 0
+roughness 0.6
 shininess 0.0
+diffuse Basic/Texture/wall.jpg
