@@ -40,6 +40,9 @@ public:
 	// Release buffer array
 	virtual void release() {}
 
+	// Set the render topology
+	void setRenderTopology(ERenderTopologyEnum renderTopology) { m_drawTopology = renderTopology; }
+
 	// Buffer count
 	FORCEINLINE Int32 getBufferCount() const { return m_buffers.length(); }
 
@@ -52,11 +55,15 @@ public:
 	FORCEINLINE bool isUsingIndexBuffer() const { return m_indexBuffer != nullptr; }
 
 	FORCEINLINE IGPUBufferData* getIndexBuffer() { return m_indexBuffer; }
+
+	FORCEINLINE ERenderTopologyEnum getRenderTopology() const { return m_drawTopology; }
+
 protected:
 	
 	Array<IGPUBufferData*, true> m_buffers;
 	IGPUBufferData* m_indexBuffer;
 	UInt32 m_dataCount;
+	ERenderTopologyEnum m_drawTopology = ERenderTopologyEnum::TOPOLOGY_TRIANGLE;
 };
 }
 #endif

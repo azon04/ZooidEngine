@@ -142,6 +142,15 @@ namespace ZE
 		pMesh->m_hPhysicsBodySetup = hPhysicsBodySetup;
 	}
 
+	ZE::ERenderTopologyEnum getTopologyByName(const char* stringType)
+	{
+		COMPARE_RETURN(stringType, TOPOLOGY_TRIANGLE_STRIP);
+		COMPARE_RETURN(stringType, TOPOLOGY_POINT);
+		COMPARE_RETURN(stringType, TOPOLOGY_LINE);
+		COMPARE_RETURN(stringType, TOPOLOGY_LINE_STRIP);
+		return TOPOLOGY_TRIANGLE;
+	}
+
 	void MeshManager::loadBuffers(FileReader* fileReader, Mesh* pMesh)
 	{
 		char buffer[256];
@@ -411,8 +420,6 @@ namespace ZE
 			pIndexBuffer->SetData(indexData, sizeof(UInt32), numIndex);
 		}
 
-		fileReader->close();
-
 		ScopedRenderThreadOwnership renderLock(gGameContext->getRenderer());
 
 		Handle hResult = BufferManager::getInstance()->createBufferArray(pVertexBuffer, pIndexBuffer, nullptr);
@@ -430,6 +437,19 @@ namespace ZE
 		}
 
 		pMesh->m_bufferArray = hResult.getObject<IGPUBufferArray>();
+
+		fileReader->readNextString(buffer);
+		if (StringFunc::Compare(buffer, "TOPOLOGY") == 0)
+		{
+			fileReader->readNextString(buffer);
+			if (pMesh->m_bufferArray)
+			{
+				pMesh->m_bufferArray->setRenderTopology(getTopologyByName(buffer));
+			}
+		}
+
+		fileReader->close();
+
 	}
 
 	int MeshManager::getBufferLayoutByString(const char* stringType)

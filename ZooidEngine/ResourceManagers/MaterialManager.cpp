@@ -103,6 +103,42 @@ namespace ZE
 					pMaterial->m_textures.push_back(texture);
 				}
 			}
+			else if (StringFunc::Compare(tokenBuffer, "roughnessMap") == 0)
+			{
+				reader.readNextString(tokenBuffer);
+				Handle hTexture = TextureManager::GetInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
+				if (hTexture.isValid())
+				{
+					MaterialTexture texture;
+					texture.texture = hTexture.getObject<IGPUTexture>();
+					texture.type = TextureType::ROUGHNESS;
+					pMaterial->m_textures.push_back(texture);
+				}
+			}
+			else if (StringFunc::Compare(tokenBuffer, "metalicMap") == 0)
+			{
+				reader.readNextString(tokenBuffer);
+				Handle hTexture = TextureManager::GetInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
+				if (hTexture.isValid())
+				{
+					MaterialTexture texture;
+					texture.texture = hTexture.getObject<IGPUTexture>();
+					texture.type = TextureType::METALIC;
+					pMaterial->m_textures.push_back(texture);
+				}
+			}
+			else if (StringFunc::Compare(tokenBuffer, "aoMap") == 0)
+			{
+				reader.readNextString(tokenBuffer);
+				Handle hTexture = TextureManager::GetInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
+				if (hTexture.isValid())
+				{
+					MaterialTexture texture;
+					texture.texture = hTexture.getObject<IGPUTexture>();
+					texture.type = TextureType::OCCLUSSION;
+					pMaterial->m_textures.push_back(texture);
+				}
+			}
 			else if (StringFunc::Compare(tokenBuffer, "shininess") == 0)
 			{
 				pMaterial->m_shininess = reader.readNextFloat();
@@ -132,6 +168,18 @@ namespace ZE
 			else if (StringFunc::Compare(tokenBuffer, "double_sided") == 0)
 			{
 				pMaterial->m_bDoubleSided = true;
+			}
+			else if (StringFunc::Compare(tokenBuffer, "metalic") == 0)
+			{
+				pMaterial->m_metalic = reader.readNextFloat();
+			}
+			else if (StringFunc::Compare(tokenBuffer, "roughness") == 0)
+			{
+				pMaterial->m_roughness = reader.readNextFloat();
+			}
+			else if (StringFunc::Compare(tokenBuffer, "reflectivity") == 0)
+			{
+				pMaterial->m_reflectivity = reader.readNextFloat();
 			}
 		}
 

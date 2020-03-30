@@ -158,6 +158,7 @@ namespace ZE
 		case TOPOLOGY_LINE:			return GL_LINES;
 		case TOPOLOGY_LINE_STRIP:	return GL_LINE_STRIP;
 		case TOPOLOGY_TRIANGLE:		return GL_TRIANGLES;
+		case TOPOLOGY_TRIANGLE_STRIP: return GL_TRIANGLE_STRIP;
 		case TOPOLOGY_POINT:		return GL_POINTS;
 		default:					return GL_TRIANGLES;
 		}

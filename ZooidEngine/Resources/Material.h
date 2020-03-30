@@ -17,7 +17,10 @@ namespace ZE
 		DIFFUSE = 1,
 		SPECULAR = 2,
 		NORMAL = 3,
-		MASK = 4
+		MASK = 4,
+		METALIC = 5,
+		ROUGHNESS = 6,
+		OCCLUSSION = 7
 	};
 
 	struct MaterialTexture

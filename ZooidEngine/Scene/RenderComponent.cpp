@@ -78,7 +78,7 @@ namespace ZE
 			if (m_mesh->hasSkeleton())
 			{
 				SkinMeshRenderInfo* skinMeshRenderInfo = m_gameContext->getDrawList()->m_skinMeshRenderGatherer.nextRenderInfo();
-				SceneRenderFactory::InitializeRenderInfoForMesh(skinMeshRenderInfo, m_mesh);
+				SceneRenderFactory::InitializeRenderInfoForMesh(skinMeshRenderInfo, m_mesh, m_material);
 				if (m_material)
 				{
 					skinMeshRenderInfo->m_material = m_material;
@@ -113,7 +113,7 @@ namespace ZE
 				{
 					meshRenderInfo = m_gameContext->getDrawList()->m_meshRenderGatherer.nextRenderInfo();
 				}
-				SceneRenderFactory::InitializeRenderInfoForMesh(meshRenderInfo, m_mesh);
+				SceneRenderFactory::InitializeRenderInfoForMesh(meshRenderInfo, m_mesh, m_material);
 				meshRenderInfo->m_material = mat;
 				meshRenderInfo->m_worldTransform = m_worldTransform;
 				meshRenderInfo->m_castShadow = m_bCastShadow;
@@ -201,7 +201,7 @@ namespace ZE
 			if (m_mesh->hasSkeleton())
 			{
 				SkinMeshRenderInfo* skinMeshRenderInfo = shadowMapData.skinMeshRenderGatherer.nextRenderInfo();
-				SceneRenderFactory::InitializeRenderInfoForMesh(skinMeshRenderInfo, m_mesh);
+				SceneRenderFactory::InitializeRenderInfoForMesh(skinMeshRenderInfo, m_mesh, m_material);
 				if (m_material)
 				{
 					skinMeshRenderInfo->m_material = m_material;
@@ -215,7 +215,7 @@ namespace ZE
 			else
 			{
 				MeshRenderInfo* meshRenderInfo = shadowMapData.meshRenderGatherer.nextRenderInfo();
-				SceneRenderFactory::InitializeRenderInfoForMesh(meshRenderInfo, m_mesh);
+				SceneRenderFactory::InitializeRenderInfoForMesh(meshRenderInfo, m_mesh, m_material);
 				if (m_material)
 				{
 					meshRenderInfo->m_material = m_material;

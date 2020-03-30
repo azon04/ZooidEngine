@@ -4,7 +4,7 @@
 #include "SceneRenderer/RenderPass.h"
 #include "Common/SingletonClass.h"
 
-#define ENABLE_PBR_TESTING 0
+#define ENABLE_PBR_TESTING 1
 
 namespace ZE
 {

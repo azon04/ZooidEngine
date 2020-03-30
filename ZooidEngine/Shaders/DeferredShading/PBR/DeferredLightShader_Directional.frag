@@ -155,7 +155,7 @@ void main()
 
 	vec3 numerator = NDF * G * F;
 	float denominator = 4 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0);
-	vec3 specular = numerator / max(denominator, 0.0001) * specularIntensity;
+	vec3 specular = numerator / max(denominator, 0.001) * specularIntensity;
 
 	vec3 kS = F;
 	vec3 kD = vec3(1.0) - kS;

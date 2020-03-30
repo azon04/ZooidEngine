@@ -2,6 +2,7 @@
 #define __ZE_MESH_H__
 
 #include "GameObjectModel/Object.h"
+#include "Renderer/IGPUBufferArray.h"
 #include "Memory/Handle.h"
 #include "Math/Shapes.h"
 
@@ -20,6 +21,7 @@ namespace ZE
 	public:
 
 		Mesh() :
+			m_material(nullptr),
 			m_doubleSided(false)
 		{}
 
@@ -30,6 +32,7 @@ namespace ZE
 		FORCEINLINE Handle getSkeletonHandle() { return m_hSkeleton; }
 		FORCEINLINE Material* getMaterial() { return m_material; }
 		FORCEINLINE Handle getPhysicsBodySetup() { return m_hPhysicsBodySetup; }
+		FORCEINLINE ERenderTopologyEnum getRenderTopology() const { return (m_bufferArray ? m_bufferArray->getRenderTopology() : ERenderTopologyEnum::TOPOLOGY_TRIANGLE); }
 
 		Sphere getBoundingSphere(const Matrix4x4& transform);
 		AxisAlignedBox getAABBoundingBox(const Matrix4x4& transform);

@@ -11,12 +11,17 @@
 
 namespace ZE
 {
-	ZE::MeshRenderInfo* SceneRenderFactory::CreateRenderInfoForMesh(Mesh* mesh)
+	ZE::MeshRenderInfo* SceneRenderFactory::CreateRenderInfoForMesh(Mesh* mesh, Material* material)
 	{
 		Handle renderInfoHandle = Handle("RenderInfo", sizeof(MeshRenderInfo));
 		MeshRenderInfo* renderInfo = new(renderInfoHandle) MeshRenderInfo;
 
-		if (mesh->getMaterial() && mesh->getMaterial()->IsBlend())
+		if (!material)
+		{
+			material = mesh->getMaterial();
+		}
+
+		if (material && material->IsBlend())
 		{
 			renderInfo->m_shaderChain = ShaderManager::GetInstance()->getShaderChain(mesh->hasSkeleton() ? Z_SHADER_CHAIN_3D_DEFAULT_SKIN_LIT_BLEND : Z_SHADER_CHAIN_3D_DEFAULT_LIT_BLEND);
 		}
@@ -25,7 +30,7 @@ namespace ZE
 			renderInfo->m_shaderChain = ShaderManager::GetInstance()->getShaderChain(mesh->hasSkeleton() ? Z_SHADER_CHAIN_3D_DEFAULT_SKIN_LIT : Z_SHADER_CHAIN_3D_DEFAULT_LIT);
 		}
 
-		renderInfo->m_renderTopology = TOPOLOGY_TRIANGLE;
+		renderInfo->m_renderTopology = mesh->getRenderTopology();
 
 		renderInfo->m_gpuBufferArray = mesh->getGPUBufferArray();
 		renderInfo->m_material = mesh->getMaterial();
@@ -36,9 +41,14 @@ namespace ZE
 		return renderInfo;
 	}
 
-	void SceneRenderFactory::InitializeRenderInfoForMesh(MeshRenderInfo* renderInfo, Mesh* mesh)
+	void SceneRenderFactory::InitializeRenderInfoForMesh(MeshRenderInfo* renderInfo, Mesh* mesh, Material* material)
 	{
-		if (mesh->getMaterial() && mesh->getMaterial()->IsBlend())
+		if (!material)
+		{
+			material = mesh->getMaterial();
+		}
+
+		if (material && material->IsBlend())
 		{
 			renderInfo->m_shaderChain = ShaderManager::GetInstance()->getShaderChain(mesh->hasSkeleton() ? Z_SHADER_CHAIN_3D_DEFAULT_SKIN_LIT_BLEND : Z_SHADER_CHAIN_3D_DEFAULT_LIT_BLEND);
 		}
@@ -47,7 +57,7 @@ namespace ZE
 			renderInfo->m_shaderChain = ShaderManager::GetInstance()->getShaderChain(mesh->hasSkeleton() ? Z_SHADER_CHAIN_3D_DEFAULT_SKIN_LIT : Z_SHADER_CHAIN_3D_DEFAULT_LIT);
 		}
 
-		renderInfo->m_renderTopology = TOPOLOGY_TRIANGLE;
+		renderInfo->m_renderTopology = mesh->getRenderTopology();
 
 		renderInfo->m_gpuBufferArray = mesh->getGPUBufferArray();
 		renderInfo->m_material = mesh->getMaterial();
@@ -66,7 +76,7 @@ namespace ZE
 		renderInfo->m_shaderChain = nullptr;
 		
 		renderInfo->m_gpuBufferArray = bufferArray;
-		renderInfo->m_renderTopology = TOPOLOGY_TRIANGLE;
+		renderInfo->m_renderTopology = bufferArray->getRenderTopology();
 
 		return renderInfo;
 	}

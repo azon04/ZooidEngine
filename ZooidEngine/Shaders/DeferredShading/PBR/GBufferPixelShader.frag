@@ -18,10 +18,18 @@ struct Material
 	sampler2D normalMap;
 	sampler2D maskMap;
 
+	// PBR Additional maps
+	sampler2D roughnessMap;
+	sampler2D metalicMap;
+	sampler2D aoMap;
+
 	float diffuseMapBound;
 	float specularMapBound;
 	float normalMapBound;
 	bool maskMapBound;
+	float roughnessMapBound;
+	float metalicMapBound;
+	float aoMapBound;
 
 	float shininess;
 	float metalic;
@@ -80,6 +88,21 @@ vec3 calculateSpec()
     return material.Ks * mix(vec3(1.0, 1.0, 1.0), vec3(texture(material.specularMap, fs_in.TexCoord)), material.specularMapBound);
 }
 
+float calculateMetalic()
+{
+	return mix(material.metalic, texture(material.metalicMap, fs_in.TexCoord).r, material.metalicMapBound);
+}
+
+float calculateRoughness()
+{
+	return mix(material.roughness, texture(material.roughnessMap, fs_in.TexCoord).r, material.roughnessMapBound);
+}
+
+vec3 calculateAmbient()
+{
+	return material.Ka * mix(1.0, texture(material.aoMap, fs_in.TexCoord).r, material.aoMapBound);
+}
+
 void main()
 {
 	if(getMask() < 0.1)
@@ -90,6 +113,6 @@ void main()
     gNormal = calculateNormal();
     gAlbedo = calculateAlbedo();
     gSpecColor = vec4(calculateSpec(), material.shininess);
-	gAmbient = material.Ka;
-	gMetalRoughF = vec4(material.metalic, material.roughness, material.reflectivity, gSpecColor.r);
+	gAmbient = calculateAmbient();
+	gMetalRoughF = vec4(calculateMetalic(), calculateRoughness(), material.reflectivity, gSpecColor.r);
 }

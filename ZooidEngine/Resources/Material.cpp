@@ -16,6 +16,9 @@ namespace ZE
 		int iSpecular = 0;
 		int iNormal = 0;
 		int iMask = 0;
+		int iMetalic = 0;
+		int iRoughness = 0;
+		int iAO = 0;
 		for (int i = 0; i < m_textures.length(); ++i)
 		{
 			MaterialTexture& matTexture = m_textures[i];
@@ -39,6 +42,18 @@ namespace ZE
 				varName += "maskMap";
 				iMask++;
 				break;
+			case TextureType::METALIC:
+				varName += "metalicMap";
+				iMetalic++;
+				break;
+			case TextureType::ROUGHNESS:
+				varName += "roughnessMap";
+				iRoughness++;
+				break;;
+			case TextureType::OCCLUSSION:
+				varName += "aoMap";
+				iAO++;
+				break;
 			default:
 				break;
 			}
@@ -50,6 +65,9 @@ namespace ZE
 		shaderChain->setFloat("material.specularMapBound", iSpecular > 0 ? 1.0f : 0.0f);
 		shaderChain->setFloat("material.normalMapBound", iNormal > 0 ? 1.0f : 0.0f);
 		shaderChain->setInt("material.maskMapBound", iMask > 0);
+		shaderChain->setFloat("material.metalicMapBound", iMetalic > 0 ? 1.0f : 0.0f);
+		shaderChain->setFloat("material.roughnessMapBound", iRoughness > 0 ? 1.0f : 0.0f);
+		shaderChain->setFloat("material.aoMapBound", iAO > 0 ? 1.0f : 0.0f);
 
 		shaderChain->setFloat("material.shininess", m_shininess);
 		
