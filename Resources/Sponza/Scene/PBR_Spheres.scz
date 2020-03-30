@@ -1,0 +1,192 @@
+SceneName PBR_Spheres
+FileVersion 1.0
+ComponentCount 27
+RenderComponent Sphere00
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr00.matz
+T 0.0 0.5 0.0
+S 0.1 0.1 0.1
+END
+RenderComponent Sphere01
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr01.matz
+T 0.25 0.5 0.0
+S 0.1 0.1 0.1
+END
+RenderComponent Sphere02
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr02.matz
+T 0.5 0.5 0.0
+S 0.1 0.1 0.1
+END
+RenderComponent Sphere03
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr03.matz
+T 0.75 0.5 0.0
+S 0.1 0.1 0.1
+END
+RenderComponent Sphere04
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr04.matz
+T 1.0 0.5 0.0
+S 0.1 0.1 0.1
+END
+RenderComponent Sphere10
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr10.matz
+T 0.0 0.5 -0.25
+S 0.1 0.1 0.1
+END
+RenderComponent Sphere11
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr11.matz
+T 0.25 0.5 -0.25
+S 0.1 0.1 0.1
+END
+RenderComponent Sphere12
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr12.matz
+T 0.5 0.5 -0.25
+S 0.1 0.1 0.1
+END
+RenderComponent Sphere13
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr13.matz
+T 0.75 0.5 -0.25
+S 0.1 0.1 0.1
+END
+RenderComponent Sphere14
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr14.matz
+T 1.0 0.5 -0.25
+S 0.1 0.1 0.1
+END
+RenderComponent Sphere20
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr20.matz
+T 0.0 0.5 -0.5
+S 0.1 0.1 0.1
+END
+RenderComponent Sphere21
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr21.matz
+T 0.25 0.5 -0.5
+S 0.1 0.1 0.1
+END
+RenderComponent Sphere22
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr22.matz
+T 0.5 0.5 -0.5
+S 0.1 0.1 0.1
+END
+RenderComponent Sphere23
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr23.matz
+T 0.75 0.5 -0.5
+S 0.1 0.1 0.1
+END
+RenderComponent Sphere24
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr24.matz
+T 1.0 0.5 -0.5
+S 0.1 0.1 0.1
+END
+RenderComponent Sphere30
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr30.matz
+T 0.0 0.5 -0.75
+S 0.1 0.1 0.1
+END
+RenderComponent Sphere31
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr31.matz
+T 0.25 0.5 -0.75
+S 0.1 0.1 0.1
+END
+RenderComponent Sphere32
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr32.matz
+T 0.5 0.5 -0.75
+S 0.1 0.1 0.1
+END
+RenderComponent Sphere33
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr33.matz
+T 0.75 0.5 -0.75
+S 0.1 0.1 0.1
+END
+RenderComponent Sphere34
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr34.matz
+T 1.0 0.5 -0.75
+S 0.1 0.1 0.1
+END
+RenderComponent Sphere40
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr40.matz
+T 0.0 0.5 -1
+S 0.1 0.1 0.1
+END
+RenderComponent Sphere41
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr41.matz
+T 0.25 0.5 -1
+S 0.1 0.1 0.1
+END
+RenderComponent Sphere42
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr42.matz
+T 0.5 0.5 -1
+S 0.1 0.1 0.1
+END
+RenderComponent Sphere43
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr43.matz
+T 0.75 0.5 -1
+S 0.1 0.1 0.1
+END
+RenderComponent Sphere44
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr44.matz
+T 1.0 0.5 -1
+S 0.1 0.1 0.1
+END
+RenderComponent SphereTexture1
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/plastic.matz
+T -0.25 0.5 0.0
+S 0.1 0.1 0.1
+END
+RenderComponent SphereTexture2
+BEGIN
+Mesh Basic/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/rusted_iron.matz
+T -0.5 0.5 0.0
+S 0.1 0.1 0.1
+END

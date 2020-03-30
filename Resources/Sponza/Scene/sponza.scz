@@ -1,11 +1,15 @@
 SceneName sponza
 FileVersion 1.0
-ComponentCount 394
+ComponentCount 395
 LightComponent DirLight
 BEGIN
 LightType 0
-R 100.0 0.0 0.0
+R 95.0 00.0 0.0
 T 0.0 3.0 3.0
+END
+SceneComponent CubeComp
+BEGIN
+Scene Sponza/Scene/PBR_Spheres.scz
 END
 RenderComponent sponza_00_0
 BEGIN
