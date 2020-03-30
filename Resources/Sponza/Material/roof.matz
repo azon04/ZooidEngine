@@ -1,6 +1,5 @@
-Ka 0.588 0.588 0.588
+Ka 0.15 0.15 0.15
 Kd 0.588 0.588 0.588
 Ks 0 0 0
 shininess 10
 diffuse Sponza/Texture/textures/sponza_roof_diff.png
-map Sponza/Texture/textures/sponza_roof_diff.png

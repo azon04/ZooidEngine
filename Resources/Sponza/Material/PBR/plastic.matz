@@ -1,0 +1,5 @@
+diffuse Sponza/Texture/PBR/ScuffedPlastic/scuffed-plastic-alb.png
+roughnessMap Sponza/Texture/PBR/ScuffedPlastic/scuffed-plastic_roughness.png
+metalicMap Sponza/Texture/PBR/ScuffedPlastic/scuffed-plastic-metal.png
+aoMap Sponza/Texture/PBR/ScuffedPlastic/scuffed-plastic-ao.png
+normal Sponza/Texture/PBR/ScuffedPlastic/scuffed-plastic-normal.png

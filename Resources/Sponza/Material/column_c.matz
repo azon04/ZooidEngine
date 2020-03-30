@@ -1,7 +1,7 @@
-Ka 0.588 0.588 0.588
+Ka 0.15 0.15 0.15
 Kd 0.588 0.588 0.588
 Ks 0 0 0
 shininess 10
 diffuse Sponza/Texture/textures/sponza_column_c_diff.png
-map Sponza/Texture/textures/sponza_column_c_diff.png
 bump Sponza/Texture/textures/sponza_column_c_bump.png
+normal Sponza/Texture/textures/sponza_column_c_normal.png

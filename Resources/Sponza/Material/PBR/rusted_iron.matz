@@ -1,0 +1,5 @@
+diffuse Sponza/Texture/PBR/RustedIron/rustediron2_basecolor.png
+roughnessMap Sponza/Texture/PBR/RustedIron/rustediron2_roughness.png
+metalicMap Sponza/Texture/PBR/RustedIron/rustediron2_metallic.png
+aoMap Sponza/Texture/PBR/RustedIron/rustediron2_ao.png
+normal Sponza/Texture/PBR/RustedIron/rustediron2_normal.png
