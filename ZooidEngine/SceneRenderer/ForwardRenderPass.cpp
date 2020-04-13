@@ -126,6 +126,7 @@ namespace ZE
 
 		m_resultFrameBuffer->bind();
 
+		_gameContext->getRenderer()->ResetViewport();
 		_gameContext->getRenderer()->ClearScreen();
 
 		// Refresh light constant buffer after generate the shadow maps

@@ -6,8 +6,11 @@
 #include "Renderer/BufferData.h"
 #include "Renderer/BufferLayout.h"
 #include "Renderer/IGPUBufferArray.h"
+#include "Renderer/IGPUTexture.h"
 #include "Renderer/IRenderer.h"
 #include "Renderer/DrawList.h"
+
+#include "SceneRenderer/Utils/EquiRectangularToCubeMap.h"
 
 #include "ResourceManagers/ShaderManager.h"
 
@@ -22,6 +25,14 @@ namespace ZE
 	{
 		m_cubeMapTexture = TextureManager::GetInstance()->loadResource<IGPUTexture>(filePath);
 		ZASSERT(m_cubeMapTexture, "Failed to load cube map");
+
+		if (!m_cubeMapTexture->isCubeTexture())
+		{
+			Handle resultHandle = EquiRectangularToCubeMap::ConvertToCubeMap(gGameContext, m_cubeMapTexture);
+			ZCHECK(resultHandle.isValid());
+			m_cubeMapTexture = resultHandle.getObject<IGPUTexture>();
+			TextureManager::GetInstance()->unloadResource(filePath);
+		}
 	}
 
 	void Skybox::setupComponent()

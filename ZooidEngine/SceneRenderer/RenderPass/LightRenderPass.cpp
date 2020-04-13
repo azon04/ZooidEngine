@@ -174,6 +174,9 @@ bool ZE::LightRenderPass::execute_GPU(GameContext* _gameContext)
 	ZCHECK(m_resultFrameBuffer);
 	m_resultFrameBuffer->bind();
 
+	// Reset Viewport
+	renderer->ResetViewport();
+
 	// Clear Bit
 	renderer->ClearScreen();
 

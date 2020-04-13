@@ -27,9 +27,6 @@ namespace ZE
 
 		GLTexture* pRealTexture = (GLTexture*)texture;
 		glFramebufferTexture2D(GL_FRAMEBUFFER, _glAttachType, GL_TEXTURE_2D, pRealTexture->getTextureBuffer(), 0);
-		
-		m_width = pRealTexture->getWidth();
-		m_height = pRealTexture->getHeight();
 
 		if (attachType == COLOR_ATTACHMENT)
 		{
@@ -44,6 +41,20 @@ namespace ZE
 
 		GLRenderBuffer* pRealRenderBuffer = (GLRenderBuffer*)renderBuffer;
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, _glAttachType, GL_RENDERBUFFER, pRealRenderBuffer->getRenderBufferObject());
+
+		if (attachType == COLOR_ATTACHMENT)
+		{
+			m_bColorAttached = true;
+			m_drawBuffers.push_back(_glAttachType);
+		}
+	}
+
+	void GLFrameBuffer::addTextureCubeAttachment(EFrameBuferAttachmentType attachType, IGPUTexture* texture, UInt32 faceIndex, UInt32 attachIndex /*= 0*/)
+	{
+		GLenum _glAttachType = getGLAttachmentType(attachType, attachIndex);
+
+		GLTexture* pRealTexture = (GLTexture*)texture;
+		glFramebufferTexture2D(GL_FRAMEBUFFER, _glAttachType, GL_TEXTURE_CUBE_MAP_POSITIVE_X + faceIndex, pRealTexture->getTextureBuffer(), 0);
 
 		if (attachType == COLOR_ATTACHMENT)
 		{
@@ -81,7 +92,6 @@ namespace ZE
 	{
 		if (m_fbo > 0)
 		{
-			glViewport(0, 0, m_width, m_height);
 			glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
 		}
 	}

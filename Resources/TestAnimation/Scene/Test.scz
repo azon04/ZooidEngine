@@ -3,7 +3,7 @@ FileVersion 1.0
 ComponentCount 12
 Skybox SkyBox1
 BEGIN
-Texture Basic/Texture/skybox.cube
+Texture Basic/Texture/Road_to_MonumentValley.hdr
 END
 LightComponent DirLight
 BEGIN

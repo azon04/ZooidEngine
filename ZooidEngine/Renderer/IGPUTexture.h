@@ -30,10 +30,13 @@ namespace ZE
 		virtual void unbind() = 0;
 
 		// Get height of the texture in pixel
-		UInt32 getHeight() { return m_height; }
+		UInt32 getHeight() const { return m_height; }
 
 		// Get Wwidth of the texture in pixel
-		UInt32 getWidth() { return m_width; }
+		UInt32 getWidth() const  { return m_width; }
+
+		// Is Cube Map
+		bool isCubeTexture() const { return m_face == 6; }
 
 	protected:
 		Texture* m_textureRes;

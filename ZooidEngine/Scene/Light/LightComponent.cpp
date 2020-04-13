@@ -419,7 +419,9 @@ namespace ZE
 				shadowMapData.dynamicShadowTexture = nullptr;
 				shadowMapData.staticShadowTexture = m_staticShadowTexture;
 				shadowMapData.lightIndex = lightIndex;
-				shadowMapData.cascadeIndex = -1;
+				shadowMapData.cascadeIndex = -1; 
+				shadowMapData.shadowWidth = m_staticShadowTexture->getWidth();
+				shadowMapData.shadowHeight = m_staticShadowTexture->getHeight();
 				// #TODO Dont cull this
 			}
 			
@@ -452,6 +454,8 @@ namespace ZE
 				shadowMapData.lightFrustum.constructFromMVPMatrix(localView * projection);
 				shadowMapData.bCull = false;
 				shadowMapData.cullingBoxTransform = cullingBoxTransform;
+				shadowMapData.shadowWidth = m_shadowMapWidth;
+				shadowMapData.shadowHeight = m_shadowMapHeight;
 
 				lightData.cascadeShadowIndices[i] = cascadeIndex;
 			}
@@ -477,6 +481,8 @@ namespace ZE
 		shadowMapData.projection = projection;
 		shadowMapData.lightFrustum.constructFromMVPMatrix(view * projection);
 		shadowMapData.bCull = false;
+		shadowMapData.shadowWidth = m_shadowMapWidth;
+		shadowMapData.shadowHeight = m_shadowMapHeight;
 		
 		Matrix4x4 cullingBoxTransform = m_worldTransform;
 		cullingBoxTransform.setPos(cullingBoxTransform.getPos() + cullingBoxTransform.getN() * (m_attDistance * 0.5));
@@ -503,7 +509,7 @@ namespace ZE
 			Matrix4x4 view, projection;
 
 			MathOps::LookAt(view, lightData.getPosition(), lightData.getPosition() + directions[i], Vector3(0.0f, 1.0f, 0.0f));
-			MathOps::CreatePerspectiveProjEx(projection, 1.0f, RadToDeg(45.0f), 0.01f, m_attDistance);
+			MathOps::CreatePerspectiveProjEx(projection, 1.0f, 45.0f, 0.01f, m_attDistance);
 
 			// Setup Shadow Map Data
 			LightShadowMapData& shadowMapData = m_gameContext->getDrawList()->getNextLightShadowMapData();
@@ -516,6 +522,8 @@ namespace ZE
 			shadowMapData.projection = projection;
 			shadowMapData.lightFrustum.constructFromMVPMatrix(view * projection);
 			shadowMapData.bCull = false;
+			shadowMapData.shadowWidth = m_shadowMapWidth;
+			shadowMapData.shadowHeight = m_shadowMapHeight;
 
 			Matrix4x4 cullingBoxTransform = m_worldTransform;
 			cullingBoxTransform.scale(Vector3(m_attDistance));

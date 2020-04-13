@@ -41,6 +41,8 @@ namespace ZE
 	protected:
 
 		IGPUFrameBuffer* m_currentFrameBuffer;
+		UInt32 m_shadowHeight;
+		UInt32 m_shadowWidth;
 		IShaderChain* m_shaderChain;
 		IShaderChain* m_skinnedShaderChain;
 		bool m_bRenderSkinMesh;

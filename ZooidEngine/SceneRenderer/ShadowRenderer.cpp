@@ -68,6 +68,9 @@ namespace ZE
 
 		if (!m_currentFrameBuffer) { return; }
 
+		m_shadowWidth = shadowMapData->shadowWidth;
+		m_shadowHeight = shadowMapData->shadowHeight;
+
 		m_shaderData.setViewMat(shadowMapData->view);
 		m_shaderData.setProjectionMat(shadowMapData->projection);
 		m_shaderConstantBuffer->refresh();
@@ -83,6 +86,7 @@ namespace ZE
 		if (!m_currentFrameBuffer) { return; }
 
 		m_currentFrameBuffer->bind();
+		gGameContext->getRenderer()->SetViewport(0,0, m_shadowWidth, m_shadowHeight);
 		gGameContext->getRenderer()->Clear(ERenderBufferBit::DEPTH_BUFFER_BIT);
 
 		// Set Face Culling Front face to fix peter panning

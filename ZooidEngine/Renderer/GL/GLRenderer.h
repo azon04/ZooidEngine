@@ -37,6 +37,7 @@ public:
 	virtual void ClearScreen() override;
 	virtual void Clear(UInt32 clearBits) override;
 	virtual void ResetViewport() override;
+	virtual void SetViewport(Int32 x, Int32 y, Int32 width, Int32 height) override;
 	virtual void DrawBufferArray(ERenderTopologyEnum primitiveTopology, IGPUBufferArray* gpuBufferArray, UInt32 count, UInt32 offset = 0) override;
 	virtual void DrawBufferArrayInstanced(ERenderTopologyEnum primitiveTopology, IGPUBufferArray* gpuBufferArray, UInt32 count, UInt32 offset, UInt32 instanceCount) override;
 	virtual void DrawIndexed(ERenderTopologyEnum primitiveTopology, UInt32 offset, UInt32 count, void* indices) override;

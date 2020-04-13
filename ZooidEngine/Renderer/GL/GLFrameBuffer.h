@@ -19,6 +19,7 @@ namespace ZE
 		virtual void create() override;
 		virtual void addTextureAttachment(EFrameBuferAttachmentType attachType, IGPUTexture* texture, UInt32 attachIndex = 0) override;
 		virtual void addRenderBufferAttachment(EFrameBuferAttachmentType attachType, IGPURenderBuffer* renderBuffer, UInt32 attachIndex = 0) override;
+		virtual void addTextureCubeAttachment(EFrameBuferAttachmentType attachType, IGPUTexture* texture, UInt32 faceIndex, UInt32 attachIndex = 0) override;
 		virtual void setupAttachments() override;
 		virtual void release() override;
 		virtual void bind() override;
@@ -30,8 +31,6 @@ namespace ZE
 		// GL Frame buffer object
 		GLuint m_fbo;
 		bool m_bColorAttached;
-		UInt32 m_width;
-		UInt32 m_height;
 		Array<GLenum> m_drawBuffers;
 	};
 }

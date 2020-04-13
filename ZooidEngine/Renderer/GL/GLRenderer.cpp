@@ -151,6 +151,11 @@ namespace ZE
 		glViewport(0, 0, m_width, m_height);
 	}
 
+	void GLRenderer::SetViewport(Int32 x, Int32 y, Int32 width, Int32 height)
+	{
+		glViewport(x, y, width, height);
+	}
+
 	GLenum translateTopology(ERenderTopologyEnum topology)
 	{
 		switch (topology)

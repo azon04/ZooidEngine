@@ -56,6 +56,33 @@ namespace ZE
 
 			reader.close();
 		}
+		else if (StringFunc::FindLast(filePath, ".hdr") >= 0)
+		{
+			int width, height, channel;
+			Float32* image = stbi_loadf(filePath, &width, &height, &channel, 0);
+
+			if (image)
+			{
+				Texture* texture = new(textureHandle) Texture();
+
+				texture->loadFromBuffer(image, width, height, 1, channel);
+				texture->m_bHDRTexture = true;
+				texture->setDataType(FLOAT);
+				switch (channel)
+				{
+				case 3:
+					texture->setTextureFormat(TEX_RGB16F);
+					break;
+				case 4:
+					texture->setTextureFormat(TEX_RGBA16F);
+					break;
+				}
+			}
+			else
+			{
+				ZEINFO("Unable to open texture file : %s ", filePath);
+			}
+		}
 		else
 		{
 			int width, height, channel;

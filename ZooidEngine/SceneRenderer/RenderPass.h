@@ -9,11 +9,24 @@ namespace ZE
 	class IGPUFrameBuffer;
 	class GameContext;
 
-	class RenderPass
+	class RenderPassBase
 	{
 	public:
 		virtual void prepare(GameContext* _gameContext) = 0;
 		virtual void release(GameContext* _gameContext) = 0;
+
+		virtual bool execute_CPU(GameContext* _gameContext) = 0;
+		virtual bool execute_GPU(GameContext* _gameContext) = 0;
+
+		bool Execute(GameContext* _gameContext)
+		{
+			return execute_CPU(_gameContext) && execute_GPU(_gameContext);
+		}
+	};
+
+	class RenderPass : public RenderPassBase
+	{
+	public:
 
 		virtual void begin(GameContext* _gameContext);
 		virtual void end(GameContext* _gameContext);
@@ -29,14 +42,6 @@ namespace ZE
 		
 		IGPUFrameBuffer* getFrameBufferOutput(Int32 index) { return m_frameBufferOuputs[index]; }
 		Int32 getFrameBufferOutputCount() const { return m_textureBufferOutputs.size(); }
-
-		virtual bool execute_CPU(GameContext* _gameContext) = 0;
-		virtual bool execute_GPU(GameContext* _gameContext) = 0;
-
-		bool Execute(GameContext* _gameContext)
-		{
-			return execute_CPU(_gameContext) && execute_GPU(_gameContext);
-		}
 
 		virtual const char* getRenderPassName() const = 0;
 

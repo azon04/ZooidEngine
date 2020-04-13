@@ -117,10 +117,14 @@ namespace ZE
 
 		FORCEINLINE TextureCreateDesc getTextureDesc() { return m_textureDesc; }
 
+		FORCEINLINE bool isHDRTexture() const { return m_bHDRTexture; }
+
 	protected:
 		Array<UChar*> m_images;
 
 		TextureCreateDesc m_textureDesc;
+
+		bool m_bHDRTexture = false;
 	};
 };
 #endif

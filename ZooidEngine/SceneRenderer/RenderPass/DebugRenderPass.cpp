@@ -53,6 +53,8 @@ namespace ZE
 			frameBuffer->bind();
 		}
 
+		_gameContext->getRenderer()->ResetViewport();
+
 		MeshSceneRenderer::Render(_gameContext->getDrawList()->m_debugMeshRenderGatherer.getRenderInfos(), _gameContext->getDrawList()->m_debugMeshRenderGatherer.getRenderCount());
 		
 		if (frameBuffer)

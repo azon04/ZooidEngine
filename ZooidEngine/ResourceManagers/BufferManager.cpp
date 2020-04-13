@@ -273,7 +273,6 @@ namespace ZE
 	{
 		IGPUBufferData* bufferData = createGPUBufferFromBuffer(_bufferData, true);
 		bufferData->m_bindingIndex = bindingIndex;
-		m_constantGPUBuffer.push_back(bufferData);
 		return bufferData;
 	}
 

@@ -115,6 +115,9 @@ namespace ZE
 		// Reset viewport
 		virtual void ResetViewport() = 0;
 
+		// Set Viewport
+		virtual void SetViewport(Int32 x, Int32 y, Int32 width, Int32 height) = 0;
+
 		// Resize Window
 		virtual void Resize(UInt32 width, UInt32 height) = 0;
 

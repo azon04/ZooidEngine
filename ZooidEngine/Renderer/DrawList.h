@@ -32,6 +32,10 @@ namespace ZE
 		// Mesh list to render at this shadow depth generation
 		MeshRenderGatherer meshRenderGatherer;
 		SkinMeshRenderGatherer skinMeshRenderGatherer;
+
+		// Shadow data
+		UInt32 shadowHeight;
+		UInt32 shadowWidth;
 	};
 
 	class DrawList 
