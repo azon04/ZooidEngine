@@ -5,14 +5,18 @@
 
 namespace ZE
 {
+	class IGPUTexture;
 	class SkyboxRenderInfo : public RenderInfo
 	{
 	public:
 		SkyboxRenderInfo() :
-			m_cubeTexture(nullptr)
+			m_cubeTexture(nullptr),
+			m_irradianceMap(nullptr)
 		{}
 
-		class IGPUTexture* m_cubeTexture;
+		IGPUTexture* m_cubeTexture;
+		IGPUTexture* m_irradianceMap;
+		
 	};
 }
 #endif

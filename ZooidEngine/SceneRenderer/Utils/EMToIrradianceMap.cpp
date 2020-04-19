@@ -1,13 +1,13 @@
-#include "EquiRectangularToCubeMap.h"
-#include "ResourceManagers/ShaderManager.h"
+#include "EMToIrradianceMap.h"
 #include "Renderer/IRenderer.h"
-#include "Renderer/IGPUTexture.h"
-#include "Renderer/IGPUFrameBuffer.h"
-#include "Renderer/IGPURenderBuffer.h"
-#include "Renderer/IGPUStates.h"
 #include "Renderer/RenderZooid.h"
+#include "Renderer/IGPURenderBuffer.h"
+#include "Renderer/IGPUFrameBuffer.h"
+#include "Renderer/IGPUTexture.h"
+#include "Renderer/IGPUStates.h"
 #include "Renderer/BufferData.h"
 #include "Resources/Texture.h"
+#include "ResourceManagers/ShaderManager.h"
 #include "ResourceManagers/BufferManager.h"
 #include "Math/MathOps.h"
 #include "ZEGameContext.h"
@@ -15,35 +15,67 @@
 
 namespace ZE
 {
-	void EquiRectangularToCubeMap::prepare(GameContext* _gameContext)
+
+	void EMToIrradianceMap::prepare(GameContext* _gameContext)
 	{
 		// Load Shader
 		if (!m_shaderChain)
 		{
-			m_shaderChain = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/Utils/EquiRectangularToCube.vs", "ZooidEngine/Shaders/Utils/EquiRectangularToCube.frag", nullptr, nullptr);
+			m_shaderChain = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/Utils/EquiRectangularToCube.vs", "ZooidEngine/Shaders/Utils/EMToIrradianceMap.frag", nullptr, nullptr);
+		}
+
+		if (!m_frameBuffer)
+		{
+			// Create Depth Buffer
+			Handle depthRenderBufferHandle = _gameContext->getRenderZooid()->CreateRenderBuffer();
+			ZCHECK(depthRenderBufferHandle.isValid());
+			m_depthBuffer = depthRenderBufferHandle.getObject<IGPURenderBuffer>();
+			m_depthBuffer->create(DEPTH_ONLY, m_textureSize, m_textureSize);
+
+			// Create the frame buffer
+			Handle fbHandle = _gameContext->getRenderZooid()->CreateFrameBuffer();
+			ZCHECK(fbHandle.isValid());
+
+			m_frameBuffer = fbHandle.getObject<IGPUFrameBuffer>();
+
+			m_frameBuffer->bind();
+			m_frameBuffer->addRenderBufferAttachment(DEPTH_ATTACHMENT, m_depthBuffer);
+			m_frameBuffer->unbind();
 		}
 	}
 
-	void EquiRectangularToCubeMap::release(GameContext* _gameContext)
+	void EMToIrradianceMap::release(GameContext* _gameContext)
 	{
+		if (m_shaderChain)
+		{
+			m_shaderChain->release();
+			m_shaderChain = nullptr;
+		}
 
+		if (m_frameBuffer)
+		{
+			m_frameBuffer->release();
+			m_frameBuffer = nullptr;
+
+			m_depthBuffer->release();
+			m_depthBuffer = nullptr;
+		}
 	}
 
-	bool EquiRectangularToCubeMap::execute_CPU(GameContext* _gameContext)
+	bool EMToIrradianceMap::execute_CPU(GameContext* _gameContext)
 	{
 		return true;
 	}
 
-	bool EquiRectangularToCubeMap::execute_GPU(GameContext* _gameContext)
+	bool EMToIrradianceMap::execute_GPU(GameContext* _gameContext)
 	{
-		ZCHECK(m_equiRectangularTexture);
+		ZCHECK(m_environmentMap);
 
-		const Int32 TextureSize = 2048;
 		IRenderer* renderer = _gameContext->getRenderer();
 
 		// Create the cube texture result
 		TextureCreateDesc cubeTextureDesc;
-		cubeTextureDesc.Width = cubeTextureDesc.Height = TextureSize;
+		cubeTextureDesc.Width = cubeTextureDesc.Height = m_textureSize;
 		cubeTextureDesc.FaceCount = 6;
 		cubeTextureDesc.WrapU = cubeTextureDesc.WrapV = CLAMP_TO_EDGE;
 		cubeTextureDesc.MinFilter = LINEAR;
@@ -59,18 +91,6 @@ namespace ZE
 
 		IGPUTexture* CubeTexture = m_result.getObject<IGPUTexture>();
 		CubeTexture->create(cubeTextureDesc);
-
-		// Create Depth Buffer
-		Handle depthRenderBufferHandle = _gameContext->getRenderZooid()->CreateRenderBuffer();
-		ZCHECK(depthRenderBufferHandle.isValid())
-		IGPURenderBuffer* depthRenderBuffer = depthRenderBufferHandle.getObject<IGPURenderBuffer>();
-		depthRenderBuffer->create(DEPTH_ONLY, TextureSize, TextureSize);
-
-		// Create the frame buffer
-		Handle fbHandle = _gameContext->getRenderZooid()->CreateFrameBuffer();
-		ZCHECK(fbHandle.isValid());
-
-		IGPUFrameBuffer* frameBuffer = fbHandle.getObject<IGPUFrameBuffer>();
 
 		// Create the cube data array
 		IGPUBufferArray* cubeBufferArray = UtilShaderResources::GetCubeVerticesOnly();
@@ -107,26 +127,25 @@ namespace ZE
 		};
 
 		renderer->SetRenderRasterizerState(TRenderRasterizerState<EFaceFrontOrder::CCW, ECullFace::CULL_NONE, ERenderFillMode::MODE_FILL>::GetGPUState());
-		renderer->SetViewport(0, 0, TextureSize, TextureSize);
+		renderer->SetViewport(0, 0, m_textureSize, m_textureSize);
 
-		frameBuffer->bind();
-		frameBuffer->addRenderBufferAttachment(DEPTH_ATTACHMENT, depthRenderBuffer);
+		m_frameBuffer->bind();
 
 		m_shaderChain->bind();
 
 		drawBufferData->bind();
 		m_shaderChain->bindConstantBuffer("draw_data", drawBufferData);
 
-		m_equiRectangularTexture->bind();
-		m_shaderChain->setTexture("equirectangularMap", m_equiRectangularTexture, 0);
+		m_environmentMap->bind();
+		m_shaderChain->setTexture("environmentMap", m_environmentMap, 0);
 
 		cubeBufferArray->bind();
-		frameBuffer->bind();
+		m_frameBuffer->bind();
 
 		Vector3 Zero;
 		for (Int32 i = 0; i < 6; i++)
 		{
-			frameBuffer->addTextureCubeAttachment(COLOR_ATTACHMENT, CubeTexture, i);
+			m_frameBuffer->addTextureCubeAttachment(COLOR_ATTACHMENT, CubeTexture, i);
 
 			renderer->Clear(ERenderBufferBit::COLOR_BUFFER_BIT | ERenderBufferBit::DEPTH_BUFFER_BIT);
 
@@ -136,13 +155,11 @@ namespace ZE
 
 			_gameContext->getRenderer()->DrawArray(TOPOLOGY_TRIANGLE, 0, 36);
 		}
-		
+
 		m_shaderChain->unbind();
-		frameBuffer->unbind();
+		m_frameBuffer->unbind();
 
 		// Cleaning Up assets
-		frameBuffer->release();
-		depthRenderBuffer->release();
 		drawBufferData->release();
 
 		renderer->SetRenderRasterizerState(DefaultRasterizerState::GetGPUState());
@@ -150,11 +167,11 @@ namespace ZE
 		return true;
 	}
 
-	ZE::Handle EquiRectangularToCubeMap::ConvertToCubeMap(GameContext* _gameContext, IGPUTexture* equiRectangularTexture)
+	ZE::Handle EMToIrradianceMap::ConvertToIrradianceMap(GameContext* _gameContext, IGPUTexture* environmentMap)
 	{
 		ScopedRenderThreadOwnership renderLock(_gameContext->getRenderer());
-		EquiRectangularToCubeMap* instance = EquiRectangularToCubeMap::GetInstance();
-		instance->m_equiRectangularTexture = equiRectangularTexture;
+		EMToIrradianceMap* instance = EMToIrradianceMap::GetInstance();
+		instance->m_environmentMap = environmentMap;
 		instance->prepare(_gameContext);
 		bool success = instance->Execute(_gameContext);
 		instance->release(_gameContext);
@@ -163,4 +180,3 @@ namespace ZE
 	}
 
 }
-

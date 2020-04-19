@@ -14,7 +14,7 @@ namespace ZE
 		DEFINE_CLASS(Skybox);
 
 	public:
-		Skybox(GameContext* gameContext) : SceneComponent(gameContext) {}
+		Skybox(GameContext* gameContext) : SceneComponent(gameContext), m_irradianceMap(nullptr) {}
 
 		void loadFromPath(const char* filePath);
 		virtual void setupComponent() override;
@@ -25,6 +25,7 @@ namespace ZE
 	protected:
 		
 		IGPUTexture* m_cubeMapTexture;
+		IGPUTexture* m_irradianceMap;
 		static IGPUBufferArray* s_skyBoxBufferArray;
 
 	};

@@ -31,7 +31,10 @@ namespace ZE
 		if (attachType == COLOR_ATTACHMENT)
 		{
 			m_bColorAttached = true;
-			m_drawBuffers.push_back(_glAttachType);
+			if (!m_drawBuffers.contains(_glAttachType))
+			{
+				m_drawBuffers.push_back(_glAttachType);
+			}
 		}
 	}
 
@@ -45,7 +48,10 @@ namespace ZE
 		if (attachType == COLOR_ATTACHMENT)
 		{
 			m_bColorAttached = true;
-			m_drawBuffers.push_back(_glAttachType);
+			if (!m_drawBuffers.contains(_glAttachType))
+			{
+				m_drawBuffers.push_back(_glAttachType);
+			}
 		}
 	}
 
@@ -59,7 +65,10 @@ namespace ZE
 		if (attachType == COLOR_ATTACHMENT)
 		{
 			m_bColorAttached = true;
-			m_drawBuffers.push_back(_glAttachType);
+			if (!m_drawBuffers.contains(_glAttachType))
+			{
+				m_drawBuffers.push_back(_glAttachType);
+			}
 		}
 	}
 

@@ -11,6 +11,7 @@
 #include "Renderer/DrawList.h"
 
 #include "SceneRenderer/Utils/EquiRectangularToCubeMap.h"
+#include "SceneRenderer/Utils/EMToIrradianceMap.h"
 
 #include "ResourceManagers/ShaderManager.h"
 
@@ -33,6 +34,9 @@ namespace ZE
 			m_cubeMapTexture = resultHandle.getObject<IGPUTexture>();
 			TextureManager::GetInstance()->unloadResource(filePath);
 		}
+
+		Handle irradianceMapHandle = EMToIrradianceMap::ConvertToIrradianceMap(gGameContext, m_cubeMapTexture);
+		m_irradianceMap = irradianceMapHandle.getObject<IGPUTexture>();
 	}
 
 	void Skybox::setupComponent()
@@ -110,6 +114,7 @@ namespace ZE
 		renderInfo->drawCount = 36;
 		renderInfo->m_shaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_SKYBOX);
 		renderInfo->m_cubeTexture = m_cubeMapTexture;
+		renderInfo->m_irradianceMap = m_irradianceMap;
 	}
 
 	ZE::IGPUBufferArray* Skybox::s_skyBoxBufferArray = nullptr;
