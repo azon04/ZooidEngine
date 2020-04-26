@@ -128,8 +128,6 @@ void main()
     vec3 fragPos = (invViewMat * vec4(textureProj(gPosition, fs_in.projectionSpace).xyz, 1.0)).xyz; // To World Space
     float depth = textureProj(gPosition, fs_in.projectionSpace).z * -1.0; // Since the gPosition in View Space, let's get the z value of that for camera depth
 	vec3 albedo = textureProj(gAlbedo, fs_in.projectionSpace).rgb;
-    vec3 ambient = textureProj(gAmbient, fs_in.projectionSpace).rgb;
-	float occlusion = textureProj(gSSAO, fs_in.projectionSpace).r;
 	vec4 metalRoughnessF = textureProj(gMetalRough, fs_in.projectionSpace);
 	float metalic = metalRoughnessF.r;
 	float roughness = metalRoughnessF.g;
@@ -181,8 +179,7 @@ void main()
 	}
 
 	float NdotL = max(dot(N,L), 0.0);
-	vec3 ambientColor = ambient * albedo * occlusion * attenuation;
-	result = ambientColor + (kD * albedo / PI + specular) * radiance * NdotL * (1.0 - shadow);
+	result = (kD * albedo / PI + specular) * radiance * NdotL * (1.0 - shadow);
 
 	fColor = vec4(result, 1.0f);
 }

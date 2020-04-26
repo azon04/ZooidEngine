@@ -32,6 +32,8 @@ void ZE::LightRenderPass::prepare(GameContext* _gameContext)
 		m_lightIndexedVolumeShader = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/LightIndexedVolumeShader.vs", "ZooidEngine/Shaders/DeferredShading/LightIndexedVolumeShader.frag", nullptr, nullptr);
 #elif RENDER_LIGHT_PASS_ALG == RENDER_LIGHT_PASS_PER_TYPE
 #if ENABLE_PBR_TESTING
+		m_ambientShader = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Directional.vs", "ZooidEngine/Shaders/DeferredShading/PBR/AmbientShader.frag", nullptr, nullptr);
+		m_ambientShaderNoIrradianceMap = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Directional.vs", "ZooidEngine/Shaders/DeferredShading/PBR/AmbientShader_NoIrradianceMap.frag", nullptr, nullptr);
 		m_directionalShader = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Directional.vs", "ZooidEngine/Shaders/DeferredShading/PBR/DeferredLightShader_Directional.frag", nullptr, nullptr);
 		m_spotLightShader = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Spot.vs", "ZooidEngine/Shaders/DeferredShading/PBR/DeferredLightShader_Spot.frag", nullptr, nullptr);
 		m_pointLightShader = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Point.vs", "ZooidEngine/Shaders/DeferredShading/PBR/DeferredLightShader_Point.frag", nullptr, nullptr);
@@ -182,11 +184,54 @@ bool ZE::LightRenderPass::execute_GPU(GameContext* _gameContext)
 
 	// Copy Depth Buffer First
 	_gameContext->getRenderer()->CopyFrameBuffer(inputFrameBuffer, m_resultFrameBuffer, 0, 0, width, height, 0, 0, width, height, ERenderBufferBit::DEPTH_BUFFER_BIT, ETextureFilter::NEAREST);
+	
 	// Set Blend State
 	renderer->SetRenderBlendState(TRenderBlendState<true, ERendererBlendFactor::ONE, ERendererBlendFactor::ONE>::GetGPUState());
 
 	IGPUBufferArray* quadVBO = BufferManager::getInstance()->getBufferArray(BUFFER_ARRAY_QUAD_V3_TC2);
 	
+	// Separate Ambient Pass
+	{
+		renderer->SetRenderDepthStencilState(TRenderDepthStencilState<false, false, false, ERendererCompareFunc::ALWAYS, ERendererCompareFunc::ALWAYS, 0, 0, 0>::GetGPUState());
+		renderer->SetRenderRasterizerState(DefaultRasterizerState::GetGPUState());
+
+		bool bHasEnvironmentMap = drawList->m_environmentMapSize > 0;
+		IShaderChain* shader = bHasEnvironmentMap ? m_ambientShader : m_ambientShaderNoIrradianceMap;
+		shader->bind();
+
+		_gameContext->getDrawList()->m_mainConstantBuffer->bind();
+		shader->bindConstantBuffer("frame_data", _gameContext->getDrawList()->m_mainConstantBuffer);
+
+		shader->setTexture("gPosition", positionTexture, 0);
+		positionTexture->bind();
+
+		shader->setTexture("gNormal", normalTexture, 1);
+		normalTexture->bind();
+
+		shader->setTexture("gAlbedo", albedoTexture, 2);
+		albedoTexture->bind();
+
+		shader->setTexture("gMetalRough", mrfTexture, 3);
+		mrfTexture->bind();
+
+		shader->setTexture("gAmbient", ambientTexture, 4);
+		ambientTexture->bind();
+
+		shader->setTexture("gSSAO", ssaoTexture, 5);
+		ssaoTexture->bind();
+
+		if (bHasEnvironmentMap)
+		{
+			IGPUTexture* environmentCube = drawList->m_environmentMaps[0].environmentMapCube;
+			shader->setTexture("gIrradianceMap", environmentCube, 6);
+			environmentCube->bind();
+		}
+
+		_gameContext->getRenderer()->DrawBufferArray(TOPOLOGY_TRIANGLE, quadVBO, quadVBO->getDataCount());
+
+		shader->unbind();
+	}
+
 	// Initialize Light Sample Data
 	m_lightSampleData.viewPos = drawList->m_lightData.ViewPos;
 
@@ -201,7 +246,7 @@ bool ZE::LightRenderPass::execute_GPU(GameContext* _gameContext)
 
 		if (light.Type == 0) // Directional Light
 		{
-			bufferArray = BufferManager::getInstance()->getBufferArray(BUFFER_ARRAY_QUAD_V3_TC2);
+			bufferArray = quadVBO;
 			shader = m_directionalShader;
 
 			// Set Depth and Rasterizer State for the light

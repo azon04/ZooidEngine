@@ -74,6 +74,11 @@ namespace ZE
 		IGPUTexture* m_lightVolumeIndexTexture;
 		IGPUFrameBuffer* m_lightVolumeFrameBuffer;
 #elif RENDER_LIGHT_PASS_ALG == RENDER_LIGHT_PASS_PER_TYPE
+		
+		// Shader for Ambient calculation
+		IShaderChain* m_ambientShader;
+		IShaderChain* m_ambientShaderNoIrradianceMap;
+
 		// Shader Per Light
 		IShaderChain* m_directionalShader;
 		IShaderChain* m_spotLightShader;

@@ -8,6 +8,7 @@ namespace ZE
 	void DrawList::Reset()
 	{
 		m_lightShadowSize = 0;
+		m_environmentMapSize = 0;
 
 		m_meshRenderGatherer.reset();
 		m_skinMeshRenderGatherer.reset();

@@ -38,6 +38,12 @@ namespace ZE
 		UInt32 shadowWidth;
 	};
 
+	struct EnvironmentMapData
+	{
+		IGPUTexture* environmentMapCube;
+		// #TODO add type ie: skybox or a probe; add position where the probe is
+	};
+
 	class DrawList 
 	{
 
@@ -87,6 +93,16 @@ namespace ZE
 
 		// Objects Bounding Volume
 		AxisAlignedBox m_objectsBounding;
+
+		EnvironmentMapData& getNextEnvironmentMap()
+		{
+			return m_environmentMaps[m_environmentMapSize++];
+		}
+
+		// Environment map list
+		EnvironmentMapData m_environmentMaps[8];
+
+		UInt32 m_environmentMapSize;
 	};
 
 };

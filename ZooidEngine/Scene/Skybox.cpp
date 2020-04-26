@@ -115,6 +115,12 @@ namespace ZE
 		renderInfo->m_shaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_SKYBOX);
 		renderInfo->m_cubeTexture = m_cubeMapTexture;
 		renderInfo->m_irradianceMap = m_irradianceMap;
+
+		if (m_irradianceMap)
+		{
+			EnvironmentMapData& envMap = gGameContext->getDrawList()->getNextEnvironmentMap();
+			envMap.environmentMapCube = m_irradianceMap;
+		}
 	}
 
 	ZE::IGPUBufferArray* Skybox::s_skyBoxBufferArray = nullptr;

@@ -128,8 +128,6 @@ void main()
     vec3 fragPos = (invViewMat * vec4(texture(gPosition, fs_in.TexCoord).xyz, 1.0)).xyz; // To World Space
     float depth = texture(gPosition, fs_in.TexCoord).z * -1.0; // Since the gPosition in View Space, let's get the z value of that for camera depth
 	vec3 albedo = texture(gAlbedo, fs_in.TexCoord).rgb;
-    vec3 ambient = texture(gAmbient, fs_in.TexCoord).rgb;
-	float occlusion = texture(gSSAO, fs_in.TexCoord).r;
 	vec4 metalRoughnessF = texture(gMetalRough, fs_in.TexCoord);
 	float metalic = metalRoughnessF.r;
 	float roughness = metalRoughnessF.g;
@@ -183,8 +181,7 @@ void main()
 	}
 	
 	float NdotL = max(dot(N,L), 0.0);
-	vec3 ambientColor = ambient * albedo * occlusion;
-	result = ambientColor + (kD * albedo / PI + specular) * radiance * NdotL * (1.0 - shadow);
+	result = (kD * albedo / PI + specular) * radiance * NdotL * (1.0 - shadow);
 
 	fColor = vec4(result, 1.0f);
 }
