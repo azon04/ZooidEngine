@@ -15,6 +15,23 @@ namespace ZE
 
 	MaterialManager* MaterialManager::s_instance = nullptr;
 
+	const ZE::StringName MaterialManager::DIFFUSE("diffuse");
+	const ZE::StringName MaterialManager::SPECULAR("specular");
+	const ZE::StringName MaterialManager::NORMAL("normal");
+	const ZE::StringName MaterialManager::MASK("mask");
+	const ZE::StringName MaterialManager::ROUGHNESS_MAP("roughnessMap");
+	const ZE::StringName MaterialManager::METALIC_MAP("metalicMap");
+	const ZE::StringName MaterialManager::AO_MAP("aoMap");
+	const ZE::StringName MaterialManager::SHININESS("shininess");
+	const ZE::StringName MaterialManager::KA("Ka");
+	const ZE::StringName MaterialManager::KD("Kd");
+	const ZE::StringName MaterialManager::KS("Ks");
+	const ZE::StringName MaterialManager::BLEND("blend");
+	const ZE::StringName MaterialManager::DOUBLE_SIDED("double_sided");
+	const ZE::StringName MaterialManager::METALIC("metalic");
+	const ZE::StringName MaterialManager::ROUGHNESS("roughness");
+	const ZE::StringName MaterialManager::REFLECTIVITY("reflectivity");
+
 	MaterialManager* MaterialManager::GetInstance()
 	{
 		return s_instance;
@@ -52,8 +69,9 @@ namespace ZE
 		{
 			tokenBuffer[0] = '\0';
 			reader.readNextString(tokenBuffer);
+			StringName bufferName(tokenBuffer);
 
-			if (StringFunc::Compare(tokenBuffer, "diffuse") == 0)
+			if (bufferName == DIFFUSE)
 			{
 				reader.readNextString(tokenBuffer);
 				TextureResourceCreateSettings settings;
@@ -67,7 +85,7 @@ namespace ZE
 					pMaterial->m_textures.push_back(texture);
 				}
 			}
-			else if (StringFunc::Compare(tokenBuffer, "specular") == 0)
+			else if (bufferName == SPECULAR)
 			{
 				reader.readNextString(tokenBuffer);
 				Handle hTexture = TextureManager::GetInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
@@ -79,7 +97,7 @@ namespace ZE
 					pMaterial->m_textures.push_back(texture);
 				}
 			}
-			else if (StringFunc::Compare(tokenBuffer, "normal") == 0)
+			else if (bufferName == NORMAL)
 			{
 				reader.readNextString(tokenBuffer);
 				Handle hTexture = TextureManager::GetInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
@@ -91,7 +109,7 @@ namespace ZE
 					pMaterial->m_textures.push_back(texture);
 				}
 			}
-			else if (StringFunc::Compare(tokenBuffer, "mask") == 0)
+			else if (bufferName == MASK)
 			{
 				reader.readNextString(tokenBuffer);
 				Handle hTexture = TextureManager::GetInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
@@ -103,7 +121,7 @@ namespace ZE
 					pMaterial->m_textures.push_back(texture);
 				}
 			}
-			else if (StringFunc::Compare(tokenBuffer, "roughnessMap") == 0)
+			else if (bufferName == ROUGHNESS_MAP)
 			{
 				reader.readNextString(tokenBuffer);
 				Handle hTexture = TextureManager::GetInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
@@ -115,7 +133,7 @@ namespace ZE
 					pMaterial->m_textures.push_back(texture);
 				}
 			}
-			else if (StringFunc::Compare(tokenBuffer, "metalicMap") == 0)
+			else if (bufferName == METALIC_MAP)
 			{
 				reader.readNextString(tokenBuffer);
 				Handle hTexture = TextureManager::GetInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
@@ -127,7 +145,7 @@ namespace ZE
 					pMaterial->m_textures.push_back(texture);
 				}
 			}
-			else if (StringFunc::Compare(tokenBuffer, "aoMap") == 0)
+			else if (bufferName == AO_MAP)
 			{
 				reader.readNextString(tokenBuffer);
 				Handle hTexture = TextureManager::GetInstance()->loadResource(GetResourcePath(tokenBuffer).c_str());
@@ -139,45 +157,45 @@ namespace ZE
 					pMaterial->m_textures.push_back(texture);
 				}
 			}
-			else if (StringFunc::Compare(tokenBuffer, "shininess") == 0)
+			else if (bufferName == SHININESS)
 			{
 				pMaterial->m_shininess = reader.readNextFloat();
 			}
-			else if (StringFunc::Compare(tokenBuffer, "Ka") == 0)
+			else if (bufferName == KA)
 			{
 				pMaterial->m_Ka.setX(reader.readNextFloat());
 				pMaterial->m_Ka.setY(reader.readNextFloat());
 				pMaterial->m_Ka.setZ(reader.readNextFloat());
 			}
-			else if (StringFunc::Compare(tokenBuffer, "Kd") == 0)
+			else if (bufferName == KD)
 			{
 				pMaterial->m_Kd.setX(reader.readNextFloat());
 				pMaterial->m_Kd.setY(reader.readNextFloat());
 				pMaterial->m_Kd.setZ(reader.readNextFloat());
 			}
-			else if (StringFunc::Compare(tokenBuffer, "Ks") == 0)
+			else if (bufferName == KS)
 			{
 				pMaterial->m_Ks.setX(reader.readNextFloat());
 				pMaterial->m_Ks.setY(reader.readNextFloat());
 				pMaterial->m_Ks.setZ(reader.readNextFloat());
 			}
-			else if (StringFunc::Compare(tokenBuffer, "blend") == 0)
+			else if (bufferName == BLEND)
 			{
 				pMaterial->m_isBlend = true;
 			}
-			else if (StringFunc::Compare(tokenBuffer, "double_sided") == 0)
+			else if (bufferName == DOUBLE_SIDED)
 			{
 				pMaterial->m_bDoubleSided = true;
 			}
-			else if (StringFunc::Compare(tokenBuffer, "metalic") == 0)
+			else if (bufferName == METALIC)
 			{
 				pMaterial->m_metalic = reader.readNextFloat();
 			}
-			else if (StringFunc::Compare(tokenBuffer, "roughness") == 0)
+			else if (bufferName == ROUGHNESS)
 			{
 				pMaterial->m_roughness = reader.readNextFloat();
 			}
-			else if (StringFunc::Compare(tokenBuffer, "reflectivity") == 0)
+			else if (bufferName == REFLECTIVITY)
 			{
 				pMaterial->m_reflectivity = reader.readNextFloat();
 			}

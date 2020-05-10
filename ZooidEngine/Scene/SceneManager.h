@@ -2,6 +2,7 @@
 #define __Z_SCENE_MANAGER_H__
 
 #include "GameObjectModel/Component.h"
+#include "Utils/StringName.h"
 
 namespace ZE
 {
@@ -35,6 +36,30 @@ namespace ZE
 	public:
 		String m_currentSceneFile;
 		
+		// Tokens
+		static const StringName BEGIN;
+		static const StringName END;
+		static const StringName ROTATION;
+		static const StringName SCALE;
+		static const StringName TRANSLATION;
+		static const StringName MESH;
+		static const StringName MATERIAL;
+		static const StringName LIGHT_TYPE;
+		static const StringName ATT_DISTANCE;
+		static const StringName ATT_CONSTANT;
+		static const StringName ATT_LINEAR;
+		static const StringName ATT_QUADRATIC;
+		static const StringName CHILDREN;
+		static const StringName SCENE;
+		static const StringName PHYSICS;
+		static const StringName TRIGGER_ONLY;
+		static const StringName EXTENT;
+		static const StringName RADIUS;
+		static const StringName OUTER_RADIUS;
+		static const StringName HEIGHT;
+		static const StringName ANIMATION;
+		static const StringName ANIMATION_STATE;
+		static const StringName	TEXTURE;
 	};
 }
 #endif

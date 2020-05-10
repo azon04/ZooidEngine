@@ -34,6 +34,30 @@ namespace ZE
 
 	SceneManager* SceneManager::s_instance = nullptr;
 
+	const StringName SceneManager::BEGIN("BEGIN");
+	const StringName SceneManager::END("END");
+	const StringName SceneManager::ROTATION("R");
+	const StringName SceneManager::SCALE("S");
+	const StringName SceneManager::TRANSLATION("T");
+	const StringName SceneManager::MESH("Mesh");
+	const StringName SceneManager::MATERIAL("Material");
+	const StringName SceneManager::LIGHT_TYPE("LightType");
+	const StringName SceneManager::ATT_DISTANCE("Att_Distance");
+	const StringName SceneManager::ATT_CONSTANT("Att_Constant");
+	const StringName SceneManager::ATT_LINEAR("Att_Linear");
+	const StringName SceneManager::ATT_QUADRATIC("Att_Quadratic");
+	const StringName SceneManager::CHILDREN("Children");
+	const StringName SceneManager::SCENE("Scene");
+	const StringName SceneManager::PHYSICS("Physics");
+	const StringName SceneManager::TRIGGER_ONLY("TriggerOnly");
+	const StringName SceneManager::EXTENT("Extent");
+	const StringName SceneManager::RADIUS("Radius");
+	const StringName SceneManager::OUTER_RADIUS("OuterRadius");
+	const StringName SceneManager::HEIGHT("Height");
+	const StringName SceneManager::ANIMATION("Animation");
+	const StringName SceneManager::ANIMATION_STATE("AnimationState");
+	const StringName SceneManager::TEXTURE("Texture");
+
 	void SceneManager::loadSceneFile(const char* filePath)
 	{
 		loadSceneFileToComp(filePath, m_gameContext->getRootComponent());
@@ -93,6 +117,7 @@ namespace ZE
 
 	void SceneManager::loadSceneFileToComp(const char* filePath, Component* parent)
 	{
+		Timer timer;
 		FileReader fileReader(filePath);
 		if (!fileReader.isValid())
 		{
@@ -119,6 +144,10 @@ namespace ZE
 		{
 			loadSceneComponentToComp(&fileReader, parent);
 		}
+
+		double loadTime = timer.GetDeltaSeconds();
+
+		ZELOG(LOG_GAME, Log, "Loaded scene \"%s\" with load time %f", filePath, loadTime);
 	}
 
 	void SceneManager::loadSceneComponentToComp(FileReader* fileReader, Component* parent)
@@ -141,9 +170,15 @@ namespace ZE
 		fileReader->readNextString(buff);
 
 		fileReader->readNextString(buff);
-		while (StringFunc::Compare(buff, "END") != 0)
+		StringName buffName(buff);
+
+		while (buffName != END)
 		{
-			if (StringFunc::Compare(buff, "R") == 0)
+			if (buffName == BEGIN)
+			{
+				// DO Nothing
+			}
+			else if (buffName == ROTATION)
 			{
 				// Read Rotation
 				Float32 x, y, z;
@@ -154,7 +189,7 @@ namespace ZE
 				Vector3 rotationInDeg(x, y, z);
 				pComp->rotateInDeg(rotationInDeg);
 			}
-			else if (StringFunc::Compare(buff, "S") == 0)
+			else if (buffName == SCALE)
 			{
 				// Read Scale
 				Vector3 scale;
@@ -164,7 +199,7 @@ namespace ZE
 
 				pComp->setScale(scale);
 			}
-			else if (StringFunc::Compare(buff, "T") == 0)
+			else if (buffName == TRANSLATION)
 			{
 				// Read Pos
 				Vector3 pos;
@@ -174,7 +209,7 @@ namespace ZE
 
 				pComp->setWorldPosition(pos);
 			}
-			else if (StringFunc::Compare(buff, "Mesh") == 0)
+			else if (buffName == MESH)
 			{
 				// Read Mesh
 				fileReader->readNextString(buff);
@@ -183,7 +218,7 @@ namespace ZE
 					pRendComp->loadMeshFromFile(GetResourcePath(buff).c_str());
 				}
 			}
-			else if (StringFunc::Compare(buff, "Material") == 0)
+			else if (buffName == MATERIAL)
 			{
 				// Read material
 				fileReader->readNextString(buff);
@@ -193,7 +228,7 @@ namespace ZE
 					pRendComp->setMaterial(hMaterial.getObject<Material>());
 				}
 			}
-			else if (StringFunc::Compare(buff, "LightType") == 0)
+			else if (buffName == LIGHT_TYPE)
 			{
 				// Read Light Type
 				int lightType = fileReader->readNextInt();
@@ -202,7 +237,7 @@ namespace ZE
 					pLightComp->m_lightType = (LightType)lightType;
 				}
 			}
-			else if (StringFunc::Compare(buff, "Att_Distance") == 0)
+			else if (buffName == ATT_DISTANCE)
 			{
 				// Read the constant term for Attenuation Equation
 				float val = fileReader->readNextFloat();
@@ -211,7 +246,7 @@ namespace ZE
 					pLightComp->m_attDistance = val;
 				}
 			}
-			else if (StringFunc::Compare(buff, "Att_Constant") == 0)
+			else if (buffName == ATT_CONSTANT)
 			{
 				// Read the constant term for Attenuation Equation
 				float val = fileReader->readNextFloat();
@@ -220,7 +255,7 @@ namespace ZE
 					pLightComp->m_attConstant = val;
 				}
 			}
-			else if (StringFunc::Compare(buff, "Att_Linear") == 0)
+			else if (buffName == ATT_LINEAR)
 			{
 				// Read the linear term for Attenuation Equation
 				float val = fileReader->readNextFloat();
@@ -229,7 +264,7 @@ namespace ZE
 					pLightComp->m_attLinear = val;
 				}
 			}
-			else if (StringFunc::Compare(buff, "Att_Quadratic") == 0)
+			else if (buffName == ATT_QUADRATIC)
 			{
 				// Read the quadratic term for Attenuation Equation
 				float val = fileReader->readNextFloat();
@@ -238,7 +273,7 @@ namespace ZE
 					pLightComp->m_attQuadratic = val;
 				}
 			}
-			else if (StringFunc::Compare(buff, "Children") == 0)
+			else if (buffName == CHILDREN)
 			{
 				// Read Children of this comp
 				Int32 count = fileReader->readNextInt();
@@ -247,13 +282,13 @@ namespace ZE
 					loadSceneComponentToComp(fileReader, pComp);
 				}
 			}
-			else if (StringFunc::Compare(buff, "Scene") == 0)
+			else if (buffName == SCENE)
 			{
 				// Read Scene
 				fileReader->readNextString(buff);
 				loadSceneFileToComp(GetResourcePath(buff).c_str(), pComp);
 			}
-			else if (StringFunc::Compare(buff, "Physics") == 0)
+			else if (buffName == PHYSICS)
 			{
 				fileReader->readNextString(buff);
 				if (RenderComponent* pRendComp = dynamic_cast<RenderComponent*>(pComp))
@@ -262,7 +297,7 @@ namespace ZE
 					pRendComp->setPhysicsEnabled(StringFunc::Compare(buff, "true") == 0);
 				}
 			}
-			else if (StringFunc::Compare(buff, "TriggerOnly") == 0)
+			else if (buffName == TRIGGER_ONLY)
 			{
 				fileReader->readNextString(buff);
 				if (CollisionComponent* pCollisionComp = dynamic_cast<CollisionComponent*>(pComp))
@@ -270,7 +305,7 @@ namespace ZE
 					pCollisionComp->setTrigger(StringFunc::Compare(buff, "true") == 0);
 				}
 			}
-			else if (StringFunc::Compare(buff, "Extent") == 0)
+			else if (buffName == EXTENT)
 			{
 				if (BoxComponent* pBoxComponent = dynamic_cast<BoxComponent*>(pComp))
 				{
@@ -281,7 +316,7 @@ namespace ZE
 					pBoxComponent->setHalfExtent(halfExtent);
 				}
 			}
-			else if (StringFunc::Compare(buff, "Radius") == 0)
+			else if (buffName == RADIUS)
 			{
 				if (SphereComponent* pSphereComp = dynamic_cast<SphereComponent*>(pComp))
 				{
@@ -296,21 +331,21 @@ namespace ZE
 					pLightComponent->m_innerRadius = DegToRad(fileReader->readNextFloat());
 				}
 			}
-			else if (StringFunc::Compare(buff, "OuterRadius") == 0)
+			else if (buffName == OUTER_RADIUS)
 			{
 				if (LightComponent* pLightComponent = dynamic_cast<LightComponent*>(pComp))
 				{
 					pLightComponent->m_outerRadius = DegToRad(fileReader->readNextFloat());
 				}
 			}
-			else if (StringFunc::Compare(buff, "Height") == 0)
+			else if (buffName == HEIGHT)
 			{
 				if (CapsuleComponent* pCapsuleComp = dynamic_cast<CapsuleComponent*>(pComp))
 				{
 					pCapsuleComp->setHeight( fileReader->readNextFloat() );
 				}
 			}
-			else if (StringFunc::Compare(buff, "Animation") == 0)
+			else if (buffName == ANIMATION)
 			{
 				Handle hAnimationComp("Animation Component", sizeof(AnimationComponent));
 				AnimationComponent* pAnimationComp = new(hAnimationComp) AnimationComponent(m_gameContext);
@@ -330,7 +365,7 @@ namespace ZE
 
 				pComp->addChild(pAnimationComp);
 			}
-			else if (StringFunc::Compare(buff, "AnimationState") == 0)
+			else if (buffName == ANIMATION_STATE)
 			{
 				Handle hAnimationSM("Animation SM", sizeof(AnimationSM));
 				AnimationSM* pAnimSM = new(hAnimationSM) AnimationSM(m_gameContext);
@@ -342,7 +377,7 @@ namespace ZE
 
 				pComp->addChild(pAnimSM);
 			}
-			else if (StringFunc::Compare(buff, "Texture") == 0)
+			else if (buffName == TEXTURE)
 			{
 				// Read Texture file
 				fileReader->readNextString(buff);
@@ -355,6 +390,7 @@ namespace ZE
 			}
 
 			fileReader->readNextString(buff);
+			buffName = StringName(buff);
 		}
 
 		pComp->setupComponent();
