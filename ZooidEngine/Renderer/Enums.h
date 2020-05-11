@@ -157,6 +157,7 @@ namespace ZE
 		TEX_RG8,
 		TEX_RGBA8,
 		TEX_RG16,
+		TEX_RG16F,
 		TEX_RGB16F,
 		TEX_RGBA16F,
 		TEX_MAX

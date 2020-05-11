@@ -12,6 +12,7 @@
 
 #include "SceneRenderer/Utils/EquiRectangularToCubeMap.h"
 #include "SceneRenderer/Utils/EMToIrradianceMap.h"
+#include "SceneRenderer/Utils/EMToPrefilterSpecMap.h"
 
 #include "ResourceManagers/ShaderManager.h"
 
@@ -37,6 +38,9 @@ namespace ZE
 
 		Handle irradianceMapHandle = EMToIrradianceMap::ConvertToIrradianceMap(gGameContext, m_cubeMapTexture);
 		m_irradianceMap = irradianceMapHandle.getObject<IGPUTexture>();
+
+		Handle prefilterSpecMapHandle = EMToPrefilterSpecMap::ConvertToPrefilterSpecMap(gGameContext, m_cubeMapTexture);
+		m_prefilterSpecMap = prefilterSpecMapHandle.getObject<IGPUTexture>();
 	}
 
 	void Skybox::setupComponent()
@@ -119,7 +123,8 @@ namespace ZE
 		if (m_irradianceMap)
 		{
 			EnvironmentMapData& envMap = gGameContext->getDrawList()->getNextEnvironmentMap();
-			envMap.environmentMapCube = m_irradianceMap;
+			envMap.irradianceMap = m_irradianceMap;
+			envMap.prefilterSpecularMap = m_prefilterSpecMap;
 		}
 	}
 

@@ -42,7 +42,7 @@ namespace ZE
 			m_Ks(1.0f, 1.0f, 1.0f),
 			m_shininess(0.0f),
 			m_metalic(0.0f),
-			m_roughness(0.5f),
+			m_roughness(1.0f),
 			m_reflectivity(0.04f),
 			m_isBlend(false),
 			m_bDoubleSided(false)

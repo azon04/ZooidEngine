@@ -54,6 +54,7 @@ namespace ZE
 #if RENDER_LIGHT_PASS_ALG == RENDER_LIGHT_PASS_LIGHT_INDEXED
 		void drawLightVolume(Int32 lightIndex, IRenderer* renderer, GameContext* gameContex);
 #endif
+		void createEnvBRDFLUT();
 
 	protected:
 		// Default Shader Chain
@@ -67,6 +68,9 @@ namespace ZE
 		// Light Volume Shapes
 		IGPUBufferArray* m_sphereBufferArray;
 		IGPUBufferArray* m_coneBufferArray;
+
+		// BRDF Spec LUT
+		IGPUTexture* m_envBRDFLUT = nullptr;
 
 #if RENDER_LIGHT_PASS_ALG == RENDER_LIGHT_PASS_LIGHT_INDEXED
 		IShaderChain* m_lightIndexedVolumeShader;

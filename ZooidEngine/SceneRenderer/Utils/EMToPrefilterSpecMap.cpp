@@ -1,4 +1,4 @@
-#include "EMToIrradianceMap.h"
+#include "EMToPrefilterSpecMap.h"
 #include "Renderer/IRenderer.h"
 #include "Renderer/RenderZooid.h"
 #include "Renderer/IGPURenderBuffer.h"
@@ -16,12 +16,12 @@
 namespace ZE
 {
 
-	void EMToIrradianceMap::prepare(GameContext* _gameContext)
+	void EMToPrefilterSpecMap::prepare(GameContext* _gameContext)
 	{
 		// Load Shader
 		if (!m_shaderChain)
 		{
-			m_shaderChain = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/Utils/EquiRectangularToCube.vs", "ZooidEngine/Shaders/Utils/EMToIrradianceMap.frag", nullptr, nullptr);
+			m_shaderChain = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/Utils/EquiRectangularToCube.vs", "ZooidEngine/Shaders/Utils/EMToPrefilterSpecMap.frag", nullptr, nullptr);
 		}
 
 		if (!m_frameBuffer)
@@ -44,7 +44,7 @@ namespace ZE
 		}
 	}
 
-	void EMToIrradianceMap::release(GameContext* _gameContext)
+	void EMToPrefilterSpecMap::release(GameContext* _gameContext)
 	{
 		if (m_frameBuffer)
 		{
@@ -56,12 +56,7 @@ namespace ZE
 		}
 	}
 
-	bool EMToIrradianceMap::execute_CPU(GameContext* _gameContext)
-	{
-		return true;
-	}
-
-	bool EMToIrradianceMap::execute_GPU(GameContext* _gameContext)
+	bool EMToPrefilterSpecMap::execute_GPU(GameContext* _gameContext)
 	{
 		ZCHECK(m_environmentMap);
 
@@ -72,10 +67,10 @@ namespace ZE
 		cubeTextureDesc.Width = cubeTextureDesc.Height = m_textureSize;
 		cubeTextureDesc.FaceCount = 6;
 		cubeTextureDesc.WrapU = cubeTextureDesc.WrapV = CLAMP_TO_EDGE;
-		cubeTextureDesc.MinFilter = LINEAR;
+		cubeTextureDesc.MinFilter = LINEAR_MIPMAP_LINEAR;
 		cubeTextureDesc.MagFilter = LINEAR;
 		cubeTextureDesc.DataType = FLOAT;
-		cubeTextureDesc.bGenerateMipMap = false;
+		cubeTextureDesc.bGenerateMipMap = true;
 		cubeTextureDesc.TextureFormat = TEX_RGB16F;
 
 		m_result = _gameContext->getRenderZooid()->CreateRenderTexture();
@@ -122,7 +117,6 @@ namespace ZE
 		};
 
 		renderer->SetRenderRasterizerState(TRenderRasterizerState<EFaceFrontOrder::CCW, ECullFace::CULL_NONE, ERenderFillMode::MODE_FILL>::GetGPUState());
-		renderer->SetViewport(0, 0, m_textureSize, m_textureSize);
 
 		m_frameBuffer->bind();
 
@@ -138,17 +132,30 @@ namespace ZE
 		m_frameBuffer->bind();
 
 		Vector3 Zero;
-		for (UInt32 i = 0; i < 6; i++)
+		const UInt32 maxMipLevels = 5;
+		Int32 mipSize = m_textureSize;
+		for (UInt32 mip = 0; mip < maxMipLevels; ++mip)
 		{
-			m_frameBuffer->addTextureCubeAttachment(COLOR_ATTACHMENT, CubeTexture, i);
+			// Set viewport
+			renderer->SetViewport(0, 0, mipSize, mipSize);
 
-			renderer->Clear(ERenderBufferBit::COLOR_BUFFER_BIT | ERenderBufferBit::DEPTH_BUFFER_BIT);
+			float roughness = float(mip) / float(maxMipLevels - 1);
+			m_shaderChain->setFloat("roughness", roughness);
 
-			// Draw for each direction
-			MathOps::LookAt(vertexBufferData[1], Zero, targets[i], ups[i]);
-			drawBufferData->bindAndRefresh();
+			for (UInt32 i = 0; i < 6; i++)
+			{
+				m_frameBuffer->addTextureCubeAttachment(COLOR_ATTACHMENT, CubeTexture, i, 0, mip);
 
-			_gameContext->getRenderer()->DrawArray(TOPOLOGY_TRIANGLE, 0, 36);
+				renderer->Clear(ERenderBufferBit::COLOR_BUFFER_BIT | ERenderBufferBit::DEPTH_BUFFER_BIT);
+
+				// Draw for each direction
+				MathOps::LookAt(vertexBufferData[1], Zero, targets[i], ups[i]);
+				drawBufferData->bindAndRefresh();
+
+				_gameContext->getRenderer()->DrawArray(TOPOLOGY_TRIANGLE, 0, 36);
+			}
+
+			mipSize = mipSize / 2;
 		}
 
 		m_shaderChain->unbind();
@@ -162,10 +169,10 @@ namespace ZE
 		return true;
 	}
 
-	ZE::Handle EMToIrradianceMap::ConvertToIrradianceMap(GameContext* _gameContext, IGPUTexture* environmentMap)
+	ZE::Handle EMToPrefilterSpecMap::ConvertToPrefilterSpecMap(GameContext* _gameContext, IGPUTexture* environmentMap)
 	{
 		ScopedRenderThreadOwnership renderLock(_gameContext->getRenderer());
-		EMToIrradianceMap* instance = EMToIrradianceMap::GetInstance();
+		EMToPrefilterSpecMap* instance = EMToPrefilterSpecMap::GetInstance();
 		instance->m_environmentMap = environmentMap;
 		instance->prepare(_gameContext);
 		bool success = instance->Execute(_gameContext);

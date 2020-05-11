@@ -26,6 +26,7 @@ namespace ZE
 		
 		IGPUTexture* m_cubeMapTexture;
 		IGPUTexture* m_irradianceMap;
+		IGPUTexture* m_prefilterSpecMap;
 		static IGPUBufferArray* s_skyBoxBufferArray;
 
 	};

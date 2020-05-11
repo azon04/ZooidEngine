@@ -55,12 +55,12 @@ namespace ZE
 		}
 	}
 
-	void GLFrameBuffer::addTextureCubeAttachment(EFrameBuferAttachmentType attachType, IGPUTexture* texture, UInt32 faceIndex, UInt32 attachIndex /*= 0*/)
+	void GLFrameBuffer::addTextureCubeAttachment(EFrameBuferAttachmentType attachType, IGPUTexture* texture, UInt32 faceIndex, UInt32 attachIndex /*= 0*/, UInt32 mipIndex)
 	{
 		GLenum _glAttachType = getGLAttachmentType(attachType, attachIndex);
 
 		GLTexture* pRealTexture = (GLTexture*)texture;
-		glFramebufferTexture2D(GL_FRAMEBUFFER, _glAttachType, GL_TEXTURE_CUBE_MAP_POSITIVE_X + faceIndex, pRealTexture->getTextureBuffer(), 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, _glAttachType, GL_TEXTURE_CUBE_MAP_POSITIVE_X + faceIndex, pRealTexture->getTextureBuffer(), mipIndex);
 
 		if (attachType == COLOR_ATTACHMENT)
 		{

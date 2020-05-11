@@ -98,6 +98,9 @@ namespace ZE
 
 		// Enable Face Culling
 		SetRenderRasterizerState(DefaultRasterizerState::GetGPUState());
+
+		// Enable Texture Cube seamless
+		glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 	}
 
 	void GLRenderer::BeginRender()

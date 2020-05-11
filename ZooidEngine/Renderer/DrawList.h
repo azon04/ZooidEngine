@@ -40,7 +40,9 @@ namespace ZE
 
 	struct EnvironmentMapData
 	{
-		IGPUTexture* environmentMapCube;
+		IGPUTexture* irradianceMap;
+		IGPUTexture* prefilterSpecularMap;
+
 		// #TODO add type ie: skybox or a probe; add position where the probe is
 	};
 

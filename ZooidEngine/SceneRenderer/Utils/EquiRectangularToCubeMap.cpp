@@ -47,6 +47,7 @@ namespace ZE
 		cubeTextureDesc.FaceCount = 6;
 		cubeTextureDesc.WrapU = cubeTextureDesc.WrapV = CLAMP_TO_EDGE;
 		cubeTextureDesc.MinFilter = LINEAR;
+		cubeTextureDesc.MagFilter = LINEAR;
 		cubeTextureDesc.DataType = FLOAT;
 		cubeTextureDesc.bGenerateMipMap = false;
 		cubeTextureDesc.TextureFormat = TEX_RGB16F;

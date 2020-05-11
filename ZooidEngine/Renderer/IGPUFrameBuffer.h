@@ -26,7 +26,7 @@ namespace ZE
 		virtual void addRenderBufferAttachment(EFrameBuferAttachmentType attachType, IGPURenderBuffer* renderBuffer, UInt32 attachIndex = 0) = 0;
 
 		// Attach texture cube to frame buffer
-		virtual void addTextureCubeAttachment(EFrameBuferAttachmentType attachType, IGPUTexture* texture, UInt32 faceIndex, UInt32 attachIndex = 0) = 0;
+		virtual void addTextureCubeAttachment(EFrameBuferAttachmentType attachType, IGPUTexture* texture, UInt32 faceIndex, UInt32 attachIndex = 0, UInt32 mipIndex = 0) = 0;
 		
 		// Setup attachments
 		virtual void setupAttachments() = 0;

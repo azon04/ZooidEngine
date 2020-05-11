@@ -10,6 +10,7 @@
 #include "Renderer/IGPURenderBuffer.h"
 #include "Renderer/IGPUStates.h"
 #include "Renderer/DrawList.h"
+#include "../Utils/SharedResources.h"
 #include "SceneRenderer/ShadowRenderer.h"
 #include "SceneRenderer/SkyboxRenderer.h"
 #include "GBufferRenderPass.h"
@@ -121,6 +122,9 @@ void ZE::LightRenderPass::prepare(GameContext* _gameContext)
 		m_sphereBufferArray = BufferManager::getInstance()->getBufferArray(BUFFER_ARRAY_SPHERE);
 		m_coneBufferArray = BufferManager::getInstance()->getBufferArray(BUFFER_ARRAY_CONE);
 	}
+
+	// Create BRDF LUT
+	createEnvBRDFLUT();
 }
 
 void ZE::LightRenderPass::release(GameContext* _gameContext)
@@ -222,9 +226,16 @@ bool ZE::LightRenderPass::execute_GPU(GameContext* _gameContext)
 
 		if (bHasEnvironmentMap)
 		{
-			IGPUTexture* environmentCube = drawList->m_environmentMaps[0].environmentMapCube;
+			IGPUTexture* environmentCube = drawList->m_environmentMaps[0].irradianceMap;
 			shader->setTexture("gIrradianceMap", environmentCube, 6);
 			environmentCube->bind();
+
+			IGPUTexture* prefilterSpecMap = drawList->m_environmentMaps[0].prefilterSpecularMap;
+			shader->setTexture("gPrefilterMap", prefilterSpecMap, 7);
+			prefilterSpecMap->bind();
+
+			shader->setTexture("gBRDFLUT", m_envBRDFLUT, 8);
+			m_envBRDFLUT->bind();
 		}
 
 		_gameContext->getRenderer()->DrawBufferArray(TOPOLOGY_TRIANGLE, quadVBO, quadVBO->getDataCount());
@@ -555,3 +566,66 @@ void ZE::LightRenderPass::drawLightVolume(Int32 lightIndex, IRenderer* renderer,
 	renderer->DrawArray(TOPOLOGY_TRIANGLE, 0, bufferArray->getDataCount());
 }
 #endif
+
+
+void ZE::LightRenderPass::createEnvBRDFLUT()
+{
+	if (m_envBRDFLUT) { return; }
+
+	IShaderChain* shaderChain = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/Utils/CreateEnvBRDF.vs", "ZooidEngine/Shaders/Utils/CreateEnvBRDF.frag", nullptr, nullptr);
+
+	if (!shaderChain) { return; }
+
+	IGPUBufferArray* quadVBO = BufferManager::getInstance()->getBufferArray(BUFFER_ARRAY_QUAD_V3_TC2);
+
+	ZCHECK(quadVBO);
+
+	TextureCreateDesc resultTextDesc;
+	resultTextDesc.Height = resultTextDesc.Width = 512;
+	resultTextDesc.TextureFormat = TEX_RG16F;
+	resultTextDesc.DataType = FLOAT;
+	resultTextDesc.bGenerateMipMap = false;
+	resultTextDesc.MinFilter = LINEAR;
+	resultTextDesc.MagFilter = LINEAR;
+
+	Handle resultHandle = gGameContext->getRenderZooid()->CreateRenderTexture();
+	if (!resultHandle.isValid())
+	{
+		return;
+	}
+
+	m_envBRDFLUT = resultHandle.getObject<IGPUTexture>();
+	m_envBRDFLUT->create(resultTextDesc);
+
+	// Create Depth Buffer
+	Handle depthRenderBufferHandle = gGameContext->getRenderZooid()->CreateRenderBuffer();
+	ZCHECK(depthRenderBufferHandle.isValid());
+	IGPURenderBuffer* depthBuffer = depthRenderBufferHandle.getObject<IGPURenderBuffer>();
+	depthBuffer->create(DEPTH_ONLY, 512, 512);
+
+	// Create the frame buffer
+	Handle fbHandle = gGameContext->getRenderZooid()->CreateFrameBuffer();
+	ZCHECK(fbHandle.isValid());
+
+	IGPUFrameBuffer* frameBuffer = fbHandle.getObject<IGPUFrameBuffer>();
+
+	frameBuffer->bind();
+	frameBuffer->addTextureAttachment(COLOR_ATTACHMENT, m_envBRDFLUT);
+	frameBuffer->addRenderBufferAttachment(DEPTH_ATTACHMENT, depthBuffer);
+
+	IRenderer* renderer = gGameContext->getRenderer();
+
+	shaderChain->bind();
+
+	renderer->SetViewport(0, 0, 512, 512);
+	renderer->Clear(ERenderBufferBit::COLOR_BUFFER_BIT | ERenderBufferBit::DEPTH_BUFFER_BIT);
+	quadVBO->bind();
+	renderer->DrawArray(TOPOLOGY_TRIANGLE, 0, 6);
+
+	quadVBO->unbind();
+	shaderChain->unbind();
+	frameBuffer->unbind();
+
+	frameBuffer->release();
+	depthBuffer->release();
+}

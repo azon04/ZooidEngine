@@ -19,7 +19,7 @@ namespace ZE
 		virtual void create() override;
 		virtual void addTextureAttachment(EFrameBuferAttachmentType attachType, IGPUTexture* texture, UInt32 attachIndex = 0) override;
 		virtual void addRenderBufferAttachment(EFrameBuferAttachmentType attachType, IGPURenderBuffer* renderBuffer, UInt32 attachIndex = 0) override;
-		virtual void addTextureCubeAttachment(EFrameBuferAttachmentType attachType, IGPUTexture* texture, UInt32 faceIndex, UInt32 attachIndex = 0) override;
+		virtual void addTextureCubeAttachment(EFrameBuferAttachmentType attachType, IGPUTexture* texture, UInt32 faceIndex, UInt32 attachIndex = 0, UInt32 mipIndex = 0) override;
 		virtual void setupAttachments() override;
 		virtual void release() override;
 		virtual void bind() override;

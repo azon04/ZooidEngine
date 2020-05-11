@@ -9,6 +9,8 @@ uniform sampler2D gMetalRough;
 uniform sampler2D gAmbient;
 uniform sampler2D gSSAO;
 uniform samplerCube gIrradianceMap;
+uniform samplerCube gPrefilterMap;
+uniform sampler2D gBRDFLUT;
 
 layout (std140) uniform frame_data
 {
@@ -42,6 +44,7 @@ void main()
 
     vec3 N = normal;
     vec3 V = normalize(viewPos - fragPos);
+    vec3 R = reflect(-V, N);
 
     vec3 F0 = vec3(f0);
     F0 = mix(F0, albedo, metalic);
@@ -50,8 +53,14 @@ void main()
     vec3 kD = 1.0 - kS;
     vec3 irradiance = texture(gIrradianceMap, N).rgb;
     vec3 diffuse = irradiance * albedo;
+
+    const float MAX_REFLECTION_LOD = 4.0;
+    vec3 prefilteredColor = textureLod(gPrefilterMap, R, roughness * MAX_REFLECTION_LOD).rgb;
+    vec2 envBRDF = texture(gBRDFLUT, vec2(max(dot(N,V), 0.0), roughness)).rg;
+    vec3 specular = prefilteredColor * (kS * envBRDF.x + envBRDF.y);
+
     vec3 ao = ambient * occlusion;
-    vec3 color = (kD * diffuse) * ao;
+    vec3 color = (kD * diffuse + specular) * ao;
 
     fColor = vec4(color, 1.0);
 }

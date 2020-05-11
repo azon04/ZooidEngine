@@ -43,7 +43,7 @@ namespace ZE
 		case ZE::COLOR_sRGB_ALPHA:
 			return GL_SRGB8_ALPHA8;
 		case ZE::DEPTH_ONLY:
-			return GL_DEPTH_COMPONENT32F; // Possibly change a little less size
+			return GL_DEPTH_COMPONENT24;
 		case ZE::DEPTH_STENCIL:
 			return GL_DEPTH24_STENCIL8;
 		case ZE::STENCIL_ONLY:
@@ -141,6 +141,8 @@ namespace ZE
 			return GL_RG8;
 		case ZE::TEX_RG16:
 			return GL_RG16;
+		case ZE::TEX_RG16F:
+			return GL_RG16F;
 		case ZE::TEX_RGB16F:
 			return GL_RGB16F;
 		case ZE::TEX_RGBA8:

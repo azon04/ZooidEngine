@@ -119,7 +119,7 @@ float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
 	float ggx1 = GeometrySchlickGGX(NdotV, roughness);
 	float ggx2 = GeometrySchlickGGX(NdotL, roughness);
 
-	return ggx1 + ggx2;
+	return ggx1 * ggx2;
 }
 
 void main()
