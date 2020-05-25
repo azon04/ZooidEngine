@@ -304,7 +304,6 @@ namespace ZE
 		PxQueryFilterData queryFilterData;
 		queryFilterData.data.word0 = _groups;
 
-		queryFilterData.flags |= PxQueryFlag::eANY_HIT;
 		queryFilterData.flags |= PxQueryFlag::ePREFILTER;
 		DefaultQueryFilterCallback filterCallback(ignoredComponents);
 

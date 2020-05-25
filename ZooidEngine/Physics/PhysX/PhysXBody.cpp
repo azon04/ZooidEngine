@@ -52,16 +52,18 @@ namespace ZE
 	void PhysXBody::setMass(Float32 _mass)
 	{
 		IPhysicsBody::setMass(_mass);
-		if (physx::PxRigidDynamic* dyn = (physx::PxRigidDynamic*)(m_physXRigidActor))
+		if (m_physXRigidActor->is<physx::PxRigidDynamic>())
 		{
+			physx::PxRigidDynamic* dyn = (physx::PxRigidDynamic*)(m_physXRigidActor);
 			dyn->setMass(m_mass);
 		}
 	}
 
 	ZE::Float32 PhysXBody::getMass() const
 	{
-		if (physx::PxRigidDynamic* dyn = (physx::PxRigidDynamic*)(m_physXRigidActor))
+		if (m_physXRigidActor->is<physx::PxRigidDynamic>())
 		{
+			physx::PxRigidDynamic* dyn = (physx::PxRigidDynamic*)(m_physXRigidActor);
 			return dyn->getMass();
 		}
 
@@ -70,8 +72,9 @@ namespace ZE
 
 	void PhysXBody::AddForceAtPos(const Vector3& globalPos, const Vector3& forceDir, Float32 forceValue, bool bImpulse /*= false*/)
 	{
-		if (physx::PxRigidBody* rigidBody = (physx::PxRigidBody*)(m_physXRigidActor))
+		if (m_physXRigidActor->is<physx::PxRigidBody>())
 		{
+			physx::PxRigidBody* rigidBody = (physx::PxRigidBody*)(m_physXRigidActor);
 			physx::PxVec3 pxGlobalPos(globalPos.getX(), globalPos.getY(), globalPos.getZ());
 			physx::PxVec3 pxForce(forceDir.getX() * forceValue, forceDir.getY() * forceValue, forceDir.getZ() * forceValue);
 			physx::PxForceMode::Enum mode = (bImpulse) ? physx::PxForceMode::eIMPULSE : physx::PxForceMode::eFORCE;
@@ -81,8 +84,9 @@ namespace ZE
 
 	void PhysXBody::AddForceAtLocalPos(const Vector3& localPos, const Vector3& forceDir, Float32 forceValue, bool bImpulse /*= false*/)
 	{
-		if (physx::PxRigidBody* rigidBody = (physx::PxRigidBody*)(m_physXRigidActor))
+		if (m_physXRigidActor->is<physx::PxRigidBody>())
 		{
+			physx::PxRigidBody* rigidBody = (physx::PxRigidBody*)(m_physXRigidActor);
 			physx::PxVec3 pxLocalPos(localPos.getX(), localPos.getY(), localPos.getZ());
 			physx::PxVec3 pxForce(forceDir.getX() * forceValue, forceDir.getY() * forceValue, forceDir.getZ() * forceValue);
 			physx::PxForceMode::Enum mode = (bImpulse) ? physx::PxForceMode::eIMPULSE : physx::PxForceMode::eFORCE;
