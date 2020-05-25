@@ -92,11 +92,8 @@ namespace ZE
 		LightRenderPass::GetInstance()->addInputTextureBuffer(GBufferRenderPass::GetInstance()->getTextureOutput(1));
 		LightRenderPass::GetInstance()->addInputTextureBuffer(GBufferRenderPass::GetInstance()->getTextureOutput(2));
 		LightRenderPass::GetInstance()->addInputTextureBuffer(GBufferRenderPass::GetInstance()->getTextureOutput(3));
-		LightRenderPass::GetInstance()->addInputTextureBuffer(GBufferRenderPass::GetInstance()->getTextureOutput(4));
 		LightRenderPass::GetInstance()->addInputTextureBuffer(SSAORenderPass::GetInstance()->getTextureOutput(0));
-#if ENABLE_PBR_TESTING
-		LightRenderPass::GetInstance()->addInputTextureBuffer(GBufferRenderPass::GetInstance()->getTextureOutput(5));
-#endif
+		LightRenderPass::GetInstance()->addInputTextureBuffer(GBufferRenderPass::GetInstance()->getTextureOutput(4));
 		LightRenderPass::GetInstance()->addInputFrameBuffer(GBufferRenderPass::GetInstance()->getFrameBufferOutput(0));
 		LightRenderPass::GetInstance()->Execute(_gameContext);
 		LightRenderPass::GetInstance()->end(_gameContext);

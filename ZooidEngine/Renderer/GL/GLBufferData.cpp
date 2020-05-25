@@ -215,4 +215,9 @@ namespace ZE
 		}
 	}
 
+	void GLBufferData::setDebugName(const char* debugName)
+	{
+		glObjectLabel(GL_BUFFER, m_BBO, -1, debugName);
+	}
+
 }

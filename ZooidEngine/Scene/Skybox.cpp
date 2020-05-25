@@ -30,7 +30,14 @@ namespace ZE
 
 		if (!m_cubeMapTexture->isCubeTexture())
 		{
+			ScopedRenderThreadOwnership renderLock(gGameContext->getRenderer());
+
 			Handle resultHandle = EquiRectangularToCubeMap::ConvertToCubeMap(gGameContext, m_cubeMapTexture);
+			
+			// Clear the equiRectangular texture once we done
+			m_cubeMapTexture->release();
+			m_cubeMapTexture = nullptr;
+
 			ZCHECK(resultHandle.isValid());
 			m_cubeMapTexture = resultHandle.getObject<IGPUTexture>();
 			TextureManager::GetInstance()->unloadResource(filePath);

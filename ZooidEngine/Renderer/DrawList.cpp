@@ -25,6 +25,8 @@ namespace ZE
 		BufferManager* pBufferManager = BufferManager::getInstance();
 		m_mainConstantBuffer = pBufferManager->createConstantBuffer(&m_shaderFrameData, sizeof(ShaderData), CONSTANT_BUFFER_SHADER_DATA_INDEX);
 		m_lightConstantBuffer = pBufferManager->createConstantBuffer(&m_lightData, sizeof(LightData), CONSTANT_BUFFER_LIGHT_DATA_INDEX);
+		m_mainConstantBuffer->setDebugName("MainConstantBuffer");
+		m_lightConstantBuffer->setDebugName("LightConstantBuffer");
 		Reset();
 	}
 

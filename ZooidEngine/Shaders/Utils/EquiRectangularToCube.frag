@@ -19,5 +19,7 @@ void main()
     vec2 uv = ( vec2(0.0, 1.0) - SampleSphericalMap(normalize(FragPos)) ) * vec2(-1.0, 1.0); // GL: Need to flip the texture y
     vec3 color = texture(equirectangularMap, uv).rgb;
 
+    color = vec3(min(color.x, 65503.0), min(color.y, 65503.0), min(color.z, 65503.0));
+    
     FragColor = vec4(color, 1.0);
 }

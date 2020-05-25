@@ -38,7 +38,7 @@ namespace ZE
 	{
 		ZCHECK(m_equiRectangularTexture);
 
-		const Int32 TextureSize = 2048;
+		const Int32 TextureSize = 1024;
 		IRenderer* renderer = _gameContext->getRenderer();
 
 		// Create the cube texture result

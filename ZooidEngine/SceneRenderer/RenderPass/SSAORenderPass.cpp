@@ -59,6 +59,7 @@ namespace ZE
 			}
 
 			m_ssaoBufferData = BufferManager::getInstance()->createConstantBuffer(m_ssaoKernels.data(), sizeof(Vector4) * m_ssaoKernels.size(), 1, true);
+			m_ssaoBufferData->setDebugName("SSAOKernelBuffer");
 
 			// Generate Noise Texture
 			Array<Vector3> ssaoNoise;
@@ -84,11 +85,13 @@ namespace ZE
 			{
 				m_noiseTexture = noiseTextureHandle.getObject<IGPUTexture>();
 				m_noiseTexture->create(textureDesc);
+				m_noiseTexture->setDebugName("SSAONoise");
 			}
 
-			textureDesc.Width = (UInt32)_gameContext->getRenderer()->GetWidth();
-			textureDesc.Height = (UInt32)_gameContext->getRenderer()->GetHeight();
-			textureDesc.TextureFormat = TEX_R16F;
+			// Use half resolution for SSAO
+			textureDesc.Width = (UInt32)_gameContext->getRenderer()->GetWidth() / 2;
+			textureDesc.Height = (UInt32)_gameContext->getRenderer()->GetHeight() / 2;
+			textureDesc.TextureFormat = TEX_RED;
 			textureDesc.MinFilter = NEAREST;
 			textureDesc.MagFilter = NEAREST;
 			textureDesc.DataType = FLOAT;
@@ -100,6 +103,7 @@ namespace ZE
 			{
 				m_ssaoResultTexture = ssaoTextureHandle.getObject<IGPUTexture>();
 				m_ssaoResultTexture->create(textureDesc);
+				m_ssaoResultTexture->setDebugName("SSAOBuffer");
 			}
 
 			ssaoTextureHandle = _gameContext->getRenderZooid()->CreateRenderTexture();
@@ -107,6 +111,7 @@ namespace ZE
 			{
 				m_ssaoBlurResultTexture = ssaoTextureHandle.getObject<IGPUTexture>();
 				m_ssaoBlurResultTexture->create(textureDesc);
+				m_ssaoBlurResultTexture->setDebugName("SSAOBlurBuffer");
 			}
 
 			Handle depthRenderBuffer = _gameContext->getRenderZooid()->CreateRenderBuffer();
@@ -181,7 +186,7 @@ namespace ZE
 		ZCHECK(m_ssaoFrameBuffer);
 		m_ssaoFrameBuffer->bind();
 
-		_gameContext->getRenderer()->ResetViewport();
+		_gameContext->getRenderer()->SetViewport(0, 0, m_ssaoResultTexture->getWidth(), m_ssaoResultTexture->getHeight());
 		_gameContext->getRenderer()->ClearScreen();
 
 		m_shaderChain->bind();

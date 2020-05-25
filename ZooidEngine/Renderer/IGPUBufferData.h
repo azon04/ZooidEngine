@@ -62,8 +62,12 @@ namespace ZE
 		// Set the stride of the buffer
 		void setStride(UInt32 stride) { m_stride = stride; }
 
+		// Check if the buffer is a static buffer
 		bool isStatic() const { return m_isStatic; }
-	
+		
+		// Set Debug Name
+		virtual void setDebugName(const char* debugName) = 0;
+
 		// get data count
 		FORCEINLINE Int32 getDataCount() const { return m_dataCount; }
 

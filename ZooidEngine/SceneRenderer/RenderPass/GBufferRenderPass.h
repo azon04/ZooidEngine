@@ -44,10 +44,8 @@ namespace ZE
 		IGPUTexture* m_renderDepthTexture;
 		IGPUFrameBuffer* m_frameBuffer;
 
-#if ENABLE_PBR_TESTING
 		// To save Metalic, Roughness and F0 (reflectivity)
 		IGPUTexture* m_tMRF;
-#endif
 
 	};
 }

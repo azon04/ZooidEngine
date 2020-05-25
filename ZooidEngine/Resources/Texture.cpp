@@ -63,20 +63,6 @@ namespace ZE
 
 			if (image)
 			{
-				for (int i = 0; i < width*3; i++)
-				{
-					for (int j = 0; j < height; j++)
-					{
-						if (image[i + j * width * 3] > 70000.0)
-						{
-							int a = 0;
-						}
-						if (image[i + j * width * 3] == INFINITY)
-						{
-							int b = 1;
-						}
-					}
-				}
 				Texture* texture = new(textureHandle) Texture();
 
 				texture->loadFromBuffer(image, width, height, 1, channel);

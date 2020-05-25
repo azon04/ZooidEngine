@@ -31,6 +31,7 @@ namespace ZE
 		virtual void refresh() override;
 		virtual void bindAndRefresh() override;
 		virtual void writeData(void* data, size_t size, size_t offset) override;
+		virtual void setDebugName(const char* debugName) override;
 
 		FORCEINLINE GLuint getBBO() const { return m_BBO; }
 

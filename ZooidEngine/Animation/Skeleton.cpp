@@ -250,7 +250,8 @@ namespace ZE
 		m_stateBufferData.reset(m_skeleton->getJointCount());
 
 		m_gpuStateBuffer = BufferManager::getInstance()->createConstantBuffer(m_stateBufferData.data(), sizeof(Matrix4x4) * m_skeleton->getJointCount(), CONSTANT_BUFFER_SKELETON_DATA_INDEX);
-		
+		m_gpuStateBuffer->setDebugName("SkeletonStateBufferData");
+
 		m_bDirty = true;
 	}
 

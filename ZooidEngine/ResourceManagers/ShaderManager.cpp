@@ -45,32 +45,20 @@ namespace ZE
 		s_instance->makeShaderChain("ZooidEngine/Shaders/DefaultGLSimple.vs", "ZooidEngine/Shaders/DefaultGLSimpleColor.frag", nullptr, nullptr);
 
 		// Z_SHADER_CHAIN_3D_DEFAULT_LIT
-#if ENABLE_PBR_TESTING
 		s_instance->makeShaderChain("ZooidEngine/Shaders/DefaultGLSimpleLit.vs", "ZooidEngine/Shaders/PBR/DefaultGLSimpleLit.frag", nullptr, nullptr);
-#else
-		s_instance->makeShaderChain("ZooidEngine/Shaders/DefaultGLSimpleLit.vs", "ZooidEngine/Shaders/DefaultGLSimpleLit.frag", nullptr, nullptr);
-#endif
+
 		// Z_SHADER_CHAIN_3D_DEFAULT_LIT_BLEND
-#if ENABLE_PBR_TESTING
 		s_instance->makeShaderChain("ZooidEngine/Shaders/DefaultGLSimpleLit.vs", "ZooidEngine/Shaders/PBR/DefaultGLSimpleLit_Blend.frag", nullptr, nullptr);
-#else
-		s_instance->makeShaderChain("ZooidEngine/Shaders/DefaultGLSimpleLit.vs", "ZooidEngine/Shaders/DefaultGLSimpleLit_Blend.frag", nullptr, nullptr);
-#endif
+
 		// Z_SHADER_CHAIN_3D_HIGHLIGHT
 		s_instance->makeShaderChain("ZooidEngine/Shaders/DefaultHighlightSimple.vs", "ZooidEngine/Shaders/DefaultHighlightSimple.frag", nullptr, nullptr);
 
 		// Z_SHADER_CHAIN_3D_DEFAULT_SKIN_LIT
-#if ENABLE_PBR_TESTING
 		s_instance->makeShaderChain("ZooidEngine/Shaders/DefaultGLSimpleLitSkin.vs", "ZooidEngine/Shaders/PBR/DefaultGLSimpleLit.frag", nullptr, nullptr);
-#else
-		s_instance->makeShaderChain("ZooidEngine/Shaders/DefaultGLSimpleLitSkin.vs", "ZooidEngine/Shaders/DefaultGLSimpleLit.frag", nullptr, nullptr);
-#endif
+
 		// Z_SHADER_CHAIN_3D_DEFAULT_SKIN_LIT_BLEND
-#if ENABLE_PBR_TESTING
 		s_instance->makeShaderChain("ZooidEngine/Shaders/DefaultGLSimpleLitSkin.vs", "ZooidEngine/Shaders/PBR/DefaultGLSimpleLit_Blend.frag", nullptr, nullptr);
-#else
-		s_instance->makeShaderChain("ZooidEngine/Shaders/DefaultGLSimpleLitSkin.vs", "ZooidEngine/Shaders/DefaultGLSimpleLit_Blend.frag", nullptr, nullptr);
-#endif
+
 		// Z_SHADER_CHAIN_WORLD_TEXT_SHADER
 		s_instance->makeShaderChain("ZooidEngine/Shaders/TextWorldShader.vs", "ZooidEngine/Shaders/TextWorldShader.frag", nullptr, nullptr);
 

@@ -7,9 +7,8 @@
 layout (location=0) out vec3 gPosition; // in View-Space
 layout (location=1) out vec3 gNormal; // In View-Space
 layout (location=2) out vec3 gAlbedo;
-layout (location=3) out vec4 gSpecColor;
-layout (location=4) out vec3 gAmbient;
-layout (location=5) out vec4 gMetalRoughF;
+layout (location=3) out vec3 gAmbient;
+layout (location=4) out vec4 gMetalRoughF;
 
 struct Material
 {
@@ -112,7 +111,6 @@ void main()
     gPosition = fs_in.FragPos;
     gNormal = calculateNormal();
     gAlbedo = calculateAlbedo();
-    gSpecColor = vec4(calculateSpec(), material.shininess);
 	gAmbient = calculateAmbient();
-	gMetalRoughF = vec4(calculateMetalic(), calculateRoughness(), material.reflectivity, gSpecColor.r);
+	gMetalRoughF = vec4(calculateMetalic(), calculateRoughness(), material.reflectivity, calculateSpec().r);
 }

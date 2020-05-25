@@ -160,6 +160,8 @@ namespace ZE
 		TEX_RG16F,
 		TEX_RGB16F,
 		TEX_RGBA16F,
+		TEX_RGB32F,
+		TEX_RGBA32F,
 		TEX_MAX
 	};
 

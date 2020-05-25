@@ -149,6 +149,10 @@ namespace ZE
 			return GL_RGBA8;
 		case ZE::TEX_RGBA16F:
 			return GL_RGBA16F;
+		case ZE::TEX_RGB32F:
+			return GL_RGB32F;
+		case ZE::TEX_RGBA32F:
+			return GL_RGBA32F;
 		case ZE::TEX_NONE:
 		default:
 			return GL_NONE;

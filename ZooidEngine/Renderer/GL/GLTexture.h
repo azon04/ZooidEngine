@@ -21,6 +21,9 @@ namespace ZE
 		virtual void bind() override;
 		virtual void unbind() override;
 
+		// Debug
+		virtual void setDebugName(const char* debugName);
+
 		GLuint getTextureBuffer() const { return m_textureBuffer; }
 
 	private:

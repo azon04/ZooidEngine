@@ -171,4 +171,13 @@ namespace ZE
 
 		glBindTexture(imageType, 0);
 	}
+
+	void GLTexture::setDebugName(const char* debugName)
+	{
+		if (m_textureBuffer > 0)
+		{
+			glObjectLabel(GL_TEXTURE, m_textureBuffer, -1, debugName);
+		}
+	}
+
 }

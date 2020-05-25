@@ -54,6 +54,7 @@ namespace ZE
 			{
 				m_depthTexture = depthTextureHandle.getObject<IGPUTexture>();
 				m_depthTexture->create(textureDesc);
+				m_depthTexture->setDebugName("DepthBuffer");
 			}
 		}
 

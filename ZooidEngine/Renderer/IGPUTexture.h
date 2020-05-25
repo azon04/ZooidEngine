@@ -38,6 +38,9 @@ namespace ZE
 		// Is Cube Map
 		bool isCubeTexture() const { return m_face == 6; }
 
+		// Debug Name
+		virtual void setDebugName(const char* debugName) = 0;
+
 	protected:
 		Texture* m_textureRes;
 		UInt32 m_width;

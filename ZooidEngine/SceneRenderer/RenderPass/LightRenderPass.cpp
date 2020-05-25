@@ -32,17 +32,11 @@ void ZE::LightRenderPass::prepare(GameContext* _gameContext)
 #if RENDER_LIGHT_PASS_ALG == RENDER_LIGHT_PASS_LIGHT_INDEXED
 		m_lightIndexedVolumeShader = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/LightIndexedVolumeShader.vs", "ZooidEngine/Shaders/DeferredShading/LightIndexedVolumeShader.frag", nullptr, nullptr);
 #elif RENDER_LIGHT_PASS_ALG == RENDER_LIGHT_PASS_PER_TYPE
-#if ENABLE_PBR_TESTING
 		m_ambientShader = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Directional.vs", "ZooidEngine/Shaders/DeferredShading/PBR/AmbientShader.frag", nullptr, nullptr);
 		m_ambientShaderNoIrradianceMap = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Directional.vs", "ZooidEngine/Shaders/DeferredShading/PBR/AmbientShader_NoIrradianceMap.frag", nullptr, nullptr);
 		m_directionalShader = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Directional.vs", "ZooidEngine/Shaders/DeferredShading/PBR/DeferredLightShader_Directional.frag", nullptr, nullptr);
 		m_spotLightShader = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Spot.vs", "ZooidEngine/Shaders/DeferredShading/PBR/DeferredLightShader_Spot.frag", nullptr, nullptr);
 		m_pointLightShader = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Point.vs", "ZooidEngine/Shaders/DeferredShading/PBR/DeferredLightShader_Point.frag", nullptr, nullptr);
-#else
-		m_directionalShader = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Directional.vs", "ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Directional.frag", nullptr, nullptr);
-		m_spotLightShader = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Spot.vs", "ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Spot.frag", nullptr, nullptr);
-		m_pointLightShader = ShaderManager::GetInstance()->makeShaderChain("ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Point.vs", "ZooidEngine/Shaders/DeferredShading/DeferredLightShader_Point.frag", nullptr, nullptr);
-#endif
 #endif
 	}
 
@@ -64,6 +58,7 @@ void ZE::LightRenderPass::prepare(GameContext* _gameContext)
 		{
 			m_resultPassTexture = textureHandle.getObject<IGPUTexture>();
 			m_resultPassTexture->create(textureCreateDesc);
+			m_resultPassTexture->setDebugName("LightBuffer");
 		}
 
 		// Depth Texture Buffer
@@ -77,6 +72,7 @@ void ZE::LightRenderPass::prepare(GameContext* _gameContext)
 		{
 			m_depthTexture = depthTextureBuffer.getObject<IGPUTexture>();
 			m_depthTexture->create(textureCreateDesc);
+			m_depthTexture->setDebugName("DepthBuffer");
 		}
 
 		// Create Frame Buffer
@@ -117,6 +113,7 @@ void ZE::LightRenderPass::prepare(GameContext* _gameContext)
 		}
 #elif RENDER_LIGHT_PASS_ALG == RENDER_LIGHT_PASS_PER_TYPE
 		m_lightSampleGPUBuffer = BufferManager::getInstance()->createConstantBuffer(&m_lightSampleData, sizeof(LightSampleData), CONSTANT_BUFFER_LIGHT_DATA_INDEX);
+		m_lightSampleGPUBuffer->setDebugName("LightSampleDataBuffer");
 #endif
 
 		m_sphereBufferArray = BufferManager::getInstance()->getBufferArray(BUFFER_ARRAY_SPHERE);
@@ -167,13 +164,9 @@ bool ZE::LightRenderPass::execute_GPU(GameContext* _gameContext)
 	IGPUTexture* positionTexture = m_textureBufferInputs[0];
 	IGPUTexture* normalTexture = m_textureBufferInputs[1];
 	IGPUTexture* albedoTexture = m_textureBufferInputs[2];
-	IGPUTexture* specTexture = m_textureBufferInputs[3];
-	IGPUTexture* ambientTexture = m_textureBufferInputs[4];
-	IGPUTexture* ssaoTexture = m_textureBufferInputs[5];
-
-#if ENABLE_PBR_TESTING
-	IGPUTexture* mrfTexture = m_textureBufferInputs[6];
-#endif
+	IGPUTexture* ambientTexture = m_textureBufferInputs[3];
+	IGPUTexture* ssaoTexture = m_textureBufferInputs[4];
+	IGPUTexture* mrfTexture = m_textureBufferInputs[5];
 
 #if RENDER_LIGHT_PASS_ALG == RENDER_LIGHT_PASS_PER_TYPE
 	// Deferred Shading with Light Type
@@ -358,16 +351,8 @@ bool ZE::LightRenderPass::execute_GPU(GameContext* _gameContext)
 		shader->setTexture("gAlbedo", albedoTexture, 2);
 		albedoTexture->bind();
 
-#if ENABLE_PBR_TESTING
-		shader->setTexture("gSpec", specTexture, 3);
-		specTexture->bind();
-
 		shader->setTexture("gMetalRough", mrfTexture, 3);
 		mrfTexture->bind();
-#else
-		shader->setTexture("gSpec", specTexture, 3);
-		specTexture->bind();
-#endif
 
 		shader->setTexture("gAmbient", ambientTexture, 4);
 		ambientTexture->bind();
@@ -596,6 +581,7 @@ void ZE::LightRenderPass::createEnvBRDFLUT()
 
 	m_envBRDFLUT = resultHandle.getObject<IGPUTexture>();
 	m_envBRDFLUT->create(resultTextDesc);
+	m_envBRDFLUT->setDebugName("EnvBRDFLUT");
 
 	// Create Depth Buffer
 	Handle depthRenderBufferHandle = gGameContext->getRenderZooid()->CreateRenderBuffer();

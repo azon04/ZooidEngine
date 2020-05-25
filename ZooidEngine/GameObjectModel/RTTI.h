@@ -13,7 +13,6 @@ namespace ZE
 
 	struct RTTI 
 	{
-		char ClassName[32];
 		Int32 ClassID = -1;
 		RTTI* ParentRTTI = nullptr;
 
