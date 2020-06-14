@@ -5,7 +5,7 @@
 class ZE::Event;
 class ZE::GameContext;
 
-namespace SpaceShooter
+namespace ZE
 {
 	class LaserBeam : public ZE::RenderComponent
 	{

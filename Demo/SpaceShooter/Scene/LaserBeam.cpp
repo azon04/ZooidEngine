@@ -3,7 +3,7 @@
 #include "ZooidEngine/FileSystem/DirectoryHelper.h"
 #include "ZooidEngine/Events/Events.h"
 
-namespace SpaceShooter
+namespace ZE
 {
 	IMPLEMENT_CLASS_1(LaserBeam, ZE::RenderComponent);
 

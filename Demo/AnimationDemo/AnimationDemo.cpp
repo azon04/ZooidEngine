@@ -1,4 +1,4 @@
-#include "MainFunction.h"
+#include "AnimationDemo.h"
 
 #include "ZEGameContext.h"
 
@@ -12,15 +12,14 @@
 #include "ZooidEngine/Scene/CameraManager.h"
 #include "ZooidEngine/Scene/CameraComponent.h"
 
-namespace AnimationDemo
+namespace ZE
 {
-
-	void MainSetup(ZE::GameContext* _gameContext)
+	void AnimationDemo::Setup(GameContext* _gameContext)
 	{
-		_gameContext->getSceneManager()->loadSceneFile(ZE::GetPackageAssetPath("TestAnimation", "Scene", "Test.scz").c_str());
-		
+		_gameContext->getSceneManager()->loadSceneFile(GetPackageAssetPath("TestAnimation", "Scene", "Test.scz").c_str());
+
 		{
-			ZE::CameraComponent* cameraComp = ZE::CameraManager::GetInstance()->getCurrentCamera();
+			CameraComponent* cameraComp = CameraManager::GetInstance()->getCurrentCamera();
 			Quaternion q;
 			Matrix4x4 transform;
 			transform.fromQuaternion(q);
@@ -29,9 +28,20 @@ namespace AnimationDemo
 		}
 	}
 
-	void MainClean(ZE::GameContext* _gameContext)
+	void AnimationDemo::Tick(GameContext* _gameContext, float deltaTime)
 	{
 
+	}
+
+	void AnimationDemo::Clean(GameContext* _gameContext)
+	{
+
+	}
+
+	Application* Application::GetApplication()
+	{
+		static AnimationDemo application;
+		return &application;
 	}
 
 }

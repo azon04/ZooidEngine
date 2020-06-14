@@ -2,23 +2,23 @@
 
 #include "Scene/RenderComponent.h"
 
-class ZE::Event;
-class ZE::GameContext;
-
-namespace SpaceShooter
+namespace ZE
 {
-	class SpaceShip : public ZE::RenderComponent
+	class Event;
+	class GameContext;
+
+	class SpaceShip : public RenderComponent
 	{
 		DEFINE_CLASS(SpaceShip)
 
 	public:
-		SpaceShip(ZE::GameContext* gameContext) : ZE::RenderComponent(gameContext)
+		SpaceShip(GameContext* gameContext) : RenderComponent(gameContext)
 		{};
 		virtual ~SpaceShip() {}
 		virtual void setupComponent() override;
 
-		void handleMovementInput(ZE::Event* evt);
-		virtual void handleUpdateEvent(ZE::Event* event) override;
+		void handleMovementInput(Event* evt);
+		virtual void handleUpdateEvent(Event* event) override;
 
 		Vector3 m_movementSpeed;
 	};

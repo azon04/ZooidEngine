@@ -1,5 +1,6 @@
 #include "ZEGameContext.h"
 #include "MainFunctions.h"
+#include "Application/Application.h"
 #include "UnitTest/UnitTest.h"
 #include "Renderer/DrawList.h"
 #include "Platform/Platform.h"
@@ -13,7 +14,7 @@ ZE_MAIN()
 	
 	ZE::MainSetup(&gameContext);
 	
-	UnitTest::RunMainTest();
+	//UnitTest::RunMainTest();
 
 	// Main Loop
 	ZE_PLATFORMLOOP()

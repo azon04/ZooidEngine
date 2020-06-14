@@ -1,4 +1,4 @@
-#include "MainFunction.h"
+#include "SceneEditor.h"
 
 #include "ZEGameContext.h"
 
@@ -14,23 +14,22 @@
 #include "ZooidEngine/Scene/CameraManager.h"
 #include "ZooidEngine/Scene/CameraComponent.h"
 
-namespace AnimationDemo
+namespace ZE
 {
-
-	void MainSetup(ZE::GameContext* _gameContext)
+	void SceneEditor::Setup(GameContext* _gameContext)
 	{
-		int argCount = ZE::Platform::GetArgCount();
-		ZE::String scenePath(1024);
+		int argCount = Platform::GetArgCount();
+		String scenePath(1024);
 
 		if (argCount >= 1)
 		{
-			ZE::Platform::GetArgByIndex(0, scenePath.c_str());
+			Platform::GetArgByIndex(0, scenePath.c_str());
 		}
 
-		_gameContext->getSceneManager()->loadSceneFile(ZE::GetResourcePath(scenePath.const_str()).c_str());
-		
+		_gameContext->getSceneManager()->loadSceneFile(GetResourcePath(scenePath.const_str()).c_str());
+
 		{
-			ZE::CameraComponent* cameraComp = ZE::CameraManager::GetInstance()->getCurrentCamera();
+			CameraComponent* cameraComp = CameraManager::GetInstance()->getCurrentCamera();
 			Quaternion q;
 			Matrix4x4 transform;
 			transform.fromQuaternion(q);
@@ -39,9 +38,20 @@ namespace AnimationDemo
 		}
 	}
 
-	void MainClean(ZE::GameContext* _gameContext)
+	void SceneEditor::Tick(GameContext* _gameContext, float deltaTime)
 	{
 
+	}
+
+	void SceneEditor::Clean(GameContext* _gameContext)
+	{
+
+	}
+
+	Application* Application::GetApplication()
+	{
+		static SceneEditor application;
+		return &application;
 	}
 
 }

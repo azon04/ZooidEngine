@@ -15,6 +15,7 @@
 #define UIMEM_ZERO(Dst, _Size) memset(Dst, 0, _Size)
 #define UIMAX(a, b) (a > b ? (a) : (b))
 #define UIMIN(a, b) (a < b ? (a) : (b))
+#define UICLAMP(a, b, v) UIMAX( a, UIMIN(b, v) )
 
 #define MERGE_PATH(p1, p2) p1 p2
 
@@ -111,15 +112,34 @@ namespace ZE
 	UIDropdownStyle UI::DefaultDropdownStyle;
 	UITextInputStyle UI::DefaultTextInputStyle;
 	UIFontStyle UI::DefaultFontStyle;
+	UIMenuStyle UI::DefaultMenuStyle;
+	UIMenuStyle UI::DefaultSubMenuStyle;
+	UIScrollBarStyle UI::DefaultScrollBarStyle;
 	
 	UIStack<UInt32> UI::StackIDs;
 
-	UIFont* UI::DefaultFont = nullptr;
 
-	ZE::UIState* UI::GetUIState()
+	// COLOR PRESETS
+	UIVector4 COLOR_WHITE(1.0f);
+	UIVector4 COLOR_BLUE_SELECTION(15 / 255.0f, 95 / 255.0f, 168 / 255.0f, 0.5f);
+	UIVector4 COLOR_BLUE_HOVERED(15 / 255.0f, 95 / 255.0f, 168 / 255.0f, 0.25f);
+
+	ZE::Int32 UI::GetScreenWidth()
 	{
-		return &MainUIState;
+		return MainUIState.screenWidth;
 	}
+
+	ZE::Int32 UI::GetScreenHeight()
+	{
+		return MainUIState.screenHeight;
+	}
+
+	ZE::UIRenderer* UI::GetRenderer()
+	{
+		return MainUIState.renderer;
+	}
+
+	UIFont* UI::DefaultFont = nullptr;
 
 	ZE::UInt32 UI::GetUIIDFromString(const UIChar* textData, UInt32 length)
 	{
@@ -131,6 +151,45 @@ namespace ZE
 	{
 		UInt32 parent = StackIDs.back();
 		return ComputeHashPointer(pData, parent);
+	}
+
+	void UI::PushInteractionRect(const UIRect& rect)
+	{
+		if (MainUIState.InteractionRectStack.size() == 0)
+		{
+			MainUIState.InteractionRectStack.push_back(rect);
+		}
+		else
+		{
+			MainUIState.InteractionRectStack.push_back(MainUIState.InteractionRectStack.back().intersect(rect));
+		}
+	}
+
+	void UI::PopInteractionRect()
+	{
+		MainUIState.InteractionRectStack.pop_back();
+	}
+
+	void UI::ClearInteractionRect()
+	{
+		MainUIState.InteractionRectStack.clear();
+	}
+
+	ZE::UIRect UI::CalculateInteractionRect(const UIRect& rect)
+	{
+		if (MainUIState.InteractionRectStack.size() == 0)
+		{
+			return rect;
+		}
+		else
+		{
+			return (MainUIState.InteractionRectStack.back().intersect(rect));
+		}
+	}
+
+	bool UI::CheckMouseInside(const UIRect& rect)
+	{
+		return rect.isContain(MainUIState.mousePos) && ( MainUIState.InteractionRectStack.size() == 0 || MainUIState.InteractionRectStack.back().isContain(MainUIState.mousePos) );
 	}
 
 	// Helper function: Get Length of the UIChar buffer
@@ -156,6 +215,9 @@ namespace ZE
 		MainUIState.textTempBuffer = UINEW(UIChar[TEXT_TEMP_LENGTH]); // #TODO need to create UIAlloc
 
 		MainUIState.textInputFilterChar = nullptr;
+
+		MainUIState.screenWidth = width;
+		MainUIState.screenHeight = height;
 
 		UITextureManager::Init();
 
@@ -254,35 +316,61 @@ namespace ZE
 
 		// Default Drowpdown Style
 		DefaultDropdownStyle.dropdownButtonStyle.up.texture = dropdownBtnUp;
-		DefaultDropdownStyle.dropdownButtonStyle.up.fillColor = UIVector4(1.0f);
+		DefaultDropdownStyle.dropdownButtonStyle.up.fillColor = COLOR_WHITE;
 		DefaultDropdownStyle.dropdownButtonStyle.up.textureOffset = UIVector4(0.12f, 0.12f, 0.075f, 0.4f);
 		DefaultDropdownStyle.dropdownButtonStyle.up.textureScale = SCALE_9SCALE;
 		DefaultDropdownStyle.dropdownButtonStyle.down.texture = dropdownBtnDown;
-		DefaultDropdownStyle.dropdownButtonStyle.down.fillColor = UIVector4(1.0f);
+		DefaultDropdownStyle.dropdownButtonStyle.down.fillColor = COLOR_WHITE;
 		DefaultDropdownStyle.dropdownButtonStyle.down.textureOffset = UIVector4(0.12f, 0.12f, 0.075f, 0.4f);
 		DefaultDropdownStyle.dropdownButtonStyle.down.textureScale = SCALE_9SCALE;
 		DefaultDropdownStyle.dropdownButtonStyle.hover.texture = dropdownBtnHover;
-		DefaultDropdownStyle.dropdownButtonStyle.hover.fillColor = UIVector4(1.0f);
+		DefaultDropdownStyle.dropdownButtonStyle.hover.fillColor = COLOR_WHITE;
 		DefaultDropdownStyle.dropdownButtonStyle.hover.textureOffset = UIVector4(0.12f, 0.12f, 0.075f, 0.4f);
 		DefaultDropdownStyle.dropdownButtonStyle.hover.textureScale = SCALE_9SCALE;
 		DefaultDropdownStyle.dropdownButtonStyle.fontStyle.font = DefaultFont;
 		DefaultDropdownStyle.dropdownButtonStyle.fontStyle.fontScale = 1.0f;
-		DefaultDropdownStyle.selectorStyle.fillColor = UIVector4(0.0f, 0.5f, 1.0f, 1.0f);
-		DefaultDropdownStyle.selectorHoverStyle.fillColor = UIVector4(0.0f, 0.0f, 1.0f, 0.5f);
+		DefaultDropdownStyle.selectorStyle.fillColor = UIVector4(0.25f, 0.25f, 0.25f, 1.0f);
+		DefaultDropdownStyle.selectorHoverStyle.fillColor = COLOR_BLUE_HOVERED;
 		DefaultDropdownStyle.selectorFontStyle.font = DefaultFont;
 		DefaultDropdownStyle.selectorFontStyle.fontScale = 1.0f;
 
 		// Default Text Input Style
-		DefaultTextInputStyle.defaultStyle.fillColor = UIVector4(1.0f);
+		DefaultTextInputStyle.defaultStyle.fillColor = COLOR_WHITE;
 		DefaultTextInputStyle.defaultStyle.texture = textInputBg;
 		DefaultTextInputStyle.defaultStyle.textureScale = SCALE_9SCALE;
 		DefaultTextInputStyle.defaultStyle.textureOffset = UIVector4(0.20f);
-		DefaultTextInputStyle.activeStyle.fillColor = UIVector4(1.0f);
+		DefaultTextInputStyle.activeStyle.fillColor = COLOR_WHITE;
 		DefaultTextInputStyle.activeStyle.texture = textInputBgActive;
 		DefaultTextInputStyle.activeStyle.textureScale = SCALE_9SCALE;
 		DefaultTextInputStyle.activeStyle.textureOffset = UIVector4(0.20f);
 		DefaultTextInputStyle.fontStyle.font = DefaultFont;
 		DefaultTextInputStyle.fontStyle.fontScale = 1.0f;
+
+		// Default Menu Style
+		DefaultMenuStyle.fontStyle.font = DefaultFont;
+		DefaultMenuStyle.fontStyle.fontScale = 1.0f;
+		DefaultMenuStyle.background.fillColor = UIVector4(0.25f, 0.25f, 0.25f, 1.0f);
+		DefaultMenuStyle.hover.fillColor = COLOR_BLUE_SELECTION;
+		DefaultMenuStyle.selected.fillColor = UIVector4(0.1f, 0.1f, 0.1f, 1.0f);
+		DefaultMenuStyle.menuPadding = 10.0f;
+
+		// Default Sub Menu Style
+		DefaultSubMenuStyle.fontStyle.font = DefaultFont;
+		DefaultSubMenuStyle.fontStyle.fontScale = 1.0f;
+		DefaultSubMenuStyle.selected.fillColor = UIVector4(0.25f, 0.25f, 0.25f, 1.0f);
+		DefaultSubMenuStyle.hover.fillColor = COLOR_BLUE_SELECTION;
+		DefaultSubMenuStyle.background.fillColor = UIVector4(0.1f, 0.1f, 0.1f, 1.0f);
+		DefaultSubMenuStyle.menuPadding = 5.0f;
+
+		// Default ScrollBar Style
+		DefaultScrollBarStyle.scrollBar.fillColor = { 0.25f, 0.45f, 0.6f, 1.0f };
+		DefaultScrollBarStyle.scrollBar.texture = nullptr;
+		DefaultScrollBarStyle.scrollButton = ZE::UI::DefaultButtonStyle;
+		DefaultScrollBarStyle.scrollButton.up.fillColor = { 0.5f, 0.75f, 1.0f, 1.0f };
+		DefaultScrollBarStyle.scrollButton.hover.fillColor = { 0.5f, 0.75f, 1.0f, 0.75f };
+		DefaultScrollBarStyle.scrollButton.down.fillColor = { 0.5f, 0.75f, 1.0f, 0.5f };
+		DefaultScrollBarStyle.scrollLineSize = 3.0f;
+		DefaultScrollBarStyle.scrollButtonSize = 5.0f;
 
 		// Push 0 as default stack id
 		StackIDs.push_back(0);
@@ -294,6 +382,9 @@ namespace ZE
 		{
 			MainUIState.renderer->resizeWindow(width, height);
 		}
+
+		MainUIState.screenWidth = width;
+		MainUIState.screenHeight = height;
 	}
 
 	void UI::Destroy()
@@ -321,24 +412,27 @@ namespace ZE
 	{
 		MainUIState.drawer->Reset();
 		MainUIState.timeFromStart += MainUIState.mainTimer.ResetAndGetDeltaMS();
+		ClearInteractionRect();
 	}
 
 	void UI::EndFrame()
 	{
 		MainUIState.renderer->setDrawList(MainUIState.drawer->getCurrentDrawList());
 		MainUIState.drawer->SwapBuffer();
+		MainUIState.UseScrollOffset();
 	}
 
 	void UI::UpdateMouseState(Float32 mouseX, Float32 mouseY, EButtonState mouseDown)
 	{
-		MainUIState.mouseDeltaX = mouseX - MainUIState.mouseX;
-		MainUIState.mouseDeltaY = mouseY - MainUIState.mouseY;
-		MainUIState.mouseX = mouseX;
-		MainUIState.mouseY = mouseY;
-		MainUIState.mouseDown = mouseDown;
+		MainUIState.mouseDeltaX = mouseX - MainUIState.mousePos.x;
+		MainUIState.mouseDeltaY = mouseY - MainUIState.mousePos.y;
+		MainUIState.mousePos.x = mouseX;
+		MainUIState.mousePos.y = mouseY;
+		MainUIState.lastMouseState = MainUIState.mouseState;
+		MainUIState.mouseState = mouseDown;
 	}
 
-	void UI::RecordKeyboardButton(UIChar keyChar, int keyState)
+	void UI::RecordKeyboardButton(UIChar keyChar, Int32 keyState)
 	{
 		// Handle Keys
 		// Backspace key
@@ -442,6 +536,11 @@ namespace ZE
 		}
 	}
 
+	void UI::RecordMouseScroll(Float32 yOffset)
+	{
+		MainUIState.scrollOffsetY = yOffset;
+	}
+
 	bool UI::DoButton(const UIChar* label, const UIButtonStyle& buttonStyle /*= DefaultButtonStyle*/)
 	{
 		static UIRect rect;
@@ -458,12 +557,12 @@ namespace ZE
 
 	bool UI::DoButtonEx(const UIChar* label, UIRect& rect, const UIButtonStyle& buttonStyle)
 	{
-		bool mouseInside = rect.isContain(UIVector2{ MainUIState.mouseX, MainUIState.mouseY });
+		const bool mouseInside = CheckMouseInside(rect);
 		bool bPressed = false;
 		
 		UInt32 _id = GetUIIDFromString(label);
 
-		if (mouseInside && MainUIState.mouseDown == EButtonState::BUTTON_DOWN)
+		if (mouseInside && MainUIState.mouseState == EButtonState::BUTTON_DOWN)
 		{
 			MainUIState.activeItem.id = _id;
 		}
@@ -478,30 +577,26 @@ namespace ZE
 			if (MainUIState.activeItem.id == _id) { MainUIState.activeItem.id = 0; }
 		}
 
-		UIStyle style;
+		const UIStyle* style = &(buttonStyle.up);
 		if (MainUIState.activeItem.id == _id)
 		{
-			style = buttonStyle.down;
+			style = &(buttonStyle.down);
 		}
 		else if(MainUIState.hotItem.id == _id)
 		{
-			style = buttonStyle.hover;
+			style = &(buttonStyle.hover);
+		}
+
+		if (style->texture)
+		{
+			MainUIState.drawer->DrawTexture(rect, style->texture, style->fillColor, style->textureScale, style->textureOffset);
 		}
 		else
 		{
-			style = buttonStyle.up;
+			MainUIState.drawer->DrawRect(rect, style->fillColor);
 		}
 
-		if (style.texture)
-		{
-			MainUIState.drawer->DrawTexture(rect, style.texture, style.fillColor, style.textureScale, style.textureOffset);
-		}
-		else
-		{
-			MainUIState.drawer->DrawRect(rect, style.fillColor);
-		}
-
-		DrawTextInRect(rect, label, UIVector4(1.0f), TEXT_CENTER, TEXT_V_CENTER, buttonStyle.fontStyle.fontScale, buttonStyle.fontStyle.font);
+		DrawTextInRect(rect, label, COLOR_WHITE, TEXT_CENTER, TEXT_V_CENTER, buttonStyle.fontStyle.fontScale, buttonStyle.fontStyle.font);
 
 		return bPressed;
 	}
@@ -524,38 +619,30 @@ namespace ZE
 		rect.m_pos = pos;
 
 		UInt32 _id = GetUIIDFromString(text);
-		UIStyle style;
+		const UIStyle* style = &(checkBoxStyle.up);
 
 		if (MainUIState.activeItem.id == _id)
 		{
-			style = checkBoxStyle.down;
+			style = &(checkBoxStyle.down);
 		}
 		else if (MainUIState.hotItem.id == _id)
 		{
-			style = checkBoxStyle.hover;
-		}
-		else
-		{
-			style = checkBoxStyle.up;
+			style = &(checkBoxStyle.hover);
 		}
 
-		rect.m_dimension.x = (style.texture ? style.textureSize.x : 0) + font->calculateTextLength(text, 1.0f);
-		rect.m_dimension.y = UIMAX((style.texture ? style.textureSize.y : 0), font->calculateTextHeight(1.0f));
+		rect.m_dimension.x = (style->texture ? style->textureSize.x : 0) + font->calculateTextLength(text, 1.0f);
+		rect.m_dimension.y = UIMAX((style->texture ? style->textureSize.y : 0), font->calculateTextHeight(1.0f));
 
-		bool mouseInside = rect.isContain(UIVector2{ MainUIState.mouseX, MainUIState.mouseY });
+		const bool mouseInside = CheckMouseInside(rect);
 		bool bPressed = false;
-		if (mouseInside && MainUIState.mouseDown == EButtonState::BUTTON_DOWN)
+		if (mouseInside && MainUIState.mouseState == EButtonState::BUTTON_DOWN)
 		{
 			MainUIState.activeItem.id = _id;
 		}
 		else if (mouseInside)
 		{
 			MainUIState.hotItem.id = _id;
-			if (MainUIState.activeItem.id == _id) 
-			{ 
-				MainUIState.activeItem.id = 0; 
-				bPressed = true; 
-			}
+			if (MainUIState.activeItem.id == _id) { MainUIState.activeItem.id = 0; bPressed = true; }
 		}
 		else
 		{
@@ -571,38 +658,23 @@ namespace ZE
 		Float32 textOffsetX = 0;
 		if (!bChecked)
 		{
+			style = &(checkBoxStyle.up);
 			if (MainUIState.activeItem.id == _id)
 			{
-				if (checkBoxStyle.down.texture)
-				{
-					UIRect drawRect;
-					drawRect.m_pos = pos;
-					drawRect.m_dimension = checkBoxStyle.down.textureSize;
-					textOffsetX = drawRect.m_dimension.x;
-					MainUIState.drawer->DrawTexture(drawRect, checkBoxStyle.down.texture, checkBoxStyle.down.fillColor);
-				}
+				style = &(checkBoxStyle.down);
 			}
 			else if (MainUIState.hotItem.id == _id)
 			{
-				if (checkBoxStyle.hover.texture)
-				{
-					UIRect drawRect;
-					drawRect.m_pos = pos;
-					drawRect.m_dimension = checkBoxStyle.hover.textureSize;
-					textOffsetX = drawRect.m_dimension.x;
-					MainUIState.drawer->DrawTexture(drawRect, checkBoxStyle.hover.texture, checkBoxStyle.hover.fillColor);
-				}
+				style = &(checkBoxStyle.hover);
 			}
-			else
+
+			if (style->texture)
 			{
-				if (checkBoxStyle.up.texture)
-				{
-					UIRect drawRect;
-					drawRect.m_pos = pos;
-					drawRect.m_dimension = checkBoxStyle.up.textureSize;
-					textOffsetX = drawRect.m_dimension.x;
-					MainUIState.drawer->DrawTexture(drawRect, checkBoxStyle.up.texture, checkBoxStyle.up.fillColor);
-				}
+				UIRect drawRect;
+				drawRect.m_pos = pos;
+				drawRect.m_dimension = style->textureSize;
+				textOffsetX = drawRect.m_dimension.x;
+				MainUIState.drawer->DrawTexture(drawRect, style->texture, style->fillColor);
 			}
 		}
 		else
@@ -619,7 +691,7 @@ namespace ZE
 
 		if (text[0] != '\0')
 		{
-			MainUIState.drawer->DrawText(UIVector2{ pos.x + textOffsetX + 5, pos.y + (rect.m_dimension.y - font->calculateTextHeight(1.0f)) / 2 }, UIVector4(1.0f), font, text, checkBoxStyle.fontStyle.fontScale);
+			MainUIState.drawer->DrawText(UIVector2{ pos.x + textOffsetX + 5, pos.y + (rect.m_dimension.y - font->calculateTextHeight(1.0f)) / 2 }, COLOR_WHITE, font, text, checkBoxStyle.fontStyle.fontScale);
 		}
 
 		return bChecked;
@@ -637,27 +709,23 @@ namespace ZE
 		rect.m_dimension.x = 0;
 		rect.m_dimension.y = 0;
 
-		UIStyle style;
+		const UIStyle* style = &(radioButtonStyle.up);
 
 		if (MainUIState.activeItem.id == _id)
 		{
-			style = radioButtonStyle.down;
+			style = &(radioButtonStyle.down);
 		}
 		else if (MainUIState.hotItem.id == _id)
 		{
-			style = radioButtonStyle.hover;
-		}
-		else
-		{
-			style = radioButtonStyle.up;
+			style = &(radioButtonStyle.hover);
 		}
 
-		rect.m_dimension.x = (style.texture ? style.textureSize.x : 0) + font->calculateTextLength(text, 1.0f);
-		rect.m_dimension.y = UIMAX((style.texture ? style.textureSize.y : 0), font->calculateTextHeight(1.0f));
+		rect.m_dimension.x = (style->texture ? style->textureSize.x : 0) + font->calculateTextLength(text, 1.0f);
+		rect.m_dimension.y = UIMAX((style->texture ? style->textureSize.y : 0), font->calculateTextHeight(1.0f));
 
-		bool mouseInside = rect.isContain(UIVector2{ MainUIState.mouseX, MainUIState.mouseY });
+		const bool mouseInside = CheckMouseInside(rect);
 		bool bPressed = false;
-		if (mouseInside && MainUIState.mouseDown == EButtonState::BUTTON_DOWN)
+		if (mouseInside && MainUIState.mouseState == EButtonState::BUTTON_DOWN)
 		{
 			MainUIState.activeItem.id = _id;
 		}
@@ -680,38 +748,24 @@ namespace ZE
 		Float32 textOffsetX = 0;
 		if (!bChecked)
 		{
+			style = &(radioButtonStyle.up);
+
 			if (MainUIState.activeItem.id == _id)
 			{
-				if (radioButtonStyle.down.texture)
-				{
-					UIRect drawRect;
-					drawRect.m_pos = pos;
-					drawRect.m_dimension = radioButtonStyle.down.textureSize;
-					textOffsetX = drawRect.m_dimension.x;
-					MainUIState.drawer->DrawTexture(drawRect, radioButtonStyle.down.texture, radioButtonStyle.down.fillColor);
-				}
+				style = &(radioButtonStyle.down);
 			}
 			else if (MainUIState.hotItem.id == _id)
 			{
-				if (radioButtonStyle.hover.texture)
-				{
-					UIRect drawRect;
-					drawRect.m_pos = pos;
-					drawRect.m_dimension = radioButtonStyle.hover.textureSize;
-					textOffsetX = drawRect.m_dimension.x;
-					MainUIState.drawer->DrawTexture(drawRect, radioButtonStyle.hover.texture, radioButtonStyle.hover.fillColor);
-				}
+				style = &(radioButtonStyle.hover);
 			}
-			else
+
+			if (style->texture)
 			{
-				if (radioButtonStyle.up.texture)
-				{
-					UIRect drawRect;
-					drawRect.m_pos = pos;
-					drawRect.m_dimension = radioButtonStyle.up.textureSize;
-					textOffsetX = drawRect.m_dimension.x;
-					MainUIState.drawer->DrawTexture(drawRect, radioButtonStyle.up.texture, radioButtonStyle.up.fillColor);
-				}
+				UIRect drawRect;
+				drawRect.m_pos = pos;
+				drawRect.m_dimension = style->textureSize;
+				textOffsetX = drawRect.m_dimension.x;
+				MainUIState.drawer->DrawTexture(drawRect, style->texture, style->fillColor);
 			}
 		}
 		else
@@ -728,7 +782,7 @@ namespace ZE
 
 		if (text[0] != '\0')
 		{
-			MainUIState.drawer->DrawText(UIVector2{ pos.x + textOffsetX + 5, pos.y + (rect.m_dimension.y - font->calculateTextHeight(1.0f)) / 2 }, UIVector4(1.0f), font, text);
+			MainUIState.drawer->DrawText(UIVector2{ pos.x + textOffsetX + 5, pos.y + (rect.m_dimension.y - font->calculateTextHeight(1.0f)) / 2 }, COLOR_WHITE, font, text);
 		}
 	}
 
@@ -759,163 +813,6 @@ namespace ZE
 		StackIDs.pop_back();
 	}
 
-	void UI::DoPanel(const UIRect& panelRect, const UIChar* text, Float32 padding, UIVector2& contentPos, bool& bClosed, const UIPanelStyle& style)
-	{
-		UIFont* font = style.headerFontStyle.font ? style.headerFontStyle.font : DefaultFont;
-		Float32 xOffset = padding;
-		Float32 headerHeight = style.headerHeight;
-
-		UInt32 _id = GetUIIDFromString(text);
-
-		if (bClosed)
-		{
-			if (style.panelClosed.texture)
-			{
-				headerHeight = UIMAX(headerHeight, style.panelClosed.textureSize.y);
-			}
-		}
-		else
-		{
-			if (style.panelOpened.texture)
-			{
-				headerHeight = UIMAX(headerHeight, style.panelOpened.textureSize.y);
-			}
-		}
-
-		if (!bClosed)
-		{
-			if (style.panel.texture)
-			{
-				MainUIState.drawer->DrawTexture(panelRect, style.panel.texture, style.panel.fillColor, style.panel.textureScale, style.panel.textureOffset);
-			}
-			else
-			{
-				MainUIState.drawer->DrawRect(panelRect, style.panel.fillColor);
-			}
-		}
-		else
-		{
-			UIRect closeRect;
-			closeRect.m_pos = panelRect.m_pos;
-			closeRect.m_dimension = { panelRect.m_dimension.x, headerHeight + 5.0f };
-			closeRect.m_roundness = panelRect.m_roundness;
-			if (style.panelClosedBG.texture)
-			{
-				MainUIState.drawer->DrawTexture(closeRect, style.panelClosedBG.texture, style.panelClosedBG.fillColor, style.panelClosedBG.textureScale, style.panelClosedBG.textureOffset);
-			}
-			else
-			{
-				MainUIState.drawer->DrawRect(closeRect, style.panelClosedBG.fillColor);
-			}
-		}
-
-
-		UIRect iconRect;
-		if (bClosed)
-		{
-			if (style.panelClosed.texture)
-			{
-				iconRect.m_pos = panelRect.m_pos + UIVector2{ xOffset, (headerHeight + 0.5f * padding - style.panelClosed.textureSize.y) / 2 };
-				iconRect.m_dimension = style.panelClosed.textureSize;
-				MainUIState.drawer->DrawTexture(iconRect, style.panelClosed.texture, style.panelClosed.fillColor);
-				xOffset += iconRect.m_dimension.x + 5;
-			}
-		}
-		else
-		{
-			if (style.panelOpened.texture)
-			{
-				iconRect.m_pos = panelRect.m_pos + UIVector2{ xOffset, (headerHeight + 0.5f * padding - style.panelOpened.textureSize.y) / 2 };
-				iconRect.m_dimension = style.panelOpened.textureSize;
-				MainUIState.drawer->DrawTexture(iconRect, style.panelOpened.texture, style.panelOpened.fillColor);
-				xOffset += iconRect.m_dimension.x + 5;
-			}
-		}
-
-		UIRect headerRect;
-		headerRect.m_pos = panelRect.m_pos + UIVector2{ xOffset, 0 };
-		headerRect.m_dimension.x = panelRect.m_dimension.x - padding * 2;
-		headerRect.m_dimension.y = headerHeight;
-
-		bool mouseInside = iconRect.isContain(UIVector2{ MainUIState.mouseX, MainUIState.mouseY });
-		bool bPressed = false;
-		if (mouseInside && MainUIState.mouseDown == EButtonState::BUTTON_DOWN)
-		{
-			MainUIState.activeItem.id = _id;
-		}
-		else if (mouseInside)
-		{
-			MainUIState.hotItem.id = _id;
-			if (MainUIState.activeItem.id == _id) { MainUIState.activeItem.id = 0; bPressed = true; }
-		}
-		else
-		{
-			if (MainUIState.hotItem.id == _id) { MainUIState.hotItem.id = 0; }
-			if (MainUIState.activeItem.id == _id) { MainUIState.activeItem.id = 0; }
-		}
-
-		if (bPressed)
-		{
-			bClosed = !bClosed;
-		}
-
-		DrawTextInRect(headerRect, text, UIVector4{ 1.0f }, ZE::TEXT_LEFT, TEXT_V_CENTER, style.headerFontStyle.fontScale, font);
-
-		contentPos.x = panelRect.m_pos.x + padding;
-		contentPos.y = panelRect.m_pos.y + headerRect.m_dimension.y + padding;
-	}
-
-	void UI::DoDragablePanel(UIRect& panelRect, const UIChar* text, Float32 padding, UIVector2& contentPos, const UIPanelStyle& style)
-	{
-		UIFont* font = style.headerFontStyle.font ? style.headerFontStyle.font : DefaultFont;
-		UIRect headerRect;
-		headerRect.m_pos = panelRect.m_pos + UIVector2{ padding, 0.0f };
-		headerRect.m_dimension.x = panelRect.m_dimension.x - padding * 2;
-		headerRect.m_dimension.y = style.headerHeight;
-
-		UInt32 _id = GetUIIDFromString(text);
-
-		bool bJustActive = false;
-		bool mouseInside = headerRect.isContain(UIVector2{ MainUIState.mouseX, MainUIState.mouseY });
-		if ((MainUIState.activeItem.id == _id || mouseInside) && MainUIState.mouseDown == EButtonState::BUTTON_DOWN)
-		{
-			bJustActive = MainUIState.activeItem.id != _id;
-			MainUIState.activeItem.id = _id;
-		}
-		else if (mouseInside)
-		{
-			MainUIState.hotItem.id = _id;
-			if (MainUIState.activeItem.id == _id) { MainUIState.activeItem.id = 0; }
-		}
-		else
-		{
-			if (MainUIState.hotItem.id == _id) { MainUIState.hotItem.id = 0; }
-			if (MainUIState.activeItem.id == _id) { MainUIState.activeItem.id = 0; }
-		}
-
-		if (MainUIState.activeItem.id == _id && !bJustActive)
-		{
-			UIVector2 delta{ MainUIState.mouseDeltaX, MainUIState.mouseDeltaY };
-			headerRect.m_pos = headerRect.m_pos + delta;
-			panelRect.m_pos = panelRect.m_pos + delta;
-		}
-		
-		if (style.panel.texture)
-		{
-			MainUIState.drawer->DrawTexture(panelRect, style.panel.texture, style.panel.fillColor, style.panel.textureScale, style.panel.textureOffset);
-		}
-		else
-		{
-			MainUIState.drawer->DrawRect(panelRect, style.panel.fillColor);
-		}
-
-		//headerRect.m_dimension.y -= padding * 2;
-		DrawTextInRect(headerRect, text, UIVector4(1.0f), TEXT_LEFT, TEXT_V_CENTER, style.headerFontStyle.fontScale, font);
-
-		contentPos.x = panelRect.m_pos.x + padding;
-		contentPos.y = panelRect.m_pos.y + style.headerHeight + padding;
-	}
-
 	void UI::DoSlider(Float32* percent, const UISliderStyle& sliderStyle /*= DefaultSliderStyle*/)
 	{
 		static UIRect rect;
@@ -930,10 +827,10 @@ namespace ZE
 
 	void UI::DoSliderEx(const UIRect& rect, Float32* percent, const UISliderStyle& sliderStyle)
 	{
-		bool mouseInside = rect.isContain(UIVector2{ MainUIState.mouseX, MainUIState.mouseY });
-		UInt32 _id = GetUIIDFromPointer(percent);
+		const bool mouseInside = CheckMouseInside(rect);
+		const UInt32 _id = GetUIIDFromPointer(percent);
 
-		if (mouseInside && MainUIState.mouseDown == EButtonState::BUTTON_DOWN)
+		if (mouseInside && MainUIState.mouseState == EButtonState::BUTTON_DOWN)
 		{
 			MainUIState.activeItem.id = _id;
 		}
@@ -950,12 +847,12 @@ namespace ZE
 
 		if (MainUIState.activeItem.id == _id)
 		{
-			*percent = (MainUIState.mouseX - rect.m_pos.x) * 1.0f / rect.m_dimension.x;
+			*percent = (MainUIState.mousePos.x - rect.m_pos.x) * 1.0f / rect.m_dimension.x;
 		}
 
 		UIRect sliderRect;
 		sliderRect.m_dimension.x = rect.m_dimension.x;
-		sliderRect.m_dimension.y = rect.m_dimension.y;
+		sliderRect.m_dimension.y = rect.m_dimension.y * 0.5;
 		sliderRect.m_pos.x = rect.m_pos.x;
 		sliderRect.m_pos.y = rect.m_pos.y + (rect.m_dimension.y - sliderRect.m_dimension.y) / 2;
 
@@ -986,7 +883,7 @@ namespace ZE
 		static UIRect rect;
 		rect = MainUIState.drawPosDimension;
 		rect.m_dimension.x = style.dropdownButtonStyle.fontStyle.font->calculateTextLength(textOptions[*selectedIdx], style.dropdownButtonStyle.fontStyle.fontScale) + 60.0f;
-		rect.m_dimension.y = style.dropdownButtonStyle.fontStyle.font->calculateTextHeight(style.dropdownButtonStyle.fontStyle.fontScale) + 20.0f;
+		rect.m_dimension.y = style.dropdownButtonStyle.fontStyle.font->calculateTextHeight(style.dropdownButtonStyle.fontStyle.fontScale) + 15.0f;
 
 		DoDropDownEx(rect, selectedIdx, textOptions, optionCount, style);
 
@@ -996,7 +893,7 @@ namespace ZE
 	void UI::DoDropDownEx(const UIRect& rect, Int32* selectedIdx, const UIChar** textOptions, Int32 optionCount, const UIDropdownStyle& style /*= DefaultDropdownStyle*/)
 	{
 		bool bPressed = false;
-		UInt32 _id = GetUIIDFromPointer(selectedIdx);
+		const UInt32 _id = GetUIIDFromPointer(selectedIdx);
 
 		UIRect selectionRect = rect;
 		if (cacheId == _id)
@@ -1004,9 +901,9 @@ namespace ZE
 			selectionRect.m_dimension.y += rect.m_dimension.y * optionCount;
 		}
 
-		bool mouseInside = selectionRect.isContain(UIVector2(MainUIState.mouseX, MainUIState.mouseY));
+		const bool mouseInside = CheckMouseInside(selectionRect);
 
-		if (mouseInside && MainUIState.mouseDown == EButtonState::BUTTON_DOWN)
+		if (mouseInside && MainUIState.mouseState == EButtonState::BUTTON_DOWN)
 		{
 			MainUIState.activeItem.id = _id;
 		}
@@ -1039,35 +936,31 @@ namespace ZE
 			}
 		}
 
-		UIStyle uiStyle;
+		const UIStyle* uiStyle = &(style.dropdownButtonStyle.up);
 		if (MainUIState.activeItem.id == _id)
 		{
-			uiStyle = style.dropdownButtonStyle.down;
+			uiStyle = &(style.dropdownButtonStyle.down);
 		}
 		else if(MainUIState.hotItem.id == _id)
 		{
-			uiStyle = style.dropdownButtonStyle.hover;
-		}
-		else
-		{
-			uiStyle = style.dropdownButtonStyle.up;
+			uiStyle = &(style.dropdownButtonStyle.hover);
 		}
 
 		UIRect textRect = rect;
-		if (uiStyle.texture)
+		if (uiStyle->texture)
 		{
-			MainUIState.drawer->DrawTexture(rect, uiStyle.texture, uiStyle.fillColor, uiStyle.textureScale, uiStyle.textureOffset);
-			textRect.m_pos.x += uiStyle.textureOffset.z * rect.m_dimension.x;
-			textRect.m_pos.y += uiStyle.textureOffset.x * rect.m_dimension.y;
-			textRect.m_dimension.x -= (uiStyle.textureOffset.z + uiStyle.textureOffset.w) * rect.m_dimension.x;
-			textRect.m_dimension.y -= (uiStyle.textureOffset.x + uiStyle.textureOffset.y) * rect.m_dimension.y;
+			MainUIState.drawer->DrawTexture(rect, uiStyle->texture, uiStyle->fillColor, uiStyle->textureScale, uiStyle->textureOffset);
+			textRect.m_pos.x += uiStyle->textureOffset.z * rect.m_dimension.x;
+			textRect.m_pos.y += uiStyle->textureOffset.x * rect.m_dimension.y;
+			textRect.m_dimension.x -= (uiStyle->textureOffset.z + uiStyle->textureOffset.w) * rect.m_dimension.x;
+			textRect.m_dimension.y -= (uiStyle->textureOffset.x + uiStyle->textureOffset.y) * rect.m_dimension.y;
 		}
 		else
 		{
-			MainUIState.drawer->DrawRect(rect, uiStyle.fillColor);
+			MainUIState.drawer->DrawRect(rect, uiStyle->fillColor);
 		}
 
-		DrawTextInRect(textRect, textOptions[*selectedIdx], UIVector4(1.0f), TEXT_LEFT, TEXT_V_CENTER, style.dropdownButtonStyle.fontStyle.fontScale, style.dropdownButtonStyle.fontStyle.font);
+		DrawTextInRect(textRect, textOptions[*selectedIdx], COLOR_WHITE, TEXT_LEFT, TEXT_V_CENTER, style.dropdownButtonStyle.fontStyle.fontScale, style.dropdownButtonStyle.fontStyle.font);
 
 		if (cacheId == _id)
 		{
@@ -1090,21 +983,20 @@ namespace ZE
 			UIRect selTextRect = rect;
 			selTextRect.m_pos.y += rect.m_dimension.y;
 			selTextRect.m_pos.x = textRect.m_pos.x;
-			UIVector2 mousePos(MainUIState.mouseX, MainUIState.mouseY);
-			for (int i = 0; i < optionCount; i++)
+			for (Int32 i = 0; i < optionCount; i++)
 			{
-				if (selTextRect.isContain(mousePos))
+				if (CheckMouseInside(selTextRect))
 				{
 					selRect.m_pos.y = selTextRect.m_pos.y;
 					MainUIState.drawer->DrawRect(selRect, style.selectorHoverStyle.fillColor);
-					if (MainUIState.mouseDown == EButtonState::BUTTON_DOWN)
+					if (MainUIState.mouseState == EButtonState::BUTTON_DOWN)
 					{
 						cacheId = 0;
 						*selectedIdx = i;
 					}
 				}
 
-				DrawTextInRect(selTextRect, textOptions[i], UIVector4(1.0f), TEXT_LEFT, TEXT_V_CENTER, DefaultDropdownStyle.selectorFontStyle.fontScale, DefaultDropdownStyle.selectorFontStyle.font);
+				DrawTextInRect(selTextRect, textOptions[i], COLOR_WHITE, TEXT_LEFT, TEXT_V_CENTER, DefaultDropdownStyle.selectorFontStyle.fontScale, DefaultDropdownStyle.selectorFontStyle.font);
 				selTextRect.m_pos.y += rect.m_dimension.y;
 			}
 
@@ -1126,15 +1018,15 @@ namespace ZE
 
 	void UI::DoTextInputEx(const UIRect& rect, UIChar* bufferChar, Int32 bufferCount, const UITextInputStyle& style /*= DefaultTextInputStyle*/)
 	{
-		bool mouseInside = rect.isContain(UIVector2(MainUIState.mouseX, MainUIState.mouseY));
-		UIRect textRect(UIVector2(rect.m_pos.x + 10, rect.m_pos.y), UIVector2(rect.m_dimension.x - 20, rect.m_dimension.y));
+		const bool mouseInside = CheckMouseInside(rect);
+		const UIRect textRect(UIVector2(rect.m_pos.x + 10, rect.m_pos.y), UIVector2(rect.m_dimension.x - 20, rect.m_dimension.y));
 		Int32 textInputScrollPos = 0;
 
 		UInt32 _id = GetUIIDFromPointer(bufferChar);
 
 		static Int32 lastMaxLength = 100000;
 
-		if (mouseInside && MainUIState.mouseDown == EButtonState::BUTTON_DOWN)
+		if (mouseInside && MainUIState.mouseState == EButtonState::BUTTON_DOWN)
 		{
 			if (MainUIState.activeItem.id != _id)
 			{
@@ -1150,7 +1042,7 @@ namespace ZE
 			else
 			{
 				// Update text cursor
-				MainUIState.textInputCurrentPos = MainUIState.textInputScrollPos + style.fontStyle.font->calculatePositionAtLength(bufferChar + MainUIState.textInputScrollPos * sizeof(UIChar), MainUIState.mouseX - textRect.m_pos.x, style.fontStyle.fontScale);
+				MainUIState.textInputCurrentPos = MainUIState.textInputScrollPos + style.fontStyle.font->calculatePositionAtLength(bufferChar + MainUIState.textInputScrollPos * sizeof(UIChar), MainUIState.mousePos.x - textRect.m_pos.x, style.fontStyle.fontScale);
 			}
 			MainUIState.activeItem.id = _id;
 		}
@@ -1163,14 +1055,10 @@ namespace ZE
 			MainUIState.hotItem.id = 0;
 		}
 
-		const UIStyle* rectStyle = nullptr;
+		const UIStyle* rectStyle = &style.defaultStyle;
 		if (MainUIState.activeItem.id == _id || MainUIState.hotItem.id == _id)
 		{
 			rectStyle = &style.activeStyle;
-		}
-		else
-		{
-			rectStyle = &style.defaultStyle;
 		}
 
 		if (MainUIState.activeItem.id == _id)
@@ -1200,20 +1088,20 @@ namespace ZE
 
 		if (bufferChar[0] != 0)
 		{
-			DrawTextInRect(textRect, bufferChar + textInputScrollPos * sizeof(UIChar), UIVector4(1.0f), ZE::TEXT_LEFT, ZE::TEXT_V_CENTER, style.fontStyle.fontScale, style.fontStyle.font);
+			DrawTextInRect(textRect, bufferChar + textInputScrollPos * sizeof(UIChar), COLOR_WHITE, ZE::TEXT_LEFT, ZE::TEXT_V_CENTER, style.fontStyle.fontScale, style.fontStyle.font);
 		}
 
 		if (MainUIState.activeItem.id == _id)
 		{
 			static Float32 timer = 0.0f;
 			timer += MainUIState.mainTimer.GetDeltaMS() / 1000.0f;
-			if (int(timer * 50.0f) % 2 == 0)
+			if (Int32(timer * 50.0f) % 2 == 0)
 			{
 				static UIRect blinkRect;
 				blinkRect.m_dimension = { 2.0f, style.fontStyle.font->calculateTextHeight(style.fontStyle.fontScale) };
 				blinkRect.m_pos.x = textRect.m_pos.x + style.fontStyle.font->calculateNTextLength(bufferChar + textInputScrollPos * sizeof(UIChar), MainUIState.textInputCurrentPos - textInputScrollPos, style.fontStyle.fontScale);
 				blinkRect.m_pos.y = textRect.m_pos.y + (textRect.m_dimension.y - blinkRect.m_dimension.y) * 0.5f;
-				MainUIState.drawer->DrawRect(blinkRect, UIVector4(1.0f));
+				MainUIState.drawer->DrawRect(blinkRect, COLOR_WHITE);
 			}
 		}
 	}
@@ -1233,7 +1121,7 @@ namespace ZE
 	{
 		UIChar charBuffer[256];
 		StringHelper::NumberToString(*number, charBuffer, 256, asInt);
-		DrawTextInRect(rect, charBuffer, UIVector4(1.0f), TEXT_CENTER, TEXT_V_CENTER, textStyle.fontScale, textStyle.font);
+		DrawTextInRect(rect, charBuffer, COLOR_WHITE, TEXT_CENTER, TEXT_V_CENTER, textStyle.fontScale, textStyle.font);
 		
 		UInt32 _id = GetUIIDFromPointer(number);
 
@@ -1271,16 +1159,17 @@ namespace ZE
 	void UI::DoNumberInputEx(const UIRect& rect, Float32* number, const UITextInputStyle& style /*= DefaultTextInputStyle*/, bool asInt /*= false*/)
 	{
 		static UIChar charBuffer[256];
-		UInt32 _id = GetUIIDFromPointer(number);
+		const UInt32 _id = GetUIIDFromPointer(number);
+		const bool mouseInside = CheckMouseInside(rect);
+
 		UIChar* bufferChar = MainUIState.activeItem.id == _id ? MainUIState.textTempBuffer : charBuffer;
 		
-		bool mouseInside = rect.isContain(UIVector2(MainUIState.mouseX, MainUIState.mouseY));
-		UIRect textRect(UIVector2(rect.m_pos.x + 10, rect.m_pos.y), UIVector2(rect.m_dimension.x - 20, rect.m_dimension.y));
+		const UIRect textRect(UIVector2(rect.m_pos.x + 10, rect.m_pos.y), UIVector2(rect.m_dimension.x - 20, rect.m_dimension.y));
 		Int32 textInputScrollPos = 0;
 
 		static Int32 lastMaxLength = 100000;
 
-		if (mouseInside && MainUIState.mouseDown == EButtonState::BUTTON_DOWN) // Set this as an active if clicked
+		if (mouseInside && MainUIState.mouseState == EButtonState::BUTTON_DOWN) // Set this as an active if clicked
 		{
 			if (MainUIState.activeItem.id != _id)
 			{
@@ -1296,7 +1185,7 @@ namespace ZE
 			else
 			{
 				// Update text cursor
-				MainUIState.textInputCurrentPos = MainUIState.textInputScrollPos + style.fontStyle.font->calculatePositionAtLength(MainUIState.textTempBuffer + MainUIState.textInputScrollPos * sizeof(UIChar), MainUIState.mouseX - textRect.m_pos.x, style.fontStyle.fontScale);
+				MainUIState.textInputCurrentPos = MainUIState.textInputScrollPos + style.fontStyle.font->calculatePositionAtLength(MainUIState.textTempBuffer + MainUIState.textInputScrollPos * sizeof(UIChar), MainUIState.mousePos.x - textRect.m_pos.x, style.fontStyle.fontScale);
 			}
 			MainUIState.activeItem.id = _id;
 
@@ -1348,14 +1237,10 @@ namespace ZE
 			StringHelper::NumberToString(*number, charBuffer, 256, asInt);
 		}
 
-		const UIStyle* rectStyle = nullptr;
+		const UIStyle* rectStyle = &style.defaultStyle;
 		if (MainUIState.activeItem.id == _id || MainUIState.hotItem.id == _id)
 		{
 			rectStyle = &style.activeStyle;
-		}
-		else
-		{
-			rectStyle = &style.defaultStyle;
 		}
 
 		if (MainUIState.activeItem.id == _id)
@@ -1385,20 +1270,20 @@ namespace ZE
 
 		if (bufferChar[0] != 0)
 		{
-			DrawTextInRect(textRect, bufferChar + textInputScrollPos * sizeof(UIChar), UIVector4(1.0f), ZE::TEXT_LEFT, ZE::TEXT_V_CENTER, style.fontStyle.fontScale, style.fontStyle.font);
+			DrawTextInRect(textRect, bufferChar + textInputScrollPos * sizeof(UIChar), COLOR_WHITE, ZE::TEXT_LEFT, ZE::TEXT_V_CENTER, style.fontStyle.fontScale, style.fontStyle.font);
 		}
 
 		if (MainUIState.activeItem.id == _id)
 		{
 			static Float32 timer = 0.0f;
 			timer += MainUIState.mainTimer.GetDeltaMS() / 1000.0f;
-			if (int(timer * 50.0f) % 2 == 0)
+			if (Int32(timer * 50.0f) % 2 == 0)
 			{
 				static UIRect blinkRect;
 				blinkRect.m_dimension = { 2.0f, style.fontStyle.font->calculateTextHeight(style.fontStyle.fontScale) };
 				blinkRect.m_pos.x = textRect.m_pos.x + style.fontStyle.font->calculateNTextLength(bufferChar + textInputScrollPos * sizeof(UIChar), MainUIState.textInputCurrentPos - textInputScrollPos, style.fontStyle.fontScale);
 				blinkRect.m_pos.y = textRect.m_pos.y + (textRect.m_dimension.y - blinkRect.m_dimension.y) * 0.5f;
-				MainUIState.drawer->DrawRect(blinkRect, UIVector4(1.0f));
+				MainUIState.drawer->DrawRect(blinkRect, COLOR_WHITE);
 			}
 		}
 	}
@@ -1416,11 +1301,11 @@ namespace ZE
 
 	void UI::DoVector2InputEx(const UIRect& rect, Float32* vec2, const UITextInputStyle& style /*= DefaultTextInputStyle*/, bool asInt /*= false*/)
 	{
-		const unsigned int nCount = 2;
-		float elementWidth = rect.m_dimension.x / nCount ;
+		const UInt32 nCount = 2;
+		const Float32 elementWidth = rect.m_dimension.x / nCount ;
 		UIRect elementRect = rect;
 		elementRect.m_dimension.x = elementWidth - 5.0f;
-		for (unsigned int i = 0; i < nCount; i++)
+		for (UInt32 i = 0; i < nCount; i++)
 		{
 			elementRect.m_pos.x = rect.m_pos.x + i * elementWidth;
 			DoNumberInputEx(elementRect, &vec2[i], style, asInt);
@@ -1440,11 +1325,11 @@ namespace ZE
 
 	void UI::DoVector3InputEx(const UIRect& rect, Float32* vec3, const UITextInputStyle& style /*= DefaultTextInputStyle*/, bool asInt /*= false*/)
 	{
-		const unsigned int nCount = 3;
-		float elementWidth = rect.m_dimension.x / nCount;
+		const UInt32 nCount = 3;
+		const Float32 elementWidth = rect.m_dimension.x / nCount;
 		UIRect elementRect = rect;
 		elementRect.m_dimension.x = elementWidth - 5.0f;
-		for (unsigned int i = 0; i < nCount; i++)
+		for (UInt32 i = 0; i < nCount; i++)
 		{
 			elementRect.m_pos.x = rect.m_pos.x + i * elementWidth;
 			DoNumberInputEx(elementRect, &vec3[i], style, asInt);
@@ -1464,40 +1349,44 @@ namespace ZE
 
 	void UI::DoVector4InputEx(const UIRect& rect, Float32* vec4, const UITextInputStyle& style /*= DefaultTextInputStyle*/, bool asInt /*= false*/)
 	{
-		const unsigned int nCount = 4;
-		float elementWidth = rect.m_dimension.x / nCount;
+		const UInt32 nCount = 4;
+		const Float32 elementWidth = rect.m_dimension.x / nCount;
 		UIRect elementRect = rect;
 		elementRect.m_dimension.x = elementWidth - 5.0f;
-		for (unsigned int i = 0; i < nCount; i++)
+		for (UInt32 i = 0; i < nCount; i++)
 		{
 			elementRect.m_pos.x = rect.m_pos.x + i * elementWidth;
 			DoNumberInputEx(elementRect, &vec4[i], style, asInt);
 		}
 	}
 
-	bool UI::BeginPanel(const UIChar* panelLabel, const UIRect initialRect, const UIPanelStyle& style /*= DefaultPanelStyle*/)
+	bool UI::BeginPanel(const UIChar* panelLabel, const UIRect initialRect, bool bAutoSize , const UIPanelStyle& style /*= DefaultPanelStyle*/)
 	{
-		UInt32 _id = GetUIIDFromString(panelLabel);
+		const UInt32 _id = GetUIIDFromString(panelLabel);
 		
 		StackIDs.push_back(_id);
 
 		if (!(HashMapHas(MainUIState.panelStates, _id)))
 		{
 			UIPanelState panelState;
-			panelState.posAndDimension = initialRect;
+			panelState.targetRect = initialRect;
+			panelState.contentSize = initialRect.m_dimension;
+			panelState.scrollOffset = 0.0f;
+			panelState.bAutoSize = bAutoSize;
 			MainUIState.panelStates[_id] = panelState;
 		}
 
 		UIPanelState& panelState = MainUIState.panelStates[_id];
 
 		UIRect headerRect;
-		headerRect.m_pos = panelState.posAndDimension.m_pos + UIVector2{ 10.0f, 0.0f };
-		headerRect.m_dimension.x = panelState.posAndDimension.m_dimension.x - 20.0f;
+		headerRect.m_pos = panelState.targetRect.m_pos + UIVector2{ 10.0f, 0.0f };
+		headerRect.m_dimension.x = panelState.targetRect.m_dimension.x - 20.0f;
 		headerRect.m_dimension.y = style.headerHeight;
+		panelState.headerSize = headerRect.m_dimension;
 
 		bool bJustActive = false;
-		bool mouseInside = headerRect.isContain(UIVector2{ MainUIState.mouseX, MainUIState.mouseY });
-		if ((MainUIState.activeItem.id == _id || mouseInside) && MainUIState.mouseDown == EButtonState::BUTTON_DOWN)
+		const bool mouseInside = CheckMouseInside(headerRect);
+		if ((MainUIState.activeItem.id == _id || mouseInside) && MainUIState.mouseState == EButtonState::BUTTON_DOWN)
 		{
 			bJustActive = MainUIState.activeItem.id != _id;
 			MainUIState.activeItem.id = _id;
@@ -1516,40 +1405,54 @@ namespace ZE
 		if (MainUIState.activeItem.id == _id && !bJustActive)
 		{
 			UIVector2 delta{ MainUIState.mouseDeltaX, MainUIState.mouseDeltaY };
-			panelState.posAndDimension.m_pos = panelState.posAndDimension.m_pos + delta;
+			panelState.targetRect.m_pos = panelState.targetRect.m_pos + delta;
 			headerRect.m_pos = headerRect.m_pos + delta;
 		}
 
 		if (style.panel.texture)
 		{
-			MainUIState.drawer->DrawTexture(panelState.posAndDimension, style.panel.texture, style.panel.fillColor, style.panel.textureScale, style.panel.textureOffset);
+			MainUIState.drawer->DrawTexture(panelState.targetRect, style.panel.texture, style.panel.fillColor, style.panel.textureScale, style.panel.textureOffset);
 		}
 		else
 		{
-			MainUIState.drawer->DrawRect(panelState.posAndDimension, style.panel.fillColor);
+			MainUIState.drawer->DrawRect(panelState.targetRect, style.panel.fillColor);
 		}
 
 		UIFont* font = style.headerFontStyle.font ? style.headerFontStyle.font : DefaultFont;
-		DrawTextInRect(headerRect, panelLabel, UIVector4(1.0f), TEXT_LEFT, TEXT_V_CENTER, style.headerFontStyle.fontScale, font);
+		DrawTextInRect(headerRect, panelLabel, COLOR_WHITE, TEXT_LEFT, TEXT_V_CENTER, style.headerFontStyle.fontScale, font);
 
 		MainUIState.drawPosDimensionStack.push_back(MainUIState.drawPosDimension);
 
-		MainUIState.drawPosDimension = panelState.posAndDimension;
+		MainUIState.drawPosDimension = panelState.targetRect;
 		MainUIState.drawPosDimension.m_pos.x += 10.0f;
-		MainUIState.drawPosDimension.m_pos.y += style.headerHeight + 10.0f;
-		MainUIState.drawPosDimension.m_dimension.x -= 20.0f;
+		MainUIState.drawPosDimension.m_pos.y += style.headerHeight + 5.0f;
+		MainUIState.drawPosDimension.m_dimension.x -= 40.0f;
+		MainUIState.drawPosDimension.m_dimension.y -= style.headerHeight + 10.0f;
 
 		MainUIState.drawDirectionStack.push_back(MainUIState.drawDirection);
 		MainUIState.drawDirection = UIVector2(0.0f, 1.0f);
+
+		if (panelState.bAutoSize)
+		{
+			panelState.targetRect.m_dimension.y = panelState.contentSize.y;
+		}
+
+		MainUIState.drawer->PushRectMask(MainUIState.drawPosDimension);
+		PushInteractionRect(MainUIState.drawPosDimension);
+
+		MainUIState.drawPosDimension.m_pos.y -= panelState.scrollOffset;
 
 		return true;
 	}
 
 	void UI::EndPanel()
 	{
+		MainUIState.drawer->PopMask();
+		PopInteractionRect();
+
 		UInt32 parentId = StackIDs.back();
 		UIPanelState& panelState = MainUIState.panelStates[parentId]; 
-		panelState.posAndDimension.m_dimension.y = MainUIState.drawPosDimension.m_pos.y - panelState.posAndDimension.m_pos.y + 10.0f;
+		panelState.contentSize.y = MainUIState.drawPosDimension.m_pos.y - ( panelState.targetRect.m_pos.y - panelState.scrollOffset );
 
 		UIRect newRect = MainUIState.drawPosDimensionStack.back();
 		MainUIState.drawPosDimension = newRect;
@@ -1558,7 +1461,554 @@ namespace ZE
 		MainUIState.drawDirection = MainUIState.drawDirectionStack.back();
 		MainUIState.drawDirectionStack.pop_back();
 
+		// Draw Scroll bar
+		Float32 contentDimensionY = panelState.targetRect.m_dimension.y - (panelState.headerSize.y + 15.0f);
+		Float32 adjustedContentSizeY = panelState.contentSize.y - (panelState.headerSize.y + 15.0f);
+		if (!panelState.bAutoSize && contentDimensionY < adjustedContentSizeY)
+		{
+			if (CheckMouseInside(panelState.targetRect))
+			{
+				Float32 mouseScroll = MainUIState.UseScrollOffset();
+				panelState.scrollOffset += mouseScroll * -10.0f;
+				panelState.scrollOffset = UICLAMP(0.0f, adjustedContentSizeY - contentDimensionY, panelState.scrollOffset);
+			}
+			panelState.scrollOffset = DoScrollBar(UIVector2(panelState.targetRect.m_pos.x + panelState.targetRect.m_dimension.x - 10.0f, panelState.targetRect.m_pos.y + panelState.headerSize.y + 10.0f), panelState.scrollOffset, contentDimensionY, adjustedContentSizeY);
+		}
+		else
+		{
+			panelState.scrollOffset = 0.0f;
+		}
+
 		StackIDs.pop_back();
+	}
+
+	void UI::BeginListView(const UIChar* listName, const UIRect& rect)
+	{
+		const UInt32 _id = GetUIIDFromString(listName);
+
+		const bool hasParent = StackIDs.size() > 1;
+		
+		StackIDs.push_back(_id);
+
+		if (!(HashMapHas(MainUIState.scrollStates, _id)))
+		{
+			UIScrollState scrollState;
+			scrollState.targetRect = rect;
+			scrollState.contentSize = rect.m_dimension;
+			scrollState.scrollOffset = 0.0f;
+			MainUIState.scrollStates[_id] = scrollState;
+		}
+
+		UIScrollState& scrollState = MainUIState.scrollStates[_id];
+
+		MainUIState.drawPosDimensionStack.push_back(MainUIState.drawPosDimension);
+
+		if (hasParent)
+		{
+			MainUIState.drawPosDimension.m_pos += rect.m_pos;
+			MainUIState.drawPosDimension.m_dimension = rect.m_dimension;
+		}
+		else
+		{
+			MainUIState.drawPosDimension = rect;
+		}
+		scrollState.targetRect = MainUIState.drawPosDimension;
+
+		MainUIState.drawDirectionStack.push_back(MainUIState.drawDirection);
+		MainUIState.drawDirection = UIVector2(0.0f, 1.0f);
+		
+		MainUIState.drawer->PushRectMask(MainUIState.drawPosDimension);
+		PushInteractionRect(MainUIState.drawPosDimension);
+
+		MainUIState.drawPosDimension.m_pos.y -= scrollState.scrollOffset;
+	}
+
+	void UI::EndListView()
+	{
+		const bool hasParent = StackIDs.size() > 2;
+		const UInt32 _id = StackIDs.back();
+
+		UIScrollState& scrollState = MainUIState.scrollStates[_id];
+		scrollState.contentSize.y = MainUIState.drawPosDimension.m_pos.y - (scrollState.targetRect.m_pos.y - scrollState.scrollOffset);
+
+		PopInteractionRect();
+		MainUIState.drawer->PopMask();
+
+		MainUIState.drawDirection = MainUIState.drawDirectionStack.back();
+		MainUIState.drawDirectionStack.pop_back();
+
+		if (hasParent)
+		{
+			UIRect topStackRect = MainUIState.drawPosDimensionStack.back();
+			MainUIState.drawPosDimension.m_pos = topStackRect.m_pos + scrollState.targetRect.m_dimension * MainUIState.drawDirection;
+			MainUIState.drawPosDimension.m_dimension = topStackRect.m_dimension;
+		}
+		else
+		{
+			MainUIState.drawPosDimension = MainUIState.drawPosDimensionStack.back();
+		}
+		MainUIState.drawPosDimensionStack.pop_back();
+
+		// Add scrollbar
+		if (scrollState.targetRect.m_dimension.y < scrollState.contentSize.y)
+		{
+			if (CheckMouseInside(scrollState.targetRect))
+			{
+				Float32 mouseScroll = MainUIState.UseScrollOffset();
+				scrollState.scrollOffset += mouseScroll * -10.0f;
+				scrollState.scrollOffset = UICLAMP(0.0f, scrollState.contentSize.y - scrollState.targetRect.m_dimension.y, scrollState.scrollOffset);
+			}
+			scrollState.scrollOffset = DoScrollBar(UIVector2(scrollState.targetRect.m_pos.x + scrollState.targetRect.m_dimension.x - 5, scrollState.targetRect.m_pos.y), scrollState.scrollOffset, scrollState.targetRect.m_dimension.y, scrollState.contentSize.y);
+		}
+		else
+		{
+			scrollState.scrollOffset = 0.0f;
+		}
+
+		StackIDs.pop_back();
+	}
+
+	void UI::DoListView(const UIChar* listName, const UIRect& rect, const UIChar** listItem, UInt32 itemCount)
+	{
+		BeginListView(listName, rect);
+		for (UInt32 i = 0; i < itemCount; i++)
+		{
+			DoText(listItem[i]);
+		}
+		EndListView();
+	}
+
+	void UI::BeginSelectionListView(const UIChar* listName, const UIRect& rect, Int32& selection)
+	{
+		const UInt32 _id = GetUIIDFromString(listName);
+
+		const bool hasParent = StackIDs.size() > 1;
+
+		StackIDs.push_back(_id);
+
+		if (!(HashMapHas(MainUIState.scrollStates, _id)))
+		{
+			UIScrollState scrollState;
+			scrollState.targetRect = rect;
+			scrollState.contentSize = rect.m_dimension;
+			scrollState.scrollOffset = 0.0f;
+			MainUIState.scrollStates[_id] = scrollState;
+		}
+
+		UIScrollState& scrollState = MainUIState.scrollStates[_id];
+
+		MainUIState.drawPosDimensionStack.push_back(MainUIState.drawPosDimension);
+
+		if (hasParent)
+		{
+			MainUIState.drawPosDimension.m_pos += rect.m_pos;
+			MainUIState.drawPosDimension.m_dimension = rect.m_dimension;
+		}
+		else
+		{
+			MainUIState.drawPosDimension = rect;
+		}
+		scrollState.targetRect = MainUIState.drawPosDimension;
+
+		MainUIState.drawDirectionStack.push_back(MainUIState.drawDirection);
+		MainUIState.drawDirection = UIVector2(0.0f, 1.0f);
+
+		MainUIState.drawer->DrawRect(MainUIState.drawPosDimension, ZE::UIVector4(0.15f, 0.15f, 0.15f, 1.0f));
+
+		MainUIState.drawer->PushRectMask(MainUIState.drawPosDimension);
+		PushInteractionRect(MainUIState.drawPosDimension);
+
+		MainUIState.drawPosDimension.m_pos.y -= scrollState.scrollOffset;
+	}
+
+	bool UI::DoSelectionListView(const UIChar* listName, const UIRect& rect, const UIChar** listItem, Int32& selection, UInt32 itemCount)
+	{
+		bool selectionChanged = false;
+		BeginSelectionListView(listName, rect, selection);
+		for (UInt32 i = 0; i < itemCount; i++)
+		{
+			selectionChanged |= DoSelectionItemList(rect, listItem[i], i, selection);
+		}
+		EndListView();
+
+		return selectionChanged;
+	}
+
+	bool UI::DoSelectionItemList(const UIRect& rect, const UIChar* listItem, const UInt32 currentIndex, Int32& selectedIndex)
+	{
+		bool selectionChanged = false;
+		static UIRect drawRect;
+		drawRect = MainUIState.drawPosDimension;
+		drawRect.m_dimension.x = rect.m_dimension.x - 5;
+		drawRect.m_dimension.y = DefaultFont->calculateTextHeight(1.0f) + 10;
+
+		const UInt32 _id = GetUIIDFromString(listItem);
+		const bool mouseInside = CheckMouseInside(drawRect);
+		
+		if (mouseInside && MainUIState.mouseState == EButtonState::BUTTON_DOWN)
+		{
+			MainUIState.activeItem.id = _id;
+		}
+		else if (mouseInside)
+		{
+			MainUIState.hotItem.id = _id;
+			if (MainUIState.activeItem.id == _id) 
+			{ 
+				MainUIState.activeItem.id = 0; 
+				selectionChanged = true;
+				if (selectedIndex != currentIndex)
+				{
+					selectedIndex = currentIndex;
+				}
+				else
+				{
+					selectedIndex = -1; // deselect
+				}
+			}
+		}
+		else
+		{
+			if (MainUIState.hotItem.id == _id) { MainUIState.hotItem.id = 0; }
+			if (MainUIState.activeItem.id == _id) { MainUIState.activeItem.id = 0; }
+		}
+
+		if (currentIndex == selectedIndex)
+		{
+			MainUIState.drawer->DrawRect(drawRect, COLOR_BLUE_SELECTION);
+		}
+		else if (MainUIState.hotItem.id == _id)
+		{
+			MainUIState.drawer->DrawRect(drawRect, COLOR_BLUE_HOVERED);
+		}
+
+		DrawTextInRect(drawRect, listItem, COLOR_WHITE, TEXT_LEFT, TEXT_V_CENTER);
+
+		MainUIState.drawPosDimension.m_pos = MainUIState.drawPosDimension.m_pos + MainUIState.drawDirection * drawRect.m_dimension;
+
+		return selectionChanged;
+	}
+
+	void UI::BeginMenu()
+	{
+		UIStyle& backgroundStyle = DefaultMenuStyle.background;
+		UIFontStyle& fontStyle = DefaultMenuStyle.fontStyle;
+
+		UIRect rect(UIVector2(0.0f), UIVector2(MainUIState.screenWidth, fontStyle.font->calculateTextHeight(fontStyle.fontScale) + 5.0f));
+
+		if (backgroundStyle.texture)
+		{
+			MainUIState.drawer->DrawTexture(rect, backgroundStyle.texture, backgroundStyle.fillColor, backgroundStyle.textureScale, backgroundStyle.textureOffset);
+		}
+		else
+		{
+			MainUIState.drawer->DrawRect(rect, backgroundStyle.fillColor);
+		}
+
+		// Menu ID and positioning
+		UInt32 menuID = GetUIIDFromString("~~~~~WindowMenu~~~~");
+		StackIDs.push_back(menuID);
+
+		// Set Position rule
+		MainUIState.drawPosDimensionStack.push_back(MainUIState.drawPosDimension);
+
+		MainUIState.drawPosDimension = rect;
+
+		MainUIState.drawDirectionStack.push_back(MainUIState.drawDirection);
+		MainUIState.drawDirection = UIVector2(1.0f, 0.0f);
+
+		MainUIState.currentMenuLevel = 0;
+	}
+
+	bool UI::DoMenu(const UIChar* menuLabel)
+	{
+		UIFontStyle& fontStyle = DefaultMenuStyle.fontStyle;
+
+		const UInt32 menuID = GetUIIDFromString(menuLabel);
+		UIRect rect = MainUIState.drawPosDimension;
+
+		rect.m_dimension.x = fontStyle.font->calculateTextLength(menuLabel, fontStyle.fontScale) + 2.0f * DefaultMenuStyle.menuPadding;
+
+		// Update Draw Position
+		MainUIState.drawPosDimension.m_pos.x += rect.m_dimension.x;
+
+		const bool mouseInside = CheckMouseInside(rect);
+
+		if (mouseInside && MainUIState.mouseState == BUTTON_DOWN)
+		{
+			MainUIState.activeItem.id = menuID;
+		}
+		else if (mouseInside)
+		{
+			MainUIState.hotItem.id = menuID;
+			if (MainUIState.activeItem.id == menuID && MainUIState.lastActiveItem.id == menuID)
+			{
+				MainUIState.lastActiveItem.id = 0;
+				MainUIState.activeItem.id = 0;
+				MainUIState.MenuStack.clear();
+			}
+			else if (MainUIState.activeItem.id == menuID) 
+			{ 
+				MainUIState.lastActiveItem.id = menuID;
+				MainUIState.activeItem.id = 0;
+				MainUIState.MenuStack.clear();
+				MainUIState.MenuStack.push_back(UIMenuInfo{ rect, menuID, false });
+			}
+		}
+
+		bool bMenuSelected = MainUIState.MenuStack.size() > 0 && MainUIState.MenuStack[0].menuID.id == menuID;
+
+		if (bMenuSelected && !mouseInside && MainUIState.lastMouseState == BUTTON_DOWN && MainUIState.mouseState == BUTTON_UP)
+		{
+			MainUIState.MenuStack.clear();
+			MainUIState.lastActiveItem.id = 0;
+			if (MainUIState.activeItem.id == menuID) { MainUIState.activeItem.id = 0; }
+			bMenuSelected = false;
+		}
+
+		if (bMenuSelected)
+		{
+			UIStyle& selectedStyle = DefaultMenuStyle.selected;
+			if (selectedStyle.texture)
+			{
+				MainUIState.drawer->DrawTexture(rect, selectedStyle.texture, selectedStyle.fillColor, selectedStyle.textureScale, selectedStyle.textureOffset);
+			}
+			else
+			{
+				MainUIState.drawer->DrawRect(rect, selectedStyle.fillColor);
+			}
+		}
+		else if (MainUIState.hotItem.id == menuID)
+		{
+			UIStyle& hoverStyle = DefaultMenuStyle.hover;
+			if (hoverStyle.texture)
+			{
+				MainUIState.drawer->DrawTexture(rect, hoverStyle.texture, hoverStyle.fillColor, hoverStyle.textureScale, hoverStyle.textureOffset);
+			}
+			else
+			{
+				MainUIState.drawer->DrawRect(rect, hoverStyle.fillColor);
+			}
+		}
+
+		DrawTextInRect(rect, menuLabel, COLOR_WHITE, ZE::TEXT_CENTER, ZE::TEXT_V_CENTER, fontStyle.fontScale, fontStyle.font);
+
+		return MainUIState.MenuStack.size() > 0 && MainUIState.MenuStack[0].menuID.id == menuID;
+	}
+
+	void UI::EndMenu()
+	{
+		StackIDs.pop_back();
+
+		MainUIState.drawDirection = MainUIState.drawDirectionStack.back();
+		MainUIState.drawDirectionStack.pop_back();
+
+		MainUIState.drawPosDimension = MainUIState.drawPosDimensionStack.back();
+		MainUIState.drawPosDimensionStack.pop_back();
+	}
+
+	void UI::BeginSubMenu(Float32 subMenusWidth)
+	{
+		UIMenuInfo& menuInfo = MainUIState.MenuStack[MainUIState.currentMenuLevel];
+		UIStyle& backgroundStyle = DefaultSubMenuStyle.background;
+		UIFontStyle& fontStyle = DefaultSubMenuStyle.fontStyle;
+
+		MainUIState.currentMenuLevel++;
+
+		UIRect rect(UIVector2(0.0f), UIVector2(subMenusWidth, 1.0f));
+		rect.m_pos = menuInfo.posAndDimension.m_pos + (menuInfo.bIsubMenu ? UIVector2(menuInfo.posAndDimension.m_dimension.x, 0.0f) : UIVector2(0.0f, menuInfo.posAndDimension.m_dimension.y));
+
+		if (backgroundStyle.texture)
+		{
+			MainUIState.drawer->DrawTexture(rect, backgroundStyle.texture, backgroundStyle.fillColor, backgroundStyle.textureScale, backgroundStyle.textureOffset);
+		}
+		else
+		{
+			MainUIState.drawer->DrawRect(rect, backgroundStyle.fillColor);
+		}
+
+		// Menu ID and positioning
+		UInt32 menuID = GetUIIDFromString("~~~~~WindowSubMenu~~~~");
+		StackIDs.push_back(menuID);
+
+		// Set Position rule
+		MainUIState.drawPosDimensionStack.push_back(MainUIState.drawPosDimension);
+		MainUIState.drawPosDimension = rect;
+
+		MainUIState.drawDirectionStack.push_back(MainUIState.drawDirection);
+		MainUIState.drawDirection = UIVector2(0.0f, 1.0f);
+	}
+
+	bool UI::DoSubMenu(const UIChar* subMenuLabel, bool hasSubMenu /*= false*/)
+	{
+		UIFontStyle& fontStyle = DefaultSubMenuStyle.fontStyle;
+		UIStyle& backgroundStyle = DefaultSubMenuStyle.background;
+
+		const UInt32 menuID = GetUIIDFromString(subMenuLabel);
+		UIRect rect = MainUIState.drawPosDimension;
+		bool bPressed = false;
+
+		rect.m_dimension.y = fontStyle.font->calculateTextHeight(fontStyle.fontScale) + 10.0f;
+
+		// Update Draw Position
+		MainUIState.drawPosDimension.m_pos.y += rect.m_dimension.y;
+
+		const bool mouseInside = CheckMouseInside(rect);
+
+		if (mouseInside && MainUIState.mouseState == BUTTON_DOWN)
+		{
+			if (MainUIState.activeItem.id != menuID)
+			{
+				MainUIState.activeItem.id = menuID;
+				bPressed = true;
+			}
+		}
+		else if (mouseInside)
+		{
+			MainUIState.hotItem.id = menuID;
+			while (MainUIState.MenuStack.size() > MainUIState.currentMenuLevel)
+			{
+				MainUIState.MenuStack.pop_back();
+			}
+			if (hasSubMenu)
+			{
+				MainUIState.MenuStack.push_back(UIMenuInfo{ rect, menuID, true });
+			}
+		}
+
+		bool bSubSubMenuActive = hasSubMenu && MainUIState.MenuStack.size() > MainUIState.currentMenuLevel && MainUIState.MenuStack[MainUIState.currentMenuLevel].menuID.id == menuID;
+		
+		if (MainUIState.activeItem.id == menuID)
+		{
+			UIStyle& selectedStyle = DefaultMenuStyle.selected;
+			if (selectedStyle.texture)
+			{
+				MainUIState.drawer->DrawTexture(rect, selectedStyle.texture, selectedStyle.fillColor, selectedStyle.textureScale, selectedStyle.textureOffset);
+			}
+			else
+			{
+				MainUIState.drawer->DrawRect(rect, selectedStyle.fillColor);
+			}
+		}
+		else if (MainUIState.hotItem.id == menuID || bSubSubMenuActive)
+		{
+			UIStyle& hoverStyle = DefaultMenuStyle.hover;
+			if (hoverStyle.texture)
+			{
+				MainUIState.drawer->DrawTexture(rect, hoverStyle.texture, hoverStyle.fillColor, hoverStyle.textureScale, hoverStyle.textureOffset);
+			}
+			else
+			{
+				MainUIState.drawer->DrawRect(rect, hoverStyle.fillColor);
+			}
+		}
+		else
+		{
+			if (backgroundStyle.texture)
+			{
+				MainUIState.drawer->DrawTexture(rect, backgroundStyle.texture, backgroundStyle.fillColor, backgroundStyle.textureScale, backgroundStyle.textureOffset);
+			}
+			else
+			{
+				MainUIState.drawer->DrawRect(rect, backgroundStyle.fillColor);
+			}
+		}
+
+		UIRect textRect = rect;
+		textRect.m_pos.x += DefaultSubMenuStyle.menuPadding;
+		DrawTextInRect(textRect, subMenuLabel, COLOR_WHITE, ZE::TEXT_LEFT, ZE::TEXT_V_CENTER, fontStyle.fontScale, fontStyle.font);
+
+		return bPressed || bSubSubMenuActive;
+	}
+
+	void UI::EndSubMenu()
+	{
+		StackIDs.pop_back();
+
+		MainUIState.drawDirection = MainUIState.drawDirectionStack.back();
+		MainUIState.drawDirectionStack.pop_back();
+
+		MainUIState.drawPosDimension = MainUIState.drawPosDimensionStack.back();
+		MainUIState.drawPosDimensionStack.pop_back();
+
+		MainUIState.currentMenuLevel--;
+	}
+
+	Float32 UI::DoScrollBar(const UIVector2& pos, Float32 currentOffset, Float32 directionSize, Float32 actualSize, EDirection scrollDirection /*= DIR_VERTICAL*/, const UIScrollBarStyle& scrollBarStyle /*= DefaultScrollBarStyle*/)
+	{
+		Float32 returnOffset = currentOffset;
+
+		const UInt32 id = scrollDirection == DIR_HORIZONTAL ? GetUIIDFromString("ScrollBarH") : GetUIIDFromString("ScrollBarV");
+
+		// Calculate button rect
+		const Float32 localOffset = currentOffset / actualSize * directionSize;
+		const Float32 localSize = directionSize / actualSize * directionSize;
+
+		UIRect buttonRect;
+		buttonRect.m_pos.x = scrollDirection == DIR_HORIZONTAL ? localOffset + pos.x : pos.x;
+		buttonRect.m_pos.y = scrollDirection == DIR_VERTICAL ? localOffset + pos.y : pos.y;
+		buttonRect.m_dimension.x = scrollDirection == DIR_HORIZONTAL ? localSize : scrollBarStyle.scrollButtonSize;
+		buttonRect.m_dimension.y = scrollDirection == DIR_VERTICAL ? localSize : scrollBarStyle.scrollButtonSize;
+
+		static Float32 mouseOffset = 0.0f;
+
+		const bool mouseInside = CheckMouseInside(buttonRect);
+		if (mouseInside && MainUIState.mouseState == BUTTON_DOWN)
+		{
+			if (MainUIState.activeItem.id != id)
+			{
+				mouseOffset = scrollDirection == DIR_VERTICAL ? MainUIState.mousePos.y - buttonRect.m_pos.y : MainUIState.mousePos.x - buttonRect.m_pos.x;
+			}
+			MainUIState.activeItem.id = id;
+		}
+		else if (mouseInside)
+		{
+			MainUIState.hotItem.id = id;
+			if (MainUIState.activeItem.id == id) { MainUIState.activeItem.id = 0; }
+		}
+		else
+		{
+			if (MainUIState.hotItem.id == id) { MainUIState.hotItem.id = 0; }
+			if (MainUIState.activeItem.id == id && MainUIState.mouseState != BUTTON_DOWN) { MainUIState.activeItem.id = 0; }
+		}
+		
+		// Handle offset changed
+		if (MainUIState.activeItem.id == id)
+		{
+			Float32 MaxOffset = actualSize - directionSize;
+			if (scrollDirection == DIR_VERTICAL)
+			{
+				returnOffset = ( MainUIState.mousePos.y - mouseOffset - pos.y ) * actualSize / directionSize;
+			}
+			else
+			{
+				returnOffset = ( MainUIState.mousePos.x - mouseOffset - pos.x ) * actualSize / directionSize;
+			}
+			returnOffset = UICLAMP(0.0f, MaxOffset, returnOffset);
+		}
+
+		UIRect scrollRect;
+		scrollRect.m_pos.x = pos.x + (scrollDirection == DIR_VERTICAL ? (scrollBarStyle.scrollButtonSize - scrollBarStyle.scrollLineSize ) *0.5f : 0.0f);
+		scrollRect.m_pos.y = pos.y + (scrollDirection == DIR_HORIZONTAL ? (scrollBarStyle.scrollButtonSize - scrollBarStyle.scrollLineSize) *0.5f : 0.0f);
+		scrollRect.m_dimension.x = scrollDirection == DIR_HORIZONTAL ? directionSize : scrollBarStyle.scrollLineSize;
+		scrollRect.m_dimension.y = scrollDirection == DIR_VERTICAL ? directionSize : scrollBarStyle.scrollLineSize;
+
+		MainUIState.drawer->DrawRect(scrollRect, scrollBarStyle.scrollBar.fillColor);
+
+		if (MainUIState.activeItem.id == id)
+		{
+			MainUIState.drawer->DrawRect(buttonRect, scrollBarStyle.scrollButton.down.fillColor);
+		}
+		else if (MainUIState.hotItem.id == id)
+		{
+			MainUIState.drawer->DrawRect(buttonRect, scrollBarStyle.scrollButton.hover.fillColor);
+		}
+		else
+		{
+			MainUIState.drawer->DrawRect(buttonRect, scrollBarStyle.scrollButton.up.fillColor);
+		}
+
+		return returnOffset;
+
 	}
 
 	void UI::DoText(const UIChar* text, const UIVector4& fillColor /*= UIVector4(1.0f)*/, const UIFontStyle& fontStyle /*= DefaultFontStyle*/)
@@ -1729,7 +2179,7 @@ namespace ZE
 		if (textureScale == ZE::SCALE_IMAGE)
 		{
 #if defined(ZUI_USE_RECT_INSTANCING)
-			drawItem->m_instances.push_back(UIInstance{ rect.m_pos, depth, rect.m_dimension, 0.0f, fillColor, UIVector4{ 0.0f, 0.0f, 1.0f, 1.0f } });
+			drawItem->m_instances.push_back(UIDrawInstance{ rect.m_pos, depth, rect.m_dimension, 0.0f, fillColor, UIVector4{ 0.0f, 0.0f, 1.0f, 1.0f } });
 #else
 			drawItem->m_vertices.push_back(UIVertex{ positions[0], depth, texCoords[0], fillColor });
 			drawItem->m_vertices.push_back(UIVertex{ positions[1], depth, texCoords[1], fillColor });
@@ -1791,28 +2241,28 @@ namespace ZE
 			UIVector2 edgeRectDimRight{ smallRectDim2.x, rect.m_dimension.y - smallRectDim2.y - smallRectDim4.y };
 
 			// Top Left Corner
-			drawItem->m_instances.push_back(UIInstance{ rect.m_pos, depth, smallRectDim1, 0.0f, fillColor, UIVector4{ 0.0f, 0.0f, left, top } });
+			drawItem->m_instances.push_back(UIDrawInstance{ rect.m_pos, depth, smallRectDim1, 0.0f, fillColor, UIVector4{ 0.0f, 0.0f, left, top } });
 
 			// Bottom Left Corner
-			drawItem->m_instances.push_back(UIInstance{ outerPositions[5], depth, smallRectDim3, 0.0f, fillColor, UIVector4{ outerTexCoords[5].x, outerTexCoords[5].y, left, bottom } });
+			drawItem->m_instances.push_back(UIDrawInstance{ outerPositions[5], depth, smallRectDim3, 0.0f, fillColor, UIVector4{ outerTexCoords[5].x, outerTexCoords[5].y, left, bottom } });
 
 			// Right Top Corner
-			drawItem->m_instances.push_back(UIInstance{ outerPositions[2], depth, smallRectDim2, 0.0f, fillColor, UIVector4{ outerTexCoords[2].x, outerTexCoords[2].y, right, top } });
+			drawItem->m_instances.push_back(UIDrawInstance{ outerPositions[2], depth, smallRectDim2, 0.0f, fillColor, UIVector4{ outerTexCoords[2].x, outerTexCoords[2].y, right, top } });
 
 			// Right Bottom Corner
-			drawItem->m_instances.push_back(UIInstance{ innerPositions[3], depth, smallRectDim4, 0.0f, fillColor, UIVector4{ innerTexCoords[3].x, innerTexCoords[3].y, right, bottom } });
+			drawItem->m_instances.push_back(UIDrawInstance{ innerPositions[3], depth, smallRectDim4, 0.0f, fillColor, UIVector4{ innerTexCoords[3].x, innerTexCoords[3].y, right, bottom } });
 			
 			// Top Edge
-			drawItem->m_instances.push_back(UIInstance{ outerPositions[0], depth, edgeRectDimTop, 0.0f, fillColor, UIVector4{ outerTexCoords[0].x, outerTexCoords[0].y, 1.0f - right - left, top } });
+			drawItem->m_instances.push_back(UIDrawInstance{ outerPositions[0], depth, edgeRectDimTop, 0.0f, fillColor, UIVector4{ outerTexCoords[0].x, outerTexCoords[0].y, 1.0f - right - left, top } });
 			
 			// Bottom Edge
-			drawItem->m_instances.push_back(UIInstance{ innerPositions[2], depth, edgeRectDimBottom, 0.0f, fillColor, UIVector4{ innerTexCoords[2].x, innerTexCoords[2].y, 1.0f - right - left, bottom } });
+			drawItem->m_instances.push_back(UIDrawInstance{ innerPositions[2], depth, edgeRectDimBottom, 0.0f, fillColor, UIVector4{ innerTexCoords[2].x, innerTexCoords[2].y, 1.0f - right - left, bottom } });
 			
 			// Left Edge
-			drawItem->m_instances.push_back(UIInstance{ outerPositions[1], depth, edgeRectDimLeft, 0.0f, fillColor, UIVector4{ outerTexCoords[1].x, outerTexCoords[1].y, left, 1.0f - top - bottom } });
+			drawItem->m_instances.push_back(UIDrawInstance{ outerPositions[1], depth, edgeRectDimLeft, 0.0f, fillColor, UIVector4{ outerTexCoords[1].x, outerTexCoords[1].y, left, 1.0f - top - bottom } });
 
 			// Right Edge
-			drawItem->m_instances.push_back(UIInstance{ innerPositions[1], depth, edgeRectDimRight, 0.0f, fillColor, UIVector4{ innerTexCoords[1].x, innerTexCoords[1].y, right, 1.0f - top - bottom } });
+			drawItem->m_instances.push_back(UIDrawInstance{ innerPositions[1], depth, edgeRectDimRight, 0.0f, fillColor, UIVector4{ innerTexCoords[1].x, innerTexCoords[1].y, right, 1.0f - top - bottom } });
 
 #else
 			// Top-Left Corner
@@ -1890,7 +2340,7 @@ namespace ZE
 			if (textureScale == SCALE_9SCALE)
 			{
 #if defined(ZUI_USE_RECT_INSTANCING)
-				drawItem->m_instances.push_back(UIInstance{ innerPositions[0], depth, { rect.m_dimension.x - smallRectDim1.x - smallRectDim2.x, rect.m_dimension.y - smallRectDim1.y - smallRectDim3.y }, 0.0f, fillColor, UIVector4{ innerTexCoords[0].x, innerTexCoords[0].y, 1.0f - left - right, 1.0f - top - bottom } });
+				drawItem->m_instances.push_back(UIDrawInstance{ innerPositions[0], depth, { rect.m_dimension.x - smallRectDim1.x - smallRectDim2.x, rect.m_dimension.y - smallRectDim1.y - smallRectDim3.y }, 0.0f, fillColor, UIVector4{ innerTexCoords[0].x, innerTexCoords[0].y, 1.0f - left - right, 1.0f - top - bottom } });
 #else
 				// Center
 				drawItem->m_vertices.push_back(UIVertex{ innerPositions[0], depth, innerTexCoords[0], fillColor });
@@ -1920,7 +2370,7 @@ namespace ZE
 		Float32 depth = m_currentLayer * 0.5f + m_currentDepth;
 
 #if defined(ZUI_USE_RECT_INSTANCING)
-		drawItem->m_instances.push_back(UIInstance{ rect.m_pos, depth, rect.m_dimension, rect.m_roundness, fillColor });
+		drawItem->m_instances.push_back(UIDrawInstance{ rect.m_pos, depth, rect.m_dimension, rect.m_roundness, fillColor });
 		drawItem->m_bUsingRectInstance = true;
 #else
 		UIVector2 positions[4] = { rect.m_pos,
@@ -1945,7 +2395,7 @@ namespace ZE
 
 	void UIDrawer::DrawShape(UIArray<UIVector2>& points, const UIVector4& fillColor)
 	{
-
+		// #TODO
 	}
 
 	void UIDrawer::DrawText(UIVector2& pos, const UIVector4& fillColor, UIFont* font, const UIChar* text, Float32 scale /*= 1.0f*/, bool bWordWrap /*= false*/, Float32 maxWidth /*= 0*/, ETextAlign wrapTextAlign /*= TEXT_LEFT*/, const UIVector2& dim, Int32* lineCount)
@@ -2004,12 +2454,67 @@ namespace ZE
 	}
 
 
+	void UIDrawer::PushRectMask(const UIRect& rect)
+	{
+		UIDrawItem* drawItem = m_currentDrawList->getNextDrawItem();
+
+		drawItem->m_layer = m_currentLayer;
+		drawItem->m_Mask = DRAW_MASK_PUSH;
+
+		Float32 depth = 0.1f;
+		UIVector4 fillColor(0.0f);
+
+#if defined(ZUI_USE_RECT_INSTANCING)
+		drawItem->m_instances.push_back(UIDrawInstance{ rect.m_pos, depth, rect.m_dimension, rect.m_roundness, fillColor });
+		drawItem->m_bUsingRectInstance = true;
+#else
+		UIVector2 positions[4] = { rect.m_pos,
+		{ rect.m_pos.x + rect.m_dimension.x, rect.m_pos.y },
+		{ rect.m_pos.x, rect.m_pos.y + rect.m_dimension.y },
+			rect.m_pos + rect.m_dimension };
+		UIVector2 texCoords[4] = { { 0.0f, 0.0f },{ 1.0f, 0.0f },{ 0.0f, 1.0f },{ 1.0f, 1.0f } };
+
+		drawItem->m_vertices.push_back(UIVertex{ positions[0], depth, texCoords[0], fillColor });
+		drawItem->m_vertices.push_back(UIVertex{ positions[1], depth, texCoords[1], fillColor });
+		drawItem->m_vertices.push_back(UIVertex{ positions[3], depth, texCoords[3], fillColor });
+
+		drawItem->m_vertices.push_back(UIVertex{ positions[0], depth, texCoords[0], fillColor });
+		drawItem->m_vertices.push_back(UIVertex{ positions[3], depth, texCoords[3], fillColor });
+		drawItem->m_vertices.push_back(UIVertex{ positions[2], depth, texCoords[2], fillColor });
+
+		drawItem->m_roundness = rect.m_roundness;
+		drawItem->m_shapeDimension = rect.m_dimension;
+#endif
+
+		PushMaskDrawStack.push_back(drawItem);
+	}
+
+	void UIDrawer::PopMask()
+	{
+		UIDrawItem* drawItem = m_currentDrawList->getNextDrawItem();
+		UIDrawItem* pushMaskDrawItem = PushMaskDrawStack.back();
+
+		drawItem->m_Mask = DRAW_MASK_POP;
+		drawItem->m_layer = m_currentLayer;
+
+#if defined(ZUI_USE_RECT_INSTANCING)
+		drawItem->m_instances = pushMaskDrawItem->m_instances;
+		drawItem->m_bUsingRectInstance = true;
+#else
+		drawItem->m_roundness = pushMaskDrawItem->m_roundness;
+		drawItem->m_shapeDimension = pushMaskDrawItem->m_shapeDimension;
+		drawItem->m_vertices = pushMaskDrawItem->m_vertices;
+#endif
+
+		PushMaskDrawStack.pop_back();
+	}
+
 	ZE::Int32 UIDrawList::itemCount() const
 	{
 		return m_count;
 	}
 
-	ZE::UIDrawItem* UIDrawList::getDrawItem(int _index) const
+	ZE::UIDrawItem* UIDrawList::getDrawItem(Int32 _index) const
 	{
 		return m_drawItems[_index];
 	}
@@ -2026,7 +2531,7 @@ namespace ZE
 
 	ZE::UIDrawItem* UIDrawList::getTextureInstanceDrawItem(UInt32 _index)
 	{
-		int idx;
+		Int32 idx;
 		HashMapHasAndAssign(m_textureToInstanceDrawItem, _index, -1, idx);
 		if (idx == -1)
 		{
@@ -2061,7 +2566,7 @@ namespace ZE
 
 	ZE::UIDrawItem* UIDrawList::getTextureDrawItem(UInt32 textureHandle)
 	{
-		int idx;
+		Int32 idx;
 		HashMapHasAndAssign(m_textureToDrawItemMap, textureHandle, -1, idx);
 		if (idx == -1)
 		{
@@ -2079,7 +2584,7 @@ namespace ZE
 		return m_vertices;
 	}
 
-	UIArray<ZE::UIInstance>& UIDrawItem::getInstances()
+	UIArray<ZE::UIDrawInstance>& UIDrawItem::getInstances()
 	{
 		return m_instances;
 	}
@@ -2097,6 +2602,7 @@ namespace ZE
 		m_bUsingRectInstance = false;
 		m_layer = 0;
 		m_bCrop = false;
+		m_Mask = DRAW_MASK_NONE;
 	}
 
 	bool UIRect::isContain(const UIVector2& pos) const
@@ -2104,6 +2610,29 @@ namespace ZE
 		UIVector2 diff = pos - m_pos;
 
 		return diff.x >= 0 && diff.x <= m_dimension.x && diff.y >= 0 && diff.y <= m_dimension.y;
+	}
+
+	UIRect UIRect::intersect(const UIRect& inRect)
+	{
+		UIRect result;
+		
+		UIVector2 bottomRight = m_pos + m_dimension;
+		UIVector2 otherBottomRight = inRect.m_pos + inRect.m_dimension;
+
+		if (((inRect.m_pos.x >= m_pos.x && inRect.m_pos.x <= bottomRight.x)
+			|| (otherBottomRight.x >= m_pos.x && otherBottomRight.x <= bottomRight.x)
+			&& 
+			((inRect.m_pos.y >= m_pos.y && inRect.m_pos.y <= bottomRight.y))
+			|| (otherBottomRight.y >= m_pos.y && otherBottomRight.y <= bottomRight.y)))
+		{
+			result.m_pos.x = UIMAX(m_pos.x, inRect.m_pos.x);
+			result.m_pos.y = UIMAX(m_pos.y, inRect.m_pos.y);
+			bottomRight.x = UIMIN(bottomRight.x, otherBottomRight.x);
+			bottomRight.y = UIMIN(bottomRight.y, otherBottomRight.y);
+			result.m_dimension = bottomRight - result.m_pos;
+		}
+
+		return result;
 	}
 
 	ZE::UIVector2 operator+(const UIVector2& v1, const UIVector2& v2)
@@ -2240,12 +2769,12 @@ namespace ZE
 
 	ZE::Float32 UIFont::calculateTextLength(const UIChar* text, Float32 scale)
 	{
-		int index = 0;
+		Int32 index = 0;
 		char c = text[index++];
 		Float32 result = 0;
 		while (c != '\0')
 		{
-			int charIndex;
+			Int32 charIndex;
 			HashMapHasAndAssign(m_charMap, c, 0, charIndex);
 			result += scale * m_charDesc[charIndex].Advance;
 			c = text[index++];
@@ -2256,12 +2785,12 @@ namespace ZE
 
 	ZE::Float32 UIFont::calculateNTextLength(const UIChar* text, Int32 n, Float32 scale)
 	{
-		int index = 0;
+		Int32 index = 0;
 		char c = text[index++];
 		Float32 result = 0;
 		while (c != '\0' && n--)
 		{
-			int charIndex;
+			Int32 charIndex;
 			HashMapHasAndAssign(m_charMap, c, 0, charIndex);
 			result += scale * m_charDesc[charIndex].Advance;
 			c = text[index++];
@@ -2276,7 +2805,7 @@ namespace ZE
 		char c = text[index++];
 		while (c != '\0' && length > 0)
 		{
-			int charIndex;
+			Int32 charIndex;
 			HashMapHasAndAssign(m_charMap, c, 0, charIndex);
 			length -= scale * m_charDesc[charIndex].Advance;
 			c = text[index++];
@@ -2292,7 +2821,7 @@ namespace ZE
 
 	ZE::Float32 UIFont::calculateWordWrapTextHeight(const UIChar* text, Float32 scale, Int32 maxWidth)
 	{
-		int index = 0;
+		Int32 index = 0;
 		char c = text[index++];
 
 		Float32 height = 0;
@@ -2306,7 +2835,7 @@ namespace ZE
 				cX = 0;
 			}
 
-			int charIndex;
+			Int32 charIndex;
 			HashMapHasAndAssign(m_charMap, c, 0, charIndex);
 			UIFontCharDesc& charDesc = m_charDesc[charIndex];
 
@@ -2328,7 +2857,7 @@ namespace ZE
 
 	void UIFont::generateVertexBuffer(const UIChar* text, UIArray<UIVertex>& result, const UIVector2 pos, Float32 scale, Float32 depth, UIVector4 color)
 	{
-		int index = 0;
+		Int32 index = 0;
 		char c = text[index++];
 
 		Float32 x = pos.x;
@@ -2344,7 +2873,7 @@ namespace ZE
 				continue;
 			}
 
-			int charIndex;
+			Int32 charIndex;
 			HashMapHasAndAssign(m_charMap, c, 0, charIndex);
 			
 			UIFontCharDesc& charDesc = m_charDesc[charIndex];
@@ -2415,9 +2944,9 @@ namespace ZE
 		}
 	}
 
-	void UIFont::generateInstanceBuffer(const UIChar* text, UIArray<UIInstance>& result, const UIVector2 pos, Float32 scale, Float32 depth, UIVector4 color)
+	void UIFont::generateInstanceBuffer(const UIChar* text, UIArray<UIDrawInstance>& result, const UIVector2 pos, Float32 scale, Float32 depth, UIVector4 color)
 	{
-		int index = 0;
+		Int32 index = 0;
 		char c = text[index++];
 
 		Float32 x = pos.x;
@@ -2433,7 +2962,7 @@ namespace ZE
 				continue;
 			}
 
-			int charIndex;
+			Int32 charIndex;
 			HashMapHasAndAssign(m_charMap, c, 0, charIndex);
 			UIFontCharDesc& charDesc = m_charDesc[charIndex];
 
@@ -2443,14 +2972,14 @@ namespace ZE
 			Float32 w = charDesc.Dimension.x * scale;
 			Float32 h = charDesc.Dimension.y * scale;
 
-			result.push_back(UIInstance{ UIVector2{ xPos, yPos }, depth, UIVector2{ w, h }, 0.0f, color, UIVector4{ charDesc.TexCoord.x * 1.0f / m_fontAtlasSize, charDesc.TexCoord.y * 1.0f / m_fontAtlasSize, charDesc.Dimension.x * 1.0f / m_fontAtlasSize, charDesc.Dimension.y * 1.0f / m_fontAtlasSize } });
+			result.push_back(UIDrawInstance{ UIVector2{ xPos, yPos }, depth, UIVector2{ w, h }, 0.0f, color, UIVector4{ charDesc.TexCoord.x * 1.0f / m_fontAtlasSize, charDesc.TexCoord.y * 1.0f / m_fontAtlasSize, charDesc.Dimension.x * 1.0f / m_fontAtlasSize, charDesc.Dimension.y * 1.0f / m_fontAtlasSize } });
 			
 			x += charDesc.Advance * scale;
 			c = text[index++];
 		}
 	}
 
-	void UIFont::generateWrapTextInstanceBuffer(const UIChar* text, UIArray<UIInstance>& result, const UIVector2 pos, Float32 scale, Float32 depth, UIVector4 color, Float32 maxWidth, ETextAlign textAlign, Int32* lineCount)
+	void UIFont::generateWrapTextInstanceBuffer(const UIChar* text, UIArray<UIDrawInstance>& result, const UIVector2 pos, Float32 scale, Float32 depth, UIVector4 color, Float32 maxWidth, ETextAlign textAlign, Int32* lineCount)
 	{
 		UIArray<UInt32> charIndices;
 		Float32 width;
@@ -2482,7 +3011,7 @@ namespace ZE
 				Float32 w = charDesc.Dimension.x * scale;
 				Float32 h = charDesc.Dimension.y * scale;
 
-				result.push_back(UIInstance{ UIVector2{ xPos, yPos }, depth, UIVector2{ w, h }, 0.0f, color, UIVector4{ charDesc.TexCoord.x * 1.0f / m_fontAtlasSize, charDesc.TexCoord.y * 1.0f / m_fontAtlasSize, charDesc.Dimension.x * 1.0f / m_fontAtlasSize, charDesc.Dimension.y * 1.0f / m_fontAtlasSize } });
+				result.push_back(UIDrawInstance{ UIVector2{ xPos, yPos }, depth, UIVector2{ w, h }, 0.0f, color, UIVector4{ charDesc.TexCoord.x * 1.0f / m_fontAtlasSize, charDesc.TexCoord.y * 1.0f / m_fontAtlasSize, charDesc.Dimension.x * 1.0f / m_fontAtlasSize, charDesc.Dimension.y * 1.0f / m_fontAtlasSize } });
 
 				x += charDesc.Advance * scale;
 			}
@@ -2510,7 +3039,7 @@ namespace ZE
 		width = 0;
 		while (c != '\0' && c!= '\n')
 		{
-			int charIndex;
+			Int32 charIndex;
 			HashMapHasAndAssign(m_charMap, c, 0, charIndex);
 			UIFontCharDesc& charDesc = m_charDesc[charIndex];
 
@@ -2534,13 +3063,13 @@ namespace ZE
 
 	ZE::Int32 UIFont::calculateFirstLineWidth(const UIChar* text, Float32 scale, Int32 maxWidth)
 	{
-		int index = 0;
+		Int32 index = 0;
 		char c = text[index++];
 
 		Float32 cX = 0;
 		while (c != '\0' && c!= '\n')
 		{
-			int charIndex;
+			Int32 charIndex;
 			HashMapHasAndAssign(m_charMap, c, 0, charIndex);
 			UIFontCharDesc& charDesc = m_charDesc[charIndex];
 
@@ -2600,7 +3129,7 @@ namespace ZE
 	{
 		if (s_instance)
 		{
-			for (int i = 0; i < static_cast<int>(s_instance->m_textures.size()); i++)
+			for (UInt32 i = 0; i < s_instance->m_textures.size(); i++)
 			{
 				UIFREE(s_instance->m_textures[i]);
 			}
@@ -2653,7 +3182,7 @@ namespace ZE
 				result *= 10.0f;
 			}
 
-			result += float(bufferChar[idx] - '0') * divider;
+			result += Float32(bufferChar[idx] - '0') * divider;
 
 			idx++;
 		}
@@ -2664,6 +3193,13 @@ namespace ZE
 	bool StringHelper::NumberFilterChar(UIChar keyChar)
 	{
 		return (keyChar >= '0' && keyChar <= '9') || keyChar == '.';
+	}
+
+	ZE::Float32 UIState::UseScrollOffset()
+	{
+		Float32 returnScroll = scrollOffsetY;
+		scrollOffsetY = 0.0f;
+		return returnScroll;
 	}
 
 }

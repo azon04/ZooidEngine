@@ -2,7 +2,7 @@
 
 #include "ZooidEngine/Scene/RenderComponent.h"
 
-namespace SpaceShooter
+namespace ZE
 {
 	class Meteor : public ZE::RenderComponent
 	{

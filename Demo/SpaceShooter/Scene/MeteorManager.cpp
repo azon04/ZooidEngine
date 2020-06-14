@@ -8,7 +8,7 @@
 
 #include <cstdlib>
 
-namespace SpaceShooter
+namespace ZE
 {
 	IMPLEMENT_CLASS_1(MeteorManager, ZE::SceneComponent)
 

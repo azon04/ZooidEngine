@@ -101,10 +101,10 @@ namespace ZE
 		UInt32 uiVertexInstanceLayout;
 		BufferLayout* instanceLayout = BufferLayoutManager::GetInstance()->createAndAddBufferLayout(uiVertexInstanceLayout);
 		instanceLayout->m_layouts.reset(4);
-		instanceLayout->m_layouts.push_back({ 0, 3, EDataType::FLOAT, sizeof(UIInstance), 0, true }); // Position
-		instanceLayout->m_layouts.push_back({ 1, 3, EDataType::FLOAT, sizeof(UIInstance), 3, true }); // Dimension + Radius
-		instanceLayout->m_layouts.push_back({ 2, 4, EDataType::FLOAT, sizeof(UIInstance), 6, true }); // Color
-		instanceLayout->m_layouts.push_back({ 3, 4, EDataType::FLOAT, sizeof(UIInstance), 10, true }); // UV Coord + Dimension
+		instanceLayout->m_layouts.push_back({ 0, 3, EDataType::FLOAT, sizeof(UIDrawInstance), 0, true }); // Position
+		instanceLayout->m_layouts.push_back({ 1, 3, EDataType::FLOAT, sizeof(UIDrawInstance), 3, true }); // Dimension + Radius
+		instanceLayout->m_layouts.push_back({ 2, 4, EDataType::FLOAT, sizeof(UIDrawInstance), 6, true }); // Color
+		instanceLayout->m_layouts.push_back({ 3, 4, EDataType::FLOAT, sizeof(UIDrawInstance), 10, true }); // UV Coord + Dimension
 		instanceLayout->calculateBufferDataCount();
 
 		// Create buffer array for rect
@@ -125,7 +125,7 @@ namespace ZE
 		Handle hInstanceBuffer("InstanceBuffer", sizeof(BufferData));
 		m_instanceBuffer = new(hInstanceBuffer) BufferData(VERTEX_BUFFER);
 		m_instanceBuffer->setBufferLayout(uiVertexInstanceLayout);
-		m_instanceBuffer->SetData(nullptr, sizeof(UIInstance), 0);
+		m_instanceBuffer->SetData(nullptr, sizeof(UIDrawInstance), 0);
 		m_instanceBuffer->setStaticBuffer(false);
 
 		{			
@@ -341,7 +341,7 @@ namespace ZE
 
 		if (drawItem->getInstances().size() > 0)
 		{
-			m_instanceBuffer->SetData(drawItem->getInstances().data(), sizeof(UIInstance), drawItem->getInstances().length());
+			m_instanceBuffer->SetData(drawItem->getInstances().data(), sizeof(UIDrawInstance), drawItem->getInstances().length());
 			m_instanceGPUBuffer->refresh();
 		}
 

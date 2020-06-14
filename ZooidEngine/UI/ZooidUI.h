@@ -18,7 +18,7 @@ namespace ZE
 	class UIRenderer;
 	class UIDrawer;
 
-	typedef bool(*FilterChar)(UIChar);
+	typedef bool(*FilterCharFunc)(UIChar);
 
 	struct UI_ID
 	{
@@ -52,6 +52,19 @@ namespace ZE
 		SCALE_BORDER
 	};
 
+	enum EDirection : UInt8
+	{
+		DIR_VERTICAL,
+		DIR_HORIZONTAL
+	};
+
+	enum EDrawMaskProcess : UInt8
+	{
+		DRAW_MASK_NONE,
+		DRAW_MASK_PUSH,
+		DRAW_MASK_POP
+	};
+
 	struct UIVector2
 	{
 		Float32 x;
@@ -71,6 +84,13 @@ namespace ZE
 		{
 			this->x = x;
 			this->y = y;
+		}
+
+		UIVector2& operator+=(const UIVector2& v)
+		{
+			this->x += v.x;
+			this->y += v.y;
+			return *this;
 		}
 	};
 
@@ -119,37 +139,29 @@ namespace ZE
 		}
 	};
 
-	class UIShape
-	{
-	public:
-		UIShape() {}
-		UIShape(const UIVector2& pos)
-			: m_pos(pos)
-		{ }
-
-		UIVector2 m_pos;
-
-		virtual bool isContain(const UIVector2& pos) const = 0;
-	};
-
-	class UIRect : public UIShape
+	class UIRect
 	{
 	public:
 		UIRect() {}
 		UIRect(const UIVector2& pos, const UIVector2& dimension, Float32 roundness = 0.0f)
-			: UIShape(pos),
+			: m_pos(pos),
 			m_dimension(dimension),
 			m_roundness(roundness)
 		{
 
 		}
 
+		UIVector2 m_pos;
 		UIVector2 m_dimension;
 		Float32 m_roundness = 0.0f;
 
-		virtual bool isContain(const UIVector2& pos) const override;
+		bool isContain(const UIVector2& pos) const;
+
+		UIRect intersect(const UIRect& otherRect);
 	};
 
+
+	// Vertex Data Structure
 	struct UIVertex
 	{
 		UIVector2 pos;
@@ -158,12 +170,33 @@ namespace ZE
 		UIVector4 color;
 	};
 
-	struct UIPanelState
+	// Scroll State
+	struct UIScrollState
 	{
-		UIRect posAndDimension;
-		bool closed;
+		UIRect targetRect;
+		UIVector2 contentSize;
+		Float32 scrollOffset;
 	};
 
+	// Panel State
+	struct UIPanelState : UIScrollState
+	{
+		UIVector2 headerSize;
+		bool closed;
+		bool bAutoSize;
+	};
+
+	// Menu Info
+	struct UIMenuInfo
+	{
+		UIRect posAndDimension;
+		UI_ID menuID;
+		bool bIsubMenu;
+	};
+
+
+	// Internal UIState
+	// Used for Global purposes and Render purpose
 	class UIState
 	{
 	public:
@@ -171,18 +204,15 @@ namespace ZE
 		UI_ID activeItem;
 		UI_ID lastActiveItem;
 
-		Float32 mouseX;
-		Float32 mouseY;
+		// Screen size
+		Int32 screenWidth;
+		Int32 screenHeight;
 
+		// Mouse State
+		UIVector2 mousePos;
 		Float32 mouseDeltaX;
 		Float32 mouseDeltaY;
-
-		UIRect drawPosDimension;
-		UIVector2 drawDirection;
-		UIStack<UIRect> drawPosDimensionStack;
-		UIStack<UIVector2> drawDirectionStack;
-
-		EButtonState mouseDown;
+		Float32 scrollOffsetY;
 
 		UIRenderer* renderer;
 		UIDrawer* drawer;
@@ -195,19 +225,51 @@ namespace ZE
 		Int32 textInputMaxScroll;
 		Int32 textInputScrollPos;
 
-		FilterChar textInputFilterChar;
+		FilterCharFunc textInputFilterChar;
 
 		// Temp Buffer
 		UIChar* textTempBuffer;
 		Int32 textTempLength;
 
+		// Timer
 		Timer mainTimer;
 		Float32 timeFromStart;
+		
+		// Current Menu Level
+		Int32 currentMenuLevel;
 
+		// Mouse State
+		EButtonState lastMouseState;
+		EButtonState mouseState;
+		
+		// Draw State
+		UIVector2 drawDirection;
+		UIRect drawPosDimension;
+
+		// Draw Position stack
+		UIArray<UIRect> drawPosDimensionStack;
+
+		// Draw Direction stack
+		UIArray<UIVector2> drawDirectionStack;
+
+		// Menu Info stack
+		UIArray<UIMenuInfo> MenuStack;
+
+		// Interaction Rect Stack
+		UIArray<UIRect> InteractionRectStack;
+
+		// Panel State Map
 		UIHashMap<UInt32, UIPanelState> panelStates;
+
+		// Scroll State Map
+		UIHashMap<UInt32, UIScrollState> scrollStates;
+
+	public:
+
+		Float32 UseScrollOffset();
 	};
 
-	struct UIInstance
+	struct UIDrawInstance
 	{
 		UIVector2 pos;
 		Float32 depth;
@@ -216,9 +278,9 @@ namespace ZE
 		UIVector4 color;
 		UIVector4 uvDim;
 
-		UIInstance() {}
+		UIDrawInstance() {}
 		
-		UIInstance(const UIVector2& pos, Float32 depth, const UIVector2& dimension, Float32 radius, const UIVector4& color, const UIVector4& uvDim)
+		UIDrawInstance(const UIVector2& pos, Float32 depth, const UIVector2& dimension, Float32 radius, const UIVector4& color, const UIVector4& uvDim)
 		{
 			this->pos = pos;
 			this->depth = depth;
@@ -228,7 +290,7 @@ namespace ZE
 			this->uvDim = uvDim;
 		}
 
-		UIInstance(const UIVector2& pos, Float32 depth, const UIVector2& dimension, Float32 radius, const UIVector4& color)
+		UIDrawInstance(const UIVector2& pos, Float32 depth, const UIVector2& dimension, Float32 radius, const UIVector4& color)
 		{
 			this->pos = pos;
 			this->depth = depth;
@@ -245,13 +307,16 @@ namespace ZE
 
 	public:
 		UIArray<UIVertex>& getVertices();
-		UIArray<UIInstance>& getInstances();
+		UIArray<UIDrawInstance>& getInstances();
 
 		UInt32 getTextureHandle() const { return m_textureHandle; }
 
 		bool isFont() const { return m_bFont; }
 		bool isUsingRectInstance() const { return m_bUsingRectInstance; }
 		bool isCrop() const { return m_bCrop; }
+
+		bool isDrawMask() const { return m_Mask != DRAW_MASK_NONE;  }
+		EDrawMaskProcess getDrawMask() const { return m_Mask; }
 
 		UIVector2 getDimension() const { return m_shapeDimension; }
 		UIVector2 getPos() const { return m_pos; }
@@ -262,17 +327,19 @@ namespace ZE
 		void reset();
 
 	protected:
-		UIArray<UIVertex> m_vertices;
-		UIArray<UIInstance> m_instances;
-
-		UInt32 m_textureHandle = 0;
-		Float32 m_roundness = 0.0f;
-		UIVector2 m_shapeDimension{ 0, 0 };
-		UIVector2 m_pos{ 0, 0 };
 		bool m_bFont = false;
 		bool m_bUsingRectInstance = false;
 		bool m_bCrop = false;
+		EDrawMaskProcess m_Mask = DRAW_MASK_NONE;
+
+		UInt32 m_textureHandle = 0;
+		Float32 m_roundness = 0.0f;
 		UInt32 m_layer = 0;
+		UIVector2 m_shapeDimension{ 0, 0 };
+		UIVector2 m_pos{ 0, 0 };
+
+		UIArray<UIVertex> m_vertices;
+		UIArray<UIDrawInstance> m_instances;
 	};
 
 	class UIDrawList
@@ -284,7 +351,7 @@ namespace ZE
 		virtual ~UIDrawList() { freeDrawItems(); }
 
 		Int32 itemCount() const;
-		UIDrawItem* getDrawItem(int _index) const;
+		UIDrawItem* getDrawItem(Int32 _index) const;
 		UIDrawItem* getNextDrawItem();
 		void reset();
 
@@ -293,16 +360,13 @@ namespace ZE
 		UIDrawItem* getTextureInstanceDrawItem(UInt32 _index);
 		UIDrawItem* getTextureDrawItem(UInt32 textureHandle);
 
-	protected:
-		static const UInt32 maxInstanceNumber = 2;
-		
-		UIHashMap<UInt32, UInt32> m_textureToDrawItemMap;
-		UIHashMap<UInt32, UInt32> m_textureToInstanceDrawItem;
+	protected:		
+		UInt32 m_count = 0;
 
 		UIArray<UIDrawItem*> m_drawItems;
 
-		UInt32 m_count = 0;
-
+		UIHashMap<UInt32, UInt32> m_textureToDrawItemMap;
+		UIHashMap<UInt32, UInt32> m_textureToInstanceDrawItem;
 	};
 
 	struct UIFontCharDesc
@@ -332,8 +396,8 @@ namespace ZE
 		void generateVertexBuffer(const UIChar* text, UIArray<UIVertex>& result, const UIVector2 pos, Float32 scale, Float32 depth, UIVector4 color);
 		void generateWrapTextVertexBuffer(const UIChar* text, UIArray<UIVertex>& result, const UIVector2 pos, Float32 scale, Float32 depth, UIVector4 color, Float32 maxWidth, ETextAlign textAlign);
 		
-		void generateInstanceBuffer(const UIChar* text, UIArray<UIInstance>& result, const UIVector2 pos, Float32 scale, Float32 depth, UIVector4 color);
-		void generateWrapTextInstanceBuffer(const UIChar* text, UIArray<UIInstance>& result, const UIVector2 pos, Float32 scale, Float32 depth, UIVector4 color, Float32 maxWidth, ETextAlign textAlign, Int32* lineCount = nullptr);
+		void generateInstanceBuffer(const UIChar* text, UIArray<UIDrawInstance>& result, const UIVector2 pos, Float32 scale, Float32 depth, UIVector4 color);
+		void generateWrapTextInstanceBuffer(const UIChar* text, UIArray<UIDrawInstance>& result, const UIVector2 pos, Float32 scale, Float32 depth, UIVector4 color, Float32 maxWidth, ETextAlign textAlign, Int32* lineCount = nullptr);
 
 		void release();
 
@@ -342,12 +406,13 @@ namespace ZE
 		Int32 calculateFirstLineWidth(const UIChar* text, Float32 scale, Int32 maxWidth);
 
 	protected:
-		UIArray<UIFontCharDesc> m_charDesc;
-		UIHashMap<UInt32, UInt32> m_charMap;
 		UInt32 m_fontSize;
 		UInt32 m_fontAtlasSize;
 		UInt32 m_textureHandle;
 		UIRenderer* m_renderer;
+
+		UIArray<UIFontCharDesc> m_charDesc;
+		UIHashMap<UInt32, UInt32> m_charMap;
 	};
 
 	class UITexture
@@ -398,6 +463,11 @@ namespace ZE
 		void SwapBuffer();
 		void SetLayer(Int32 layer) { m_currentLayer = layer; }
 
+		// Draw Mask
+		void PushRectMask(const UIRect& rect);
+		//void PushTextureMask(const UIRect& rect, UITexture* texture, ETextureScale textureScale = SCALE_IMAGE, const UIVector4& textureOffset = UIVector4(0.0f));
+		void PopMask();
+
 		UIDrawList* getCurrentDrawList() { return m_currentDrawList; }
 
 	protected:
@@ -406,6 +476,8 @@ namespace ZE
 		Float32 m_currentDepth = 0.00001f;
 		Int32 m_currentLayer = 0;
 		const Float32 m_step = 0.00001f;
+
+		UIArray<UIDrawItem*> PushMaskDrawStack;
 	};
 
 	class StringHelper
@@ -426,11 +498,11 @@ namespace ZE
 	// Button Style
 	struct UIStyle
 	{
-		UITexture* texture = nullptr;
-		UIVector2 textureSize;
-		ETextureScale textureScale = SCALE_IMAGE;
 		UIVector4 textureOffset;
 		UIVector4 fillColor;
+		UIVector2 textureSize;
+		UITexture* texture = nullptr;
+		ETextureScale textureScale = SCALE_IMAGE;
 	};
 
 	struct UIButtonStyle
@@ -446,6 +518,14 @@ namespace ZE
 	{
 		UIStyle slider;
 		UIButtonStyle sliderButton;
+	};
+
+	struct UIScrollBarStyle
+	{
+		Float32 scrollLineSize;
+		Float32 scrollButtonSize;
+		UIStyle scrollBar;
+		UIButtonStyle scrollButton;
 	};
 
 	struct UIPanelStyle
@@ -474,6 +554,15 @@ namespace ZE
 		UIChar cursorChar;
 	};
 
+	struct UIMenuStyle
+	{
+		UIFontStyle fontStyle;
+		UIStyle background;
+		UIStyle hover;
+		UIStyle selected;
+		Float32 menuPadding;
+	};
+
 	// Functions to use to draw everything
 	namespace UI
 	{
@@ -490,14 +579,28 @@ namespace ZE
 		extern UIFont* DefaultFont;
 		extern UITextInputStyle DefaultTextInputStyle;
 		extern UIFontStyle DefaultFontStyle;
+		extern UIMenuStyle DefaultMenuStyle;
+		extern UIMenuStyle DefaultSubMenuStyle;
+		extern UIScrollBarStyle DefaultScrollBarStyle;
 
 		// ID Stack
 		extern UIStack<UInt32> StackIDs;
 
 		// Getter
-		UIState* GetUIState();
+		Int32 GetScreenWidth();
+		Int32 GetScreenHeight();
+
+		UIRenderer* GetRenderer();
+
 		UInt32 GetUIIDFromString(const UIChar* textData, UInt32 length = 255);
 		UInt32 GetUIIDFromPointer(const void* pData);
+
+		// Interaction rect helper
+		void PushInteractionRect(const UIRect& rect);
+		void PopInteractionRect();
+		void ClearInteractionRect();
+		UIRect CalculateInteractionRect(const UIRect& rect);
+		bool CheckMouseInside(const UIRect& rect);
 
 		// Function
 		void Init(Int32 width, Int32 height);
@@ -515,10 +618,13 @@ namespace ZE
 		
 		// Update/Record keyboard button
 		// Key State: 0:pressed 1:release 2: repeat
-		void RecordKeyboardButton(UIChar keyChar, int keyState);
+		void RecordKeyboardButton(UIChar keyChar, Int32 keyState);
 		
 		// Update/Record keyboard text input
 		void RecordTextInput(UIChar keyChar);
+
+		// Record Mouse scroll input
+		void RecordMouseScroll(Float32 yOffset);
 
 		// ==============================================
 
@@ -540,12 +646,6 @@ namespace ZE
 		void DoRadioButtons(const UIChar** textArray, UInt32 textArrayLen, Int32* _selectionId, const UIButtonStyle& radioButtonStyle = DefaultRadioBtnStyle);
 		void DoRadioButtonsEx(const UIVector2& startPos, const UIChar** textArray, UInt32 textArrayLen, Int32* _selectionId, const UIButtonStyle& radioButtonStyle = DefaultRadioBtnStyle);
 
-		// Panel
-		void DoPanel(const UIRect& panelRect, const UIChar* text, Float32 padding, UIVector2& contentPos, bool& bClosed, const UIPanelStyle& style = DefaultPanelStyle);
-		
-		// Draggable Panel
-		void DoDragablePanel(UIRect& panelRect, const UIChar* text, Float32 padding, UIVector2& contentPos, const UIPanelStyle& style = DefaultPanelStyle);
-		
 		// Slider
 		void DoSlider(Float32* percent, const UISliderStyle& sliderStyle = DefaultSliderStyle);
 		void DoSliderEx(const UIRect& rect, Float32* percent, const UISliderStyle& sliderStyle = DefaultSliderStyle);
@@ -582,13 +682,62 @@ namespace ZE
 
 		// Start panel, all component/widgets go after this will be part of the panel
 		// @return true if panel is created and not closed
-		bool BeginPanel(const UIChar* panelLabel, const UIRect initialRect, const UIPanelStyle& style = DefaultPanelStyle);
+		bool BeginPanel(const UIChar* panelLabel, const UIRect initialRect, bool bAutoSize = false, const UIPanelStyle& style = DefaultPanelStyle);
 		
 		// End of the panel
 		void EndPanel();
 
-		// =================================================
+		// Begin List View
+		void BeginListView(const UIChar* listName, const UIRect& rect);
 
+		// End List View
+		void EndListView();
+
+		template<typename T, typename Func>
+		void DoListView(const UIChar* listName, const UIRect& rect, T* listItem, UInt32 itemCount, Func func)
+		{
+			BeginListView(listName, rect);
+			for (UInt32 i = 0; i < itemCount; i++)
+			{
+				func(listItem[i], i);
+			}
+			EndListView();
+		}
+
+		// Specialized function with default DoText
+		void DoListView(const UIChar* listName, const UIRect& rect, const UIChar** listItem, UInt32 itemCount);
+
+		// Begin Selection List View
+		void BeginSelectionListView(const UIChar* listName, const UIRect& rect, Int32& selection);
+
+		// Selection List View
+		// @return true if selectedIndex changed
+		bool DoSelectionListView(const UIChar* listName, const UIRect& rect, const UIChar** listItems, Int32& selectedIndex, UInt32 itemCount);
+
+		// Selection Item List
+		bool DoSelectionItemList(const UIRect& rect, const UIChar* listItem, const UInt32 currentIndex, Int32& selectedIndex);
+
+		// Menu Implementation
+
+		// Start Window Menu
+		void BeginMenu();
+
+		// Make window menu
+		bool DoMenu(const UIChar* menuLabel);
+
+		// End Menu
+		void EndMenu();
+
+		// Start Window sub-menu
+		void BeginSubMenu(Float32 subMenusWidth);
+
+		// Make window sub-menu
+		bool DoSubMenu(const UIChar* subMenuLabel, bool hasSubMenu = false);
+
+		// End sub menu
+		void EndSubMenu();
+
+		// Draw TextField
 		void DoText(const UIChar* text, const UIVector4& fillColor = UIVector4(1.0f), const UIFontStyle& fontStyle = DefaultFontStyle);
 
 		void DrawTextInPos(UIVector2& pos, const UIChar* text, const UIVector4& fillColor, UIFont* font = DefaultFont, Float32 scale = 1.0f);
@@ -604,13 +753,19 @@ namespace ZE
 		
 		void DrawTextureInPos(const UIVector2& pos, UITexture* texture, const UIVector4& colorMultiplier, ETextureScale textureScale = SCALE_IMAGE, const UIVector4& scaleOffset = UIVector4(0.0f));
 		void DrawTextureInPos(const UIRect& rect, UITexture* texture, const UIVector4& colorMultiplier, ETextureScale textureScale = SCALE_IMAGE, const UIVector4& scaleOffset = UIVector4(0.0f));
+		
+		// Draw Scroll Bar
+		Float32 DoScrollBar(const UIVector2& pos, Float32 currentOffset, Float32 directionSize, Float32 actualSize, EDirection scrollDirection = DIR_VERTICAL, const UIScrollBarStyle& scrollBarStyle = DefaultScrollBarStyle);
 
+		// =================================================
+
+		// Process all draw list and render to screen
 		void ProcessDrawList();
 
 		// Texture Load
 		UITexture* LoadTexture(const char* filePath);
 
-		// Utils
+		// Utility functions(s)
 		Float32 Lerp(Float32 start, Float32 next, Float32 alpha);
 
 		// Platform Implementation

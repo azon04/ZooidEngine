@@ -4,6 +4,8 @@
 
 #include "ZEngine.h"
 
+#include "Application/Application.h"
+
 #include "Renderer/IGPUTexture.h"
 #include "Memory/Handle.h"
 #include "Events/Events.h"
@@ -203,6 +205,9 @@ namespace ZE
 		ZEINFO("Initializing Zooid UI...");
 		UIManager::Init(_gameContext);
 
+		// Application setup
+		Application::GetApplication()->Setup(_gameContext);
+
 #if DEFERRED_RENDERING
 		BaseDeferredRenderGraph::GetInstance()->init(_gameContext);
 #else
@@ -230,6 +235,9 @@ namespace ZE
 #if TEST_DEFERRED_RENDERING
 		BaseDeferredRenderGraph::GetInstance()->release(_gameContext);
 #endif
+
+		// Application Clean
+		Application::GetApplication()->Clean(_gameContext);
 
 		IGPUState::ClearGPUStates();
 		UIManager::Destroy();
@@ -292,6 +300,9 @@ namespace ZE
 			_gameContext->getPhysics()->DrawDebug();
 		}
 
+		// Application Clean
+		Application::GetApplication()->Tick(_gameContext, deltaTime);
+
 #if ZE_RENDER_MULTITHREAD
 		while (g_drawReady) 
 		{
@@ -300,17 +311,17 @@ namespace ZE
 #endif
 
 		// Draw Base Lines
-		DebugRenderer::DrawMatrixBasis(Matrix4x4());
+		//DebugRenderer::DrawMatrixBasis(Matrix4x4());
 		//DebugRenderer::DrawTextWorld("Zooid Engine", Matrix4x4());
 		//DebugRenderer::DrawTextScreen("Zooid Engine", Vector2(10, 10), Vector3(1.0f), 0.5f);
 
 		// Debug Options Menu
-		if (ZE::UI::BeginPanel("Debug Options", UIRect(UIVector2{ gGameContext->getRenderer()->GetWidth() - 300,10 }, UIVector2{ 250, 100 })))
+		/*if (ZE::UI::BeginPanel("Debug Options", UIRect(UIVector2{ gGameContext->getRenderer()->GetWidth() - 300,10 }, UIVector2{ 250, 100 }), true))
 		{
 			gDebugOptions.DebugDrawOptions.bDrawCullShapes = ZE::UI::DoCheckBox("DebugDraw:CullShape", gDebugOptions.DebugDrawOptions.bDrawCullShapes);
 			gDebugOptions.DebugDrawOptions.bDrawPhysicsShapes = ZE::UI::DoCheckBox("DebugDraw:PhysicsShape", gDebugOptions.DebugDrawOptions.bDrawPhysicsShapes);
 			ZE::UI::EndPanel();
-		}
+		}*/
 
 		DrawList* drawList = _gameContext->getDrawList();
 
@@ -376,7 +387,7 @@ namespace ZE
 		// Write on Total Delta time
 		g_gameThreadTime = MathOps::FLerp(g_gameThreadTime, (Float32)deltaTime, 0.01f);
 
-		if (ZE::UI::BeginPanel("Performance", UIRect(UIVector2{ 10,10 }, UIVector2{ 250, 150 })))
+		/*if (ZE::UI::BeginPanel("Performance", UIRect(UIVector2{ 10,10 }, UIVector2{ 250, 150 }), true))
 		{
 			char buffer[256];
 
@@ -394,7 +405,7 @@ namespace ZE
 			ZE::UI::DoText(buffer);
 
 			ZE::UI::EndPanel();
-		}
+		}*/
 
 		// UI End Frame
 		ZE::UI::EndFrame();

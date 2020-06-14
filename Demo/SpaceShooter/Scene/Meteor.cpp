@@ -4,7 +4,7 @@
 #include "ZooidEngine/FileSystem/DirectoryHelper.h"
 #include "ZooidEngine/Memory/MemoryManager.h"
 
-namespace SpaceShooter
+namespace ZE
 {
 	IMPLEMENT_CLASS_1(Meteor, ZE::RenderComponent)
 

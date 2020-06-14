@@ -2,7 +2,7 @@
 
 #include "Scene/RenderComponent.h"
 
-namespace PhysicsSandBox
+namespace ZE
 {
 	class ControlledComponent : public ZE::RenderComponent
 	{

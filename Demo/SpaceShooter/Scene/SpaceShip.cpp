@@ -8,7 +8,7 @@
 
 #include <windows.h>
 
-namespace SpaceShooter
+namespace ZE
 {
 	IMPLEMENT_CLASS_1(SpaceShip, ZE::RenderComponent);
 
@@ -17,8 +17,8 @@ namespace SpaceShooter
 		this->loadMeshFromFile(ZE::GetResourcePath("SpaceShooter/Mesh/Starship.meshz").c_str());
 
 		ZE::RenderComponent::setupComponent();
-		addEventDelegate(ZE::Event_KEY_DOWN, &SpaceShooter::SpaceShip::handleMovementInput);
-		addEventDelegate(ZE::Event_KEY_UP, &SpaceShooter::SpaceShip::handleMovementInput);
+		addEventDelegate(ZE::Event_KEY_DOWN, &SpaceShip::handleMovementInput);
+		addEventDelegate(ZE::Event_KEY_UP, &SpaceShip::handleMovementInput);
 	}
 
 	void SpaceShip::handleMovementInput(ZE::Event* evt)

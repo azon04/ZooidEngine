@@ -10,7 +10,7 @@
 
 #include "Logging/Log.h"
 
-namespace PhysicsSandBox
+namespace ZE
 {
 	IMPLEMENT_CLASS_1(ControlledComponent, ZE::RenderComponent)
 
@@ -44,7 +44,7 @@ namespace PhysicsSandBox
 				if (hit.BlockedComponent)
 				{
 					ZE::IPhysicsBodyHolder* pPhysicsBodyHolder = dynamic_cast<ZE::IPhysicsBodyHolder*>(hit.BlockedComponent);
-					pPhysicsBodyHolder->AddForceAtPos(hit.BlockedPosition, -1 * m_worldTransform.getN(), 10.0f, true);
+					pPhysicsBodyHolder->AddForceAtPos(hit.BlockedPosition, -1 * m_worldTransform.getN(), 50.0f, true);
 				}
 			}
 		}

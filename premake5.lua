@@ -280,6 +280,21 @@ project "SpaceShooter"
 
     setup_game_project()
 
+project "SceneEditor"
+    location (project_dir .. "/".. _ACTION .."/Demo")
+    kind "WindowedApp"
+    language "C++"
+
+    files
+    {
+        "Demo/SceneEditor/**"
+    }
+
+    debugdir "./"
+    debugargs { "Basic/Scene/LightTest.scz --log" }
+
+    setup_game_project()
+
 -- Tools Projects
 group "Tools"
 

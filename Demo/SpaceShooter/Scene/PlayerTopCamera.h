@@ -2,7 +2,7 @@
 
 #include "ZooidEngine/Scene/DebugCamera.h"
 
-namespace SpaceShooter
+namespace ZE
 {
 	class PlayerTopCamera : public ZE::CameraComponent
 	{
