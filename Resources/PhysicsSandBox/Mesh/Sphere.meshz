@@ -1,0 +1,3 @@
+vbuff Basic/VertexBuffer/Sphere.vbuff
+mat Basic/Material/Checker.matz
+physics single SPHERE 1.0 Mass 1.0

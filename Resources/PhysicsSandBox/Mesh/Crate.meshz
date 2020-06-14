@@ -1,3 +1,3 @@
 vbuff Basic/VertexBuffer/Cube.vbuff
-mat Basic/Material/Crate.matz
+mat Sponza/Material/PBR/pbr00.matz
 physics single BOX 0.5 0.5 0.5 Mass 1.0

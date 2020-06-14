@@ -1,63 +1,150 @@
 SceneName TestMap
 FileVersion 1.0
-ComponentCount 11
+ComponentCount 21
+Skybox SkyBox1
+BEGIN
+Texture Basic/Texture/Factory_Catwalk_2k.hdr
+END
 LightComponent DirLight
 BEGIN
 LightType 0
-R 150.0 0.0 0.0
+R 30.0 0.0 0.0
 T 0.0 3.0 3.0
 END
 RenderComponent Floor
 BEGIN
 Mesh PhysicsSandBox/Mesh/Floor.meshz
-S 20.0 1.0 20.0
+S 50.0 1.0 50.0
 END
-RenderComponent Crate_1
+RenderComponent Wall_1
 BEGIN
 Mesh PhysicsSandBox/Mesh/BrickWall.meshz
-S 1.0 1.0 1.0
+Material Sponza/Material/PBR/pbr04.matz
+S 20.0 1.0 1.0
+R 0.0 0.0 0.0
+T 0.1 0.5 -16.0
+END
+RenderComponent Wall_2
+BEGIN
+Mesh PhysicsSandBox/Mesh/BrickWall.meshz
+Material Sponza/Material/PBR/pbr04.matz
+S 1.0 1.0 30.0
+R 0.0 0.0 0.0
+T 10.0 0.5 0.0
+END
+RenderComponent Wall_3
+BEGIN
+Mesh PhysicsSandBox/Mesh/BrickWall.meshz
+Material Sponza/Material/PBR/pbr04.matz
+S 1.0 1.0 30.0
+R 0.0 0.0 0.0
+T -10.0 0.5 0.0
+END
+RenderComponent Wall_4
+BEGIN
+Mesh PhysicsSandBox/Mesh/BrickWall.meshz
+Material Sponza/Material/PBR/pbr04.matz
+S 20.0 1.0 1.0
+R 0.0 0.0 0.0
+T 0.1 0.5 16.0
+END
+RenderComponent Ball_Player
+BEGIN
+Mesh PhysicsSandBox/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr00.matz
+S 0.5 0.5 0.5
+R 0.0 0.0 0.0
+T 0.0 0.5 3.5
+Physics true
+END
+RenderComponent Ball_1
+BEGIN
+Mesh PhysicsSandBox/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr00.matz
+S 0.5 0.5 0.5
 R 0.0 0.0 0.0
 T 0.0 0.5 0.0
 Physics true
 END
-RenderComponent Crate_2
+RenderComponent Ball_2
 BEGIN
-Mesh PhysicsSandBox/Mesh/BrickWall.meshz
-S 1.0 1.0 1.0
+Mesh PhysicsSandBox/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr04.matz
+S 0.5 0.5 0.5
 R 0.0 0.0 0.0
-T 0.0 5.0 0.0
+T 0.5 0.5 -1.0
 Physics true
 END
-RenderComponent Crate_3
+RenderComponent Ball_3
 BEGIN
-Mesh PhysicsSandBox/mesh/BrickWall.meshz
-S 1.0 1.0 1.0
+Mesh PhysicsSandBox/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr00.matz
+S 0.5 0.5 0.5
 R 0.0 0.0 0.0
-T 0.0 1.5 0.0
+T -0.5 0.5 -1.0
 Physics true
 END
-RenderComponent Crate_4
+RenderComponent Ball_4
 BEGIN
-Mesh PhysicsSandBox/mesh/BrickWall.meshz
-S 1.0 1.0 1.0
+Mesh PhysicsSandBox/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/plastic.matz
+S 0.5 0.5 0.5
 R 0.0 0.0 0.0
-T 1.0 0.5 0.0
+T 0.0 0.5 -2.0
 Physics true
 END
-RenderComponent Crate_5
+RenderComponent Ball_5
 BEGIN
-Mesh PhysicsSandBox/mesh/BrickWall.meshz
-S 1.0 1.0 1.0
+Mesh PhysicsSandBox/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/rusted_iron.matz
+S 0.5 0.5 0.5
 R 0.0 0.0 0.0
-T -1.0 0.5 0.0
+T -1.0 0.5 -2.0
 Physics true
 END
-RenderComponent Crate_6
+RenderComponent Ball_6
 BEGIN
-Mesh PhysicsSandBox/mesh/BrickWall.meshz
-S 1.0 1.0 1.0
+Mesh PhysicsSandBox/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr03.matz
+S 0.5 0.5 0.5
 R 0.0 0.0 0.0
-T 1.0 0.5 -1.5
+T 1.0 0.5 -2.0
+Physics true
+END
+RenderComponent Ball_7
+BEGIN
+Mesh PhysicsSandBox/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/plastic.matz
+S 0.5 0.5 0.5
+R 0.0 0.0 0.0
+T 0.5 0.5 -3.0
+Physics true
+END
+RenderComponent Ball_8
+BEGIN
+Mesh PhysicsSandBox/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/rusted_iron.matz
+S 0.5 0.5 0.5
+R 0.0 0.0 0.0
+T -0.5 0.5 -3.0
+Physics true
+END
+RenderComponent Ball_9
+BEGIN
+Mesh PhysicsSandBox/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr03.matz
+S 0.5 0.5 0.5
+R 0.0 0.0 0.0
+T 1.5 0.5 -3.0
+Physics true
+END
+RenderComponent Ball_10
+BEGIN
+Mesh PhysicsSandBox/Mesh/Sphere.meshz
+Material Sponza/Material/PBR/pbr03.matz
+S 0.5 0.5 0.5
+R 0.0 0.0 0.0
+T -1.5 0.5 -3.0
 Physics true
 END
 BoxComponent Box_1
