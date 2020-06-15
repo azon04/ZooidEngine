@@ -1578,6 +1578,16 @@ namespace ZE
 		EndListView();
 	}
 
+	void UI::DoListView(const UIChar* listName, const UIRect& rect, ItemListProvider* ItemProvider)
+	{
+		BeginListView(listName, rect);
+		for (UInt32 i = 0; i < ItemProvider->count(); i++)
+		{
+			DoText(ItemProvider->getItemAt(i));
+		}
+		EndListView();
+	}
+
 	void UI::BeginSelectionListView(const UIChar* listName, const UIRect& rect, Int32& selection)
 	{
 		const UInt32 _id = GetUIIDFromString(listName);
@@ -1628,6 +1638,19 @@ namespace ZE
 		for (UInt32 i = 0; i < itemCount; i++)
 		{
 			selectionChanged |= DoSelectionItemList(rect, listItem[i], i, selection);
+		}
+		EndListView();
+
+		return selectionChanged;
+	}
+
+	bool UI::DoSelectionListView(const UIChar* listName, const UIRect& rect, ItemListProvider* itemProvider, Int32& selectedIndex)
+	{
+		bool selectionChanged = false;
+		BeginSelectionListView(listName, rect, selectedIndex);
+		for (UInt32 i = 0; i < itemProvider->count(); i++)
+		{
+			selectionChanged |= DoSelectionItemList(rect, itemProvider->getItemAt(i), i, selectedIndex);
 		}
 		EndListView();
 

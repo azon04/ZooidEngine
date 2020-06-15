@@ -98,13 +98,6 @@ namespace ZE
 				hashKeyValue.m_occupied = 0;
 				m_length--;
 				put_internal(hashKeyValue.m_key, hashKeyValue.m_value);
-
-#if HASH_MAP_PROBING == HASH_MAP_LINEAR_PROBING
-				index = (index + 1) % m_capacity;
-#elif HASH_MAP_PROBING == HASH_MAP_QUADRATIC_PROBING
-				index = (initial_index + (q_offset * q_offset)) % m_capacity;
-				q_offset++;
-#endif
 			}
 
 			while (get(index).m_occupied == 1)
@@ -295,13 +288,6 @@ namespace ZE
 				hashKeyValue.m_occupied = 0;
 				m_length--;
 				put_internal(hashKeyValue.m_key.c_str(), hashKeyValue.m_value);
-
-#if HASH_MAP_PROBING == HASH_MAP_LINEAR_PROBING
-				index = (index + 1) % m_capacity;
-#elif HASH_MAP_PROBING == HASH_MAP_QUADRATIC_PROBING
-				index = (initial_index + (q_offset * q_offset)) % m_capacity;
-				q_offset++;
-#endif
 			}
 
 			while (get(index).m_occupied == 1)

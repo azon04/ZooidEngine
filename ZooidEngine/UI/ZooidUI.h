@@ -562,6 +562,26 @@ namespace ZE
 		UIStyle selected;
 		Float32 menuPadding;
 	};
+	
+	// ItemListProvider is used to populate item to view in ListView and SelectionListView
+	class ItemListProvider
+	{
+	public:
+		virtual const UIChar* getItemAt(UInt32 index) const = 0;
+		virtual Int32 count() const = 0;
+	};
+
+	class TextItemListProvider : public ItemListProvider
+	{
+	public:
+		TextItemListProvider(const UIChar** itemList, UInt32 count) : m_itemList(itemList), m_count(count) {}
+		virtual const UIChar* getItemAt(UInt32 index) const { return m_itemList[index]; }
+		virtual Int32 count() const { return m_count; }
+
+	protected:
+		const UIChar** m_itemList;
+		UInt32 m_count;
+	};
 
 	// Functions to use to draw everything
 	namespace UI
@@ -707,12 +727,19 @@ namespace ZE
 		// Specialized function with default DoText
 		void DoListView(const UIChar* listName, const UIRect& rect, const UIChar** listItem, UInt32 itemCount);
 
+		// Specialize function with Item List Provider
+		void DoListView(const UIChar* listName, const UIRect& rect, ItemListProvider* itemProvider);
+
 		// Begin Selection List View
 		void BeginSelectionListView(const UIChar* listName, const UIRect& rect, Int32& selection);
 
 		// Selection List View
 		// @return true if selectedIndex changed
 		bool DoSelectionListView(const UIChar* listName, const UIRect& rect, const UIChar** listItems, Int32& selectedIndex, UInt32 itemCount);
+
+		// Selection List View with ItemListProvider
+		// @return true if selectedIndex changed
+		bool DoSelectionListView(const UIChar* listName, const UIRect& rect, ItemListProvider* itemProvider, Int32& selectedIndex);
 
 		// Selection Item List
 		bool DoSelectionItemList(const UIRect& rect, const UIChar* listItem, const UInt32 currentIndex, Int32& selectedIndex);

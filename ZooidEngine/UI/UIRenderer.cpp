@@ -70,6 +70,10 @@ namespace ZE
 		Handle m_hInstanceTextGPUBufferArray;
 
 		Array<Handle> textureHandles;
+
+		// Depth Stencil State
+		RenderDepthStencilState m_state;
+		IGPUDepthStencilState* m_gpuState;
 	};
 
 	ZE_UIRenderer::ZE_UIRenderer()
@@ -183,6 +187,10 @@ namespace ZE
 				m_drawBufferArray->SetupBufferArray(m_drawGPUBuffer, nullptr, nullptr);
 			}
 		}
+
+		// Create Depth Stencil State
+		m_state = TRenderDepthStencilState <false, true, true, ERendererCompareFunc::ALWAYS, ERendererCompareFunc::ALWAYS, 0, 0, 0>::GetStatic();
+		m_gpuState = gameContext->getRenderZooid()->CreateDepthStencilState(m_state).getObject<IGPUDepthStencilState>();
 	}
 
 	void ZE_UIRenderer::ProcessCurrentDrawList()
@@ -191,7 +199,6 @@ namespace ZE
 		IRenderer* renderer = gameContext->getRenderer();
 
 		// Disable Depth Test
-
 		renderer->SetRenderDepthStencilState(TRenderDepthStencilState< 
 			false,
 			false,
@@ -214,6 +221,7 @@ namespace ZE
 		// Reset Renderer Feature
 		renderer->SetRenderBlendState(DefaultRenderBlendState::GetGPUState());
 		renderer->SetRenderDepthStencilState(DefaultDepthStencilState::GetGPUState());
+
 	}
 
 	void ZE_UIRenderer::Destroy()
@@ -297,6 +305,41 @@ namespace ZE
 
 		bool isFont = drawItem->getTextureHandle() && drawItem->isFont();
 		bool isUsingRect = drawItem->isUsingRectInstance();
+
+		if (drawItem->isDrawMask())
+		{
+			m_state.StencilMask = 0xFF;
+			m_state.StencilEnabled = true;
+			m_state.StencilTestFunc = ALWAYS;
+			m_state.StencilWriteMask = 0xFF;
+			m_state.StencilFailOp = DS_OP_KEEP;
+			m_state.DepthFailOp = DS_OP_KEEP;
+
+			if (drawItem->getDrawMask() == DRAW_MASK_PUSH)
+			{
+				m_state.StencilRefMask++;
+				m_state.DepthStencilPassOp = DS_OP_INCR;
+			}
+			else
+			{
+				m_state.DepthStencilPassOp = DS_OP_DECR;
+			}
+		}
+		else if(m_state.StencilRefMask)
+		{
+			m_state.StencilEnabled = true;
+			m_state.StencilWriteMask = 0x00;
+			m_state.StencilTestFunc = EQUAL;
+			m_state.StencilMask = 0xFF;
+		}
+		else
+		{
+			m_state.StencilEnabled = false;
+		}
+
+		m_gpuState->setup(m_state);
+
+		mainRenderer->SetRenderDepthStencilState(m_gpuState);
 		
 		IGPUBufferArray* bufferArray = isUsingRect ? m_instanceGPUBufferArray : m_drawBufferArray;
 		IShaderChain* shader = m_drawShader;
@@ -357,6 +400,14 @@ namespace ZE
 		}
 
 		shader->unbind();
+
+		if (drawItem->isDrawMask())
+		{
+			if (drawItem->getDrawMask() == DRAW_MASK_POP)
+			{
+				m_state.StencilRefMask--;
+			}
+		}
 	}
 
 	ZE::UIRenderer* UI::Platform::CreateRenderer()
