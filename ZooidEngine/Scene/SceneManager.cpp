@@ -164,7 +164,7 @@ namespace ZE
 
 		ZELOG(LOG_GAME, Log, "Read component in scene with name \"%s\"", buff);
 
-		m_componentMap.put(buff, compHandle);
+		addComponent(String(buff), compHandle);
 
 		// BEGIN
 		fileReader->readNextString(buff);
@@ -395,6 +395,12 @@ namespace ZE
 
 		pComp->setupComponent();
 		parent->addChild(pComp);
+	}
+
+	void SceneManager::addComponent(const String& name, Handle componentHandle)
+	{
+		m_componentMap.put(name.const_str(), componentHandle);
+		m_cachedCompNames.push_back(name);
 	}
 
 	ZE::Handle SceneManager::getCompByName(const char* name)

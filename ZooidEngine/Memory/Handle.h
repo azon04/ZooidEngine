@@ -51,7 +51,7 @@ namespace ZE
 			if(pCache == NULL)
 				return m_poolIndex != INVALID_UINT && m_blockIndex != INVALID_UINT;
 			else 
-				return true;
+				return MemoryManager::GetInstance() != nullptr;
 		}
 		
 		template<typename T>

@@ -5,6 +5,7 @@
 #include "Scene/DebugCamera.h"
 #include "Scene/Light/LightComponent.h"
 #include "Scene/Skybox.h"
+#include "Scene/RenderComponent.h"
 
 // Resource Managers
 #include "ResourceManagers/MeshManager.h"
@@ -35,6 +36,7 @@ namespace ZE {
 		LightComponent::RegClass();
 		AnimationComponent::RegClass();
 		Skybox::RegClass();
+		RenderComponent::RegClass();
 
 		// Register Resource Classes
 		Material::RegClass();
