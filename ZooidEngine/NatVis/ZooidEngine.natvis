@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+
+  <!-- String.h -->
+  <Type Name="ZE::String">
+    <DisplayString>{{ value={(char*)m_handle.pCache,na}, len={m_handle.m_size-1} }}</DisplayString>
+  </Type>
+  
+  <!-- Array.h -->
+  <Type Name="ZE::Array&lt;*&gt;">
+    <DisplayString>{{ length={m_length}, capacity={m_capacity} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]"> m_length </Item>
+      <Item Name="[capacity]"> m_capacity </Item>
+      <ArrayItems>
+        <Size>m_length</Size>
+        <ValuePointer>m_debugPointer</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  
+  <!-- HashKeyValue in HashMap.h -->
+  <Type Name="ZE::HashKeyValue&lt;*,*&gt;">
+    <DisplayString Condition="m_occupied==1">{{ key={m_key}, value={m_value} }}</DisplayString>
+    <DisplayString Condition="m_occupied==0">{{ empty }}</DisplayString>
+    <Expand>
+      <Item Name="[key]"> m_key </Item>
+      <Item Name="[value]"> m_value </Item>
+      <Item Name="[hash]">m_hashKey</Item>
+    </Expand>
+  </Type>
+  
+  <!-- HashMap.h -->
+  <Type Name="ZE::HashMap&lt;*,*,*&gt;">
+    <DisplayString>{{ length={m_length}, capacity={m_capacity} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]"> m_length </Item>
+      <Item Name="[capacity]"> m_capacity </Item>
+      <ArrayItems>
+        <Size>m_capacity</Size>
+        <ValuePointer>m_debugPointer</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+</AutoVisualizer>
