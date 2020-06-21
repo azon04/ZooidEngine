@@ -74,6 +74,9 @@ namespace ZE
 			m_handle = Handle(size * sizeof(T));
 			MemoryHelper::Zero(m_handle.getObject(), m_handle.getCapacity());
 			
+#if _DEBUG
+			m_debugPointer = (T*)m_handle.getObject();
+#endif
 			m_capacity = size;
 			m_length = 0;
 
@@ -125,6 +128,10 @@ namespace ZE
 			}
 
 			m_capacity = size;
+
+#if _DEBUG
+			m_debugPointer = (T*)m_handle.getObject();
+#endif
 		}
 
 		FORCEINLINE T& operator[](int index)
@@ -296,6 +303,10 @@ namespace ZE
 		Handle m_handle;
 		int m_length;
 		int m_capacity;
+
+#if _DEBUG
+		T* m_debugPointer;
+#endif
 
 	};
 }

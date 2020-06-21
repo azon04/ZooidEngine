@@ -159,7 +159,7 @@ namespace ZE
 		char* const_str() const { return (char*)(m_handle.isValid() ? m_handle.getObjectConst() : nullptr); }
 		char* c_str() { return m_handle.isValid() ? m_handle.getObject<char>() : nullptr; }
 
-		Int32 length() { return StringFunc::Length(c_str()); }
+		Int32 length() const { return StringFunc::Length(const_str()); }
 		Handle getHandle() const { return m_handle; }
 
 		Handle m_handle;
