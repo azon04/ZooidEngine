@@ -9,6 +9,8 @@
 	platArgs.rawCommandLine = lpCmdLine; \
 	ZE::Platform::Init(platArgs);
 
+#define ZE_POSTINITPLATFORM() ZE::Platform::PostInit();
+
 #define ZE_DESTROYPLATFORM() ZE::Platform::Destroy(); \
 	return ZE::Platform::GetExitErrorCode();
 

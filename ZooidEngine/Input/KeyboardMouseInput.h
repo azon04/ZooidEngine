@@ -3,6 +3,7 @@
 
 #include "GameObjectModel/Component.h"
 #include "Utils/PrimitiveTypes.h"
+#include "Keys.h"
 
 namespace ZE
 {
@@ -33,10 +34,13 @@ namespace ZE
 			return ( m_keyStates[keyId] & 0x80 ) > 0;
 		}
 
+		void setKey(Short keyId, KeyState::KeyStateEnum keyState);
+
+		void setMousePosition(int mouseX, int mouseY);
+
 	protected:
 
-		Byte m_keyStates[256];
-		Byte m_prevState[256];
+		Byte m_keyStates[256] = { 0 };
 
 		int m_mouseX;
 		int m_mouseY;

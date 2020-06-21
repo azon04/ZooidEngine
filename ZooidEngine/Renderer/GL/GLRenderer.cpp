@@ -12,10 +12,6 @@
 
 #include "ResourceManagers/ShaderManager.h"
 
-#if defined(_WIN32) || defined(_WIN64)
-	#define GLFW_EXPOSE_NATIVE_WIN32
-#endif
-
 #include "GLFW/glfw3native.h"
 #include <cstring>
 
@@ -70,11 +66,6 @@ namespace ZE
 			return;
 		}
 		glfwMakeContextCurrent(m_window);
-
-#if defined(_WIN32) || defined(_WIN64)
-		// Setup WinWindow
-		m_winWindow = glfwGetWin32Window(m_window);
-#endif
 
 		// Init glfw
 		glewExperimental = GL_TRUE;

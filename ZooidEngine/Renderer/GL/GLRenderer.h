@@ -80,16 +80,10 @@ public:
 	virtual void RetreiveQueryResult(ERenderQueryType type, UInt32 queryId, UInt32* result) override;
 	virtual void EndQuery(ERenderQueryType type, UInt32 queryId) override;
 
-
-#if defined(_WIN32) || defined(_WIN64)
-	virtual HWND getWinWindow() override
+	FORCEINLINE virtual void* getWindowContext()
 	{
-		return m_winWindow;
+		return m_window;
 	}
-
-private:
-	HWND m_winWindow;
-#endif
 
 private:
 	

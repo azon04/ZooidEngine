@@ -45,4 +45,8 @@
 	if( StringFunc::Compare(InText, #OutVar) == 0) \
 	{ return OutVar; }
 
+#ifndef ZE_RENDER_OPENGL
+#define ZE_RENDER_OPENGL 0
+#endif
+
 #endif

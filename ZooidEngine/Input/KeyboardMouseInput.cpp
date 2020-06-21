@@ -6,11 +6,6 @@
 #include "Memory/MemoryHelper.h"
 #include "Renderer/IRenderer.h"
 
-#if defined(_WIN32) || defined(_WIN64) 
-#include <Windows.h>
-#else
-#endif
-
 namespace ZE 
 {
 
@@ -19,8 +14,6 @@ namespace ZE
 	void KeyboardMouseInput::setupComponent()
 	{
 		addEventDelegate(Event_UPDATE, &KeyboardMouseInput::handleUpdate);
-		GetKeyboardState(m_keyStates);
-		GetKeyboardState(m_prevState);
 
 		m_isCurrentDragged = false;
 	}
@@ -29,50 +22,23 @@ namespace ZE
 	{
 		Event_UPDATE* pEventUpdate = (Event_UPDATE*)event;
 
-		POINT p;
-		if (GetCursorPos(&p))
+		static const Short dragKeys[] = { Key::MouseLeftButton, Key::MouseRightButton };
+
+		for (int i = 0; i < 2; ++i)
 		{
-			ScreenToClient(m_gameContext->getRenderer()->getWinWindow(), &p);
-			m_mouseX = p.x;
-			m_mouseY = p.y;
-		}
-		
-		if (GetKeyboardState(m_keyStates))
-		{
-			for (Short i = 0; i < 256; i++)
+			const bool mouseHold = IsKeyDown(dragKeys[i]);
+
+			if (mouseHold && (!m_isCurrentDragged || m_currentDragKey != dragKeys[i]))
 			{
-				if (m_keyStates[i] ^ m_prevState[i])
-				{
-					if (m_keyStates[i] & 0x80)
-					{
-						Handle handle("InputEvent", sizeof(Event_KEY_DOWN));
-						Event_KEY_DOWN* pEvent = new(handle) Event_KEY_DOWN;
-						pEvent->m_keyId = i;
-						m_gameContext->getEventDispatcher()->addEvent(handle, EVENT_INPUT);	
-
-						if ((i == VK_LBUTTON || i == VK_RBUTTON) && (!m_isCurrentDragged || m_currentDragKey != i))
-						{
-							m_currentDragTime = 0.0f;
-							m_isCurrentDragged = true;
-							m_startDragX = m_mouseX;
-							m_startDragY = m_mouseY;
-							m_currentDragKey = i;
-						}
-					}
-					else
-					{
-						Handle handle("InputEvent", sizeof(Event_KEY_UP));
-						Event_KEY_UP* pEvent = new(handle) Event_KEY_UP;
-						pEvent->m_keyId = i;
-						m_gameContext->getEventDispatcher()->addEvent(handle, EVENT_INPUT);
-
-						if ((i == VK_LBUTTON || i == VK_RBUTTON ) && m_isCurrentDragged && m_currentDragKey == i)
-						{
-							m_isCurrentDragged = false;
-						}
-					}
-					m_prevState[i] = m_keyStates[i];
-				}
+				m_currentDragTime = 0.0f;
+				m_isCurrentDragged = true;
+				m_startDragX = m_mouseX;
+				m_startDragY = m_mouseY;
+				m_currentDragKey = dragKeys[i];
+			}
+			else if (!mouseHold && m_isCurrentDragged && m_currentDragKey == dragKeys[i])
+			{
+				m_isCurrentDragged = false;
 			}
 		}
 
@@ -97,6 +63,42 @@ namespace ZE
 			}
 		}
 
+	}
+
+	void KeyboardMouseInput::setKey(Short keyId, KeyState::KeyStateEnum keyState)
+	{
+		if (keyState == KeyState::Pressed)
+		{
+			const bool bTriggerEvent = !IsKeyDown(keyId);
+			m_keyStates[keyId] = 0xFF;
+
+			if (bTriggerEvent)
+			{
+				Handle handle("InputEvent", sizeof(Event_KEY_DOWN));
+				Event_KEY_DOWN* pEvent = new(handle) Event_KEY_DOWN;
+				pEvent->m_keyId = keyId;
+				m_gameContext->getEventDispatcher()->addEvent(handle, EVENT_INPUT);
+			}
+		}
+		else if( keyState == KeyState::Released )
+		{
+			const bool bTriggerEvent = IsKeyDown(keyId);
+			m_keyStates[keyId] = 0x00;
+
+			if (bTriggerEvent)
+			{
+				Handle handle("InputEvent", sizeof(Event_KEY_UP));
+				Event_KEY_UP* pEvent = new(handle) Event_KEY_UP;
+				pEvent->m_keyId = keyId;
+				m_gameContext->getEventDispatcher()->addEvent(handle, EVENT_INPUT);
+			}
+		}
+	}
+
+	void KeyboardMouseInput::setMousePosition(int mouseX, int mouseY)
+	{
+		m_mouseX = mouseX;
+		m_mouseY = mouseY;
 	}
 
 }

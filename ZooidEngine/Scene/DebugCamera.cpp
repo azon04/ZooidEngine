@@ -5,8 +5,7 @@
 #include "Input/KeyboardMouseInput.h"
 #include "ZEGameContext.h"
 
-// #TODO get rid of Windows here when we have Key abstraction
-#include <Windows.h>
+#include "Input/Keys.h"
 
 namespace ZE
 {
@@ -54,22 +53,22 @@ namespace ZE
 			m_velocity.setX(m_velocity.getX() + 2.0f);
 		}
 
-		if (pRealEvent->m_keyId == VK_UP)
+		if (pRealEvent->m_keyId == Key::UpArrow)
 		{
 			m_rotation.setX(m_rotation.getX() + 20.0f);
 		}
 
-		if (pRealEvent->m_keyId == VK_DOWN)
+		if (pRealEvent->m_keyId == Key::DownArrow)
 		{
 			m_rotation.setX(m_rotation.getX() - 20.0f);
 		}
 
-		if (pRealEvent->m_keyId == VK_LEFT)
+		if (pRealEvent->m_keyId == Key::LeftArrow)
 		{
 			m_rotation.setY(m_rotation.getY() + 20.0f);
 		}
 
-		if (pRealEvent->m_keyId == VK_RIGHT)
+		if (pRealEvent->m_keyId == Key::RightArrow)
 		{
 			m_rotation.setY(m_rotation.getY() - 20.0f);
 		}
@@ -98,22 +97,22 @@ namespace ZE
 			m_velocity.setX(m_velocity.getX() - 2.0f);
 		}
 
-		if (pRealEvent->m_keyId == VK_UP)
+		if (pRealEvent->m_keyId == Key::UpArrow)
 		{
 			m_rotation.setX(m_rotation.getX() - 20.0f);
 		}
 
-		if (pRealEvent->m_keyId == VK_DOWN)
+		if (pRealEvent->m_keyId == Key::DownArrow)
 		{
 			m_rotation.setX(m_rotation.getX() + 20.0f);
 		}
 
-		if (pRealEvent->m_keyId == VK_LEFT)
+		if (pRealEvent->m_keyId == Key::LeftArrow)
 		{
 			m_rotation.setY(m_rotation.getY() - 20.0f);
 		}
 
-		if (pRealEvent->m_keyId == VK_RIGHT)
+		if (pRealEvent->m_keyId == Key::RightArrow)
 		{
 			m_rotation.setY(m_rotation.getY() + 20.0f);
 		}
@@ -123,7 +122,7 @@ namespace ZE
 	{
 		Event_MOUSE_DRAG* pMouseDragEvent = (Event_MOUSE_DRAG*)_event;
 
-		if (pMouseDragEvent->m_keyId == VK_RBUTTON)
+		if (pMouseDragEvent->m_keyId == Key::MouseRightButton)
 		{
 			float deltaPitch = pMouseDragEvent->m_deltaY * 0.001f;
 			float deltaYaw = pMouseDragEvent->m_deltaX * 0.001f;
@@ -143,22 +142,22 @@ namespace ZE
 
 		if (inputManager)
 		{
-			if (inputManager->IsKeyDown('W'))
+			if (inputManager->IsKeyDown(Key::W))
 			{
 				m_velocity.m_z -= 2.0f;
 			}
 
-			if (inputManager->IsKeyDown('S'))
+			if (inputManager->IsKeyDown(Key::S))
 			{
 				m_velocity.m_z += 2.0f;
 			}
 
-			if (inputManager->IsKeyDown('A'))
+			if (inputManager->IsKeyDown(Key::A))
 			{
 				m_velocity.m_x -= 2.0f;
 			}
 
-			if (inputManager->IsKeyDown('D'))
+			if (inputManager->IsKeyDown(Key::D))
 			{
 				m_velocity.m_x += 2.0f;
 			}
@@ -167,22 +166,22 @@ namespace ZE
 		m_rotation.setX(0.0f);
 		m_rotation.setY(0.0f);
 
-		if (inputManager->IsKeyDown(VK_UP))
+		if (inputManager->IsKeyDown(Key::UpArrow))
 		{
 			m_rotation.setX(m_rotation.getX() + 20.0f);
 		}
 
-		if (inputManager->IsKeyDown(VK_DOWN))
+		if (inputManager->IsKeyDown(Key::DownArrow))
 		{
 			m_rotation.setX(m_rotation.getX() - 20.0f);
 		}
 
-		if (inputManager->IsKeyDown(VK_LEFT))
+		if (inputManager->IsKeyDown(Key::LeftArrow))
 		{
 			m_rotation.setY(m_rotation.getY() + 20.0f);
 		}
 
-		if (inputManager->IsKeyDown(VK_RIGHT))
+		if (inputManager->IsKeyDown(Key::RightArrow))
 		{
 			m_rotation.setY(m_rotation.getY() - 20.0f);
 		}

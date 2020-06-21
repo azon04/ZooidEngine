@@ -11,9 +11,11 @@ ZE_MAIN()
 
 	// Init Engine
 	ZE::GameContext gameContext;
-	
+
 	ZE::MainSetup(&gameContext);
 	
+	ZE_POSTINITPLATFORM();
+
 	//UnitTest::RunMainTest();
 
 	// Main Loop

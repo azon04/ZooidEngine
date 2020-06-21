@@ -6,10 +6,6 @@
 #include "Enums.h"
 #include "Structs.h"
 
-#if defined(_WIN32) || defined(_WIN64)
-#include <Windows.h>
-#endif
-
 namespace ZE 
 {
 	struct ShaderData;
@@ -147,10 +143,7 @@ namespace ZE
 		// End Query
 		virtual void EndQuery(ERenderQueryType type, UInt32 queryId) = 0;
 
-
-	#if defined(_WIN32) || defined(_WIN64)
-		virtual HWND getWinWindow() = 0;
-	#endif
+		virtual void* getWindowContext() = 0;
 
 	};
 

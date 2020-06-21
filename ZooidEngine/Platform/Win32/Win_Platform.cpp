@@ -4,14 +4,39 @@
 #include <direct.h>
 #include <stdlib.h>
 
+#include "ZEGameContext.h"
+#include "Input/InputManager.h"
+#include "Input/KeyboardMouseInput.h"
 #include "Logging/LogManager.h"
 #include "Utils/ZEngineHelper.h"
 #include "Utils/StringFunc.h"
+#include "Utils/HashMap.h"
+#include "Utils/Macros.h"
+
+// Current OpenGL implementation using GLFW, so all input will be handled by GLFW
+// Let's forward those inputs to the engine
+#if ZE_RENDER_OPENGL
+#include <GLFW/glfw3.h>
+
+#include "Renderer/IRenderer.h"
+
+ZE::HashMap<int, ZE::Key::KeyEnum> keyMap;
+#define MAP_KEY(Key, EngineKey) keyMap.put(Key, EngineKey); 
+#endif
 
 DWORD ReadCPUSpeed();
 void CheckCPU();
 bool CheckMemory(const DWORDLONG physicalRAMNeeded, const DWORDLONG virtualRAMNeeded);
 bool CheckStorage(const DWORDLONG diskSpaceNeeded);
+
+#if ZE_RENDER_OPENGL
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
+void charInputCallback(GLFWwindow* window, unsigned int codepoint);
+void mousePositionCallback(GLFWwindow* window, double xPos, double yPos);
+void scrollCallback(GLFWwindow* window, double xOffset, double yOffset);
+void mouseButtonUpdateCallback(GLFWwindow* window, int button, int action, int mods);
+void populateKeyMap();
+#endif
 
 namespace ZE
 {
@@ -67,6 +92,21 @@ namespace ZE
 			CheckStorage(0);
 		}
 
+		virtual void postInit()
+		{
+#if ZE_RENDER_OPENGL
+			IRenderer* renderer = gGameContext->getRenderer();
+
+			glfwSetCursorPosCallback((GLFWwindow*)renderer->getWindowContext(), mousePositionCallback);
+			glfwSetMouseButtonCallback((GLFWwindow*)renderer->getWindowContext(), mouseButtonUpdateCallback);
+			glfwSetKeyCallback((GLFWwindow*)renderer->getWindowContext(), keyCallback);
+			glfwSetCharCallback((GLFWwindow*)renderer->getWindowContext(), charInputCallback);
+			glfwSetScrollCallback((GLFWwindow*)renderer->getWindowContext(), scrollCallback);
+
+			populateKeyMap();
+#endif
+		}
+
 		virtual void requestExit(int errorCode)
 		{
 			m_bRequestExit = true;
@@ -113,6 +153,32 @@ namespace ZE
 		virtual Float32 randUnitFloat()
 		{
 			return rand() / float(RAND_MAX);
+		}
+
+	public:
+		// Handle Input functions
+		void handleKey(Short key, KeyState::KeyStateEnum keyState)
+		{
+			KeyboardMouseInput* keyboardMouseInput = gGameContext->getInputManager()->getKeyboardMouseInput();
+
+			keyboardMouseInput->setKey(key, keyState);
+		}
+
+		void handleCharacterInput(unsigned int charCode)
+		{
+
+		}
+
+		void handleMousePosition(int xPos, int yPos)
+		{
+			KeyboardMouseInput* keyboardMouseInput = gGameContext->getInputManager()->getKeyboardMouseInput();
+
+			keyboardMouseInput->setMousePosition(xPos, yPos);
+		}
+
+		void handleMouseScroll(double xOffset, double yOffset)
+		{
+
 		}
 	};
 
@@ -210,3 +276,98 @@ bool CheckStorage(const DWORDLONG diskSpaceNeeded)
 
 	return diskSpaceNeeded < totalAvailDisk;
 }
+
+#if ZE_RENDER_OPENGL
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)
+{
+	ZE::Win_Platform* plat = (ZE::Win_Platform*) ZE::Platform::GetPlatform();
+
+	ZE::KeyState::KeyStateEnum state = ZE::KeyState::Pressed;
+
+	switch (action)
+	{
+	case GLFW_PRESS:
+		state = ZE::KeyState::Pressed;
+		break;
+	case GLFW_RELEASE:
+		state = ZE::KeyState::Released;
+		break;
+	case GLFW_REPEAT:
+		state = ZE::KeyState::Repeat;
+		break;
+	}
+
+	if (key > 255)
+	{
+		ZE::Short engineKey = keyMap[key];
+		plat->handleKey(engineKey, state);
+	}
+	else
+	{
+		plat->handleKey(key, state);
+	}
+}
+
+void charInputCallback(GLFWwindow* window, unsigned int codepoint)
+{
+
+}
+
+void mousePositionCallback(GLFWwindow* window, double xPos, double yPos)
+{
+	ZE::Win_Platform* plat = (ZE::Win_Platform*) ZE::Platform::GetPlatform();
+
+	plat->handleMousePosition(xPos, yPos);
+}
+
+void scrollCallback(GLFWwindow* window, double xOffset, double yOffset)
+{
+
+}
+
+void mouseButtonUpdateCallback(GLFWwindow* window, int button, int action, int mods)
+{
+	ZE::KeyState::KeyStateEnum state = ZE::KeyState::Pressed;
+
+	switch (action)
+	{
+	case GLFW_PRESS:
+		state = ZE::KeyState::Pressed;
+		break;
+	case GLFW_RELEASE:
+		state = ZE::KeyState::Released;
+		break;
+	case GLFW_REPEAT:
+		state = ZE::KeyState::Repeat;
+		break;
+	}
+
+	ZE::Key::KeyEnum mouseButton = ZE::Key::None;
+
+	switch (button)
+	{
+	case GLFW_MOUSE_BUTTON_LEFT:
+		mouseButton = ZE::Key::MouseLeftButton;
+		break;
+	case GLFW_MOUSE_BUTTON_RIGHT:
+		mouseButton = ZE::Key::MouseRightButton;
+		break;
+	}
+
+	if (mouseButton != ZE::Key::None)
+	{
+		ZE::Win_Platform* plat = (ZE::Win_Platform*) ZE::Platform::GetPlatform();
+
+		plat->handleKey(mouseButton, state);
+	}
+}
+
+void populateKeyMap()
+{
+	MAP_KEY(GLFW_KEY_ESCAPE, ZE::Key::Esc)
+	MAP_KEY(GLFW_KEY_UP, ZE::Key::UpArrow)
+	MAP_KEY(GLFW_KEY_DOWN, ZE::Key::DownArrow)
+	MAP_KEY(GLFW_KEY_LEFT, ZE::Key::LeftArrow)
+	MAP_KEY(GLFW_KEY_RIGHT, ZE::Key::RightArrow)
+}
+#endif

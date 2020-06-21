@@ -16,7 +16,7 @@
 
 #include "Logging/Log.h"
 
-#if Z_RENDER_OPENGL
+#if ZE_RENDER_OPENGL
 #include "Renderer/GL/GLRenderZooid.h"
 #endif
 
@@ -98,7 +98,7 @@ namespace ZE
 		// Creating rendering Zooid
 
 		{
-#if Z_RENDER_OPENGL
+#if ZE_RENDER_OPENGL
 			ZEINFO("Initializing GL Rendering...");
 			Handle renderZooidHandle("Render Zooid", sizeof(GLRenderZooid));
 			_gameContext->m_renderZooid = new(renderZooidHandle) GLRenderZooid(_gameContext);

@@ -47,6 +47,7 @@ project "ZooidEngine"
     files { "ZooidEngine/**.h", 
             "ZooidEngine/**.cpp",
             "ZooidEngine/**.c",
+            "ZooidEngine/**.natvis",
             "ZooidEngine/Shaders/**.vs",
             "ZooidEngine/Shaders/**.frag"
         }
@@ -88,7 +89,7 @@ project "ZooidEngine"
 
         files { "ZooidEngine/Renderer/GL/**" }
 
-        defines { "Z_RENDER_OPENGL" }
+        defines { "ZE_RENDER_OPENGL=1" }
 
         postbuildcommands {
             "{COPY} \"" .. path.getabsolute("./Dependencies/glew-2.0.0/bin/Release/Win32/*.DLL") .. "\" %{cfg.targetdir}",

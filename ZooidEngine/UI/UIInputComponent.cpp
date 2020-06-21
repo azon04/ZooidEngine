@@ -3,8 +3,7 @@
 
 #include "ZEGameContext.h"
 #include "Input/InputManager.h"
-
-#include <Windows.h>
+#include "Input/Keys.h"
 
 namespace ZE
 {
@@ -30,7 +29,7 @@ namespace ZE
 
 		InputManager* inputManager = m_gameContext->getInputManager();
 		inputManager->getMousePosition(mouseX, mouseY);
-		buttonState = inputManager->IsKeyDown(VK_LBUTTON) ? EButtonState::BUTTON_DOWN : EButtonState::BUTTON_UP;
+		buttonState = inputManager->IsKeyDown(Key::MouseLeftButton) ? EButtonState::BUTTON_DOWN : EButtonState::BUTTON_UP;
 		
 		ZE::UI::UpdateMouseState((Float32)mouseX, (Float32)mouseY, buttonState);
 	}

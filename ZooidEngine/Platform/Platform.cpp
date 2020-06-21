@@ -21,6 +21,12 @@ namespace ZE
 		plat->init(args);
 	}
 
+	void Platform::PostInit()
+	{
+		Platform* plat = GetPlatform();
+		plat->postInit();
+	}
+
 	void Platform::Destroy()
 	{
 		Platform* plat = GetPlatform();

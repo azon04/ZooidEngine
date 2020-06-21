@@ -17,6 +17,7 @@ namespace ZE
 
 	protected:
 		virtual void init(PlatformArgs&) = 0;
+		virtual void postInit() = 0;
 		virtual void requestExit(int errorCode) = 0;
 		virtual bool isRequestedExit() = 0;
 		virtual void destroy() = 0;
@@ -26,6 +27,7 @@ namespace ZE
 		virtual int getArgCount() = 0;
 		virtual float randUnitFloat() = 0;
 
+	public:
 		// #TODO implement this on specific platform
 		static Platform* GetPlatform();
 	
@@ -34,6 +36,7 @@ namespace ZE
 		static bool IsRequestedExit();
 		static void RequestExit(int errorCode);
 		static void Init(PlatformArgs& args);
+		static void PostInit();
 		static void Destroy();
 		static int GetExitErrorCode();
 		static bool GetArgByIndex(int index, char* buff);
