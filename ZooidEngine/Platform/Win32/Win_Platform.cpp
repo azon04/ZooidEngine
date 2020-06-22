@@ -166,7 +166,9 @@ namespace ZE
 
 		void handleCharacterInput(unsigned int charCode)
 		{
+			KeyboardMouseInput* keyboardMouseInput = gGameContext->getInputManager()->getKeyboardMouseInput();
 
+			keyboardMouseInput->handleTextInput(charCode);
 		}
 
 		void handleMousePosition(int xPos, int yPos)
@@ -178,7 +180,9 @@ namespace ZE
 
 		void handleMouseScroll(double xOffset, double yOffset)
 		{
+			KeyboardMouseInput* keyboardMouseInput = gGameContext->getInputManager()->getKeyboardMouseInput();
 
+			keyboardMouseInput->setMouseScroll(xOffset, yOffset);
 		}
 	};
 
@@ -310,7 +314,9 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 
 void charInputCallback(GLFWwindow* window, unsigned int codepoint)
 {
+	ZE::Win_Platform* plat = (ZE::Win_Platform*) ZE::Platform::GetPlatform();
 
+	plat->handleCharacterInput(codepoint);
 }
 
 void mousePositionCallback(GLFWwindow* window, double xPos, double yPos)
@@ -322,7 +328,9 @@ void mousePositionCallback(GLFWwindow* window, double xPos, double yPos)
 
 void scrollCallback(GLFWwindow* window, double xOffset, double yOffset)
 {
+	ZE::Win_Platform* plat = (ZE::Win_Platform*) ZE::Platform::GetPlatform();
 
+	plat->handleMouseScroll(xOffset, yOffset);
 }
 
 void mouseButtonUpdateCallback(GLFWwindow* window, int button, int action, int mods)
@@ -365,6 +373,7 @@ void mouseButtonUpdateCallback(GLFWwindow* window, int button, int action, int m
 void populateKeyMap()
 {
 	MAP_KEY(GLFW_KEY_ESCAPE, ZE::Key::Esc)
+	MAP_KEY(GLFW_KEY_BACKSPACE, ZE::Key::Backspace)
 	MAP_KEY(GLFW_KEY_UP, ZE::Key::UpArrow)
 	MAP_KEY(GLFW_KEY_DOWN, ZE::Key::DownArrow)
 	MAP_KEY(GLFW_KEY_LEFT, ZE::Key::LeftArrow)

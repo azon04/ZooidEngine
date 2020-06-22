@@ -35,8 +35,11 @@ namespace ZE
 		}
 
 		void setKey(Short keyId, KeyState::KeyStateEnum keyState);
-
 		void setMousePosition(int mouseX, int mouseY);
+		void setMouseScroll(float mouseScrollX, float mouseScrollY);
+
+		// Handling text input. charCode: character code of what user input
+		void handleTextInput(UInt32 charCode);
 
 	protected:
 
@@ -51,6 +54,10 @@ namespace ZE
 		float m_currentDragTime;
 		bool m_isCurrentDragged;
 		Short m_currentDragKey;
+
+		// For Mouse scrolling
+		float m_lastMouseScrollX;
+		float m_lastMouseScrollY;
 	};
 };
 

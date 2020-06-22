@@ -55,6 +55,8 @@ namespace ZE {
 			Event_KEY_UP::RegClass();
 			Event_KEY_DOWN::RegClass();
 			Event_MOUSE_DRAG::RegClass();
+			Event_MOUSE_SCROLL::RegClass();
+			Event_TEXT_INPUT::RegClass();
 		Event_GATHER_LIGHT::RegClass();
 		Event_GATHER_RENDER::RegClass();
 		Event_GATHER_BOUND::RegClass();

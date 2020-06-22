@@ -101,4 +101,26 @@ namespace ZE
 		m_mouseY = mouseY;
 	}
 
+	void KeyboardMouseInput::setMouseScroll(float mouseScrollX, float mouseScrollY)
+	{
+		{
+			Handle handle("InputEvent", sizeof(Event_MOUSE_SCROLL));
+			Event_MOUSE_SCROLL* pEvent = new(handle) Event_MOUSE_SCROLL;
+			pEvent->m_deltaScrollX = mouseScrollX;
+			pEvent->m_deltaScrollY = mouseScrollY;
+			m_gameContext->getEventDispatcher()->addEvent(handle, EVENT_INPUT);
+		}
+
+		m_lastMouseScrollX = mouseScrollX;
+		m_lastMouseScrollY = mouseScrollY;
+	}
+
+	void KeyboardMouseInput::handleTextInput(UInt32 charCode)
+	{
+		Handle handle("InputEvent", sizeof(Event_TEXT_INPUT));
+		Event_TEXT_INPUT* pEvent = new(handle) Event_TEXT_INPUT;
+		pEvent->m_charCode = charCode;
+		m_gameContext->getEventDispatcher()->addEvent(handle, EVENT_INPUT);
+	}
+
 }

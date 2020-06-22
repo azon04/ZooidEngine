@@ -21,6 +21,10 @@ namespace ZE
 	protected:
 		// Handle Update Component
 		void handleUpdateEvent(Event* _event);
+		void handleMouseScroll(Event* _event);
+		void handleKeyUp(Event* _event);
+		void handleKeyDown(Event* _event);
+		void handleTextInput(Event* _event);
 	};
 }
 #endif

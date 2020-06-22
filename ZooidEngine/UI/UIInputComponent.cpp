@@ -19,6 +19,10 @@ namespace ZE
 	{
 		Component::setupComponent();
 		addEventDelegate(Event_UPDATE, &UIInputComponent::handleUpdateEvent);
+		addEventDelegate(Event_MOUSE_SCROLL, &UIInputComponent::handleMouseScroll);
+		addEventDelegate(Event_KEY_UP, &UIInputComponent::handleKeyUp);
+		addEventDelegate(Event_KEY_DOWN, &UIInputComponent::handleKeyDown);
+		addEventDelegate(Event_TEXT_INPUT, &UIInputComponent::handleTextInput);
 	}
 
 	void UIInputComponent::handleUpdateEvent(Event* _event)
@@ -32,6 +36,34 @@ namespace ZE
 		buttonState = inputManager->IsKeyDown(Key::MouseLeftButton) ? EButtonState::BUTTON_DOWN : EButtonState::BUTTON_UP;
 		
 		ZE::UI::UpdateMouseState((Float32)mouseX, (Float32)mouseY, buttonState);
+	}
+
+	void UIInputComponent::handleMouseScroll(Event* _event)
+	{
+		Event_MOUSE_SCROLL* pRealEvent = (Event_MOUSE_SCROLL*)_event;
+
+		ZE::UI::RecordMouseScroll(pRealEvent->m_deltaScrollY);
+	}
+
+	void UIInputComponent::handleKeyUp(Event* _event)
+	{
+		Event_INPUT* inputEvent = (Event_INPUT*)_event;
+
+		ZE::UI::RecordKeyboardButton(inputEvent->m_keyId, 1);
+	}
+
+	void UIInputComponent::handleKeyDown(Event* _event)
+	{
+		Event_INPUT* inputEvent = (Event_INPUT*)_event;
+
+		ZE::UI::RecordKeyboardButton(inputEvent->m_keyId, 0);
+	}
+
+	void UIInputComponent::handleTextInput(Event* _event)
+	{
+		Event_TEXT_INPUT* inputEvent = (Event_TEXT_INPUT*)_event;
+
+		ZE::UI::RecordTextInput(inputEvent->m_charCode);
 	}
 
 }

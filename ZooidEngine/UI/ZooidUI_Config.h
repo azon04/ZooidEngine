@@ -7,6 +7,7 @@
 #include "Utils/Array.h"
 #include "Utils/HashMap.h"
 #include "Utils/PrimitiveTypes.h"
+#include "Input/Keys.h"
 
 // Array Type that use in this code. Change to other type if needed
 #define UIArray ZE::Array
@@ -51,15 +52,15 @@
 #define DEFAULT_FONT_PATH "Font/OpenSans-Regular.ttf"
 
 // Keys: Special Keys Define
-#define ZOOID_KEY_BACKSPACE	8
-#define ZOOID_KEY_ENTER 13
-#define ZOOID_KEY_DELETE 127
-#define ZOOID_KEY_ARROW_LEFT 11
-#define ZOOID_KEY_ARROW_RIGHT 12
-#define ZOOID_KEY_ARROW_UP 13
-#define ZOOID_KEY_ARROW_DOWN 14
-#define ZOOID_KEY_HOME 2
-#define ZOOID_KEY_END 3
+#define ZOOID_KEY_BACKSPACE	ZE::Key::Backspace
+#define ZOOID_KEY_ENTER ZE::Key::Return
+#define ZOOID_KEY_DELETE ZE::Key::Delete
+#define ZOOID_KEY_ARROW_LEFT ZE::Key::LeftArrow
+#define ZOOID_KEY_ARROW_RIGHT ZE::Key::RightArrow
+#define ZOOID_KEY_ARROW_UP ZE::Key::UpArrow
+#define ZOOID_KEY_ARROW_DOWN ZE::Key::DownArrow
+#define ZOOID_KEY_HOME ZE::Key::Home
+#define ZOOID_KEY_END ZE::Key::End
 
 // Text Input: Length of temp text input (use as temp buffer)
 #define TEXT_TEMP_LENGTH 246

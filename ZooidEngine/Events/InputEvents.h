@@ -51,6 +51,34 @@ namespace ZE
 		// Delta Y change in pixel
 		int m_deltaY;
 	};
+
+	class Event_MOUSE_SCROLL : public Event_INPUT
+	{
+		DEFINE_CLASS(Event_MOUSE_SCROLL)
+
+	public:
+
+		Event_MOUSE_SCROLL() {}
+		virtual ~Event_MOUSE_SCROLL() {}
+
+		// Delta scroll X
+		float m_deltaScrollX;
+
+		// Delta scroll y
+		float m_deltaScrollY;
+	};
+
+	class Event_TEXT_INPUT : public Event_INPUT
+	{
+		DEFINE_CLASS(Event_TEXT_INPUT)
+
+	public:
+
+		Event_TEXT_INPUT() {}
+		virtual ~Event_TEXT_INPUT() {}
+
+		UInt32 m_charCode;
+	};
 }
 
 #endif
