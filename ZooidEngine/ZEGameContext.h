@@ -3,6 +3,7 @@
 
 #include "Platform/Thread.h"
 #include "Utils/Timer.h"
+#include "Utils/PrimitiveTypes.h"
 
 namespace ZE 
 {
@@ -78,6 +79,9 @@ namespace ZE
 	};
 
 	extern GameContext* gGameContext;
+
+	extern Int32 gRenderWidth;
+	extern Int32 gRenderHeight;
 
 	GameContext* GetGameContext();
 }

@@ -80,6 +80,7 @@ namespace ZE
 	void TextScreenRenderer::beginRender()
 	{
 		gGameContext->getRenderer()->SetRenderBlendState(TRenderBlendState<true, ERendererBlendFactor::SRC_ALPHA, ERendererBlendFactor::ONE_MINUS_SRC_ALPHA>::GetGPUState());
+		gGameContext->getRenderer()->SetRenderDepthStencilState(TRenderDepthStencilState<false, false, false, ERendererCompareFunc::ALWAYS, ERendererCompareFunc::ALWAYS, 0xFF, 0xFF, 0xFF>::GetGPUState());
 	}
 
 	void TextScreenRenderer::render(RenderInfo* renderInfos, UInt32 renderInfoCount)
@@ -114,6 +115,7 @@ namespace ZE
 	void TextScreenRenderer::endRender()
 	{
 		gGameContext->getRenderer()->SetRenderBlendState(DefaultRenderBlendState::GetGPUState());
+		gGameContext->getRenderer()->SetRenderDepthStencilState(DefaultDepthStencilState::GetGPUState());
 	}
 
 	void TextScreenRenderer::Render(RenderInfo* renderInfos, UInt32 renderInfoCount)

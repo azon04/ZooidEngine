@@ -2,6 +2,7 @@
 
 #include "Renderer/IRenderer.h"
 #include "SceneRenderer/SceneRenderer.h"
+#include "SceneRenderer/TextRenderer.h"
 #include "Renderer/DrawList.h"
 #include "Renderer/IGPUFrameBuffer.h"
 #include "ZEGameContext.h"
@@ -56,7 +57,9 @@ namespace ZE
 		_gameContext->getRenderer()->ResetViewport();
 
 		MeshSceneRenderer::Render(_gameContext->getDrawList()->m_debugMeshRenderGatherer.getRenderInfos(), _gameContext->getDrawList()->m_debugMeshRenderGatherer.getRenderCount());
-		
+		TextSceneRenderer::Render(_gameContext->getDrawList()->m_textSceneRenderGatherer.getRenderInfos(), _gameContext->getDrawList()->m_textSceneRenderGatherer.getRenderCount());
+		TextScreenRenderer::Render(_gameContext->getDrawList()->m_textScreenRenderGatherer.getRenderInfos(), _gameContext->getDrawList()->m_textScreenRenderGatherer.getRenderCount());
+
 		if (frameBuffer)
 		{
 			frameBuffer->unbind();

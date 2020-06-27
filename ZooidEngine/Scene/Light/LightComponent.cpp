@@ -145,8 +145,6 @@ namespace ZE
 		default:
 			break;
 		}
-
-		DebugRenderer::DrawMatrixBasis(m_worldTransform);
 	}
 
 	void LightComponent::setStatic(bool bStatic)

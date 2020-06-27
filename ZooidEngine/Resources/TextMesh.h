@@ -22,7 +22,7 @@ namespace ZE
 		FORCEINLINE IGPUBufferArray* getGPUBufferArray() const { return m_bufferArray; }
 
 		void init(Font* _font, const char* text);
-		void generateTextMesh(const char* text, bool bNormalizeHeight = false);
+		void generateTextMesh(const char* text, bool bNormalizeHeight = true);
 		void setFont(Font* _font);
 
 	protected:

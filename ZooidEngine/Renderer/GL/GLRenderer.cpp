@@ -21,8 +21,8 @@ namespace ZE
 
 	GLRenderer::GLRenderer()
 	{
-		m_width = WIDTH;
-		m_height = HEIGHT;
+		m_width = gRenderWidth;
+		m_height = gRenderHeight;
 
 		s_renderer = this;
 	}
@@ -58,7 +58,7 @@ namespace ZE
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		//glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 		
-		m_window = glfwCreateWindow(WIDTH, HEIGHT, "ZooidEngine - Windows", nullptr, nullptr);
+		m_window = glfwCreateWindow(m_width, m_height, "ZooidEngine - Windows", nullptr, nullptr);
 		if (!m_window) 
 		{
 			glfwTerminate();

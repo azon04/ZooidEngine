@@ -9,9 +9,6 @@
 #include "Platform/Thread.h"
 #include "Utils/HashMap.h"
 
-#define WIDTH 1600
-#define HEIGHT 900
-
 #define ZE_GL_VERSION_MAJOR 4
 #define ZE_GL_VERSION_MINOR 3
 namespace ZE 

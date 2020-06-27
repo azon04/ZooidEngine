@@ -210,17 +210,21 @@ namespace ZE
 			charCode = FT_Get_Next_Char(face, charCode, &glyphIndex);
 		}
 
-		// #TODO this should be handled by TextureManager ???
-		Handle hTexture("Font Texture", sizeof(Texture));
-		Texture* pTexture = new(hTexture) Texture;
-		pTexture->loadFromBuffer(pTAtlas, texSize, texSize, 1, 1);
+		TextureCreateDesc textureCreateDesc;
+		textureCreateDesc.Width = textureCreateDesc.Height = texSize;
+		textureCreateDesc.Channel = 1;
+		textureCreateDesc.TextureFormat = TEX_RED;
+		textureCreateDesc.MinFilter = LINEAR;
+		textureCreateDesc.MagFilter = LINEAR;
+		textureCreateDesc.InitialData = pTAtlas;
+		textureCreateDesc.bGenerateMipMap = false;
 
 		{
 			ScopedRenderThreadOwnership renderLock(gameContext->getRenderer());
 
 			pFont->m_hGPUTexture = gameContext->getRenderZooid()->CreateRenderTexture();
 			IGPUTexture* gpuTexture = pFont->m_hGPUTexture.getObject<IGPUTexture>();
-			gpuTexture->fromTexture(pTexture);
+			gpuTexture->create(textureCreateDesc);
 		}
 
 		FT_Done_Face(face);

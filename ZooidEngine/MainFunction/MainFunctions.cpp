@@ -310,11 +310,6 @@ namespace ZE
 		}
 #endif
 
-		// Draw Base Lines
-		//DebugRenderer::DrawMatrixBasis(Matrix4x4());
-		//DebugRenderer::DrawTextWorld("Zooid Engine", Matrix4x4());
-		//DebugRenderer::DrawTextScreen("Zooid Engine", Vector2(10, 10), Vector3(1.0f), 0.5f);
-
 		// Debug Options Menu
 		/*if (ZE::UI::BeginPanel("Debug Options", UIRect(UIVector2{ gGameContext->getRenderer()->GetWidth() - 300,10 }, UIVector2{ 250, 100 }), true))
 		{
@@ -387,25 +382,25 @@ namespace ZE
 		// Write on Total Delta time
 		g_gameThreadTime = MathOps::FLerp(g_gameThreadTime, (Float32)deltaTime, 0.01f);
 
-		/*if (ZE::UI::BeginPanel("Performance", UIRect(UIVector2{ 10,10 }, UIVector2{ 250, 150 }), true))
+		if( gDebugOptions.bShowFPSStats )
 		{
-			char buffer[256];
+			static char buffer[256];
+			static Vector3 RedColor(1.0f, 0.0f, 0.0f);
+			static Vector3 GreenColor(0.0f, 1.0f, 0.0f);
+			static Vector3 YellowColor(1.0f, 1.0f, 0.0f);
+			static Float32 targetTime = 1.0f / 60.0f;
 
-			StringFunc::PrintToString(buffer, 256, "Global Time: %.2fms", g_gameThreadTime);
-			ZE::UI::DoText(buffer);
+			Float32 fps = 1000.0f / g_gameThreadTime;
+			StringFunc::PrintToString(buffer, 256, "FPS %.2f", fps);
+			DebugRenderer::DrawTextScreen(buffer, Vector2(10.0f, gRenderHeight - 50.0f), (fps < 30.0f) ? RedColor : (fps < 59.0f) ? YellowColor : GreenColor);
 
-			StringFunc::PrintToString(buffer, 256, "GPU Draw Time: %.2fms", g_gpuDrawTime);
-			ZE::UI::DoText(buffer);
+			StringFunc::PrintToString(buffer, 256, "Game: %.2fms", g_gameThreadTime);
+			DebugRenderer::DrawTextScreen(buffer, Vector2(10.0f, gRenderHeight - 80.0f), (g_gameThreadTime < 0.5 * targetTime) ? RedColor : (g_gameThreadTime < targetTime) ? YellowColor : GreenColor);
 
-			StringFunc::PrintToString(buffer, 256, "FPS: %.2f", 1000.0f / g_gameThreadTime);
-			ZE::UI::DoText(buffer);
+			StringFunc::PrintToString(buffer, 256, "GPU: %.2fms", g_gpuDrawTime);
+			DebugRenderer::DrawTextScreen(buffer, Vector2(10.0f, gRenderHeight - 100.0f), (g_gpuDrawTime < 0.5 * targetTime) ? RedColor : (g_gpuDrawTime < targetTime) ? YellowColor : GreenColor);
 
-			DrawList* drawList = _gameContext->getDrawList();
-			StringFunc::PrintToString(buffer, 256, "Num Meshes To Draw: %d", drawList->m_meshRenderGatherer.getRenderCount() + drawList->m_skinMeshRenderGatherer.getRenderCount());
-			ZE::UI::DoText(buffer);
-
-			ZE::UI::EndPanel();
-		}*/
+		}
 
 		// UI End Frame
 		ZE::UI::EndFrame();

@@ -12,6 +12,7 @@ namespace ZE
 	struct DebugOptions
 	{
 		DebugDraw DebugDrawOptions;
+		bool bShowFPSStats = false;
 	};
 
 	extern DebugOptions gDebugOptions;
