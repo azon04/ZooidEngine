@@ -40,21 +40,20 @@ namespace ZE
 			textureDesc.Width = (UInt32)_gameContext->getRenderer()->GetWidth();
 			textureDesc.Height = (UInt32)_gameContext->getRenderer()->GetHeight();
 			textureDesc.Channel = 1;
-			textureDesc.TextureFormat = TEX_DEPTH;
+			textureDesc.TextureFormat = TEX_DEPTH24_STENCIL8;
 			textureDesc.WrapU = CLAMP_TO_BORDER;
 			textureDesc.WrapV = CLAMP_TO_BORDER;
 			textureDesc.MinFilter = LINEAR;
 			textureDesc.MagFilter = LINEAR;
-			textureDesc.DataType = FLOAT;
+			textureDesc.DataType = UNSIGNED_INT_24_8;
 			textureDesc.bGenerateMipMap = false;
-			textureDesc.BorderColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 
 			Handle depthTextureHandle = _gameContext->getRenderZooid()->CreateRenderTexture();
 			if (depthTextureHandle.isValid())
 			{
 				m_depthTexture = depthTextureHandle.getObject<IGPUTexture>();
 				m_depthTexture->create(textureDesc);
-				m_depthTexture->setDebugName("DepthBuffer");
+				m_depthTexture->setDebugName("DepthStencilBuffer");
 			}
 		}
 
@@ -66,7 +65,7 @@ namespace ZE
 			{
 				m_frameBuffer = fbHandle.getObject<IGPUFrameBuffer>();
 				m_frameBuffer->bind();
-				m_frameBuffer->addTextureAttachment(DEPTH_ATTACHMENT, m_depthTexture);
+				m_frameBuffer->addTextureAttachment(DEPTH_STENCIL_ATTACHMENT, m_depthTexture);
 				m_frameBuffer->setupAttachments();
 				m_frameBuffer->unbind();
 			}
@@ -108,9 +107,9 @@ namespace ZE
 		DrawList* drawList = _gameContext->getDrawList();
 
 		_gameContext->getRenderer()->ResetViewport();
-		_gameContext->getRenderer()->Clear(ERenderBufferBit::DEPTH_BUFFER_BIT);
+		_gameContext->getRenderer()->Clear(ERenderBufferBit::DEPTH_BUFFER_BIT | ERenderBufferBit::STENCIL_BUFFER_BIT);
 
-		MeshSceneRenderer::Render(drawList->m_meshRenderGatherer.getRenderInfos(), drawList->m_meshRenderGatherer.getRenderCount(), m_shaderChain);
+		MeshSceneRenderer::Render(drawList->m_meshRenderGatherer.getRenderInfos(), drawList->m_meshRenderGatherer.getRenderCount(), m_shaderChain, true);
 		SkinMeshSceneRenderer::Render(drawList->m_skinMeshRenderGatherer.getRenderInfos(), drawList->m_skinMeshRenderGatherer.getRenderCount(), m_skinnedShaderChain);
 
 		if (g_bDoSceneOcclusion)
@@ -153,6 +152,7 @@ namespace ZE
 		Matrix4x4 worldTransform;
 		Vector3 extent;
 		Vector3 pos;
+		bool bUseStencil = false;
 		
 		for (UInt32 index = 0; index < renderInfoCount; index++)
 		{
@@ -163,6 +163,7 @@ namespace ZE
 				extent = skinMesh.m_boxExtent;
 				pos = skinMesh.m_boxLocalPos;
 				worldTransform = skinMesh.m_worldTransform;
+				bUseStencil = false;
 			}
 			else
 			{
@@ -171,6 +172,7 @@ namespace ZE
 				extent = currentMesh.m_boxExtent;
 				pos = currentMesh.m_boxLocalPos;
 				worldTransform = currentMesh.m_worldTransform;
+				bUseStencil = currentMesh.m_outlined;
 			}
 
 			// check if scale has any zero

@@ -2,7 +2,6 @@
 
 namespace ZE
 {
-
 	bool Platform::IsRequestedExit()
 	{
 		Platform* plat = GetPlatform();

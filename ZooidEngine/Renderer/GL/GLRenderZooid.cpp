@@ -90,6 +90,8 @@ namespace ZE
 
 	void GLRenderZooid::Init()
 	{
+		ZEINFO("Initializing OpenGL...");
+
 		Handle rendererHandle("GL Renderer", sizeof(GLRenderer));
 		m_renderer = new(rendererHandle) GLRenderer();
 		m_renderer->Setup();
@@ -100,6 +102,12 @@ namespace ZE
 		// Destroying GLRenderer
 		m_renderer->Clean();
 		m_renderer = nullptr;
+	}
+
+	RenderZooid* RenderZooid::GetRenderZooid(GameContext* _gameContext)
+	{
+		static GLRenderZooid renderZooid(_gameContext);
+		return &renderZooid;
 	}
 
 }

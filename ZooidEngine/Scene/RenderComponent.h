@@ -48,6 +48,8 @@ namespace ZE
 		void setPhysicsEnabled(bool _bEnabled);
 
 		void setMaterial(Material* material);
+
+		void setHighLight(bool _highlight) { m_bHighlight = _highlight; }
 		
 		// Physics: handle physics update transform event
 		void handlePhysicsUpdateTransform(Event* pEvent);

@@ -23,7 +23,7 @@ namespace ZE
 			return GL_STENCIL_ATTACHMENT;
 			break;
 		case ZE::DEPTH_STENCIL_ATTACHMENT:
-			return GL_DEPTH_STENCIL;
+			return GL_DEPTH_STENCIL_ATTACHMENT;
 			break;
 		default:
 			return GL_NONE;
@@ -67,6 +67,8 @@ namespace ZE
 			return GL_BYTE;
 		case ZE::UNSIGNED_BYTE:
 			return GL_UNSIGNED_BYTE;
+		case ZE::UNSIGNED_INT_24_8:
+			return GL_UNSIGNED_INT_24_8;
 		default:
 			return GL_NONE;
 		}
@@ -127,6 +129,8 @@ namespace ZE
 			return GL_DEPTH_COMPONENT;
 		case ZE::TEX_DEPTH_STENCIL:
 			return GL_DEPTH_STENCIL;
+		case ZE::TEX_DEPTH24_STENCIL8:
+			return GL_DEPTH24_STENCIL8;
 		case ZE::TEX_sRGB:
 			return GL_SRGB;
 		case ZE::TEX_sRGBA:

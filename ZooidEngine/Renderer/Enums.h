@@ -19,7 +19,9 @@ namespace ZE
 		INTEGER = 2,
 		UNSIGNED_INTEGER = 3,
 		BYTE = 4,
-		UNSIGNED_BYTE = 5
+		UNSIGNED_BYTE = 5,
+		UNSIGNED_INT_24_8 = 6
+
 	};
 
 	enum EFrameBuferAttachmentType
@@ -149,6 +151,7 @@ namespace ZE
 		TEX_RGBA = 4,
 		TEX_DEPTH = 5,
 		TEX_DEPTH_STENCIL = 6,
+		TEX_DEPTH24_STENCIL8,
 		TEX_sRGB,
 		TEX_sRGBA,
 		TEX_R8,

@@ -57,7 +57,7 @@ project "ZooidEngine"
         "ZooidEngine/Renderer/GL/**" 
     }
 
-    defines { "WIN32", "_CONSOLE", "_UNICODE", "UNICODE" }
+    defines { "WIN32", "_CONSOLE", "_UNICODE", "UNICODE", "_CRT_SECURE_NO_WARNINGS" }
 
     filter "configurations:Debug"
         defines { "DEBUG" }
@@ -103,8 +103,6 @@ project "ZooidEngine"
             "$(Physx)/../PxShared/include",
             "$(Physx)/Include"
         }
-
-        defines { "Z_PHYSICS_PHYSX" }
     
     filter { "options:with-physX","action:vs2015" }
         postbuildcommands {

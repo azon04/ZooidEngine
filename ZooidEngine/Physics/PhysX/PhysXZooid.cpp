@@ -8,6 +8,8 @@ namespace ZE
 
 	void PhysXZooid::Init()
 	{
+		ZEINFO("Initializing PhysX...");
+
 		Handle physicsHandle("PhysX Physics", sizeof(PhysXEngine));
 		m_physics = new(physicsHandle) PhysXEngine();
 		m_physics->Setup();
@@ -17,6 +19,12 @@ namespace ZE
 	{
 		m_physics->Destroy();
 		m_physics = nullptr;
+	}
+
+	PhysicsZooid* PhysicsZooid::GetPhysicsZood(GameContext* gameContext)
+	{
+		static PhysXZooid physicZooid(gameContext);
+		return &physicZooid;
 	}
 
 }

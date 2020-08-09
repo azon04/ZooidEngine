@@ -14,13 +14,15 @@ namespace ZE
 		MeshRenderInfo() :
 			m_material(nullptr),
 			m_castShadow(false),
-			m_instanceCount(1)
+			m_instanceCount(1),
+			m_outlined(false)
 		{}
 
 		Material* m_material;
 		UInt32 m_instanceCount;
 		bool m_castShadow;
 		bool m_isDoubleSided;
+		bool m_outlined;
 	};
 };
 

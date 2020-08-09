@@ -27,12 +27,13 @@ namespace ZE
 	{
 	public:
 
-		BaseSceneRenderer() : m_overrideShaderChain(nullptr) {}
+		BaseSceneRenderer() : m_overrideShaderChain(nullptr), m_bUseStencil(false) {}
 
 		void setOverrideShaderChain(IShaderChain* overrideShaderChain) { m_overrideShaderChain = overrideShaderChain; }
 
 	protected:
 		IShaderChain* m_overrideShaderChain;
+		bool m_bUseStencil;
 	};
 
 	class MeshSceneRenderer : public BaseSceneRenderer, public Singleton<MeshSceneRenderer>
@@ -43,7 +44,7 @@ namespace ZE
 		virtual void render(RenderInfo* renderInfos, UInt32 renderInfoCount) override;
 		virtual void endRender() override;
 
-		static void Render(RenderInfo* renderInfos, UInt32 renderInfoCount, IShaderChain* shaderOverride = nullptr);
+		static void Render(RenderInfo* renderInfos, UInt32 renderInfoCount, IShaderChain* shaderOverride = nullptr, bool bUseStencil = false);
 	};
 
 	class TransculentSceneRenderer : public BaseSceneRenderer, public Singleton<TransculentSceneRenderer>

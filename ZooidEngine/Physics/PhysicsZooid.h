@@ -19,6 +19,9 @@ namespace ZE
 
 		FORCEINLINE IPhysics* GetPhysics() const { return m_physics; }
 
+		// Need to implement when we implemenenting specific Physics Engine
+		static PhysicsZooid* GetPhysicsZood(GameContext* gameContext);
+
 	protected:
 		IPhysics* m_physics;
 	};

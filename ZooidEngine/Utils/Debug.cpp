@@ -18,5 +18,6 @@ namespace ZE
 		va_end(arg);
 
 		OutputDebugStringA(szBuff);
+		printf(szBuff);
 	}
 }

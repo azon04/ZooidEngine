@@ -17,6 +17,8 @@ namespace ZE
 		m_textSceneRenderGatherer.reset();
 		m_textScreenRenderGatherer.reset();
 
+		m_highligtRenderGatherer.reset();
+
 		m_debugMeshRenderGatherer.reset();
 	}
 

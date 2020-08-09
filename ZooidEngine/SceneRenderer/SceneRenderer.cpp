@@ -85,6 +85,19 @@ namespace ZE
 				bPrevDoubleSided = false;
 			}
 
+			if (m_bUseStencil)
+			{
+				// Set Depth Stencil if outline
+				if (currentMesh.m_outlined)
+				{
+					gGameContext->getRenderer()->SetRenderDepthStencilState(TRenderDepthStencilState<true, true, true, ZE::LEQUAL, ALWAYS, 0x01, 0xFF, 0xFF, DS_OP_KEEP, DS_OP_KEEP, DS_OP_REPLACE>::GetGPUState());
+				}
+				else
+				{
+					gGameContext->getRenderer()->SetRenderDepthStencilState(DefaultDepthStencilState::GetGPUState());
+				}
+			}
+
 			currentMesh.m_gpuBufferArray->bind();
 
 			if (currentMesh.m_material) 
@@ -121,9 +134,10 @@ namespace ZE
 
 	}
 
-	void MeshSceneRenderer::Render(RenderInfo* renderInfos, UInt32 renderInfoCount, IShaderChain* shaderOverride)
+	void MeshSceneRenderer::Render(RenderInfo* renderInfos, UInt32 renderInfoCount, IShaderChain* shaderOverride, bool bUseStencil)
 	{
 		MeshSceneRenderer* renderer = GetInstance();
+		renderer->m_bUseStencil = bUseStencil;
 		renderer->setOverrideShaderChain(shaderOverride);
 		renderer->beginRender();
 		renderer->render(renderInfos, renderInfoCount);
@@ -179,6 +193,7 @@ namespace ZE
 					ECullFace::BACK,
 					ERenderFillMode::MODE_FILL>::GetGPUState());
 			}
+
 
 			currentMesh.m_gpuBufferArray->bind();
 

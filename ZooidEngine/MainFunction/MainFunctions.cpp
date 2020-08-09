@@ -16,14 +16,7 @@
 
 #include "Logging/Log.h"
 
-#if ZE_RENDER_OPENGL
-#include "Renderer/GL/GLRenderZooid.h"
-#endif
-
-#if Z_PHYSICS_PHYSX
-#include "Physics/PhysX/PhysXZooid.h"
-#endif
-
+#include "Physics/PhysicsZooid.h"
 #include "Physics/Physics.h"
 
 #include "Platform/Thread.h"
@@ -96,13 +89,9 @@ namespace ZE
 		GlobalRegistry::Register();
 
 		// Creating rendering Zooid
-
 		{
-#if ZE_RENDER_OPENGL
-			ZEINFO("Initializing GL Rendering...");
-			Handle renderZooidHandle("Render Zooid", sizeof(GLRenderZooid));
-			_gameContext->m_renderZooid = new(renderZooidHandle) GLRenderZooid(_gameContext);
-#endif
+			ZEINFO("Initializing Rendering...");
+			_gameContext->m_renderZooid = RenderZooid::GetRenderZooid(_gameContext);
 			_gameContext->m_renderZooid->Init();
 			_gameContext->m_renderer = _gameContext->m_renderZooid->GetRenderer();
 		}
@@ -183,11 +172,8 @@ namespace ZE
 
 		// Create Physics
 		{
-#if Z_PHYSICS_PHYSX
 			ZEINFO("Initializing Physics...");
-			Handle hPhysXZooidHandle("PhysX Zooid", sizeof(ZE::PhysXZooid));
-			_gameContext->m_physicsZooid = new (hPhysXZooidHandle) ZE::PhysXZooid(_gameContext);
-#endif
+			_gameContext->m_physicsZooid = PhysicsZooid::GetPhysicsZood(_gameContext);
 			_gameContext->m_physicsZooid->Init();
 			_gameContext->m_physics = _gameContext->m_physicsZooid->GetPhysics();
 		}

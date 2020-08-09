@@ -8,6 +8,7 @@
 #include "SceneRenderer/RenderPass/SSAORenderPass.h"
 #include "SceneRenderer/RenderPass/TransculentRenderPass.h"
 #include "SceneRenderer/RenderPass/DepthRenderPass.h"
+#include "SceneRenderer/RenderPass/HighlightRenderPass.h"
 
 #include "Renderer/IGPUBufferData.h"
 #include "Renderer/DrawList.h"
@@ -30,6 +31,7 @@ namespace ZE
 		ScreenRenderPass::GetInstance()->prepare(_gameContext);
 		DebugRenderPass::GetInstance()->prepare(_gameContext);
 		SSAORenderPass::GetInstance()->prepare(_gameContext);
+		HighlightRenderPass::GetInstance()->prepare(_gameContext);
 	}
 
 	void BaseDeferredRenderGraph::release(GameContext* _gameContext)
@@ -42,6 +44,7 @@ namespace ZE
 		ScreenRenderPass::GetInstance()->release(_gameContext);
 		DebugRenderPass::GetInstance()->release(_gameContext);
 		SSAORenderPass::GetInstance()->release(_gameContext);
+		HighlightRenderPass::GetInstance()->release(_gameContext);
 	}
 
 	void BaseDeferredRenderGraph::begin(GameContext* _gameContext)
@@ -102,6 +105,11 @@ namespace ZE
 		TransculentRenderPass::GetInstance()->addInputFrameBuffer(LightRenderPass::GetInstance()->getFrameBufferOutput(0));
 		TransculentRenderPass::GetInstance()->Execute(_gameContext);
 		TransculentRenderPass::GetInstance()->end(_gameContext);
+
+		HighlightRenderPass::GetInstance()->begin(_gameContext);
+		HighlightRenderPass::GetInstance()->addInputFrameBuffer(TransculentRenderPass::GetInstance()->getFrameBufferOutput(0));
+		HighlightRenderPass::GetInstance()->Execute(_gameContext);
+		HighlightRenderPass::GetInstance()->end(_gameContext);
 
 		DebugRenderPass::GetInstance()->begin(_gameContext);
 		DebugRenderPass::GetInstance()->addInputFrameBuffer(TransculentRenderPass::GetInstance()->getFrameBufferOutput(0));

@@ -119,24 +119,18 @@ namespace ZE
 				meshRenderInfo->m_castShadow = m_bCastShadow;
 				meshRenderInfo->m_boxExtent = m_mesh->getLocalBoxExtend();
 				meshRenderInfo->m_boxLocalPos = m_mesh->getLocalBoxCenter();
+				meshRenderInfo->m_outlined = m_bHighlight;
+
+				if (m_bHighlight)
+				{
+					MeshRenderInfo* highLightRenderInfo = m_gameContext->getDrawList()->m_highligtRenderGatherer.nextRenderInfo();
+					SceneRenderFactory::InitializeRenderInfoForMesh(highLightRenderInfo, m_mesh, m_material);
+					highLightRenderInfo->m_worldTransform = m_worldTransform;
+					highLightRenderInfo->m_boxLocalPos = meshRenderInfo->m_boxLocalPos;
+
+					DebugRenderer::DrawDebugBox(m_mesh->getLocalBoxExtend(), m_mesh->getLocalBoxCenter(), m_worldTransform);
+				}
 			}
-
-			/*if (m_bHighlight)
-			{
-				EnableAndSetStencilFunc(*shaderAction, ALWAYS, 1, 0xFF, 0xFF);
-
-				ShaderAction& highlightAction = m_gameContext->getDrawList()->getNextShaderAction();
-
-				highlightAction.setShaderAndBuffer(ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_3D_HIGHLIGHT), m_mesh->getGPUBufferArray());
-				highlightAction.setTopology(TOPOLOGY_TRIANGLE);
-				Matrix4x4 m_scaledTransform = m_worldTransform;
-				m_scaledTransform.scale(Vector3(1.05f, 1.05f, 1.05f));
-
-				highlightAction.setShaderMatVar("modelMat", m_scaledTransform);
-				highlightAction.setShaderVec3Var("highlightColor", Vector3(1.0f, 0.5, 0.3f));
-
-				EnableAndSetStencilFunc(highlightAction, NOTEQUAL, 1, 0xFF, 0x00);
-			}*/
 		}
 	}
 

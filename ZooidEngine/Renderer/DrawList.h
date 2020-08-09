@@ -88,6 +88,9 @@ namespace ZE
 		// #TODO this will be available for debug only
 		MeshRenderGatherer m_debugMeshRenderGatherer;
 
+		// Highlight
+		MeshRenderGatherer m_highligtRenderGatherer;
+
 		// View Fustrum
 		ViewFrustum m_viewFustrum;
 		Matrix4x4 m_projectionMat;

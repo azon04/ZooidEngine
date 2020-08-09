@@ -30,6 +30,8 @@ namespace ZE
 
 		FORCEINLINE IRenderer* GetRenderer() const { return m_renderer; }
 
+		static RenderZooid* GetRenderZooid(GameContext* gameContext);
+
 	protected:
 		IRenderer* m_renderer;
 	};

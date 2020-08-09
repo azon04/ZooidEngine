@@ -176,17 +176,17 @@ namespace ZE
 				TextureCreateDesc textureCreateDesc;
 				textureCreateDesc.MinFilter = LINEAR;
 				textureCreateDesc.MagFilter = LINEAR;
-				textureCreateDesc.TextureFormat = TEX_DEPTH;
-				textureCreateDesc.DataType = FLOAT;
+				textureCreateDesc.TextureFormat = TEX_DEPTH24_STENCIL8;
+				textureCreateDesc.DataType = UNSIGNED_INT_24_8;
 				textureCreateDesc.bGenerateMipMap = false;
 				Handle depthRenderBuffer = _gameContext->getRenderZooid()->CreateRenderTexture();
 				if (depthRenderBuffer.isValid())
 				{
 					m_renderDepthTexture = depthRenderBuffer.getObject<IGPUTexture>();
 					m_renderDepthTexture->create(textureCreateDesc);
-					m_renderDepthTexture->setDebugName("DepthBuffer");
+					m_renderDepthTexture->setDebugName("DepthStencilBuffer");
 
-					m_frameBuffer->addTextureAttachment(DEPTH_ATTACHMENT, m_renderDepthTexture);
+					m_frameBuffer->addTextureAttachment(DEPTH_STENCIL_ATTACHMENT, m_renderDepthTexture);
 					m_frameBuffer->setupAttachments();
 				}
 			}
@@ -194,8 +194,7 @@ namespace ZE
 			_gameContext->getRenderer()->ClearScreen();
 		}
 
-
-		MeshSceneRenderer::Render(drawList->m_meshRenderGatherer.getRenderInfos(), drawList->m_meshRenderGatherer.getRenderCount(), m_shaderChain);
+		MeshSceneRenderer::Render(drawList->m_meshRenderGatherer.getRenderInfos(), drawList->m_meshRenderGatherer.getRenderCount(), m_shaderChain, m_textureBufferInputs.size() == 0);
 		SkinMeshSceneRenderer::Render(drawList->m_skinMeshRenderGatherer.getRenderInfos(), drawList->m_skinMeshRenderGatherer.getRenderCount(), m_shaderSkinChain);
 		//TransculentSceneRenderer::Render(drawList->m_transculentRenderGatherer.getRenderInfos(), drawList->m_transculentRenderGatherer.getRenderCount(), m_shaderChain);
 
