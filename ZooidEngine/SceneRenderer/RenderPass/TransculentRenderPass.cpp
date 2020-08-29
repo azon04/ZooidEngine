@@ -53,7 +53,7 @@ namespace ZE
 			frameBuffer->bind();
 		}
 
-		TransculentSceneRenderer::Render(_gameContext->getDrawList()->m_transculentRenderGatherer.getRenderInfos(), _gameContext->getDrawList()->m_transculentRenderGatherer.getRenderCount());
+		TransculentSceneRenderer::Render(_gameContext->getRenderDrawList()->m_transculentRenderGatherer.getRenderInfos(), _gameContext->getRenderDrawList()->m_transculentRenderGatherer.getRenderCount());
 
 		if (frameBuffer)
 		{

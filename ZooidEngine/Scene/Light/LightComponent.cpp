@@ -73,8 +73,8 @@ namespace ZE
 				AxisAlignedBox box(pos - Vector3(m_attDistance), pos + Vector3(m_attDistance));
 				//Sphere sphere(pos, m_attDistance);
 
-				EFrustumTestResult testResult = m_gameContext->getDrawList()->m_viewFustrum.testAAB(box);
-				//EFrustumTestResult testResult = m_gameContext->getDrawList()->m_viewFustrum.testSphere(sphere);
+				EFrustumTestResult testResult = m_gameContext->getGameDrawList()->m_viewFustrum.testAAB(box);
+				//EFrustumTestResult testResult = m_gameContext->getRenderDrawList()->m_viewFustrum.testSphere(sphere);
 				if (testResult == FRUSTUM_OUTSIDE)
 				{
 					return; // ignore this light if outside
@@ -93,7 +93,7 @@ namespace ZE
 				float radius = m_attDistance * tan(m_outerRadius);
 				
 				Cone cone(top, bottom, radius);
-				EFrustumTestResult testResult = m_gameContext->getDrawList()->m_viewFustrum.testCone(cone);
+				EFrustumTestResult testResult = m_gameContext->getGameDrawList()->m_viewFustrum.testCone(cone);
 				if (testResult == FRUSTUM_OUTSIDE)
 				{
 					return; // ignore this light if outside
@@ -107,7 +107,7 @@ namespace ZE
 			}
 		}
 
-		LightData& lightData = m_gameContext->getDrawList()->m_lightData;
+		LightData& lightData = m_gameContext->getGameDrawList()->m_lightData;
 		Int32 index = lightData.NumLight++;
 		LightStruct& light = lightData.lights[index];
 		light.reset();
@@ -317,8 +317,8 @@ namespace ZE
 
 	void LightComponent::setupShadowMapsDirectional(UInt32 lightIndex)
 	{
-		LightStruct& lightData = m_gameContext->getDrawList()->m_lightData.lights[lightIndex];
-		DrawList* drawList = m_gameContext->getDrawList();
+		DrawList* drawList = m_gameContext->getGameDrawList();
+		LightStruct& lightData = drawList->m_lightData.lights[lightIndex];
 
 		CameraComponent* currentCamera = CameraManager::GetInstance()->getCurrentCamera();
 		Float32 farDistance = currentCamera->m_far - currentCamera->m_near;
@@ -412,7 +412,7 @@ namespace ZE
 		{
 			if(m_staticShadowTexture)
 			{
-				LightShadowMapData& shadowMapData = m_gameContext->getDrawList()->getNextLightShadowMapData();
+				LightShadowMapData& shadowMapData = drawList->getNextLightShadowMapData();
 				shadowMapData.dynamicShadowFrameBuffer = nullptr;
 				shadowMapData.dynamicShadowTexture = nullptr;
 				shadowMapData.staticShadowTexture = m_staticShadowTexture;
@@ -431,8 +431,8 @@ namespace ZE
 			{
 				Matrix4x4 localView = view;
 				Matrix4x4 cullingBoxTransform;
-				int cascadeIndex = m_gameContext->getDrawList()->m_lightData.NumCascade++;
-				CascadeShadowData& cascadeData = m_gameContext->getDrawList()->m_lightData.cascadeShadowData[cascadeIndex];
+				int cascadeIndex = drawList->m_lightData.NumCascade++;
+				CascadeShadowData& cascadeData = drawList->m_lightData.cascadeShadowData[cascadeIndex];
 				
 				calculateCascadeLightFustrum(localView, projection, &(drawList->m_viewFustrum), currentCascadeStart, cascadedDistances[i], 
 					obMostRight, obMostLeft, obMostTop, obMostBottom, obMostNear, obMostFar, cullingBoxTransform);
@@ -441,7 +441,7 @@ namespace ZE
 				currentCascadeStart = cascadedDistances[i] - 0.0025f;
 				
 				// Setup Shadow Map Data
-				LightShadowMapData& shadowMapData = m_gameContext->getDrawList()->getNextLightShadowMapData();
+				LightShadowMapData& shadowMapData = drawList->getNextLightShadowMapData();
 				shadowMapData.dynamicShadowFrameBuffer = getOrCreateShadowFrameBuffer(i);
 				shadowMapData.dynamicShadowTexture = getDynamicShadowMap(i);
 				shadowMapData.staticShadowTexture = nullptr;
@@ -462,14 +462,15 @@ namespace ZE
 
 	void LightComponent::setupShadowMapsSpotLight(UInt32 lightIndex)
 	{
-		LightStruct& lightData = m_gameContext->getDrawList()->m_lightData.lights[lightIndex];
+		DrawList* drawList = m_gameContext->getGameDrawList();
+		LightStruct& lightData = drawList->m_lightData.lights[lightIndex];
 		Matrix4x4 view, projection;
 
 		MathOps::LookAt(view, lightData.getPosition(), lightData.getPosition() + lightData.getDirection(), Vector3(0.0f, 1.0f, 0.0f));
 		MathOps::CreatePerspectiveProjEx(projection, 1.0f, 2.0f * RadToDeg(acosf(lightData.OuterCutOff)), 0.1f, 10.0f);
 
 		// Setup Shadow Map Data
-		LightShadowMapData& shadowMapData = m_gameContext->getDrawList()->getNextLightShadowMapData();
+		LightShadowMapData& shadowMapData = drawList->getNextLightShadowMapData();
 		shadowMapData.dynamicShadowFrameBuffer = getOrCreateShadowFrameBuffer(0);
 		shadowMapData.dynamicShadowTexture = getDynamicShadowMap(0);
 		shadowMapData.staticShadowTexture = m_staticShadowTexture;
@@ -491,7 +492,8 @@ namespace ZE
 
 	void LightComponent::setupShadowMapsPointLight(UInt32 lightIndex)
 	{
-		LightStruct& lightData = m_gameContext->getDrawList()->m_lightData.lights[lightIndex];
+		DrawList* drawList = m_gameContext->getGameDrawList();
+		LightStruct& lightData = drawList->m_lightData.lights[lightIndex];
 
 		static Vector3 directions[6] = {
 			Vector3(0.0, 1.0f, 0.0f),
@@ -510,7 +512,7 @@ namespace ZE
 			MathOps::CreatePerspectiveProjEx(projection, 1.0f, 45.0f, 0.01f, m_attDistance);
 
 			// Setup Shadow Map Data
-			LightShadowMapData& shadowMapData = m_gameContext->getDrawList()->getNextLightShadowMapData();
+			LightShadowMapData& shadowMapData = drawList->getNextLightShadowMapData();
 			shadowMapData.dynamicShadowFrameBuffer = getOrCreateShadowFrameBuffer(i);
 			shadowMapData.dynamicShadowTexture = getDynamicShadowMap(i);
 			shadowMapData.staticShadowTexture = nullptr;

@@ -175,6 +175,7 @@ namespace ZE
 
 	bool SSAORenderPass::execute_GPU(GameContext* _gameContext)
 	{
+		DrawList* drawList = _gameContext->getRenderDrawList();
 		IGPUBufferArray* quadVBO = BufferManager::getInstance()->getBufferArray(BUFFER_ARRAY_QUAD_V3_TC2);
 
 		// Get Input
@@ -200,8 +201,8 @@ namespace ZE
 		m_shaderChain->setTexture("noiseTexture", m_noiseTexture, 2);
 		m_noiseTexture->bind();
 
-		m_shaderChain->bindConstantBuffer("frame_data", _gameContext->getDrawList()->m_mainConstantBuffer);
-		_gameContext->getDrawList()->m_mainConstantBuffer->bind();
+		m_shaderChain->bindConstantBuffer("frame_data", drawList->m_mainConstantBuffer);
+		drawList->m_mainConstantBuffer->bind();
 
 		m_shaderChain->bindConstantBuffer("sample_data", m_ssaoBufferData);
 		m_ssaoBufferData->bind();

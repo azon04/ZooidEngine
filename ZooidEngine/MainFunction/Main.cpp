@@ -24,7 +24,10 @@ ZE_MAIN()
 		ZE::MainThreadJob(&gameContext);
 	}
 
-	gameContext.getDrawList()->Reset();
+	for(int i=0; i < MAX_DRAWLIST_BUFFER; i++)
+	{ 
+		gameContext.getDrawList(i)->Reset();
+	}
 
 	ZE::MainClean(&gameContext);
 

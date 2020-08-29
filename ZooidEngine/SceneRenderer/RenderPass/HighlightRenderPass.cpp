@@ -32,7 +32,7 @@ namespace ZE
 
 	bool HighlightRenderPass::execute_GPU(GameContext* _gameContext)
 	{
-		DrawList* drawList = _gameContext->getDrawList();
+		DrawList* drawList = _gameContext->getRenderDrawList();
 		IRenderer* renderer = _gameContext->getRenderer();
 		IShaderChain* shaderChain = ShaderManager::GetInstance()->getShaderChain(Z_SHADER_CHAIN_3D_HIGHLIGHT);
 

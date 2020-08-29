@@ -15,6 +15,8 @@ namespace ZE
 
 		// Get view matrix for camera
 		void getViewMatrix(Matrix4x4& _outMat);
+		void getProjectionMat(Matrix4x4& _outMat);
+		void calculateProjectionMat();
 
 		ZE::Float32 m_near;
 		ZE::Float32 m_far;
@@ -23,6 +25,10 @@ namespace ZE
 		// For Orthographic Projection
 		ZE::Float32 m_orthoWidth;
 		bool m_bUsingOrthoProjection;
+
+	private:
+
+		Matrix4x4 m_projectionMat;
 	};
 }
 #endif

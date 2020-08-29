@@ -49,4 +49,8 @@
 #define ZE_RENDER_OPENGL 0
 #endif
 
+#ifndef ZE_RENDER_MULTITHREAD
+#define ZE_RENDER_MULTITHREAD 1
+#endif
+
 #endif

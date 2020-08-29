@@ -22,8 +22,8 @@ namespace ZE
 
 	void MeshSceneRenderer::render(RenderInfo* renderInfos, UInt32 renderInfoCount)
 	{
+		DrawList* drawList = gGameContext->getRenderDrawList();
 		MeshRenderInfo* meshRenderInfos = static_cast<MeshRenderInfo*>(renderInfos);
-		
 		IShaderChain* shader = m_overrideShaderChain;
 
 		bool bPrevDoubleSided = false;
@@ -57,12 +57,12 @@ namespace ZE
 			ZCHECK(shader);
 
 			// Bind frame_data
-			gGameContext->getDrawList()->m_mainConstantBuffer->bind();
-			shader->bindConstantBuffer("frame_data", gGameContext->getDrawList()->m_mainConstantBuffer);
+			drawList->m_mainConstantBuffer->bind();
+			shader->bindConstantBuffer("frame_data", drawList->m_mainConstantBuffer);
 
 			// Bind light_data
-			gGameContext->getDrawList()->m_lightConstantBuffer->bind();
-			shader->bindConstantBuffer("light_data", gGameContext->getDrawList()->m_lightConstantBuffer);
+			drawList->m_lightConstantBuffer->bind();
+			shader->bindConstantBuffer("light_data", drawList->m_lightConstantBuffer);
 
 			// Create and bind draw data
 			IGPUBufferData* drawBufferData = BufferManager::getInstance()->getOrCreateDrawBuffer(currentMesh.m_worldTransform.m_data, sizeof(Matrix4x4));
@@ -105,7 +105,7 @@ namespace ZE
 				currentMesh.m_material->Bind(shader);
 			}
 
-			ShadowDepthRenderer::BindShadowTextures(gGameContext->getDrawList(), shader, currentMesh.m_material ? currentMesh.m_material->getTextureCount() : 0);
+			ShadowDepthRenderer::BindShadowTextures(drawList, shader, currentMesh.m_material ? currentMesh.m_material->getTextureCount() : 0);
 
 			if (currentMesh.m_gpuBufferArray->isUsingIndexBuffer())
 			{
@@ -153,6 +153,7 @@ namespace ZE
 
 	void TransculentSceneRenderer::render(RenderInfo* renderInfos, UInt32 renderInfoCount)
 	{
+		DrawList* drawList = gGameContext->getRenderDrawList();
 		Array<UInt32> sortIndices;
 		MeshRenderInfo* meshInfos = static_cast<MeshRenderInfo*>(renderInfos);
 		sortBlendInfos(meshInfos, renderInfoCount, sortIndices);
@@ -168,12 +169,12 @@ namespace ZE
 			currentMesh.m_shaderChain->bind();
 
 			// Bind frame_data
-			gGameContext->getDrawList()->m_mainConstantBuffer->bind();
-			currentMesh.m_shaderChain->bindConstantBuffer("frame_data", gGameContext->getDrawList()->m_mainConstantBuffer);
+			drawList->m_mainConstantBuffer->bind();
+			currentMesh.m_shaderChain->bindConstantBuffer("frame_data", drawList->m_mainConstantBuffer);
 
 			// Bind light_data
-			gGameContext->getDrawList()->m_lightConstantBuffer->bind();
-			currentMesh.m_shaderChain->bindConstantBuffer("light_data", gGameContext->getDrawList()->m_lightConstantBuffer);
+			drawList->m_lightConstantBuffer->bind();
+			currentMesh.m_shaderChain->bindConstantBuffer("light_data", drawList->m_lightConstantBuffer);
 
 			// Create and bind draw data
 			IGPUBufferData* drawBufferData = BufferManager::getInstance()->getOrCreateDrawBuffer(currentMesh.m_worldTransform.m_data, sizeof(Matrix4x4));
@@ -202,7 +203,7 @@ namespace ZE
 				currentMesh.m_material->Bind(currentMesh.m_shaderChain);
 			}
 
-			ShadowDepthRenderer::BindShadowTextures(gGameContext->getDrawList(), currentMesh.m_shaderChain, currentMesh.m_material ? currentMesh.m_material->getTextureCount() : 0);
+			ShadowDepthRenderer::BindShadowTextures(drawList, currentMesh.m_shaderChain, currentMesh.m_material ? currentMesh.m_material->getTextureCount() : 0);
 
 
 			if (currentMesh.m_gpuBufferArray->isUsingIndexBuffer())
@@ -274,7 +275,7 @@ namespace ZE
 		if (renderInfoCount == 0) { return; }
 
 		Array<Float32> squareDists(renderInfoCount);
-		Vector3& cameraPosition = gGameContext->getDrawList()->m_cameraPosition;
+		Vector3& cameraPosition = gGameContext->getRenderDrawList()->m_cameraPosition;
 
 		for (UInt32 i = 0; i < renderInfoCount; i++)
 		{
@@ -292,6 +293,7 @@ namespace ZE
 
 	void SkinMeshSceneRenderer::render(RenderInfo* renderInfos, UInt32 renderInfoCount)
 	{
+		DrawList* drawList = gGameContext->getRenderDrawList();
 		SkinMeshRenderInfo* meshRenderInfos = static_cast<SkinMeshRenderInfo*>(renderInfos);
 		
 		bool bPrevDoubleSided = false;
@@ -326,12 +328,12 @@ namespace ZE
 			ZCHECK(shader);
 
 			// Bind frame_data
-			gGameContext->getDrawList()->m_mainConstantBuffer->bind();
-			shader->bindConstantBuffer("frame_data", gGameContext->getDrawList()->m_mainConstantBuffer);
+			drawList->m_mainConstantBuffer->bind();
+			shader->bindConstantBuffer("frame_data", drawList->m_mainConstantBuffer);
 
 			// Bind light_data
-			gGameContext->getDrawList()->m_lightConstantBuffer->bind();
-			shader->bindConstantBuffer("light_data", gGameContext->getDrawList()->m_lightConstantBuffer);
+			drawList->m_lightConstantBuffer->bind();
+			shader->bindConstantBuffer("light_data", drawList->m_lightConstantBuffer);
 
 			// Bind bone_data
 			currentMesh.m_skinJointData->bind();
@@ -365,7 +367,7 @@ namespace ZE
 				currentMesh.m_material->Bind(shader);
 			}
 
-			ShadowDepthRenderer::BindShadowTextures(gGameContext->getDrawList(), shader, currentMesh.m_material ? currentMesh.m_material->getTextureCount() : 0);
+			ShadowDepthRenderer::BindShadowTextures(gGameContext->getRenderDrawList(), shader, currentMesh.m_material ? currentMesh.m_material->getTextureCount() : 0);
 
 
 			if (currentMesh.m_gpuBufferArray->isUsingIndexBuffer())

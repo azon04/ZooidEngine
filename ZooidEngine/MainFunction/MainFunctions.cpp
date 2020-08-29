@@ -68,8 +68,6 @@ ZE::Float32 g_gpuDrawTime;
 namespace ZE 
 {
 	ConditionVariable g_drawThreadVariable;
-	Mutex g_drawMutex;
-	bool g_drawReady = false;
 
 	void MainSetup(GameContext* _gameContext)
 	{
@@ -118,9 +116,12 @@ namespace ZE
 
 		{
 			ZEINFO("Initializing DrawList...");
-			Handle handle("DrawList", sizeof(DrawList));
-			_gameContext->m_drawList = new(handle) DrawList;
-			_gameContext->m_drawList->Setup();
+			for (int i = 0; i < MAX_DRAWLIST_BUFFER; i++)
+			{
+				Handle handle("DrawList", sizeof(DrawList));
+				_gameContext->m_drawLists[i] = new(handle) DrawList;
+				_gameContext->m_drawLists[i]->Setup();
+			}
 		}
 
 		// Create Main Event Dispatcher
@@ -203,7 +204,6 @@ namespace ZE
 		_gameContext->m_mainTimer.Reset();
 
 #if ZE_RENDER_MULTITHREAD
-		g_drawReady = false;
 		_gameContext->m_drawThread = new Thread(MainDrawJob, _gameContext);
 #endif
 
@@ -214,6 +214,7 @@ namespace ZE
 #if ZE_RENDER_MULTITHREAD
 		if (_gameContext->m_drawThread)
 		{
+			g_drawThreadVariable.notify_one();
 			_gameContext->m_drawThread->join();
 		}
 #endif
@@ -289,11 +290,10 @@ namespace ZE
 		// Application Clean
 		Application::GetApplication()->Tick(_gameContext, deltaTime);
 
+		static Timer lockTimer;
 #if ZE_RENDER_MULTITHREAD
-		while (g_drawReady) 
 		{
-			ZE::ThreadSleep(0);
-		}
+		LockGuard guard(_gameContext->getGameDrawList()->m_mutex);
 #endif
 
 		// Debug Options Menu
@@ -304,14 +304,19 @@ namespace ZE
 			ZE::UI::EndPanel();
 		}*/
 
-		DrawList* drawList = _gameContext->getDrawList();
+		DrawList* drawList = _gameContext->getGameDrawList();
 
 		// Set up data for this frame
 		{
 			// Set ViewFustrum before gathering the render target
 			CameraComponent* currentCamera = CameraManager::GetInstance()->getCurrentCamera();
 
+			// Get Projection Matrix
+			currentCamera->getProjectionMat(drawList->m_projectionMat);
+
 			// Compute View Matrix and View Frustum
+			drawList->m_viewFustrum.setProjectionVars(_gameContext->getRenderer()->GetWidth() / _gameContext->getRenderer()->GetHeight(), 45.0f, currentCamera->m_near, currentCamera->m_far);
+			// #TODO set ViewFustrum for Orthographic Projection
 			drawList->m_viewFustrum.setCameraVars(currentCamera->getWorldPosition(), currentCamera->getForwardVector() * -1.0f, currentCamera->getUpVector(), currentCamera->getRightVector());
 			currentCamera->getViewMatrix(drawList->m_viewMat);
 			drawList->m_viewFustrum.constructFromMVPMatrix(drawList->m_viewMat * drawList->m_projectionMat);
@@ -319,8 +324,8 @@ namespace ZE
 			drawList->m_objectsBounding.m_max = Vector3(-99999.9f);
 			drawList->m_objectsBounding.m_min = Vector3(99999.9f);
 
-			_gameContext->getDrawList()->m_lightData.NumLight = 0;
-			_gameContext->getDrawList()->m_lightData.NumCascade = 0;
+			drawList->m_lightData.NumLight = 0;
+			drawList->m_lightData.NumCascade = 0;
 		}
 
 		// Handle Event_GATHER_BOUND
@@ -368,7 +373,7 @@ namespace ZE
 		// Write on Total Delta time
 		g_gameThreadTime = MathOps::FLerp(g_gameThreadTime, (Float32)deltaTime, 0.01f);
 
-		if( gDebugOptions.bShowFPSStats )
+		if (gDebugOptions.bShowFPSStats)
 		{
 			static char buffer[256];
 			static Vector3 RedColor(1.0f, 0.0f, 0.0f);
@@ -392,12 +397,13 @@ namespace ZE
 		ZE::UI::EndFrame();
 
 #if ZE_RENDER_MULTITHREAD
-		UniqueLock lck(g_drawMutex);
-		g_drawReady = true;
-		//ZELOG(LOG_ENGINE, Log, "gDrawReady in Main2 %d", g_drawReady);
-		g_drawThreadVariable.notify_all();
+		_gameContext->getGameDrawList()->m_bReady = true;
+		_gameContext->m_currentGameDrawlist = (_gameContext->m_currentGameDrawlist + 1) % MAX_DRAWLIST_BUFFER;
 
+		g_drawThreadVariable.notify_one();
+		}
 		// Oddly needed. This will let the main thread know that the window is still active
+		
 		_gameContext->getRenderer()->PollEvent();
 #else
 		_gameContext->getRenderer()->PollEvent();
@@ -407,22 +413,18 @@ namespace ZE
 
 	void MainDrawJob(GameContext* _gameContext)
 	{
-		UniqueLock lck(g_drawMutex);
-
 		_gameContext->m_renderThreadTimer.Reset();
-
-		while (!g_drawReady)
-		{
-			g_drawThreadVariable.wait(lck);
-		}
 
 		while (!_gameContext->getRenderer()->IsClose())
 		{
-			DrawJob(_gameContext);
+			DrawList* drawList = _gameContext->getRenderDrawList();
+			UniqueLock lck(drawList->m_mutex);
 			
-			g_drawReady = false;
-			//ZELOG(LOG_ENGINE, Log, "gDrawReady in Draw %d", g_drawReady);
-			while (!g_drawReady) g_drawThreadVariable.wait(lck);
+			g_drawThreadVariable.wait(lck, [] { return gGameContext->getRenderDrawList()->m_bReady || gGameContext->getRenderer()->IsClose(); });
+
+			DrawJob(_gameContext);
+			drawList->m_bReady = false;
+			_gameContext->m_currentRenderDrawlist = (_gameContext->m_currentRenderDrawlist + 1) % MAX_DRAWLIST_BUFFER;
 		}
 	}
 
@@ -431,7 +433,7 @@ namespace ZE
 		double deltaTime = _gameContext->m_renderThreadTimer.ResetAndGetDeltaMS();
 
 		IRenderer* renderer = _gameContext->getRenderer();
-		DrawList* drawList = _gameContext->getDrawList();
+		DrawList* drawList = _gameContext->getRenderDrawList();
 
 		// Main Renderer BeginFrame
 		renderer->BeginFrame();

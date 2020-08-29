@@ -56,9 +56,10 @@ namespace ZE
 
 		_gameContext->getRenderer()->ResetViewport();
 
-		MeshSceneRenderer::Render(_gameContext->getDrawList()->m_debugMeshRenderGatherer.getRenderInfos(), _gameContext->getDrawList()->m_debugMeshRenderGatherer.getRenderCount());
-		TextSceneRenderer::Render(_gameContext->getDrawList()->m_textSceneRenderGatherer.getRenderInfos(), _gameContext->getDrawList()->m_textSceneRenderGatherer.getRenderCount());
-		TextScreenRenderer::Render(_gameContext->getDrawList()->m_textScreenRenderGatherer.getRenderInfos(), _gameContext->getDrawList()->m_textScreenRenderGatherer.getRenderCount());
+		DrawList* drawList = _gameContext->getRenderDrawList();
+		MeshSceneRenderer::Render(drawList->m_debugMeshRenderGatherer.getRenderInfos(), drawList->m_debugMeshRenderGatherer.getRenderCount());
+		TextSceneRenderer::Render(drawList->m_textSceneRenderGatherer.getRenderInfos(), drawList->m_textSceneRenderGatherer.getRenderCount());
+		TextScreenRenderer::Render(drawList->m_textScreenRenderGatherer.getRenderInfos(), drawList->m_textScreenRenderGatherer.getRenderCount());
 
 		if (frameBuffer)
 		{

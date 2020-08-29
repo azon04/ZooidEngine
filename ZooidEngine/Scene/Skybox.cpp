@@ -118,7 +118,8 @@ namespace ZE
 
 	void Skybox::handleGatherRender(Event* pEvent)
 	{
-		SkyboxRenderInfo* renderInfo = gGameContext->getDrawList()->m_skyboxRenderGatherer.nextRenderInfo();
+		DrawList* drawList = gGameContext->getGameDrawList();
+		SkyboxRenderInfo* renderInfo = drawList->m_skyboxRenderGatherer.nextRenderInfo();
 
 		renderInfo->m_renderTopology = TOPOLOGY_TRIANGLE;
 		renderInfo->m_gpuBufferArray = s_skyBoxBufferArray;
@@ -129,7 +130,7 @@ namespace ZE
 
 		if (m_irradianceMap)
 		{
-			EnvironmentMapData& envMap = gGameContext->getDrawList()->getNextEnvironmentMap();
+			EnvironmentMapData& envMap = drawList->getNextEnvironmentMap();
 			envMap.irradianceMap = m_irradianceMap;
 			envMap.prefilterSpecularMap = m_prefilterSpecMap;
 		}

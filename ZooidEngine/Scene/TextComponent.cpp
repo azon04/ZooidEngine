@@ -56,7 +56,7 @@ namespace ZE
 		{
 			if (m_drawSpace == DRAW_SCREEN)
 			{
-				TextRenderInfo* textRenderInfo = m_gameContext->getDrawList()->m_textScreenRenderGatherer.nextRenderInfo();
+				TextRenderInfo* textRenderInfo = m_gameContext->getGameDrawList()->m_textScreenRenderGatherer.nextRenderInfo();
 
 				textRenderInfo->m_gpuBufferArray = m_textMesh->getGPUBufferArray();
 				textRenderInfo->m_renderTopology = TOPOLOGY_TRIANGLE;
@@ -83,7 +83,7 @@ namespace ZE
 			}
 			else
 			{
-				TextRenderInfo* textRenderInfo = m_gameContext->getDrawList()->m_textSceneRenderGatherer.nextRenderInfo();
+				TextRenderInfo* textRenderInfo = m_gameContext->getGameDrawList()->m_textSceneRenderGatherer.nextRenderInfo();
 
 				textRenderInfo->m_gpuBufferArray = m_textMesh->getGPUBufferArray();
 				textRenderInfo->m_renderTopology = TOPOLOGY_TRIANGLE;

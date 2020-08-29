@@ -24,6 +24,7 @@ namespace ZE
 
 	void TextSceneRenderer::render(RenderInfo* renderInfos, UInt32 renderInfoCount)
 	{
+		DrawList* drawList = gGameContext->getRenderDrawList();
 		TextRenderInfo* textRenderInfos = static_cast<TextRenderInfo*>(renderInfos);
 		for (UInt32 i = 0; i < renderInfoCount; i++)
 		{
@@ -35,12 +36,12 @@ namespace ZE
 			currentInfo.m_shaderChain->bind();
 
 			// Bind Frame data
-			gGameContext->getDrawList()->m_mainConstantBuffer->bind();
-			currentInfo.m_shaderChain->bindConstantBuffer("frame_data", gGameContext->getDrawList()->m_mainConstantBuffer);
+			drawList->m_mainConstantBuffer->bind();
+			currentInfo.m_shaderChain->bindConstantBuffer("frame_data", drawList->m_mainConstantBuffer);
 
 			// Bind light_data
-			gGameContext->getDrawList()->m_lightConstantBuffer->bind();
-			currentInfo.m_shaderChain->bindConstantBuffer("light_data", gGameContext->getDrawList()->m_lightConstantBuffer);
+			drawList->m_lightConstantBuffer->bind();
+			currentInfo.m_shaderChain->bindConstantBuffer("light_data", drawList->m_lightConstantBuffer);
 
 			// Create and bind draw data
 			IGPUBufferData* drawBufferData = BufferManager::getInstance()->getOrCreateDrawBuffer(currentInfo.m_worldTransform.m_data, sizeof(Matrix4x4));

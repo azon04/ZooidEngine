@@ -44,20 +44,7 @@ namespace ZE
 	void CameraManager::setCurrentCamara(CameraComponent* cameraComponent)
 	{
 		m_currentCamera = cameraComponent;
-		if (cameraComponent->m_bUsingOrthoProjection)
-		{
-			MathOps::CreateOrthoProj(m_gameContext->getDrawList()->m_projectionMat, m_currentCamera->m_orthoWidth / 2.0f, 
-				(m_gameContext->getRenderer()->GetHeight() / m_gameContext->getRenderer()->GetWidth()) * m_currentCamera->m_orthoWidth * 0.5f, m_currentCamera->m_near, m_currentCamera->m_far);
-		
-			// #TODO set ViewFustrum for Orthographic Projection
-		}
-		else
-		{
-			MathOps::CreatePerspectiveProjEx(m_gameContext->getDrawList()->m_projectionMat, 
-				m_gameContext->getRenderer()->GetWidth() / m_gameContext->getRenderer()->GetHeight(), 45.0f, m_currentCamera->m_near, m_currentCamera->m_far);
-
-			m_gameContext->getDrawList()->m_viewFustrum.setProjectionVars(m_gameContext->getRenderer()->GetWidth() / m_gameContext->getRenderer()->GetHeight(), 45.0f, m_currentCamera->m_near, m_currentCamera->m_far);
-		}
+		m_currentCamera->calculateProjectionMat();
 	}
 
 }

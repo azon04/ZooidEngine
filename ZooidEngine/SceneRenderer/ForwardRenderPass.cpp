@@ -79,12 +79,13 @@ namespace ZE
 		ZE::CameraComponent* currentCamera = _gameContext->getCameraManager()->getCurrentCamera();
 		if (currentCamera)
 		{
-			_gameContext->getDrawList()->m_shaderFrameData.setViewMat(_gameContext->getDrawList()->m_viewMat);
-			_gameContext->getDrawList()->m_cameraPosition = currentCamera->getWorldPosition();
-			_gameContext->getDrawList()->m_cameraDirection = currentCamera->getForwardVector();
-			_gameContext->getDrawList()->m_shaderFrameData.setProjectionMat(_gameContext->getDrawList()->m_projectionMat);
-			_gameContext->getDrawList()->m_lightData.setViewPos(currentCamera->getWorldPosition());
-			_gameContext->getDrawList()->m_mainConstantBuffer->refresh();
+			DrawList* drawList = _gameContext->getRenderDrawList();
+			drawList->m_shaderFrameData.setViewMat(_gameContext->getRenderDrawList()->m_viewMat);
+			drawList->m_cameraPosition = currentCamera->getWorldPosition();
+			drawList->m_cameraDirection = currentCamera->getForwardVector();
+			drawList->m_shaderFrameData.setProjectionMat(_gameContext->getRenderDrawList()->m_projectionMat);
+			drawList->m_lightData.setViewPos(currentCamera->getWorldPosition());
+			drawList->m_mainConstantBuffer->refresh();
 		}
 	}
 
@@ -102,7 +103,7 @@ namespace ZE
 
 	bool ForwardRenderPass::execute_GPU(GameContext* _gameContext)
 	{
-		DrawList* drawList = _gameContext->getDrawList();
+		DrawList* drawList = _gameContext->getRenderDrawList();
 
 		ShadowDepthRenderer::Reset();
 
@@ -130,7 +131,7 @@ namespace ZE
 		_gameContext->getRenderer()->ClearScreen();
 
 		// Refresh light constant buffer after generate the shadow maps
-		_gameContext->getDrawList()->m_lightConstantBuffer->refresh();
+		drawList->m_lightConstantBuffer->refresh();
 
 		// reset viewport
 		_gameContext->getRenderer()->ResetViewport();

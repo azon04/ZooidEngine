@@ -152,7 +152,7 @@ namespace ZE
 
 	bool GBufferRenderPass::execute_GPU(GameContext* _gameContext)
 	{
-		DrawList* drawList = _gameContext->getDrawList();
+		DrawList* drawList = _gameContext->getRenderDrawList();
 		_gameContext->getRenderer()->ResetViewport();
 
 		if (m_textureBufferInputs.size() > 0)

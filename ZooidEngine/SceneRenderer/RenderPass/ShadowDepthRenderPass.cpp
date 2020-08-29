@@ -33,7 +33,7 @@ namespace ZE
 		RenderPass::end(_gameContext);
 
 		// Refresh light constant buffer after generate the shadow maps
-		_gameContext->getDrawList()->m_lightConstantBuffer->refresh();
+		_gameContext->getRenderDrawList()->m_lightConstantBuffer->refresh();
 
 		// reset viewport
 		_gameContext->getRenderer()->ResetViewport();
@@ -46,7 +46,7 @@ namespace ZE
 
 	bool ShadowDepthRenderPass::execute_GPU(GameContext* _gameContext)
 	{
-		DrawList* drawList = _gameContext->getDrawList();
+		DrawList* drawList = _gameContext->getRenderDrawList();
 		// For each Light render Shadows
 		for (UInt32 iShadowData = 0; iShadowData < drawList->m_lightShadowSize; iShadowData++)
 		{

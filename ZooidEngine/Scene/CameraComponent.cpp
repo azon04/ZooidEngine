@@ -1,6 +1,10 @@
 #include "CameraComponent.h"
 
+#include "Math/MathOps.h"
 #include "Math/Vector3.h"
+#include "Renderer/IRenderer.h"
+
+#include "ZEGameContext.h"
 
 #define USING_INVERSE 1
 
@@ -34,6 +38,26 @@ namespace ZE
 
 		_outMat.setPos(v);
 #endif
+	}
+
+	void CameraComponent::getProjectionMat(Matrix4x4& _outMat)
+	{
+		_outMat = m_projectionMat;
+	}
+
+	void CameraComponent::calculateProjectionMat()
+	{
+		if (m_bUsingOrthoProjection)
+		{
+			MathOps::CreateOrthoProj(m_projectionMat, m_orthoWidth / 2.0f,
+				(m_gameContext->getRenderer()->GetHeight() / m_gameContext->getRenderer()->GetWidth()) * m_orthoWidth * 0.5f, m_near, m_far);
+		}
+		else
+		{
+			MathOps::CreatePerspectiveProjEx(m_projectionMat,
+				m_gameContext->getRenderer()->GetWidth() / m_gameContext->getRenderer()->GetHeight(), 45.0f, m_near, m_far);
+
+		}
 	}
 
 }

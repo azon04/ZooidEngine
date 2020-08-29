@@ -149,7 +149,7 @@ bool ZE::LightRenderPass::execute_CPU(GameContext* _gameContext)
 
 bool ZE::LightRenderPass::execute_GPU(GameContext* _gameContext)
 {
-	DrawList* drawList = _gameContext->getDrawList();
+	DrawList* drawList = _gameContext->getRenderDrawList();
 	IRenderer* renderer = _gameContext->getRenderer();
 
 	// Copy Depth Texture from Input Frame Buffer
@@ -196,8 +196,8 @@ bool ZE::LightRenderPass::execute_GPU(GameContext* _gameContext)
 		IShaderChain* shader = bHasEnvironmentMap ? m_ambientShader : m_ambientShaderNoIrradianceMap;
 		shader->bind();
 
-		_gameContext->getDrawList()->m_mainConstantBuffer->bind();
-		shader->bindConstantBuffer("frame_data", _gameContext->getDrawList()->m_mainConstantBuffer);
+		drawList->m_mainConstantBuffer->bind();
+		shader->bindConstantBuffer("frame_data", drawList->m_mainConstantBuffer);
 
 		shader->setTexture("gPosition", positionTexture, 0);
 		positionTexture->bind();
@@ -339,8 +339,8 @@ bool ZE::LightRenderPass::execute_GPU(GameContext* _gameContext)
 		m_lightSampleGPUBuffer->bindAndRefresh();
 		shader->bindConstantBuffer("light_sample_data", m_lightSampleGPUBuffer);
 
-		_gameContext->getDrawList()->m_mainConstantBuffer->bind();
-		shader->bindConstantBuffer("frame_data", _gameContext->getDrawList()->m_mainConstantBuffer);
+		drawList->m_mainConstantBuffer->bind();
+		shader->bindConstantBuffer("frame_data", drawList->m_mainConstantBuffer);
 
 		shader->setTexture("gPosition", positionTexture, 0);
 		positionTexture->bind();
@@ -362,7 +362,7 @@ bool ZE::LightRenderPass::execute_GPU(GameContext* _gameContext)
 
 		const Int32 shadowStartIndex = 6;
 
-		ShadowDepthRenderer::BindShadowTexturesIndexed(_gameContext->getDrawList(), shader, shadowStartIndex, shadowIndices);
+		ShadowDepthRenderer::BindShadowTexturesIndexed(_gameContext->getRenderDrawList(), shader, shadowStartIndex, shadowIndices);
 
 		_gameContext->getRenderer()->DrawBufferArray(TOPOLOGY_TRIANGLE, bufferArray, bufferArray->getDataCount());
 
@@ -396,11 +396,11 @@ bool ZE::LightRenderPass::execute_GPU(GameContext* _gameContext)
 
 	m_lightIndexedVolumeShader->bind();
 
-	_gameContext->getDrawList()->m_mainConstantBuffer->bind();
-	m_lightIndexedVolumeShader->bindConstantBuffer("frame_data", _gameContext->getDrawList()->m_mainConstantBuffer);
+	_gameContext->getRenderDrawList()->m_mainConstantBuffer->bind();
+	m_lightIndexedVolumeShader->bindConstantBuffer("frame_data", _gameContext->getRenderDrawList()->m_mainConstantBuffer);
 
 	// Draw Light
-	for(Int32 i=0; i < _gameContext->getDrawList()->m_lightData.NumLight; i++)
+	for(Int32 i=0; i < _gameContext->getRenderDrawList()->m_lightData.NumLight; i++)
 	{
 		drawLightVolume(i, renderer, _gameContext);
 	}
@@ -422,11 +422,11 @@ bool ZE::LightRenderPass::execute_GPU(GameContext* _gameContext)
 
 	m_shaderChain->bind();
 
-	_gameContext->getDrawList()->m_lightConstantBuffer->bind();
-	m_shaderChain->bindConstantBuffer("light_data", _gameContext->getDrawList()->m_lightConstantBuffer);
+	_gameContext->getRenderDrawList()->m_lightConstantBuffer->bind();
+	m_shaderChain->bindConstantBuffer("light_data", _gameContext->getRenderDrawList()->m_lightConstantBuffer);
 
-	_gameContext->getDrawList()->m_mainConstantBuffer->bind();
-	m_shaderChain->bindConstantBuffer("frame_data", _gameContext->getDrawList()->m_mainConstantBuffer);
+	_gameContext->getRenderDrawList()->m_mainConstantBuffer->bind();
+	m_shaderChain->bindConstantBuffer("frame_data", _gameContext->getRenderDrawList()->m_mainConstantBuffer);
 
 	m_shaderChain->setTexture("gPosition", positionTexture, 0);
 	positionTexture->bind();
@@ -446,7 +446,7 @@ bool ZE::LightRenderPass::execute_GPU(GameContext* _gameContext)
 	m_shaderChain->setTexture("gSSAO", ssaoTexture, 5);
 	ssaoTexture->bind();
 
-	ShadowDepthRenderer::BindShadowTextures(_gameContext->getDrawList(), m_shaderChain, 6);
+	ShadowDepthRenderer::BindShadowTextures(_gameContext->getRenderDrawList(), m_shaderChain, 6);
 
 	_gameContext->getRenderer()->DrawBufferArray(TOPOLOGY_TRIANGLE, quadVBO, 6);
 
@@ -467,11 +467,11 @@ bool ZE::LightRenderPass::execute_GPU(GameContext* _gameContext)
 
 	m_shaderChain->bind();
 
-	_gameContext->getDrawList()->m_lightConstantBuffer->bind();
-	m_shaderChain->bindConstantBuffer("light_data", _gameContext->getDrawList()->m_lightConstantBuffer);
+	_gameContext->getRenderDrawList()->m_lightConstantBuffer->bind();
+	m_shaderChain->bindConstantBuffer("light_data", _gameContext->getRenderDrawList()->m_lightConstantBuffer);
 
-	_gameContext->getDrawList()->m_mainConstantBuffer->bind();
-	m_shaderChain->bindConstantBuffer("frame_data", _gameContext->getDrawList()->m_mainConstantBuffer);
+	_gameContext->getRenderDrawList()->m_mainConstantBuffer->bind();
+	m_shaderChain->bindConstantBuffer("frame_data", _gameContext->getRenderDrawList()->m_mainConstantBuffer);
 
 	m_shaderChain->setTexture("gPosition", positionTexture, 0);
 	positionTexture->bind();
@@ -491,7 +491,7 @@ bool ZE::LightRenderPass::execute_GPU(GameContext* _gameContext)
 	m_shaderChain->setTexture("gSSAO", ssaoTexture, 5);
 	ssaoTexture->bind();
 
-	ShadowDepthRenderer::BindShadowTextures(_gameContext->getDrawList(), m_shaderChain, 6);
+	ShadowDepthRenderer::BindShadowTextures(_gameContext->getRenderDrawList(), m_shaderChain, 6);
 
 	_gameContext->getRenderer()->DrawBufferArray(TOPOLOGY_TRIANGLE, quadVBO, 6);
 
@@ -510,7 +510,7 @@ bool ZE::LightRenderPass::execute_GPU(GameContext* _gameContext)
 #if RENDER_LIGHT_PASS_ALG == RENDER_LIGHT_PASS_LIGHT_INDEXED
 void ZE::LightRenderPass::drawLightVolume(Int32 lightIndex, IRenderer* renderer, GameContext* gameContex)
 {
-	LightStruct& light = gameContex->getDrawList()->m_lightData.lights[lightIndex];
+	LightStruct& light = gameContex->getRenderDrawList()->m_lightData.lights[lightIndex];
 
 	if (light.Type == 0) // Skip Directional Light
 	{

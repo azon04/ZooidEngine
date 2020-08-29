@@ -43,10 +43,10 @@ namespace ZE
 	{
 		if (m_mesh)
 		{
-			DrawList* drawList = m_gameContext->getDrawList();
+			DrawList* drawList = m_gameContext->getGameDrawList();
 
 			Sphere boundingSphere = m_mesh->getBoundingSphere(m_worldTransform);
-			EFrustumTestResult testResult = m_gameContext->getDrawList()->m_viewFustrum.testSphere(boundingSphere);
+			EFrustumTestResult testResult = m_gameContext->getGameDrawList()->m_viewFustrum.testSphere(boundingSphere);
 			if (testResult == FRUSTUM_OUTSIDE)
 			{
 				return;
@@ -54,7 +54,7 @@ namespace ZE
 			
 			if (testResult == FRUSTUM_INTERSECT)
 			{
-				testResult = m_gameContext->getDrawList()->m_viewFustrum.testOB(m_mesh->getOBBoundingBox(m_worldTransform));
+				testResult = m_gameContext->getGameDrawList()->m_viewFustrum.testOB(m_mesh->getOBBoundingBox(m_worldTransform));
 			}
 
 			if (testResult == FRUSTUM_OUTSIDE)
@@ -77,7 +77,7 @@ namespace ZE
 			
 			if (m_mesh->hasSkeleton())
 			{
-				SkinMeshRenderInfo* skinMeshRenderInfo = m_gameContext->getDrawList()->m_skinMeshRenderGatherer.nextRenderInfo();
+				SkinMeshRenderInfo* skinMeshRenderInfo = m_gameContext->getGameDrawList()->m_skinMeshRenderGatherer.nextRenderInfo();
 				SceneRenderFactory::InitializeRenderInfoForMesh(skinMeshRenderInfo, m_mesh, m_material);
 				if (m_material)
 				{
@@ -107,11 +107,11 @@ namespace ZE
 				Material* mat = m_material ? m_material : m_mesh->getMaterial();
 				if (mat->IsBlend())
 				{
-					meshRenderInfo = m_gameContext->getDrawList()->m_transculentRenderGatherer.nextRenderInfo();
+					meshRenderInfo = m_gameContext->getGameDrawList()->m_transculentRenderGatherer.nextRenderInfo();
 				}
 				else
 				{
-					meshRenderInfo = m_gameContext->getDrawList()->m_meshRenderGatherer.nextRenderInfo();
+					meshRenderInfo = m_gameContext->getGameDrawList()->m_meshRenderGatherer.nextRenderInfo();
 				}
 				SceneRenderFactory::InitializeRenderInfoForMesh(meshRenderInfo, m_mesh, m_material);
 				meshRenderInfo->m_material = mat;
@@ -123,7 +123,7 @@ namespace ZE
 
 				if (m_bHighlight)
 				{
-					MeshRenderInfo* highLightRenderInfo = m_gameContext->getDrawList()->m_highligtRenderGatherer.nextRenderInfo();
+					MeshRenderInfo* highLightRenderInfo = m_gameContext->getGameDrawList()->m_highligtRenderGatherer.nextRenderInfo();
 					SceneRenderFactory::InitializeRenderInfoForMesh(highLightRenderInfo, m_mesh, m_material);
 					highLightRenderInfo->m_worldTransform = m_worldTransform;
 					highLightRenderInfo->m_boxLocalPos = meshRenderInfo->m_boxLocalPos;
@@ -139,7 +139,7 @@ namespace ZE
 		// Calculate total Bounding Box
 		if(m_mesh)
 		{
-			DrawList* drawList = m_gameContext->getDrawList();
+			DrawList* drawList = m_gameContext->getGameDrawList();
 
 			AxisAlignedBox objectBounding = m_mesh->getAABBoundingBox(m_worldTransform);
 
@@ -181,7 +181,7 @@ namespace ZE
 		{
 			Event_GATHER_SHADOW_LIST* pRealEvent = static_cast<Event_GATHER_SHADOW_LIST*>(pEvent);
 
-			DrawList* drawList = m_gameContext->getDrawList();
+			DrawList* drawList = m_gameContext->getGameDrawList();
 
 			LightShadowMapData& shadowMapData = drawList->m_lightShadowMapData[pRealEvent->m_shadowDataIndex];
 

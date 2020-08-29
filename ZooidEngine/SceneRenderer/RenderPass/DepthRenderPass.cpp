@@ -104,7 +104,7 @@ namespace ZE
 
 	bool DepthRenderPass::execute_GPU(GameContext* _gameContext)
 	{
-		DrawList* drawList = _gameContext->getDrawList();
+		DrawList* drawList = _gameContext->getRenderDrawList();
 
 		_gameContext->getRenderer()->ResetViewport();
 		_gameContext->getRenderer()->Clear(ERenderBufferBit::DEPTH_BUFFER_BIT | ERenderBufferBit::STENCIL_BUFFER_BIT);
@@ -185,8 +185,8 @@ namespace ZE
 			transform = transform * worldTransform;
 
 			// Bind frame_data
-			gGameContext->getDrawList()->m_mainConstantBuffer->bind();
-			m_shaderChain->bindConstantBuffer("frame_data", gGameContext->getDrawList()->m_mainConstantBuffer);
+			gGameContext->getRenderDrawList()->m_mainConstantBuffer->bind();
+			m_shaderChain->bindConstantBuffer("frame_data", gGameContext->getRenderDrawList()->m_mainConstantBuffer);
 
 			// Create and bind draw data
 			IGPUBufferData* drawBufferData = BufferManager::getInstance()->getOrCreateDrawBuffer(transform.m_data, sizeof(Matrix4x4));
@@ -224,7 +224,7 @@ namespace ZE
 	{
 		gGameContext->getRenderer()->PushDebugGroup("ShadowOcclusionQueries");
 
-		DrawList* drawList = gGameContext->getDrawList();
+		DrawList* drawList = gGameContext->getRenderDrawList();
 		const int shadowMapCount = drawList->m_lightShadowSize;
 
 		// Make Render Queries
@@ -252,8 +252,8 @@ namespace ZE
 			transform = drawList->m_lightShadowMapData[index].cullingBoxTransform;
 
 			// Bind frame_data
-			gGameContext->getDrawList()->m_mainConstantBuffer->bind();
-			m_shaderChain->bindConstantBuffer("frame_data", gGameContext->getDrawList()->m_mainConstantBuffer);
+			gGameContext->getRenderDrawList()->m_mainConstantBuffer->bind();
+			m_shaderChain->bindConstantBuffer("frame_data", gGameContext->getRenderDrawList()->m_mainConstantBuffer);
 
 			// Create and bind draw data
 			IGPUBufferData* drawBufferData = BufferManager::getInstance()->getOrCreateDrawBuffer(transform.m_data, sizeof(Matrix4x4));

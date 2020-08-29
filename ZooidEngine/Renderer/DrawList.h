@@ -108,6 +108,11 @@ namespace ZE
 		EnvironmentMapData m_environmentMaps[8];
 
 		UInt32 m_environmentMapSize;
+
+#if ZE_RENDER_MULTITHREAD
+		Mutex m_mutex;
+		bool m_bReady = false;
+#endif
 	};
 
 };

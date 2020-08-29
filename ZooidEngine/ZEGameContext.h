@@ -5,6 +5,12 @@
 #include "Utils/Timer.h"
 #include "Utils/PrimitiveTypes.h"
 
+#if ZE_RENDER_MULTITHREAD
+#define MAX_DRAWLIST_BUFFER 2
+#else
+#define MAX_DRAWLIST_BUFFER 1
+#endif
+
 namespace ZE 
 {
 	class MaterialManager;
@@ -38,7 +44,7 @@ namespace ZE
 
 		BufferManager* m_bufferManager;
 		ShaderManager* m_shaderManager;
-		DrawList* m_drawList;
+		DrawList* m_drawLists[MAX_DRAWLIST_BUFFER];
 		CameraManager* m_cameraManager;
 		EventDispatcher* m_mainEventDispatcher;
 		SceneComponent* m_rootComponent;
@@ -57,12 +63,17 @@ namespace ZE
 		Timer m_globalTimer;
 		Timer m_renderThreadTimer;
 
+		Int32 m_currentGameDrawlist = 0;
+		Int32 m_currentRenderDrawlist = 0;
+
 		FORCEINLINE RenderZooid* getRenderZooid() const { return m_renderZooid; }
 		FORCEINLINE IRenderer* getRenderer() const { return m_renderer; }
 
 		FORCEINLINE BufferManager* getBufferManager() const { return m_bufferManager; }
 		FORCEINLINE ShaderManager* getShaderManager() const { return m_shaderManager; }
-		FORCEINLINE DrawList* getDrawList() const { return m_drawList; }
+		FORCEINLINE DrawList* getDrawList(int index) const { return m_drawLists[index]; }
+		FORCEINLINE DrawList* getGameDrawList() const { return m_drawLists[m_currentGameDrawlist]; } // Draw list to write into
+		FORCEINLINE DrawList* getRenderDrawList() const { return m_drawLists[m_currentRenderDrawlist]; } // Draw list to be read by rendering job
 		FORCEINLINE CameraManager* getCameraManager() const { return m_cameraManager; }
 		FORCEINLINE SceneComponent* getRootComponent() const { return m_rootComponent; }
 		FORCEINLINE EventDispatcher* getEventDispatcher() const { return m_mainEventDispatcher; }

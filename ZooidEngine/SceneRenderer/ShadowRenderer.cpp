@@ -31,10 +31,10 @@ namespace ZE
 	void ShadowDepthRenderer::setupShadowMapData(LightShadowMapData* shadowMapData)
 	{
 		CascadeShadowData* casecadeData = nullptr;
-		LightData& globalLightData = gGameContext->getDrawList()->m_lightData;
+		LightData& globalLightData = gGameContext->getRenderDrawList()->m_lightData;
 		if (shadowMapData->cascadeIndex >= 0)
 		{
-			casecadeData = &(gGameContext->getDrawList()->m_lightData.cascadeShadowData[shadowMapData->cascadeIndex]);
+			casecadeData = &(gGameContext->getRenderDrawList()->m_lightData.cascadeShadowData[shadowMapData->cascadeIndex]);
 		}
 
 		m_currentFrameBuffer = shadowMapData->dynamicShadowFrameBuffer;

@@ -22,6 +22,7 @@ namespace ZE
 
 	void SkyBoxRenderer::render(RenderInfo* renderInfos, UInt32 renderInfoCount)
 	{
+		DrawList* drawList = gGameContext->getRenderDrawList();
 		SkyboxRenderInfo* skyboxInfos = static_cast<SkyboxRenderInfo*>(renderInfos);
 		for (UInt32 i = 0; i < renderInfoCount; i++)
 		{
@@ -34,8 +35,8 @@ namespace ZE
 			currentInfo.m_shaderChain->bind();
 
 			// Bind frame_data
-			gGameContext->getDrawList()->m_mainConstantBuffer->bind();
-			currentInfo.m_shaderChain->bindConstantBuffer("frame_data", gGameContext->getDrawList()->m_mainConstantBuffer);
+			drawList->m_mainConstantBuffer->bind();
+			currentInfo.m_shaderChain->bindConstantBuffer("frame_data", drawList->m_mainConstantBuffer);
 
 			currentInfo.m_shaderChain->setTexture("skybox", currentInfo.m_cubeTexture, 0);
 			currentInfo.m_cubeTexture->bind();
