@@ -29,16 +29,17 @@ These are some features that I made for this version of the engine.
   * Forward Rendering
 * **Render Graph**
 * **Rendering Stuff**
+  * Physically Based Rendering (PBR)
   * Screen-Space Ambient Occlusion (SSAO)
-  * Shadow Map
   * Cascaded Shadow Map (CSM) for directional light
   * Cubemap Skybox
+  * Depth PrePass
 * **Custom Data Structures** to work with Memory Management: 
   * Resizable Array, 
   * Resizable HashMap (also using HashString), 
   * Custom String.
 * **Input Manager** that handle keyboard and mouse input
-* **Simple Drawlist** - Made drawlist to be collected/accumulated before drawing to renderer.
+* **Multi-Drawlist** - Made drawlist to be collected/accumulated before drawing to renderer. The engine will have two drawlists (one for write and one for read) if multithreading enabled.
 * **Components**
   * SceneComponent - which has position/transform in the game world.
   * RenderComponent - has Mesh to be drawn by renderer and also has transform.
@@ -53,9 +54,14 @@ These are some features that I made for this version of the engine.
 * **Font Texture Generation Tools** - generating font glyphs texture and descriptor file for the texture to read in the engine. The tools can generate SDF texture and Multi-channel SDF texture. The tools is used https://github.com/Chlumsky/msdfgen to help in SDF and MSDF generation. 
 * **Demo: Scene Viewer** - Basic viewer to load and view a scene file (.scz file).
 * **Demo: Animation Demo** - basic demo how animation set up and played. See "Resources/TestAnimation" for the assets used in the demo.
+* **Demo: Simple Scene Editor** - Simple basic editor that build using the engine code and ZooidUI.
 * **Premake5** - Now the project files can be generated using premake. In the project dir, call "Binaries/premake5 vs2017" to generate VS 2017 solution file.
 * **Misc**
   * High resolution timer with C++11 or basic timer if not using C++11.
+
+## Screenshots
+![PBR Scene screenshot](Readme/Images/PBR_Scene.jpg?raw=true "Physically Based Rendering")
+![Animation Scene screenshot](Readme/Images/Animation_Scene.jpg?raw=true "Skeletal Animation")
 
 ## Libraries and External Codes
 This list consists all libraries and code that help me implementing the engine.
