@@ -13,7 +13,7 @@ extern "C"
 #define USING_MEM_FUNCTION 1
 #define USING_ENDIANNES 1
 
-void StringFunc::WriteTo(char* to, const char* from, unsigned int size)
+void StringFunc::WriteTo(char* to, const char* from, size_t size)
 {
 #if USING_MEM_FUNCTION
 	memcpy(to, from, size);

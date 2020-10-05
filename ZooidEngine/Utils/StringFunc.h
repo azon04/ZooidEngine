@@ -9,7 +9,7 @@ namespace StringFunc {
 	
 	extern char Buffer[STRING_FUNC_BUFFER_SIZE];
 
-	void WriteTo(char* to, const char* from, unsigned int size);
+	void WriteTo(char* to, const char* from, size_t size);
 
 	// Length of char* string, including null terminated char
 	int Length(const char* string);

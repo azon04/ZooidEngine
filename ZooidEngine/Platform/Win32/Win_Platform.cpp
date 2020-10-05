@@ -38,6 +38,8 @@ void mouseButtonUpdateCallback(GLFWwindow* window, int button, int action, int m
 void populateKeyMap();
 #endif
 
+LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+
 namespace ZE
 {
 	class Win_Platform : public Platform
@@ -92,20 +94,7 @@ namespace ZE
 			CheckStorage(0);
 		}
 
-		virtual void postInit()
-		{
-#if ZE_RENDER_OPENGL
-			IRenderer* renderer = gGameContext->getRenderer();
-
-			glfwSetCursorPosCallback((GLFWwindow*)renderer->getWindowContext(), mousePositionCallback);
-			glfwSetMouseButtonCallback((GLFWwindow*)renderer->getWindowContext(), mouseButtonUpdateCallback);
-			glfwSetKeyCallback((GLFWwindow*)renderer->getWindowContext(), keyCallback);
-			glfwSetCharCallback((GLFWwindow*)renderer->getWindowContext(), charInputCallback);
-			glfwSetScrollCallback((GLFWwindow*)renderer->getWindowContext(), scrollCallback);
-
-			populateKeyMap();
-#endif
-		}
+		virtual void postInit() {}
 
 		virtual void requestExit(int errorCode)
 		{
@@ -186,9 +175,88 @@ namespace ZE
 		}
 	};
 
+	class NativeWin_Platform : public Win_Platform
+	{
+	protected:
+		LPCWSTR m_applicationName;
+		HINSTANCE m_hInstance;
+		HWND m_hwnd;
+
+	protected:
+		virtual void init(PlatformArgs& args) override
+		{
+			Win_Platform::init(args);
+
+			m_hInstance = GetModuleHandle(NULL);
+
+			m_applicationName = L"Zooid Engine";
+
+			WNDCLASSEX wc;
+
+			ZeroMemory(&wc, sizeof(WNDCLASSEX));
+
+			wc.cbSize = sizeof(WNDCLASSEX);
+			wc.style = CS_HREDRAW | CS_VREDRAW;
+			wc.lpfnWndProc = WndProc;
+			wc.hInstance = m_hInstance;
+			wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+			wc.lpszClassName = L"WindowClass1";
+
+			RegisterClassEx(&wc);
+
+			int PosX = (GetSystemMetrics(SM_CXSCREEN) - gRenderWidth) / 2;
+			int PosY = (GetSystemMetrics(SM_CYSCREEN) - gRenderHeight) / 2;
+
+			RECT wr = { 0,0, gRenderWidth, gRenderHeight };
+			AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, false);
+
+			// Create the window
+			m_hwnd = CreateWindowEx(NULL,
+				L"WindowClass1",
+				m_applicationName,
+				WS_OVERLAPPEDWINDOW,
+				PosX,
+				PosY,
+				wr.right - wr.left,
+				wr.bottom - wr.top,
+				NULL,
+				NULL,
+				m_hInstance,
+				NULL);
+
+			// Show the window
+			ShowWindow(m_hwnd, SW_SHOW);
+		}
+	};
+
+#if ZE_RENDER_OPENGL
+	class GLFWWin_Platform : public Win_Platform
+	{
+	protected:
+		virtual void postInit() override
+		{
+			Win_Platform::postInit();
+
+			IRenderer* renderer = gGameContext->getRenderer();
+
+			glfwSetCursorPosCallback((GLFWwindow*)renderer->getWindowContext(), mousePositionCallback);
+			glfwSetMouseButtonCallback((GLFWwindow*)renderer->getWindowContext(), mouseButtonUpdateCallback);
+			glfwSetKeyCallback((GLFWwindow*)renderer->getWindowContext(), keyCallback);
+			glfwSetCharCallback((GLFWwindow*)renderer->getWindowContext(), charInputCallback);
+			glfwSetScrollCallback((GLFWwindow*)renderer->getWindowContext(), scrollCallback);
+
+			populateKeyMap();
+		}
+	};
+#endif
+
 	Platform* Platform::GetPlatform()
 	{
-		static Win_Platform winPlatform;
+#if ZE_RENDER_OPENGL
+		static GLFWWin_Platform winPlatform;
+#else
+		static NativeWin_Platform winPlatform;
+#endif
 		return &winPlatform;
 	}
 }
@@ -279,6 +347,11 @@ bool CheckStorage(const DWORDLONG diskSpaceNeeded)
 	ZELOG(ZE::LOG_ENGINE, ZE::Log, "Total Available Disk in %c: %f GB", (char)('A' + drive - 1), (totalAvailDisk / DIV_GB));
 
 	return diskSpaceNeeded < totalAvailDisk;
+}
+
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
 #if ZE_RENDER_OPENGL
