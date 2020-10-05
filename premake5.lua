@@ -15,6 +15,8 @@ newaction {
 }
 
 -- Options
+
+-- Rendering Options
 newoption {
     trigger = "with-opengl",
     description = "Using OpenGL as rendering Graphics API."
@@ -25,9 +27,21 @@ newoption {
     description = "Using DirectX11 as rendering Graphics API."
 }
 
+-- Physics Options
 newoption {
     trigger = "with-physX",
     description = "Using PhysX as main physics engine."
+}
+
+-- Profiler Options
+newoption {
+    trigger = "with-optick",
+    description = "Using Optick as external profiler"
+}
+
+newoption {
+    trigger = "with-inprofiler",
+    description = "Enabling/Using in game profiler"
 }
 
 workspace "ZooidEngine"
@@ -68,8 +82,8 @@ project "ZooidEngine"
     
     -- exclude this file since it will be added on Platform specific
     removefiles { 
-        "ZooidEngine/Renderer/GL/**",
-        "ZooidEngine/Renderer/DX11/**",
+        "ZooidEngine/Renderer/*/**",
+        "ZooidEngine/Profiler/*/**"
     }
 
     defines { "_CONSOLE", "_UNICODE", "UNICODE", "_CRT_SECURE_NO_WARNINGS" }
@@ -187,6 +201,20 @@ project "ZooidEngine"
             "{COPY} \"$(PhysX)/Bin/vc15win64/PhysXDevice64.DLL\" %{cfg.targetdir}",
             "{COPY} \"$(PhysX)/../PxShared/bin/vc15win64/*DEBUG_x64.DLL\" %{cfg.targetdir}",
             "{COPY} \"$(PhysX)/../PxShared/bin/vc15win64/*DEBUG_x64.pdb\" %{cfg.targetdir}",
+        }
+
+    configuration "with-optick"
+
+        files { 
+            "ZooidEngine/Profiler/Optick/**",
+            "Dependencies/Optick_1.3.1/src/**"
+        }
+
+        defines {
+            "ZE_PROFILER=1",
+            "ZE_EXTERNAL_PROFILER=1",
+            "ZE_USE_OPTICK=1",
+            "OPTICK_ENABLE_GPU=0"
         }
 
 group "Demo"

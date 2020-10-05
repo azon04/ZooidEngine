@@ -43,6 +43,8 @@
 #include "SceneRenderer/SkyboxRenderer.h"
 #include "SceneRenderer/ForwardRenderPass.h"
 
+#include "Profiler/ProfilerZooid.h"
+
 #include "Utils/DebugOptions.h"
 
 #define DEFERRED_RENDERING 1
@@ -258,6 +260,7 @@ namespace ZE
 
 		// Handle Event_Update
 		{
+			ZE_PROFILER_SECTION("Event_Update");
 			ZE::Handle handleUpdate("EventUpdate", sizeof(ZE::Event_UPDATE));
 			ZE::Event_UPDATE* eventUpdate = new(handleUpdate) ZE::Event_UPDATE();
 			eventUpdate->m_deltaMilliseconds = deltaTime;
@@ -267,28 +270,35 @@ namespace ZE
 			handleUpdate.release();
 		}
 
-		for (int i = 0; i < _gameContext->getEventDispatcher()->getEvents(ZE::EVENT_INPUT).length(); i++)
 		{
-			ZE::Handle handle = _gameContext->getEventDispatcher()->getEvents(ZE::EVENT_INPUT)[i];
-			if (handle.isValid())
+			ZE_PROFILER_SECTION("Event_Input");
+			for (int i = 0; i < _gameContext->getEventDispatcher()->getEvents(ZE::EVENT_INPUT).length(); i++)
 			{
-				_gameContext->getEventDispatcher()->handleEvent(handle.getObject<ZE::Event>());
+				ZE::Handle handle = _gameContext->getEventDispatcher()->getEvents(ZE::EVENT_INPUT)[i];
+				if (handle.isValid())
+				{
+					_gameContext->getEventDispatcher()->handleEvent(handle.getObject<ZE::Event>());
+				}
+				handle.release();
 			}
-			handle.release();
+			_gameContext->getEventDispatcher()->clearEvents(ZE::EVENT_INPUT);
 		}
-		_gameContext->getEventDispatcher()->clearEvents(ZE::EVENT_INPUT);
 
 		// Update Physics
 		if (_gameContext->getPhysics())
 		{
+			ZE_PROFILER_SECTION("Event_Physics");
 			_gameContext->getPhysics()->PreUpdate();
 			_gameContext->getPhysics()->Update(deltaSeconds);
 			_gameContext->getPhysics()->PostUpdate();
 			_gameContext->getPhysics()->DrawDebug();
 		}
 
-		// Application Clean
-		Application::GetApplication()->Tick(_gameContext, deltaTime);
+		// Application Tick
+		{
+			ZE_PROFILER_SECTION("ApplicationTick");
+			Application::GetApplication()->Tick(_gameContext, deltaTime);
+		}
 
 		static Timer lockTimer;
 #if ZE_RENDER_MULTITHREAD
@@ -308,6 +318,7 @@ namespace ZE
 
 		// Set up data for this frame
 		{
+			ZE_PROFILER_SECTION("UpdateFrameData");
 			// Set ViewFustrum before gathering the render target
 			CameraComponent* currentCamera = CameraManager::GetInstance()->getCurrentCamera();
 
@@ -330,6 +341,7 @@ namespace ZE
 
 		// Handle Event_GATHER_BOUND
 		{
+			ZE_PROFILER_SECTION("Event_GATHER_BOUND");
 			Handle handleGatherBound("EventGatherBound", sizeof(Event_GATHER_BOUND));
 			Event_GATHER_BOUND* pEvent = new(handleGatherBound) Event_GATHER_BOUND;
 			_gameContext->getEventDispatcher()->handleEvent(pEvent);
@@ -338,6 +350,7 @@ namespace ZE
 
 		// Handle Event_GATHER_RENDER
 		{
+			ZE_PROFILER_SECTION("Event_GATHER_RENDER");
 			Handle handleGatherRender("EventGatherRender", sizeof(Event_GATHER_RENDER));
 			Event_GATHER_RENDER* pEvent = new(handleGatherRender) Event_GATHER_RENDER();
 			_gameContext->getEventDispatcher()->handleEvent(pEvent);
@@ -346,6 +359,7 @@ namespace ZE
 
 		// Handle Event_GATHER_LIGHT
 		{
+			ZE_PROFILER_SECTION("Event_GATHER_LIGHT");
 			Handle handleGatherLight("EventGatherLight", sizeof(ZE::Event_GATHER_LIGHT));
 			Event_GATHER_LIGHT* eventGatherLight = new(handleGatherLight) Event_GATHER_LIGHT();
 			_gameContext->getEventDispatcher()->handleEvent(eventGatherLight);
@@ -354,6 +368,7 @@ namespace ZE
 
 		// Handle Event_GATHER_SHADOW_LIST
 		{
+			ZE_PROFILER_SECTION("Event_GATHER_SHADOW_LIST");
 			Handle handleGatherShadowList("EventGatherShadowList", sizeof(Event_GATHER_SHADOW_LIST));
 			Event_GATHER_SHADOW_LIST* eventGatherShadow = new(handleGatherShadowList) Event_GATHER_SHADOW_LIST;
 			for (UInt32 i = 0; i < drawList->m_lightShadowSize; i++)
@@ -413,6 +428,8 @@ namespace ZE
 
 	void MainDrawJob(GameContext* _gameContext)
 	{
+		ZE_PROFILER_THREAD("Render Worker");
+
 		_gameContext->m_renderThreadTimer.Reset();
 
 		while (!_gameContext->getRenderer()->IsClose())

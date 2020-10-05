@@ -1,0 +1,35 @@
+#ifndef __ZE_PROFILER_H__
+#define __ZE_PROFILER_H__
+
+#ifndef ZE_PROFILER
+#define  ZE_PROFILER 0
+#endif // !ZE_PROFILER
+
+#if ZE_PROFILER
+
+#ifndef ZE_USE_OPTICK
+#define ZE_USE_OPTICK 0
+#endif
+
+#if ZE_USE_OPTICK
+#include "Optick/OptickProfilerZooid.h"
+#else
+// TODO Use In Game Profiler
+#define ZE_PROFILER_INIT(APP_NAME)
+#define ZE_PROFILER_DESTROY()
+#define ZE_PROFILER_FRAME(FRAME_NAME)
+#define ZE_PROFILER_THREAD(THREAD_NAME)
+#define ZE_PROFILER_FUNCTION(FUNC_NAME)
+#define ZE_PROFILER_SECTION(SECTION_NAME)
+#endif
+
+#else
+#define ZE_PROFILER_INIT(APP_NAME)
+#define ZE_PROFILER_DESTROY()
+#define ZE_PROFILER_FRAME(FRAME_NAME)
+#define ZE_PROFILER_THREAD(THREAD_NAME)
+#define ZE_PROFILER_FUNCTION(FUNC_NAME)
+#define ZE_PROFILER_SECTION(SECTION_NAME)
+#endif
+
+#endif // !__ZE_PROFILER_H__
