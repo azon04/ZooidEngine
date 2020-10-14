@@ -4,6 +4,7 @@
 #include "ResourceManagers/BufferManager.h"
 
 #include "Renderer/IRenderer.h"
+#include "Renderer/DrawList.h"
 #include "ZEGameContext.h"
 
 namespace ZE
@@ -222,12 +223,13 @@ namespace ZE
 				getJointMatrixPallete(i, jointPallete);
 			}
 
-			// #TODO probably send command to render thread
+			DrawList* drawList = gGameContext->getGameDrawList();
+			drawList->m_commandList.registerCommand([](void* data)
 			{
-				ScopedRenderThreadOwnership scope(gGameContext->getRenderer());
-
-				m_gpuStateBuffer->refresh();
-			}
+				if (!data) { return; }
+				IGPUBufferData* gpuStateBuffer = reinterpret_cast<IGPUBufferData*>(data);
+				gpuStateBuffer->refresh();
+			}, m_gpuStateBuffer);
 
 			m_bDirty = false;
 		}

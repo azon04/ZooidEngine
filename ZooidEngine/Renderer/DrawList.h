@@ -8,6 +8,7 @@
 #include "ShaderData.h"
 #include "SceneRenderer/RenderGatherer.h"
 #include "SceneRenderer/ViewFrustum.h"
+#include "SceneRenderer/RenderCommand.h"
 
 namespace ZE 
 {
@@ -108,6 +109,9 @@ namespace ZE
 		EnvironmentMapData m_environmentMaps[8];
 
 		UInt32 m_environmentMapSize;
+
+		// Render Command function
+		RenderCommandList m_commandList;
 
 #if ZE_RENDER_MULTITHREAD
 		Mutex m_mutex;

@@ -187,11 +187,13 @@ public:
 
 	Vector3 extractScale() const
 	{
-		Vector3 scaleVector;
-		scaleVector.setX(getU().length());
-		scaleVector.setY(getV().length());
-		scaleVector.setZ(getN().length());
-		return scaleVector;
+		static Vector4 U, V, N, scaleVector;
+		U.set(m_data[0][0], m_data[0][1], m_data[0][2], 0);
+		V.set(m_data[1][0], m_data[1][1], m_data[1][2], 0);
+		N.set(m_data[2][0], m_data[2][1], m_data[2][2], 0);
+		scaleVector.set(U.lengthSquared(), V.lengthSquared(), N.lengthSquared(), 0);
+		Vector4::FastSqrt(scaleVector, scaleVector);
+		return Vector3(scaleVector.getX(), scaleVector.getY(), scaleVector.getZ());
 	}
 
 	void normalizeScale() 

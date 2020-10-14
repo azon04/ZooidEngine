@@ -47,12 +47,11 @@ namespace ZE
 
 		if (m_bDirty)
 		{
-			ScopedRenderThreadOwnership renderLock(m_gameContext->getRenderer());
-			m_textMesh->generateTextMesh(m_text.const_str(), m_drawSpace == DRAW_WORLD_SPACE);
+			m_textMesh->generateTextMesh(m_text.const_str(), m_drawSpace == DRAW_WORLD_SPACE, m_gameContext->getGameDrawList());
 			m_bDirty = false;
 		}
 
-		if (m_textMesh)
+		if (m_textMesh && m_textMesh->getGPUBufferArray())
 		{
 			if (m_drawSpace == DRAW_SCREEN)
 			{

@@ -11,6 +11,10 @@
 #include <xmmintrin.h>
 #include <pmmintrin.h>
 
+#if USING_AVX
+#include <smmintrin.h>
+#endif
+
 #define _mm_madd_ps(x, y, z) \
 	_mm_add_ps(_mm_mul_ps((x),(y)),(z))
 

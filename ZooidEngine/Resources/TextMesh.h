@@ -8,6 +8,7 @@ namespace ZE
 	class IGPUBufferArray;
 	class IGPUBufferData;
 	class Font;
+	class DrawList;
 
 	class TextMesh : public Object
 	{
@@ -22,12 +23,11 @@ namespace ZE
 		FORCEINLINE IGPUBufferArray* getGPUBufferArray() const { return m_bufferArray; }
 
 		void init(Font* _font, const char* text);
-		void generateTextMesh(const char* text, bool bNormalizeHeight = true);
+		void generateTextMesh(const char* text, bool bNormalizeHeight = true, DrawList* _drawList = nullptr);
 		void setFont(Font* _font);
 
 	protected:
 		IGPUBufferArray* m_bufferArray;
-		Font* m_font;
-	};
+		Font* m_font;	};
 }
 #endif

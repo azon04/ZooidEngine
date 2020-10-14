@@ -300,7 +300,6 @@ namespace ZE
 			Application::GetApplication()->Tick(_gameContext, deltaTime);
 		}
 
-		static Timer lockTimer;
 #if ZE_RENDER_MULTITHREAD
 		{
 		LockGuard guard(_gameContext->getGameDrawList()->m_mutex);
@@ -418,7 +417,6 @@ namespace ZE
 		g_drawThreadVariable.notify_one();
 		}
 		// Oddly needed. This will let the main thread know that the window is still active
-		
 		_gameContext->getRenderer()->PollEvent();
 #else
 		_gameContext->getRenderer()->PollEvent();
@@ -456,6 +454,9 @@ namespace ZE
 		renderer->BeginFrame();
 
 		ScopedRenderThreadOwnership renderLock(renderer);
+
+		// Execute all render command list before we start the frame
+		drawList->m_commandList.executeCommands();
 
 		BufferManager::getInstance()->setupForNextFrame();
 

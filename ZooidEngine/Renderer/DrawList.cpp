@@ -20,6 +20,8 @@ namespace ZE
 		m_highligtRenderGatherer.reset();
 
 		m_debugMeshRenderGatherer.reset();
+
+		m_commandList.clearCommands();
 	}
 
 	void DrawList::Setup()

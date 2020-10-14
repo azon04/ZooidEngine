@@ -91,6 +91,8 @@ namespace ZE
 		{
 			TextRenderInfo& currentInfo = textRenderInfos[i];
 
+			if (!currentInfo.m_gpuBufferArray) { continue; }
+
 			ZCHECK(currentInfo.m_shaderChain);
 			ZCHECK(currentInfo.m_gpuBufferArray);
 

@@ -126,10 +126,12 @@ namespace ZE
 			// Update Line data
 			m_lineBufferData->SetData(&s_instance->m_lineBuffers[0], sizeof(DebugPointStruct), s_instance->m_lineBuffers.size());
 			
+			m_gameContext->getGameDrawList()->m_commandList.registerCommand([](void* data)
 			{
-				ScopedRenderThreadOwnership renderLock(m_gameContext->getRenderer());
-				m_lineGPUBufferData->refresh();
-			}
+				if (!data) { return; }
+				IGPUBufferData* lineGPUBufferData = reinterpret_cast<IGPUBufferData*>(data);
+				lineGPUBufferData->refresh();
+			}, m_lineGPUBufferData);
 
 		}
 

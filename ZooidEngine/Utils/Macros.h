@@ -22,6 +22,7 @@
 #if defined(ZE_PLATFORM_WINDOWS)
 #define ZE_SUPPORT_SIMD
 #define USING_SSE 1
+#define USING_AVX 0
 #else
 
 #endif
