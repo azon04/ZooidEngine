@@ -153,43 +153,48 @@ namespace ZE
 		return ComputeHashPointer(pData, parent);
 	}
 
-	void UI::PushInteractionRect(const UIRect& rect)
+	void UI::PushDrawRect(const UIRect& rect)
 	{
-		if (MainUIState.InteractionRectStack.size() == 0)
+		if (MainUIState.DrawRectStack.size() == 0)
 		{
-			MainUIState.InteractionRectStack.push_back(rect);
+			MainUIState.DrawRectStack.push_back(rect);
 		}
 		else
 		{
-			MainUIState.InteractionRectStack.push_back(MainUIState.InteractionRectStack.back().intersect(rect));
+			MainUIState.DrawRectStack.push_back(MainUIState.DrawRectStack.back().intersect(rect));
 		}
 	}
 
-	void UI::PopInteractionRect()
+	void UI::PopDrawRect()
 	{
-		MainUIState.InteractionRectStack.pop_back();
+		MainUIState.DrawRectStack.pop_back();
 	}
 
-	void UI::ClearInteractionRect()
+	void UI::ClearDrawRect()
 	{
-		MainUIState.InteractionRectStack.clear();
+		MainUIState.DrawRectStack.clear();
 	}
 
 	ZE::UIRect UI::CalculateInteractionRect(const UIRect& rect)
 	{
-		if (MainUIState.InteractionRectStack.size() == 0)
+		if (MainUIState.DrawRectStack.size() == 0)
 		{
 			return rect;
 		}
 		else
 		{
-			return (MainUIState.InteractionRectStack.back().intersect(rect));
+			return (MainUIState.DrawRectStack.back().intersect(rect));
 		}
 	}
 
 	bool UI::CheckMouseInside(const UIRect& rect)
 	{
-		return rect.isContain(MainUIState.mousePos) && ( MainUIState.InteractionRectStack.size() == 0 || MainUIState.InteractionRectStack.back().isContain(MainUIState.mousePos) );
+		return rect.isContain(MainUIState.mousePos) && ( MainUIState.DrawRectStack.size() == 0 || MainUIState.DrawRectStack.back().isContain(MainUIState.mousePos) );
+	}
+
+	bool UI::ShouldDrawRect(const UIRect& rect)
+	{
+		return MainUIState.DrawRectStack.size() == 0 || MainUIState.DrawRectStack.back().hasIntersectWith(rect);
 	}
 
 	// Helper function: Get Length of the UIChar buffer
@@ -412,7 +417,7 @@ namespace ZE
 	{
 		MainUIState.drawer->Reset();
 		MainUIState.timeFromStart += MainUIState.mainTimer.ResetAndGetDeltaMS();
-		ClearInteractionRect();
+		ClearDrawRect();
 	}
 
 	void UI::EndFrame()
@@ -1438,7 +1443,7 @@ namespace ZE
 		}
 
 		MainUIState.drawer->PushRectMask(MainUIState.drawPosDimension);
-		PushInteractionRect(MainUIState.drawPosDimension);
+		PushDrawRect(MainUIState.drawPosDimension);
 
 		MainUIState.drawPosDimension.m_pos.y -= panelState.scrollOffset;
 
@@ -1448,7 +1453,7 @@ namespace ZE
 	void UI::EndPanel()
 	{
 		MainUIState.drawer->PopMask();
-		PopInteractionRect();
+		PopDrawRect();
 
 		UInt32 parentId = StackIDs.back();
 		UIPanelState& panelState = MainUIState.panelStates[parentId]; 
@@ -1518,7 +1523,7 @@ namespace ZE
 		MainUIState.drawDirection = UIVector2(0.0f, 1.0f);
 		
 		MainUIState.drawer->PushRectMask(MainUIState.drawPosDimension);
-		PushInteractionRect(MainUIState.drawPosDimension);
+		PushDrawRect(MainUIState.drawPosDimension);
 
 		MainUIState.drawPosDimension.m_pos.y -= scrollState.scrollOffset;
 	}
@@ -1531,7 +1536,7 @@ namespace ZE
 		UIScrollState& scrollState = MainUIState.scrollStates[_id];
 		scrollState.contentSize.y = MainUIState.drawPosDimension.m_pos.y - (scrollState.targetRect.m_pos.y - scrollState.scrollOffset);
 
-		PopInteractionRect();
+		PopDrawRect();
 		MainUIState.drawer->PopMask();
 
 		MainUIState.drawDirection = MainUIState.drawDirectionStack.back();
@@ -1626,7 +1631,7 @@ namespace ZE
 		MainUIState.drawer->DrawRect(MainUIState.drawPosDimension, ZE::UIVector4(0.15f, 0.15f, 0.15f, 1.0f));
 
 		MainUIState.drawer->PushRectMask(MainUIState.drawPosDimension);
-		PushInteractionRect(MainUIState.drawPosDimension);
+		PushDrawRect(MainUIState.drawPosDimension);
 
 		MainUIState.drawPosDimension.m_pos.y -= scrollState.scrollOffset;
 	}
@@ -1664,6 +1669,12 @@ namespace ZE
 		drawRect = MainUIState.drawPosDimension;
 		drawRect.m_dimension.x = rect.m_dimension.x - 5;
 		drawRect.m_dimension.y = DefaultFont->calculateTextHeight(1.0f) + 10;
+
+		if (!ShouldDrawRect(drawRect)) 
+		{ 
+			MainUIState.drawPosDimension.m_pos = MainUIState.drawPosDimension.m_pos + MainUIState.drawDirection * drawRect.m_dimension;
+			return false; 
+		}
 
 		const UInt32 _id = GetUIIDFromString(listItem);
 		const bool mouseInside = CheckMouseInside(drawRect);
@@ -2643,9 +2654,9 @@ namespace ZE
 		UIVector2 otherBottomRight = inRect.m_pos + inRect.m_dimension;
 
 		if (((inRect.m_pos.x >= m_pos.x && inRect.m_pos.x <= bottomRight.x)
-			|| (otherBottomRight.x >= m_pos.x && otherBottomRight.x <= bottomRight.x)
+			|| (otherBottomRight.x >= m_pos.x && otherBottomRight.x <= bottomRight.x))
 			&& 
-			((inRect.m_pos.y >= m_pos.y && inRect.m_pos.y <= bottomRight.y))
+			((inRect.m_pos.y >= m_pos.y && inRect.m_pos.y <= bottomRight.y)
 			|| (otherBottomRight.y >= m_pos.y && otherBottomRight.y <= bottomRight.y)))
 		{
 			result.m_pos.x = UIMAX(m_pos.x, inRect.m_pos.x);
@@ -2656,6 +2667,17 @@ namespace ZE
 		}
 
 		return result;
+	}
+
+	bool UIRect::hasIntersectWith(const UIRect& inRect)
+	{
+		UIVector2 bottomRight = m_pos + m_dimension;
+		UIVector2 otherBottomRight = inRect.m_pos + inRect.m_dimension;
+		return ((inRect.m_pos.x >= m_pos.x && inRect.m_pos.x <= bottomRight.x)
+			|| (otherBottomRight.x >= m_pos.x && otherBottomRight.x <= bottomRight.x))
+			&&
+			((inRect.m_pos.y >= m_pos.y && inRect.m_pos.y <= bottomRight.y)
+			|| (otherBottomRight.y >= m_pos.y && otherBottomRight.y <= bottomRight.y));
 	}
 
 	ZE::UIVector2 operator+(const UIVector2& v1, const UIVector2& v2)

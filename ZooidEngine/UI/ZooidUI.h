@@ -158,6 +158,7 @@ namespace ZE
 		bool isContain(const UIVector2& pos) const;
 
 		UIRect intersect(const UIRect& otherRect);
+		bool hasIntersectWith(const UIRect& otherRect);
 	};
 
 
@@ -256,7 +257,7 @@ namespace ZE
 		UIArray<UIMenuInfo> MenuStack;
 
 		// Interaction Rect Stack
-		UIArray<UIRect> InteractionRectStack;
+		UIArray<UIRect> DrawRectStack;
 
 		// Panel State Map
 		UIHashMap<UInt32, UIPanelState> panelStates;
@@ -616,11 +617,12 @@ namespace ZE
 		UInt32 GetUIIDFromPointer(const void* pData);
 
 		// Interaction rect helper
-		void PushInteractionRect(const UIRect& rect);
-		void PopInteractionRect();
-		void ClearInteractionRect();
+		void PushDrawRect(const UIRect& rect);
+		void PopDrawRect();
+		void ClearDrawRect();
 		UIRect CalculateInteractionRect(const UIRect& rect);
 		bool CheckMouseInside(const UIRect& rect);
+		bool ShouldDrawRect(const UIRect& rect);
 
 		// Function
 		void Init(Int32 width, Int32 height);
