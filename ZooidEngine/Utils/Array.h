@@ -94,7 +94,7 @@ namespace ZE
 			{
 				return *this;
 			}
-			if (otherArray.capacity() > 0) { reset(otherArray.capacity()); }
+			if (otherArray.capacity() > 0 && otherArray.capacity() != capacity()) { reset(otherArray.capacity()); }
 			m_length = otherArray.length();
 
 			for (int i = 0; i < m_length; ++i)
