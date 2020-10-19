@@ -77,12 +77,12 @@ namespace ZE
 	{
 
 	public:
-		bool put_internal(const K& key, const V& value)
+		bool put_internal(const K& key, const V& value, int& index)
 		{
 			Func func;
 			ZE::UInt32 hashValue = func(key);
 			int initial_index = hashValue % m_capacity;
-			int index = initial_index;
+			index = initial_index;
 
 			// TODO Check if the index currently occupied
 			// TODO Probing until find empty spot
@@ -91,16 +91,17 @@ namespace ZE
 			int q_offset = 1;
 #endif
 			// first check on the index
-			if (get(index).m_occupied == 1)
+			if (getConst(index).m_occupied == 1)
 			{
 				// Try to reposition the current index for better performance
 				HashKeyValue<K, V>& hashKeyValue = get(index);
 				hashKeyValue.m_occupied = 0;
 				m_length--;
-				put_internal(hashKeyValue.m_key, hashKeyValue.m_value);
+				int tempIndex = 0;
+				put_internal(hashKeyValue.m_key, hashKeyValue.m_value, tempIndex);
 			}
 
-			while (get(index).m_occupied == 1)
+			while (getConst(index).m_occupied == 1)
 			{
 #if HASH_MAP_PROBING == HASH_MAP_LINEAR_PROBING
 				index = (index + 1) % m_capacity;
@@ -123,6 +124,12 @@ namespace ZE
 		bool put(const K& key, const V& value)
 		{
 			int index = 0;
+			return putChecked(key, value, index);
+		}
+
+		bool putChecked(const K& key, const V& value, int& index)
+		{
+			index = 0;
 			if (hasKey_internal(key, index))
 			{
 				HashKeyValue<K, V>& hashKeyValue = get(index);
@@ -139,7 +146,7 @@ namespace ZE
 				resize(m_capacity * 2);
 			}
 
-			return put_internal(key, value);
+			return put_internal(key, value, index);
 		}
 
 		V& operator[](const K& key)
@@ -147,22 +154,25 @@ namespace ZE
 			int index = 0;
 			if (hasKey_internal(key, index))
 			{
-				return get(index).m_value;
+				return getConst(index).m_value;
 			}
 
 			// if nothing, then put
 			V temp;
-			put(key, temp);
-			hasKey_internal(key, index);
+			putChecked(key, temp, index);
 
-			return get(index).m_value;
+			return getConst(index).m_value;
 		}
 
-		bool hasKey_internal(const K& key, int& index)
+		bool hasKey_internal(const K& key, int& index) const
 		{
 			int currentCapacity = m_capacity;
 			Func func;
 			ZE::UInt32 hashValue = func(key);
+
+			ZE::Int8 occupied;
+			ZE::UInt32 currentHash;
+
 			while (currentCapacity > 0)
 			{
 				int initial_index = hashValue % currentCapacity;
@@ -170,24 +180,32 @@ namespace ZE
 
 				int offset = 1;
 				
-				while ((get(index).m_occupied == 0 || get(index).m_hashKey != hashValue) && offset < currentCapacity)
+				const HashKeyValue<K, V>& item = getConst(index);
+				occupied = item.m_occupied;
+				currentHash = item.m_hashKey;
+
+				while (offset < currentCapacity && (occupied == 0 || currentHash != hashValue))
 				{
 #if HASH_MAP_PROBING == HASH_MAP_LINEAR_PROBING
 					index = (index + 1) % currentCapacity;
 #elif HASH_MAP_PROBING == HASH_MAP_QUADRATIC_PROBING
 					index = (initial_index + (offset * offset)) % currentCapacity;
 #endif
+					const HashKeyValue<K, V>& innerItem = getConst(index);
+					occupied = innerItem.m_occupied;
+					currentHash = innerItem.m_hashKey;
+
 					offset++;
 				}
 
-				if (get(index).m_occupied == -1)
+				if (occupied == -1)
 				{
 					// is deleted
 					index = -1;
 					return false;
 				}
 
-				if (get(index).m_hashKey == hashValue)
+				if (currentHash == hashValue)
 				{
 					return true;
 				}
@@ -211,7 +229,7 @@ namespace ZE
 			return hasKey_internal(key, index);
 		}
 
-		bool getIndex(const K& key, int& index)
+		bool getIndex(const K& key, int& index) const
 		{
 			return hasKey_internal(key, index);
 		}
@@ -235,7 +253,7 @@ namespace ZE
 			Array<K, true> keys;
 			for (int i = 0; i < m_capacity; i++)
 			{
-				if (get(i).m_occupied == 1)
+				if (getConst(i).m_occupied == 1)
 				{
 					keys.push_back(get(i).m_key);
 				}
