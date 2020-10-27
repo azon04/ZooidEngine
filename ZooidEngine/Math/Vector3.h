@@ -141,4 +141,9 @@ FORCEINLINE Vector3 operator*(const Vector3& _v, const float _number)
 	return Vector3(_v.m_x * _number, _v.m_y * _number, _v.m_z * _number);
 }
 
+FORCEINLINE Vector3 operator/(const float number, const Vector3& v)
+{
+	return Vector3(number / v.m_x, number / v.m_y, number / v.m_z);
+}
+
 #endif

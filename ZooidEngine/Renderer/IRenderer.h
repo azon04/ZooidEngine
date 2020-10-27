@@ -143,6 +143,9 @@ namespace ZE
 		// End Query
 		virtual void EndQuery(ERenderQueryType type, UInt32 queryId) = 0;
 
+		// Enable and Disable Vsync
+		virtual void SetVsync(bool bEnabled) = 0;
+
 		virtual void* getWindowContext() = 0;
 
 	};

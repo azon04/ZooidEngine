@@ -32,6 +32,8 @@ namespace ZE
 
 		virtual Handle CreateDynamicRigidBody(Matrix4x4& _transform, PhysicsBodySetup* _setup) override;
 		virtual Handle CreateStaticRigidBody(Matrix4x4& _transform, PhysicsBodySetup* _setup) override;
+		virtual Handle CreateDynamicRigidBody(const Transform& _transform, PhysicsBodySetup* _setup) override;
+		virtual Handle CreateStaticRigidBody(const Transform& _transform, PhysicsBodySetup* _setup) override;
 
 		virtual void DestroyPhysicsObject(Handle handle) override;
 		

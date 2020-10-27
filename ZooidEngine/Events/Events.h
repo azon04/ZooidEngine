@@ -54,6 +54,14 @@ namespace ZE {
 		Event_GATHER_BOUND() {}
 	};
 
+	class Event_CALC_TRANSFORM : public Event
+	{
+		DEFINE_CLASS(Event_CALC_TRANSFORM);
+
+	public:
+		Event_CALC_TRANSFORM() {}
+	};
+
 	class Event_GATHER_SHADOW_LIST : public Event
 	{
 		DEFINE_CLASS(Event_GATHER_SHADOW_LIST);

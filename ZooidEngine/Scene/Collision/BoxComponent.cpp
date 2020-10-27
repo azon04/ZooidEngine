@@ -17,7 +17,7 @@ namespace ZE
 		bodyDesc.HalfExtent = m_halfExtent;
 		bodySetup.m_bodies.push_back(bodyDesc);
 
-		hPhysicsBody = m_gameContext->getPhysics()->CreateStaticRigidBody(m_worldTransform, &bodySetup);
+		hPhysicsBody = m_gameContext->getPhysics()->CreateStaticRigidBody(m_cacheWorldMatrix, &bodySetup);
 
 		if (hPhysicsBody.isValid())
 		{

@@ -17,7 +17,7 @@ namespace ZE
 		bodyDesc.Radius = m_radius;
 		bodySetup.m_bodies.push_back(bodyDesc);
 
-		hPhysicsBody = m_gameContext->getPhysics()->CreateStaticRigidBody(m_worldTransform, &bodySetup);
+		hPhysicsBody = m_gameContext->getPhysics()->CreateStaticRigidBody(m_cacheWorldMatrix, &bodySetup);
 
 		if (hPhysicsBody.isValid())
 		{

@@ -66,20 +66,23 @@ namespace ZE
 	protected:
 		Mesh* m_mesh;
 		Material* m_material;
-		bool m_bHighlight;
 
 		// Physics Data
-		bool m_bStatic;
-		bool m_physicsEnabled;
-		bool m_bTriggerOnly;
-		bool m_bEnableGravity;
 		Handle m_hPhysicsBody;
-
-		// Shadow configuration
-		bool m_bCastShadow;
 
 		// Skeleton Data
 		Handle m_hSkeletonState;
+
+		// Flags
+		bool m_bHighlight:1;
+		bool m_bStatic:1;
+		bool m_physicsEnabled:1;
+		bool m_bTriggerOnly:1;
+		bool m_bEnableGravity:1;
+
+		// Shadow configuration
+		bool m_bCastShadow:1;
+
 	};
 }
 #endif

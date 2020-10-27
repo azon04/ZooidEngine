@@ -54,7 +54,7 @@ namespace ZE
 			
 			if (testResult == FRUSTUM_INTERSECT)
 			{
-				testResult = m_gameContext->getGameDrawList()->m_viewFustrum.testOB(m_mesh->getOBBoundingBox(m_worldTransform));
+				testResult = m_gameContext->getGameDrawList()->m_viewFustrum.testOB(m_mesh->getOBBoundingBox(m_cacheWorldMatrix));
 			}
 
 			if (testResult == FRUSTUM_OUTSIDE)
@@ -71,7 +71,7 @@ namespace ZE
 				}
 				else
 				{
-					DebugRenderer::DrawDebugBox(m_mesh->getLocalBoxExtend(), m_mesh->getLocalBoxCenter(), m_worldTransform);
+					DebugRenderer::DrawDebugBox(m_mesh->getLocalBoxExtend(), m_mesh->getLocalBoxCenter(), m_cacheWorldMatrix);
 				}
 			}
 			
@@ -83,7 +83,7 @@ namespace ZE
 				{
 					skinMeshRenderInfo->m_material = m_material;
 				}
-				skinMeshRenderInfo->m_worldTransform = m_worldTransform;
+				skinMeshRenderInfo->m_worldTransform = m_cacheWorldMatrix;
 				skinMeshRenderInfo->m_castShadow = m_bCastShadow;
 				skinMeshRenderInfo->m_boxExtent = m_mesh->getLocalBoxExtend();
 				skinMeshRenderInfo->m_boxLocalPos = m_mesh->getLocalBoxCenter();
@@ -97,7 +97,7 @@ namespace ZE
 				{
 					Matrix4x4 bindPose;
 					pSkeletonState->getBindPoseMatrix(i, bindPose);
-					DebugRenderer::DrawMatrixBasis(bindPose * m_worldTransform);
+					DebugRenderer::DrawMatrixBasis(bindPose * m_cacheWorldMatrix);
 				}
 #endif
 			}
@@ -115,7 +115,7 @@ namespace ZE
 				}
 				SceneRenderFactory::InitializeRenderInfoForMesh(meshRenderInfo, m_mesh, m_material);
 				meshRenderInfo->m_material = mat;
-				meshRenderInfo->m_worldTransform = m_worldTransform;
+				meshRenderInfo->m_worldTransform = m_cacheWorldMatrix;
 				meshRenderInfo->m_castShadow = m_bCastShadow;
 				meshRenderInfo->m_boxExtent = m_mesh->getLocalBoxExtend();
 				meshRenderInfo->m_boxLocalPos = m_mesh->getLocalBoxCenter();
@@ -125,10 +125,10 @@ namespace ZE
 				{
 					MeshRenderInfo* highLightRenderInfo = m_gameContext->getGameDrawList()->m_highligtRenderGatherer.nextRenderInfo();
 					SceneRenderFactory::InitializeRenderInfoForMesh(highLightRenderInfo, m_mesh, m_material);
-					highLightRenderInfo->m_worldTransform = m_worldTransform;
+					highLightRenderInfo->m_worldTransform = m_cacheWorldMatrix;
 					highLightRenderInfo->m_boxLocalPos = meshRenderInfo->m_boxLocalPos;
 
-					DebugRenderer::DrawDebugBox(m_mesh->getLocalBoxExtend(), m_mesh->getLocalBoxCenter(), m_worldTransform);
+					DebugRenderer::DrawDebugBox(m_mesh->getLocalBoxExtend(), m_mesh->getLocalBoxCenter(), m_cacheWorldMatrix);
 				}
 			}
 		}
@@ -141,7 +141,7 @@ namespace ZE
 		{
 			DrawList* drawList = m_gameContext->getGameDrawList();
 
-			AxisAlignedBox objectBounding = m_mesh->getAABBoundingBox(m_worldTransform);
+			AxisAlignedBox objectBounding = m_mesh->getAABBoundingBox(m_cacheWorldMatrix);
 
 			if (drawList->m_objectsBounding.m_min.m_x > objectBounding.m_min.m_x)
 			{
@@ -200,7 +200,7 @@ namespace ZE
 				{
 					skinMeshRenderInfo->m_material = m_material;
 				}
-				skinMeshRenderInfo->m_worldTransform = m_worldTransform;
+				skinMeshRenderInfo->m_worldTransform = m_cacheWorldMatrix;
 
 				SkeletonState* pSkeletonState = m_hSkeletonState.getObject<SkeletonState>();
 				pSkeletonState->updateBuffer();
@@ -214,7 +214,7 @@ namespace ZE
 				{
 					meshRenderInfo->m_material = m_material;
 				}
-				meshRenderInfo->m_worldTransform = m_worldTransform;
+				meshRenderInfo->m_worldTransform = m_cacheWorldMatrix;
 			}
 		}
 	}
@@ -251,9 +251,9 @@ namespace ZE
 	void RenderComponent::handlePhysicsUpdateTransform(Event* pEvent)
 	{
 		Event_Physics_UPDATE_TRANSFORM* pRealEvent = static_cast<Event_Physics_UPDATE_TRANSFORM*>(pEvent);
-		Matrix4x4 interMatrix = pRealEvent->m_worldTransform;
-		interMatrix.scale(m_worldTransform.extractScale());
-		m_worldTransform = interMatrix;
+		m_worldTransform.setPosition(pRealEvent->m_worldTransform.getPosition());
+		m_worldTransform.setQuat(pRealEvent->m_worldTransform.getQuat());
+		m_bTransformDirty = true;
 	}
 
 	void RenderComponent::setupPhysics()

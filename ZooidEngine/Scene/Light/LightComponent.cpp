@@ -55,6 +55,7 @@ namespace ZE
 
 	void LightComponent::setupComponent()
 	{
+		SceneComponent::setupComponent();
 		addEventDelegate(Event_GATHER_LIGHT, &LightComponent::handleGatherLight);
 		
 		m_bLightSetup = false;
@@ -63,13 +64,14 @@ namespace ZE
 
 	void LightComponent::handleGatherLight(Event* event)
 	{
+		DebugRenderer::DrawMatrixBasis(m_cacheWorldMatrix);
 		// Light Culling
 		if (m_lightType != ZE::DIRECTIONAL_LIGHT)
 		{
 			// Check Point Light
 			if (m_lightType == ZE::POINT_LIGHT)
 			{
-				Vector3 pos = m_worldTransform.getPos();
+				Vector3 pos = m_cacheWorldMatrix.getPos();
 				AxisAlignedBox box(pos - Vector3(m_attDistance), pos + Vector3(m_attDistance));
 				//Sphere sphere(pos, m_attDistance);
 
@@ -88,8 +90,8 @@ namespace ZE
 			}
 			else if (m_lightType == SPOT_LIGHT)
 			{
-				Vector3 top = m_worldTransform.getPos();
-				Vector3 bottom = top + m_attDistance * m_worldTransform.getN();
+				Vector3 top = m_cacheWorldMatrix.getPos();
+				Vector3 bottom = top + m_attDistance * m_cacheWorldMatrix.getN();
 				float radius = m_attDistance * tan(m_outerRadius);
 				
 				Cone cone(top, bottom, radius);
@@ -102,7 +104,7 @@ namespace ZE
 				// Draw debug culling
 				if (gDebugOptions.DebugDrawOptions.bDrawCullShapes)
 				{
-					DebugRenderer::DrawDebugCone(Vector3(), m_attDistance, radius, Matrix4x4(m_worldTransform.getV(), m_worldTransform.getN(), m_worldTransform.getU(), top));
+					DebugRenderer::DrawDebugCone(Vector3(), m_attDistance, radius, Matrix4x4(m_cacheWorldMatrix.getV(), m_cacheWorldMatrix.getN(), m_cacheWorldMatrix.getU(), top));
 				}
 			}
 		}
@@ -120,11 +122,11 @@ namespace ZE
 		switch (m_lightType)
 		{
 		case ZE::DIRECTIONAL_LIGHT:
-			light.setDirection(m_worldTransform.getN());
+			light.setDirection(m_cacheWorldMatrix.getN());
 			if (m_bGenerateShadow) { setupShadowMapsDirectional(index); }
 			break;
 		case ZE::POINT_LIGHT:
-			light.setPosition(m_worldTransform.getPos());
+			light.setPosition(m_cacheWorldMatrix.getPos());
 			light.Att_constant = m_attConstant;
 			light.Att_linear = m_attLinear;
 			light.Att_quadratic = m_attQuadratic;
@@ -132,8 +134,8 @@ namespace ZE
 			if (m_bGenerateShadow) { setupShadowMapsPointLight(index); }
 			break;
 		case ZE::SPOT_LIGHT:
-			light.setPosition(m_worldTransform.getPos());
-			light.setDirection(m_worldTransform.getN());
+			light.setPosition(m_cacheWorldMatrix.getPos());
+			light.setDirection(m_cacheWorldMatrix.getN());
 			light.Att_constant = m_attConstant;
 			light.Att_linear = m_attLinear;
 			light.Att_quadratic = m_attQuadratic;
@@ -308,7 +310,7 @@ namespace ZE
 		centerPos = centerPos + zAxis * (mostFar + dimension.getZ() * 0.5f);
 		view.setPos(Vector3(xAxis | newPos * -1.0f, yAxis | newPos * -1.0f, zAxis | newPos * -1.0f));
 
-		cullingBoxTransform = m_worldTransform;
+		cullingBoxTransform = m_cacheWorldMatrix;
 		cullingBoxTransform.setPos(centerPos);
 		cullingBoxTransform.setScale(dimension);
 
@@ -483,7 +485,7 @@ namespace ZE
 		shadowMapData.shadowWidth = m_shadowMapWidth;
 		shadowMapData.shadowHeight = m_shadowMapHeight;
 		
-		Matrix4x4 cullingBoxTransform = m_worldTransform;
+		Matrix4x4 cullingBoxTransform = m_cacheWorldMatrix;
 		cullingBoxTransform.setPos(cullingBoxTransform.getPos() + cullingBoxTransform.getN() * (m_attDistance * 0.5));
 		cullingBoxTransform.scale(Vector3(m_attDistance));
 
@@ -525,7 +527,7 @@ namespace ZE
 			shadowMapData.shadowWidth = m_shadowMapWidth;
 			shadowMapData.shadowHeight = m_shadowMapHeight;
 
-			Matrix4x4 cullingBoxTransform = m_worldTransform;
+			Matrix4x4 cullingBoxTransform = m_cacheWorldMatrix;
 			cullingBoxTransform.scale(Vector3(m_attDistance));
 
 			shadowMapData.cullingBoxTransform = cullingBoxTransform;

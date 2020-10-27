@@ -21,7 +21,7 @@ namespace ZE
 		// TODO init some default debug camera
 		Handle cameraHandle("DEBUG CAMERA", sizeof(DebugCamera));
 		DebugCamera* debugCamera = new(cameraHandle) DebugCamera(_gameContext);
-		debugCamera->setWorldPosition(Vector3(2.0f, 5.0f, 15.0f));
+		debugCamera->setWorldPosition(Vector3(2.0f, 2.0f, 5.0f));
 		debugCamera->rotateInDeg(Vector3(-15.0f, 15.0f, 0.0f));
 		debugCamera->setupComponent();
 		s_instance->setCurrentCamara(debugCamera);

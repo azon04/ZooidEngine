@@ -132,6 +132,11 @@ public:
 		return v.toVector3();
 	}
 
+	Vector3 rotate(const Vector3& v) const
+	{
+		return ((*this) * v * conjugate()).toVector3();
+	}
+
 	Vector3 toVector3()
 	{
 		return Vector3(m_x, m_y, m_z);
@@ -141,6 +146,21 @@ public:
 	Quaternion operator*()
 	{
 		return Quaternion(-m_x, -m_y, -m_z, m_w);
+	}
+
+	FORCEINLINE Quaternion conjugate() const
+	{
+		return Quaternion(-m_x, -m_y, -m_z, m_w);
+	}
+
+	FORCEINLINE Quaternion inverse() const
+	{
+		ZE::Float32 len = sqrt(m_x * m_x + m_y * m_y + m_z * m_z + m_w * m_w);
+
+		// #TODO check nearly 0
+		ZE::Float32 invLen = 1 / len;
+
+		return Quaternion(-m_x * invLen, -m_y * invLen, -m_z * invLen, m_w * invLen);
 	}
 
 	// Getter and Setter

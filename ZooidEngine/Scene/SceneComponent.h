@@ -3,6 +3,7 @@
 
 #include "GameObjectModel/Component.h"
 #include "Math/Matrix4x4.h"
+#include "Math/Transform.h"
 
 namespace ZE
 {
@@ -13,7 +14,7 @@ namespace ZE
 		DEFINE_CLASS(SceneComponent)
 
 	public:
-		SceneComponent(GameContext* gameContext) : Component(gameContext) {}
+		SceneComponent(GameContext* gameContext) : Component(gameContext), m_bTransformDirty(true) {}
 		virtual ~SceneComponent() {}
 
 		virtual void calculateTransform(const Matrix4x4& parentMat);
@@ -23,9 +24,9 @@ namespace ZE
 		void setWorldTransform(Matrix4x4& _worldTransform);
 
 		void setWorldPosition(const Vector3& _worldPosition);
-		void setRelativePosition(Vector3 _relativePosition);
-		void setScale(Vector3 _scale);
-		void rotateInDeg(Vector3 _eulerAngle);
+		void setRelativePosition(const Vector3& _relativePosition);
+		void setScale(const Vector3& _scale);
+		void rotateInDeg(const Vector3& _eulerAngle);
 
 		Vector3 getRelativePosition() const;
 		Vector3 getWorldPosition() const;
@@ -39,9 +40,15 @@ namespace ZE
 	protected:
 
 		virtual void handleUpdateEvent(Event* event);
+		virtual void handleCalculateTransform(Event* event);
+		void updateCacheMatrix();
 
 		ALIGN16 Matrix4x4 m_localTransform;
-		ALIGN16 Matrix4x4 m_worldTransform;
+		ALIGN16 Matrix4x4 m_cacheWorldMatrix;
+
+		Transform m_worldTransform;
+
+		bool m_bTransformDirty:1;
 	};
 }
 

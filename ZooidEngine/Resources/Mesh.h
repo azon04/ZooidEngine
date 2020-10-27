@@ -5,6 +5,7 @@
 #include "Renderer/IGPUBufferArray.h"
 #include "Memory/Handle.h"
 #include "Math/Shapes.h"
+#include "Math/Transform.h"
 
 namespace ZE
 {
@@ -35,6 +36,8 @@ namespace ZE
 		FORCEINLINE ERenderTopologyEnum getRenderTopology() const { return (m_bufferArray ? m_bufferArray->getRenderTopology() : ERenderTopologyEnum::TOPOLOGY_TRIANGLE); }
 
 		Sphere getBoundingSphere(const Matrix4x4& transform);
+		Sphere getBoundingSphere(const Transform& transform);
+		Sphere getBoundingSphere(const Vector3& scale, const Vector3& position);
 		AxisAlignedBox getAABBoundingBox(const Matrix4x4& transform);
 		OrientedBox getOBBoundingBox(const Matrix4x4& transform);
 

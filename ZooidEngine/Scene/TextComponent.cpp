@@ -45,10 +45,10 @@ namespace ZE
 	{
 		if (!m_bVisible) { return; }
 
-		if (m_bDirty)
+		if (m_bTextDirty)
 		{
 			m_textMesh->generateTextMesh(m_text.const_str(), m_drawSpace == DRAW_WORLD_SPACE, m_gameContext->getGameDrawList());
-			m_bDirty = false;
+			m_bTextDirty = false;
 		}
 
 		if (m_textMesh && m_textMesh->getGPUBufferArray())
@@ -75,7 +75,7 @@ namespace ZE
 				}
 
 				textRenderInfo->m_shaderChain = ShaderManager::GetInstance()->getShaderChain(shaderType);
-				textRenderInfo->m_worldTransform = m_worldTransform;
+				textRenderInfo->m_worldTransform = m_cacheWorldMatrix;
 				textRenderInfo->m_color = m_color;
 				textRenderInfo->m_fontTexture = m_font->getGPUTexture();
 				textRenderInfo->drawCount = m_textMesh->getGPUBufferArray()->getDataCount();
@@ -102,7 +102,7 @@ namespace ZE
 				}
 
 				textRenderInfo->m_shaderChain = ShaderManager::GetInstance()->getShaderChain(shaderType);
-				textRenderInfo->m_worldTransform = m_worldTransform;
+				textRenderInfo->m_worldTransform = m_cacheWorldMatrix;
 				textRenderInfo->m_color = m_color;
 				textRenderInfo->m_fontTexture = m_font->getGPUTexture();
 				textRenderInfo->drawCount = m_textMesh->getGPUBufferArray()->getDataCount();
@@ -112,8 +112,8 @@ namespace ZE
 
 	void TextComponent::setText(String text)
 	{
-		m_bDirty = text != m_text;
-		if (m_bDirty)
+		m_bTextDirty = text != m_text;
+		if (m_bTextDirty)
 		{
 			m_text = text;
 		}

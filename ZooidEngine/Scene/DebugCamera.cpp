@@ -25,9 +25,9 @@ namespace ZE
 
 		Event_UPDATE* pRealEvent = static_cast<Event_UPDATE*>(_event);
 		Float32 deltaInSeconds = pRealEvent->m_deltaSeconds;
-		m_worldTransform.setPos(m_worldTransform.getPos() + (m_worldTransform.getU() * m_velocity.getX() + m_worldTransform.getN() * m_velocity.getZ()) * deltaInSeconds );
-		m_worldTransform.rotateAroundU(DegToRad(m_rotation.getX() * deltaInSeconds));
-		m_worldTransform.rotateAroundV(DegToRad(m_rotation.getY() * deltaInSeconds));
+		m_cacheWorldMatrix.setPos(m_cacheWorldMatrix.getPos() + (m_cacheWorldMatrix.getU() * m_velocity.getX() + m_cacheWorldMatrix.getN() * m_velocity.getZ()) * deltaInSeconds );
+		m_cacheWorldMatrix.rotateAroundU(DegToRad(m_rotation.getX() * deltaInSeconds));
+		m_cacheWorldMatrix.rotateAroundV(DegToRad(m_rotation.getY() * deltaInSeconds));
 	}
 
 	void DebugCamera::handleKeyDownEvent(Event* _event)
@@ -112,7 +112,7 @@ namespace ZE
 			m_rotation.setY(m_rotation.getY() - 20.0f);
 		}
 
-		if (pRealEvent->m_keyId == Key::RightArrow)
+		if (pRealEvent->m_keyId == Key::RightArrow) 
 		{
 			m_rotation.setY(m_rotation.getY() + 20.0f);
 		}
@@ -127,8 +127,8 @@ namespace ZE
 			float deltaPitch = pMouseDragEvent->m_deltaY * 0.001f;
 			float deltaYaw = pMouseDragEvent->m_deltaX * 0.001f;
 
-			m_worldTransform.rotateAroundV(-deltaYaw);
-			m_worldTransform.rotateAroundU(-deltaPitch);
+			m_cacheWorldMatrix.rotateAroundV(-deltaYaw);
+			m_cacheWorldMatrix.rotateAroundU(-deltaPitch);
 		}
 	}
 

@@ -260,7 +260,7 @@ namespace ZE
 
 		// Handle Event_Update
 		{
-			ZE_PROFILER_SECTION("Event_Update");
+			ZE_PROFILER_SECTION("Event_UPDATE");
 			ZE::Handle handleUpdate("EventUpdate", sizeof(ZE::Event_UPDATE));
 			ZE::Event_UPDATE* eventUpdate = new(handleUpdate) ZE::Event_UPDATE();
 			eventUpdate->m_deltaMilliseconds = deltaTime;
@@ -270,6 +270,7 @@ namespace ZE
 			handleUpdate.release();
 		}
 
+		// Update Input
 		{
 			ZE_PROFILER_SECTION("Event_Input");
 			for (int i = 0; i < _gameContext->getEventDispatcher()->getEvents(ZE::EVENT_INPUT).length(); i++)
@@ -292,6 +293,15 @@ namespace ZE
 			_gameContext->getPhysics()->Update(deltaSeconds);
 			_gameContext->getPhysics()->PostUpdate();
 			_gameContext->getPhysics()->DrawDebug();
+		}
+
+		// Event Calculate Transform
+		{
+			ZE_PROFILER_SECTION("Event_CALC_TRANSFORM");
+			ZE::Handle handleUpdate("EventTransform", sizeof(ZE::Event_CALC_TRANSFORM));
+			ZE::Event_CALC_TRANSFORM* eventUpdate = new(handleUpdate) ZE::Event_CALC_TRANSFORM();
+			_gameContext->getEventDispatcher()->handleEvent(eventUpdate);
+			handleUpdate.release();
 		}
 
 		// Application Tick
@@ -404,7 +414,6 @@ namespace ZE
 
 			StringFunc::PrintToString(buffer, 256, "GPU: %.2fms", g_gpuDrawTime);
 			DebugRenderer::DrawTextScreen(buffer, Vector2(10.0f, gRenderHeight - 100.0f), (g_gpuDrawTime < 0.5 * targetTime) ? RedColor : (g_gpuDrawTime < targetTime) ? YellowColor : GreenColor);
-
 		}
 
 		// UI End Frame
@@ -445,6 +454,8 @@ namespace ZE
 
 	void DrawJob(GameContext* _gameContext)
 	{
+		ZE_PROFILER_SECTION("Draw Job");
+
 		double deltaTime = _gameContext->m_renderThreadTimer.ResetAndGetDeltaMS();
 
 		IRenderer* renderer = _gameContext->getRenderer();

@@ -37,14 +37,14 @@ namespace ZE
 		{
 			ZE::PhysicsHit hit;
 
-			if (m_gameContext->getPhysics()->DoLineRaycast(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, m_worldTransform.getPos() - 1.2f * m_worldTransform.getN(), -1 * m_worldTransform.getN(), 20.0f, hit))
+			if (m_gameContext->getPhysics()->DoLineRaycast(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, getWorldPosition() - 1.2f * getForwardVector(), -1 * getForwardVector(), 20.0f, hit))
 			{
 				ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit %s!", hit.BlockedComponent->getObjectName());
 				
 				if (hit.BlockedComponent)
 				{
 					ZE::IPhysicsBodyHolder* pPhysicsBodyHolder = dynamic_cast<ZE::IPhysicsBodyHolder*>(hit.BlockedComponent);
-					pPhysicsBodyHolder->AddForceAtPos(hit.BlockedPosition, -1 * m_worldTransform.getN(), 50.0f, true);
+					pPhysicsBodyHolder->AddForceAtPos(hit.BlockedPosition, -1 * getForwardVector(), 50.0f, true);
 				}
 			}
 		}
@@ -52,7 +52,7 @@ namespace ZE
 		{
 			ZE::PhysicsHit hit;
 
-			if (m_gameContext->getPhysics()->DoBoxCast(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, m_worldTransform.getPos() - 1.2f * m_worldTransform.getN(), -1 * m_worldTransform.getN(), 20.0f, Quaternion(), Vector3(0.25f, 0.25f, 0.25f), hit))
+			if (m_gameContext->getPhysics()->DoBoxCast(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, getWorldPosition() - 1.2f * getForwardVector(), -1 * getForwardVector(), 20.0f, Quaternion(), Vector3(0.25f, 0.25f, 0.25f), hit))
 			{
 				ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit %s!", hit.BlockedComponent->getObjectName());
 			}
@@ -61,7 +61,7 @@ namespace ZE
 		{
 			ZE::PhysicsHit hit;
 
-			if (m_gameContext->getPhysics()->DoCapsuleCast(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, m_worldTransform.getPos() - 1.2f * m_worldTransform.getN(), -1 * m_worldTransform.getN(), 20.0f, Quaternion(), 0.45f, 0.45f, hit))
+			if (m_gameContext->getPhysics()->DoCapsuleCast(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, getWorldPosition() - 1.2f * getForwardVector(), -1 * getForwardVector(), 20.0f, Quaternion(), 0.45f, 0.45f, hit))
 			{
 				ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit %s!", hit.BlockedComponent->getObjectName());
 			}
@@ -70,7 +70,7 @@ namespace ZE
 		{
 			ZE::PhysicsHit hit;
 
-			if (m_gameContext->getPhysics()->DoSphereCast(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, m_worldTransform.getPos() - 1.2f * m_worldTransform.getN(), -1 * m_worldTransform.getN(), 20.0f, 0.45f, hit))
+			if (m_gameContext->getPhysics()->DoSphereCast(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, getWorldPosition() - 1.2f * getForwardVector(), -1 * getForwardVector(), 20.0f, 0.45f, hit))
 			{
 				ZELOG(ZE::LOG_PHYSICS, ZE::Log, "Hit %s!", hit.BlockedComponent->getObjectName());
 			}
@@ -79,7 +79,7 @@ namespace ZE
 		{
 			ZE::PhysicsHit hit;
 
-			if (m_gameContext->getPhysics()->DoLineRaycastMulti(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, m_worldTransform.getPos() - 1.2f * m_worldTransform.getN(), -1 * m_worldTransform.getN(), 20.0f, hit))
+			if (m_gameContext->getPhysics()->DoLineRaycastMulti(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, getWorldPosition() - 1.2f * getForwardVector(), -1 * getForwardVector(), 20.0f, hit))
 			{
 				if (hit.BlockedComponent)
 				{
@@ -98,7 +98,7 @@ namespace ZE
 		{
 			ZE::PhysicsHit hit;
 
-			if (m_gameContext->getPhysics()->DoBoxCastMulti(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, m_worldTransform.getPos() - 1.2f * m_worldTransform.getN(), -1 * m_worldTransform.getN(), 20.0f, Quaternion(), Vector3(0.25f, 0.25f, 0.25f), hit))
+			if (m_gameContext->getPhysics()->DoBoxCastMulti(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, getWorldPosition() - 1.2f * getForwardVector(), -1 * getForwardVector(), 20.0f, Quaternion(), Vector3(0.25f, 0.25f, 0.25f), hit))
 			{
 				if (hit.BlockedComponent)
 				{
@@ -117,7 +117,7 @@ namespace ZE
 		{
 			ZE::PhysicsHit hit;
 
-			if (m_gameContext->getPhysics()->DoSphereCastMulti(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, m_worldTransform.getPos() - 1.2f * m_worldTransform.getN(), -1 * m_worldTransform.getN(), 20.0f, 0.45f, hit))
+			if (m_gameContext->getPhysics()->DoSphereCastMulti(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, getWorldPosition() - 1.2f * getForwardVector(), -1 * getForwardVector(), 20.0f, 0.45f, hit))
 			{
 				if (hit.BlockedComponent)
 				{
@@ -136,7 +136,7 @@ namespace ZE
 		{
 			ZE::PhysicsHit hit;
 
-			if (m_gameContext->getPhysics()->DoCapsuleCastMulti(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, m_worldTransform.getPos() - 1.2f * m_worldTransform.getN(), -1 * m_worldTransform.getN(), 20.0f, Quaternion(), 0.45f, 0.45f, hit))
+			if (m_gameContext->getPhysics()->DoCapsuleCastMulti(ZE::CollisionGroup::COLLISION_STATIC | ZE::CollisionGroup::COLLISION_DYNAMIC, getWorldPosition() - 1.2f * getForwardVector(), -1 * getForwardVector(), 20.0f, Quaternion(), 0.45f, 0.45f, hit))
 			{
 				if (hit.BlockedComponent)
 				{

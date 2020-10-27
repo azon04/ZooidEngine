@@ -53,7 +53,7 @@ namespace ZE
 
 	public:
 
-		ALIGN16 Matrix4x4 m_worldTransform;
+		Transform m_worldTransform;
 	};
 
 	class Event_Physics_ON_TRIGGER : public Event_Physics_BASE

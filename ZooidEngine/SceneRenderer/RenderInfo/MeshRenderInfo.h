@@ -20,9 +20,9 @@ namespace ZE
 
 		Material* m_material;
 		UInt32 m_instanceCount;
-		bool m_castShadow;
-		bool m_isDoubleSided;
-		bool m_outlined;
+		bool m_castShadow:1;
+		bool m_isDoubleSided:1;
+		bool m_outlined:1;
 	};
 };
 

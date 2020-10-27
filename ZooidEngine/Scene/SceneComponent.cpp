@@ -8,7 +8,7 @@ namespace ZE {
 
 	void SceneComponent::calculateTransform(const Matrix4x4& parentMat)
 	{
-		Matrix4x4::FastMul(parentMat, m_localTransform, m_worldTransform);
+		Matrix4x4::FastMul(parentMat, m_localTransform, m_cacheWorldMatrix);
 	}
 
 	void SceneComponent::setupComponent()
@@ -16,6 +16,7 @@ namespace ZE {
 		Component::setupComponent();
 
 		addEventDelegate(Event_UPDATE, &SceneComponent::handleUpdateEvent);
+		addEventDelegate(Event_CALC_TRANSFORM, &SceneComponent::handleCalculateTransform);
 	}
 
 	void SceneComponent::setLocalTransform(Matrix4x4& _localTransform)
@@ -27,14 +28,15 @@ namespace ZE {
 
 	void SceneComponent::setWorldTransform(Matrix4x4& _worldTransform)
 	{
-		m_worldTransform = _worldTransform;
+		m_cacheWorldMatrix = _worldTransform;
 
 		// #TODO Calculate new world transform to its children
 	}
 
 	void SceneComponent::setWorldPosition(const Vector3& _worldPosition)
 	{
-		m_worldTransform.setPos(_worldPosition);
+		m_worldTransform.setPosition(_worldPosition);
+		m_bTransformDirty = true;
 
 		// #TODO Calculate new world transform to its children
 	}
@@ -43,25 +45,39 @@ namespace ZE {
 	{
 	}
 
-	void SceneComponent::setRelativePosition(Vector3 _relativePosition)
+	void SceneComponent::handleCalculateTransform(Event* event)
+	{
+		updateCacheMatrix();
+	}
+
+	void SceneComponent::updateCacheMatrix()
+	{
+		if (m_bTransformDirty)
+		{
+			m_cacheWorldMatrix = m_worldTransform.toMatrix();
+			m_bTransformDirty = false;
+		}
+	}
+
+	void SceneComponent::setRelativePosition(const Vector3& _relativePosition)
 	{
 		m_localTransform.setPos(_relativePosition);
 
 		// #TODO Calculate new world transform to its children
 	}
 
-	void SceneComponent::setScale(Vector3 _scale)
+	void SceneComponent::setScale(const Vector3& _scale)
 	{
 		m_worldTransform.setScale(_scale);
+		m_bTransformDirty = true;
 
 		// #TODO Calculate new world transform to its children
 	}
 
-	void SceneComponent::rotateInDeg(Vector3 _eulerAngle)
+	void SceneComponent::rotateInDeg(const Vector3& _eulerAngle)
 	{
-		m_worldTransform.rotateAroundU(DegToRad(_eulerAngle.getX()));
-		m_worldTransform.rotateAroundV(DegToRad(_eulerAngle.getY()));
-		m_worldTransform.rotateAroundN(DegToRad(_eulerAngle.getZ()));
+		m_worldTransform.setRotation(_eulerAngle);
+		m_bTransformDirty = true;
 
 		// #TODO Calculate new world transform to its children
 	}
@@ -73,22 +89,38 @@ namespace ZE {
 
 	Vector3 SceneComponent::getWorldPosition() const
 	{
-		return m_worldTransform.getPos();
+		if (m_bTransformDirty)
+		{
+			return m_worldTransform.getPosition();
+		}
+		return m_cacheWorldMatrix.getPos();
 	}
 
 	Vector3 SceneComponent::getForwardVector() const
 	{
-		return m_worldTransform.getN();
+		if (m_bTransformDirty)
+		{
+			return m_worldTransform.m_quat.rotate(Vector3(0.0f, 0.0f, 1.0f));
+		}
+		return m_cacheWorldMatrix.getN();
 	}
 
 	Vector3 SceneComponent::getRightVector() const
 	{
-		return m_worldTransform.getU();
+		if (m_bTransformDirty)
+		{
+			return m_worldTransform.m_quat.rotate(Vector3(1.0f, 0.0f, 0.0f));
+		}
+		return m_cacheWorldMatrix.getU();
 	}
 
 	Vector3 SceneComponent::getUpVector() const
 	{
-		return m_worldTransform.getV();
+		if (m_bTransformDirty)
+		{
+			return m_worldTransform.m_quat.rotate(Vector3(0.0f, 1.0f, 0.0f));
+		}
+		return m_cacheWorldMatrix.getV();
 	}
 
 	Matrix4x4 SceneComponent::getLocalTransform()
@@ -98,7 +130,7 @@ namespace ZE {
 
 	Matrix4x4 SceneComponent::getWorldTransform()
 	{
-		return m_worldTransform;
+		return m_cacheWorldMatrix;
 	}
 
 }

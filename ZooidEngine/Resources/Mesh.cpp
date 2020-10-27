@@ -18,6 +18,25 @@ namespace ZE
 		return sphere;
 	}
 
+	Sphere Mesh::getBoundingSphere(const Vector3& scale, const Vector3& position)
+	{
+		Sphere sphere;
+		sphere.m_pos = position + (scale * m_centerOffset);
+		Float32 maxScale = MATH_MAX(scale.m_x, MATH_MAX(scale.m_y, scale.m_z));
+		sphere.m_radius = maxScale * m_radius;
+		return sphere;
+	}
+
+	Sphere Mesh::getBoundingSphere(const Transform& transform)
+	{
+		Sphere sphere;
+		Vector3 scale = transform.getScale();
+		sphere.m_pos = transform.getPosition() + (scale * m_centerOffset);
+		Float32 maxScale = MATH_MAX(scale.m_x, MATH_MAX(scale.m_y, scale.m_z));
+		sphere.m_radius = maxScale * m_radius;
+		return sphere;
+	}
+
 	AxisAlignedBox Mesh::getAABBoundingBox(const Matrix4x4& transform)
 	{
 		AxisAlignedBox aab;

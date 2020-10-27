@@ -166,6 +166,12 @@ namespace ZE
 		return resultMat;
 	}
 
+	Transform ConvertToTransform(physx::PxTransform& _inTransform)
+	{
+		return Transform(Vector3(_inTransform.p.x, _inTransform.p.y, _inTransform.p.z),
+			Quaternion(_inTransform.q.x, _inTransform.q.y, _inTransform.q.z, _inTransform.q.w), Vector3(1.0f));
+	}
+
 	void PhysXEngine::PostUpdate()
 	{
 		physx::PxU32 nbActors;
@@ -188,7 +194,7 @@ namespace ZE
 				Component* pComponent = (Component*)(pPhysicsBody->getGameObject());
 				if (pComponent)
 				{
-					eventUpdateTransform.m_worldTransform = ConvertToMatrix4x4(actor->getGlobalPose());
+					eventUpdateTransform.m_worldTransform = ConvertToTransform(actor->getGlobalPose());
 					pComponent->handleEvent(&eventPostUpdate);
 					pComponent->handleEvent(&eventUpdateTransform);
 				}
@@ -245,6 +251,12 @@ namespace ZE
 		return physx::PxTransform(pxMat44);
 	}
 
+	physx::PxTransform ConvertToPxTransform(const Transform& _transform)
+	{
+		return physx::PxTransform(_transform.m_position.m_x, _transform.m_position.m_y, _transform.m_position.m_z,
+			physx::PxQuat(_transform.m_quat.m_x, _transform.m_quat.m_y, _transform.m_quat.m_z, _transform.m_quat.m_w));
+	}
+
 	ZE::Handle PhysXEngine::CreateDynamicRigidBody(Matrix4x4& _transform, PhysicsBodySetup* _setup)
 	{
 		physx::PxTransform pxTransform= ConvertToPxTransform(_transform);
@@ -265,6 +277,26 @@ namespace ZE
 		return hPhysicsBody;
 	}
 
+	ZE::Handle PhysXEngine::CreateDynamicRigidBody(const Transform& _transform, PhysicsBodySetup* _setup)
+	{
+		physx::PxTransform pxTransform = ConvertToPxTransform(_transform);
+		physx::PxRigidDynamic* body = m_physxPhysics->createRigidDynamic(pxTransform);
+		for (int i = 0; i < _setup->m_bodies.length(); i++)
+		{
+			PhysicsBodyDesc& bodyDesc = _setup->m_bodies[i];
+			physx::PxShape* shape = CreateShape(&bodyDesc, _transform.getScale());
+			if (shape) { body->attachShape(*shape); }
+		}
+
+		m_physxScene->addActor(*body);
+
+		body->setMass(_setup->Mass);
+		Handle hPhysicsBody("Physics Body", sizeof(PhysXBody));
+		PhysXBody* pPhysicsBody = new(hPhysicsBody) PhysXBody(body);
+
+		return hPhysicsBody;
+	}
+
 	ZE::Handle PhysXEngine::CreateStaticRigidBody(Matrix4x4& _transform, PhysicsBodySetup* _setup)
 	{
 		physx::PxTransform pxTransform = ConvertToPxTransform(_transform);
@@ -273,6 +305,25 @@ namespace ZE
 		{
 			PhysicsBodyDesc& bodyDesc = _setup->m_bodies[i];
 			physx::PxShape* shape = CreateShape(&bodyDesc, _transform.extractScale());
+			if (shape) { body->attachShape(*shape); }
+		}
+
+		m_physxScene->addActor(*body);
+
+		Handle hPhysicsBody("Physics Body", sizeof(PhysXBody));
+		PhysXBody* pPhysicsBody = new(hPhysicsBody) PhysXBody(body);
+
+		return hPhysicsBody;
+	}
+
+	ZE::Handle PhysXEngine::CreateStaticRigidBody(const Transform& _transform, PhysicsBodySetup* _setup)
+	{
+		physx::PxTransform pxTransform = ConvertToPxTransform(_transform);
+		physx::PxRigidStatic* body = m_physxPhysics->createRigidStatic(pxTransform);
+		for (int i = 0; i < _setup->m_bodies.length(); i++)
+		{
+			PhysicsBodyDesc& bodyDesc = _setup->m_bodies[i];
+			physx::PxShape* shape = CreateShape(&bodyDesc, _transform.getScale());
 			if (shape) { body->attachShape(*shape); }
 		}
 

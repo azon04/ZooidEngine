@@ -24,17 +24,18 @@ namespace ZE
 
 	void CameraComponent::getViewMatrix(Matrix4x4& _outMat)
 	{
+		updateCacheMatrix();
 #if USING_INVERSE
-		_outMat = m_worldTransform.inverse();
+		_outMat = m_cacheWorldMatrix.inverse();
 #else
-		_outMat.setU(m_worldTransform.getU());
-		_outMat.setV(m_worldTransform.getV());
-		_outMat.setN(m_worldTransform.getN());
+		_outMat.setU(m_cacheWorldMatrix.getU());
+		_outMat.setV(m_cacheWorldMatrix.getV());
+		_outMat.setN(m_cacheWorldMatrix.getN());
 		_outMat = _outMat.transpose();
 		
-		Vector3 v(-m_worldTransform.getU().dotProduct(m_worldTransform.getPos()),
-			-m_worldTransform.getV().dotProduct(m_worldTransform.getPos()),
-			-m_worldTransform.getN().dotProduct(m_worldTransform.getPos()));
+		Vector3 v(-m_cacheWorldMatrix.getU().dotProduct(m_cacheWorldMatrix.getPos()),
+			-m_cacheWorldMatrix.getV().dotProduct(m_cacheWorldMatrix.getPos()),
+			-m_cacheWorldMatrix.getN().dotProduct(m_cacheWorldMatrix.getPos()));
 
 		_outMat.setPos(v);
 #endif

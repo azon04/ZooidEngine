@@ -29,9 +29,9 @@ namespace ZE
 	void CollisionComponent::handlePhysicsUpdateTransform(Event* pEvent)
 	{
 		Event_Physics_UPDATE_TRANSFORM* pRealEvent = static_cast<Event_Physics_UPDATE_TRANSFORM*>(pEvent);
-		Matrix4x4 interMatrix = pRealEvent->m_worldTransform;
-		interMatrix.scale(m_worldTransform.extractScale());
-		m_worldTransform = interMatrix;
+		m_worldTransform.setPosition(pRealEvent->m_worldTransform.getPosition());
+		m_worldTransform.setQuat(pRealEvent->m_worldTransform.getQuat());
+		m_bTransformDirty = true;
 	}
 
 	void CollisionComponent::handleOnCollide(Event* pEvent)

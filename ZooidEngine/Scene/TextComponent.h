@@ -46,17 +46,17 @@ namespace ZE
 		void setDrawSpace(DrawSpace _drawSpace) 
 		{ 
 			m_drawSpace = _drawSpace; 
-			m_bDirty = true; 
+			m_bTextDirty = true;
 		}
 
 	protected:
 		TextMesh* m_textMesh;
 		Font* m_font;
 		String m_text;
-		bool m_bDirty;
-		bool m_bVisible;
-		DrawSpace m_drawSpace;
 		Vector3 m_color;
+		DrawSpace m_drawSpace;
+		bool m_bTextDirty:1;
+		bool m_bVisible:1;
 	};
 }
 #endif

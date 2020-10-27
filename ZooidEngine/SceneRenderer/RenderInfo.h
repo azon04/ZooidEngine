@@ -26,11 +26,11 @@ namespace ZE
 		IShader* m_pixelShader;
 		IShaderChain* m_shaderChain;
 		IGPUBufferArray* m_gpuBufferArray;
-		ERenderTopologyEnum m_renderTopology;
-		UInt32 drawCount;
 		Matrix4x4 m_worldTransform;
 		Vector3 m_boxExtent;
+		UInt32 drawCount;
 		Vector3 m_boxLocalPos;
+		ERenderTopologyEnum m_renderTopology;
 		bool m_bCulled;
 	};
 };

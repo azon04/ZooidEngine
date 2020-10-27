@@ -4,6 +4,7 @@
 #include "Memory/Handle.h"
 #include "Math/Vector3.h"
 #include "Math/Matrix4x4.h"
+#include "Math/Transform.h"
 #include "Utils/PrimitiveTypes.h"
 #include "Utils/Array.h"
 
@@ -144,6 +145,12 @@ namespace ZE
 
 		// Create Static Rigid Body based on PhysicsBodySetup
 		virtual Handle CreateStaticRigidBody(Matrix4x4& _transform, PhysicsBodySetup* _setup) = 0;
+
+		// Create Dynamic Rigid body based on PhysicsBodySetup
+		virtual Handle CreateDynamicRigidBody(const Transform& _transform, PhysicsBodySetup* _setup) = 0;
+
+		// Create Static Rigid Body based on PhysicsBodySetup
+		virtual Handle CreateStaticRigidBody(const Transform& _transform, PhysicsBodySetup* _setup) = 0;
 
 		// Queries
 

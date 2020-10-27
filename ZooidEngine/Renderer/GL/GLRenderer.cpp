@@ -56,7 +56,7 @@ namespace ZE
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, ZE_GL_VERSION_MAJOR);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, ZE_GL_VERSION_MINOR);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-		//glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+		glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 		
 		m_window = glfwCreateWindow(m_width, m_height, "ZooidEngine - Windows", nullptr, nullptr);
 		if (!m_window) 
@@ -242,6 +242,11 @@ namespace ZE
 		GLFrameBuffer* realFrameBufferTo = static_cast<GLFrameBuffer*>(frameBufferTo);
 
 		glBlitNamedFramebuffer(realFrameBufferFrom->getFBO(), realFrameBufferTo->getFBO(), srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, getRenderBitMask(mask), getTextureFilter(filter));
+	}
+
+	void GLRenderer::SetVsync(bool bEnabled)
+	{
+		glfwSwapInterval(bEnabled ? 1 : 0);
 	}
 
 	void GLRenderer::PushDebugGroup(const char* groupName)
