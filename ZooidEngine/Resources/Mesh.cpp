@@ -30,9 +30,8 @@ namespace ZE
 	Sphere Mesh::getBoundingSphere(const Transform& transform)
 	{
 		Sphere sphere;
-		Vector3 scale = transform.getScale();
-		sphere.m_pos = transform.getPosition() + (scale * m_centerOffset);
-		Float32 maxScale = MATH_MAX(scale.m_x, MATH_MAX(scale.m_y, scale.m_z));
+		sphere.m_pos = transform.m_position + (transform.m_scale * m_centerOffset);
+		Float32 maxScale = MATH_MAX(transform.m_scale.m_x, MATH_MAX(transform.m_scale.m_y, transform.m_scale.m_z));
 		sphere.m_radius = maxScale * m_radius;
 		return sphere;
 	}

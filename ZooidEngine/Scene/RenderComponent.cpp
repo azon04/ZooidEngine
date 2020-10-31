@@ -45,8 +45,7 @@ namespace ZE
 		{
 			DrawList* drawList = m_gameContext->getGameDrawList();
 
-			Sphere boundingSphere = m_mesh->getBoundingSphere(m_worldTransform);
-			EFrustumTestResult testResult = m_gameContext->getGameDrawList()->m_viewFustrum.testSphere(boundingSphere);
+			EFrustumTestResult testResult = m_gameContext->getGameDrawList()->m_viewFustrum.testSphere(m_boundingSphere);
 			if (testResult == FRUSTUM_OUTSIDE)
 			{
 				return;
@@ -67,7 +66,7 @@ namespace ZE
 			{
 				if (testResult == FRUSTUM_INSIDE)
 				{
-					DebugRenderer::DrawDebugSphere(boundingSphere.m_pos, boundingSphere.m_radius);
+					DebugRenderer::DrawDebugSphere(m_boundingSphere.m_pos, m_boundingSphere.m_radius);
 				}
 				else
 				{
@@ -141,36 +140,34 @@ namespace ZE
 		{
 			DrawList* drawList = m_gameContext->getGameDrawList();
 
-			AxisAlignedBox objectBounding = m_mesh->getAABBoundingBox(m_cacheWorldMatrix);
-
-			if (drawList->m_objectsBounding.m_min.m_x > objectBounding.m_min.m_x)
+			if (drawList->m_objectsBounding.m_min.m_x > m_boundingBox.m_min.m_x)
 			{
-				drawList->m_objectsBounding.m_min.m_x = objectBounding.m_min.m_x;
+				drawList->m_objectsBounding.m_min.m_x = m_boundingBox.m_min.m_x;
 			}
 
-			if (drawList->m_objectsBounding.m_min.m_y > objectBounding.m_min.m_y)
+			if (drawList->m_objectsBounding.m_min.m_y > m_boundingBox.m_min.m_y)
 			{
-				drawList->m_objectsBounding.m_min.m_y = objectBounding.m_min.m_y;
+				drawList->m_objectsBounding.m_min.m_y = m_boundingBox.m_min.m_y;
 			}
 
-			if (drawList->m_objectsBounding.m_min.m_z > objectBounding.m_min.m_z)
+			if (drawList->m_objectsBounding.m_min.m_z > m_boundingBox.m_min.m_z)
 			{
-				drawList->m_objectsBounding.m_min.m_z = objectBounding.m_min.m_z;
+				drawList->m_objectsBounding.m_min.m_z = m_boundingBox.m_min.m_z;
 			}
 
-			if (drawList->m_objectsBounding.m_max.m_x < objectBounding.m_max.m_x)
+			if (drawList->m_objectsBounding.m_max.m_x < m_boundingBox.m_max.m_x)
 			{
-				drawList->m_objectsBounding.m_max.m_x = objectBounding.m_max.m_x;
+				drawList->m_objectsBounding.m_max.m_x = m_boundingBox.m_max.m_x;
 			}
 
-			if (drawList->m_objectsBounding.m_max.m_y < objectBounding.m_max.m_y)
+			if (drawList->m_objectsBounding.m_max.m_y < m_boundingBox.m_max.m_y)
 			{
-				drawList->m_objectsBounding.m_max.m_y = objectBounding.m_max.m_y;
+				drawList->m_objectsBounding.m_max.m_y = m_boundingBox.m_max.m_y;
 			}
 
-			if (drawList->m_objectsBounding.m_max.m_z < objectBounding.m_max.m_z)
+			if (drawList->m_objectsBounding.m_max.m_z < m_boundingBox.m_max.m_z)
 			{
-				drawList->m_objectsBounding.m_max.m_z = objectBounding.m_max.m_z;
+				drawList->m_objectsBounding.m_max.m_z = m_boundingBox.m_max.m_z;
 			}
 		}
 	}
@@ -185,8 +182,7 @@ namespace ZE
 
 			LightShadowMapData& shadowMapData = drawList->m_lightShadowMapData[pRealEvent->m_shadowDataIndex];
 
-			Sphere boundingSphere = m_mesh->getBoundingSphere(m_worldTransform);
-			EFrustumTestResult testResult = shadowMapData.lightFrustum.testSphere(boundingSphere);
+			EFrustumTestResult testResult = shadowMapData.lightFrustum.testSphere(m_boundingSphere);
 			if (testResult == FRUSTUM_OUTSIDE)
 			{
 				return;
@@ -302,6 +298,19 @@ namespace ZE
 	ZE::IPhysicsBody* RenderComponent::getPhysicsBody()
 	{
 		return m_hPhysicsBody.getObject<IPhysicsBody>();
+	}
+
+	void RenderComponent::updateCacheMatrix()
+	{
+		if (m_bTransformDirty)
+		{
+			SceneComponent::updateCacheMatrix();
+			if (m_mesh)
+			{
+				m_boundingSphere = m_mesh->getBoundingSphere(m_worldTransform);
+				m_boundingBox = m_mesh->getAABBoundingBox(m_cacheWorldMatrix);
+			}
+		}
 	}
 
 }

@@ -1,6 +1,7 @@
 #ifndef __ZE_RENDER_COMPONENT__
 #define __ZE_RENDER_COMPONENT__
 
+#include "Math/Shapes.h"
 #include "SceneComponent.h"
 #include "Physics/PhysicsBodyHolder.h"
 
@@ -62,6 +63,9 @@ namespace ZE
 		virtual IPhysicsBody* getPhysicsBody();
 
 		FORCEINLINE Handle getSkeletonStateHandle() { return m_hSkeletonState; }
+	protected:
+
+		virtual void updateCacheMatrix() override;
 
 	protected:
 		Mesh* m_mesh;
@@ -72,6 +76,10 @@ namespace ZE
 
 		// Skeleton Data
 		Handle m_hSkeletonState;
+
+		// Bounding Information
+		Sphere m_boundingSphere;
+		AxisAlignedBox m_boundingBox;
 
 		// Flags
 		bool m_bHighlight:1;

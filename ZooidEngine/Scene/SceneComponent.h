@@ -41,7 +41,7 @@ namespace ZE
 
 		virtual void handleUpdateEvent(Event* event);
 		virtual void handleCalculateTransform(Event* event);
-		void updateCacheMatrix();
+		virtual void updateCacheMatrix();
 
 		ALIGN16 Matrix4x4 m_localTransform;
 		ALIGN16 Matrix4x4 m_cacheWorldMatrix;
