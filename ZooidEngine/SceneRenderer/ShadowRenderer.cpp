@@ -135,7 +135,7 @@ namespace ZE
 
 				if (currentMesh.m_material)
 				{
-					currentMesh.m_material->Bind(shaderChain);
+					currentMesh.m_material->BindForShadow(shaderChain);
 				}
 
 				if (currentMesh.m_gpuBufferArray->isUsingIndexBuffer())
@@ -169,7 +169,7 @@ namespace ZE
 
 				if (currentMesh.m_material)
 				{
-					currentMesh.m_material->Bind(shaderChain);
+					currentMesh.m_material->BindForShadow(shaderChain);
 				}
 
 				if (currentMesh.m_gpuBufferArray->isUsingIndexBuffer())

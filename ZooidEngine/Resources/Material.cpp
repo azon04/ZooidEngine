@@ -10,6 +10,27 @@ namespace ZE
 {
 	IMPLEMENT_CLASS_0(Material);
 
+	void Material::BindForShadow(IShaderChain* shaderChain)
+	{
+		int iMask = 0;
+		for (int i = 0; i < m_textures.length(); ++i)
+		{
+			MaterialTexture& matTexture = m_textures[i];
+			switch (matTexture.type)
+			{
+			case TextureType::MASK:
+				shaderChain->setTexture("material.maskMap", matTexture.texture, i);
+				matTexture.texture->bind();
+				iMask++;
+				break;
+			default:
+				break;
+			}
+		}
+
+		shaderChain->setInt("material.maskMapBound", iMask > 0);
+	}
+
 	void Material::Bind(IShaderChain* shaderChain)
 	{
 		int iDiffuse = 0;
@@ -22,42 +43,39 @@ namespace ZE
 		for (int i = 0; i < m_textures.length(); ++i)
 		{
 			MaterialTexture& matTexture = m_textures[i];
-			String varName(1024);
-			varName += "material.";
 			switch (matTexture.type)
 			{
 			case TextureType::DIFFUSE:
-				varName += "diffuseMap";
+				shaderChain->setTexture("material.diffuseMap", matTexture.texture, i);
 				iDiffuse++;
 				break;
 			case TextureType::SPECULAR:
-				varName += "specularMap";
+				shaderChain->setTexture("material.specularMap", matTexture.texture, i);
 				iSpecular++;
 				break;
 			case TextureType::NORMAL:
-				varName += "normalMap";
+				shaderChain->setTexture("material.normalMap", matTexture.texture, i);
 				iNormal++;
 				break;
 			case TextureType::MASK:
-				varName += "maskMap";
+				shaderChain->setTexture("material.maskMap", matTexture.texture, i);
 				iMask++;
 				break;
 			case TextureType::METALIC:
-				varName += "metalicMap";
+				shaderChain->setTexture("material.metalicMap", matTexture.texture, i);
 				iMetalic++;
 				break;
 			case TextureType::ROUGHNESS:
-				varName += "roughnessMap";
+				shaderChain->setTexture("material.roughnessMap", matTexture.texture, i);
 				iRoughness++;
 				break;;
 			case TextureType::OCCLUSSION:
-				varName += "aoMap";
+				shaderChain->setTexture("material.aoMap", matTexture.texture, i);
 				iAO++;
 				break;
 			default:
 				break;
 			}
-			shaderChain->setTexture(varName.c_str(), matTexture.texture, i);
 			matTexture.texture->bind();
 		}
 

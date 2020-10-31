@@ -49,6 +49,7 @@ namespace ZE
 		{
 		}
 
+		void BindForShadow(IShaderChain* shaderChain);
 		void Bind(IShaderChain* shaderChain);
 
 		// Does material have transparency?
