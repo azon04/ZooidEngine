@@ -2,6 +2,7 @@
 #define __PLANE_Z__
 
 #include "MathUtil.h"
+#include "Math/Vector4.h"
 #include "Utils/Macros.h"
 
 class Plane
@@ -46,7 +47,9 @@ public:
 
 	ZE::Float32 distanceFromPlane(Vector3& point)
 	{
-		return m_normal.dotProduct(point) - m_distance;
+		static Vector4 temp;
+		temp.set(point.m_x, point.m_y, point.m_z, -1.0f);
+		return Vector4::FastDot(m_normalDistance, temp);
 	}
 
 	// Normalize the normal and calculate the new distance based 
@@ -59,8 +62,16 @@ public:
 	}
 
 public:
-	Vector3 m_normal;
-	ZE::Float32 m_distance; // Distance plane from origin
+	union 
+	{
+		struct 
+		{
+			Vector3 m_normal;
+			ZE::Float32 m_distance; // Distance plane from origin
+		};
+		Vector4 m_normalDistance;
+	};
+	
 };
 
 #endif
