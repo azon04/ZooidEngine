@@ -95,6 +95,22 @@ public:
 		updateAngleInRad(DegToRad(_degAngle));
 	}
 
+	// calculate the Quaternion rotation that rotate v1 to v2
+	void fromVectors(const Vector3& v1, const Vector3& v2)
+	{
+		Vector3 n1 = Vector3::Normalize(v1);
+		Vector3 n2 = Vector3::Normalize(v2);
+		n2 = Vector3::Normalize(n1 + n2);
+		
+		ZE::Float32 dotProduct = n1.dotProduct(n2);
+		n1 = n1.crossProduct(n2);
+
+		m_x = n1.getX();
+		m_y = n1.getY();
+		m_z = n1.getZ();
+		m_w = dotProduct;
+	}
+
 	Quaternion operator+(const Quaternion& _q2) const 
 	{
 		return Quaternion(m_x + _q2.m_x, m_y + _q2.m_y, m_z + _q2.m_z, m_w + _q2.m_w);

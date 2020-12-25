@@ -85,13 +85,13 @@ public:
 	}
 
 	// SquareLength
-	FORCEINLINE ZE::Float32 lengthSquare() 
+	FORCEINLINE ZE::Float32 lengthSquare() const
 	{
 		return m_x * m_x + m_y * m_y + m_z * m_z;
 	}
 
 	// Length
-	FORCEINLINE ZE::Float32 length() 
+	FORCEINLINE ZE::Float32 length() const
 	{
 		return sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
 	}
@@ -116,6 +116,13 @@ public:
 	FORCEINLINE Vector3& setX(float _x) { m_x = _x; return *this; }
 	FORCEINLINE Vector3& setY(float _y) { m_y = _y; return *this; }
 	FORCEINLINE Vector3& setZ(float _z) { m_z = _z; return *this; }
+
+	// Helper function
+	FORCEINLINE static Vector3 Normalize(const Vector3& v)
+	{
+		ZE::Float32 inverseLength = 1.0f / v.length();
+		return Vector3(v.m_x * inverseLength, v.m_y * inverseLength, v.m_z * inverseLength);
+	}
 
 	// Data Member
 	union 
